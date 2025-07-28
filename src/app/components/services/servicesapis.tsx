@@ -561,7 +561,6 @@ export const uploadPhoto = async (file: File, candidateId: string) => {
     );
 
     if (response.data?.fileUrl) {
-      toast.success("Photo uploaded successfully!");
       return response.data.fileUrl;
     } else {
       toast.error(response.data?.message || "Failed to upload photo.");

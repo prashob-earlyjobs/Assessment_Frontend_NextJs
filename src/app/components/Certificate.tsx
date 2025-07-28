@@ -537,134 +537,139 @@ const Certificate: React.FC<CertificateProps> = ({
   isPDFGenerating,
 }) => {
   return (
-    <div className="w-full h-full bg-white" id="certificate" style={{ overflow: "hidden" }}>
-      <div className="border-8 border-[#F97316] relative h-full p-4">
-        {/* Border Decorations */}
-        <div className="absolute top-2 left-2 w-8 h-8 border-l-4 border-t-4 border-[#F97316]"></div>
-        <div className="absolute top-2 right-2 w-8 h-8 border-r-4 border-t-4 border-[#F97316]"></div>
-        <div className="absolute bottom-2 left-2 w-8 h-8 border-l-4 border-b-4 border-[#F97316]"></div>
-        <div className="absolute bottom-2 right-2 w-8 h-8 border-r-4 border-b-4 border-[#F97316]"></div>
+  <div className="w-full h-full" id="certificate" style={{ overflow: "hidden", backgroundColor: "#FFFFFF" }}>
+  <div className="border-8 relative h-full p-4" style={{ borderColor: "#F97316" }}>
+    {/* Border Decorations */}
+    <div className="absolute top-2 left-2 w-8 h-8 border-l-4 border-t-4" style={{ borderColor: "#F97316" }}></div>
+    <div className="absolute top-2 right-2 w-8 h-8 border-r-4 border-t-4" style={{ borderColor: "#F97316" }}></div>
+    <div className="absolute bottom-2 left-2 w-8 h-8 border-l-4 border-b-4" style={{ borderColor: "#F97316" }}></div>
+    <div className="absolute bottom-2 right-2 w-8 h-8 border-r-4 border-b-4" style={{ borderColor: "#F97316" }}></div>
 
-        {/* Header */}
-        <div className="text-center mb-4">
-          <img
-            src="/images/logo.png"
-            alt="EarlyJobs Logo"
-            className="h-16 w-auto mx-auto mb-3"
-          />
-          <h1 className={`text-4xl font-bold text-gray-800 ${isPDFGenerating && "mb-[1rem]"}`}>
-            CERTIFICATE OF ACHIEVEMENT
-          </h1>
-          <div className="w-32 h-1 bg-gradient-to-r from-[#F97316] to-[#9333EA] mx-auto mb-4" />
-        </div>
+    {/* Header */}
+    <div className="text-center mb-4">
+      <img
+        src="/images/logo.png"
+        alt="EarlyJobs Logo"
+        className="h-16 w-auto mx-auto mb-3"
+      />
+      <h1 className={`text-4xl font-bold ${isPDFGenerating && "mb-[1rem]"}`} style={{ color: "#1F2937" }}>
+        CERTIFICATE OF ACHIEVEMENT
+      </h1>
+      <div className="w-32 h-1 mx-auto mb-4" style={{ background: "linear-gradient(to right, #F97316, #9333EA)" }} />
+    </div>
 
-        {/* Main Content */}
-        <div className="text-center mb-6">
-          <p className="text-lg text-gray-600 mb-2">This is to certify that</p>
-          <h2 className="text-3xl font-bold text-gray-800 border-b-2 border-gray-300 pb-2 inline-block mb-2">
-            {candidateName}
-          </h2>
-          <p className="text-lg text-gray-600 mb-2">has successfully completed the</p>
-          <h3 className="text-2xl font-semibold text-[#F97316] mb-2">{assessmentName}</h3>
-          <p className="text-lg text-gray-600 mb-2">with a score of</p>
+    {/* Main Content */}
+    <div className="text-center mb-6">
+      <p className="text-lg mb-2" style={{ color: "#4B5563" }}>This is to certify that</p>
+      <h2 className="text-3xl font-bold border-b-2 pb-2 inline-block mb-2" style={{ color: "#1F2937", borderColor: "#D1D5DB" }}>
+        {candidateName}
+      </h2>
+      <p className="text-lg mb-2" style={{ color: "#4B5563" }}>has successfully completed the</p>
+      <h3 className="text-2xl font-semibold mb-2" style={{ color: "#F97316" }}>{assessmentName}</h3>
+      <p className="text-lg mb-2" style={{ color: "#4B5563" }}>with a score of</p>
 
-          {/* Score badge */}
-          <div className="flex flex-wrap justify-center items-center gap-2 px-4 py-2 rounded-full w-fit mx-auto mb-6">
-            <Badge
-              className={`bg-white text-[#15803D] px-3 ${isPDFGenerating ? "" : "py-1"} rounded-full flex items-center gap-1 border border-[#16A34A]`}
-            >
-              <span className={`text-sm font-medium ${isPDFGenerating && "mb-[1rem]"}`}>
-                Overall Score:
-              </span>
-              <span className={`text-sm font-bold text-[#16A34A] ${isPDFGenerating && "mb-[1rem]"}`}>
-                {score}/10
-              </span>
-            </Badge>
-            <Badge
-              className="bg-white text-[#15803D] px-3 py-1 rounded-full flex items-center gap-1 border border-[#16A34A]"
-            >
-              <span className={`text-sm font-medium ${isPDFGenerating && "mb-[1rem]"}`}>
-                Communication:
-              </span>
-              <span className={`text-sm font-bold text-[#16A34A] ${isPDFGenerating && "mb-[1rem]"}`}>
-                {commScore}/10
-              </span>
-            </Badge>
-            <Badge
-              className="bg-white text-[#15803D] px-3 py-1 rounded-full flex items-center gap-1 border border-[#16A34A]"
-            >
-              <span className={`text-sm font-medium ${isPDFGenerating && "mb-[1rem]"}`}>
-                Proctoring:
-              </span>
-              <span className={`text-sm font-bold text-[#16A34A] ${isPDFGenerating && "mb-[1rem]"}`}>
-                {proctScore}/10
-              </span>
-            </Badge>
-          </div>
-        </div>
-
-        {/* Skills Verified */}
-        <div className="mb-8">
-          <h4 className="text-lg font-semibold text-gray-700 mb-4 text-center flex items-center justify-center gap-2">
-            <CheckCircle className="h-5 w-5 text-[#16A34A]" />
-            <span className={`${isPDFGenerating && "mb-[1rem]"}`}>Skills Verified</span>
-          </h4>
-          <div className="flex flex-wrap justify-center gap-2 max-w-[9in] mx-auto">
-            {skillsVerified?.map((skill, index) => (
-              <Badge
-                key={index}
-                variant="secondary"
-                className="px-3 py-1 bg-[#EDE9FE] text-[#9333EA]"
-              >
-                <span className={`${isPDFGenerating && "mb-[0.5rem]"}`}>{skill}</span>
-              </Badge>
-            ))}
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div
-          className={`flex justify-between items-end mt-12 px-12 ${isPDFGenerating && "mt-[1rem]"}`}
-          style={{ position: "absolute", display: "flex", width: "100%", bottom: "24px" }}
+      {/* Score badge */}
+      <div className="flex flex-wrap justify-center items-center gap-2 px-4 py-2 rounded-full w-fit mx-auto mb-6">
+        <Badge
+          className={`px-3 ${isPDFGenerating ? "" : "py-1"} rounded-full flex items-center gap-1 border`} 
+          style={{ backgroundColor: "#FFFFFF", color: "#15803D", borderColor: "#16A34A" }}
         >
-          <div className="text-center">
-            <div className="w-48 border-b-2 border-gray-400 mb-2 mx-auto"></div>
-            <p className="text-sm text-gray-600">Authorized Signature</p>
-            <p className={`text-xs text-gray-500 ${isPDFGenerating && "mb-[0.5rem]"}`}>
-              EarlyJobs Certification Authority
-            </p>
-          </div>
-          <div className="text-right space-y-2 text-gray-600">
-            <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4" />
-              <span className={`text-sm ${isPDFGenerating && "mb-[0.5rem]"}`}>Date: {date}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <User className="h-4 w-4" />
-              <span className={`text-sm ${isPDFGenerating && "mb-[0.5rem]"}`}>
-                Certificate ID: {certificateId}
-              </span>
-            </div>
-          </div>
-        </div>
+          <span className={`text-sm font-medium ${isPDFGenerating && "mb-[1rem]"}`} style={{ color: "#15803D" }}>
+            Overall Score:
+          </span>
+          <span className={`text-sm font-bold ${isPDFGenerating && "mb-[1rem]"}`} style={{ color: "#16A34A" }}>
+            {score}/10
+          </span>
+        </Badge>
+        <Badge
+          className="px-3 py-1 rounded-full flex items-center gap-1 border"
+          style={{ backgroundColor: "#FFFFFF", color: "#15803D", borderColor: "#16A34A" }}
+        >
+          <span className={`text-sm font-medium ${isPDFGenerating && "mb-[1rem]"}`} style={{ color: "#15803D" }}>
+            Communication:
+          </span>
+          <span className={`text-sm font-bold ${isPDFGenerating && "mb-[1rem]"}`} style={{ color: "#16A34A" }}>
+            {commScore}/10
+          </span>
+        </Badge>
+        <Badge
+          className="px-3 py-1 rounded-full flex items-center gap-1 border"
+          style={{ backgroundColor: "#FFFFFF", color: "#15803D", borderColor: "#16A34A" }}
+        >
+          <span className={`text-sm font-medium ${isPDFGenerating && "mb-[1rem]"}`} style={{ color: "#15803D" }}>
+            Proctoring:
+          </span>
+          <span className={`text-sm font-bold ${isPDFGenerating && "mb-[1rem]"}`} style={{ color: "#16A34A" }}>
+            {proctScore}/10
+          </span>
+        </Badge>
+      </div>
+    </div>
 
-        {/* QR Code Placeholder */}
-        <div className="absolute top-8 right-8 w-16 h-16 flex items-center justify-center">
-          <img
-            src="/images/qrcode_earlyjobs.png"
-            className="border border-gray-300 rounded-md"
-            alt="QR Code"
-          />
+    {/* Skills Verified */}
+    <div className="mb-8">
+      <h4 className="text-lg font-semibold mb-4 text-center flex items-center justify-center gap-2" style={{ color: "#374151" }}>
+        <CheckCircle className="h-5 w-5" style={{ color: "#16A34A" }} />
+        <span className={`${isPDFGenerating && "mb-[1rem]"}`}>Skills Verified</span>
+      </h4>
+      <div className="flex flex-wrap justify-center gap-2 max-w-[9in] mx-auto">
+        {skillsVerified?.map((skill, index) => (
+          <Badge
+            key={index}
+            variant="secondary"
+            className="px-3 py-1"
+            style={{ backgroundColor: "#EDE9FE", color: "#9333EA" }}
+          >
+            <span className={`${isPDFGenerating && "mb-[0.5rem]"}`}>{skill}</span>
+          </Badge>
+        ))}
+      </div>
+    </div>
+
+    {/* Footer */}
+    <div
+      className={`flex justify-between items-end mt-12 px-12 ${isPDFGenerating && "mt-[1rem]"}`}
+      style={{ position: "absolute", display: "flex", width: "100%", bottom: "24px" }}
+    >
+      <div className="text-center">
+        <div className="w-48 border-b-2 mb-2 mx-auto" style={{ borderColor: "#9CA3AF" }}></div>
+        <p className="text-sm" style={{ color: "#4B5563" }}>Authorized Signature</p>
+        <p className={`text-xs ${isPDFGenerating && "mb-[0.5rem]"}`} style={{ color: "#6B7280" }}>
+          EarlyJobs Certification Authority
+        </p>
+      </div>
+      <div className="text-right space-y-2" style={{ color: "#4B5563" }}>
+        <div className="flex items-center gap-2">
+          <Calendar className="h-4 w-4" style={{ color: "#4B5563" }} />
+          <span className={`text-sm ${isPDFGenerating && "mb-[0.5rem]"}`} style={{ color: "#4B5563" }}>Date: {date}</span>
         </div>
-        <div className={`absolute ${isPDFGenerating && "mb-[0.5rem]"} bottom-[4.5rem] left-[4.5rem]`}>
-          <img
-            src="/images/signature.png"
-            alt="Signature of Cofounder"
-            className="max-w-[11rem]"
-          />
+        <div className="flex items-center gap-2">
+          <User className="h-4 w-4" style={{ color: "#4B5563" }} />
+          <span className={`text-sm ${isPDFGenerating && "mb-[0.5rem]"}`} style={{ color: "#4B5563" }}>
+            Certificate ID: {certificateId}
+          </span>
         </div>
       </div>
     </div>
+
+    {/* QR Code Placeholder */}
+    <div className="absolute top-8 right-8 w-16 h-16 flex items-center justify-center">
+      <img
+        src="/images/qrcode_earlyjobs.png"
+        className="border rounded-md"
+        alt="QR Code"
+        style={{ borderColor: "#D1D5DB" }}
+      />
+    </div>
+    <div className={`absolute ${isPDFGenerating && "mb-[0.5rem]"} bottom-[4.5rem] left-[4.5rem]`}>
+      <img
+        src="/images/signature.png"
+        alt="Signature of Cofounder"
+        className="max-w-[11rem]"
+      />
+    </div>
+  </div>
+</div>
   );
 };
 
@@ -785,7 +790,6 @@ const CertificateWithPDF: React.FC<CertificateProps> = ({
           throw new Error("Invalid URL returned from upload");
         }
         setFileUrl(fileUrl);
-        toast.success("Certificate PDF uploaded successfully!");
         return fileUrl;
       } else {
         throw new Error("Upload failed: No valid response from server");
