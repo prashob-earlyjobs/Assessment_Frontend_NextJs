@@ -1,26 +1,21 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* in your globals.css or tailwind base layer */
+[data-state='open'] button.bg-red-600 {
+  color: white !important;
 }
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+button.bg-blue-600 {
+  color: white !important;
 }
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+button.bg-orange-600 {
+  color: white !important;
 }
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+button.bg-green-600 {
+  color: white !important;
+}
+button{
+  cursor: pointer !important;
+}
+[role='dialog']{  
+  background-color:#fff
 }
