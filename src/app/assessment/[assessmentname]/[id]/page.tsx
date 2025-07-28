@@ -12,7 +12,7 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { assessmentname, id, referralCode } = params;
+  const { assessmentname, id } = params;
 
   // Example: You can also fetch actual details using `id` if needed
   // const assessment = await fetchAssessmentById(id);
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: `Detailed view of '${decodeURIComponent(
         assessmentname
       )}' assessment and results.`,
-      url: `https://earlyjobs.ai/assessment/${assessmentname}/${id}/${referralCode}`, // Optional but recommended
+      url: `https://earlyjobs.ai/assessment/${assessmentname}/${id}`, // Optional but recommended
       siteName: "EarlyJobs",
       images: [
         {

@@ -1,4 +1,3 @@
-"use client";
 // import { useParams } from "react-router-dom";
 // import { useState } from "react";
 // import { Document, Page, pdfjs } from "react-pdf";
@@ -159,25 +158,73 @@
 // export default FileToShow;
 
 
+// app/certificate/[interviewId]/[fileName]/page.tsx
 
 import React from 'react';
 import Header from "@/app/components/pages/header";
+import type { Metadata } from "next";
 
-const FileToShow = ({ 
-  fileUrl = "https://earlyjobs-assessment-1.s3.ap-south-1.amazonaws.com/e4675748-f93b-4a08-b930-6393f2853375/EJ-CERT-2025-e4675748.pdf",
-  width = "100%",
-  height = "100%"
-}) => {
+type Props = {
+  params: {
+    interviewId: string;
+    fileName: string;
+  };
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { fileName, interviewId } = params;
+
+  const decodedFileName = decodeURIComponent(fileName);
+  const title = `${decodedFileName} | Certificate | EarlyJobs`;
+  const description = `Download or view the official certificate: ${decodedFileName}`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `https://earlyjobs.ai/certificate/${interviewId}/${fileName}`,
+      siteName: "EarlyJobs",
+      images: [
+        {
+          url: `https://earlyjobs-assessment-1.s3.ap-south-1.amazonaws.com/${interviewId}/${fileName}.pdf`, // Optional OG image
+          width: 1200,
+          height: 630,
+          alt: "EarlyJobs Certificate",
+        },
+      ],
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ["https://earlyjobs.ai/assets/og-image.png"],
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+  };
+}
+
+const FileToShow = ({ params }: Props) => {
+  const { fileName, interviewId } = params;
+
+  const fileUrl = `https://earlyjobs-assessment-1.s3.ap-south-1.amazonaws.com/${interviewId}/${fileName}.pdf`
+  const width = "100%"
+  const height = "100%"
   return (
     <div className="w-full h-screen flex flex-col">
-      <Header/>   
+      <Header />   
       <div className="flex-1">
         <embed
           src={`${fileUrl}#toolbar=0`}
           type="application/pdf"
           width={width}
           height={height}
-          style={{ border: 'none',borderBlockColor: 'white', backgroundColor: 'white' }}
+          style={{ border: 'none', backgroundColor: 'white' }}
         />
       </div>
     </div>
