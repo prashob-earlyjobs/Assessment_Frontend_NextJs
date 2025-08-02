@@ -132,7 +132,7 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
 import { toast } from 'sonner';
 
-const url = process.env.VITE_APP_BACKEND || 'http://localhost:5001/api';
+const url = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
 
 interface CustomAxiosRequestConfig extends AxiosRequestConfig {
   _retry?: boolean;

@@ -339,7 +339,7 @@ const Assessment = () => {
       setOrderId(orderResponse.id);
 
       const options: RazorpayOrderOptions = {
-        key: process.env.VITE_APP_RAZORPAY_KEY || "YOUR_RAZORPAY_KEY",
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY || "YOUR_RAZORPAY_KEY",
         amount: finalAssessmentFee * 100,
         currency: "INR",
         name: "EarlyJobs",
