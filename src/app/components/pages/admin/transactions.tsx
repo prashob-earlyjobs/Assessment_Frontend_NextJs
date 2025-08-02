@@ -8,7 +8,7 @@ import { ArrowLeft, Clock, CreditCard, Tag } from "lucide-react";
 import { AdminLayout } from "../../../components/admin/AdminLayout";
 import { getTransactionsForSprAdmin, getTransactionsForFranchisenAdmin } from "../../../components/services/servicesapis";
 import { useAdmin } from "../../../context/AdminContext";
-import { response } from "express";
+
 
 const LIMIT = 10;
 
