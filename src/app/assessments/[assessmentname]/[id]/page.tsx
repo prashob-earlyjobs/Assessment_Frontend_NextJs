@@ -4,17 +4,17 @@ import AssessmentDetails from "@/app/components/pages/AssessmentDetails";
 import type { Metadata } from "next";
 
 type Props = {
-  params: {
+  params: Promise<{
     assessmentname: string;
     id: string;
-  };
+  }>;
 };
 
 // Optional: Fetch actual assessment data here using the `id` from a database or API
 // async function getAssessmentDetails(id: string) { ... }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { assessmentname, id } = params;
+  const { assessmentname, id } = await params;
 
   const title = decodeURIComponent(assessmentname) + "Assessment | EarlyJobs";
   const description = `View detailed information for the assessment "${decodeURIComponent(assessmentname)}".`;

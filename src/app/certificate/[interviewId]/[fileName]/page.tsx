@@ -165,14 +165,14 @@ import Header from "@/app/components/pages/header";
 import type { Metadata } from "next";
 
 type Props = {
-  params: {
+  params: Promise<{
     interviewId: string;
     fileName: string;
-  };
+  }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { fileName, interviewId } = params;
+  const { fileName, interviewId } = await params;
 
   const decodedFileName = decodeURIComponent(fileName);
   const title = `${decodedFileName} | Certificate | EarlyJobs`;
@@ -209,8 +209,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-const FileToShow = ({ params }: Props) => {
-  const { fileName, interviewId } = params;
+const FileToShow = async ({ params }: Props) => {
+  const { fileName, interviewId } = await params;
 
   const fileUrl = `https://earlyjobs-assessment-1.s3.ap-south-1.amazonaws.com/${interviewId}/${fileName}.pdf`
   const width = "100%"

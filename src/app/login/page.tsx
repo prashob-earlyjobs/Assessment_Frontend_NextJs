@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -13,7 +13,7 @@ import Cookies from "js-cookie";
 import { isUserLoggedIn, resetPassword, sendOtptoMobile, userLogin, userSignup, verifyFranchiseId, verifyOtpMobile } from "../components/services/servicesapis";
 import { useUser } from "@/app/context";
 
-export default function Login() {
+function LoginContent() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -752,5 +752,13 @@ export default function Login() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function Login() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginContent />
+    </Suspense>
   );
 }

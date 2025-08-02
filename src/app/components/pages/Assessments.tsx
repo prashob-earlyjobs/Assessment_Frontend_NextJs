@@ -441,8 +441,10 @@ function getIcon(skill: string) {
 
 export default Assessments;
 
-const style = document.createElement("style");
-style.innerHTML = `
+// Add bubble animations only on client side
+if (typeof window !== "undefined") {
+  const style = document.createElement("style");
+  style.innerHTML = `
 .bubble {
   position: absolute;
   border: 1px solid rgba(255, 255, 255);
@@ -508,10 +510,8 @@ style.innerHTML = `
   100% { transform: translate(0, 0); opacity: 0.4; }
 }
 `;
-if (
-  typeof document !== "undefined" &&
-  !document.getElementById("bubble-keyframes")
-) {
-  style.id = "bubble-keyframes";
-  document.head.appendChild(style);
+  if (!document.getElementById("bubble-keyframes")) {
+    style.id = "bubble-keyframes";
+    document.head.appendChild(style);
+  }
 }

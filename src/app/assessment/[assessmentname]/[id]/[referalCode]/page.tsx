@@ -4,15 +4,15 @@ import AssessmentDetails from "@/app/components/pages/AssessmentDetails";
 import type { Metadata } from "next";
 
 type Props = {
-  params: {
+  params: Promise<{
     assessmentname: string;
     id: string;
     referralCode: string;
-  };
+  }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { assessmentname, id, referralCode } = params;
+  const { assessmentname, id, referralCode } = await params;
 
   // Example: You can also fetch actual details using `id` if needed
   // const assessment = await fetchAssessmentById(id);
