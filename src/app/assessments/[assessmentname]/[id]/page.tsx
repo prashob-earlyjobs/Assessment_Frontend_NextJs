@@ -33,19 +33,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     // Use the proper title from the API response
     const properTitle = assessment?.title;
-    const description = `View the assessment '${properTitle}' details in EarlyJobs.`;
+    const description = `Evaluate your skills in '${properTitle}'. Test your knowledge, improve your expertise, and stand out in your career.`;
     
     return {
       title: `${properTitle} Aseessment | EarlyJobs`,
       description,
       openGraph: {
         title: `${properTitle} Aseessment | EarlyJobs`,
-        description: `Detailed view of '${properTitle}' assessment and results.`,
+        description: `Evaluate your skills in '${properTitle}'. Test your knowledge, improve your expertise, and stand out in your career.`,
         url: `https://earlyjobs.ai/assessments/${assessmentname}/${id}`,
         siteName: "EarlyJobs",
         images: [
           {
-            url: "https://earlyjobs.ai/images/og-image.png",
+            url: "https://earlyjobs.ai/assets/og-image.png",
             width: 1200,
             height: 630,
             alt: "Assessment",
@@ -56,8 +56,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       twitter: {
         card: "summary_large_image",
         title: `${properTitle} | EarlyJobs`,
-        description: `Detailed view of '${properTitle}' assessment and results.`,
-        images: ["https://earlyjobs.ai/images/og-image.png"],
+        description: `Evaluate your skills in '${properTitle}'. Test your knowledge, improve your expertise, and stand out in your career.`,
+        images: ["https://earlyjobs.ai/assets/og-image.png"],
       },
       robots: {
         index: true,
@@ -73,14 +73,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: `View the assessment '${fallbackTitle}' details in EarlyJobs.`,
       openGraph: {
         title: `${fallbackTitle} | EarlyJobs`,
-        description: `Detailed view of '${fallbackTitle}' assessment and results.`,
+        description: `Evaluate your skills in '${fallbackTitle}'. Test your knowledge, improve your expertise, and stand out in your career .`,
         url: `https://earlyjobs.ai/assessments/${assessmentname}/${id}`,
         siteName: "EarlyJobs",
         images: [
           {
-            url: "https://earlyjobs.ai/images/og-image.png",
+            url: "https://earlyjobs.ai/assets/og-image.png",
             width: 1200,
-            height: 630,
+            height: 627,
             alt: "Assessment",
           },
         ],
@@ -89,8 +89,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       twitter: {
         card: "summary_large_image",
         title: `${fallbackTitle} | EarlyJobs`,
-        description: `Detailed view of '${fallbackTitle}' assessment and results.`,
-        images: ["https://earlyjobs.ai/images/og-image.png"],
+        description: `Evaluate your skills in '${fallbackTitle}'. Test your knowledge, improve your expertise, and stand out in your career .`,
+        images: ["https://earlyjobs.ai/assets/og-image.png"],
       },
       robots: {
         index: true,
