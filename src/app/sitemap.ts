@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 import { getAssessmentsfromSearch } from './components/services/servicesapis'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://earlyjobs.ai'
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.earlyjobs.ai'
   
   // Static pages
   const staticPages = [
