@@ -87,7 +87,14 @@ const Assessments = () => {
     try {
       const response = await getAssessmentsfromSearch(params);
       const fetched = response.data.assessments;
-      setAssessments((prev) => [...prev, ...fetched]);
+      
+      // Remove duplicates based on _id
+      setAssessments((prev) => {
+        const existingIds = new Set(prev.map(assessment => assessment._id));
+        const uniqueFetched = fetched.filter(assessment => !existingIds.has(assessment._id));
+        return [...prev, ...uniqueFetched];
+      });
+      
       setHasMore(fetched.length === LIMIT);
     } catch (err) {
       toast.error("Failed to fetch assessments:");

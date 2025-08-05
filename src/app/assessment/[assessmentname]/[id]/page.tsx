@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // const assessment = await fetchAssessmentById(id);
 
   return {
-    title: `${decodeURIComponent(assessmentname)} | EarlyJobs`,
+    title: `View ${decodeURIComponent(assessmentname)} | EarlyJobs`,
     description: `View the assessment '${decodeURIComponent(
       assessmentname
     )}' details in EarlyJobs.`,
