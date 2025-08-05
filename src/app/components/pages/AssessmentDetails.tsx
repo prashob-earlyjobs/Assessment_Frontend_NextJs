@@ -42,7 +42,6 @@ import { useParams, useRouter } from "next/navigation";
 
 const AssessmentDetails = () => {
   const { id,referalCode } = useParams();
-  console.log("referalCode", referalCode);
   const navigate = useRouter();
   const [assessment, setAssessment] = useState(null);
   const [suggestedAssessments, setSuggestedAssessments] = useState([]);
@@ -68,7 +67,7 @@ const AssessmentDetails = () => {
     };
 
     fetchAssessment();
-  }, [id, navigate]);
+  }, [id]);
 
   useEffect(() => {
     const fetchSuggestedAssessments = async () => {
