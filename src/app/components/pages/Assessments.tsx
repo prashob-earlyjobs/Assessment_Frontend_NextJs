@@ -183,23 +183,23 @@ const Assessments = () => {
                   <Filter className="h-4 w-4 mr-2" />
                   <SelectValue placeholder="All Skills" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Types</SelectItem>
+                <SelectContent className="bg-white rounded-2xl shadow-lg border-gray-200 ">
+                  <SelectItem value="all" className="hover:bg-orange-100">All Types</SelectItem>
                   {skills.map((skill) => (
-                    <SelectItem key={skill} value={skill}>
+                    <SelectItem key={skill} value={skill} className="hover:bg-orange-100">
                       { skill==="technical" ? "Technical" : "Non-Technical"}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
               <Select value={selectedLevel} onValueChange={setSelectedLevel}>
-                <SelectTrigger className="w-48 h-12 rounded-2xl border-gray-200">
+                <SelectTrigger className="w-48 h-12 rounded-2xl border-gray-200 ">
                   <SelectValue placeholder="All Levels" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Levels</SelectItem>
+                <SelectContent className="bg-white rounded-2xl shadow-lg border-gray-200">
+                  <SelectItem value="all" className="hover:bg-orange-100">All Levels</SelectItem>
                   {levels.map((level) => (
-                    <SelectItem key={level} value={level}>
+                    <SelectItem key={level} value={level} className="hover:bg-orange-100">
                       {level}
                     </SelectItem>
                   ))}
@@ -276,7 +276,7 @@ const Assessments = () => {
                               </div>
                             </div>
                             <div
-                              className="flex flex-wrap items-center space-x-1 gap-[8px]"
+                              className="flex w-full space-x-2 gap-[6px]"
                               style={{ marginLeft: "0px" }}
                             >
                               {assessment?.tags?.length > 0 &&
@@ -284,7 +284,7 @@ const Assessments = () => {
                                   <Badge
                                     key={tag}
                                     variant="secondary"
-                                    className="rounded-full text-center text-[8px] px-2 py-1 bg-blue-100 text-blue-700"
+                                    className="rounded-full text-center text-[8px] px-2 py-1 bg-blue-100 text-blue-700 whitespace-nowrap"
                                   >
                                     {tag}
                                   </Badge>
@@ -319,7 +319,7 @@ const Assessments = () => {
                         {assessment.description}
                       </CardDescription>
                     </TooltipTrigger>
-                    <TooltipContent className="max-w-xs text-sm text-gray-600">
+                    <TooltipContent className="max-w-xs text-sm text-gray-600 bg-white shadow-lg rounded-lg p-3  border-gray-200">
                       {assessment.description}
                     </TooltipContent>
                   </Tooltip>
