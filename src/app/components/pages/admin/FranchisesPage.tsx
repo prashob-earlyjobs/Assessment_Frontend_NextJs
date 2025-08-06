@@ -42,8 +42,8 @@ const FranchisesPage: React.FC = () => {
             <h1 className="text-3xl font-bold text-gray-900">Franchise Management</h1>
             <p className="text-gray-600 mt-1">Manage franchise partners and their access</p>
           </div>
-          <Button onClick={() => setShowAddModal(true)}>
-            <Plus className="h-4 w-4 mr-2" />
+          <Button onClick={() => setShowAddModal(true)} className="bg-orange-500 hover:bg-orange-600 text-white">
+            <Plus className="h-4 w-4 mr-2 " />
             Add New Franchise
           </Button>
         </div>
@@ -83,7 +83,7 @@ const FranchisesPage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="gap-4 pt-2 border-t">
+                <div className="gap-4 pt-2 border-t border-gray-300">
                   <div className="flex justify-between items-center w-full">
                     <p className="text-sm text-gray-500">Active Users</p>
                     <div className="flex items-center justify-center gap-1">
@@ -94,7 +94,7 @@ const FranchisesPage: React.FC = () => {
 
                 </div>
 
-                <div className="pt-2 border-t">
+                <div className="pt-2 border-t border-gray-300">
                   <p className="text-xs text-gray-500">
                     Joined: {new Date(franchise?.joinDate).toLocaleDateString()}
                   </p>
