@@ -158,7 +158,7 @@ const AdminDashboard: React.FC = () => {
         {/* <DashboardStats stats={stats} /> */}
 
         {/* Invite Link Card - Show for both admin and franchise */}
-        <Card className="w-full">
+        <Card className="w-full border-gray-300">
           <CardHeader>
             <CardTitle className="text-lg font-semibold">
               {isFranchiseAdmin ? 'Candidate Invite Link' : 'Invite Link'}
@@ -190,7 +190,7 @@ const AdminDashboard: React.FC = () => {
         </Card>
 
         {/* Quick Actions Grid */}
-        <Card className="w-full">
+        <Card className="w-full border-gray-300">
           <CardHeader>
             <CardTitle className="text-lg font-semibold flex items-center">
               <Plus className="h-5 w-5 mr-2" />
