@@ -390,10 +390,10 @@ const Profile = () => {
                 <div className="space-y-2">
                   <Button
                     variant="outline"
-                    className="rounded-2xl border-gray-300"
+                    className="rounded-2xl border-gray-300 hover:bg-orange-100 focus:bg-orange-200"
                     onClick={() => photoInputRef.current?.click()}
                   >
-                    <Upload className="h-4 w-4 mr-2" />
+                    <Upload className="h-4 w-4 mr-2 " />
                     Upload Photo
                   </Button>
                   <input
@@ -410,7 +410,7 @@ const Profile = () => {
               <div className="p-4 border border-dashed border-gray-300 rounded-2xl">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <FileText className="h-8 w-8 text-blue-600" />
+                    <FileText className="h-8 w-8 text-orange-500" />
                     <div>
                       <h3 className="font-medium">Upload Resume</h3>
                       <p className="text-sm text-gray-500">
@@ -419,7 +419,7 @@ const Profile = () => {
                             href={profileData.profile.resumeUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
+                            className="text-orange-500 hover:underline"
                           >
                             View Current Resume
                           </a>
@@ -431,7 +431,7 @@ const Profile = () => {
                   </div>
                   <Button
                     variant="outline"
-                    className="rounded-2xl border-gray-300"
+                    className="rounded-2xl border-gray-300 hover:bg-orange-100 focus:bg-orange-200"
                     onClick={() => resumeInputRef.current?.click()}
                   >
                     <Upload className="h-4 w-4 mr-2" />
@@ -458,7 +458,7 @@ const Profile = () => {
                     id="name"
                     value={profileData.name}
                     onChange={(e) => handleInputChange("name", e.target.value)}
-                    className="rounded-2xl border-gray-300"
+                    className="rounded-2xl border-gray-300 focus:border-orange-500 focus:outline-none focus:ring-0 shadow-none"
                   />
                 </div>
                 <div className="space-y-2">
@@ -504,7 +504,7 @@ const Profile = () => {
                     }
                     disabled
                   >
-                    <SelectTrigger className="rounded-2xl border-gray-300 focus:border-orange-500 focus:ring-1 focus:ring-orange-400 focus:outline-none shadow-none">
+                    <SelectTrigger className="rounded-2xl border-gray-300 focus:border-orange-500 focus:outline-none focus:ring-0 shadow-none">
                       <SelectValue placeholder="Select Gender" />
                     </SelectTrigger>
                     <SelectContent>
@@ -523,7 +523,7 @@ const Profile = () => {
                   readOnly
                   value={profileData.profile.bio}
                   onChange={(e) => handleInputChange("profile.bio", e.target.value)}
-                  className="rounded-2xl min-h-[100px] cursor-not-allowed bg-gray-100 border-gray-300 focus:border-orange-500 focus:ring-1 focus:ring-orange-400 focus:outline-none shadow-none"
+                  className="rounded-2xl min-h-[100px] cursor-not-allowed bg-gray-100 border-gray-300 focus:border-orange-500 focus:outline-none focus:ring-0 shadow-none"
                   placeholder="Tell us about yourself..."
                 />
               </div>
@@ -547,7 +547,7 @@ const Profile = () => {
                     onChange={(e) =>
                       handleInputChange("profile.address.street", e.target.value)
                     }
-                    className="rounded-2xl border-gray-300"
+                    className="rounded-2xl border-gray-300 focus:border-orange-500"
                   />
                 </div>
                 <div className="space-y-2">
@@ -558,7 +558,7 @@ const Profile = () => {
                     onChange={(e) =>
                       handleInputChange("profile.address.city", e.target.value)
                     }
-                    className="rounded-2xl border-gray-300"
+                    className="rounded-2xl border-gray-300 focus:border-orange-500"
                   />
                 </div>
                 <div className="space-y-2">
@@ -569,7 +569,7 @@ const Profile = () => {
                     onChange={(e) =>
                       handleInputChange("profile.address.state", e.target.value)
                     }
-                    className="rounded-2xl border-gray-300"
+                    className="rounded-2xl border-gray-300 focus:border-orange-500"
                   />
                 </div>
                 <div className="space-y-2">
@@ -580,7 +580,7 @@ const Profile = () => {
                     onChange={(e) =>
                       handleInputChange("profile.address.zipCode", e.target.value)
                     }
-                    className="rounded-2xl border-gray-300"
+                    className="rounded-2xl border-gray-300 focus:border-orange-500 "
                   />
                 </div>
                 <div className="space-y-2">
@@ -591,7 +591,7 @@ const Profile = () => {
                     onChange={(e) =>
                       handleInputChange("profile.address.country", e.target.value)
                     }
-                    className="rounded-2xl border-gray-300"
+                    className="rounded-2xl border-gray-300 focus:border-orange-500"
                   />
                 </div>
               </div>
@@ -620,7 +620,7 @@ const Profile = () => {
                         e.target.value
                       )
                     }
-                    className="rounded-2xl border-gray-300"
+                    className="rounded-2xl border-gray-300 focus:border-orange-500"
                   />
                 </div>
                 <div className="space-y-2">
@@ -637,7 +637,7 @@ const Profile = () => {
                         e.target.value
                       )
                     }
-                    className="rounded-2xl border-gray-300"
+                    className="rounded-2xl border-gray-300 focus:border-orange-500"
                   />
                 </div>
                 <div className="space-y-2">
@@ -655,7 +655,7 @@ const Profile = () => {
                         e.target.value
                       )
                     }
-                    className="rounded-2xl border-gray-300"
+                    className="rounded-2xl border-gray-300 focus:border-orange-500"
                     placeholder="80000"
                   />
                 </div>
@@ -674,7 +674,7 @@ const Profile = () => {
                         e.target.value
                       )
                     }
-                    className="rounded-2xl border-gray-300"
+                    className="rounded-2xl border-gray-300 focus:border-orange-500"
                   />
                 </div>
                 <div className="space-y-2 md:col-span-2">
@@ -690,7 +690,7 @@ const Profile = () => {
                       )
                     }
                   >
-                    <SelectTrigger className="rounded-2xl border-gray-300 focus:border-orange-500 focus:ring-1 focus:ring-orange-400 focus:outline-none shadow-none">
+                    <SelectTrigger className="rounded-2xl border-gray-300 focus:border-orange-500 focus:outline-none focus:ring-0 shadow-none">
                       <SelectValue placeholder="Select Work Mode" />
                     </SelectTrigger>
                     <SelectContent className="bg-white rounded-2xl shadow-lg border-gray-200">
