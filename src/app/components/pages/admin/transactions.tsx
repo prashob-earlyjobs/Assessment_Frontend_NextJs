@@ -82,7 +82,7 @@ const TransactionsForAdmin = () => {
 
     return (
         <AdminLayout>
-            <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+            <div className="min-h-screen bg-orange-50 rounded-2xl">
                 <main className="max-w-7xl mx-auto px-6 py-4">
                     {/* <div className="mb-4">
                         <h2 className="text-3xl font-bold text-gray-900 mb-2">All Transactions</h2>
@@ -146,7 +146,7 @@ const TransactionsForAdmin = () => {
                     </div>
 
 
-                    <Card className="rounded-3xl border-0 shadow-lg">
+                    <Card className="rounded-3xl border-0 shadow-xl bg-white">
                         <CardHeader>
                             <CardTitle className="text-2xl">Transaction History</CardTitle>
                         </CardHeader>
@@ -178,7 +178,7 @@ const TransactionsForAdmin = () => {
                                             </thead>
                                             <tbody>
                                                 {transactions.map((transaction) => (
-                                                    <tr key={transaction._id} className="border-b hover:bg-gray-50 transition-colors">
+                                                    <tr key={transaction._id} className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
                                                         <td className="px-4 py-3">
                                                             <div className="flex items-center space-x-1">
                                                                 <Clock className="h-4 w-4 text-gray-500" />
@@ -219,7 +219,7 @@ const TransactionsForAdmin = () => {
                                         <Button
                                             onClick={handlePrevPage}
                                             disabled={page === 1}
-                                            className="rounded-2xl bg-blue-600 hover:bg-blue-700 text-white"
+                                            className="rounded-2xl bg-orange-600 hover:bg-orange-700 text-white"
                                         >
                                             Previous
                                         </Button>
@@ -229,7 +229,7 @@ const TransactionsForAdmin = () => {
                                         <Button
                                             onClick={handleNextPage}
                                             disabled={page >= Math.ceil(total / LIMIT)}
-                                            className="rounded-2xl bg-blue-600 hover:bg-blue-700 text-white"
+                                            className="rounded-2xl bg-orange-600 hover:bg-orange-700 text-white"
                                         >
                                             Next
                                         </Button>
