@@ -213,7 +213,7 @@ const CandidatesPage = () => {
 
         <Card>
           <CardHeader>
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center ">
               <CardTitle>Candidates Overview</CardTitle>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -233,7 +233,7 @@ const CandidatesPage = () => {
                 return (
                   <div
                     key={candidate._id}
-                    className="border rounded-lg p-4 hover:bg-gray-50 transition-colors"
+                    className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors"
                     style={{
                       width:
                         window.innerWidth >= 1024 && window.innerWidth <= 1704

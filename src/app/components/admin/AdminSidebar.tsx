@@ -79,7 +79,7 @@ export const AdminSidebar: React.FC = () => {
 
   return (
     <div
-      className={`relative h-screen bg-white border-r transition-all duration-300 ${
+      className={`relative h-screen bg-white border-r border-gray-300 transition-all duration-300 ${
         collapsed ? 'w-16' : 'w-64'
       }`}
     >
