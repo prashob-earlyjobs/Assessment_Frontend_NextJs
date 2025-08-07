@@ -85,7 +85,7 @@ export const AdminHeader: React.FC = () => {
           </div>
         </div>
         <AlertDialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
-          <AlertDialogContent className="rounded-3xl"  style={{backgroundColor: 'rgba(255, 255, 255, 0.5)' }}>
+          <AlertDialogContent className="rounded-3xl bg-white"  style={{backgroundColor: 'white' }}>
             <AlertDialogHeader>
               <AlertDialogTitle>Confirm Logout</AlertDialogTitle>
               <AlertDialogDescription>
