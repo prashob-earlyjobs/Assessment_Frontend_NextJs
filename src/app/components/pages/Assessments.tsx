@@ -126,22 +126,11 @@ const Assessments = () => {
     }
   };
 
-  const skills = ["technical","non-technical"];
+  const skills = ["all"];
   const levels = ["Beginner", "Intermediate", "Advanced"];
 
   const categoryColour = (category: string) => {
-    switch (category) {
-      case "technical":
-        return "bg-blue-100 text-blue-700";
-      case "non-technical":
-        return "bg-green-100 text-green-700";
-      case "personality":
-        return "bg-yellow-100 text-yellow-700";
-      case "aptitude":
-        return "bg-purple-100 text-purple-700";
-      default:
-        return "bg-gray-100 text-gray-700";
-    }
+    return "bg-blue-100 text-blue-700";
   };
 
   const formatPrice = (price) => {
@@ -185,11 +174,7 @@ const Assessments = () => {
                 </SelectTrigger>
                 <SelectContent className="bg-white rounded-2xl shadow-lg border-gray-200 ">
                   <SelectItem value="all" className="hover:bg-orange-100">All Types</SelectItem>
-                  {skills.map((skill) => (
-                    <SelectItem key={skill} value={skill} className="hover:bg-orange-100">
-                      { skill==="technical" ? "Technical" : "Non-Technical"}
-                    </SelectItem>
-                  ))}
+                  <SelectItem value="all" className="hover:bg-orange-100">All Categories</SelectItem>
                 </SelectContent>
               </Select>
               <Select value={selectedLevel} onValueChange={setSelectedLevel}>
@@ -234,16 +219,7 @@ const Assessments = () => {
                             assessment.category
                           )}`}
                         >
-                          {(() => {
-                            switch (assessment.category) {
-                              case "technical":
-                                return <Code className="h-6 w-6" />;
-                              case "non-technical":
-                                return <BarChart className="h-6 w-6" />;
-                              default:
-                                return <Award className="h-6 w-6" />;
-                            }
-                          })()}
+                          <Award className="h-6 w-6" />
                         </div>
 
                         <div
@@ -258,9 +234,7 @@ const Assessments = () => {
                           >
                             <div className="flex items-center space-x-2">
                               <Badge className="rounded-full text-xs px-2 py-1">
-                                {assessment.category === "non-technical"
-                                  ? "Non-Technical"
-                                  : "Technical"}
+                                {assessment.category || "Uncategorized"}
                               </Badge>
                               <Badge
                                 variant="outline"
