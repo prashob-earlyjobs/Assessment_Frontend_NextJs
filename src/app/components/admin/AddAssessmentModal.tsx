@@ -191,10 +191,10 @@ export const AddAssessmentModal: React.FC<AddAssessmentModalProps> = ({
           <div className="space-y-2">
             <Label htmlFor="title">Assessment Title *</Label>
             <Select value={title} onValueChange={setTitle}>
-              <SelectTrigger>
+              <SelectTrigger className="bg-white border border-gray-300 rounded-2xl focus:border-orange-500 focus:outline-none focus:ring-0">
                 <SelectValue placeholder="Select a title" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className='bg-white border border-gray-300 rounded-2xl'>
                 {assessmentData.map((assessment, index) => (
                   <SelectItem key={index} value={assessment.title}>
                     {assessment.title}
@@ -212,6 +212,7 @@ export const AddAssessmentModal: React.FC<AddAssessmentModalProps> = ({
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Describe what this assessment covers..."
               rows={3}
+              className="bg-white border border-gray-300 rounded-2xl focus:border-orange-500 focus:outline-none focus:ring-0"
             />
           </div>
 
@@ -219,10 +220,10 @@ export const AddAssessmentModal: React.FC<AddAssessmentModalProps> = ({
             <div className="space-y-2">
               <Label htmlFor="type">Type *</Label>
               <Select value={type} onValueChange={(v) => setType(v as "mcq" | "coding" | "video" | "mixed" | "")}>
-                <SelectTrigger>
+                <SelectTrigger className="bg-white border border-gray-300 rounded-2xl focus:border-orange-500 focus:outline-none focus:ring-0">
                   <SelectValue placeholder="Select type" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className='bg-white border border-gray-300 rounded-2xl'>
                   <SelectItem value="mcq">MCQ</SelectItem>
                   <SelectItem value="coding">Coding</SelectItem>
                   <SelectItem value="video">Video</SelectItem>
@@ -233,7 +234,7 @@ export const AddAssessmentModal: React.FC<AddAssessmentModalProps> = ({
             <div className="space-y-2">
               <Label htmlFor="category">Category *</Label>
               <Select value={category} onValueChange={(v) => setCategory(v as "technical" | "aptitude" | "personality" | "communication" | "")}>
-                <SelectTrigger>
+                <SelectTrigger className="bg-white border border-gray-300 rounded-2xl focus:border-orange-500 focus:outline-none focus:ring-0">
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
@@ -246,7 +247,7 @@ export const AddAssessmentModal: React.FC<AddAssessmentModalProps> = ({
             <div className="space-y-2">
               <Label htmlFor="difficulty">Difficulty *</Label>
               <Select value={difficulty} onValueChange={setDifficulty}>
-                <SelectTrigger>
+                <SelectTrigger className="bg-white border border-gray-300 rounded-2xl focus:border-orange-500 focus:outline-none focus:ring-0">
                   <SelectValue placeholder="Select difficulty" />
                 </SelectTrigger>
                 <SelectContent>
@@ -265,6 +266,7 @@ export const AddAssessmentModal: React.FC<AddAssessmentModalProps> = ({
                 value={duration}
                 onChange={(e) => setDuration(e.target.value)}
                 placeholder="60"
+                className="bg-white border border-gray-300 rounded-2xl focus:border-orange-500 focus:outline-none focus:ring-0"
               />
             </div>
           </div>
@@ -289,15 +291,16 @@ export const AddAssessmentModal: React.FC<AddAssessmentModalProps> = ({
                 onChange={(e) => setCurrentTag(e.target.value)}
                 placeholder="e.g., JavaScript"
                 onKeyPress={(e) => e.key === 'Enter' && handleAddTag()}
+                className="bg-white border border-gray-300 rounded-2xl focus:border-orange-500 focus:outline-none focus:ring-0"
               />
-              <Button type="button" variant="outline" onClick={handleAddTag}>
+              <Button type="button" variant="outline" onClick={handleAddTag} className='rounded-2xl bg-orange-500 text-white hover:bg-orange-600'>
                 Add
               </Button>
             </div>
             {skillTags.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-2">
                 {skillTags.map((tag) => (
-                  <Badge key={tag} variant="secondary" className="flex items-center gap-1">
+                  <Badge key={tag} variant="secondary" className="flex items-center gap-1 bg-orange-100 text-orange-600 rounded-full px-2 py-1">
                     {tag}
                     <X
                       className="h-3 w-3 cursor-pointer"
@@ -319,6 +322,7 @@ export const AddAssessmentModal: React.FC<AddAssessmentModalProps> = ({
                 onChange={(e) => setBasePrice(e.target.value)}
                 placeholder="100"
                 min="0"
+                className="bg-white border border-gray-300 rounded-2xl focus:border-orange-500 focus:outline-none focus:ring-0"
               />
             </div>
             <div className="space-y-2">
@@ -330,6 +334,7 @@ export const AddAssessmentModal: React.FC<AddAssessmentModalProps> = ({
                 onChange={(e) => setDiscountedPrice(e.target.value)}
                 placeholder="80"
                 min="0"
+                className="bg-white border border-gray-300 rounded-2xl focus:border-orange-500 focus:outline-none focus:ring-0"
               />
             </div>
           </div>
@@ -341,6 +346,7 @@ export const AddAssessmentModal: React.FC<AddAssessmentModalProps> = ({
               value={offerTitle}
               onChange={(e) => setOfferTitle(e.target.value)}
               placeholder="Summer Discount"
+              className="bg-white border border-gray-300 rounded-2xl focus:border-orange-500 focus:outline-none focus:ring-0"
             />
           </div>
 
@@ -348,7 +354,7 @@ export const AddAssessmentModal: React.FC<AddAssessmentModalProps> = ({
             <div className="space-y-2">
               <Label htmlFor="offerType">Offer Type *</Label>
               <Select value={offerType} onValueChange={setOfferType as (value: string) => void}>
-                <SelectTrigger>
+                <SelectTrigger className="bg-white border border-gray-300 rounded-2xl focus:border-orange-500 focus:outline-none focus:ring-0">
                   <SelectValue placeholder="Select offer type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -366,6 +372,7 @@ export const AddAssessmentModal: React.FC<AddAssessmentModalProps> = ({
                 onChange={(e) => setOfferValue(e.target.value)}
                 placeholder="10"
                 min="0"
+                className="bg-white border border-gray-300 rounded-2xl focus:border-orange-500 focus:outline-none focus:ring-0"
               />
             </div>
           </div>
@@ -379,6 +386,7 @@ export const AddAssessmentModal: React.FC<AddAssessmentModalProps> = ({
               value={offerValidUntil}
               onChange={(e) => setOfferValidUntil(e.target.value)}
               min={new Date().toISOString().split('T')[0]} // Current date as minimum
+              className="bg-white border border-gray-300 rounded-2xl focus:border-orange-500 focus:outline-none focus:ring-0"
             />
           </div>
           <div className="space-y-2">
@@ -387,6 +395,7 @@ export const AddAssessmentModal: React.FC<AddAssessmentModalProps> = ({
               id="shortId"
               value={shortId}
               readOnly
+              className="bg-white border border-gray-300 rounded-2xl focus:border-orange-500 focus:outline-none focus:ring-0"
             />
           </div>
           </div>
@@ -405,10 +414,10 @@ export const AddAssessmentModal: React.FC<AddAssessmentModalProps> = ({
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+          <Button variant="outline" className="rounded-2xl border border-gray-300" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
-          <Button onClick={handleSave} disabled={!title || !description || !difficulty || !basePrice || !discountedPrice || !offerTitle || !offerType || !offerValue || !offerValidUntil}>
+          <Button className="rounded-2xl bg-orange-500 text-white hover:bg-orange-600 cursor-pointer" onClick={handleSave} disabled={!title || !description || !difficulty || !basePrice || !discountedPrice || !offerTitle || !offerType || !offerValue || !offerValidUntil}>
             Create Assessment
           </Button>
         </DialogFooter>
