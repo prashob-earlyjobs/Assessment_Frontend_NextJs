@@ -11,6 +11,8 @@ import { Search, Edit } from 'lucide-react';
 import { User } from '../../types/admin';
 import { getUsers } from '../services/servicesapis';
 import { toast } from 'sonner';
+import * as Select from "@radix-ui/react-select";
+import { ChevronDown } from "lucide-react";
 
 interface UserManagementProps {
   users: User[];
@@ -28,13 +30,10 @@ export const UserManagement: React.FC<UserManagementProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState<string>('all');
 
-
-
   useEffect(() => {
     // Reset search and filter when users change
     const resetSearchAndFilter = async () => {
       try {
-
         const response = await getUsers({ searchQuery: searchTerm, role: roleFilter === 'all' ? undefined : roleFilter });
         if (!response.success) {
           throw new Error(response.message);
@@ -45,8 +44,6 @@ export const UserManagement: React.FC<UserManagementProps> = ({
         return;
       }
     }
-
-
     resetSearchAndFilter();
   }, [searchTerm, roleFilter]);
 
@@ -66,30 +63,51 @@ export const UserManagement: React.FC<UserManagementProps> = ({
   };
 
   return (
-    <Card>
+    <Card className="border-gray-300">
       <CardHeader>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <CardTitle className="text-xl font-semibold">User Management</CardTitle>
+          <CardTitle className="text-xl font-semibold ">User Management</CardTitle>
           <div className="flex gap-2 w-full sm:w-auto">
-            <div className="relative flex-1 sm:flex-none">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <div className="relative flex-1 sm:w-64">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
               <Input
                 placeholder="Search users..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 w-full sm:w-64"
+                className="pl-10 w-full"
               />
             </div>
-            <select
-              value={roleFilter}
-              onChange={(e) => setRoleFilter(e.target.value)}
-              className="px-3 py-2 border rounded-md bg-white text-sm"
-            >
-              <option value="all">All Roles</option>
-              <option value="candidate">Candidates</option>
-              <option value="franchise_admin">Franchises</option>
-              <option value="super_admin">Admins</option>
-            </select>
+            <div className="flex-shrink-0">
+              <Select.Root value={roleFilter} onValueChange={setRoleFilter}>
+                <Select.Trigger className="px-3 py-2 border rounded-md bg-white text-sm flex items-center justify-between min-w-[120px] focus:outline-none">
+                  <Select.Value>
+                    {roleFilter === "all" ? "All Roles" : 
+                      roleFilter === "candidate" ? "Candidates" :
+                      roleFilter === "franchise_admin" ? "Franchises" :
+                      roleFilter === "super_admin" ? "Admins" : ""}
+                  </Select.Value>
+                  <ChevronDown className="ml-2 h-4 w-4 text-gray-400" />
+                </Select.Trigger>
+                <Select.Content
+                  side="bottom"
+                  align="start"
+                  className="bg-white rounded-md shadow-lg border border-gray-200  min-w-[120px]"
+                >
+                  <Select.Item value="all" className="px-3 py-2 cursor-pointer hover:bg-orange-100 text-sm">
+                    All Roles
+                  </Select.Item>
+                  <Select.Item value="candidate" className="px-3 py-2 cursor-pointer hover:bg-orange-100 text-sm">
+                    Candidates
+                  </Select.Item>
+                  <Select.Item value="franchise_admin" className="px-3 py-2 cursor-pointer hover:bg-orange-100 text-sm">
+                    Franchises
+                  </Select.Item>
+                  <Select.Item value="super_admin" className="px-3 py-2 cursor-pointer hover:bg-orange-100 text-sm">
+                    Admins
+                  </Select.Item>
+                </Select.Content>
+              </Select.Root>
+            </div>
           </div>
         </div>
       </CardHeader>
@@ -103,13 +121,12 @@ export const UserManagement: React.FC<UserManagementProps> = ({
                 <th className="text-left py-3 px-4 font-medium text-gray-600">Status</th>
                 <th className="text-left py-3 px-4 font-medium text-gray-600">Registered</th>
                 <th className="text-left py-3 px-4 font-medium text-gray-600">Referrer</th>
-
                 <th className="text-left py-3 px-4 font-medium text-gray-600">Actions</th>
               </tr>
             </thead>
             <tbody>
               {users.map((user) => (
-                <tr key={user._id} className="border-b hover:bg-gray-50">
+                <tr key={user._id} className="border-b border-gray-300 hover:bg-gray-50">
                   <td className="py-3 px-4">
                     <div className="flex items-center gap-3">
                       <Avatar className="h-8 w-8">

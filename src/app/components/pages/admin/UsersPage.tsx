@@ -80,7 +80,7 @@ const UsersPage: React.FC = () => {
             <h1 className="text-3xl font-bold text-gray-900">Users</h1>
             <p className="text-gray-600 mt-2">Manage all platform users and their access.</p>
           </div>
-          <Button className="bg-primary hover:bg-primary/90">
+          <Button className="bg-orange-500 hover:bg-orange-600 text-white">
             <Plus className="h-4 w-4 mr-2" />
             Add User
           </Button>

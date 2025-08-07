@@ -256,14 +256,14 @@ const AssessmentDetails = () => {
                 <ChevronDown className="h-4 w-4 ml-2" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
+            <DropdownMenuContent align="end" className="w-48 bg-white rounded-2xl shadow-lg border border-gray-200">
               <DropdownMenuItem onClick={handleCopyToClipboard} className="cursor-pointer">
-                <Copy className="h-4 w-4 mr-2" />
+                <Copy className="h-4 w-4 mr-2 hover:bg-orange-100" />
                 Copy to clipboard
               </DropdownMenuItem>
               {navigator.share && (
                 <DropdownMenuItem onClick={handleNativeShare} className="cursor-pointer">
-                  <Share2 className="h-4 w-4 mr-2" />
+                  <Share2 className="h-4 w-4 mr-2 hover:bg-orange-100" />
                   Share via...
                 </DropdownMenuItem>
               )}

@@ -230,7 +230,7 @@ const AssessmentsPage: React.FC = () => {
             <p className="text-gray-600 mt-2">Create and manage skill assessments for candidates.</p>
           </div>
           {currentUser.role === 'super_admin' && (
-            <Button className="bg-blue-600 hover:bg-blue-700" onClick={() => setShowAddModal(true)}>
+            <Button className="bg-orange-600 hover:bg-orange-700" onClick={() => setShowAddModal(true)}>
               <Plus className="h-4 w-4 mr-2" />
               Create Assessment
             </Button>
@@ -248,7 +248,7 @@ const AssessmentsPage: React.FC = () => {
                     placeholder="Search assessments..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 w-64"
+                    className="pl-10 w-64 border-gray-300"
                   />
                 </div>
               </div>
@@ -260,7 +260,7 @@ const AssessmentsPage: React.FC = () => {
                   return (
                     <div
                       key={assessment._id}
-                      className="border rounded-lg p-6 hover:bg-gray-50 transition-colors"
+                      className="border border-gray-300 rounded-lg p-6 hover:bg-gray-50 transition-colors"
                       ref={isLast ? lastAssessmentRef : null}
                     >
                       <div className="flex items-start justify-between mb-4">
@@ -292,17 +292,17 @@ const AssessmentsPage: React.FC = () => {
                               </Badge>
                           </div>
                             {assessment?.tags?.map((tag, index) => (
-                              <Badge key={index} variant="outline" className="text-xs">
+                              <Badge key={index} variant="outline" className="text-xs px-2 py-1 rounded-lg bg-gray-100 text-gray-800 ml-1 ">
                                 {tag}
                               </Badge>
                             ))}
                           <Tooltip>
                         <TooltipTrigger asChild>
-                          <CardDescription className="text-sm text-gray-600 mt-3 max-h-[64px] leading-snug line-clamp-3 cursor-default">
+                          <CardDescription className="text-sm text-gray-600 mt-3 max-h-[64px] bg-white leading-snug line-clamp-3 cursor-default">
                             {assessment.description}
                           </CardDescription>
                         </TooltipTrigger>
-                        <TooltipContent className="max-w-xs text-sm text-gray-600">
+                        <TooltipContent className="max-w-xs text-sm bg-white text-gray-600">
                           {assessment.description}
                         </TooltipContent>
                         </Tooltip>                          <div className="flex flex-wrap gap-2">
@@ -337,7 +337,7 @@ const AssessmentsPage: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 pt-4 border-t">
+                      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 pt-4 border-t border-gray-300 ">
                         <div className="text-center">
                           <p className="text-2xl font-semibold text-gray-900">{assessment.timeLimit}</p>
                           <p className="text-sm text-gray-500">Minutes</p>
