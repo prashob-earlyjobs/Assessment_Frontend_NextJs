@@ -31,6 +31,7 @@ const Index = () => {
           name="keywords"
           content="job search, skill assessments, AI resume, career guidance, job applications, EarlyJobs"
         />
+        
       </Head>
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex flex-col">
         {/* Header */}

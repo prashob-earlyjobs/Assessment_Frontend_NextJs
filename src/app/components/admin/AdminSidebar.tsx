@@ -67,10 +67,14 @@ const menuItems = [
   },
 ];
 
-export const AdminSidebar: React.FC = () => {
+interface AdminSidebarProps {
+  collapsed: boolean;
+  setCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const AdminSidebar: React.FC<AdminSidebarProps> = ({ collapsed, setCollapsed }) => {
   const pathname = usePathname();
   const { hasPermission } = useAdmin();
-  const [collapsed, setCollapsed] = useState(false);
 
   const isActive = (path: string) =>
     pathname === path || (path !== '/admin' && pathname.startsWith(path));
@@ -79,7 +83,7 @@ export const AdminSidebar: React.FC = () => {
 
   return (
     <div
-      className={`relative h-screen bg-white border-r transition-all duration-300 ${
+      className={`fixed top-0 left-0 z-30 h-screen bg-white border-r border-gray-300 transition-all duration-300 ${
         collapsed ? 'w-16' : 'w-64'
       }`}
     >
