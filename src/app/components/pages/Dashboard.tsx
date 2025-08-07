@@ -483,9 +483,7 @@ const Dashboard = () => {
                         'bg-teal-100 text-teal-600'
                       }`}>
                     
-                      {
-                        activity.category === 'technical' ? <Code className="h-4 w-4" /> :activity.category === 'non-technical'? <BookOpen className="h-4 w-4" />:<Lightbulb className="h-4 w-4" />
-                      }
+                      <BookOpen className="h-4 w-4" />
 
                     </div>
                     <div className="flex-1 min-w-0">
@@ -495,12 +493,12 @@ const Dashboard = () => {
                       <div className="flex items-center space-x-2 mt-1">
                         <Badge
                           variant="secondary"
-                          className={`text-xs rounded-full ${activity.category === 'technical' || activity.status === 'Profile Updated' ? 'bg-green-100 text-green-700' :
+                          className={`text-xs rounded-full ${activity.status === 'Profile Updated' ? 'bg-green-100 text-green-700' :
                             activity.status === 'Applied' ? 'bg-blue-100 text-blue-700' :
                               'bg-yellow-100 text-yellow-700'
                             }`}
                         >
-                          {activity.category==='technical'  ?'Technical':activity.status === 'Profile Updated' ? 'Profile Updated' : 'Non-Technical' }
+                          {activity.category || (activity.status === 'Profile Updated' ? 'Profile Updated' : 'Uncategorized')}
                         </Badge>
                         <span className="text-xs text-gray-500">{activity.time}</span>
                       </div>
