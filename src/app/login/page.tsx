@@ -120,7 +120,6 @@ function LoginContent() {
     return;
   }
 
-  // Validate email
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!signupData.email) {
     toast.error("Email is required!");
