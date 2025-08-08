@@ -110,46 +110,67 @@ function LoginContent() {
   };
 
   const handleSignup = async () => {
-    if (signupData.password !== signupData.confirmPassword) {
-      toast.error("Passwords don't match!");
-      return;
+  // Validate name
+  if (!signupData.name) {
+    toast.error("Name is required!");
+    return;
+  }
+  if (signupData.name.length < 4) {
+    toast.error("Name must be at least 4 characters long!");
+    return;
+  }
+
+  // Validate email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!signupData.email) {
+    toast.error("Email is required!");
+    return;
+  }
+  if (!emailRegex.test(signupData.email)) {
+    toast.error("Please enter a valid email address!");
+    return;
+  }
+
+  // Existing mobile number validation
+  if (signupData.mobile.length !== 10) {
+    toast.error("Please enter a valid mobile number!");
+    return;
+  }
+
+  // Existing password validation
+  if (signupData.password !== signupData.confirmPassword) {
+    toast.error("Passwords don't match!");
+    return;
+  }
+  if (signupData.password.length < 6) {
+    toast.error("Password should be at least 6 characters long!");
+    return;
+  }
+  const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}[\]:;<>,.?~\\/-]).{6,}$/;
+  if (!passwordRegex.test(signupData.password)) {
+    toast.error("Password must contain at least one uppercase letter, one number, and one special character!");
+    return;
+  }
+
+  try {
+    const otpResponse = await sendOtptoMobile({
+      phoneNumber: signupData.mobile.replace(/^\+91/, ''),
+      email: signupData.email,
+      franchiseId: signupData.referrerId
+    });
+
+    if (!otpResponse.success) {
+      console.log("otpResponse", otpResponse);
+      throw new Error(otpResponse.message || "Failed to send OTP");
     }
 
-    if (signupData.mobile.length !== 10) {
-      toast.error("Please enter a valid mobile number!");
-      return;
-    }
-
-    if (signupData.password.length < 6) {
-      toast.error("Password should be at least 6 characters long!");
-      return;
-    }
-
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}[\]:;<>,.?~\\/-]).{6,}$/;
-    if (!passwordRegex.test(signupData.password)) {
-      toast.error("Password must contain at least one uppercase letter, one number, and one special character!");
-      return;
-    }
-
-    try {
-      const otpResponse = await sendOtptoMobile({
-        phoneNumber: signupData.mobile.replace(/^\+91/, ''),
-        email: signupData.email,
-        franchiseId: signupData.referrerId
-      });
-
-      if (!otpResponse.success) {
-        console.log("otpResponse", otpResponse);
-        throw new Error(otpResponse.message || "Failed to send OTP");
-      }
-
-      setIsOtpDialogOpen(true);
-      toast.success("OTP sent to your mobile number and email!");
-    } catch (error: any) {
-      console.log("error", error?.response?.data || error.message || error);
-      toast.error(error?.response?.data?.message || error.message || "Error sending OTP");
-    }
-  };
+    setIsOtpDialogOpen(true);
+    toast.success("OTP sent to your mobile number and email!");
+  } catch (error: any) {
+    console.log("error", error?.response?.data || error.message || error);
+    toast.error(error?.response?.data?.message || error.message || "Error sending OTP");
+  }
+};
 
   const handleResendOtp = async () => {
     try {
