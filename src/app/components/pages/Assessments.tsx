@@ -84,9 +84,11 @@ const Assessments = () => {
       searchQuery: searchQuery || "",
       category: selectedSkill !== "all" ? selectedSkill : "",
     };
+    console.log("Filter params:", params); // Debug log
     try {
       const response = await getAssessmentsfromSearch(params);
       const fetched = response.data.assessments;
+      console.log("Fetched assessments:", fetched); // Debug log
       
       // Remove duplicates based on _id
       setAssessments((prev) => {
@@ -97,6 +99,7 @@ const Assessments = () => {
       
       setHasMore(fetched.length === LIMIT);
     } catch (err) {
+      console.error("Error fetching assessments:", err); // Debug log
       toast.error("Failed to fetch assessments:");
     } finally {
       setLoading(false);
@@ -156,27 +159,18 @@ const Assessments = () => {
         </div>
 
         <div className="bg-white rounded-3xl shadow-lg border-0 p-6 mb-8">
-          <div className="flex flex-col lg:flex-row gap-4">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 focus:border-orange-500" />
-              <Input
-                placeholder="Search assessments..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 h-12 rounded-2xl border-gray-200 focus:border-blue-500"
-              />
-            </div>
-            <div className="flex gap-4">
-              <Select value={selectedSkill} onValueChange={setSelectedSkill}>
-                <SelectTrigger className="w-48 h-12 rounded-2xl border-gray-200">
-                  <Filter className="h-4 w-4 mr-2" />
-                  <SelectValue placeholder="All Skills" />
-                </SelectTrigger>
-                <SelectContent className="bg-white rounded-2xl shadow-lg border-gray-200 ">
-                  <SelectItem value="all" className="hover:bg-orange-100">All Types</SelectItem>
-                  <SelectItem value="all" className="hover:bg-orange-100">All Categories</SelectItem>
-                </SelectContent>
-              </Select>
+          <div className="flex flex-col gap-4">
+            {/* Top Row: Search and Level Filter */}
+            <div className="flex flex-col lg:flex-row gap-4">
+              <div className="flex-1 relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 focus:border-orange-500" />
+                <Input
+                  placeholder="Search assessments..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 h-12 rounded-2xl border-gray-200 focus:border-blue-500"
+                />
+              </div>
               <Select value={selectedLevel} onValueChange={setSelectedLevel}>
                 <SelectTrigger className="w-48 h-12 rounded-2xl border-gray-200 ">
                   <SelectValue placeholder="All Levels" />
@@ -190,6 +184,47 @@ const Assessments = () => {
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+            
+            {/* Bottom Row: Category Filter Buttons */}
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => setSelectedSkill("all")}
+                className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 ${
+                  selectedSkill === "all"
+                    ? "bg-blue-600 text-white shadow-lg"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                All Categories
+              </button>
+              {[
+                "Aptitude & Reasoning",
+                "Sales & Marketing", 
+                "Customer Support & BPO",
+                "Data Entry & Back Office",
+                "Operations & Admin",
+                "Human Resources & Recruitment",
+                "Finance & Accounts",
+                "IT & Technical Support",
+                "Retail & E-commerce",
+                "Hospitality & Front Desk",
+                "Healthcare (Non-Clinical)",
+                "Internship & Fresher Readiness",
+                "Behavioral & Soft Skills"
+              ].map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setSelectedSkill(category)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 ${
+                    selectedSkill === category
+                      ? "bg-blue-600 text-white shadow-lg"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
             </div>
           </div>
         </div>
