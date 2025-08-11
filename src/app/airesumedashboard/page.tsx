@@ -1,5 +1,5 @@
-import AiResumeDashboard from "../components/pages/AiResumeDashboard";
+// import AiResumeDashboard from "../components/pages/AiResumeDashboard";
 
-export default function Page() {
-  return <AiResumeDashboard />;
-}
+// export default function Page() {
+//   return <AiResumeDashboard />;
+// }

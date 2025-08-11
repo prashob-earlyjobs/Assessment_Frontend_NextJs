@@ -39,6 +39,10 @@ function LoginContent() {
   const [forgotPasswordData, setForgotPasswordData] = useState({ email: "", mobile: "", newPassword: "", confirmPassword: "" });
   const [forgotOtp, setForgotOtp] = useState("");
   const [isEnteringNumber, setIsEnteringNumber] = useState(false);
+  const [otpTimer, setOtpTimer] = useState(30);
+  const [isOtpTimerActive, setIsOtpTimerActive] = useState(false);
+  const [forgotOtpTimer, setForgotOtpTimer] = useState(30);
+  const [isForgotOtpTimerActive, setIsForgotOtpTimerActive] = useState(false);
 
   useEffect(() => {
     const checkUserLoggedIn = async () => {
@@ -76,6 +80,38 @@ function LoginContent() {
     }
   }, [id, referalCode, router, pathname, setUserCredentials]);
 
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (isOtpTimerActive && otpTimer > 0) {
+      timer = setInterval(() => {
+        setOtpTimer((prev) => {
+          if (prev <= 1) {
+            setIsOtpTimerActive(false);
+            return 30;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [isOtpTimerActive, otpTimer]);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (isForgotOtpTimerActive && forgotOtpTimer > 0) {
+      timer = setInterval(() => {
+        setForgotOtpTimer((prev) => {
+          if (prev <= 1) {
+            setIsForgotOtpTimerActive(false);
+            return 30;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [isForgotOtpTimerActive, forgotOtpTimer]);
+
   const handleLogin = async () => {
     if (isEnteringNumber && loginData.emailormobile.length !== 10) {
       toast.error("Please enter a valid mobile number!");
@@ -110,66 +146,64 @@ function LoginContent() {
   };
 
   const handleSignup = async () => {
-  // Validate name
-  if (!signupData.name) {
-    toast.error("Name is required!");
-    return;
-  }
-  if (signupData.name.length < 4) {
-    toast.error("Name must be at least 4 characters long!");
-    return;
-  }
-
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!signupData.email) {
-    toast.error("Email is required!");
-    return;
-  }
-  if (!emailRegex.test(signupData.email)) {
-    toast.error("Please enter a valid email address!");
-    return;
-  }
-
-  // Existing mobile number validation
-  if (signupData.mobile.length !== 10) {
-    toast.error("Please enter a valid mobile number!");
-    return;
-  }
-
-  // Existing password validation
-  if (signupData.password !== signupData.confirmPassword) {
-    toast.error("Passwords don't match!");
-    return;
-  }
-  if (signupData.password.length < 6) {
-    toast.error("Password should be at least 6 characters long!");
-    return;
-  }
-  const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}[\]:;<>,.?~\\/-]).{6,}$/;
-  if (!passwordRegex.test(signupData.password)) {
-    toast.error("Password must contain at least one uppercase letter, one number, and one special character!");
-    return;
-  }
-
-  try {
-    const otpResponse = await sendOtptoMobile({
-      phoneNumber: signupData.mobile.replace(/^\+91/, ''),
-      email: signupData.email,
-      franchiseId: signupData.referrerId
-    });
-
-    if (!otpResponse.success) {
-      console.log("otpResponse", otpResponse);
-      throw new Error(otpResponse.message || "Failed to send OTP");
+    if (!signupData.name) {
+      toast.error("Name is required!");
+      return;
+    }
+    if (signupData.name.length < 4) {
+      toast.error("Name must be at least 4 characters long!");
+      return;
     }
 
-    setIsOtpDialogOpen(true);
-    toast.success("OTP sent to your mobile number and email!");
-  } catch (error: any) {
-    console.log("error", error?.response?.data || error.message || error);
-    toast.error(error?.response?.data?.message || error.message || "Error sending OTP");
-  }
-};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!signupData.email) {
+      toast.error("Email is required!");
+      return;
+    }
+    if (!emailRegex.test(signupData.email)) {
+      toast.error("Please enter a valid email address!");
+      return;
+    }
+
+    if (signupData.mobile.length !== 10) {
+      toast.error("Please enter a valid mobile number!");
+      return;
+    }
+
+    if (signupData.password !== signupData.confirmPassword) {
+      toast.error("Passwords don't match!");
+      return;
+    }
+    if (signupData.password.length < 6) {
+      toast.error("Password should be at least 6 characters long!");
+      return;
+    }
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}[\]:;<>,.?~\\/-]).{6,}$/;
+    if (!passwordRegex.test(signupData.password)) {
+      toast.error("Password must contain at least one uppercase letter, one number, and one special character!");
+      return;
+    }
+
+    try {
+      const otpResponse = await sendOtptoMobile({
+        phoneNumber: signupData.mobile.replace(/^\+91/, ''),
+        email: signupData.email,
+        franchiseId: signupData.referrerId
+      });
+
+      if (!otpResponse.success) {
+        console.log("otpResponse", otpResponse);
+        throw new Error(otpResponse.message || "Failed to send OTP");
+      }
+
+      setIsOtpDialogOpen(true);
+      setIsOtpTimerActive(true);
+      toast.success("OTP sent to your mobile number and email!");
+    } catch (error: any) {
+      console.log("error", error?.response?.data || error.message || error);
+      toast.error(error?.response?.data?.message || error.message || "Error sending OTP");
+    }
+  };
 
   const handleResendOtp = async () => {
     try {
@@ -183,6 +217,8 @@ function LoginContent() {
         return;
       }
       setOtp("");
+      setIsOtpTimerActive(true);
+      setOtpTimer(30);
       toast.success("OTP resent to your mobile number and email!");
     } catch (error) {
       toast.error("Error resending OTP");
@@ -218,6 +254,8 @@ function LoginContent() {
       setUserCredentials(signupResponse.data.user);
 
       setIsOtpDialogOpen(false);
+      setIsOtpTimerActive(false);
+      setOtpTimer(30);
       toast.success("Account created successfully!");
       if (pathname.startsWith('/login') || pathname.startsWith('/signup')) {
         router.push('/onboarding');
@@ -256,6 +294,7 @@ function LoginContent() {
       setUserCredentials(otpResponse.data.user);
       setIsForgotPasswordDialogOpen(false);
       setIsForgotOtpDialogOpen(true);
+      setIsForgotOtpTimerActive(true);
       toast.success("OTP sent to your mobile number and email!");
     } catch (error) {
       toast.error("User does not exist with this mobile number or email");
@@ -281,6 +320,8 @@ function LoginContent() {
       }
 
       setIsForgotOtpDialogOpen(false);
+      setIsForgotOtpTimerActive(false);
+      setForgotOtpTimer(30);
       setIsResetPasswordDialogOpen(true);
       toast.success("OTP verified successfully!");
     } catch (error) {
@@ -604,8 +645,9 @@ function LoginContent() {
                   onClick={handleResendOtp}
                   variant="outline"
                   className="w-full h-12 rounded-2xl text-base"
+                  disabled={isOtpTimerActive}
                 >
-                  Resend OTP
+                  {isOtpTimerActive ? `Resend OTP in ${otpTimer}s` : "Resend OTP"}
                 </Button>
               </div>
             </div>
@@ -697,8 +739,9 @@ function LoginContent() {
                   onClick={handleForgotPassword}
                   variant="outline"
                   className="w-full h-12 rounded-2xl text-base"
+                  disabled={isForgotOtpTimerActive}
                 >
-                  Resend OTP
+                  {isForgotOtpTimerActive ? `Resend OTP in ${forgotOtpTimer}s` : "Resend OTP"}
                 </Button>
               </div>
             </div>
