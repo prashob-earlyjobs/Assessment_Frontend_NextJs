@@ -74,16 +74,16 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            {pathname !== "/dashboard" && (
+            {/* {pathname !== "/dashboard" && (
               <Button
                 variant="ghost"
                 onClick={() => window.history.back()}
-                className="rounded-2xl"
+                className="rounded-2xl hidden md:block"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back
               </Button>
-            )}
+            )} */}
 
             <img
               src="/images/logo.png"

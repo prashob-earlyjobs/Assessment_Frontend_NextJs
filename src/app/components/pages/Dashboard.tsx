@@ -335,8 +335,8 @@ const Dashboard = () => {
                     Let AI craft your perfect resume and apply to dozens of companies.
                   </CardDescription>
                   <Button
-                    // onClick={handleBulkApplyBrowse}
-                    onClick={() => toast.info("Access granted to selected candidates only")}
+                    // onClick={() => navigate.push('/airesumedashboard')}
+                     onClick={() => toast.info("Access granted to selected candidates only")}
                     variant="secondary"
                     className="w-full rounded-2xl bg-white text-yellow-600 hover:bg-gray-50 mb-3"
                   >
