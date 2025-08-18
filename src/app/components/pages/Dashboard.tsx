@@ -341,7 +341,7 @@ const Dashboard = () => {
                     className="w-full rounded-2xl bg-white text-yellow-600 hover:bg-gray-50 mb-3"
                   >
                     Build Resume
-                    <img src="/images/lock.svg" alt="Arrow Right" className="h-4 w-4 ml-2" />
+                    {/* <img src="/images/lock.svg" alt="Arrow Right" className="h-4 w-4 ml-2" /> */}
                   </Button>
                 </CardContent>
               </Card>
