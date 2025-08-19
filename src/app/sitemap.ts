@@ -3,6 +3,7 @@ import { getAssessmentsfromSearch } from './components/services/servicesapis'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.earlyjobs.ai'
+  const backendUrl = "https://apis.earlyjobs.in"
   
   // Static pages
   const staticPages = [
@@ -14,6 +15,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: `${baseUrl}/assessments`,
+      lastModified: new Date(),
+      changeFrequency: 'daily' as const,
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/jobs`,
       lastModified: new Date(),
       changeFrequency: 'daily' as const,
       priority: 0.9,
@@ -112,6 +119,34 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // If API fails, we'll just return static pages
   }
 
-  // Combine static and dynamic pages
-  return [...staticPages, ...assessmentPages]
+  // Dynamic job pages
+  let jobPages: MetadataRoute.Sitemap = []
+  
+  try {
+    // Fetch all jobs from the backend API
+    const jobsResponse = await fetch(`${backendUrl}/api/public/jobs`)
+    
+    if (jobsResponse.ok) {
+      const jobsData = await jobsResponse.json()
+      const jobs = jobsData?.data?.jobs || jobsData?.jobs || []
+      
+      jobPages = jobs.map((job: any) => {
+        // Create URL-friendly job title
+        const jobTitle = encodeURIComponent(job.title || job.jobTitle || job.name || 'job')
+        
+        return {
+          url: `${baseUrl}/jobs/${jobTitle}/${job._id || job.id}`,
+          lastModified: new Date(job.updatedAt || job.createdAt || Date.now()),
+          changeFrequency: 'daily' as const,
+          priority: 0.8,
+        }
+      })
+    }
+  } catch (error) {
+    console.error('Error fetching jobs for sitemap:', error)
+    // If API fails, we'll just return static pages and assessments
+  }
+
+  // Combine static, assessment, and job pages
+  return [...staticPages, ...assessmentPages, ...jobPages]
 } 
