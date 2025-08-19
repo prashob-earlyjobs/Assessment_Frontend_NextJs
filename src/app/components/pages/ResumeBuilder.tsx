@@ -13,6 +13,8 @@ import { Badge } from "../ui/badge"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible"
 import ATSScoreCard from "../ui/ats-score"
+import {toast} from "sonner"
+import Header from "./header"
 import {
   ArrowLeft,
   FileText,
@@ -131,42 +133,16 @@ const templates = [
     accent: "text-gray-600",
     preview: "Traditional and professional",
   },
-  {
-    id: "creative",
-    name: "Creative",
-    color: "bg-purple-600",
-    headerBg: "bg-gradient-to-r from-purple-600 to-pink-500",
-    headerText: "text-white",
-    sectionHeader: "text-purple-600 border-purple-200",
-    accent: "text-purple-600",
-    preview: "Bold design with creative elements",
-  },
-  {
-    id: "minimal",
-    name: "Minimal",
-    color: "bg-blue-400",
-    headerBg: "bg-white border-b-4 border-blue-400",
-    headerText: "text-gray-800",
-    sectionHeader: "text-blue-400 border-blue-100",
-    accent: "text-blue-400",
-    preview: "Clean and simple layout",
-  },
-  {
-    id: "professional",
-    name: "Professional",
-    color: "bg-green-700",
-    headerBg: "bg-green-700",
-    headerText: "text-white",
-    sectionHeader: "text-green-700 border-green-200",
-    accent: "text-green-600",
-    preview: "Corporate-friendly design",
-  },
+  
+  
+ 
 ]
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL
-const token = Cookies.get("accessToken")
+
 const apiService = {
   async saveResume(resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[]) {
+    const token = Cookies.get("accessToken")
     const response = await fetch(`${API_BASE_URL}/resumes`, {
       method: "POST",
       headers: {
@@ -205,6 +181,7 @@ const apiService = {
   // },
 
   async updateResume(id: string, resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[]) {
+    const token = Cookies.get("accessToken")
     const response = await fetch(`${API_BASE_URL}/resume/${id}`, {
       method: "PUT",
       headers: {
@@ -226,6 +203,7 @@ const apiService = {
   },
 
   async analyzeATS(resumeData: ResumeData) {
+    const token = Cookies.get("accessToken")
     const response = await fetch(`${API_BASE_URL}/ats/analyze`, {
       method: "POST",
       headers: {
@@ -243,8 +221,9 @@ const apiService = {
   },
 
  async generatePDF(id: string, htmlContent: string) {
+  const token = Cookies.get("accessToken")
   console.log("Generate PDF for resume:", id);
-
+  
   const response = await fetch(`${API_BASE_URL}/resumes/${id}/generate-pdf`, {
     method: "POST",
     headers: {
@@ -328,65 +307,24 @@ export default function ResumeBuilder() {
   const [isSaving, setIsSaving] = useState(false)
   const [savedResumeId, setSavedResumeId] = useState<string | null>(null)
 
-  // useEffect(() => {
-  //   const loadExistingResume = async () => {
-  //     try {
-  //       const result = await apiService.loadResume()
-  //       if (result && result.success && result.data) {
-  //         const resume = result.data
-  //         setResumeData({
-  //           personalInfo: resume.personalInfo || resumeData.personalInfo,
-  //           professionalSummary: resume.professionalSummary || "",
-  //           education: resume.education || [],
-  //           workExperience: resume.workExperience || [],
-  //           skills: resume.skills || [],
-  //           certifications: resume.certifications || [],
-  //           projects: resume.projects || [],
-  //           achievements: resume.achievements || [],
-  //           extracurriculars: resume.extracurriculars || [],
-  //           profilePicture: resume.profilePicture || null,
-  //         })
-
-  //         if (resume.template) {
-  //           setActiveTemplate(resume.template)
-  //         }
-
-  //         if (resume.sectionOrder) {
-  //           setSectionOrder(resume.sectionOrder)
-  //         }
-
-  //         if (resume.atsScore) {
-  //           setATSScore(resume.atsScore)
-  //         }
-
-  //         setSavedResumeId(resume._id)
-  //       }
-  //     } catch (error) {
-  //       console.error("Failed to load resume:", error)
-  //       // Continue with empty resume if loading fails
-  //     }
-  //   }
-
-  //   loadExistingResume()
-  // }, [])
+ 
 
   const handleSave = async () => {
   setIsSaving(true)
   try {
     let result
     if (savedResumeId) {
-      // Update existing resume
       result = await apiService.updateResume(savedResumeId, resumeData, activeTemplate, sectionOrder)
     } else {
-      // Create new resume
       result = await apiService.saveResume(resumeData, activeTemplate, sectionOrder)
     }
 
     if (result.success) {
       const resumeId = result.data?._id || result.resume?._id || result._id
       if (resumeId) {
-        setSavedResumeId(resumeId)   // ✅ now always set
+        setSavedResumeId(resumeId)   
       }
+      toast.success("Resume saved successfully!")
       console.log("Resume saved successfully!")
     }
   } catch (error) {
@@ -730,28 +668,28 @@ export default function ResumeBuilder() {
     }))
   }, [])
 
-  const addNewSection = useCallback(
-    (sectionType: "achievements" | "extracurriculars") => {
-      console.log("[v0] Adding new section:", sectionType)
-      setSectionOrder((prev) =>
-        prev.map((section) => (section.id === sectionType ? { ...section, visible: true } : section)),
-      )
-      setCollapsedSections((prev) => {
-        const newSet = new Set(prev)
-        newSet.delete(sectionType)
-        return newSet
-      })
+  // const addNewSection = useCallback(
+  //   (sectionType: "achievements" | "extracurriculars") => {
+  //     console.log("[v0] Adding new section:", sectionType)
+  //     setSectionOrder((prev) =>
+  //       prev.map((section) => (section.id === sectionType ? { ...section, visible: true } : section)),
+  //     )
+  //     setCollapsedSections((prev) => {
+  //       const newSet = new Set(prev)
+  //       newSet.delete(sectionType)
+  //       return newSet
+  //     })
 
-      if (sectionType === "achievements") {
-        addAchievement()
-      } else if (sectionType === "extracurriculars") {
-        addExtracurricular()
-      }
+  //     if (sectionType === "achievements") {
+  //       addAchievement()
+  //     } else if (sectionType === "extracurriculars") {
+  //       addExtracurricular()
+  //     }
 
-      setIsAddSectionDialogOpen(false)
-    },
-    [addAchievement, addExtracurricular],
-  )
+  //     setIsAddSectionDialogOpen(false)
+  //   },
+  //   [addAchievement, addExtracurricular],
+  // )
 
   // ATS Analysis function
   // const analyzeATS = useCallback(async () => {
@@ -1141,32 +1079,29 @@ export default function ResumeBuilder() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+      <Header />
       <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container max-w-7xl mx-auto px-4 py-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 md:space-x-4">
               <Link href="/airesume">
                 <Button variant="ghost" size="sm" className="p-2 md:px-3">
                   <ArrowLeft className="w-4 h-4 md:mr-2" />
-                  <span className="hidden md:inline">Back to Home</span>
+                  <span className="hidden md:inline">Back to Dashboard</span>
                 </Button>
               </Link>
-              <div className="flex items-center space-x-2">
-                <div className="w-6 h-6 md:w-8 md:h-8 bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
-                  <FileText className="w-4 h-4 md:w-5 md:h-5 text-white" />
-                </div>
-                <h1 className="text-lg md:text-xl font-bold text-gray-900 hidden sm:block">AI Resume Builder</h1>
-              </div>
+              
             </div>
             <div className="flex items-center space-x-1 md:space-x-3">
-              <Button variant="outline" size="sm" className="hidden sm:flex bg-transparent">
-                <RotateCcw className="w-4 h-4 md:mr-2" />
-                <span className="hidden md:inline">Clear All</span>
-              </Button>
-              <Button onClick={handleDownloadPDF} size="sm" className="bg-green-500 hover:bg-green-600 text-white">
+              <Link href="/myresumes">
+                <Button variant="outline" size="sm" className="hidden sm:flex bg-transparent" >
+                  <FileText className="w-4 h-4 md:mr-2" />
+                  <span>My Resumes</span>
+                </Button>
+              </Link>
+              <Button onClick={handleSave} size="sm" className="bg-orange-500 hover:bg-orange-600 text-white">
                 <Download className="w-4 h-4 md:mr-2" />
-                <span className="hidden md:inline">Download PDF</span>
+                <span className="hidden md:inline">Save as PDF</span>
               </Button>
             </div>
           </div>
@@ -1878,9 +1813,9 @@ export default function ResumeBuilder() {
               <Card>
                 <CardContent className="p-0">
                   <div id="resume-preview" className="bg-white rounded-lg min-h-[700px] shadow-sm overflow-hidden">
-                    {/* Resume Preview Content with Live Updates */}
+                    
                     <div className="space-y-6">
-                      {/* Header - Always at top, not draggable */}
+                      
                       <div className={`${currentTemplate.headerBg} ${currentTemplate.headerText} p-6`}>
                         <div className="flex items-center space-x-4">
                           {resumeData.profilePicture && (

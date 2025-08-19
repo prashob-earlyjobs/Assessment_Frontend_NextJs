@@ -3,6 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import Header from "./header";
+import { toast } from "sonner";
 import {
   Card,
   CardContent,
@@ -162,8 +163,9 @@ export default function Index() {
                 </div>
 
                 {/* JDE Option */}
-                <Link href="/builder?type=jde" className="block">
-                  <Card className="border-2 border-orange-200 hover:border-orange-400 transition-colors cursor-pointer hover:shadow-md">
+                
+                  <Card className="border-2 border-orange-200 hover:border-orange-400 transition-colors cursor-pointer hover:shadow-md" 
+                        onClick={() => toast.info("Access granted to selected candidates only")}>
                     <CardContent className="p-4">
                       <div className="flex items-center space-x-3">
                         <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
@@ -180,7 +182,7 @@ export default function Index() {
                       </div>
                     </CardContent>
                   </Card>
-                </Link>
+                
 
                 {/* Standard Option */}
                 <Link href="/resumeBuilder" className="block">

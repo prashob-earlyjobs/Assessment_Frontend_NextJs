@@ -97,7 +97,7 @@ export default function Login() {
       toast.error(response.message);
       return;
     } else {
-      Cookies.set("accessToken", response.data.accessToken);
+      Cookies.set("accessToken", response.data.accessToken, { expires: 7 });
       setUserCredentials(response.data.user);
       toast.success("Login successful!");
       if (pathname.startsWith('/login') || pathname.startsWith('/signup')) {
