@@ -104,8 +104,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const assessments = response?.data?.assessments || []
     
     assessmentPages = assessments.map((assessment: any) => {
-      // Create URL-friendly assessment name
-      const assessmentName = encodeURIComponent(assessment.title || assessment.name || 'assessment')
+      // Create URL-friendly assessment name with hyphens instead of spaces
+      const assessmentName = (assessment.title || assessment.name || 'assessment')
+        .replace(/\s+/g, '-')
+        .toLowerCase()
       
       return {
         url: `${baseUrl}/assessments/${assessmentName}/${assessment._id}`,
@@ -131,8 +133,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const jobs = jobsData?.data?.jobs || jobsData?.jobs || []
       
       jobPages = jobs.map((job: any) => {
-        // Create URL-friendly job title
-        const jobTitle = encodeURIComponent(job.title || job.jobTitle || job.name || 'job')
+        // Create URL-friendly job title with hyphens instead of spaces
+        const jobTitle = (job.title || job.jobTitle || job.name || 'job')
+          .replace(/\s+/g, '-')
+          .toLowerCase()
         
         return {
           url: `${baseUrl}/jobs/${jobTitle}/${job._id || job.id}`,
