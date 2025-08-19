@@ -128,7 +128,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   
   try {
     // Fetch all jobs from the backend API
-    const jobsResponse = await fetch(`${backendUrl}/api/public/jobs`)
+    const jobsResponse = await fetch(`${backendUrl}/api/public/jobs?page=1&pageSize=1000`)
     
     if (jobsResponse.ok) {
       const jobsData = await jobsResponse.json()

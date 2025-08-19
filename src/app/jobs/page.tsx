@@ -44,7 +44,7 @@ const Jobs = () => {
   const [totalJobs, setTotalJobs] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   // const [jobsPerPage] = useState(10);
-  const pageSize = 20;
+  const pageSize = 10;
 
   // Filter states
   const [companyName, setCompanyName] = useState("");
@@ -53,6 +53,7 @@ const Jobs = () => {
   const [searchInput, setSearchInput] = useState("");
 
   const backendUrl = "https://apis.earlyjobs.in";
+
 
   // Calculate pagination values
   const totalPages = Math.ceil(totalJobs / pageSize);
@@ -101,7 +102,7 @@ const Jobs = () => {
       if (tit) params.append("title", tit);
       if (si) params.append("search", si);
       params.append("page", cp.toString());
-      // params.append('limit', jobsPerPage.toString());
+      params.append("pageSize", pageSize.toString());
 
       const url = `${backendUrl}/api/public/jobs?${params.toString()}`;
       console.log("API URL:", url); // Debug log
