@@ -66,6 +66,12 @@ export default {
           500: "#f4a261", // Matches --saffron-500 in globals.css
           600: "#e76f51", // Matches --saffron-600 in globals.css
         },
+        earlyjobs: {
+          orange: "var(--earlyjobs-orange)",
+          navy: "var(--earlyjobs-navy)",
+          text: "var(--earlyjobs-text)",
+          "light-orange": "var(--earlyjobs-light-orange)",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
