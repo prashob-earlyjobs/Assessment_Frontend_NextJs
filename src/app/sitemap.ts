@@ -104,9 +104,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const assessments = response?.data?.assessments || []
     
     assessmentPages = assessments.map((assessment: any) => {
-      // Create URL-friendly assessment name with hyphens instead of spaces
+      // Create URL-friendly assessment name with hyphens instead of spaces and escape special characters
       const assessmentName = (assessment.title || assessment.name || 'assessment')
+        .replace(/[&<>"']/g, '') // Remove XML special characters
         .replace(/\s+/g, '-')
+        .replace(/[^\w\-]/g, '') // Remove any remaining non-word characters except hyphens
         .toLowerCase()
       
       return {
@@ -133,9 +135,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const jobs = jobsData?.data?.jobs || jobsData?.jobs || []
       
       jobPages = jobs.map((job: any) => {
-        // Create URL-friendly job title with hyphens instead of spaces
+        // Create URL-friendly job title with hyphens instead of spaces and escape special characters
         const jobTitle = (job.title || job.jobTitle || job.name || 'job')
+          .replace(/[&<>"']/g, '') // Remove XML special characters
           .replace(/\s+/g, '-')
+          .replace(/[^\w\-]/g, '') // Remove any remaining non-word characters except hyphens
           .toLowerCase()
         
         return {
