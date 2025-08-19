@@ -402,6 +402,12 @@ const Jobs = () => {
                     <Button
                       variant="outline"
                       className="rounded-2xl border-gray-200 hover:bg-gray-50"
+                      onClick={() => {
+                        // Create URL with jobtitle and jobid as separate parameters
+                        const jobTitle = job.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+                        const jobUrl = `/jobs/${jobTitle}/${job.id}`;
+                        navigate.push(jobUrl);
+                      }}
                     >
                       <Eye className="h-4 w-4 mr-2" />
                       View Details
