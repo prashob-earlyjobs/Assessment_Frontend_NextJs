@@ -15,6 +15,8 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/colla
 import ATSScoreCard from "../ui/ats-score"
 import {toast} from "sonner"
 import Header from "./header"
+import html2pdf from "html2pdf.js"
+import { oklch, oklab, rgb } from "culori"
 import {
   ArrowLeft,
   FileText,
@@ -113,26 +115,16 @@ interface SectionOrder {
 }
 
 const templates = [
-  {
-    id: "modern",
-    name: "Modern",
-    color: "bg-orange-500",
-    headerBg: "bg-gradient-to-r from-orange-500 to-orange-600",
-    headerText: "text-white",
-    sectionHeader: "text-orange-600 border-orange-200",
-    accent: "text-orange-500",
-    preview: "Clean and contemporary with orange accents",
-  },
-  {
-    id: "classic",
-    name: "Classic",
-    color: "bg-[#DEDEFF]",
-    headerBg: "bg-[#DEDEFF]",
-    headerText: "text-gray-900",
-    sectionHeader: "text-gray-800 border-gray-200",
-    accent: "text-gray-600",
-    preview: "Traditional and professional",
-  },
+{
+  id: "minimal",
+  name: "Minimal",
+  color: "bg-white",
+  headerBg: "bg-white border-b border-gray-300",
+  headerText: "text-black",
+  sectionHeader: "text-black border-gray-300",
+  accent: "text-black",
+  preview: "Clean, professional, black-and-white design",
+}
   
   
  
@@ -163,22 +155,7 @@ const apiService = {
     return response.json()
   },
 
-  //  async loadResume() {
-  //   const response = await fetch(`${API_BASE_URL}/resume/save`, {
-  //     headers: {
-  //       "user-id": "default-user", // In real app, get from auth context
-  //     },
-  //   })
-
-  //   if (!response.ok) {
-  //     if (response.status === 404) {
-  //       return null // No resume found
-  //     }
-  //     throw new Error("Failed to load resume")
-  //   }
-
-  //   return response.json()
-  // },
+  
 
   async updateResume(id: string, resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[]) {
     const token = Cookies.get("accessToken")
@@ -220,30 +197,11 @@ const apiService = {
     return response.json()
   },
 
- async generatePDF(id: string, htmlContent: string) {
-  const token = Cookies.get("accessToken")
-  console.log("Generate PDF for resume:", id);
-  
-  const response = await fetch(`${API_BASE_URL}/resumes/${id}/generate-pdf`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "authorization": `Bearer ${token}`,
-    },
-    body: JSON.stringify({ html: htmlContent }),
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text(); // show backend error
-    console.error("Backend response:", errorText);
-    throw new Error("Failed to generate PDF");
-  }
-
-  return await response.blob(); // PDF blob
-}
 
 
-}
+};
+
+
 
 export default function ResumeBuilder() {
   const [activeTemplate, setActiveTemplate] = useState("modern")
@@ -296,8 +254,8 @@ export default function ResumeBuilder() {
     { id: "skills", name: "Skills", visible: true },
     { id: "projects", name: "Projects", visible: true },
     { id: "certifications", name: "Certifications", visible: true },
-    { id: "achievements", name: "Achievements", visible: false },
-    { id: "extracurriculars", name: "Extracurricular Activities", visible: false },
+    { id: "achievements", name: "Achievements", visible: true },
+    { id: "extracurriculars", name: "Extracurricular Activities", visible: true },
   ])
 
   const [currentSkill, setCurrentSkill] = useState("")
@@ -307,8 +265,62 @@ export default function ResumeBuilder() {
   const [isSaving, setIsSaving] = useState(false)
   const [savedResumeId, setSavedResumeId] = useState<string | null>(null)
 
- 
+const convertOklchToRgb = () => {
+    const elements = document.querySelectorAll("#resume-preview *")
+    elements.forEach((element: HTMLElement) => {
+      const styles = window.getComputedStyle(element)
+      const properties = ["color", "background-color", "border-color"]
 
+      properties.forEach((property) => {
+        const value = styles.getPropertyValue(property)
+        if (value.includes("oklch") || value.includes("oklab")) {
+          try {
+            let color
+            if (value.includes("oklch")) {
+              color = oklch(value)
+            } else if (value.includes("oklab")) {
+              color = oklab(value)
+            }
+            if (color) {
+              const rgbColor = rgb(color)
+              const rgbString = `rgb(${Math.round(rgbColor.r * 255)}, ${Math.round(rgbColor.g * 255)}, ${Math.round(rgbColor.b * 255)})`
+              element.style.setProperty(property, rgbString)
+            }
+          }catch (e) {
+            console.error("Color conversion failed:", e)
+            if (property === "background-color") {
+              element.style.setProperty(property, "rgb(255, 255, 255)") // White background
+            } else {
+              element.style.setProperty(property, "rgb(0, 0, 0)") // Black text
+            }
+          }
+        }
+      })
+    })
+  }
+
+const handleDownloadPDF = () => {
+    const element = document.getElementById("resume-preview")
+    if (!element) {
+      toast.error("Preview not found. Please try again.")
+      return
+    }
+
+    convertOklchToRgb()
+
+    const opt = {
+      margin: 0.25,
+      filename: `${resumeData.personalInfo.fullName || "resume"}.pdf`,
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+    }
+
+    html2pdf().set(opt).from(element).save().catch((error: Error) => {
+      console.error("Failed to generate PDF:", error)
+      toast.error("Failed to generate PDF. Please try again.")
+    })
+  }
   const handleSave = async () => {
   setIsSaving(true)
   try {
@@ -326,6 +338,7 @@ export default function ResumeBuilder() {
       }
       toast.success("Resume saved successfully!")
       console.log("Resume saved successfully!")
+      
     }
   } catch (error) {
     console.error("Failed to save resume:", error)
@@ -351,43 +364,7 @@ export default function ResumeBuilder() {
     }
   }
 
-  const handleDownloadPDF = async () => {
-    if (!savedResumeId) {
-
-      await handleSave()
-      if (!savedResumeId) {
-        console.error("Failed to save resume before PDF generation")
-        return
-      }
-    }
-
-    try {
-      // Generate HTML content from the current resume preview
-      const previewElement = document.querySelector("#resume-preview")
-      const htmlContent = previewElement?.innerHTML || ""
-
-      if (!htmlContent) {
-        console.error("No preview content found for PDF generation")
-        return
-      }
-
-      const pdfBlob = await apiService.generatePDF(savedResumeId, htmlContent)
-
-      const url = window.URL.createObjectURL(pdfBlob)
-      const link = document.createElement("a")
-      link.href = url
-      link.download = `${resumeData.personalInfo.fullName.replace(/\s+/g, "_") || "Resume"}.pdf`
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      window.URL.revokeObjectURL(url)
-      console.log("PDF generated successfully!")
-    } catch (error) {
-      console.error("Failed to generate PDF:", error)
-      // Show error message or toast
-    }
-  }
-
+  
   // Section toggle function - Open one section, close all others
   const toggleSection = useCallback((sectionId: string) => {
     setCollapsedSections((prev) => {
@@ -464,19 +441,19 @@ export default function ResumeBuilder() {
   }, [])
 
   // Profile picture upload
-  const handleProfilePictureUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        setResumeData((prev) => ({
-          ...prev,
-          profilePicture: e.target?.result as string,
-        }))
-      }
-      reader.readAsDataURL(file)
-    }
-  }, [])
+  // const handleProfilePictureUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0]
+  //   if (file) {
+  //     const reader = new FileReader()
+  //     reader.onload = (e) => {
+  //       setResumeData((prev) => ({
+  //         ...prev,
+  //         profilePicture: e.target?.result as string,
+  //       }))
+  //     }
+  //     reader.readAsDataURL(file)
+  //   }
+  // }, [])
 
   // Education functions
   const addEducation = useCallback(() => {
@@ -668,194 +645,6 @@ export default function ResumeBuilder() {
     }))
   }, [])
 
-  // const addNewSection = useCallback(
-  //   (sectionType: "achievements" | "extracurriculars") => {
-  //     console.log("[v0] Adding new section:", sectionType)
-  //     setSectionOrder((prev) =>
-  //       prev.map((section) => (section.id === sectionType ? { ...section, visible: true } : section)),
-  //     )
-  //     setCollapsedSections((prev) => {
-  //       const newSet = new Set(prev)
-  //       newSet.delete(sectionType)
-  //       return newSet
-  //     })
-
-  //     if (sectionType === "achievements") {
-  //       addAchievement()
-  //     } else if (sectionType === "extracurriculars") {
-  //       addExtracurricular()
-  //     }
-
-  //     setIsAddSectionDialogOpen(false)
-  //   },
-  //   [addAchievement, addExtracurricular],
-  // )
-
-  // ATS Analysis function
-  // const analyzeATS = useCallback(async () => {
-  //   if (atsLoading) return; // Prevent duplicate calls
-
-  //   setATSLoading(true);
-  //   try {
-  //     const response = await fetch("/api/ats/analyze", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         personalInfo: resumeData.personalInfo,
-  //         professionalSummary: resumeData.professionalSummary,
-  //         education: resumeData.education,
-  //         workExperience: resumeData.workExperience,
-  //         skills: resumeData.skills,
-  //         certifications: resumeData.certifications,
-  //         projects: resumeData.projects,
-  //         template: activeTemplate,
-  //         sectionOrder,
-  //       }),
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! status: ${response.status}`);
-  //     }
-
-  //     const result = await response.json();
-  //     if (result.success) {
-  //       setATSScore(result.data.atsScore);
-  //     } else {
-  //       throw new Error(result.message || "Analysis failed");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error analyzing ATS score:", error);
-  //     // Reset ATS score on error
-  //     setATSScore(null);
-  //   } finally {
-  //     setATSLoading(false);
-  //   }
-  // }, [resumeData, activeTemplate, sectionOrder, atsLoading]);
-
-  // Save resume function
-  // const saveResume = useCallback(async () => {
-  //   if (isSaving) return; // Prevent duplicate calls
-
-  //   setIsSaving(true);
-  //   try {
-  //     const resumePayload = {
-  //       personalInfo: resumeData.personalInfo,
-  //       professionalSummary: resumeData.professionalSummary,
-  //       education: resumeData.education,
-  //       workExperience: resumeData.workExperience,
-  //       skills: resumeData.skills,
-  //       certifications: resumeData.certifications,
-  //       projects: resumeData.projects,
-  //       profilePicture: resumeData.profilePicture,
-  //       template: activeTemplate,
-  //       sectionOrder,
-  //     };
-
-  //     const response = await fetch(
-  //       savedResumeId ? `/api/resumes/${savedResumeId}` : "/api/resumes",
-  //       {
-  //         method: savedResumeId ? "PUT" : "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(resumePayload),
-  //       },
-  //     );
-
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! status: ${response.status}`);
-  //     }
-
-  //     const result = await response.json();
-  //     if (result.success) {
-  //       setSavedResumeId(result.data._id);
-  //       if (result.data.atsScore) {
-  //         setATSScore(result.data.atsScore);
-  //       }
-  //     } else {
-  //       throw new Error(result.message || "Save failed");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error saving resume:", error);
-  //   } finally {
-  //     setIsSaving(false);
-  //   }
-  // }, [resumeData, activeTemplate, sectionOrder, savedResumeId, isSaving]);
-
-  // Auto-save on data changes
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     if (resumeData.personalInfo.fullName && resumeData.personalInfo.email) {
-  //       saveResume();
-  //     }
-  //   }, 2000); // Auto-save after 2 seconds of inactivity
-
-  //   return () => clearTimeout(timer);
-  // }, [resumeData, saveResume]);
-
-  // PDF Download function
-  // const downloadPDF = useCallback(async () => {
-  //   // Check if resume has meaningful content
-  //   const hasContent =
-  //     resumeData.personalInfo.fullName ||
-  //     resumeData.professionalSummary ||
-  //     resumeData.education.length > 0 ||
-  //     resumeData.workExperience.length > 0 ||
-  //     resumeData.skills.length > 0 ||
-  //     resumeData.certifications.length > 0 ||
-  //     resumeData.projects.length > 0;
-
-  //   if (!hasContent) {
-  //     alert("Please add some content to your resume before downloading.");
-  //     return;
-  //   }
-
-  //   const element = document.getElementById("resume-preview");
-  //   if (!element) {
-  //     alert("Resume preview not found. Please ensure the preview is visible.");
-  //     return;
-  //   }
-
-  //   try {
-  //     // Import html2pdf dynamically
-  //     const html2pdf = (await import("html2pdf.js")).default;
-
-  //     // Ensure the element is fully rendered
-  //     await new Promise((resolve) => setTimeout(resolve, 500));
-
-  //     // Configure PDF options
-  //     const options = {
-  //       margin: [0.5, 0.5, 0.5, 0.5],
-  //       filename: `${resumeData.personalInfo.fullName.replace(/\s+/g, "_") || "Resume"}.pdf`,
-  //       image: { type: "jpeg", quality: 0.98 },
-  //       html2canvas: {
-  //         scale: 2,
-  //         useCORS: true,
-  //         letterRendering: true,
-  //         scrollX: 0,
-  //         scrollY: 0,
-  //         windowWidth: element.scrollWidth,
-  //         windowHeight: element.scrollHeight,
-  //         backgroundColor: "#ffffff",
-  //         logging: true,
-  //       },
-  //       jsPDF: {
-  //         unit: "in",
-  //         format: "a4",
-  //         orientation: "portrait",
-  //         compress: true,
-  //       },
-  //     };
-
-  //     // Generate and download PDF
-  //     await html2pdf().set(options).from(element).save();
-  //   } catch (error) {
-  //     console.error("Error generating PDF:", error);
-  //     alert("Failed to generate PDF. Please check the console for details or try again.");
-  //   }
-  // }, [resumeData]);
 
   const sections = [
     {
@@ -907,8 +696,8 @@ export default function ResumeBuilder() {
 
       if (sectionId === "summary" && resumeData.professionalSummary) {
         return (
-          <div key="summary">
-            <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-3 border-b pb-1`}>
+          <div key="summary" className="mb-6">
+            <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>
               Professional Summary
             </h2>
             <p className="text-gray-700 leading-relaxed">{resumeData.professionalSummary}</p>
@@ -918,8 +707,8 @@ export default function ResumeBuilder() {
 
       if (sectionId === "experience" && resumeData.workExperience.length > 0) {
         return (
-          <div key="experience">
-            <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-3 border-b pb-1`}>Work Experience</h2>
+          <div key="experience"  className="mb-6">
+            <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Work Experience</h2>
             <div className="space-y-4">
               {resumeData.workExperience.map((work) => (
                 <div key={work.id}>
@@ -944,8 +733,8 @@ export default function ResumeBuilder() {
 
       if (sectionId === "education" && resumeData.education.length > 0) {
         return (
-          <div key="education">
-            <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-3 border-b pb-1`}>Education</h2>
+          <div key="education" className="mb-6">
+            <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Education</h2>
             <div className="space-y-3">
               {resumeData.education.map((edu) => (
                 <div key={edu.id} className="flex justify-between items-start">
@@ -970,8 +759,8 @@ export default function ResumeBuilder() {
 
       if (sectionId === "skills" && resumeData.skills.length > 0) {
         return (
-          <div key="skills">
-            <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-3 border-b pb-1`}>Skills</h2>
+          <div key="skills"  className="mb-6">
+            <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Skills</h2>
             <div className="flex flex-wrap gap-2">
               {resumeData.skills.map((skill) => (
                 <Badge key={skill} variant="secondary" className="text-sm">
@@ -985,8 +774,8 @@ export default function ResumeBuilder() {
 
       if (sectionId === "projects" && resumeData.projects.length > 0) {
         return (
-          <div key="projects">
-            <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-3 border-b pb-1`}>Projects</h2>
+          <div key="projects" className="mb-6">
+            <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Projects</h2>
             <div className="space-y-4">
               {resumeData.projects.map((project) => (
                 <div key={project.id}>
@@ -1020,8 +809,8 @@ export default function ResumeBuilder() {
 
       if (sectionId === "certifications" && resumeData.certifications.length > 0) {
         return (
-          <div key="certifications">
-            <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-3 border-b pb-1`}>Certifications</h2>
+          <div key="certifications"  className="mb-6">
+            <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Certifications</h2>
             <div className="space-y-2">
               {resumeData.certifications.map((cert) => (
                 <div key={cert} className="flex items-center">
@@ -1036,8 +825,8 @@ export default function ResumeBuilder() {
 
       if (sectionId === "achievements" && resumeData.achievements.length > 0) {
         return (
-          <div key="achievements">
-            <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-3 border-b pb-1`}>Achievements</h2>
+          <div key="achievements"  className="mb-6">
+            <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Achievements</h2>
             <div className="space-y-2">
               {resumeData.achievements.map((achievement) => (
                 <div key={achievement.id} className="flex items-center">
@@ -1054,8 +843,8 @@ export default function ResumeBuilder() {
 
       if (sectionId === "extracurriculars" && resumeData.extracurriculars.length > 0) {
         return (
-          <div key="extracurriculars">
-            <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-3 border-b pb-1`}>
+          <div key="extracurriculars"  className="mb-6">
+            <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>
               Extracurricular Activities
             </h2>
             <div className="space-y-2">
@@ -1102,6 +891,10 @@ export default function ResumeBuilder() {
               <Button onClick={handleSave} size="sm" className="bg-orange-500 hover:bg-orange-600 text-white">
                 <Download className="w-4 h-4 md:mr-2" />
                 <span className="hidden md:inline">Save as PDF</span>
+              </Button>
+              <Button onClick={handleDownloadPDF} size="sm" className="bg-green-500 hover:bg-green-600 text-white">
+                <Download className="w-4 h-4 md:mr-2" />
+                <span className="hidden md:inline">Download PDF</span>
               </Button>
             </div>
           </div>
@@ -1154,7 +947,7 @@ export default function ResumeBuilder() {
                         {/* Personal Info Section */}
                         {section.id === "personal" && (
                           <div className="space-y-4">
-                            <div className="text-center">
+                            {/* <div className="text-center">
                               <div className="w-24 h-24 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center overflow-hidden">
                                 {resumeData.profilePicture ? (
                                   <img
@@ -1177,7 +970,7 @@ export default function ResumeBuilder() {
                                 <Camera className="w-4 h-4 mr-2" />
                                 Upload Photo
                               </Button>
-                            </div>
+                            </div> */}
                             <Separator />
                             <div className="grid grid-cols-1 gap-3">
                               <div>
@@ -1812,91 +1605,93 @@ export default function ResumeBuilder() {
             {viewMode === "preview" && (
               <Card>
                 <CardContent className="p-0">
-                  <div id="resume-preview" className="bg-white rounded-lg min-h-[700px] shadow-sm overflow-hidden">
-                    
-                    <div className="space-y-6">
-                      
-                      <div className={`${currentTemplate.headerBg} ${currentTemplate.headerText} p-6`}>
-                        <div className="flex items-center space-x-4">
-                          {resumeData.profilePicture && (
-                            <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white/20 flex-shrink-0">
-                              <img
-                                src={resumeData.profilePicture || "/placeholder.svg"}
-                                alt="Profile"
-                                className="w-full h-full object-cover"
-                              />
+                  <div id="resume-preview">
+                <div className="space-y-6">
+                  <div className={`${currentTemplate.headerBg} ${currentTemplate.headerText} p-6`}>
+                    <div className="flex items-center space-x-4">
+                      {/* {resumeData.profilePicture && (
+                        <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white/20 flex-shrink-0">
+                          <img
+                            src={resumeData.profilePicture || "/placeholder.svg"}
+                            alt="Profile"
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      )} */}
+                      <div className="flex-1">
+                        <h1 className="text-3xl font-bold">{resumeData.personalInfo.fullName || "John Doe"}</h1>
+                        <p className="text-lg opacity-90 mt-1">
+                          {resumeData.workExperience[0]?.position || "Software Developer"}
+                        </p>
+                        <div className="flex flex-wrap items-center space-x-4 text-sm mt-3 opacity-90">
+                          <span>{resumeData.personalInfo.email || "johndoe68@gmail.com"}</span>
+                          <span>{resumeData.personalInfo.phone || "123456789"}</span>
+                          <span>{resumeData.personalInfo.location || "Hyderabad"}</span>
+                        </div>
+                        <div className="flex flex-wrap items-center space-x-4 text-sm mt-1 opacity-90">
+                          <a href={resumeData.personalInfo.linkedin} target="_blank" rel="noopener noreferrer">
+                            <span>
+                              <strong>LinkedIn:</strong> {resumeData.personalInfo.linkedin}
+                            </span>
+                          </a>
+                          <a href={resumeData.personalInfo.website} target="_blank" rel="noopener noreferrer">
+                            {resumeData.personalInfo.website && (
+                              <span>
+                                <strong>Website:</strong> {resumeData.personalInfo.website}
+                              </span>
+                            )}
+                          </a>
+                        </div>
+                        <a href={resumeData.personalInfo.github} target="_blank" rel="noopener noreferrer">
+                          {resumeData.personalInfo.github && (
+                            <div className="text-sm mt-1 opacity-90">
+                              <span>
+                                <strong>GitHub:</strong> {resumeData.personalInfo.github}
+                              </span>
                             </div>
                           )}
-                          <div className="flex-1">
-                            <h1 className="text-3xl font-bold">{resumeData.personalInfo.fullName || "John Doe"}</h1>
-                            <p className="text-lg opacity-90 mt-1">
-                              {resumeData.workExperience[0]?.position || "Software Developer"}
-                            </p>
-                            <div className="flex flex-wrap items-center space-x-4 text-sm mt-3 opacity-90">
-                              <span>{resumeData.personalInfo.email || "johndoe68@gmail.com"}</span>
-                              <span>{resumeData.personalInfo.phone || "123456789"}</span>
-                              <span>{resumeData.personalInfo.location || "Hyderabad"}</span>
-                            </div>
-                            <div className="flex flex-wrap items-center space-x-4 text-sm mt-1 opacity-90">
-                              {resumeData.personalInfo.linkedin && (
-                                <span>
-                                  <strong>LinkedIn:</strong> {resumeData.personalInfo.linkedin}
-                                </span>
-                              )}
-                              {resumeData.personalInfo.website && (
-                                <span>
-                                  <strong>Website:</strong> {resumeData.personalInfo.website}
-                                </span>
-                              )}
-                            </div>
-                            {resumeData.personalInfo.github && (
-                              <div className="text-sm mt-1 opacity-90">
-                                <span>
-                                  <strong>GitHub:</strong> {resumeData.personalInfo.github}
-                                </span>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="px-6 pb-6 space-y-6">
-                        {/* Dynamic Sections - Draggable in reorder mode */}
-                        {sectionOrder
-                          .filter((section) => section.visible)
-                          .map((sectionConfig, index) => {
-                            const content = renderSectionContent(sectionConfig)
-                            if (!content) return null
-
-                            if (isReorderMode) {
-                              return (
-                                <div
-                                  key={sectionConfig.id}
-                                  draggable
-                                  onDragStart={(e) => handleDragStart(e, sectionConfig.id)}
-                                  onDragOver={handleDragOver}
-                                  onDrop={(e) => handleDrop(e, sectionConfig.id)}
-                                  onDragEnd={handleDragEnd}
-                                  className={`border-2 border-dashed border-orange-300 rounded-lg p-4 cursor-move transition-all hover:border-orange-400 hover:shadow-md ${draggedSection === sectionConfig.id ? "opacity-50" : "opacity-100"
-                                    }`}
-                                >
-                                  <div className="flex items-center justify-between mb-2">
-                                    <div className="flex items-center space-x-2">
-                                      <GripVertical className="w-4 h-4 text-orange-500" />
-                                      <span className="text-sm font-medium text-orange-700">
-                                        Drag to reorder: {sectionConfig.name}
-                                      </span>
-                                    </div>
-                                  </div>
-                                  {content}
-                                </div>
-                              )
-                            }
-
-                            return content
-                          })}
+                        </a>
                       </div>
                     </div>
+                  </div>
+
+                  <div className="px-6 pb-6 space-y-6">
+                    {sectionOrder
+                      .filter((section) => section.visible)
+                      .map((sectionConfig, index) => {
+                        const content = renderSectionContent(sectionConfig);
+                        if (!content) return null;
+
+                        if (isReorderMode) {
+                          return (
+                            <div
+                              key={sectionConfig.id}
+                              draggable
+                              onDragStart={(e) => handleDragStart(e, sectionConfig.id)}
+                              onDragOver={handleDragOver}
+                              onDrop={(e) => handleDrop(e, sectionConfig.id)}
+                              onDragEnd={handleDragEnd}
+                              className={`border-2 border-dashed border-orange-300 rounded-lg p-4 cursor-move transition-all hover:border-orange-400 hover:shadow-md ${
+                                draggedSection === sectionConfig.id ? "opacity-50" : "opacity-100"
+                              }`}
+                            >
+                              <div className="flex items-center justify-between mb-2">
+                                <div className="flex items-center space-x-2">
+                                  <GripVertical className="w-4 h-4 text-orange-500" />
+                                  <span className="text-sm font-medium text-orange-700">
+                                    Drag to reorder: {sectionConfig.name}
+                                  </span>
+                                </div>
+                              </div>
+                              {content}
+                            </div>
+                          );
+                        }
+
+                        return content;
+                      })}
+                  </div>
+                </div>
                   </div>
                 </CardContent>
               </Card>
