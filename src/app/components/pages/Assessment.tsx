@@ -138,7 +138,7 @@ const Assessment = () => {
             response.message || "Failed to fetch assessment data"
           );
         }
-        const currentDate = new Date(); // 06:19 PM IST
+        const currentDate = new Date(); 
         const offerValid =
           new Date(response.data.data.assessment.offer.validUntil) >=
           currentDate;

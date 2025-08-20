@@ -1,101 +1,44 @@
+"use client"
+import { useState } from "react";
 import Link from "next/link";
-import { Upload, Plus, FileText, Sparkles, Download, Zap } from "lucide-react";
-import { ReactNode } from "react";
+import { Button } from "../ui/button";
 import Header from "./header";
+import { toast } from "sonner";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import {
+  Upload,
+  Plus,
+  FileText,
+  Sparkles,
+  Download,
+  Zap,
+  Briefcase,
+  Lightbulb,
+} from "lucide-react";
 
-// Define interfaces for component props
-interface ButtonProps {
-  children: ReactNode;
-  className?: string;
-}
+export default function Index() {
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
-interface CardProps {
-  children: ReactNode;
-  className?: string;
-}
-
-interface CardHeaderProps {
-  children: ReactNode;
-  className?: string;
-}
-
-interface CardContentProps {
-  children: ReactNode;
-  className?: string;
-}
-
-interface CardTitleProps {
-  children: ReactNode;
-  className?: string;
-}
-
-interface CardDescriptionProps {
-  children: ReactNode;
-  className?: string;
-}
-
-// Define Button component
-const Button: React.FC<ButtonProps> = ({ children, className }) => (
-  <button
-    className={`inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ${className}`}
-  >
-    {children}
-  </button>
-);
-
-// Define Card component
-const Card: React.FC<CardProps> = ({ children, className }) => (
-  <div className={`rounded-lg bg-white shadow-md ${className}`}>
-    {children}
-  </div>
-);
-
-// Define CardHeader component
-const CardHeader: React.FC<CardHeaderProps> = ({ children, className }) => (
-  <div className={`px-6 py-4 ${className}`}>
-    {children}
-  </div>
-);
-
-// Define CardContent component
-const CardContent: React.FC<CardContentProps> = ({ children, className }) => (
-  <div className={`px-6 py-4 ${className}`}>
-    {children}
-  </div>
-);
-
-// Define CardTitle component
-const CardTitle: React.FC<CardTitleProps> = ({ children, className }) => (
-  <h3 className={`text-lg font-semibold text-gray-900 ${className}`}>
-    {children}
-  </h3>
-);
-
-// Define CardDescription component
-const CardDescription: React.FC<CardDescriptionProps> = ({ children, className }) => (
-  <p className={`text-sm text-gray-500 ${className}`}>
-    {children}
-  </p>
-);
-
-export default function AiResumeDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-orange-25 to-white">
+      {/* Header */}
       <Header />
-      <header className="border-b border-white/20 backdrop-blur-sm">
-        <div className="container mx-auto px-40 py-6">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent whitespace-nowrap">
-              AI Resume Builder
-            </h1>
-           
-            
-          </div>
-        </div>
-      </header>
 
       {/* Hero Section */}
-      <div className="container mx-auto px-4 ">
+      <div className="container mx-auto px-4 py-16">
         <div className="text-center max-w-4xl mx-auto mb-16">
           <h2 className="text-5xl font-bold text-gray-900 mb-6 leading-tight">
             Create Your Perfect Resume in
@@ -155,7 +98,7 @@ export default function AiResumeDashboard() {
                     DOCX Support
                   </span>
                 </div>
-                <Link href="/builder?mode=upload" passHref>
+                <Link href="/builder?mode=upload" className="block">
                   <Button className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-lg py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
                     Upload & Parse Resume
                     <Upload className="w-5 h-5 ml-2" />
@@ -165,47 +108,138 @@ export default function AiResumeDashboard() {
             </CardContent>
           </Card>
 
-          {/* Create New Resume Card */}
-          <Card className="relative overflow-hidden border-0 shadow-xl bg-white/80 backdrop-blur-sm hover:shadow-2xl transition-all duration-300 group">
-            <CardHeader className="text-center pb-4">
-              <div className="w-16 h-16 bg-gradient-to-r from-orange-600 to-orange-700 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                <Plus className="w-8 h-8 text-white" />
-              </div>
-              <CardTitle className="text-2xl font-bold text-gray-900 mb-2">
-                Create New Resume
-              </CardTitle>
-              <CardDescription className="text-gray-600 text-base">
-                Start fresh with our guided builder. Get AI suggestions and
-                choose from beautiful templates.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <div className="space-y-4">
-                <div className="flex justify-center space-x-4 text-sm text-gray-500">
-                  <span className="flex items-center">
-                    <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                    AI Assistance
-                  </span>
-                  <span className="flex items-center">
-                    <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                    Live Preview
-                  </span>
+          {/* Create New Resume Card with Dialog */}
+          <Dialog
+            open={isCreateDialogOpen}
+            onOpenChange={setIsCreateDialogOpen}
+          >
+            <DialogTrigger asChild>
+              <Card className="relative overflow-hidden border-0 shadow-xl bg-white/80 backdrop-blur-sm hover:shadow-2xl transition-all duration-300 group cursor-pointer">
+                <CardHeader className="text-center pb-4">
+                  <div className="w-16 h-16 bg-gradient-to-r from-orange-600 to-orange-700 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <Plus className="w-8 h-8 text-white" />
+                  </div>
+                  <CardTitle className="text-2xl font-bold text-gray-900 mb-2">
+                    Create New Resume
+                  </CardTitle>
+                  <CardDescription className="text-gray-600 text-base">
+                    Start fresh with our guided builder. Get AI suggestions and
+                    choose from beautiful templates.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <div className="space-y-4">
+                    <div className="flex justify-center space-x-4 text-sm text-gray-500">
+                      <span className="flex items-center">
+                        <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                        AI Assistance
+                      </span>
+                      <span className="flex items-center">
+                        <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                        Live Preview
+                      </span>
+                    </div>
+                    <Button className="w-full bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white text-lg py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                      Start Building Resume
+                      <Plus className="w-5 h-5 ml-2" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </DialogTrigger>
+
+            <DialogContent className="max-w-md">
+              <DialogHeader>
+                <DialogTitle className="text-center text-xl font-bold text-gray-900">
+                  Choose Resume Type
+                </DialogTitle>
+              </DialogHeader>
+
+              <div className="space-y-4 mt-6">
+                <div className="text-center mb-6">
+                  <p className="text-gray-600">
+                    Select the type of resume you'd like to create:
+                  </p>
                 </div>
-                <Link href="/resumeBuilder" passHref>
-                  <Button className="w-full bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white text-lg py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
-                    Start Building Resume
-                    <Plus className="w-5 h-5 ml-2" />
-                  </Button>
+
+                {/* JDE Option */}
+                
+                  <Card className="border-2 border-orange-200 hover:border-orange-400 transition-colors cursor-pointer hover:shadow-md" 
+                        onClick={() => toast.info("Access granted to selected candidates only")}>
+                    <CardContent className="p-4">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                          <Briefcase className="w-6 h-6 text-orange-600" />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-900">
+                            Job Description Enhanced (JDE)
+                          </h3>
+                          <p className="text-sm text-gray-600">
+                            AI-optimized for specific job descriptions
+                          </p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                
+
+                {/* Standard Option */}
+                <Link href="/resumeBuilder" className="block">
+                  <Card className="border-2 border-gray-200 hover:border-orange-400 transition-colors cursor-pointer hover:shadow-md">
+                    <CardContent className="p-4">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                          <FileText className="w-6 h-6 text-gray-600" />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-900">
+                            Standard Resume
+                          </h3>
+                          <p className="text-sm text-gray-600">
+                            General purpose resume template
+                          </p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </Link>
+
+                {/* AI-Powered Option */}
+                {/* <Link href="/builder?type=ai-enhanced" className="block">
+                  <Card className="border-2 border-purple-200 hover:border-orange-400 transition-colors cursor-pointer hover:shadow-md">
+                    <CardContent className="p-4">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                          <Lightbulb className="w-6 h-6 text-purple-600" />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-900">
+                            AI-Enhanced Resume
+                          </h3>
+                          <p className="text-sm text-gray-600">
+                            Maximum AI assistance and optimization
+                          </p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link> */}
               </div>
-            </CardContent>
-          </Card>
+
+              <div className="mt-6 text-center">
+                <p className="text-xs text-gray-500">
+                  You can change the resume type later in the builder
+                </p>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
 
         {/* Additional Features */}
         <div className="mt-20 text-center max-w-3xl mx-auto">
           <h3 className="text-2xl font-bold text-gray-900 mb-8">
-            Why Choose EarlyJobs?
+            Why Choose EarlyJobs-Resume Builder?
           </h3>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="p-6">

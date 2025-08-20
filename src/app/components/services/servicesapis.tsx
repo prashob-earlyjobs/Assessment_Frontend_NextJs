@@ -18,7 +18,9 @@ export const userLogin = async ({
     const data = response.data;
     const accessToken = data.data.accessToken; // Corrected destructuring
     if (accessToken) {
-      axiosInstance.defaults.headers.Authorization = `Bearer ${accessToken}`; // Set for all future requests
+      axiosInstance.defaults.headers.Authorization = `Bearer ${accessToken}`; 
+      localStorage.setItem("accessToken", accessToken); // Set for all future requests
+      console.log(accessToken, "accessToken in servicesapis.tsx");
     }
     return data;
   } catch (error) {
@@ -218,7 +220,7 @@ export const userLogout = async () => {
     }
     Cookies.remove("accessToken");
     localStorage.removeItem("userCredentials");
-    axiosInstance.defaults.headers.Authorization = ""; // Clear the Authorization header
+    axiosInstance.defaults.headers.Authorization = ""; 
     toast.success("Logged out successfully!");
     return response.data;
   } catch (error) {
@@ -244,7 +246,8 @@ export const adminLogin = async ({
     const data = response.data;
     const accessToken = data.data.accessToken; // Corrected destructuring
     if (accessToken) {
-      axiosInstance.defaults.headers.Authorization = `Bearer ${accessToken}`; // Set for all future requests
+      axiosInstance.defaults.headers.Authorization = `Bearer ${accessToken}`;
+      localStorage.setItem("accessToken", accessToken); // Set for all future requests
     }
     return data;
   } catch (error) {
