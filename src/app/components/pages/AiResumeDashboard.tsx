@@ -98,12 +98,14 @@ export default function Index() {
                     DOCX Support
                   </span>
                 </div>
-                <Link href="/builder?mode=upload" className="block">
-                  <Button className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-lg py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                
+                  <Button 
+                   onClick={ () => toast.info("Upload functionality coming soon!")}
+                  className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-lg py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
                     Upload & Parse Resume
                     <Upload className="w-5 h-5 ml-2" />
                   </Button>
-                </Link>
+                
               </div>
             </CardContent>
           </Card>
