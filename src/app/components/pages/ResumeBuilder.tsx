@@ -135,7 +135,7 @@ const templates = [
 ]
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL
-const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY
 
 const apiService = {
   async saveResume(resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[]) {
