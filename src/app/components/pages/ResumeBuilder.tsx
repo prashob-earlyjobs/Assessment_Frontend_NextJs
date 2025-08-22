@@ -1,6 +1,7 @@
 "use client"
 import { useState, useRef, useCallback, useEffect } from "react"
 import type React from "react"
+import { useRouter } from "next/navigation"
 import Cookies from "js-cookie"
 import Link from "next/link"
 import { Button } from "../ui/button"
@@ -13,7 +14,7 @@ import { Badge } from "../ui/badge"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible"
 import ATSScoreCard from "../ui/ats-score"
-import {toast} from "sonner"
+import { toast } from "sonner"
 import Header from "./header"
 import html2pdf from "html2pdf.js"
 import { oklch, oklab, rgb } from "culori"
@@ -24,6 +25,7 @@ import {
   Plus,
   Trash2,
   User,
+  Sparkles,
   Briefcase,
   GraduationCap,
   Award,
@@ -40,7 +42,11 @@ import {
   Target,
   Trophy,
   Users,
+  Linkedin,
+  Github,
+  Globe,
 } from "lucide-react"
+import { GoogleGenerativeAI } from "@google/generative-ai"
 
 interface PersonalInfo {
   fullName: string
@@ -68,7 +74,8 @@ interface WorkExperience {
   position: string
   startDate: string
   endDate: string
-  description: string
+  description: string[] 
+  index: number // Changed to number for description point index
 }
 
 interface Project {
@@ -115,22 +122,20 @@ interface SectionOrder {
 }
 
 const templates = [
-{
-  id: "minimal",
-  name: "Minimal",
-  color: "bg-white",
-  headerBg: "bg-white border-b border-gray-300",
-  headerText: "text-black",
-  sectionHeader: "text-black border-gray-300",
-  accent: "text-black",
-  preview: "Clean, professional, black-and-white design",
-}
-  
-  
- 
+  {
+    id: "minimal",
+    name: "Minimal",
+    color: "bg-white",
+    headerBg: "bg-white border-b border-gray-300",
+    headerText: "text-black",
+    sectionHeader: "text-black border-gray-300",
+    accent: "text-black",
+    preview: "Clean, professional, black-and-white design",
+  }
 ]
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL
+const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY
 
 const apiService = {
   async saveResume(resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[]) {
@@ -154,8 +159,6 @@ const apiService = {
 
     return response.json()
   },
-
-  
 
   async updateResume(id: string, resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[]) {
     const token = Cookies.get("accessToken")
@@ -196,21 +199,19 @@ const apiService = {
 
     return response.json()
   },
-
-
-
-};
-
-
+}
 
 export default function ResumeBuilder() {
-  const [activeTemplate, setActiveTemplate] = useState("modern")
+  const [activeTemplate, setActiveTemplate] = useState("minimal")
   const [isTemplateDialogOpen, setIsTemplateDialogOpen] = useState(false)
   const [isReorderMode, setIsReorderMode] = useState(false)
-  const [viewMode, setViewMode] = useState<"preview" | "ats">("preview")
+  
   const [draggedSection, setDraggedSection] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [isAddSectionDialogOpen, setIsAddSectionDialogOpen] = useState(false)
+  const router = useRouter()
+  const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false)
+  const [aiLoading, setAiLoading] = useState(false)
 
   // Section collapse states
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(
@@ -260,12 +261,11 @@ export default function ResumeBuilder() {
 
   const [currentSkill, setCurrentSkill] = useState("")
   const [currentCertification, setCurrentCertification] = useState("")
-  const [atsScore, setATSScore] = useState<any>(null)
-  const [atsLoading, setATSLoading] = useState(false)
+  
   const [isSaving, setIsSaving] = useState(false)
   const [savedResumeId, setSavedResumeId] = useState<string | null>(null)
 
-const convertOklchToRgb = () => {
+  const convertOklchToRgb = () => {
     const elements = document.querySelectorAll("#resume-preview *")
     elements.forEach((element: HTMLElement) => {
       const styles = window.getComputedStyle(element)
@@ -286,12 +286,12 @@ const convertOklchToRgb = () => {
               const rgbString = `rgb(${Math.round(rgbColor.r * 255)}, ${Math.round(rgbColor.g * 255)}, ${Math.round(rgbColor.b * 255)})`
               element.style.setProperty(property, rgbString)
             }
-          }catch (e) {
+          } catch (e) {
             console.error("Color conversion failed:", e)
             if (property === "background-color") {
-              element.style.setProperty(property, "rgb(255, 255, 255)") // White background
+              element.style.setProperty(property, "rgb(255, 255, 255)")
             } else {
-              element.style.setProperty(property, "rgb(0, 0, 0)") // Black text
+              element.style.setProperty(property, "rgb(0, 0, 0)")
             }
           }
         }
@@ -299,7 +299,8 @@ const convertOklchToRgb = () => {
     })
   }
 
-const handleDownloadPDF = () => {
+  const handleDownloadPDF = async () => {
+    
     const element = document.getElementById("resume-preview")
     if (!element) {
       toast.error("Preview not found. Please try again.")
@@ -316,56 +317,177 @@ const handleDownloadPDF = () => {
       jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
     }
 
-    html2pdf().set(opt).from(element).save().catch((error: Error) => {
+    try {
+      if (resumeData.personalInfo.fullName || resumeData.personalInfo.email || resumeData.personalInfo.phone) {
+        await html2pdf().set(opt).from(element).save()
+        await handleSave()
+      }
+      else{
+        toast.info("Please enter your name, email or phone number before downloading the resume.")
+      }
+      // setResumeData({
+      //   personalInfo: {
+      //     fullName: "",
+      //     email: "",
+      //     phone: "",
+      //     location: "",
+      //     linkedin: "",
+      //     website: "",
+      //     github: "",
+      //   },
+      //   professionalSummary: "",
+      //   education: [],
+      //   workExperience: [],
+      //   skills: [],
+      //   certifications: [],
+      //   projects: [],
+      //   achievements: [],
+      //   extracurriculars: [],
+      //   profilePicture: null,
+      // })
+      // setCurrentSkill("")
+      // setCurrentCertification("")
+       setSavedResumeId(null)
+    } catch (error: any) {
       console.error("Failed to generate PDF:", error)
       toast.error("Failed to generate PDF. Please try again.")
-    })
+    }
   }
+
   const handleSave = async () => {
-  setIsSaving(true)
-  try {
-    let result
-    if (savedResumeId) {
-      result = await apiService.updateResume(savedResumeId, resumeData, activeTemplate, sectionOrder)
-    } else {
-      result = await apiService.saveResume(resumeData, activeTemplate, sectionOrder)
-    }
-
-    if (result.success) {
-      const resumeId = result.data?._id || result.resume?._id || result._id
-      if (resumeId) {
-        setSavedResumeId(resumeId)   
-      }
-      toast.success("Resume saved successfully!")
-      console.log("Resume saved successfully!")
-      
-    }
-  } catch (error) {
-    console.error("Failed to save resume:", error)
-  } finally {
-    setIsSaving(false)
+    setIsSaveDialogOpen(true)
   }
-}
 
-
-  const analyzeATS = async () => {
-    setATSLoading(true)
+  const confirmSave = async () => {
+    setIsSaving(true)
+    setIsSaveDialogOpen(false)
     try {
-      const result = await apiService.analyzeATS(resumeData)
-      if (result.success && result.data.atsScore) {
-        setATSScore(result.data.atsScore)
+      let result
+      if (savedResumeId) {
+        result = await apiService.updateResume(savedResumeId, resumeData, activeTemplate, sectionOrder)
+      } else {
+        result = await apiService.saveResume(resumeData, activeTemplate, sectionOrder)
+      }
+
+      if (result.success) {
+        const resumeId = result.data?._id || result.resume?._id || result._id
+        if (resumeId) {
+          setSavedResumeId(resumeId)
+        }
+        toast.success("Resume saved successfully!")
+        setResumeData({
+          personalInfo: {
+            fullName: "",
+            email: "",
+            phone: "",
+            location: "",
+            linkedin: "",
+            website: "",
+            github: "",
+          },
+          professionalSummary: "",
+          education: [],
+          workExperience: [],
+          skills: [],
+          certifications: [],
+          projects: [],
+          achievements: [],
+          extracurriculars: [],
+          profilePicture: null,
+        })
+        setCurrentSkill("")
+        setCurrentCertification("")
+        setSavedResumeId(null)
       }
     } catch (error) {
-      console.error("Failed to analyze ATS score:", error)
-      // Fallback to frontend calculation if backend fails
-      // ... existing frontend ATS calculation code ...
+      console.error("Failed to save resume:", error)
     } finally {
-      setATSLoading(false)
+      setIsSaving(false)
     }
+  }
+
+  const cancelSave = () => {
+    setIsSaveDialogOpen(false)
   }
 
   
-  // Section toggle function - Open one section, close all others
+
+  const handleAISuggest = async () => {
+    if (!GEMINI_API_KEY || GEMINI_API_KEY === "your-gemini-api-key-here") {
+      toast.error("Gemini API key is not configured.")
+      return
+    }
+
+    setAiLoading(true)
+    try {
+      const dataSummary = `
+        Name: ${resumeData.personalInfo.fullName || "N/A"}
+        Email: ${resumeData.personalInfo.email || "N/A"}
+        Location: ${resumeData.personalInfo.location || "N/A"}
+        Education: ${resumeData.education.map(edu => `${edu.degree} in ${edu.field || "N/A"} from ${edu.school || "N/A"} (${edu.startDate} - ${edu.endDate || "Present"})`).join("; ") || "N/A"}
+        Work Experience: ${resumeData.workExperience.map(work => `${work.position || "N/A"} at ${work.company || "N/A"} (${work.startDate} - ${work.endDate || "Present"}): ${work.description.join("; ") || "N/A"}`).join("; ") || "N/A"}
+        Skills: ${resumeData.skills.join(", ") || "N/A"}
+        Certifications: ${resumeData.certifications.join(", ") || "N/A"}
+        Projects: ${resumeData.projects.map(proj => `${proj.name || "N/A"}: ${proj.description || "N/A"} (Technologies: ${proj.technologies || "N/A"})`).join("; ") || "N/A"}
+        Achievements: ${resumeData.achievements.map(ach => `${ach.title || "N/A"} (${ach.date || "N/A"}): ${ach.description || "N/A"}`).join("; ") || "N/A"}
+        Extracurriculars: ${resumeData.extracurriculars.map(extra => `${extra.activity || "N/A"} - ${extra.role || "N/A"} (${extra.startDate} - ${extra.endDate || "Present"}): ${extra.description || "N/A"}`).join("; ") || "N/A"}
+      `
+
+      const prompt = `Generate a concise, ATS friendly professional summary (45-55 words) for a resume based on the following information. Highlight key achievements, skills, and career goals, tailored to the provided data. Ensure the summary is professional, engaging, and suitable for a resume: ${dataSummary}`
+
+      const genAI = new GoogleGenerativeAI(GEMINI_API_KEY)
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" })
+
+      const result = await model.generateContent(prompt)
+      const generatedSummary = result.response.text().trim()
+
+      setResumeData((prev) => ({ ...prev, professionalSummary: generatedSummary }))
+      toast.success("AI-generated summary added to textarea!")
+    } catch (error) {
+      console.error("Failed to generate AI suggestion:", error)
+      toast.error("Failed to generate AI suggestion. Please try again.")
+    } finally {
+      setAiLoading(false)
+    }
+  }
+
+  const handleAISuggestForWork = async (id: string) => {
+    if (!GEMINI_API_KEY || GEMINI_API_KEY === "your-gemini-api-key-here") {
+      toast.error("Gemini API key is not configured.")
+      return
+    }
+
+    setAiLoading(true)
+    try {
+      const work = resumeData.workExperience.find((w) => w.id === id)
+      if (!work || !work.position || !work.company) {
+        toast.info("Please provide position and company first.")
+        return
+      }
+
+      const prompt = `Generate a concise, ATS-friendly job description (3 points, each not more than 20 words) for the position of ${work.position} at ${work.company}. Highlight key responsibilities, achievements, and skills. Ensure it is professional, engaging, and suitable for a resume.`
+
+      const genAI = new GoogleGenerativeAI(GEMINI_API_KEY)
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" })
+
+      const result = await model.generateContent(prompt)
+      const generatedDescription = result.response.text().trim().split('\n').slice(0, 3).map(point => point.trim().replace(/^-|\•/, '').trim())
+
+      setResumeData((prev) => ({
+        ...prev,
+        workExperience: prev.workExperience.map((w) =>
+          w.id === id ? { ...w, description: generatedDescription } : w
+        ),
+      }))
+      toast.success("AI-generated description added!")
+    } catch (error) {
+      console.error("Failed to generate AI suggestion:", error)
+      toast.error("Failed to generate AI suggestion. Please try again.")
+    } finally {
+      setAiLoading(false)
+    }
+  }
+
   const toggleSection = useCallback((sectionId: string) => {
     setCollapsedSections((prev) => {
       const allSections = new Set<string>([
@@ -379,17 +501,14 @@ const handleDownloadPDF = () => {
         "achievements",
         "extracurriculars",
       ])
-      // If the section is already open, close it (all sections collapsed)
       if (!prev.has(sectionId)) {
-        return allSections // Close all sections
+        return allSections
       }
-      // Open the selected section by excluding it from the collapsed set
       allSections.delete(sectionId)
       return allSections
     })
   }, [])
 
-  // Drag and drop functions
   const handleDragStart = useCallback((e: React.DragEvent, sectionId: string) => {
     setDraggedSection(sectionId)
     e.dataTransfer.effectAllowed = "move"
@@ -412,7 +531,6 @@ const handleDownloadPDF = () => {
 
         if (draggedIndex === -1 || targetIndex === -1) return prev
 
-        // Remove dragged item and insert at target position
         const [draggedItem] = newOrder.splice(draggedIndex, 1)
         newOrder.splice(targetIndex, 0, draggedItem)
 
@@ -427,7 +545,6 @@ const handleDownloadPDF = () => {
     setDraggedSection(null)
   }, [])
 
-  // Update personal info
   const updatePersonalInfo = useCallback((field: keyof PersonalInfo, value: string) => {
     setResumeData((prev) => ({
       ...prev,
@@ -435,27 +552,10 @@ const handleDownloadPDF = () => {
     }))
   }, [])
 
-  // Update professional summary
   const updateProfessionalSummary = useCallback((value: string) => {
     setResumeData((prev) => ({ ...prev, professionalSummary: value }))
   }, [])
 
-  // Profile picture upload
-  // const handleProfilePictureUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = event.target.files?.[0]
-  //   if (file) {
-  //     const reader = new FileReader()
-  //     reader.onload = (e) => {
-  //       setResumeData((prev) => ({
-  //         ...prev,
-  //         profilePicture: e.target?.result as string,
-  //       }))
-  //     }
-  //     reader.readAsDataURL(file)
-  //   }
-  // }, [])
-
-  // Education functions
   const addEducation = useCallback(() => {
     const newEducation: Education = {
       id: Date.now().toString(),
@@ -486,7 +586,6 @@ const handleDownloadPDF = () => {
     }))
   }, [])
 
-  // Work experience functions
   const addWorkExperience = useCallback(() => {
     const newWork: WorkExperience = {
       id: Date.now().toString(),
@@ -494,7 +593,8 @@ const handleDownloadPDF = () => {
       position: "",
       startDate: "",
       endDate: "",
-      description: "",
+      description: ["", "", ""],
+      index: 0,
     }
     setResumeData((prev) => ({
       ...prev,
@@ -502,13 +602,24 @@ const handleDownloadPDF = () => {
     }))
   }, [])
 
-  const updateWorkExperience = useCallback((id: string, field: keyof WorkExperience, value: string) => {
-    setResumeData((prev) => ({
-      ...prev,
-      workExperience: prev.workExperience.map((work) => (work.id === id ? { ...work, [field]: value } : work)),
-    }))
-  }, [])
-
+const updateWorkExperience = useCallback((id: string, field: keyof WorkExperience | 'description', value: string | string[], index?: number) => {
+  setResumeData((prev) => ({
+    ...prev,
+    workExperience: prev.workExperience.map((work) => {
+      if (work.id === id) {
+        if (field === 'description' && Array.isArray(value)) {
+          return { ...work, description: value }
+        } else if (field === 'description' && typeof index === 'number') {
+          const newDescription = [...work.description]
+          newDescription[index] = value as string
+          return { ...work, description: newDescription }
+        }
+        return { ...work, [field]: value as string }
+      }
+      return work
+    }),
+  }))
+}, [])
   const removeWorkExperience = useCallback((id: string) => {
     setResumeData((prev) => ({
       ...prev,
@@ -516,7 +627,6 @@ const handleDownloadPDF = () => {
     }))
   }, [])
 
-  // Project functions
   const addProject = useCallback(() => {
     const newProject: Project = {
       id: Date.now().toString(),
@@ -545,7 +655,6 @@ const handleDownloadPDF = () => {
     }))
   }, [])
 
-  // Skills functions
   const addSkill = useCallback(
     (skill: string) => {
       if (skill.trim() && !resumeData.skills.includes(skill.trim())) {
@@ -566,7 +675,6 @@ const handleDownloadPDF = () => {
     }))
   }, [])
 
-  // Certifications functions
   const addCertification = useCallback(
     (cert: string) => {
       if (cert.trim() && !resumeData.certifications.includes(cert.trim())) {
@@ -645,7 +753,6 @@ const handleDownloadPDF = () => {
     }))
   }, [])
 
-
   const sections = [
     {
       id: "personal",
@@ -654,15 +761,15 @@ const handleDownloadPDF = () => {
       required: true,
     },
     {
-      id: "summary",
-      name: "Professional Summary",
-      icon: FileText,
-      required: false,
-    },
-    {
       id: "experience",
       name: "Work Experience",
       icon: Briefcase,
+      required: false,
+    },
+    {
+      id: "summary",
+      name: "Professional Summary",
+      icon: FileText,
       required: false,
     },
     {
@@ -689,25 +796,13 @@ const handleDownloadPDF = () => {
 
   const currentTemplate = getCurrentTemplate()
 
-  // Render section content for live preview
   const renderSectionContent = useCallback(
     (sectionConfig: SectionOrder) => {
       const sectionId = sectionConfig.id
 
-      if (sectionId === "summary" && resumeData.professionalSummary) {
-        return (
-          <div key="summary" className="mb-6">
-            <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>
-              Professional Summary
-            </h2>
-            <p className="text-gray-700 leading-relaxed">{resumeData.professionalSummary}</p>
-          </div>
-        )
-      }
-
       if (sectionId === "experience" && resumeData.workExperience.length > 0) {
         return (
-          <div key="experience"  className="mb-6">
+          <div key="experience" className="mb-6">
             <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Work Experience</h2>
             <div className="space-y-4">
               {resumeData.workExperience.map((work) => (
@@ -723,10 +818,27 @@ const handleDownloadPDF = () => {
                         : work.startDate || work.endDate || "2023-08 - Present"}
                     </span>
                   </div>
-                  {work.description && <p className="text-gray-700 text-sm leading-relaxed">{work.description}</p>}
+                  {work.description.some(desc => desc.trim()) && (
+                    <ul className="text-gray-700 text-sm leading-relaxed list-disc pl-5">
+                      {work.description.map((desc, index) => (
+                        desc.trim() && <li key={index}>{desc}</li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               ))}
             </div>
+          </div>
+        )
+      }
+
+      if (sectionId === "summary" && resumeData.professionalSummary) {
+        return (
+          <div key="summary" className="mb-6">
+            <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>
+              Professional Summary
+            </h2>
+            <p className="text-gray-700 leading-relaxed">{resumeData.professionalSummary}</p>
           </div>
         )
       }
@@ -759,7 +871,7 @@ const handleDownloadPDF = () => {
 
       if (sectionId === "skills" && resumeData.skills.length > 0) {
         return (
-          <div key="skills"  className="mb-6">
+          <div key="skills" className="mb-6">
             <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Skills</h2>
             <div className="flex flex-wrap gap-2">
               {resumeData.skills.map((skill) => (
@@ -809,7 +921,7 @@ const handleDownloadPDF = () => {
 
       if (sectionId === "certifications" && resumeData.certifications.length > 0) {
         return (
-          <div key="certifications"  className="mb-6">
+          <div key="certifications" className="mb-6">
             <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Certifications</h2>
             <div className="space-y-2">
               {resumeData.certifications.map((cert) => (
@@ -825,7 +937,7 @@ const handleDownloadPDF = () => {
 
       if (sectionId === "achievements" && resumeData.achievements.length > 0) {
         return (
-          <div key="achievements"  className="mb-6">
+          <div key="achievements" className="mb-6">
             <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Achievements</h2>
             <div className="space-y-2">
               {resumeData.achievements.map((achievement) => (
@@ -843,7 +955,7 @@ const handleDownloadPDF = () => {
 
       if (sectionId === "extracurriculars" && resumeData.extracurriculars.length > 0) {
         return (
-          <div key="extracurriculars"  className="mb-6">
+          <div key="extracurriculars" className="mb-6">
             <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>
               Extracurricular Activities
             </h2>
@@ -879,19 +991,14 @@ const handleDownloadPDF = () => {
                   <span className="hidden md:inline">Back to Dashboard</span>
                 </Button>
               </Link>
-              
             </div>
             <div className="flex items-center space-x-1 md:space-x-3">
               <Link href="/myresumes">
-                <Button variant="outline" size="sm" className="hidden sm:flex bg-transparent" >
+                <Button variant="outline" size="sm" className="hidden sm:flex bg-transparent">
                   <FileText className="w-4 h-4 md:mr-2" />
                   <span>My Resumes</span>
                 </Button>
               </Link>
-              <Button onClick={handleSave} size="sm" className="bg-orange-500 hover:bg-orange-600 text-white">
-                <Download className="w-4 h-4 md:mr-2" />
-                <span className="hidden md:inline">Save as PDF</span>
-              </Button>
               <Button onClick={handleDownloadPDF} size="sm" className="bg-green-500 hover:bg-green-600 text-white">
                 <Download className="w-4 h-4 md:mr-2" />
                 <span className="hidden md:inline">Download PDF</span>
@@ -903,7 +1010,6 @@ const handleDownloadPDF = () => {
 
       <div className="container mx-auto px-2 sm:px-3 md:px-4 py-3 md:py-6 max-w-7xl">
         <div className="grid lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8">
-          {/* Left Panel - Collapsible Sections with Scroll */}
           <div className="space-y-3 md:space-y-4 max-h-[calc(100vh-120px)] overflow-y-auto">
             {sections.map((section) => {
               const Icon = section.icon
@@ -944,33 +1050,8 @@ const handleDownloadPDF = () => {
 
                     <CollapsibleContent>
                       <CardContent className="pt-0 px-3 md:px-6 pb-3 md:pb-6 space-y-4">
-                        {/* Personal Info Section */}
                         {section.id === "personal" && (
                           <div className="space-y-4">
-                            {/* <div className="text-center">
-                              <div className="w-24 h-24 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center overflow-hidden">
-                                {resumeData.profilePicture ? (
-                                  <img
-                                    src={resumeData.profilePicture || "/placeholder.svg"}
-                                    alt="Profile"
-                                    className="w-full h-full object-cover"
-                                  />
-                                ) : (
-                                  <User className="w-8 h-8 text-gray-400" />
-                                )}
-                              </div>
-                              <input
-                                type="file"
-                                ref={fileInputRef}
-                                onChange={handleProfilePictureUpload}
-                                accept="image/*"
-                                className="hidden"
-                              />
-                              <Button variant="outline" size="sm" onClick={() => fileInputRef.current?.click()}>
-                                <Camera className="w-4 h-4 mr-2" />
-                                Upload Photo
-                              </Button>
-                            </div> */}
                             <Separator />
                             <div className="grid grid-cols-1 gap-3">
                               <div>
@@ -1047,7 +1128,6 @@ const handleDownloadPDF = () => {
                           </div>
                         )}
 
-                        {/* Professional Summary Section */}
                         {section.id === "summary" && (
                           <div className="space-y-4">
                             <Textarea
@@ -1056,10 +1136,18 @@ const handleDownloadPDF = () => {
                               value={resumeData.professionalSummary}
                               onChange={(e) => updateProfessionalSummary(e.target.value)}
                             />
+                            <Button
+                              variant="outline"
+                              className="bg-orange-500 text-white  hover:bg-white hover:border-orange-500 hover:text-orange-600 p-2 h-auto font-medium"
+                              onClick={handleAISuggest}
+                              disabled={aiLoading}
+                            >
+                              <Sparkles className="w-4 h-4 mr-2 inline-block" />
+                              {aiLoading ? "Generating..." : "AI Suggest"}
+                            </Button>
                           </div>
                         )}
 
-                        {/* Education Section */}
                         {section.id === "education" && (
                           <div className="space-y-4">
                             {resumeData.education.map((edu) => (
@@ -1136,7 +1224,6 @@ const handleDownloadPDF = () => {
                           </div>
                         )}
 
-                        {/* Work Experience Section */}
                         {section.id === "experience" && (
                           <div className="space-y-4">
                             {resumeData.workExperience.map((work) => (
@@ -1179,12 +1266,26 @@ const handleDownloadPDF = () => {
                                     </div>
                                     <div>
                                       <Label className="flex items-center justify-between">Job Description</Label>
-                                      <Textarea
-                                        placeholder="Describe your key responsibilities and achievements..."
-                                        className="min-h-[100px]"
-                                        value={work.description}
-                                        onChange={(e) => updateWorkExperience(work.id, "description", e.target.value)}
-                                      />
+                                      <div className="space-y-2 mt-2">
+                                        {[0, 1, 2].map((index) => (
+                                          <Input
+                                            key={index}
+                                            placeholder={`Description point ${index + 1}`}
+                                            value={work.description[index] || ""}
+                                            onChange={(e) => updateWorkExperience(work.id, "description", e.target.value, index)}
+                                            className="text-sm"
+                                          />
+                                        ))}
+                                      </div>
+                                      <Button
+                                        variant="outline"
+                                        className="bg-orange-500 text-white  hover:bg-white hover:border-orange-500 hover:text-orange-600 p-2 h-auto font-medium mt-2"
+                                        onClick={() => handleAISuggestForWork(work.id)}
+                                        disabled={aiLoading}
+                                      >
+                                        <Sparkles className="w-4 h-4 mr-2 inline-block" />
+                                        {aiLoading ? "Generating..." : "AI Suggest"}
+                                      </Button>
                                     </div>
                                     <Button
                                       variant="destructive"
@@ -1206,7 +1307,6 @@ const handleDownloadPDF = () => {
                           </div>
                         )}
 
-                        {/* Skills Section */}
                         {section.id === "skills" && (
                           <div className="space-y-4">
                             <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
@@ -1242,7 +1342,6 @@ const handleDownloadPDF = () => {
                           </div>
                         )}
 
-                        {/* Certifications Section */}
                         {section.id === "certifications" && (
                           <div className="space-y-4">
                             <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
@@ -1278,7 +1377,6 @@ const handleDownloadPDF = () => {
                           </div>
                         )}
 
-                        {/* Projects Section */}
                         {section.id === "projects" && (
                           <div className="space-y-4">
                             {resumeData.projects.map((project) => (
@@ -1339,6 +1437,7 @@ const handleDownloadPDF = () => {
                             </Button>
                           </div>
                         )}
+
                         {section.id === "achievements" && (
                           <div className="space-y-4">
                             {resumeData.achievements.map((achievement) => (
@@ -1480,33 +1579,21 @@ const handleDownloadPDF = () => {
             })}
           </div>
 
-          {/* Right Panel - Preview with Scroll */}
           <div className="space-y-4 md:space-y-6 max-h-[calc(100vh-120px)] overflow-y-auto lg:sticky lg:top-24">
-            {/* Header Controls */}
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <h2 className="text-lg font-semibold">{viewMode === "preview" ? "Resume Preview" : "ATS Analysis"}</h2>
-
-                {/* View Toggle */}
+                <h2 className="text-lg font-semibold">Resume Preview</h2>
                 <div className="flex items-center bg-gray-100 rounded-lg p-1">
                   <Button
-                    variant={viewMode === "preview" ? "default" : "ghost"}
+                    variant="default"
                     size="sm"
-                    onClick={() => setViewMode("preview")}
-                    className={`h-7 md:h-8 px-2 md:px-3 text-xs ${viewMode === "preview" ? "bg-orange-500 hover:bg-orange-600 text-white" : "text-gray-700"}`}
+                    className={`h-7 md:h-8 px-2 md:px-3 text-xs bg-orange-500  text-white`}
                   >
                     <Eye className="w-3 h-3 md:mr-1" />
                     <span className="hidden sm:inline">Preview</span>
                   </Button>
-                  <Button
-                    variant={viewMode === "ats" ? "default" : "ghost"}
-                    size="sm"
-                    onClick={() => setViewMode("ats")}
-                    className={`h-7 md:h-8 px-2 md:px-3 text-xs ${viewMode === "ats" ? "bg-orange-500 hover:bg-orange-600 text-white" : "text-gray-700"}`}
-                  >
-                    <Target className="w-3 h-3 md:mr-1" />
-                    <span className="hidden sm:inline">ATS Score</span>
-                  </Button>
+                  
+                    
                 </div>
               </div>
 
@@ -1526,8 +1613,7 @@ const handleDownloadPDF = () => {
                       {templates.map((template) => (
                         <div
                           key={template.id}
-                          className={`border-2 rounded-lg p-4 cursor-pointer transition-all hover:shadow-lg ${activeTemplate === template.id ? "border-orange-500 bg-orange-50" : "border-gray-200"
-                            }`}
+                          className={`border-2 rounded-lg p-4 cursor-pointer transition-all hover:shadow-lg ${activeTemplate === template.id ? "border-orange-500 bg-orange-50" : "border-gray-200"}`}
                           onClick={() => {
                             setActiveTemplate(template.id)
                             setIsTemplateDialogOpen(false)
@@ -1545,7 +1631,7 @@ const handleDownloadPDF = () => {
                     </div>
                   </DialogContent>
                 </Dialog>
-                {viewMode === "preview" && (
+                
                   <Button
                     variant={isReorderMode ? "default" : "outline"}
                     size="sm"
@@ -1563,11 +1649,10 @@ const handleDownloadPDF = () => {
                       </>
                     )}
                   </Button>
-                )}
+                
               </div>
             </div>
 
-            {/* Reorder Instructions */}
             {isReorderMode && (
               <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
                 <p className="text-sm text-orange-700">
@@ -1577,125 +1662,114 @@ const handleDownloadPDF = () => {
               </div>
             )}
 
-            {/* ATS Score Analysis */}
-            {viewMode === "ats" && (
-              <ATSScoreCard
-                score={
-                  atsScore || {
-                    totalScore: 0,
-                    contactInfoScore: 0,
-                    keywordsScore: 0,
-                    formatScore: 0,
-                    experienceScore: 0,
-                    skillsScore: 0,
-                    suggestions: ["Start building your resume to see ATS analysis"],
-                    lastUpdated: new Date(),
-                  }
-                }
-                loading={atsLoading}
-                onAnalyze={analyzeATS}
-                onViewSuggestions={() => {
-                  // Could open a detailed suggestions modal
-                  alert("Detailed suggestions modal would open here")
-                }}
-              />
-            )}
+            
+            <Dialog open={isSaveDialogOpen} onOpenChange={setIsSaveDialogOpen}>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Confirm Save</DialogTitle>
+                </DialogHeader>
+                <div className="py-4">
+                  <p>Are you sure you want to save this resume? This will clear all current data.</p>
+                </div>
+                <div className="flex justify-end space-x-2">
+                  <Button variant="outline" onClick={cancelSave}>
+                    Cancel
+                  </Button>
+                  <Button onClick={confirmSave} className="bg-orange-500 hover:bg-orange-600 text-white">
+                    Save
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
 
-            {/* Live Preview */}
-            {viewMode === "preview" && (
               <Card>
                 <CardContent className="p-0">
                   <div id="resume-preview">
-                <div className="space-y-6">
-                  <div className={`${currentTemplate.headerBg} ${currentTemplate.headerText} p-6`}>
-                    <div className="flex items-center space-x-4">
-                      {/* {resumeData.profilePicture && (
-                        <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white/20 flex-shrink-0">
-                          <img
-                            src={resumeData.profilePicture || "/placeholder.svg"}
-                            alt="Profile"
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      )} */}
-                      <div className="flex-1">
-                        <h1 className="text-3xl font-bold">{resumeData.personalInfo.fullName || "John Doe"}</h1>
-                        <p className="text-lg opacity-90 mt-1">
-                          {resumeData.workExperience[0]?.position || "Software Developer"}
-                        </p>
-                        <div className="flex flex-wrap items-center space-x-4 text-sm mt-3 opacity-90">
-                          <span>{resumeData.personalInfo.email || "johndoe68@gmail.com"}</span>
-                          <span>{resumeData.personalInfo.phone || "123456789"}</span>
-                          <span>{resumeData.personalInfo.location || "Hyderabad"}</span>
-                        </div>
-                        <div className="flex flex-wrap items-center space-x-4 text-sm mt-1 opacity-90">
-                          <a href={resumeData.personalInfo.linkedin} target="_blank" rel="noopener noreferrer">
-                            <span>
-                              <strong>LinkedIn:</strong> {resumeData.personalInfo.linkedin}
-                            </span>
-                          </a>
-                          <a href={resumeData.personalInfo.website} target="_blank" rel="noopener noreferrer">
-                            {resumeData.personalInfo.website && (
-                              <span>
-                                <strong>Website:</strong> {resumeData.personalInfo.website}
-                              </span>
-                            )}
-                          </a>
-                        </div>
-                        <a href={resumeData.personalInfo.github} target="_blank" rel="noopener noreferrer">
-                          {resumeData.personalInfo.github && (
-                            <div className="text-sm mt-1 opacity-90">
-                              <span>
-                                <strong>GitHub:</strong> {resumeData.personalInfo.github}
-                              </span>
+                    <div className="space-y-6">
+                      <div className={`${currentTemplate.headerBg} ${currentTemplate.headerText} p-6`}>
+                        <div className="flex items-center space-x-4">
+                          <div className="flex-1">
+                            <h1 className="text-3xl font-bold">{resumeData.personalInfo.fullName || "John Doe"}</h1>
+                            <p className="text-lg opacity-90 mt-1">
+                              {resumeData.workExperience[0]?.position || "Software Developer"}
+                            </p>
+                            <div className="flex items-center space-x-6 text-sm mt-3 opacity-90">
+                              <span>{resumeData.personalInfo.email || "johndoe68@gmail.com"}</span>
+                              <span>{resumeData.personalInfo.phone || "123456789"}</span>
+                              <span>{resumeData.personalInfo.location || "Hyderabad"}</span>
                             </div>
-                          )}
-                        </a>
+                            <div className="flex  justify-between text-sm mt-1 opacity-90">
+                              <a href={resumeData.personalInfo.linkedin} target="_blank" rel="noopener noreferrer">
+                                {resumeData.personalInfo.linkedin && (
+                                  <span>
+                                    <Linkedin className="w-4 h-4 mr-1 inline" />
+                                    {resumeData.personalInfo.linkedin.slice(27)}
+                                  </span>
+                                )}
+                              </a>
+                              <a href={resumeData.personalInfo.website} target="_blank" rel="noopener noreferrer">
+                                {resumeData.personalInfo.website && (
+                                  <span>
+                                    <Globe className="w-4 h-4 mr-1 inline" />
+                                    View Website
+                                  </span>
+                                )}
+                              </a>
+                               <a href={resumeData.personalInfo.github} target="_blank" rel="noopener noreferrer">
+                              {resumeData.personalInfo.github && (
+                                <div className="text-sm mt-1 opacity-90">
+                                  <span>
+                                    <Github className="w-4 h-4 mr-1 inline" />
+                                    {resumeData.personalInfo.github.slice(19)}
+                                  </span>
+                                </div>
+                              )}
+                            </a>
+                            </div>
+                           
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="px-6 pb-6 space-y-6">
+                        {sectionOrder
+                          .filter((section) => section.visible)
+                          .map((sectionConfig, index) => {
+                            const content = renderSectionContent(sectionConfig)
+                            if (!content) return null
+
+                            if (isReorderMode) {
+                              return (
+                                <div
+                                  key={sectionConfig.id}
+                                  draggable
+                                  onDragStart={(e) => handleDragStart(e, sectionConfig.id)}
+                                  onDragOver={handleDragOver}
+                                  onDrop={(e) => handleDrop(e, sectionConfig.id)}
+                                  onDragEnd={handleDragEnd}
+                                  className={`border-2 border-dashed border-orange-300 rounded-lg p-4 cursor-move transition-all hover:border-orange-400 hover:shadow-md ${draggedSection === sectionConfig.id ? "opacity-50" : "opacity-100"}`}
+                                >
+                                  <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center space-x-2">
+                                      <GripVertical className="w-4 h-4 text-orange-500" />
+                                      <span className="text-sm font-medium text-orange-700">
+                                        Drag to reorder: {sectionConfig.name}
+                                      </span>
+                                    </div>
+                                  </div>
+                                  {content}
+                                </div>
+                              )
+                            }
+
+                            return content
+                          })}
                       </div>
                     </div>
                   </div>
-
-                  <div className="px-6 pb-6 space-y-6">
-                    {sectionOrder
-                      .filter((section) => section.visible)
-                      .map((sectionConfig, index) => {
-                        const content = renderSectionContent(sectionConfig);
-                        if (!content) return null;
-
-                        if (isReorderMode) {
-                          return (
-                            <div
-                              key={sectionConfig.id}
-                              draggable
-                              onDragStart={(e) => handleDragStart(e, sectionConfig.id)}
-                              onDragOver={handleDragOver}
-                              onDrop={(e) => handleDrop(e, sectionConfig.id)}
-                              onDragEnd={handleDragEnd}
-                              className={`border-2 border-dashed border-orange-300 rounded-lg p-4 cursor-move transition-all hover:border-orange-400 hover:shadow-md ${
-                                draggedSection === sectionConfig.id ? "opacity-50" : "opacity-100"
-                              }`}
-                            >
-                              <div className="flex items-center justify-between mb-2">
-                                <div className="flex items-center space-x-2">
-                                  <GripVertical className="w-4 h-4 text-orange-500" />
-                                  <span className="text-sm font-medium text-orange-700">
-                                    Drag to reorder: {sectionConfig.name}
-                                  </span>
-                                </div>
-                              </div>
-                              {content}
-                            </div>
-                          );
-                        }
-
-                        return content;
-                      })}
-                  </div>
-                </div>
-                  </div>
                 </CardContent>
               </Card>
-            )}
+            
           </div>
         </div>
       </div>
