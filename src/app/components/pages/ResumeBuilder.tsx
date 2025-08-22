@@ -135,7 +135,7 @@ const templates = [
 ]
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY
+
 
 const apiService = {
   async saveResume(resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[]) {
@@ -182,23 +182,7 @@ const apiService = {
     return response.json()
   },
 
-  async analyzeATS(resumeData: ResumeData) {
-    const token = Cookies.get("accessToken")
-    const response = await fetch(`${API_BASE_URL}/ats/analyze`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "authorization": `Bearer ${token}`,
-      },
-      body: JSON.stringify(resumeData),
-    })
-
-    if (!response.ok) {
-      throw new Error("Failed to analyze ATS score")
-    }
-
-    return response.json()
-  },
+  
 }
 
 export default function ResumeBuilder() {
@@ -412,81 +396,88 @@ export default function ResumeBuilder() {
 
   
 
-  const handleAISuggest = async () => {
-    if (!GEMINI_API_KEY || GEMINI_API_KEY === "your-gemini-api-key-here") {
-      toast.error("Gemini API key is not configured.")
-      return
-    }
+ const handleAISuggest = async () => {
+  setAiLoading(true);
+  try {
+    const dataSummary = `
+      Name: ${resumeData.personalInfo.fullName || "N/A"}
+      Email: ${resumeData.personalInfo.email || "N/A"}
+      Location: ${resumeData.personalInfo.location || "N/A"}
+      Education: ${resumeData.education.map(edu => `${edu.degree} in ${edu.field || "N/A"} from ${edu.school || "N/A"} (${edu.startDate} - ${edu.endDate || "Present"})`).join("; ") || "N/A"}
+      Work Experience: ${resumeData.workExperience.map(work => `${work.position || "N/A"} at ${work.company || "N/A"} (${work.startDate} - ${work.endDate || "Present"}): ${work.description.join("; ") || "N/A"}`).join("; ") || "N/A"}
+      Skills: ${resumeData.skills.join(", ") || "N/A"}
+      Certifications: ${resumeData.certifications.join(", ") || "N/A"}
+      Projects: ${resumeData.projects.map(proj => `${proj.name || "N/A"}: ${proj.description || "N/A"} (Technologies: ${proj.technologies || "N/A"})`).join("; ") || "N/A"}
+      Achievements: ${resumeData.achievements.map(ach => `${ach.title || "N/A"} (${ach.date || "N/A"}): ${ach.description || "N/A"}`).join("; ") || "N/A"}
+      Extracurriculars: ${resumeData.extracurriculars.map(extra => `${extra.activity || "N/A"} - ${extra.role || "N/A"} (${extra.startDate} - ${extra.endDate || "Present"}): ${extra.description || "N/A"}`).join("; ") || "N/A"}
+    `;
 
-    setAiLoading(true)
-    try {
-      const dataSummary = `
-        Name: ${resumeData.personalInfo.fullName || "N/A"}
-        Email: ${resumeData.personalInfo.email || "N/A"}
-        Location: ${resumeData.personalInfo.location || "N/A"}
-        Education: ${resumeData.education.map(edu => `${edu.degree} in ${edu.field || "N/A"} from ${edu.school || "N/A"} (${edu.startDate} - ${edu.endDate || "Present"})`).join("; ") || "N/A"}
-        Work Experience: ${resumeData.workExperience.map(work => `${work.position || "N/A"} at ${work.company || "N/A"} (${work.startDate} - ${work.endDate || "Present"}): ${work.description.join("; ") || "N/A"}`).join("; ") || "N/A"}
-        Skills: ${resumeData.skills.join(", ") || "N/A"}
-        Certifications: ${resumeData.certifications.join(", ") || "N/A"}
-        Projects: ${resumeData.projects.map(proj => `${proj.name || "N/A"}: ${proj.description || "N/A"} (Technologies: ${proj.technologies || "N/A"})`).join("; ") || "N/A"}
-        Achievements: ${resumeData.achievements.map(ach => `${ach.title || "N/A"} (${ach.date || "N/A"}): ${ach.description || "N/A"}`).join("; ") || "N/A"}
-        Extracurriculars: ${resumeData.extracurriculars.map(extra => `${extra.activity || "N/A"} - ${extra.role || "N/A"} (${extra.startDate} - ${extra.endDate || "Present"}): ${extra.description || "N/A"}`).join("; ") || "N/A"}
-      `
+    const prompt = `Generate a concise, ATS friendly professional summary (45-55 words) for a resume based on the following information. Highlight key achievements, skills, and career goals, tailored to the provided data. Ensure the summary is professional, engaging, and suitable for a resume: ${dataSummary}`;
 
-      const prompt = `Generate a concise, ATS friendly professional summary (45-55 words) for a resume based on the following information. Highlight key achievements, skills, and career goals, tailored to the provided data. Ensure the summary is professional, engaging, and suitable for a resume: ${dataSummary}`
+    const res = await fetch("/api/gemini", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt }),
+    });
 
-      const genAI = new GoogleGenerativeAI(GEMINI_API_KEY)
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" })
+    const data = await res.json();
+    const generatedSummary =
+      data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
 
-      const result = await model.generateContent(prompt)
-      const generatedSummary = result.response.text().trim()
-
-      setResumeData((prev) => ({ ...prev, professionalSummary: generatedSummary }))
-      toast.success("AI-generated summary added to textarea!")
-    } catch (error) {
-      console.error("Failed to generate AI suggestion:", error)
-      toast.error("Failed to generate AI suggestion. Please try again.")
-    } finally {
-      setAiLoading(false)
-    }
+    setResumeData((prev) => ({
+      ...prev,
+      professionalSummary: generatedSummary,
+    }));
+    toast.success("AI-generated summary added to textarea!");
+  } catch (error) {
+    console.error("Failed to generate AI suggestion:", error);
+    toast.error("Failed to generate AI suggestion. Please try again.");
+  } finally {
+    setAiLoading(false);
   }
-
-  const handleAISuggestForWork = async (id: string) => {
-    if (!GEMINI_API_KEY || GEMINI_API_KEY === "your-gemini-api-key-here") {
-      toast.error("Gemini API key is not configured.")
-      return
+};
+const handleAISuggestForWork = async (id: string) => {
+  setAiLoading(true);
+  try {
+    const work = resumeData.workExperience.find((w) => w.id === id);
+    if (!work || !work.position || !work.company) {
+      toast.info("Please provide position and company first.");
+      return;
     }
 
-    setAiLoading(true)
-    try {
-      const work = resumeData.workExperience.find((w) => w.id === id)
-      if (!work || !work.position || !work.company) {
-        toast.info("Please provide position and company first.")
-        return
-      }
+    const prompt = `Generate a concise, ATS-friendly job description (3 points, each not more than 20 words) for the position of ${work.position} at ${work.company}. Highlight key responsibilities, achievements, and skills. Ensure it is professional, engaging, and suitable for a resume.`;
 
-      const prompt = `Generate a concise, ATS-friendly job description (3 points, each not more than 20 words) for the position of ${work.position} at ${work.company}. Highlight key responsibilities, achievements, and skills. Ensure it is professional, engaging, and suitable for a resume.`
+    const res = await fetch("/api/gemini", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt }),
+    });
 
-      const genAI = new GoogleGenerativeAI(GEMINI_API_KEY)
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" })
+    const data = await res.json();
+    const generatedDescription =
+      data.candidates?.[0]?.content?.parts?.[0]?.text
+        ?.trim()
+        .split("\n")
+        .slice(0, 3)
+        .map((point: string) =>
+          point.trim().replace(/^[-•]\s*/, "").trim()
+        ) || [];
 
-      const result = await model.generateContent(prompt)
-      const generatedDescription = result.response.text().trim().split('\n').slice(0, 3).map(point => point.trim().replace(/^-|\•/, '').trim())
-
-      setResumeData((prev) => ({
-        ...prev,
-        workExperience: prev.workExperience.map((w) =>
-          w.id === id ? { ...w, description: generatedDescription } : w
-        ),
-      }))
-      toast.success("AI-generated description added!")
-    } catch (error) {
-      console.error("Failed to generate AI suggestion:", error)
-      toast.error("Failed to generate AI suggestion. Please try again.")
-    } finally {
-      setAiLoading(false)
-    }
+    setResumeData((prev) => ({
+      ...prev,
+      workExperience: prev.workExperience.map((w) =>
+        w.id === id ? { ...w, description: generatedDescription } : w
+      ),
+    }));
+    toast.success("AI-generated description added!");
+  } catch (error) {
+    console.error("Failed to generate AI suggestion:", error);
+    toast.error("Failed to generate AI suggestion. Please try again.");
+  } finally {
+    setAiLoading(false);
   }
+};
+
 
   const toggleSection = useCallback((sectionId: string) => {
     setCollapsedSections((prev) => {
