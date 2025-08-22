@@ -1,4 +1,3 @@
-
 "use client"
 import { useState, useRef, useCallback, useEffect } from "react"
 import type React from "react"
@@ -26,6 +25,7 @@ import {
   Plus,
   Trash2,
   User,
+  Sparkles,
   Briefcase,
   GraduationCap,
   Award,
@@ -42,6 +42,9 @@ import {
   Target,
   Trophy,
   Users,
+  Linkedin,
+  Github,
+  Globe,
 } from "lucide-react"
 import { GoogleGenerativeAI } from "@google/generative-ai"
 
@@ -71,7 +74,8 @@ interface WorkExperience {
   position: string
   startDate: string
   endDate: string
-  description: string
+  description: string[] 
+  index: number // Changed to number for description point index
 }
 
 interface Project {
@@ -131,7 +135,7 @@ const templates = [
 ]
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL
-const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY 
+const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY
 
 const apiService = {
   async saveResume(resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[]) {
@@ -201,7 +205,7 @@ export default function ResumeBuilder() {
   const [activeTemplate, setActiveTemplate] = useState("minimal")
   const [isTemplateDialogOpen, setIsTemplateDialogOpen] = useState(false)
   const [isReorderMode, setIsReorderMode] = useState(false)
-  const [viewMode, setViewMode] = useState<"preview" | "ats">("preview")
+  
   const [draggedSection, setDraggedSection] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [isAddSectionDialogOpen, setIsAddSectionDialogOpen] = useState(false)
@@ -257,8 +261,7 @@ export default function ResumeBuilder() {
 
   const [currentSkill, setCurrentSkill] = useState("")
   const [currentCertification, setCurrentCertification] = useState("")
-  const [atsScore, setATSScore] = useState<any>(null)
-  const [atsLoading, setATSLoading] = useState(false)
+  
   const [isSaving, setIsSaving] = useState(false)
   const [savedResumeId, setSavedResumeId] = useState<string | null>(null)
 
@@ -316,29 +319,29 @@ export default function ResumeBuilder() {
 
     try {
       await html2pdf().set(opt).from(element).save()
-      setResumeData({
-        personalInfo: {
-          fullName: "",
-          email: "",
-          phone: "",
-          location: "",
-          linkedin: "",
-          website: "",
-          github: "",
-        },
-        professionalSummary: "",
-        education: [],
-        workExperience: [],
-        skills: [],
-        certifications: [],
-        projects: [],
-        achievements: [],
-        extracurriculars: [],
-        profilePicture: null,
-      })
-      setCurrentSkill("")
-      setCurrentCertification("")
-      setSavedResumeId(null)
+      // setResumeData({
+      //   personalInfo: {
+      //     fullName: "",
+      //     email: "",
+      //     phone: "",
+      //     location: "",
+      //     linkedin: "",
+      //     website: "",
+      //     github: "",
+      //   },
+      //   professionalSummary: "",
+      //   education: [],
+      //   workExperience: [],
+      //   skills: [],
+      //   certifications: [],
+      //   projects: [],
+      //   achievements: [],
+      //   extracurriculars: [],
+      //   profilePicture: null,
+      // })
+      // setCurrentSkill("")
+      // setCurrentCertification("")
+       setSavedResumeId(null)
     } catch (error: any) {
       console.error("Failed to generate PDF:", error)
       toast.error("Failed to generate PDF. Please try again.")
@@ -401,19 +404,7 @@ export default function ResumeBuilder() {
     setIsSaveDialogOpen(false)
   }
 
-  const analyzeATS = async () => {
-    setATSLoading(true)
-    try {
-      const result = await apiService.analyzeATS(resumeData)
-      if (result.success && result.data.atsScore) {
-        setATSScore(result.data.atsScore)
-      }
-    } catch (error) {
-      console.error("Failed to analyze ATS score:", error)
-    } finally {
-      setATSLoading(false)
-    }
-  }
+  
 
   const handleAISuggest = async () => {
     if (!GEMINI_API_KEY || GEMINI_API_KEY === "your-gemini-api-key-here") {
@@ -428,7 +419,7 @@ export default function ResumeBuilder() {
         Email: ${resumeData.personalInfo.email || "N/A"}
         Location: ${resumeData.personalInfo.location || "N/A"}
         Education: ${resumeData.education.map(edu => `${edu.degree} in ${edu.field || "N/A"} from ${edu.school || "N/A"} (${edu.startDate} - ${edu.endDate || "Present"})`).join("; ") || "N/A"}
-        Work Experience: ${resumeData.workExperience.map(work => `${work.position || "N/A"} at ${work.company || "N/A"} (${work.startDate} - ${work.endDate || "Present"}): ${work.description || "N/A"}`).join("; ") || "N/A"}
+        Work Experience: ${resumeData.workExperience.map(work => `${work.position || "N/A"} at ${work.company || "N/A"} (${work.startDate} - ${work.endDate || "Present"}): ${work.description.join("; ") || "N/A"}`).join("; ") || "N/A"}
         Skills: ${resumeData.skills.join(", ") || "N/A"}
         Certifications: ${resumeData.certifications.join(", ") || "N/A"}
         Projects: ${resumeData.projects.map(proj => `${proj.name || "N/A"}: ${proj.description || "N/A"} (Technologies: ${proj.technologies || "N/A"})`).join("; ") || "N/A"}
@@ -446,6 +437,43 @@ export default function ResumeBuilder() {
 
       setResumeData((prev) => ({ ...prev, professionalSummary: generatedSummary }))
       toast.success("AI-generated summary added to textarea!")
+    } catch (error) {
+      console.error("Failed to generate AI suggestion:", error)
+      toast.error("Failed to generate AI suggestion. Please try again.")
+    } finally {
+      setAiLoading(false)
+    }
+  }
+
+  const handleAISuggestForWork = async (id: string) => {
+    if (!GEMINI_API_KEY || GEMINI_API_KEY === "your-gemini-api-key-here") {
+      toast.error("Gemini API key is not configured.")
+      return
+    }
+
+    setAiLoading(true)
+    try {
+      const work = resumeData.workExperience.find((w) => w.id === id)
+      if (!work || !work.position || !work.company) {
+        toast.info("Please provide position and company first.")
+        return
+      }
+
+      const prompt = `Generate a concise, ATS-friendly job description (3 points, each not more than 20 words) for the position of ${work.position} at ${work.company}. Highlight key responsibilities, achievements, and skills. Ensure it is professional, engaging, and suitable for a resume.`
+
+      const genAI = new GoogleGenerativeAI(GEMINI_API_KEY)
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" })
+
+      const result = await model.generateContent(prompt)
+      const generatedDescription = result.response.text().trim().split('\n').slice(0, 3).map(point => point.trim().replace(/^-|\•/, '').trim())
+
+      setResumeData((prev) => ({
+        ...prev,
+        workExperience: prev.workExperience.map((w) =>
+          w.id === id ? { ...w, description: generatedDescription } : w
+        ),
+      }))
+      toast.success("AI-generated description added!")
     } catch (error) {
       console.error("Failed to generate AI suggestion:", error)
       toast.error("Failed to generate AI suggestion. Please try again.")
@@ -559,7 +587,8 @@ export default function ResumeBuilder() {
       position: "",
       startDate: "",
       endDate: "",
-      description: "",
+      description: ["", "", ""],
+      index: 0,
     }
     setResumeData((prev) => ({
       ...prev,
@@ -567,13 +596,24 @@ export default function ResumeBuilder() {
     }))
   }, [])
 
-  const updateWorkExperience = useCallback((id: string, field: keyof WorkExperience, value: string) => {
-    setResumeData((prev) => ({
-      ...prev,
-      workExperience: prev.workExperience.map((work) => (work.id === id ? { ...work, [field]: value } : work)),
-    }))
-  }, [])
-
+const updateWorkExperience = useCallback((id: string, field: keyof WorkExperience | 'description', value: string | string[], index?: number) => {
+  setResumeData((prev) => ({
+    ...prev,
+    workExperience: prev.workExperience.map((work) => {
+      if (work.id === id) {
+        if (field === 'description' && Array.isArray(value)) {
+          return { ...work, description: value }
+        } else if (field === 'description' && typeof index === 'number') {
+          const newDescription = [...work.description]
+          newDescription[index] = value as string
+          return { ...work, description: newDescription }
+        }
+        return { ...work, [field]: value as string }
+      }
+      return work
+    }),
+  }))
+}, [])
   const removeWorkExperience = useCallback((id: string) => {
     setResumeData((prev) => ({
       ...prev,
@@ -772,7 +812,13 @@ export default function ResumeBuilder() {
                         : work.startDate || work.endDate || "2023-08 - Present"}
                     </span>
                   </div>
-                  {work.description && <p className="text-gray-700 text-sm leading-relaxed">{work.description}</p>}
+                  {work.description.some(desc => desc.trim()) && (
+                    <ul className="text-gray-700 text-sm leading-relaxed list-disc pl-5">
+                      {work.description.map((desc, index) => (
+                        desc.trim() && <li key={index}>{desc}</li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               ))}
             </div>
@@ -1086,10 +1132,11 @@ export default function ResumeBuilder() {
                             />
                             <Button
                               variant="outline"
-                              className="text-orange-500 border-orange-500 hover:bg-orange-50 hover:text-orange-600 p-2 h-auto font-medium"
+                              className="bg-orange-500 text-white  hover:bg-white hover:border-orange-500 hover:text-orange-600 p-2 h-auto font-medium"
                               onClick={handleAISuggest}
                               disabled={aiLoading}
                             >
+                              <Sparkles className="w-4 h-4 mr-2 inline-block" />
                               {aiLoading ? "Generating..." : "AI Suggest"}
                             </Button>
                           </div>
@@ -1213,12 +1260,26 @@ export default function ResumeBuilder() {
                                     </div>
                                     <div>
                                       <Label className="flex items-center justify-between">Job Description</Label>
-                                      <Textarea
-                                        placeholder="Describe your key responsibilities and achievements..."
-                                        className="min-h-[100px]"
-                                        value={work.description}
-                                        onChange={(e) => updateWorkExperience(work.id, "description", e.target.value)}
-                                      />
+                                      <div className="space-y-2 mt-2">
+                                        {[0, 1, 2].map((index) => (
+                                          <Input
+                                            key={index}
+                                            placeholder={`Description point ${index + 1}`}
+                                            value={work.description[index] || ""}
+                                            onChange={(e) => updateWorkExperience(work.id, "description", e.target.value, index)}
+                                            className="text-sm"
+                                          />
+                                        ))}
+                                      </div>
+                                      <Button
+                                        variant="outline"
+                                        className="bg-orange-500 text-white  hover:bg-white hover:border-orange-500 hover:text-orange-600 p-2 h-auto font-medium mt-2"
+                                        onClick={() => handleAISuggestForWork(work.id)}
+                                        disabled={aiLoading}
+                                      >
+                                        <Sparkles className="w-4 h-4 mr-2 inline-block" />
+                                        {aiLoading ? "Generating..." : "AI Suggest"}
+                                      </Button>
                                     </div>
                                     <Button
                                       variant="destructive"
@@ -1515,26 +1576,18 @@ export default function ResumeBuilder() {
           <div className="space-y-4 md:space-y-6 max-h-[calc(100vh-120px)] overflow-y-auto lg:sticky lg:top-24">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <h2 className="text-lg font-semibold">{viewMode === "preview" ? "Resume Preview" : "ATS Analysis"}</h2>
+                <h2 className="text-lg font-semibold">Resume Preview</h2>
                 <div className="flex items-center bg-gray-100 rounded-lg p-1">
                   <Button
-                    variant={viewMode === "preview" ? "default" : "ghost"}
+                    variant="default"
                     size="sm"
-                    onClick={() => setViewMode("preview")}
-                    className={`h-7 md:h-8 px-2 md:px-3 text-xs ${viewMode === "preview" ? "bg-orange-500 hover:bg-orange-600 text-white" : "text-gray-700"}`}
+                    className={`h-7 md:h-8 px-2 md:px-3 text-xs bg-orange-500  text-white`}
                   >
                     <Eye className="w-3 h-3 md:mr-1" />
                     <span className="hidden sm:inline">Preview</span>
                   </Button>
-                  <Button
-                    variant={viewMode === "ats" ? "default" : "ghost"}
-                    size="sm"
-                    onClick={() => setViewMode("ats")}
-                    className={`h-7 md:h-8 px-2 md:px-3 text-xs ${viewMode === "ats" ? "bg-orange-500 hover:bg-orange-600 text-white" : "text-gray-700"}`}
-                  >
-                    <Target className="w-3 h-3 md:mr-1" />
-                    <span className="hidden sm:inline">ATS Score</span>
-                  </Button>
+                  
+                    
                 </div>
               </div>
 
@@ -1572,7 +1625,7 @@ export default function ResumeBuilder() {
                     </div>
                   </DialogContent>
                 </Dialog>
-                {viewMode === "preview" && (
+                
                   <Button
                     variant={isReorderMode ? "default" : "outline"}
                     size="sm"
@@ -1590,7 +1643,7 @@ export default function ResumeBuilder() {
                       </>
                     )}
                   </Button>
-                )}
+                
               </div>
             </div>
 
@@ -1603,28 +1656,7 @@ export default function ResumeBuilder() {
               </div>
             )}
 
-            {viewMode === "ats" && (
-              <ATSScoreCard
-                score={
-                  atsScore || {
-                    totalScore: 0,
-                    contactInfoScore: 0,
-                    keywordsScore: 0,
-                    formatScore: 0,
-                    experienceScore: 0,
-                    skillsScore: 0,
-                    suggestions: ["Start building your resume to see ATS analysis"],
-                    lastUpdated: new Date(),
-                  }
-                }
-                loading={atsLoading}
-                onAnalyze={analyzeATS}
-                onViewSuggestions={() => {
-                  alert("Detailed suggestions modal would open here")
-                }}
-              />
-            )}
-
+            
             <Dialog open={isSaveDialogOpen} onOpenChange={setIsSaveDialogOpen}>
               <DialogContent>
                 <DialogHeader>
@@ -1644,7 +1676,6 @@ export default function ResumeBuilder() {
               </DialogContent>
             </Dialog>
 
-            {viewMode === "preview" && (
               <Card>
                 <CardContent className="p-0">
                   <div id="resume-preview">
@@ -1656,34 +1687,40 @@ export default function ResumeBuilder() {
                             <p className="text-lg opacity-90 mt-1">
                               {resumeData.workExperience[0]?.position || "Software Developer"}
                             </p>
-                            <div className="flex flex-wrap items-center space-x-4 text-sm mt-3 opacity-90">
+                            <div className="flex items-center space-x-6 text-sm mt-3 opacity-90">
                               <span>{resumeData.personalInfo.email || "johndoe68@gmail.com"}</span>
                               <span>{resumeData.personalInfo.phone || "123456789"}</span>
                               <span>{resumeData.personalInfo.location || "Hyderabad"}</span>
                             </div>
-                            <div className="flex flex-wrap items-center space-x-4 text-sm mt-1 opacity-90">
+                            <div className="flex  justify-between text-sm mt-1 opacity-90">
                               <a href={resumeData.personalInfo.linkedin} target="_blank" rel="noopener noreferrer">
-                                <span>
-                                  <strong>LinkedIn:</strong> {resumeData.personalInfo.linkedin}
-                                </span>
+                                {resumeData.personalInfo.linkedin && (
+                                  <span>
+                                    <Linkedin className="w-4 h-4 mr-1 inline" />
+                                    {resumeData.personalInfo.linkedin.slice(27)}
+                                  </span>
+                                )}
                               </a>
                               <a href={resumeData.personalInfo.website} target="_blank" rel="noopener noreferrer">
                                 {resumeData.personalInfo.website && (
                                   <span>
-                                    <strong>Website:</strong> {resumeData.personalInfo.website}
+                                    <Globe className="w-4 h-4 mr-1 inline" />
+                                    View Website
                                   </span>
                                 )}
                               </a>
-                            </div>
-                            <a href={resumeData.personalInfo.github} target="_blank" rel="noopener noreferrer">
+                               <a href={resumeData.personalInfo.github} target="_blank" rel="noopener noreferrer">
                               {resumeData.personalInfo.github && (
                                 <div className="text-sm mt-1 opacity-90">
                                   <span>
-                                    <strong>GitHub:</strong> {resumeData.personalInfo.github}
+                                    <Github className="w-4 h-4 mr-1 inline" />
+                                    {resumeData.personalInfo.github.slice(19)}
                                   </span>
                                 </div>
                               )}
                             </a>
+                            </div>
+                           
                           </div>
                         </div>
                       </div>
@@ -1726,7 +1763,7 @@ export default function ResumeBuilder() {
                   </div>
                 </CardContent>
               </Card>
-            )}
+            
           </div>
         </div>
       </div>
