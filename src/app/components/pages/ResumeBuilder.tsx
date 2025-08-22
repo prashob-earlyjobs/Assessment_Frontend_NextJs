@@ -300,7 +300,7 @@ export default function ResumeBuilder() {
   }
 
   const handleDownloadPDF = async () => {
-    await handleSave()
+    
     const element = document.getElementById("resume-preview")
     if (!element) {
       toast.error("Preview not found. Please try again.")
@@ -318,7 +318,13 @@ export default function ResumeBuilder() {
     }
 
     try {
-      await html2pdf().set(opt).from(element).save()
+      if (resumeData.personalInfo.fullName || resumeData.personalInfo.email || resumeData.personalInfo.phone) {
+        await html2pdf().set(opt).from(element).save()
+        await handleSave()
+      }
+      else{
+        toast.info("Please enter your name, email or phone number before downloading the resume.")
+      }
       // setResumeData({
       //   personalInfo: {
       //     fullName: "",
