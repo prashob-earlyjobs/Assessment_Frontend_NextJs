@@ -318,7 +318,7 @@ export default function ResumeBuilder() {
     }
 
     try {
-      if (resumeData.personalInfo.fullName && resumeData.personalInfo.email && resumeData.personalInfo.phone) {
+      if (resumeData.personalInfo.fullName || resumeData.personalInfo.email || resumeData.personalInfo.phone) {
         await html2pdf().set(opt).from(element).save()
         await handleSave()
       }
@@ -354,11 +354,13 @@ export default function ResumeBuilder() {
     }
   }
 
-  
-
   const handleSave = async () => {
+    setIsSaveDialogOpen(true)
+  }
+
+  const confirmSave = async () => {
     setIsSaving(true)
-    
+    setIsSaveDialogOpen(false)
     try {
       let result
       if (savedResumeId) {
@@ -373,28 +375,28 @@ export default function ResumeBuilder() {
           setSavedResumeId(resumeId)
         }
         toast.success("Resume saved successfully!")
-        // setResumeData({
-        //   personalInfo: {
-        //     fullName: "",
-        //     email: "",
-        //     phone: "",
-        //     location: "",
-        //     linkedin: "",
-        //     website: "",
-        //     github: "",
-        //   },
-        //   professionalSummary: "",
-        //   education: [],
-        //   workExperience: [],
-        //   skills: [],
-        //   certifications: [],
-        //   projects: [],
-        //   achievements: [],
-        //   extracurriculars: [],
-        //   profilePicture: null,
-        // })
-        // setCurrentSkill("")
-        // setCurrentCertification("")
+        setResumeData({
+          personalInfo: {
+            fullName: "",
+            email: "",
+            phone: "",
+            location: "",
+            linkedin: "",
+            website: "",
+            github: "",
+          },
+          professionalSummary: "",
+          education: [],
+          workExperience: [],
+          skills: [],
+          certifications: [],
+          projects: [],
+          achievements: [],
+          extracurriculars: [],
+          profilePicture: null,
+        })
+        setCurrentSkill("")
+        setCurrentCertification("")
         setSavedResumeId(null)
       }
     } catch (error) {
@@ -1661,7 +1663,7 @@ const updateWorkExperience = useCallback((id: string, field: keyof WorkExperienc
             )}
 
             
-            {/* <Dialog open={isSaveDialogOpen} onOpenChange={setIsSaveDialogOpen}>
+            <Dialog open={isSaveDialogOpen} onOpenChange={setIsSaveDialogOpen}>
               <DialogContent>
                 <DialogHeader>
                   <DialogTitle>Confirm Save</DialogTitle>
@@ -1678,7 +1680,7 @@ const updateWorkExperience = useCallback((id: string, field: keyof WorkExperienc
                   </Button>
                 </div>
               </DialogContent>
-            </Dialog> */}
+            </Dialog>
 
               <Card>
                 <CardContent className="p-0">
