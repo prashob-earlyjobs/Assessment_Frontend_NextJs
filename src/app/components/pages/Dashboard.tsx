@@ -335,13 +335,13 @@ const Dashboard = () => {
                     Let AI craft your perfect resume and apply to dozens of companies.
                   </CardDescription>
                   <Button
-                    // onClick={() => navigate.push('/airesumedashboard')}
-                     onClick={() => toast.info("Access granted to selected candidates only")}
+                     onClick={() => navigate.push('/airesume')}
+                     //onClick={() => toast.info("Access granted to selected candidates only")}
                     variant="secondary"
                     className="w-full rounded-2xl bg-white text-yellow-600 hover:bg-gray-50 mb-3"
                   >
                     Build Resume
-                    <img src="/images/lock.svg" alt="Arrow Right" className="h-4 w-4 ml-2" />
+                    {/* <img src="/images/lock.svg" alt="Arrow Right" className="h-4 w-4 ml-2" /> */}
                   </Button>
                 </CardContent>
               </Card>
