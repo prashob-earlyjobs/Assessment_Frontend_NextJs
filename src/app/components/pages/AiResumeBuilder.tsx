@@ -422,7 +422,7 @@ export default function AIResumeBuilder() {
       Extracurriculars: ${resumeData.extracurriculars.map(extra => `${extra.activity || "N/A"} - ${extra.role || "N/A"} (${extra.startDate} - ${extra.endDate || "Present"}): ${extra.description || "N/A"}`).join("; ") || "N/A"}
     `;
 
-      const prompt = `Generate a concise, ATS friendly professional summary (45-55 words) for a resume based on the following information. Highlight key achievements, skills, and career goals, tailored to the provided data. Ensure the summary is professional, engaging, and suitable for a resume: ${dataSummary}`;
+      const prompt = `Generate a concise, ATS friendly professional summary (30 words) for a resume based on the following information. Highlight key achievements, skills, and career goals, tailored to the provided data. Ensure the summary is professional, engaging, and suitable for a resume: ${dataSummary}`;
 
       const res = await fetch("/api/gemini", {
         method: "POST",
@@ -486,46 +486,81 @@ export default function AIResumeBuilder() {
   };
 
   const computeAtsScore = async () => {
-    if (!jobDescription) {
-      toast.info("Job description is required for ATS analysis.");
+  if (!jobDescription) {
+    toast.info("Job description is required for ATS analysis.");
+    return;
+  }
+
+  setAtsLoading(true);
+  try {
+    const resumeContent = JSON.stringify(resumeData);
+    const prompt = `Analyze this resume content: ${resumeContent} against this job description: "${jobDescription}" for ATS compatibility. Provide scores as JSON object: {
+      "totalScore": number (0-100),
+      "contactInfoScore": number (0-20),
+      "keywordsScore": number (0-25),
+      "formatScore": number (0-20),
+      "experienceScore": number (0-20),
+      "skillsScore": number (0-15),
+      "suggestions": array of strings (3-5 improvement suggestions)
+    }. Ensure the output is valid JSON only.`;
+
+    const res = await fetch("/api/gemini", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt }),
+    });
+
+    if (!res.ok) {
+      throw new Error(`API request failed with status ${res.status}`);
+    }
+
+    const data = await res.json();
+    const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "{}";
+    console.log("Raw responseText:", responseText); // Debug log
+
+    // Clean and parse JSON
+    let parsedScore;
+    try {
+      const jsonStart = responseText.indexOf("{");
+      const jsonEnd = responseText.lastIndexOf("}") + 1;
+      const cleanJson = jsonStart >= 0 && jsonEnd > jsonStart ? responseText.slice(jsonStart, jsonEnd) : "{}";
+      parsedScore = JSON.parse(cleanJson);
+    } catch (parseError) {
+      console.error("Failed to parse ATS score JSON:", parseError, "Raw response:", responseText);
+      toast.error("Invalid response from ATS analysis. Please try again.");
       return;
     }
 
-    setAtsLoading(true);
-    try {
-      const resumeContent = JSON.stringify(resumeData);
-      const prompt = `Analyze this resume content: ${resumeContent} against this job description: "${jobDescription}" for ATS compatibility. Provide scores as JSON object: {
-        "totalScore": number (0-100),
-        "contactInfoScore": number (0-20),
-        "keywordsScore": number (0-25),
-        "formatScore": number (0-20),
-        "experienceScore": number (0-20),
-        "skillsScore": number (0-15),
-        "suggestions": array of strings (3-5 improvement suggestions)
-      }. Ensure the output is valid JSON only.`;
+    // Validate required fields
+    const requiredFields = [
+      "totalScore",
+      "contactInfoScore",
+      "keywordsScore",
+      "formatScore",
+      "experienceScore",
+      "skillsScore",
+      "suggestions",
+    ];
+    const hasAllFields = requiredFields.every((field) => field in parsedScore && parsedScore[field] !== undefined);
 
-      const res = await fetch("/api/gemini", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt }),
-      });
-
-      const data = await res.json();
-      const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "{}";
-      const parsedScore = JSON.parse(responseText);
-
-      setAtsScore({
-        ...parsedScore,
-        lastUpdated: new Date(),
-      });
-      toast.success("ATS score computed!");
-    } catch (error) {
-      console.error("Failed to compute ATS score:", error);
-      toast.error("Failed to compute ATS score. Please try again.");
-    } finally {
-      setAtsLoading(false);
+    if (!hasAllFields) {
+      console.error("Missing required fields in ATS score:", parsedScore);
+      toast.error("Incomplete ATS score data. Please try again.");
+      return;
     }
-  };
+
+    setAtsScore({
+      ...parsedScore,
+      lastUpdated: new Date(),
+    });
+    toast.success("ATS score computed!");
+  } catch (error) {
+    console.error("Failed to compute ATS score:", error);
+    toast.error("Failed to compute ATS score. Please try again.");
+  } finally {
+    setAtsLoading(false);
+  }
+};
 
   const toggleSection = useCallback((sectionId: string) => {
     setCollapsedSections((prev) => {
