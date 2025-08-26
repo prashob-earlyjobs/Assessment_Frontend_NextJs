@@ -1,23 +1,23 @@
-"use client"
-import { useState, useRef, useCallback, useEffect } from "react"
-import type React from "react"
-import { useRouter } from "next/navigation"
-import Cookies from "js-cookie"
-import Link from "next/link"
-import { Button } from "../ui/button"
-import { Card, CardContent, CardHeader } from "../ui/card"
-import { Input } from "../ui/input"
-import { Label } from "../ui/label"
-import { Textarea } from "../ui/textarea"
-import { Separator } from "../ui/separator"
-import { Badge } from "../ui/badge"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible"
-import ATSScoreCard from "../ui/ats-score"
-import { toast } from "sonner"
-import Header from "./header"
-import html2pdf from "html2pdf.js"
-import { oklch, oklab, rgb } from "culori"
+"use client";
+import { useState, useRef, useCallback, useEffect } from "react";
+import type React from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import Cookies from "js-cookie";
+import Link from "next/link";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader } from "../ui/card";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Textarea } from "../ui/textarea";
+import { Separator } from "../ui/separator";
+import { Badge } from "../ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
+import ATSScoreCard from "../ui/ats-score";
+import { toast } from "sonner";
+import Header from "./header";
+import html2pdf from "html2pdf.js";
+import { oklch, oklab, rgb } from "culori";
 import {
   ArrowLeft,
   FileText,
@@ -45,80 +45,90 @@ import {
   Linkedin,
   Github,
   Globe,
-} from "lucide-react"
-import { GoogleGenerativeAI } from "@google/generative-ai"
+} from "lucide-react";
 
 interface PersonalInfo {
-  fullName: string
-  email: string
-  phone: string
-  location: string
-  linkedin: string
-  website: string
-  github: string
+  fullName: string;
+  email: string;
+  phone: string;
+  location: string;
+  linkedin: string;
+  website: string;
+  github: string;
 }
 
 interface Education {
-  id: string
-  school: string
-  degree: string
-  field: string
-  startDate: string
-  endDate: string
-  gpa: string
+  id: string;
+  school: string;
+  degree: string;
+  field: string;
+  startDate: string;
+  endDate: string;
+  gpa: string;
 }
 
 interface WorkExperience {
-  id: string
-  company: string
-  position: string
-  startDate: string
-  endDate: string
-  description: string[]
-  index: number // Changed to number for description point index
+  id: string;
+  company: string;
+  position: string;
+  startDate: string;
+  endDate: string;
+  description: string[];
+  index: number;
 }
 
 interface Project {
-  id: string
-  name: string
-  description: string
-  technologies: string
-  link: string
+  id: string;
+  name: string;
+  description: string;
+  technologies: string;
+  link: string;
 }
 
 interface Achievement {
-  id: string
-  title: string
-  description: string
-  date: string
+  id: string;
+  title: string;
+  description: string;
+  date: string;
 }
 
 interface Extracurricular {
-  id: string
-  activity: string
-  role: string
-  description: string
-  startDate: string
-  endDate: string
+  id: string;
+  activity: string;
+  role: string;
+  description: string;
+  startDate: string;
+  endDate: string;
 }
 
 interface ResumeData {
-  personalInfo: PersonalInfo
-  professionalSummary: string
-  education: Education[]
-  workExperience: WorkExperience[]
-  skills: string[]
-  certifications: string[]
-  projects: Project[]
-  achievements: Achievement[]
-  extracurriculars: Extracurricular[]
-  profilePicture: string | null
+  personalInfo: PersonalInfo;
+  professionalSummary: string;
+  education: Education[];
+  workExperience: WorkExperience[];
+  skills: string[];
+  certifications: string[];
+  projects: Project[];
+  achievements: Achievement[];
+  extracurriculars: Extracurricular[];
+  profilePicture: string | null;
 }
 
 interface SectionOrder {
-  id: string
-  name: string
-  visible: boolean
+  id: string;
+  name: string;
+  visible: boolean;
+}
+
+interface ATSScore {
+  totalScore: number;
+  contactInfoScore: number;
+  keywordsScore: number;
+  formatScore: number;
+  experienceScore: number;
+  skillsScore: number;
+  suggestions: string[];
+  lastUpdated: Date;
 }
 
 const templates = [
@@ -131,73 +141,79 @@ const templates = [
     sectionHeader: "text-black border-gray-300",
     accent: "text-black",
     preview: "Clean, professional, black-and-white design",
-  }
-]
+  },
+];
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL
-
+const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 const apiService = {
   async saveResume(resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[]) {
-    const token = Cookies.get("accessToken")
+    const token = Cookies.get("accessToken");
     const response = await fetch(`${API_BASE_URL}/resumes`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "authorization": `Bearer ${token}`,
+        authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         ...resumeData,
         template: activeTemplate,
         sectionOrder: sectionOrder,
       }),
-    })
+    });
 
     if (!response.ok) {
-      throw new Error("Failed to save resume")
+      throw new Error("Failed to save resume");
     }
 
-    return response.json()
+    return response.json();
   },
 
   async updateResume(id: string, resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[]) {
-    const token = Cookies.get("accessToken")
+    const token = Cookies.get("accessToken");
     const response = await fetch(`${API_BASE_URL}/resume/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "authorization": `Bearer ${token}`,
+        authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         ...resumeData,
         template: activeTemplate,
         sectionOrder: sectionOrder,
       }),
-    })
+    });
 
     if (!response.ok) {
-      throw new Error("Failed to update resume")
+      throw new Error("Failed to update resume");
     }
 
-    return response.json()
+    return response.json();
   },
+};
 
+export default function AIResumeBuilder() {
+  const searchParams = useSearchParams();
+  const jobTitle = searchParams.get("jobTitle") || "";
+  const jobDescription = searchParams.get("jobDescription") || "";
+  const router = useRouter();
 
-}
+  const [activeTemplate, setActiveTemplate] = useState("minimal");
+  const [isTemplateDialogOpen, setIsTemplateDialogOpen] = useState(false);
+  const [isReorderMode, setIsReorderMode] = useState(false);
+  const [draggedSection, setDraggedSection] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isAddSectionDialogOpen, setIsAddSectionDialogOpen] = useState(false);
+  const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [savedResumeId, setSavedResumeId] = useState<string | null>(null);
+  const [isPrefilled, setIsPrefilled] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [viewMode, setViewMode] = useState<"preview" | "ats">("preview");
+  const [atsScore, setAtsScore] = useState<ATSScore | null>(null);
+  const [atsLoading, setAtsLoading] = useState(false);
 
-export default function ResumeBuilder() {
-  const [activeTemplate, setActiveTemplate] = useState("minimal")
-  const [isTemplateDialogOpen, setIsTemplateDialogOpen] = useState(false)
-  const [isReorderMode, setIsReorderMode] = useState(false)
-
-  const [draggedSection, setDraggedSection] = useState<string | null>(null)
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const [isAddSectionDialogOpen, setIsAddSectionDialogOpen] = useState(false)
-  const router = useRouter()
-  const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false)
-  const [aiLoading, setAiLoading] = useState(false)
-
-  // Section collapse states
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(
     new Set([
       "summary",
@@ -208,8 +224,8 @@ export default function ResumeBuilder() {
       "projects",
       "achievements",
       "extracurriculars",
-    ]),
-  )
+    ])
+  );
 
   const [resumeData, setResumeData] = useState<ResumeData>({
     personalInfo: {
@@ -230,7 +246,7 @@ export default function ResumeBuilder() {
     achievements: [],
     extracurriculars: [],
     profilePicture: null,
-  })
+  });
 
   const [sectionOrder, setSectionOrder] = useState<SectionOrder[]>([
     { id: "summary", name: "Professional Summary", visible: true },
@@ -241,140 +257,154 @@ export default function ResumeBuilder() {
     { id: "certifications", name: "Certifications", visible: true },
     { id: "achievements", name: "Achievements", visible: true },
     { id: "extracurriculars", name: "Extracurricular Activities", visible: true },
-  ])
+  ]);
 
-  const [currentSkill, setCurrentSkill] = useState("")
-  const [currentCertification, setCurrentCertification] = useState("")
-
-  const [isSaving, setIsSaving] = useState(false)
-  const [savedResumeId, setSavedResumeId] = useState<string | null>(null)
+  const [currentSkill, setCurrentSkill] = useState("");
+  const [currentCertification, setCurrentCertification] = useState("");
 
   const convertOklchToRgb = () => {
-    const elements = document.querySelectorAll("#resume-preview *")
+    const elements = document.querySelectorAll("#resume-preview *");
     elements.forEach((element: HTMLElement) => {
-      const styles = window.getComputedStyle(element)
-      const properties = ["color", "background-color", "border-color"]
+      const styles = window.getComputedStyle(element);
+      const properties = ["color", "background-color", "border-color"];
 
       properties.forEach((property) => {
-        const value = styles.getPropertyValue(property)
+        const value = styles.getPropertyValue(property);
         if (value.includes("oklch") || value.includes("oklab")) {
           try {
-            let color
+            let color;
             if (value.includes("oklch")) {
-              color = oklch(value)
+              color = oklch(value);
             } else if (value.includes("oklab")) {
-              color = oklab(value)
+              color = oklab(value);
             }
             if (color) {
-              const rgbColor = rgb(color)
-              const rgbString = `rgb(${Math.round(rgbColor.r * 255)}, ${Math.round(rgbColor.g * 255)}, ${Math.round(rgbColor.b * 255)})`
-              element.style.setProperty(property, rgbString)
+              const rgbColor = rgb(color);
+              const rgbString = `rgb(${Math.round(rgbColor.r * 255)}, ${Math.round(rgbColor.g * 255)}, ${Math.round(
+                rgbColor.b * 255
+              )})`;
+              element.style.setProperty(property, rgbString);
             }
           } catch (e) {
-            console.error("Color conversion failed:", e)
+            console.error("Color conversion failed:", e);
             if (property === "background-color") {
-              element.style.setProperty(property, "rgb(255, 255, 255)")
+              element.style.setProperty(property, "rgb(255, 255, 255)");
             } else {
-              element.style.setProperty(property, "rgb(0, 0, 0)")
+              element.style.setProperty(property, "rgb(0, 0, 0)");
             }
           }
         }
-      })
-    })
-  }
-
- const handleDownloadPDF = async () => {
-  const element = document.getElementById("resume-preview");
-  if (!element) {
-    toast.error("Preview not found. Please try again.");
-    return;
-  }
-
-  convertOklchToRgb();
-
-  const opt = {
-    margin: [0.5, 0.25, 0.25, 0.5], // Uniform margins [top, right, bottom, left] in inches
-    filename: `${resumeData.personalInfo.fullName || "resume"}.pdf`,
-    image: { type: "jpeg", quality: 0.98 },
-    html2canvas: { 
-      scale: 4, // Maintain high resolution
-      windowWidth: 612, // Match letter page width at 72 DPI
-      useCORS: false 
-    },
-    jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+      });
+    });
   };
 
-  try {
-    if (resumeData.personalInfo.fullName && resumeData.personalInfo.email && resumeData.personalInfo.phone) {
-      console.log("Element dimensions:", element.offsetWidth, element.offsetHeight); // Debug log
-      // Temporarily set a fixed width to match the intended layout
-      element.style.width = "612px";
-      await html2pdf().set(opt).from(element).save();
-      element.style.width = ""; // Reset width after conversion
-      await handleSave();
-    } else {
-      toast.info("Please enter your name, email or phone number before downloading the resume.");
+  const handleDownloadPDF = async () => {
+    const element = document.getElementById("resume-preview");
+    if (!element) {
+      toast.error("Preview not found. Please try again.");
+      return;
     }
-  } catch (error: any) {
-    console.error("Failed to generate PDF:", error);
-    toast.error("Failed to generate PDF. Please try again.");
-  }
-};
 
+    convertOklchToRgb();
 
-  const handleSave = async () => {
-    setIsSaving(true)
+    const opt = {
+      margin: [0.5, 0.25, 0.25, 0.5],
+      filename: `${resumeData.personalInfo.fullName || "resume"}.pdf`,
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 4, windowWidth: 612, useCORS: false },
+      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+    };
 
     try {
-      let result
-      if (savedResumeId) {
-        result = await apiService.updateResume(savedResumeId, resumeData, activeTemplate, sectionOrder)
+      if (resumeData.personalInfo.fullName && resumeData.personalInfo.email && resumeData.personalInfo.phone) {
+        element.style.width = "612px";
+        await html2pdf().set(opt).from(element).save();
+        element.style.width = "";
+        await handleSave();
       } else {
-        result = await apiService.saveResume(resumeData, activeTemplate, sectionOrder)
+        toast.info("Please enter your name, email, or phone number before downloading the resume.");
+      }
+    } catch (error: any) {
+      console.error("Failed to generate PDF:", error);
+      toast.error("Failed to generate PDF. Please try again.");
+    }
+  };
+
+  const handleSave = async () => {
+    setIsSaving(true);
+
+    try {
+      let result;
+      if (savedResumeId) {
+        result = await apiService.updateResume(savedResumeId, resumeData, activeTemplate, sectionOrder);
+      } else {
+        result = await apiService.saveResume(resumeData, activeTemplate, sectionOrder);
       }
 
       if (result.success) {
-        const resumeId = result.data?._id || result.resume?._id || result._id
+        const resumeId = result.data?._id || result.resume?._id || result._id;
         if (resumeId) {
-          setSavedResumeId(resumeId)
+          setSavedResumeId(resumeId);
         }
-        toast.success("Resume saved successfully!")
-        // setResumeData({
-        //   personalInfo: {
-        //     fullName: "",
-        //     email: "",
-        //     phone: "",
-        //     location: "",
-        //     linkedin: "",
-        //     website: "",
-        //     github: "",
-        //   },
-        //   professionalSummary: "",
-        //   education: [],
-        //   workExperience: [],
-        //   skills: [],
-        //   certifications: [],
-        //   projects: [],
-        //   achievements: [],
-        //   extracurriculars: [],
-        //   profilePicture: null,
-        // })
-        // setCurrentSkill("")
-        // setCurrentCertification("")
-        setSavedResumeId(null)
+        toast.success("Resume saved successfully!");
       }
     } catch (error) {
-      console.error("Failed to save resume:", error)
+      console.error("Failed to save resume:", error);
+      toast.error("Failed to save resume. Please try again.");
     } finally {
-      setIsSaving(false)
+      setIsSaving(false);
     }
-  }
+  };
 
   const cancelSave = () => {
-    setIsSaveDialogOpen(false)
-  }
+    setIsSaveDialogOpen(false);
+  };
 
+  const prefillSummaryAndSkills = useCallback(async () => {
+    if (!jobTitle || !jobDescription) {
+      setIsPrefilled(true);
+      setIsLoading(false);
+      toast.info("No job title or description provided. Skipping prefill.");
+      return;
+    }
 
+    setIsLoading(true);
+    try {
+      const summaryPrompt = `Generate a concise, ATS-friendly professional summary (45-55 words) tailored to the job title "${jobTitle}" and job description: "${jobDescription}". Highlight key achievements, skills, and career goals. Ensure it's professional and engaging.`;
+
+      const summaryRes = await fetch("/api/gemini", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: summaryPrompt }),
+      });
+      const summaryData = await summaryRes.json();
+      const generatedSummary = summaryData.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
+
+      const skillsPrompt = `Extract and list 8-12 key skills from the job description for "${jobTitle}": "${jobDescription}". Output as a comma-separated list without duplicates.`;
+
+      const skillsRes = await fetch("/api/gemini", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: skillsPrompt }),
+      });
+      const skillsData = await skillsRes.json();
+      const generatedSkills = skillsData.candidates?.[0]?.content?.parts?.[0]?.text?.trim().split(",").map((s: string) => s.trim()) || [];
+
+      setResumeData((prev) => ({
+        ...prev,
+        professionalSummary: generatedSummary,
+        skills: generatedSkills,
+      }));
+      setIsPrefilled(true);
+      toast.success("Professional summary and skills prefilled using AI!");
+    } catch (error) {
+      console.error("Failed to prefill summary and skills:", error);
+      toast.error("Failed to prefill summary and skills. Loading page anyway.");
+      setIsPrefilled(true);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [jobTitle, jobDescription]);
 
   const handleAISuggest = async () => {
     setAiLoading(true);
@@ -401,8 +431,7 @@ export default function ResumeBuilder() {
       });
 
       const data = await res.json();
-      const generatedSummary =
-        data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
+      const generatedSummary = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
 
       setResumeData((prev) => ({
         ...prev,
@@ -416,6 +445,7 @@ export default function ResumeBuilder() {
       setAiLoading(false);
     }
   };
+
   const handleAISuggestForWork = async (id: string) => {
     setAiLoading(true);
     try {
@@ -434,14 +464,11 @@ export default function ResumeBuilder() {
       });
 
       const data = await res.json();
-      const generatedDescription =
-        data.candidates?.[0]?.content?.parts?.[0]?.text
-          ?.trim()
-          .split("\n")
-          .slice(0, 3)
-          .map((point: string) =>
-            point.trim().replace(/^[-•]\s*/, "").trim()
-          ) || [];
+      const generatedDescription = data.candidates?.[0]?.content?.parts?.[0]?.text
+        ?.trim()
+        .split("\n")
+        .slice(0, 3)
+        .map((point: string) => point.trim().replace(/^[-•]\s*/, "").trim()) || [];
 
       setResumeData((prev) => ({
         ...prev,
@@ -458,6 +485,47 @@ export default function ResumeBuilder() {
     }
   };
 
+  const computeAtsScore = async () => {
+    if (!jobDescription) {
+      toast.info("Job description is required for ATS analysis.");
+      return;
+    }
+
+    setAtsLoading(true);
+    try {
+      const resumeContent = JSON.stringify(resumeData);
+      const prompt = `Analyze this resume content: ${resumeContent} against this job description: "${jobDescription}" for ATS compatibility. Provide scores as JSON object: {
+        "totalScore": number (0-100),
+        "contactInfoScore": number (0-20),
+        "keywordsScore": number (0-25),
+        "formatScore": number (0-20),
+        "experienceScore": number (0-20),
+        "skillsScore": number (0-15),
+        "suggestions": array of strings (3-5 improvement suggestions)
+      }. Ensure the output is valid JSON only.`;
+
+      const res = await fetch("/api/gemini", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt }),
+      });
+
+      const data = await res.json();
+      const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "{}";
+      const parsedScore = JSON.parse(responseText);
+
+      setAtsScore({
+        ...parsedScore,
+        lastUpdated: new Date(),
+      });
+      toast.success("ATS score computed!");
+    } catch (error) {
+      console.error("Failed to compute ATS score:", error);
+      toast.error("Failed to compute ATS score. Please try again.");
+    } finally {
+      setAtsLoading(false);
+    }
+  };
 
   const toggleSection = useCallback((sectionId: string) => {
     setCollapsedSections((prev) => {
@@ -471,61 +539,61 @@ export default function ResumeBuilder() {
         "projects",
         "achievements",
         "extracurriculars",
-      ])
+      ]);
       if (!prev.has(sectionId)) {
-        return allSections
+        return allSections;
       }
-      allSections.delete(sectionId)
-      return allSections
-    })
-  }, [])
+      allSections.delete(sectionId);
+      return allSections;
+    });
+  }, []);
 
   const handleDragStart = useCallback((e: React.DragEvent, sectionId: string) => {
-    setDraggedSection(sectionId)
-    e.dataTransfer.effectAllowed = "move"
-  }, [])
+    setDraggedSection(sectionId);
+    e.dataTransfer.effectAllowed = "move";
+  }, []);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    e.dataTransfer.dropEffect = "move"
-  }, [])
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+  }, []);
 
   const handleDrop = useCallback(
     (e: React.DragEvent, targetSectionId: string) => {
-      e.preventDefault()
-      if (!draggedSection || draggedSection === targetSectionId) return
+      e.preventDefault();
+      if (!draggedSection || draggedSection === targetSectionId) return;
 
       setSectionOrder((prev) => {
-        const newOrder = [...prev]
-        const draggedIndex = newOrder.findIndex((s) => s.id === draggedSection)
-        const targetIndex = newOrder.findIndex((s) => s.id === targetSectionId)
+        const newOrder = [...prev];
+        const draggedIndex = newOrder.findIndex((s) => s.id === draggedSection);
+        const targetIndex = newOrder.findIndex((s) => s.id === targetSectionId);
 
-        if (draggedIndex === -1 || targetIndex === -1) return prev
+        if (draggedIndex === -1 || targetIndex === -1) return prev;
 
-        const [draggedItem] = newOrder.splice(draggedIndex, 1)
-        newOrder.splice(targetIndex, 0, draggedItem)
+        const [draggedItem] = newOrder.splice(draggedIndex, 1);
+        newOrder.splice(targetIndex, 0, draggedItem);
 
-        return newOrder
-      })
-      setDraggedSection(null)
+        return newOrder;
+      });
+      setDraggedSection(null);
     },
-    [draggedSection],
-  )
+    [draggedSection]
+  );
 
   const handleDragEnd = useCallback(() => {
-    setDraggedSection(null)
-  }, [])
+    setDraggedSection(null);
+  }, []);
 
   const updatePersonalInfo = useCallback((field: keyof PersonalInfo, value: string) => {
     setResumeData((prev) => ({
       ...prev,
       personalInfo: { ...prev.personalInfo, [field]: value },
-    }))
-  }, [])
+    }));
+  }, []);
 
   const updateProfessionalSummary = useCallback((value: string) => {
-    setResumeData((prev) => ({ ...prev, professionalSummary: value }))
-  }, [])
+    setResumeData((prev) => ({ ...prev, professionalSummary: value }));
+  }, []);
 
   const addEducation = useCallback(() => {
     const newEducation: Education = {
@@ -536,26 +604,26 @@ export default function ResumeBuilder() {
       startDate: "",
       endDate: "",
       gpa: "",
-    }
+    };
     setResumeData((prev) => ({
       ...prev,
       education: [...prev.education, newEducation],
-    }))
-  }, [])
+    }));
+  }, []);
 
   const updateEducation = useCallback((id: string, field: keyof Education, value: string) => {
     setResumeData((prev) => ({
       ...prev,
       education: prev.education.map((edu) => (edu.id === id ? { ...edu, [field]: value } : edu)),
-    }))
-  }, [])
+    }));
+  }, []);
 
   const removeEducation = useCallback((id: string) => {
     setResumeData((prev) => ({
       ...prev,
       education: prev.education.filter((edu) => edu.id !== id),
-    }))
-  }, [])
+    }));
+  }, []);
 
   const addWorkExperience = useCallback(() => {
     const newWork: WorkExperience = {
@@ -566,37 +634,41 @@ export default function ResumeBuilder() {
       endDate: "",
       description: ["", "", ""],
       index: 0,
-    }
+    };
     setResumeData((prev) => ({
       ...prev,
       workExperience: [...prev.workExperience, newWork],
-    }))
-  }, [])
+    }));
+  }, []);
 
-  const updateWorkExperience = useCallback((id: string, field: keyof WorkExperience | 'description', value: string | string[], index?: number) => {
-    setResumeData((prev) => ({
-      ...prev,
-      workExperience: prev.workExperience.map((work) => {
-        if (work.id === id) {
-          if (field === 'description' && Array.isArray(value)) {
-            return { ...work, description: value }
-          } else if (field === 'description' && typeof index === 'number') {
-            const newDescription = [...work.description]
-            newDescription[index] = value as string
-            return { ...work, description: newDescription }
+  const updateWorkExperience = useCallback(
+    (id: string, field: keyof WorkExperience | "description", value: string | string[], index?: number) => {
+      setResumeData((prev) => ({
+        ...prev,
+        workExperience: prev.workExperience.map((work) => {
+          if (work.id === id) {
+            if (field === "description" && Array.isArray(value)) {
+              return { ...work, description: value };
+            } else if (field === "description" && typeof index === "number") {
+              const newDescription = [...work.description];
+              newDescription[index] = value as string;
+              return { ...work, description: newDescription };
+            }
+            return { ...work, [field]: value as string };
           }
-          return { ...work, [field]: value as string }
-        }
-        return work
-      }),
-    }))
-  }, [])
+          return work;
+        }),
+      }));
+    },
+    []
+  );
+
   const removeWorkExperience = useCallback((id: string) => {
     setResumeData((prev) => ({
       ...prev,
       workExperience: prev.workExperience.filter((work) => work.id !== id),
-    }))
-  }, [])
+    }));
+  }, []);
 
   const addProject = useCallback(() => {
     const newProject: Project = {
@@ -605,26 +677,26 @@ export default function ResumeBuilder() {
       description: "",
       technologies: "",
       link: "",
-    }
+    };
     setResumeData((prev) => ({
       ...prev,
       projects: [...prev.projects, newProject],
-    }))
-  }, [])
+    }));
+  }, []);
 
   const updateProject = useCallback((id: string, field: keyof Project, value: string) => {
     setResumeData((prev) => ({
       ...prev,
       projects: prev.projects.map((project) => (project.id === id ? { ...project, [field]: value } : project)),
-    }))
-  }, [])
+    }));
+  }, []);
 
   const removeProject = useCallback((id: string) => {
     setResumeData((prev) => ({
       ...prev,
       projects: prev.projects.filter((project) => project.id !== id),
-    }))
-  }, [])
+    }));
+  }, []);
 
   const addSkill = useCallback(
     (skill: string) => {
@@ -632,19 +704,19 @@ export default function ResumeBuilder() {
         setResumeData((prev) => ({
           ...prev,
           skills: [...prev.skills, skill.trim()],
-        }))
-        setCurrentSkill("")
+        }));
+        setCurrentSkill("");
       }
     },
-    [resumeData.skills],
-  )
+    [resumeData.skills]
+  );
 
   const removeSkill = useCallback((skillToRemove: string) => {
     setResumeData((prev) => ({
       ...prev,
       skills: prev.skills.filter((skill) => skill !== skillToRemove),
-    }))
-  }, [])
+    }));
+  }, []);
 
   const addCertification = useCallback(
     (cert: string) => {
@@ -652,19 +724,19 @@ export default function ResumeBuilder() {
         setResumeData((prev) => ({
           ...prev,
           certifications: [...prev.certifications, cert.trim()],
-        }))
-        setCurrentCertification("")
+        }));
+        setCurrentCertification("");
       }
     },
-    [resumeData.certifications],
-  )
+    [resumeData.certifications]
+  );
 
   const removeCertification = useCallback((certToRemove: string) => {
     setResumeData((prev) => ({
       ...prev,
       certifications: prev.certifications.filter((cert) => cert !== certToRemove),
-    }))
-  }, [])
+    }));
+  }, []);
 
   const addAchievement = useCallback(() => {
     const newAchievement: Achievement = {
@@ -672,28 +744,28 @@ export default function ResumeBuilder() {
       title: "",
       description: "",
       date: "",
-    }
+    };
     setResumeData((prev) => ({
       ...prev,
       achievements: [...prev.achievements, newAchievement],
-    }))
-  }, [])
+    }));
+  }, []);
 
   const updateAchievement = useCallback((id: string, field: keyof Achievement, value: string) => {
     setResumeData((prev) => ({
       ...prev,
       achievements: prev.achievements.map((achievement) =>
-        achievement.id === id ? { ...achievement, [field]: value } : achievement,
+        achievement.id === id ? { ...achievement, [field]: value } : achievement
       ),
-    }))
-  }, [])
+    }));
+  }, []);
 
   const removeAchievement = useCallback((id: string) => {
     setResumeData((prev) => ({
       ...prev,
       achievements: prev.achievements.filter((achievement) => achievement.id !== id),
-    }))
-  }, [])
+    }));
+  }, []);
 
   const addExtracurricular = useCallback(() => {
     const newExtracurricular: Extracurricular = {
@@ -703,77 +775,52 @@ export default function ResumeBuilder() {
       description: "",
       startDate: "",
       endDate: "",
-    }
+    };
     setResumeData((prev) => ({
       ...prev,
       extracurriculars: [...prev.extracurriculars, newExtracurricular],
-    }))
-  }, [])
+    }));
+  }, []);
 
   const updateExtracurricular = useCallback((id: string, field: keyof Extracurricular, value: string) => {
     setResumeData((prev) => ({
       ...prev,
       extracurriculars: prev.extracurriculars.map((extra) => (extra.id === id ? { ...extra, [field]: value } : extra)),
-    }))
-  }, [])
+    }));
+  }, []);
 
   const removeExtracurricular = useCallback((id: string) => {
     setResumeData((prev) => ({
       ...prev,
       extracurriculars: prev.extracurriculars.filter((extra) => extra.id !== id),
-    }))
-  }, [])
+    }));
+  }, []);
 
   const sections = [
-    {
-      id: "personal",
-      name: "Personal Information",
-      icon: User,
-      required: true,
-    },
-    {
-      id: "experience",
-      name: "Work Experience",
-      icon: Briefcase,
-      required: false,
-    },
-    {
-      id: "summary",
-      name: "Professional Summary",
-      icon: FileText,
-      required: false,
-    },
-    {
-      id: "education",
-      name: "Education",
-      icon: GraduationCap,
-      required: false,
-    },
+    { id: "personal", name: "Personal Information", icon: User, required: true },
+    { id: "experience", name: "Work Experience", icon: Briefcase, required: false },
+    { id: "summary", name: "Professional Summary", icon: FileText, required: false },
+    { id: "education", name: "Education", icon: GraduationCap, required: false },
     { id: "skills", name: "Skills", icon: Code, required: false },
-    {
-      id: "certifications",
-      name: "Certifications (Optional)",
-      icon: Award,
-      required: false,
-    },
+    { id: "certifications", name: "Certifications (Optional)", icon: Award, required: false },
     { id: "projects", name: "Projects (Optional)", icon: FolderOpen, required: false },
     { id: "achievements", name: "Achievements (Optional)", icon: Trophy, required: false },
     { id: "extracurriculars", name: "Extracurricular Activities (Optional)", icon: Users, required: false },
-  ]
+  ];
 
   const getCurrentTemplate = () => {
-    return templates.find((t) => t.id === activeTemplate) || templates[0]
-  }
+    return templates.find((t) => t.id === activeTemplate) || templates[0];
+  };
 
-  const currentTemplate = getCurrentTemplate()
+  const currentTemplate = getCurrentTemplate();
 
   const renderSectionContent = useCallback(
     (sectionConfig: SectionOrder) => {
-      const sectionId = sectionConfig.id
+      const sectionId = sectionConfig.id;
 
       if (sectionId === "experience" && resumeData.workExperience.length > 0) {
         return (
-          <div key="experience" className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+          <div key="experience" className="mb-6" style={{ pageBreakInside: "avoid" }}>
             <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Work Experience</h2>
             <div className="space-y-4">
               {resumeData.workExperience.map((work) => (
@@ -789,34 +836,32 @@ export default function ResumeBuilder() {
                         : work.startDate || work.endDate || "2023-08 - Present"}
                     </span>
                   </div>
-                  {work.description.some(desc => desc.trim()) && (
+                  {work.description.some((desc) => desc.trim()) && (
                     <ul className="text-gray-700 text-sm leading-relaxed list-disc pl-5">
-                      {work.description.map((desc, index) => (
-                        desc.trim() && <li key={index}>{desc}</li>
-                      ))}
+                      {work.description.map((desc, index) => desc.trim() && <li key={index}>{desc}</li>)}
                     </ul>
                   )}
                 </div>
               ))}
             </div>
           </div>
-        )
+        );
       }
 
       if (sectionId === "summary" && resumeData.professionalSummary) {
         return (
-          <div key="summary" className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+          <div key="summary" className="mb-6" style={{ pageBreakInside: "avoid" }}>
             <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>
               Professional Summary
             </h2>
             <p className="text-gray-700 leading-relaxed">{resumeData.professionalSummary}</p>
           </div>
-        )
+        );
       }
 
       if (sectionId === "education" && resumeData.education.length > 0) {
         return (
-          <div key="education" className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+          <div key="education" className="mb-6" style={{ pageBreakInside: "avoid" }}>
             <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Education</h2>
             <div className="space-y-3">
               {resumeData.education.map((edu) => (
@@ -837,12 +882,12 @@ export default function ResumeBuilder() {
               ))}
             </div>
           </div>
-        )
+        );
       }
 
       if (sectionId === "skills" && resumeData.skills.length > 0) {
         return (
-          <div key="skills" className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+          <div key="skills" className="mb-6" style={{ pageBreakInside: "avoid" }}>
             <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Skills</h2>
             <div className="flex flex-wrap gap-2">
               {resumeData.skills.map((skill) => (
@@ -852,12 +897,12 @@ export default function ResumeBuilder() {
               ))}
             </div>
           </div>
-        )
+        );
       }
 
       if (sectionId === "projects" && resumeData.projects.length > 0) {
         return (
-          <div key="projects" className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+          <div key="projects" className="mb-6" style={{ pageBreakInside: "avoid" }}>
             <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Projects</h2>
             <div className="space-y-4">
               {resumeData.projects.map((project) => (
@@ -887,12 +932,12 @@ export default function ResumeBuilder() {
               ))}
             </div>
           </div>
-        )
+        );
       }
 
       if (sectionId === "certifications" && resumeData.certifications.length > 0) {
         return (
-          <div key="certifications" className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+          <div key="certifications" className="mb-6" style={{ pageBreakInside: "avoid" }}>
             <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Certifications</h2>
             <div className="space-y-2">
               {resumeData.certifications.map((cert) => (
@@ -903,12 +948,12 @@ export default function ResumeBuilder() {
               ))}
             </div>
           </div>
-        )
+        );
       }
 
       if (sectionId === "achievements" && resumeData.achievements.length > 0) {
         return (
-          <div key="achievements" className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+          <div key="achievements" className="mb-6" style={{ pageBreakInside: "avoid" }}>
             <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Achievements</h2>
             <div className="space-y-2">
               {resumeData.achievements.map((achievement) => (
@@ -921,12 +966,12 @@ export default function ResumeBuilder() {
               ))}
             </div>
           </div>
-        )
+        );
       }
 
       if (sectionId === "extracurriculars" && resumeData.extracurriculars.length > 0) {
         return (
-          <div key="extracurriculars" className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+          <div key="extracurriculars" className="mb-6" style={{ pageBreakInside: "avoid" }}>
             <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>
               Extracurricular Activities
             </h2>
@@ -941,13 +986,28 @@ export default function ResumeBuilder() {
               ))}
             </div>
           </div>
-        )
+        );
       }
 
-      return null
+      return null;
     },
-    [resumeData, currentTemplate],
-  )
+    [resumeData, currentTemplate]
+  );
+
+  useEffect(() => {
+    prefillSummaryAndSkills();
+  }, [prefillSummaryAndSkills]);
+
+  if (isLoading || !isPrefilled) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <p className="text-lg font-medium text-gray-700">Loading resume data...</p>
+          <p className="text-sm text-gray-500">Please wait while we generate your professional summary and skills.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -964,12 +1024,6 @@ export default function ResumeBuilder() {
               </Link>
             </div>
             <div className="flex items-center space-x-1 md:space-x-3">
-              {/* <Link href="/myresumes">
-                <Button variant="outline" size="sm" className="hidden sm:flex bg-transparent">
-                  <FileText className="w-4 h-4 md:mr-2" />
-                  <span>My Resumes</span>
-                </Button>
-              </Link> */}
               <Button onClick={handleDownloadPDF} size="sm" className="bg-green-500 hover:bg-green-600 text-white">
                 <Download className="w-4 h-4 md:mr-2" />
                 <span className="hidden md:inline">Download PDF</span>
@@ -983,8 +1037,8 @@ export default function ResumeBuilder() {
         <div className="grid lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8">
           <div className="space-y-3 md:space-y-4 max-h-[calc(100vh-120px)] overflow-y-auto">
             {sections.map((section) => {
-              const Icon = section.icon
-              const isCollapsed = collapsedSections.has(section.id)
+              const Icon = section.icon;
+              const isCollapsed = collapsedSections.has(section.id);
 
               return (
                 <Collapsible key={section.id} open={!isCollapsed} onOpenChange={() => toggleSection(section.id)}>
@@ -1031,7 +1085,7 @@ export default function ResumeBuilder() {
                                 </Label>
                                 <Input
                                   id="fullName"
-                                  placeholder="JohnDoe"
+                                  placeholder="John Doe"
                                   value={resumeData.personalInfo.fullName}
                                   onChange={(e) => updatePersonalInfo("fullName", e.target.value)}
                                   className="h-9 text-sm"
@@ -1109,7 +1163,7 @@ export default function ResumeBuilder() {
                             />
                             <Button
                               variant="outline"
-                              className="bg-orange-500 text-white  hover:bg-white hover:border-orange-500 hover:text-orange-600 p-2 h-auto font-medium"
+                              className="bg-orange-500 text-white hover:bg-white hover:border-orange-500 hover:text-orange-600 p-2 h-auto font-medium"
                               onClick={handleAISuggest}
                               disabled={aiLoading}
                             >
@@ -1250,7 +1304,7 @@ export default function ResumeBuilder() {
                                       </div>
                                       <Button
                                         variant="outline"
-                                        className="bg-orange-500 text-white  hover:bg-white hover:border-orange-500 hover:text-orange-600 p-2 h-auto font-medium mt-2"
+                                        className="bg-orange-500 text-white hover:bg-white hover:border-orange-500 hover:text-orange-600 p-2 h-auto font-medium mt-2"
                                         onClick={() => handleAISuggestForWork(work.id)}
                                         disabled={aiLoading}
                                       >
@@ -1287,7 +1341,7 @@ export default function ResumeBuilder() {
                                 onChange={(e) => setCurrentSkill(e.target.value)}
                                 onKeyPress={(e) => {
                                   if (e.key === "Enter") {
-                                    addSkill(currentSkill)
+                                    addSkill(currentSkill);
                                   }
                                 }}
                                 className="flex-1"
@@ -1322,7 +1376,7 @@ export default function ResumeBuilder() {
                                 onChange={(e) => setCurrentCertification(e.target.value)}
                                 onKeyPress={(e) => {
                                   if (e.key === "Enter") {
-                                    addCertification(currentCertification)
+                                    addCertification(currentCertification);
                                   }
                                 }}
                                 className="flex-1"
@@ -1546,7 +1600,7 @@ export default function ResumeBuilder() {
                     </CollapsibleContent>
                   </Card>
                 </Collapsible>
-              )
+              );
             })}
           </div>
 
@@ -1556,15 +1610,26 @@ export default function ResumeBuilder() {
                 <h2 className="text-lg font-semibold">Resume Preview</h2>
                 <div className="flex items-center bg-gray-100 rounded-lg p-1">
                   <Button
-                    variant="default"
+                    variant={viewMode === "preview" ? "default" : "ghost"}
                     size="sm"
-                    className={`h-7 md:h-8 px-2 md:px-3 text-xs bg-orange-500  text-white`}
+                    className={`h-7 md:h-8 px-2 md:px-3 text-xs ${viewMode === "preview" ? "bg-orange-500 text-white" : ""}`}
+                    onClick={() => setViewMode("preview")}
                   >
                     <Eye className="w-3 h-3 md:mr-1" />
                     <span className="hidden sm:inline">Preview</span>
                   </Button>
-
-
+                  <Button
+                    variant={viewMode === "ats" ? "default" : "ghost"}
+                    size="sm"
+                    className={`h-7 md:h-8 px-2 md:px-3 text-xs ${viewMode === "ats" ? "bg-orange-500 text-white" : ""}`}
+                    onClick={() => {
+                      setViewMode("ats");
+                      if (!atsScore) computeAtsScore();
+                    }}
+                  >
+                    <Target className="w-3 h-3 md:mr-1" />
+                    <span className="hidden sm:inline">ATS Score</span>
+                  </Button>
                 </div>
               </div>
 
@@ -1586,8 +1651,8 @@ export default function ResumeBuilder() {
                           key={template.id}
                           className={`border-2 rounded-lg p-4 cursor-pointer transition-all hover:shadow-lg ${activeTemplate === template.id ? "border-orange-500 bg-orange-50" : "border-gray-200"}`}
                           onClick={() => {
-                            setActiveTemplate(template.id)
-                            setIsTemplateDialogOpen(false)
+                            setActiveTemplate(template.id);
+                            setIsTemplateDialogOpen(false);
                           }}
                         >
                           <div
@@ -1620,118 +1685,129 @@ export default function ResumeBuilder() {
                     </>
                   )}
                 </Button>
-
               </div>
             </div>
 
             {isReorderMode && (
               <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
                 <p className="text-sm text-orange-700">
-                  <strong>Reorder Mode:</strong> Drag and drop sections below to reorder them. Personal Information
-                  cannot be moved.
+                  <strong>Reorder Mode:</strong> Drag and drop sections below to reorder them. Personal Information cannot be moved.
                 </p>
               </div>
             )}
 
-
-            {/* <Dialog open={isSaveDialogOpen} onOpenChange={setIsSaveDialogOpen}>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Confirm Save</DialogTitle>
-                </DialogHeader>
-                <div className="py-4">
-                  <p>Are you sure you want to save this resume? This will clear all current data.</p>
-                </div>
-                <div className="flex justify-end space-x-2">
-                  <Button variant="outline" onClick={cancelSave}>
-                    Cancel
-                  </Button>
-                  <Button onClick={confirmSave} className="bg-orange-500 hover:bg-orange-600 text-white">
-                    Save
-                  </Button>
-                </div>
-              </DialogContent>
-            </Dialog> */}
-
             <Card>
               <CardContent className="p-0">
-                <div id="resume-preview" style={{ width: "612px" }}>
-                  <div className="space-y-6">
-                    <div className={`${currentTemplate.headerBg} ${currentTemplate.headerText} p-6 break-inside-avoid`}>
-                      <div className="flex items-center space-x-4">
-                        <div className="flex-1">
-                          <h1 className="text-3xl font-bold">{resumeData.personalInfo.fullName || "John Doe"}</h1>
-                          <p className="text-lg opacity-90 mt-1">
-                            {resumeData.workExperience[0]?.position || "Software Developer"}
-                          </p>
-                          <div className="flex items-center space-x-6 text-sm mt-3 opacity-90">
-                            <span>{resumeData.personalInfo.email || "johndoe68@gmail.com"}</span>
-                            <span>{resumeData.personalInfo.phone || "123456789"}</span>
-                            <span>{resumeData.personalInfo.location || "Hyderabad"}</span>
-                          </div>
-                          <div className="grid grid-cols-3 gap-4 mt-1 text-sm opacity-90">
-                            {resumeData.personalInfo.linkedin && (
-                              <a href={resumeData.personalInfo.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center">
-                                <Linkedin className="w-4 h-4 mr-1" /> {resumeData.personalInfo.linkedin.slice(27)}
-                              </a>
-                            )}
-                            {resumeData.personalInfo.website && (
-                              <a href={resumeData.personalInfo.website} target="_blank" rel="noopener noreferrer" className="flex items-center">
-                                <Globe className="w-4 h-4 mr-1" /> View Website
-                              </a>
-                            )}
-                            {resumeData.personalInfo.github && (
-                              <a href={resumeData.personalInfo.github} target="_blank" rel="noopener noreferrer" className="flex items-center">
-                                <Github className="w-4 h-4 mr-1" /> {resumeData.personalInfo.github.slice(19)}
-                              </a>
-                            )}
+                {viewMode === "preview" ? (
+                  <div id="resume-preview" style={{ width: "612px" }}>
+                    <div className="space-y-6">
+                      <div className={`${currentTemplate.headerBg} ${currentTemplate.headerText} p-6 break-inside-avoid`}>
+                        <div className="flex items-center space-x-4">
+                          <div className="flex-1">
+                            <h1 className="text-3xl font-bold">{resumeData.personalInfo.fullName || "John Doe"}</h1>
+                            <p className="text-lg opacity-90 mt-1">
+                              {resumeData.workExperience[0]?.position || "Software Developer"}
+                            </p>
+                            <div className="flex items-center space-x-6 text-sm mt-3 opacity-90">
+                              <span>{resumeData.personalInfo.email || "johndoe68@gmail.com"}</span>
+                              <span>{resumeData.personalInfo.phone || "123456789"}</span>
+                              <span>{resumeData.personalInfo.location || "Hyderabad"}</span>
+                            </div>
+                            <div className="grid grid-cols-3 gap-4 mt-1 text-sm opacity-90">
+                              {resumeData.personalInfo.linkedin && (
+                                <a
+                                  href={resumeData.personalInfo.linkedin}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center"
+                                >
+                                  <Linkedin className="w-4 h-4 mr-1" /> {resumeData.personalInfo.linkedin.slice(27)}
+                                </a>
+                              )}
+                              {resumeData.personalInfo.website && (
+                                <a
+                                  href={resumeData.personalInfo.website}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center"
+                                >
+                                  <Globe className="w-4 h-4 mr-1" /> View Website
+                                </a>
+                              )}
+                              {resumeData.personalInfo.github && (
+                                <a
+                                  href={resumeData.personalInfo.github}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center"
+                                >
+                                  <Github className="w-4 h-4 mr-1" /> {resumeData.personalInfo.github.slice(19)}
+                                </a>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
 
-                    <div className="px-6 pb-2 space-y-6">
-                      {sectionOrder
-                        .filter((section) => section.visible)
-                        .map((sectionConfig, index) => {
-                          const content = renderSectionContent(sectionConfig);
-                          if (!content) return null;
+                      <div className="px-6 pb-2 space-y-6">
+                        {sectionOrder
+                          .filter((section) => section.visible)
+                          .map((sectionConfig) => {
+                            const content = renderSectionContent(sectionConfig);
+                            if (!content) return null;
 
-                          if (isReorderMode) {
-                            return (
-                              <div
-                                key={sectionConfig.id}
-                                draggable
-                                onDragStart={(e) => handleDragStart(e, sectionConfig.id)}
-                                onDragOver={handleDragOver}
-                                onDrop={(e) => handleDrop(e, sectionConfig.id)}
-                                onDragEnd={handleDragEnd}
-                                className={`border-2 border-dashed border-orange-300 rounded-lg p-4 cursor-move transition-all hover:border-orange-400 hover:shadow-md ${draggedSection === sectionConfig.id ? "opacity-50" : "opacity-100"}`}
-                              >
-                                <div className="flex items-center justify-between mb-2">
-                                  <div className="flex items-center space-x-2">
-                                    <GripVertical className="w-4 h-4 text-orange-500" />
-                                    <span className="text-sm font-medium text-orange-700">
-                                      Drag to reorder: {sectionConfig.name}
-                                    </span>
+                            if (isReorderMode) {
+                              return (
+                                <div
+                                  key={sectionConfig.id}
+                                  draggable
+                                  onDragStart={(e) => handleDragStart(e, sectionConfig.id)}
+                                  onDragOver={handleDragOver}
+                                  onDrop={(e) => handleDrop(e, sectionConfig.id)}
+                                  onDragEnd={handleDragEnd}
+                                  className={`border-2 border-dashed border-orange-300 rounded-lg p-4 cursor-move transition-all hover:border-orange-400 hover:shadow-md ${draggedSection === sectionConfig.id ? "opacity-50" : "opacity-100"}`}
+                                >
+                                  <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center space-x-2">
+                                      <GripVertical className="w-4 h-4 text-orange-500" />
+                                      <span className="text-sm font-medium text-orange-700">
+                                        Drag to reorder: {sectionConfig.name}
+                                      </span>
+                                    </div>
                                   </div>
+                                  {content}
                                 </div>
-                                {content}
-                              </div>
-                            );
-                          }
+                              );
+                            }
 
-                          return content;
-                        })}
+                            return content;
+                          })}
+                      </div>
                     </div>
                   </div>
-                </div>
+                ) : (
+                  <ATSScoreCard
+                    score={
+                      atsScore || {
+                        totalScore: 0,
+                        contactInfoScore: 0,
+                        keywordsScore: 0,
+                        formatScore: 0,
+                        experienceScore: 0,
+                        skillsScore: 0,
+                        suggestions: [],
+                        lastUpdated: new Date(),
+                      }
+                    }
+                    loading={atsLoading || !atsScore}
+                    onAnalyze={computeAtsScore}
+                  />
+                )}
               </CardContent>
             </Card>
-
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
