@@ -1,23 +1,22 @@
-"use client"
-import { useState, useRef, useCallback, useEffect } from "react"
-import type React from "react"
-import { useRouter } from "next/navigation"
-import Cookies from "js-cookie"
-import Link from "next/link"
-import { Button } from "../ui/button"
-import { Card, CardContent, CardHeader } from "../ui/card"
-import { Input } from "../ui/input"
-import { Label } from "../ui/label"
-import { Textarea } from "../ui/textarea"
-import { Separator } from "../ui/separator"
-import { Badge } from "../ui/badge"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible"
-import ATSScoreCard from "../ui/ats-score"
-import { toast } from "sonner"
-import Header from "./header"
-import html2pdf from "html2pdf.js"
-import { oklch, oklab, rgb } from "culori"
+"use client";
+import { useState, useRef, useCallback, useEffect } from "react";
+import type React from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import Cookies from "js-cookie";
+import Link from "next/link";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader } from "../ui/card";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Textarea } from "../ui/textarea";
+import { Separator } from "../ui/separator";
+import { Badge } from "../ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
+import { toast } from "sonner";
+import Header from "./header";
+import html2pdf from "html2pdf.js";
+import { oklch, oklab, rgb } from "culori";
 import {
   ArrowLeft,
   FileText,
@@ -45,81 +44,103 @@ import {
   Linkedin,
   Github,
   Globe,
-} from "lucide-react"
-import { GoogleGenerativeAI } from "@google/generative-ai"
+} from "lucide-react";
+import { ATSScoreCard } from "../ui/ats-score";
 
 interface PersonalInfo {
-  fullName: string
-  email: string
-  phone: string
-  location: string
-  linkedin: string
-  website: string
-  github: string
+  fullName: string;
+  email: string;
+  phone: string;
+  location: string;
+  linkedin: string;
+  website: string;
+  github: string;
 }
 
 interface Education {
-  id: string
-  school: string
-  degree: string
-  field: string
-  startDate: string
-  endDate: string
-  gpa: string
+  id: string;
+  school: string;
+  degree: string;
+  field: string;
+  startDate: string;
+  endDate: string;
+  gpa: string;
 }
 
 interface WorkExperience {
-  id: string
-  company: string
-  position: string
-  startDate: string
-  endDate: string
-  description: string[] 
-  index: number // Changed to number for description point index
+  id: string;
+  company: string;
+  position: string;
+  startDate: string;
+  endDate: string;
+  description: string[];
+  index: number;
 }
 
 interface Project {
-  id: string
-  name: string
-  description: string
-  technologies: string
-  link: string
+  id: string;
+  name: string;
+  description: string;
+  technologies: string;
+  link: string;
 }
 
 interface Achievement {
-  id: string
-  title: string
-  description: string
-  date: string
+  id: string;
+  title: string;
+  description: string;
+  date: string;
 }
 
 interface Extracurricular {
-  id: string
-  activity: string
-  role: string
-  description: string
-  startDate: string
-  endDate: string
+  id: string;
+  activity: string;
+  role: string;
+  description: string;
+  startDate: string;
+  endDate: string;
 }
 
 interface ResumeData {
-  personalInfo: PersonalInfo
-  professionalSummary: string
-  education: Education[]
-  workExperience: WorkExperience[]
-  skills: string[]
-  certifications: string[]
-  projects: Project[]
-  achievements: Achievement[]
-  extracurriculars: Extracurricular[]
-  profilePicture: string | null
+  personalInfo: PersonalInfo;
+  professionalSummary: string;
+  education: Education[];
+  workExperience: WorkExperience[];
+  skills: string[];
+  certifications: string[];
+  projects: Project[];
+  achievements: Achievement[];
+  extracurriculars: Extracurricular[];
+  profilePicture: string | null;
 }
 
 interface SectionOrder {
-  id: string
-  name: string
-  visible: boolean
+  id: string;
+  name: string;
+  visible: boolean;
 }
+
+interface ATSScore {
+  totalScore: number;
+  contactInfoScore: number;
+  keywordsScore: number;
+  formatScore: number;
+  experienceScore: number;
+  skillsScore: number;
+  suggestions: string[];
+  lastUpdated: Date;
+}
+
+const defaultATSScore: ATSScore = {
+  totalScore: 0,
+  contactInfoScore: 0,
+  keywordsScore: 0,
+  formatScore: 0,
+  experienceScore: 0,
+  skillsScore: 0,
+  suggestions: [],
+  lastUpdated: new Date(),
+};
 
 const templates = [
   {
@@ -131,73 +152,75 @@ const templates = [
     sectionHeader: "text-black border-gray-300",
     accent: "text-black",
     preview: "Clean, professional, black-and-white design",
-  }
-]
+  },
+];
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL
-
+const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 const apiService = {
   async saveResume(resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[]) {
-    const token = Cookies.get("accessToken")
+    const token = Cookies.get("accessToken");
     const response = await fetch(`${API_BASE_URL}/resumes`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "authorization": `Bearer ${token}`,
+        authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         ...resumeData,
         template: activeTemplate,
         sectionOrder: sectionOrder,
       }),
-    })
+    });
 
     if (!response.ok) {
-      throw new Error("Failed to save resume")
+      throw new Error("Failed to save resume");
     }
 
-    return response.json()
+    return response.json();
   },
 
   async updateResume(id: string, resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[]) {
-    const token = Cookies.get("accessToken")
+    const token = Cookies.get("accessToken");
     const response = await fetch(`${API_BASE_URL}/resume/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "authorization": `Bearer ${token}`,
+        authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         ...resumeData,
         template: activeTemplate,
         sectionOrder: sectionOrder,
       }),
-    })
+    });
 
     if (!response.ok) {
-      throw new Error("Failed to update resume")
+      throw new Error("Failed to update resume");
     }
 
-    return response.json()
+    return response.json();
   },
+};
 
-  
-}
+const extractJsonFromText = (text: string) => {
+  const jsonRegex = /\{[\s\S]*?\}/s;
+  const match = text.match(jsonRegex);
+  return match ? match[0] : null;
+};
 
-export default function ResumeBuilder() {
-  const [activeTemplate, setActiveTemplate] = useState("minimal")
-  const [isTemplateDialogOpen, setIsTemplateDialogOpen] = useState(false)
-  const [isReorderMode, setIsReorderMode] = useState(false)
-  
-  const [draggedSection, setDraggedSection] = useState<string | null>(null)
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const [isAddSectionDialogOpen, setIsAddSectionDialogOpen] = useState(false)
-  const router = useRouter()
-  const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false)
-  const [aiLoading, setAiLoading] = useState(false)
+export default function AIResumeBuilder() {
+  const [activeTemplate, setActiveTemplate] = useState("minimal");
+  const [isTemplateDialogOpen, setIsTemplateDialogOpen] = useState(false);
+  const [isReorderMode, setIsReorderMode] = useState(false);
+  const [draggedSection, setDraggedSection] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isAddSectionDialogOpen, setIsAddSectionDialogOpen] = useState(false);
+  const router = useRouter();
+  const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [atsScore, setAtsScore] = useState<ATSScore>(defaultATSScore);
 
-  // Section collapse states
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(
     new Set([
       "summary",
@@ -208,8 +231,8 @@ export default function ResumeBuilder() {
       "projects",
       "achievements",
       "extracurriculars",
-    ]),
-  )
+    ])
+  );
 
   const [resumeData, setResumeData] = useState<ResumeData>({
     personalInfo: {
@@ -230,7 +253,7 @@ export default function ResumeBuilder() {
     achievements: [],
     extracurriculars: [],
     profilePicture: null,
-  })
+  });
 
   const [sectionOrder, setSectionOrder] = useState<SectionOrder[]>([
     { id: "summary", name: "Professional Summary", visible: true },
@@ -241,57 +264,260 @@ export default function ResumeBuilder() {
     { id: "certifications", name: "Certifications", visible: true },
     { id: "achievements", name: "Achievements", visible: true },
     { id: "extracurriculars", name: "Extracurricular Activities", visible: true },
-  ])
+  ]);
 
-  const [currentSkill, setCurrentSkill] = useState("")
-  const [currentCertification, setCurrentCertification] = useState("")
-  
-  const [isSaving, setIsSaving] = useState(false)
-  const [savedResumeId, setSavedResumeId] = useState<string | null>(null)
+  const [currentSkill, setCurrentSkill] = useState("");
+  const [currentCertification, setCurrentCertification] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
+  const [savedResumeId, setSavedResumeId] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<"preview" | "ats">("preview");
+
+  const searchParams = useSearchParams();
+  const jobTitle = searchParams.get("jobTitle") || "";
+  const jobDescription = searchParams.get("jobDescription") || "";
+
+  useEffect(() => {
+    const generateResumeAndSummary = async () => {
+      if (jobDescription && jobTitle) {
+        setAiLoading(true);
+        try {
+          const resumePrompt = `Generate a full resume optimized for the following job description. Output in JSON format only, with fields: personalInfo {fullName, email, phone, location, linkedin, github, website}, professionalSummary, education [{id: string, school, degree, field, startDate, endDate, gpa}], workExperience [{id: string, company, position, startDate, endDate, description: array of strings, index: number}], skills: array, certifications: array, projects [{id: string, name, description, technologies, link}], achievements [{id: string, title, description, date}], extracurriculars [{id: string, activity, role, description, startDate, endDate}]
+
+Job Title: ${jobTitle}
+
+Job Description: ${jobDescription}
+
+Make it realistic and tailored, use placeholder names. Ensure IDs are unique strings.`;
+
+          const resumeRes = await fetch("/api/gemini", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt: resumePrompt }),
+          });
+
+          if (!resumeRes.ok) {
+            throw new Error(`Failed to generate resume: HTTP ${resumeRes.status}`);
+          }
+
+          const resumeDataResponse = await resumeRes.json();
+          if (!resumeDataResponse.candidates?.[0]?.content?.parts?.[0]?.text) {
+            throw new Error("Invalid resume response structure from Gemini API");
+          }
+
+          let resumeText = resumeDataResponse.candidates[0].content.parts[0].text.trim();
+
+          // Extract JSON if wrapped
+          const extractedJson = extractJsonFromText(resumeText);
+          if (extractedJson) {
+            resumeText = extractedJson;
+          } else {
+            resumeText = resumeText.replace(/```json|```/g, "").trim();
+          }
+
+          let generatedResume;
+          try {
+            generatedResume = JSON.parse(resumeText);
+          } catch (err) {
+            console.error("Failed to parse Gemini response as JSON:", resumeText);
+            throw err;
+          }
+
+          // Map achievement fields if mismatched
+          if (generatedResume.achievements) {
+            generatedResume.achievements = generatedResume.achievements.map((ach: any) => ({
+              id: ach.id,
+              title: ach.title || ach.name || "Achievement Title",
+              description: ach.description || ach.authority || "Description",
+              date: ach.date,
+            }));
+          }
+
+          // Generate professional summary
+          const summaryPrompt = `Generate a concise, ATS-friendly professional summary (45-55 words) for a resume tailored to the job title and description below. Highlight key achievements, skills, and career goals relevant to the job. Ensure the output is plain text, professional, engaging, and suitable for a resume without bullet points or formatting.
+
+Job Title: ${jobTitle}
+
+Job Description: ${jobDescription}`;
+
+          const summaryRes = await fetch("/api/gemini", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt: summaryPrompt }),
+          });
+
+          if (!summaryRes.ok) {
+            throw new Error(`Failed to generate professional summary: HTTP ${summaryRes.status}`);
+          }
+
+          const summaryData = await summaryRes.json();
+          if (!summaryData.candidates?.[0]?.content?.parts?.[0]?.text) {
+            throw new Error("Invalid summary response structure from Gemini API");
+          }
+
+          const generatedSummary = summaryData.candidates[0].content.parts[0].text.trim();
+
+          // Update resume data
+          setResumeData({
+            ...resumeData,
+            personalInfo: generatedResume.personalInfo || resumeData.personalInfo,
+            professionalSummary: generatedSummary,
+            education: generatedResume.education || resumeData.education,
+            workExperience: generatedResume.workExperience || resumeData.workExperience,
+            skills: generatedResume.skills || resumeData.skills,
+            certifications: generatedResume.certifications || resumeData.certifications,
+            projects: generatedResume.projects || resumeData.projects,
+            achievements: generatedResume.achievements || resumeData.achievements,
+            extracurriculars: generatedResume.extracurriculars || resumeData.extracurriculars,
+          });
+
+          // Calculate ATS score
+          await calculateATSScore();
+
+          toast.success("AI-generated resume, summary, and ATS score loaded!");
+        } catch (error: any) {
+          console.error("Error generating AI resume or summary:", {
+            message: error.message,
+            stack: error.stack,
+            jobTitle,
+            jobDescriptionLength: jobDescription.length,
+          });
+          toast.error("Failed to generate AI resume or summary. Please check your input and try again.");
+        } finally {
+          setAiLoading(false);
+        }
+      }
+    };
+
+    generateResumeAndSummary();
+  }, [jobTitle, jobDescription]);
+
+  const calculateATSScore = async () => {
+    setAiLoading(true);
+    try {
+      const dataSummary = `
+        Name: ${resumeData.personalInfo.fullName || "N/A"}
+        Email: ${resumeData.personalInfo.email || "N/A"}
+        Phone: ${resumeData.personalInfo.phone || "N/A"}
+        Location: ${resumeData.personalInfo.location || "N/A"}
+        Professional Summary: ${resumeData.professionalSummary || "N/A"}
+        Education: ${resumeData.education.map(edu => `${edu.degree} in ${edu.field || "N/A"} from ${edu.school || "N/A"} (${edu.startDate} - ${edu.endDate || "Present"})`).join("; ") || "N/A"}
+        Work Experience: ${resumeData.workExperience.map(work => `${work.position || "N/A"} at ${work.company || "N/A"} (${work.startDate} - ${work.endDate || "Present"}): ${work.description.join("; ") || "N/A"}`).join("; ") || "N/A"}
+        Skills: ${resumeData.skills.join(", ") || "N/A"}
+        Certifications: ${resumeData.certifications.join(", ") || "N/A"}
+        Projects: ${resumeData.projects.map(proj => `${proj.name || "N/A"}: ${proj.description || "N/A"} (Technologies: ${proj.technologies || "N/A"})`).join("; ") || "N/A"}
+        Achievements: ${resumeData.achievements.map(ach => `${ach.title || "N/A"} (${ach.date || "N/A"}): ${ach.description || "N/A"}`).join("; ") || "N/A"}
+        Extracurriculars: ${resumeData.extracurriculars.map(extra => `${extra.activity || "N/A"} - ${extra.role || "N/A"} (${extra.startDate} - ${extra.endDate || "Present"}): ${extra.description || "N/A"}`).join("; ") || "N/A"}
+      `;
+
+      const atsPrompt = `Analyze the following resume data against the job description and provide an ATS score in JSON format with the following fields: totalScore (0-100), contactInfoScore (0-20), keywordsScore (0-25), formatScore (0-20), experienceScore (0-20), skillsScore (0-15), suggestions (array of strings with improvement tips). Ensure the scores reflect how well the resume matches the job description and follows ATS best practices (e.g., keyword usage, clear formatting, complete contact info).
+
+Resume Data: ${dataSummary}
+
+Job Title: ${jobTitle}
+
+Job Description: ${jobDescription}`;
+
+      const res = await fetch("/api/gemini", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: atsPrompt }),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Failed to calculate ATS score: HTTP ${res.status}`);
+      }
+
+      const data = await res.json();
+      let atsText = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+
+      if (!atsText) {
+        throw new Error("Invalid ATS score response structure from Gemini API");
+      }
+
+      // Extract JSON if wrapped
+      const extractedJson = extractJsonFromText(atsText);
+      if (extractedJson) {
+        atsText = extractedJson;
+      } else {
+        atsText = atsText.replace(/```json|```/g, "").trim();
+      }
+
+      let atsScoreData;
+      try {
+        atsScoreData = JSON.parse(atsText);
+      } catch (err) {
+        console.error("Failed to parse ATS score JSON:", atsText);
+        throw err;
+      }
+
+      const validatedScore: ATSScore = {
+        totalScore: Math.min(Math.max(atsScoreData.totalScore || 0, 0), 100),
+        contactInfoScore: Math.min(Math.max(atsScoreData.contactInfoScore || 0, 0), 20),
+        keywordsScore: Math.min(Math.max(atsScoreData.keywordsScore || 0, 0), 25),
+        formatScore: Math.min(Math.max(atsScoreData.formatScore || 0, 0), 20),
+        experienceScore: Math.min(Math.max(atsScoreData.experienceScore || 0, 0), 20),
+        skillsScore: Math.min(Math.max(atsScoreData.skillsScore || 0, 0), 15),
+        suggestions: Array.isArray(atsScoreData.suggestions) ? atsScoreData.suggestions : [],
+        lastUpdated: new Date(),
+      };
+
+      setAtsScore(validatedScore);
+      toast.success("ATS score calculated successfully!");
+    } catch (error: any) {
+      console.error("Error calculating ATS score:", {
+        message: error.message,
+        stack: error.stack,
+        jobTitle,
+        jobDescriptionLength: jobDescription.length,
+      });
+      toast.error("Failed to calculate ATS score. Please try again.");
+    } finally {
+      setAiLoading(false);
+    }
+  };
 
   const convertOklchToRgb = () => {
-    const elements = document.querySelectorAll("#resume-preview *")
+    const elements = document.querySelectorAll("#resume-preview *");
     elements.forEach((element: HTMLElement) => {
-      const styles = window.getComputedStyle(element)
-      const properties = ["color", "background-color", "border-color"]
+      const styles = window.getComputedStyle(element);
+      const properties = ["color", "background-color", "border-color"];
 
       properties.forEach((property) => {
-        const value = styles.getPropertyValue(property)
+        const value = styles.getPropertyValue(property);
         if (value.includes("oklch") || value.includes("oklab")) {
           try {
-            let color
+            let color;
             if (value.includes("oklch")) {
-              color = oklch(value)
+              color = oklch(value);
             } else if (value.includes("oklab")) {
-              color = oklab(value)
+              color = oklab(value);
             }
             if (color) {
-              const rgbColor = rgb(color)
-              const rgbString = `rgb(${Math.round(rgbColor.r * 255)}, ${Math.round(rgbColor.g * 255)}, ${Math.round(rgbColor.b * 255)})`
-              element.style.setProperty(property, rgbString)
+              const rgbColor = rgb(color);
+              const rgbString = `rgb(${Math.round(rgbColor.r * 255)}, ${Math.round(rgbColor.g * 255)}, ${Math.round(rgbColor.b * 255)})`;
+              element.style.setProperty(property, rgbString);
             }
           } catch (e) {
-            console.error("Color conversion failed:", e)
+            console.error("Color conversion failed:", e);
             if (property === "background-color") {
-              element.style.setProperty(property, "rgb(255, 255, 255)")
+              element.style.setProperty(property, "rgb(255, 255, 255)");
             } else {
-              element.style.setProperty(property, "rgb(0, 0, 0)")
+              element.style.setProperty(property, "rgb(0, 0, 0)");
             }
           }
         }
-      })
-    })
-  }
+      });
+    });
+  };
 
   const handleDownloadPDF = async () => {
-    
-    const element = document.getElementById("resume-preview")
+    const element = document.getElementById("resume-preview");
     if (!element) {
-      toast.error("Preview not found. Please try again.")
-      return
+      toast.error("Preview not found. Please try again.");
+      return;
     }
 
-    convertOklchToRgb()
+    convertOklchToRgb();
 
     const opt = {
       margin: 0.25,
@@ -299,183 +525,129 @@ export default function ResumeBuilder() {
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: 2, useCORS: true },
       jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
-    }
+    };
 
     try {
       if (resumeData.personalInfo.fullName && resumeData.personalInfo.email && resumeData.personalInfo.phone) {
-        await html2pdf().set(opt).from(element).save()
-        await handleSave()
+        await html2pdf().set(opt).from(element).save();
+        await handleSave();
+      } else {
+        toast.info("Please enter your name, email, or phone number before downloading the resume.");
       }
-      else{
-        toast.info("Please enter your name, email or phone number before downloading the resume.")
-      }
-      // setResumeData({
-      //   personalInfo: {
-      //     fullName: "",
-      //     email: "",
-      //     phone: "",
-      //     location: "",
-      //     linkedin: "",
-      //     website: "",
-      //     github: "",
-      //   },
-      //   professionalSummary: "",
-      //   education: [],
-      //   workExperience: [],
-      //   skills: [],
-      //   certifications: [],
-      //   projects: [],
-      //   achievements: [],
-      //   extracurriculars: [],
-      //   profilePicture: null,
-      // })
-      // setCurrentSkill("")
-      // setCurrentCertification("")
-       setSavedResumeId(null)
+      setSavedResumeId(null);
     } catch (error: any) {
-      console.error("Failed to generate PDF:", error)
-      toast.error("Failed to generate PDF. Please try again.")
+      console.error("Failed to generate PDF:", error);
+      toast.error("Failed to generate PDF. Please try again.");
     }
-  }
-
-  
+  };
 
   const handleSave = async () => {
-    setIsSaving(true)
-    
+    setIsSaving(true);
     try {
-      let result
+      let result;
       if (savedResumeId) {
-        result = await apiService.updateResume(savedResumeId, resumeData, activeTemplate, sectionOrder)
+        result = await apiService.updateResume(savedResumeId, resumeData, activeTemplate, sectionOrder);
       } else {
-        result = await apiService.saveResume(resumeData, activeTemplate, sectionOrder)
+        result = await apiService.saveResume(resumeData, activeTemplate, sectionOrder);
       }
 
       if (result.success) {
-        const resumeId = result.data?._id || result.resume?._id || result._id
+        const resumeId = result.data?._id || result.resume?._id || result._id;
         if (resumeId) {
-          setSavedResumeId(resumeId)
+          setSavedResumeId(resumeId);
         }
-        toast.success("Resume saved successfully!")
-        // setResumeData({
-        //   personalInfo: {
-        //     fullName: "",
-        //     email: "",
-        //     phone: "",
-        //     location: "",
-        //     linkedin: "",
-        //     website: "",
-        //     github: "",
-        //   },
-        //   professionalSummary: "",
-        //   education: [],
-        //   workExperience: [],
-        //   skills: [],
-        //   certifications: [],
-        //   projects: [],
-        //   achievements: [],
-        //   extracurriculars: [],
-        //   profilePicture: null,
-        // })
-        // setCurrentSkill("")
-        // setCurrentCertification("")
-        setSavedResumeId(null)
+        toast.success("Resume saved successfully!");
+        setSavedResumeId(null);
       }
     } catch (error) {
-      console.error("Failed to save resume:", error)
+      console.error("Failed to save resume:", error);
     } finally {
-      setIsSaving(false)
+      setIsSaving(false);
     }
-  }
+  };
 
   const cancelSave = () => {
-    setIsSaveDialogOpen(false)
-  }
+    setIsSaveDialogOpen(false);
+  };
 
-  
+  const handleAISuggest = async () => {
+    setAiLoading(true);
+    try {
+      const dataSummary = `
+        Name: ${resumeData.personalInfo.fullName || "N/A"}
+        Email: ${resumeData.personalInfo.email || "N/A"}
+        Location: ${resumeData.personalInfo.location || "N/A"}
+        Education: ${resumeData.education.map(edu => `${edu.degree} in ${edu.field || "N/A"} from ${edu.school || "N/A"} (${edu.startDate} - ${edu.endDate || "Present"})`).join("; ") || "N/A"}
+        Work Experience: ${resumeData.workExperience.map(work => `${work.position || "N/A"} at ${work.company || "N/A"} (${work.startDate} - ${work.endDate || "Present"}): ${work.description.join("; ") || "N/A"}`).join("; ") || "N/A"}
+        Skills: ${resumeData.skills.join(", ") || "N/A"}
+        Certifications: ${resumeData.certifications.join(", ") || "N/A"}
+        Projects: ${resumeData.projects.map(proj => `${proj.name || "N/A"}: ${proj.description || "N/A"} (Technologies: ${proj.technologies || "N/A"})`).join("; ") || "N/A"}
+        Achievements: ${resumeData.achievements.map(ach => `${ach.title || "N/A"} (${ach.date || "N/A"}): ${ach.description || "N/A"}`).join("; ") || "N/A"}
+        Extracurriculars: ${resumeData.extracurriculars.map(extra => `${extra.activity || "N/A"} - ${extra.role || "N/A"} (${extra.startDate} - ${extra.endDate || "Present"}): ${extra.description || "N/A"}`).join("; ") || "N/A"}
+      `;
 
- const handleAISuggest = async () => {
-  setAiLoading(true);
-  try {
-    const dataSummary = `
-      Name: ${resumeData.personalInfo.fullName || "N/A"}
-      Email: ${resumeData.personalInfo.email || "N/A"}
-      Location: ${resumeData.personalInfo.location || "N/A"}
-      Education: ${resumeData.education.map(edu => `${edu.degree} in ${edu.field || "N/A"} from ${edu.school || "N/A"} (${edu.startDate} - ${edu.endDate || "Present"})`).join("; ") || "N/A"}
-      Work Experience: ${resumeData.workExperience.map(work => `${work.position || "N/A"} at ${work.company || "N/A"} (${work.startDate} - ${work.endDate || "Present"}): ${work.description.join("; ") || "N/A"}`).join("; ") || "N/A"}
-      Skills: ${resumeData.skills.join(", ") || "N/A"}
-      Certifications: ${resumeData.certifications.join(", ") || "N/A"}
-      Projects: ${resumeData.projects.map(proj => `${proj.name || "N/A"}: ${proj.description || "N/A"} (Technologies: ${proj.technologies || "N/A"})`).join("; ") || "N/A"}
-      Achievements: ${resumeData.achievements.map(ach => `${ach.title || "N/A"} (${ach.date || "N/A"}): ${ach.description || "N/A"}`).join("; ") || "N/A"}
-      Extracurriculars: ${resumeData.extracurriculars.map(extra => `${extra.activity || "N/A"} - ${extra.role || "N/A"} (${extra.startDate} - ${extra.endDate || "Present"}): ${extra.description || "N/A"}`).join("; ") || "N/A"}
-    `;
+      const prompt = `Generate a concise, ATS-friendly professional summary (45-55 words) for a resume based on the following information. Highlight key achievements, skills, and career goals, tailored to the provided data. Ensure the summary is professional, engaging, and suitable for a resume: ${dataSummary}`;
 
-    const prompt = `Generate a concise, ATS friendly professional summary (45-55 words) for a resume based on the following information. Highlight key achievements, skills, and career goals, tailored to the provided data. Ensure the summary is professional, engaging, and suitable for a resume: ${dataSummary}`;
+      const res = await fetch("/api/gemini", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt }),
+      });
 
-    const res = await fetch("/api/gemini", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt }),
-    });
+      const data = await res.json();
+      const generatedSummary = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
 
-    const data = await res.json();
-    const generatedSummary =
-      data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
-
-    setResumeData((prev) => ({
-      ...prev,
-      professionalSummary: generatedSummary,
-    }));
-    toast.success("AI-generated summary added to textarea!");
-  } catch (error) {
-    console.error("Failed to generate AI suggestion:", error);
-    toast.error("Failed to generate AI suggestion. Please try again.");
-  } finally {
-    setAiLoading(false);
-  }
-};
-const handleAISuggestForWork = async (id: string) => {
-  setAiLoading(true);
-  try {
-    const work = resumeData.workExperience.find((w) => w.id === id);
-    if (!work || !work.position || !work.company) {
-      toast.info("Please provide position and company first.");
-      return;
+      setResumeData((prev) => ({
+        ...prev,
+        professionalSummary: generatedSummary,
+      }));
+      toast.success("AI-generated summary added to textarea!");
+    } catch (error) {
+      console.error("Failed to generate AI suggestion:", error);
+      toast.error("Failed to generate AI suggestion. Please try again.");
+    } finally {
+      setAiLoading(false);
     }
+  };
 
-    const prompt = `Generate a concise, ATS-friendly job description (3 points, each not more than 20 words) for the position of ${work.position} at ${work.company}. Highlight key responsibilities, achievements, and skills. Ensure it is professional, engaging, and suitable for a resume.`;
+  const handleAISuggestForWork = async (id: string) => {
+    setAiLoading(true);
+    try {
+      const work = resumeData.workExperience.find((w) => w.id === id);
+      if (!work || !work.position || !work.company) {
+        toast.info("Please provide position and company first.");
+        return;
+      }
 
-    const res = await fetch("/api/gemini", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt }),
-    });
+      const prompt = `Generate a concise, ATS-friendly job description (3 points, each not more than 20 words) for the position of ${work.position} at ${work.company}. Highlight key responsibilities, achievements, and skills. Ensure it is professional, engaging, and suitable for a resume.`;
 
-    const data = await res.json();
-    const generatedDescription =
-      data.candidates?.[0]?.content?.parts?.[0]?.text
+      const res = await fetch("/api/gemini", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt }),
+      });
+
+      const data = await res.json();
+      const generatedDescription = data.candidates?.[0]?.content?.parts?.[0]?.text
         ?.trim()
         .split("\n")
         .slice(0, 3)
-        .map((point: string) =>
-          point.trim().replace(/^[-•]\s*/, "").trim()
-        ) || [];
+        .map((point: string) => point.trim().replace(/^[-•]\s*/, "").trim()) || [];
 
-    setResumeData((prev) => ({
-      ...prev,
-      workExperience: prev.workExperience.map((w) =>
-        w.id === id ? { ...w, description: generatedDescription } : w
-      ),
-    }));
-    toast.success("AI-generated description added!");
-  } catch (error) {
-    console.error("Failed to generate AI suggestion:", error);
-    toast.error("Failed to generate AI suggestion. Please try again.");
-  } finally {
-    setAiLoading(false);
-  }
-};
-
+      setResumeData((prev) => ({
+        ...prev,
+        workExperience: prev.workExperience.map((w) =>
+          w.id === id ? { ...w, description: generatedDescription } : w
+        ),
+      }));
+      toast.success("AI-generated description added!");
+    } catch (error) {
+      console.error("Failed to generate AI suggestion:", error);
+      toast.error("Failed to generate AI suggestion. Please try again.");
+    } finally {
+      setAiLoading(false);
+    }
+  };
 
   const toggleSection = useCallback((sectionId: string) => {
     setCollapsedSections((prev) => {
@@ -489,61 +661,61 @@ const handleAISuggestForWork = async (id: string) => {
         "projects",
         "achievements",
         "extracurriculars",
-      ])
+      ]);
       if (!prev.has(sectionId)) {
-        return allSections
+        return allSections;
       }
-      allSections.delete(sectionId)
-      return allSections
-    })
-  }, [])
+      allSections.delete(sectionId);
+      return allSections;
+    });
+  }, []);
 
   const handleDragStart = useCallback((e: React.DragEvent, sectionId: string) => {
-    setDraggedSection(sectionId)
-    e.dataTransfer.effectAllowed = "move"
-  }, [])
+    setDraggedSection(sectionId);
+    e.dataTransfer.effectAllowed = "move";
+  }, []);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    e.dataTransfer.dropEffect = "move"
-  }, [])
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+  }, []);
 
   const handleDrop = useCallback(
     (e: React.DragEvent, targetSectionId: string) => {
-      e.preventDefault()
-      if (!draggedSection || draggedSection === targetSectionId) return
+      e.preventDefault();
+      if (!draggedSection || draggedSection === targetSectionId) return;
 
       setSectionOrder((prev) => {
-        const newOrder = [...prev]
-        const draggedIndex = newOrder.findIndex((s) => s.id === draggedSection)
-        const targetIndex = newOrder.findIndex((s) => s.id === targetSectionId)
+        const newOrder = [...prev];
+        const draggedIndex = newOrder.findIndex((s) => s.id === draggedSection);
+        const targetIndex = newOrder.findIndex((s) => s.id === targetSectionId);
 
-        if (draggedIndex === -1 || targetIndex === -1) return prev
+        if (draggedIndex === -1 || targetIndex === -1) return prev;
 
-        const [draggedItem] = newOrder.splice(draggedIndex, 1)
-        newOrder.splice(targetIndex, 0, draggedItem)
+        const [draggedItem] = newOrder.splice(draggedIndex, 1);
+        newOrder.splice(targetIndex, 0, draggedItem);
 
-        return newOrder
-      })
-      setDraggedSection(null)
+        return newOrder;
+      });
+      setDraggedSection(null);
     },
-    [draggedSection],
-  )
+    [draggedSection]
+  );
 
   const handleDragEnd = useCallback(() => {
-    setDraggedSection(null)
-  }, [])
+    setDraggedSection(null);
+  }, []);
 
   const updatePersonalInfo = useCallback((field: keyof PersonalInfo, value: string) => {
     setResumeData((prev) => ({
       ...prev,
       personalInfo: { ...prev.personalInfo, [field]: value },
-    }))
-  }, [])
+    }));
+  }, []);
 
   const updateProfessionalSummary = useCallback((value: string) => {
-    setResumeData((prev) => ({ ...prev, professionalSummary: value }))
-  }, [])
+    setResumeData((prev) => ({ ...prev, professionalSummary: value }));
+  }, []);
 
   const addEducation = useCallback(() => {
     const newEducation: Education = {
@@ -554,26 +726,26 @@ const handleAISuggestForWork = async (id: string) => {
       startDate: "",
       endDate: "",
       gpa: "",
-    }
+    };
     setResumeData((prev) => ({
       ...prev,
       education: [...prev.education, newEducation],
-    }))
-  }, [])
+    }));
+  }, []);
 
   const updateEducation = useCallback((id: string, field: keyof Education, value: string) => {
     setResumeData((prev) => ({
       ...prev,
       education: prev.education.map((edu) => (edu.id === id ? { ...edu, [field]: value } : edu)),
-    }))
-  }, [])
+    }));
+  }, []);
 
   const removeEducation = useCallback((id: string) => {
     setResumeData((prev) => ({
       ...prev,
       education: prev.education.filter((edu) => edu.id !== id),
-    }))
-  }, [])
+    }));
+  }, []);
 
   const addWorkExperience = useCallback(() => {
     const newWork: WorkExperience = {
@@ -584,37 +756,41 @@ const handleAISuggestForWork = async (id: string) => {
       endDate: "",
       description: ["", "", ""],
       index: 0,
-    }
+    };
     setResumeData((prev) => ({
       ...prev,
       workExperience: [...prev.workExperience, newWork],
-    }))
-  }, [])
+    }));
+  }, []);
 
-const updateWorkExperience = useCallback((id: string, field: keyof WorkExperience | 'description', value: string | string[], index?: number) => {
-  setResumeData((prev) => ({
-    ...prev,
-    workExperience: prev.workExperience.map((work) => {
-      if (work.id === id) {
-        if (field === 'description' && Array.isArray(value)) {
-          return { ...work, description: value }
-        } else if (field === 'description' && typeof index === 'number') {
-          const newDescription = [...work.description]
-          newDescription[index] = value as string
-          return { ...work, description: newDescription }
-        }
-        return { ...work, [field]: value as string }
-      }
-      return work
-    }),
-  }))
-}, [])
+  const updateWorkExperience = useCallback(
+    (id: string, field: keyof WorkExperience | "description", value: string | string[], index?: number) => {
+      setResumeData((prev) => ({
+        ...prev,
+        workExperience: prev.workExperience.map((work) => {
+          if (work.id === id) {
+            if (field === "description" && Array.isArray(value)) {
+              return { ...work, description: value };
+            } else if (field === "description" && typeof index === "number") {
+              const newDescription = [...work.description];
+              newDescription[index] = value as string;
+              return { ...work, description: newDescription };
+            }
+            return { ...work, [field]: value as string };
+          }
+          return work;
+        }),
+      }));
+    },
+    []
+  );
+
   const removeWorkExperience = useCallback((id: string) => {
     setResumeData((prev) => ({
       ...prev,
       workExperience: prev.workExperience.filter((work) => work.id !== id),
-    }))
-  }, [])
+    }));
+  }, []);
 
   const addProject = useCallback(() => {
     const newProject: Project = {
@@ -623,26 +799,26 @@ const updateWorkExperience = useCallback((id: string, field: keyof WorkExperienc
       description: "",
       technologies: "",
       link: "",
-    }
+    };
     setResumeData((prev) => ({
       ...prev,
       projects: [...prev.projects, newProject],
-    }))
-  }, [])
+    }));
+  }, []);
 
   const updateProject = useCallback((id: string, field: keyof Project, value: string) => {
     setResumeData((prev) => ({
       ...prev,
       projects: prev.projects.map((project) => (project.id === id ? { ...project, [field]: value } : project)),
-    }))
-  }, [])
+    }));
+  }, []);
 
   const removeProject = useCallback((id: string) => {
     setResumeData((prev) => ({
       ...prev,
       projects: prev.projects.filter((project) => project.id !== id),
-    }))
-  }, [])
+    }));
+  }, []);
 
   const addSkill = useCallback(
     (skill: string) => {
@@ -650,19 +826,19 @@ const updateWorkExperience = useCallback((id: string, field: keyof WorkExperienc
         setResumeData((prev) => ({
           ...prev,
           skills: [...prev.skills, skill.trim()],
-        }))
-        setCurrentSkill("")
+        }));
+        setCurrentSkill("");
       }
     },
-    [resumeData.skills],
-  )
+    [resumeData.skills]
+  );
 
   const removeSkill = useCallback((skillToRemove: string) => {
     setResumeData((prev) => ({
       ...prev,
       skills: prev.skills.filter((skill) => skill !== skillToRemove),
-    }))
-  }, [])
+    }));
+  }, []);
 
   const addCertification = useCallback(
     (cert: string) => {
@@ -670,19 +846,19 @@ const updateWorkExperience = useCallback((id: string, field: keyof WorkExperienc
         setResumeData((prev) => ({
           ...prev,
           certifications: [...prev.certifications, cert.trim()],
-        }))
-        setCurrentCertification("")
+        }));
+        setCurrentCertification("");
       }
     },
-    [resumeData.certifications],
-  )
+    [resumeData.certifications]
+  );
 
   const removeCertification = useCallback((certToRemove: string) => {
     setResumeData((prev) => ({
       ...prev,
       certifications: prev.certifications.filter((cert) => cert !== certToRemove),
-    }))
-  }, [])
+    }));
+  }, []);
 
   const addAchievement = useCallback(() => {
     const newAchievement: Achievement = {
@@ -690,28 +866,28 @@ const updateWorkExperience = useCallback((id: string, field: keyof WorkExperienc
       title: "",
       description: "",
       date: "",
-    }
+    };
     setResumeData((prev) => ({
       ...prev,
       achievements: [...prev.achievements, newAchievement],
-    }))
-  }, [])
+    }));
+  }, []);
 
   const updateAchievement = useCallback((id: string, field: keyof Achievement, value: string) => {
     setResumeData((prev) => ({
       ...prev,
       achievements: prev.achievements.map((achievement) =>
-        achievement.id === id ? { ...achievement, [field]: value } : achievement,
+        achievement.id === id ? { ...achievement, [field]: value } : achievement
       ),
-    }))
-  }, [])
+    }));
+  }, []);
 
   const removeAchievement = useCallback((id: string) => {
     setResumeData((prev) => ({
       ...prev,
       achievements: prev.achievements.filter((achievement) => achievement.id !== id),
-    }))
-  }, [])
+    }));
+  }, []);
 
   const addExtracurricular = useCallback(() => {
     const newExtracurricular: Extracurricular = {
@@ -721,73 +897,48 @@ const updateWorkExperience = useCallback((id: string, field: keyof WorkExperienc
       description: "",
       startDate: "",
       endDate: "",
-    }
+    };
     setResumeData((prev) => ({
       ...prev,
       extracurriculars: [...prev.extracurriculars, newExtracurricular],
-    }))
-  }, [])
+    }));
+  }, []);
 
   const updateExtracurricular = useCallback((id: string, field: keyof Extracurricular, value: string) => {
     setResumeData((prev) => ({
       ...prev,
       extracurriculars: prev.extracurriculars.map((extra) => (extra.id === id ? { ...extra, [field]: value } : extra)),
-    }))
-  }, [])
+    }));
+  }, []);
 
   const removeExtracurricular = useCallback((id: string) => {
     setResumeData((prev) => ({
       ...prev,
       extracurriculars: prev.extracurriculars.filter((extra) => extra.id !== id),
-    }))
-  }, [])
+    }));
+  }, []);
 
   const sections = [
-    {
-      id: "personal",
-      name: "Personal Information",
-      icon: User,
-      required: true,
-    },
-    {
-      id: "experience",
-      name: "Work Experience",
-      icon: Briefcase,
-      required: false,
-    },
-    {
-      id: "summary",
-      name: "Professional Summary",
-      icon: FileText,
-      required: false,
-    },
-    {
-      id: "education",
-      name: "Education",
-      icon: GraduationCap,
-      required: false,
-    },
+    { id: "personal", name: "Personal Information", icon: User, required: true },
+    { id: "experience", name: "Work Experience", icon: Briefcase, required: false },
+    { id: "summary", name: "Professional Summary", icon: FileText, required: false },
+    { id: "education", name: "Education", icon: GraduationCap, required: false },
     { id: "skills", name: "Skills", icon: Code, required: false },
-    {
-      id: "certifications",
-      name: "Certifications (Optional)",
-      icon: Award,
-      required: false,
-    },
+    { id: "certifications", name: "Certifications (Optional)", icon: Award, required: false },
     { id: "projects", name: "Projects (Optional)", icon: FolderOpen, required: false },
     { id: "achievements", name: "Achievements (Optional)", icon: Trophy, required: false },
     { id: "extracurriculars", name: "Extracurricular Activities (Optional)", icon: Users, required: false },
-  ]
+  ];
 
   const getCurrentTemplate = () => {
-    return templates.find((t) => t.id === activeTemplate) || templates[0]
-  }
+    return templates.find((t) => t.id === activeTemplate) || templates[0];
+  };
 
-  const currentTemplate = getCurrentTemplate()
+  const currentTemplate = getCurrentTemplate();
 
   const renderSectionContent = useCallback(
     (sectionConfig: SectionOrder) => {
-      const sectionId = sectionConfig.id
+      const sectionId = sectionConfig.id;
 
       if (sectionId === "experience" && resumeData.workExperience.length > 0) {
         return (
@@ -807,18 +958,16 @@ const updateWorkExperience = useCallback((id: string, field: keyof WorkExperienc
                         : work.startDate || work.endDate || "2023-08 - Present"}
                     </span>
                   </div>
-                  {work.description.some(desc => desc.trim()) && (
+                  {work.description.some((desc) => desc.trim()) && (
                     <ul className="text-gray-700 text-sm leading-relaxed list-disc pl-5">
-                      {work.description.map((desc, index) => (
-                        desc.trim() && <li key={index}>{desc}</li>
-                      ))}
+                      {work.description.map((desc, index) => desc.trim() && <li key={index}>{desc}</li>)}
                     </ul>
                   )}
                 </div>
               ))}
             </div>
           </div>
-        )
+        );
       }
 
       if (sectionId === "summary" && resumeData.professionalSummary) {
@@ -829,7 +978,7 @@ const updateWorkExperience = useCallback((id: string, field: keyof WorkExperienc
             </h2>
             <p className="text-gray-700 leading-relaxed">{resumeData.professionalSummary}</p>
           </div>
-        )
+        );
       }
 
       if (sectionId === "education" && resumeData.education.length > 0) {
@@ -855,7 +1004,7 @@ const updateWorkExperience = useCallback((id: string, field: keyof WorkExperienc
               ))}
             </div>
           </div>
-        )
+        );
       }
 
       if (sectionId === "skills" && resumeData.skills.length > 0) {
@@ -870,7 +1019,7 @@ const updateWorkExperience = useCallback((id: string, field: keyof WorkExperienc
               ))}
             </div>
           </div>
-        )
+        );
       }
 
       if (sectionId === "projects" && resumeData.projects.length > 0) {
@@ -905,7 +1054,7 @@ const updateWorkExperience = useCallback((id: string, field: keyof WorkExperienc
               ))}
             </div>
           </div>
-        )
+        );
       }
 
       if (sectionId === "certifications" && resumeData.certifications.length > 0) {
@@ -921,7 +1070,7 @@ const updateWorkExperience = useCallback((id: string, field: keyof WorkExperienc
               ))}
             </div>
           </div>
-        )
+        );
       }
 
       if (sectionId === "achievements" && resumeData.achievements.length > 0) {
@@ -933,13 +1082,13 @@ const updateWorkExperience = useCallback((id: string, field: keyof WorkExperienc
                 <div key={achievement.id} className="flex items-center">
                   <div className={`w-2 h-2 ${currentTemplate.accent.replace("text-", "bg-")} rounded-full mr-3`}></div>
                   <span className="text-gray-700">
-                    {achievement.title} - {achievement.description} ({achievement.date})
+                    {achievement.title || "Achievement"} - {achievement.description || "Description"} ({achievement.date || "Date"})
                   </span>
                 </div>
               ))}
             </div>
           </div>
-        )
+        );
       }
 
       if (sectionId === "extracurriculars" && resumeData.extracurriculars.length > 0) {
@@ -959,13 +1108,13 @@ const updateWorkExperience = useCallback((id: string, field: keyof WorkExperienc
               ))}
             </div>
           </div>
-        )
+        );
       }
 
-      return null
+      return null;
     },
-    [resumeData, currentTemplate],
-  )
+    [resumeData, currentTemplate]
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -974,20 +1123,20 @@ const updateWorkExperience = useCallback((id: string, field: keyof WorkExperienc
         <div className="container max-w-7xl mx-auto px-4 py-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 md:space-x-4">
-              <Link href="/airesume">
+              <Link href="/airesume/jde">
                 <Button variant="ghost" size="sm" className="p-2 md:px-3">
                   <ArrowLeft className="w-4 h-4 md:mr-2" />
-                  <span className="hidden md:inline">Back to Dashboard</span>
+                  <span className="hidden md:inline">Back to JDE</span>
                 </Button>
               </Link>
             </div>
             <div className="flex items-center space-x-1 md:space-x-3">
-              {/* <Link href="/myresumes">
+              <Link href="/myresumes">
                 <Button variant="outline" size="sm" className="hidden sm:flex bg-transparent">
                   <FileText className="w-4 h-4 md:mr-2" />
                   <span>My Resumes</span>
                 </Button>
-              </Link> */}
+              </Link>
               <Button onClick={handleDownloadPDF} size="sm" className="bg-green-500 hover:bg-green-600 text-white">
                 <Download className="w-4 h-4 md:mr-2" />
                 <span className="hidden md:inline">Download PDF</span>
@@ -1001,8 +1150,8 @@ const updateWorkExperience = useCallback((id: string, field: keyof WorkExperienc
         <div className="grid lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8">
           <div className="space-y-3 md:space-y-4 max-h-[calc(100vh-120px)] overflow-y-auto">
             {sections.map((section) => {
-              const Icon = section.icon
-              const isCollapsed = collapsedSections.has(section.id)
+              const Icon = section.icon;
+              const isCollapsed = collapsedSections.has(section.id);
 
               return (
                 <Collapsible key={section.id} open={!isCollapsed} onOpenChange={() => toggleSection(section.id)}>
@@ -1049,7 +1198,7 @@ const updateWorkExperience = useCallback((id: string, field: keyof WorkExperienc
                                 </Label>
                                 <Input
                                   id="fullName"
-                                  placeholder="JohnDoe"
+                                  placeholder="John Doe"
                                   value={resumeData.personalInfo.fullName}
                                   onChange={(e) => updatePersonalInfo("fullName", e.target.value)}
                                   className="h-9 text-sm"
@@ -1127,7 +1276,7 @@ const updateWorkExperience = useCallback((id: string, field: keyof WorkExperienc
                             />
                             <Button
                               variant="outline"
-                              className="bg-orange-500 text-white  hover:bg-white hover:border-orange-500 hover:text-orange-600 p-2 h-auto font-medium"
+                              className="bg-orange-500 text-white hover:bg-white hover:border-orange-500 hover:text-orange-600 p-2 h-auto font-medium"
                               onClick={handleAISuggest}
                               disabled={aiLoading}
                             >
@@ -1268,7 +1417,7 @@ const updateWorkExperience = useCallback((id: string, field: keyof WorkExperienc
                                       </div>
                                       <Button
                                         variant="outline"
-                                        className="bg-orange-500 text-white  hover:bg-white hover:border-orange-500 hover:text-orange-600 p-2 h-auto font-medium mt-2"
+                                        className="bg-orange-500 text-white hover:bg-white hover:border-orange-500 hover:text-orange-600 p-2 h-auto font-medium mt-2"
                                         onClick={() => handleAISuggestForWork(work.id)}
                                         disabled={aiLoading}
                                       >
@@ -1305,7 +1454,7 @@ const updateWorkExperience = useCallback((id: string, field: keyof WorkExperienc
                                 onChange={(e) => setCurrentSkill(e.target.value)}
                                 onKeyPress={(e) => {
                                   if (e.key === "Enter") {
-                                    addSkill(currentSkill)
+                                    addSkill(currentSkill);
                                   }
                                 }}
                                 className="flex-1"
@@ -1340,7 +1489,7 @@ const updateWorkExperience = useCallback((id: string, field: keyof WorkExperienc
                                 onChange={(e) => setCurrentCertification(e.target.value)}
                                 onKeyPress={(e) => {
                                   if (e.key === "Enter") {
-                                    addCertification(currentCertification)
+                                    addCertification(currentCertification);
                                   }
                                 }}
                                 className="flex-1"
@@ -1564,7 +1713,7 @@ const updateWorkExperience = useCallback((id: string, field: keyof WorkExperienc
                     </CollapsibleContent>
                   </Card>
                 </Collapsible>
-              )
+              );
             })}
           </div>
 
@@ -1574,15 +1723,23 @@ const updateWorkExperience = useCallback((id: string, field: keyof WorkExperienc
                 <h2 className="text-lg font-semibold">Resume Preview</h2>
                 <div className="flex items-center bg-gray-100 rounded-lg p-1">
                   <Button
-                    variant="default"
+                    variant={viewMode === "preview" ? "default" : "ghost"}
                     size="sm"
-                    className={`h-7 md:h-8 px-2 md:px-3 text-xs bg-orange-500  text-white`}
+                    className={viewMode === "preview" ? "bg-orange-500 text-white" : ""}
+                    onClick={() => setViewMode("preview")}
                   >
                     <Eye className="w-3 h-3 md:mr-1" />
                     <span className="hidden sm:inline">Preview</span>
                   </Button>
-                  
-                    
+                  <Button
+                    variant={viewMode === "ats" ? "default" : "ghost"}
+                    size="sm"
+                    className={viewMode === "ats" ? "bg-orange-500 text-white" : ""}
+                    onClick={() => setViewMode("ats")}
+                  >
+                    <Target className="w-3 h-3 md:mr-1" />
+                    <span className="hidden sm:inline">ATS Score</span>
+                  </Button>
                 </div>
               </div>
 
@@ -1602,10 +1759,11 @@ const updateWorkExperience = useCallback((id: string, field: keyof WorkExperienc
                       {templates.map((template) => (
                         <div
                           key={template.id}
-                          className={`border-2 rounded-lg p-4 cursor-pointer transition-all hover:shadow-lg ${activeTemplate === template.id ? "border-orange-500 bg-orange-50" : "border-gray-200"}`}
+                          className={`border-2 rounded-lg p-4 cursor-pointer transition-all hover:shadow-lg ${activeTemplate === template.id ? "border-orange-500 bg-orange-50" : "border-gray-200"
+                            }`}
                           onClick={() => {
-                            setActiveTemplate(template.id)
-                            setIsTemplateDialogOpen(false)
+                            setActiveTemplate(template.id);
+                            setIsTemplateDialogOpen(false);
                           }}
                         >
                           <div
@@ -1620,57 +1778,37 @@ const updateWorkExperience = useCallback((id: string, field: keyof WorkExperienc
                     </div>
                   </DialogContent>
                 </Dialog>
-                
-                  <Button
-                    variant={isReorderMode ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setIsReorderMode(!isReorderMode)}
-                  >
-                    {isReorderMode ? (
-                      <>
-                        <Save className="w-4 h-4 mr-2" />
-                        Save Order
-                      </>
-                    ) : (
-                      <>
-                        <RotateCcw className="w-4 h-4 mr-2" />
-                        Reorder
-                      </>
-                    )}
-                  </Button>
-                
+
+                <Button
+                  variant={isReorderMode ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setIsReorderMode(!isReorderMode)}
+                >
+                  {isReorderMode ? (
+                    <>
+                      <Save className="w-4 h-4 mr-2" />
+                      Save Order
+                    </>
+                  ) : (
+                    <>
+                      <RotateCcw className="w-4 h-4 mr-2" />
+                      Reorder
+                    </>
+                  )}
+                </Button>
               </div>
             </div>
 
             {isReorderMode && (
               <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
                 <p className="text-sm text-orange-700">
-                  <strong>Reorder Mode:</strong> Drag and drop sections below to reorder them. Personal Information
-                  cannot be moved.
+                  <strong>Reorder Mode:</strong> Drag and drop sections below to reorder them. Personal Information cannot
+                  be moved.
                 </p>
               </div>
             )}
 
-            
-            {/* <Dialog open={isSaveDialogOpen} onOpenChange={setIsSaveDialogOpen}>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Confirm Save</DialogTitle>
-                </DialogHeader>
-                <div className="py-4">
-                  <p>Are you sure you want to save this resume? This will clear all current data.</p>
-                </div>
-                <div className="flex justify-end space-x-2">
-                  <Button variant="outline" onClick={cancelSave}>
-                    Cancel
-                  </Button>
-                  <Button onClick={confirmSave} className="bg-orange-500 hover:bg-orange-600 text-white">
-                    Save
-                  </Button>
-                </div>
-              </DialogContent>
-            </Dialog> */}
-
+            {viewMode === "preview" ? (
               <Card>
                 <CardContent className="p-0">
                   <div id="resume-preview">
@@ -1687,7 +1825,7 @@ const updateWorkExperience = useCallback((id: string, field: keyof WorkExperienc
                               <span>{resumeData.personalInfo.phone || "123456789"}</span>
                               <span>{resumeData.personalInfo.location || "Hyderabad"}</span>
                             </div>
-                            <div className="flex  justify-between text-sm mt-1 opacity-90">
+                            <div className="flex justify-between text-sm mt-1 opacity-90">
                               <a href={resumeData.personalInfo.linkedin} target="_blank" rel="noopener noreferrer">
                                 {resumeData.personalInfo.linkedin && (
                                   <span>
@@ -1704,18 +1842,15 @@ const updateWorkExperience = useCallback((id: string, field: keyof WorkExperienc
                                   </span>
                                 )}
                               </a>
-                               <a href={resumeData.personalInfo.github} target="_blank" rel="noopener noreferrer">
-                              {resumeData.personalInfo.github && (
-                                <div className="text-sm mt-1 opacity-90">
+                              <a href={resumeData.personalInfo.github} target="_blank" rel="noopener noreferrer">
+                                {resumeData.personalInfo.github && (
                                   <span>
                                     <Github className="w-4 h-4 mr-1 inline" />
                                     {resumeData.personalInfo.github.slice(19)}
                                   </span>
-                                </div>
-                              )}
-                            </a>
+                                )}
+                              </a>
                             </div>
-                           
                           </div>
                         </div>
                       </div>
@@ -1723,45 +1858,23 @@ const updateWorkExperience = useCallback((id: string, field: keyof WorkExperienc
                       <div className="px-6 pb-6 space-y-6">
                         {sectionOrder
                           .filter((section) => section.visible)
-                          .map((sectionConfig, index) => {
-                            const content = renderSectionContent(sectionConfig)
-                            if (!content) return null
-
-                            if (isReorderMode) {
-                              return (
-                                <div
-                                  key={sectionConfig.id}
-                                  draggable
-                                  onDragStart={(e) => handleDragStart(e, sectionConfig.id)}
-                                  onDragOver={handleDragOver}
-                                  onDrop={(e) => handleDrop(e, sectionConfig.id)}
-                                  onDragEnd={handleDragEnd}
-                                  className={`border-2 border-dashed border-orange-300 rounded-lg p-4 cursor-move transition-all hover:border-orange-400 hover:shadow-md ${draggedSection === sectionConfig.id ? "opacity-50" : "opacity-100"}`}
-                                >
-                                  <div className="flex items-center justify-between mb-2">
-                                    <div className="flex items-center space-x-2">
-                                      <GripVertical className="w-4 h-4 text-orange-500" />
-                                      <span className="text-sm font-medium text-orange-700">
-                                        Drag to reorder: {sectionConfig.name}
-                                      </span>
-                                    </div>
-                                  </div>
-                                  {content}
-                                </div>
-                              )
-                            }
-
-                            return content
-                          })}
+                          .map((sectionConfig, index) => renderSectionContent(sectionConfig))}
                       </div>
                     </div>
                   </div>
                 </CardContent>
               </Card>
-            
+            ) : (
+              <ATSScoreCard
+                score={atsScore}
+                onViewSuggestions={() => console.log("View suggestions clicked")}
+                onAnalyze={calculateATSScore}
+                loading={aiLoading}
+              />
+            )}
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
