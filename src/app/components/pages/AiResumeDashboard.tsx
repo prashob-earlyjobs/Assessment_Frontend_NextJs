@@ -73,7 +73,7 @@ export default function Index() {
         {/* Main Action Cards */}
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {/* Upload Existing Resume Card */}
-          <Card  onClick={ () => toast.info("Upload functionality coming soon!")} className="relative overflow-hidden border-0 shadow-xl bg-white/80 backdrop-blur-sm hover:shadow-2xl transition-all duration-300 group cursor-pointer">
+          <Card className="relative overflow-hidden border-0 shadow-xl bg-white/80 backdrop-blur-sm hover:shadow-2xl transition-all duration-300 group">
             <CardHeader className="text-center pb-4">
               <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                 <Upload className="w-8 h-8 text-white" />
@@ -100,7 +100,7 @@ export default function Index() {
                 </div>
                 
                   <Button 
-                  
+                   onClick={ () => toast.info("Upload functionality coming soon!")}
                   className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-lg py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
                     Upload & Parse Resume
                     <Upload className="w-5 h-5 ml-2" />
@@ -165,8 +165,9 @@ export default function Index() {
                 </div>
 
                 {/* JDE Option */}
-                <Link href="/jde" className="block">
-                  <Card className="border-2 border-orange-200 hover:border-orange-400 transition-colors cursor-pointer hover:shadow-md">
+                
+                  <Card className="border-2 border-orange-200 hover:border-orange-400 transition-colors cursor-pointer hover:shadow-md" 
+                        onClick={() => toast.info("Access granted to selected candidates only")}>
                     <CardContent className="p-4">
                       <div className="flex items-center space-x-3">
                         <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
@@ -183,7 +184,7 @@ export default function Index() {
                       </div>
                     </CardContent>
                   </Card>
-                </Link>
+                
 
                 {/* Standard Option */}
                 <Link href="/resumeBuilder" className="block">
