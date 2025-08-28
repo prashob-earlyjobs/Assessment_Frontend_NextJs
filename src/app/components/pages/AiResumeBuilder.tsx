@@ -313,18 +313,18 @@ export default function AIResumeBuilder() {
     convertOklchToRgb();
 
     const opt = {
-      margin: [0.5, 0.25, 0.25, 0.5],
+      margin: [0.5, 0.125, 0.125, 0.5],
       filename: `${resumeData.personalInfo.fullName || "resume"}.pdf`,
       image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 4, windowWidth: 612, useCORS: false },
+      html2canvas: { scale: 4,  useCORS: false },
       jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
     };
 
     try {
       if (resumeData.personalInfo.fullName && resumeData.personalInfo.email && resumeData.personalInfo.phone) {
-        element.style.width = "612px";
+        
         await html2pdf().set(opt).from(element).save();
-        element.style.width = "";
+        
         await handleSave();
         setTimeout(() => {
           router.push("/airesume");

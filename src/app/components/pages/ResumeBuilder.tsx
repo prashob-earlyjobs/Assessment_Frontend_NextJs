@@ -11,7 +11,7 @@ import { Label } from "../ui/label"
 import { Textarea } from "../ui/textarea"
 import { Separator } from "../ui/separator"
 import { Badge } from "../ui/badge"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "../ui/dialog"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible"
 import { toast } from "sonner"
 import Header from "./header"
@@ -194,7 +194,7 @@ export default function ResumeBuilder() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [isAddSectionDialogOpen, setIsAddSectionDialogOpen] = useState(false)
   const router = useRouter()
-  const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false)
+    const [isDownloadDialogOpen, setIsDownloadDialogOpen] = useState(false);
   const [aiLoading, setAiLoading] = useState(false)
 
   // Section collapse states
@@ -297,12 +297,12 @@ export default function ResumeBuilder() {
   convertOklchToRgb();
 
   const opt = {
-    margin: [0.5, 0.25, 0.25, 0.5], // Uniform margins [top, right, bottom, left] in inches
+    margin: [0.5, 0.125, 0.125, 0.5], // Uniform margins [top, right, bottom, left] in inches
     filename: `${resumeData.personalInfo.fullName || "resume"}.pdf`,
     image: { type: "jpeg", quality: 0.98 },
     html2canvas: { 
       scale: 4, // Maintain high resolution
-      windowWidth: 612, // Match letter page width at 72 DPI
+      // Match letter page width at 72 DPI
       useCORS: false 
     },
     jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
@@ -310,12 +310,14 @@ export default function ResumeBuilder() {
 
   try {
     if (resumeData.personalInfo.fullName && resumeData.personalInfo.email && resumeData.personalInfo.phone) {
-      console.log("Element dimensions:", element.offsetWidth, element.offsetHeight); // Debug log
-      // Temporarily set a fixed width to match the intended layout
-      element.style.width = "612px";
+       
+     
       await html2pdf().set(opt).from(element).save();
       element.style.width = ""; // Reset width after conversion
       await handleSave();
+      setTimeout(() => {
+          router.push("/airesume");
+        }, 3000);
     } else {
       toast.info("Please enter your name, email or phone number before downloading the resume.");
     }
@@ -343,28 +345,7 @@ export default function ResumeBuilder() {
           setSavedResumeId(resumeId)
         }
         toast.success("Resume saved successfully!")
-        // setResumeData({
-        //   personalInfo: {
-        //     fullName: "",
-        //     email: "",
-        //     phone: "",
-        //     location: "",
-        //     linkedin: "",
-        //     website: "",
-        //     github: "",
-        //   },
-        //   professionalSummary: "",
-        //   education: [],
-        //   workExperience: [],
-        //   skills: [],
-        //   certifications: [],
-        //   projects: [],
-        //   achievements: [],
-        //   extracurriculars: [],
-        //   profilePicture: null,
-        // })
-        // setCurrentSkill("")
-        // setCurrentCertification("")
+       
         setSavedResumeId(null)
       }
     } catch (error) {
@@ -374,10 +355,7 @@ export default function ResumeBuilder() {
     }
   }
 
-  const cancelSave = () => {
-    setIsSaveDialogOpen(false)
-  }
-
+  
 
 
   const handleAISuggest = async () => {
@@ -972,16 +950,39 @@ export default function ResumeBuilder() {
               </Link>
             </div>
             <div className="flex items-center space-x-1 md:space-x-3">
-              {/* <Link href="/myresumes">
-                <Button variant="outline" size="sm" className="hidden sm:flex bg-transparent">
-                  <FileText className="w-4 h-4 md:mr-2" />
-                  <span>My Resumes</span>
-                </Button>
-              </Link> */}
-              <Button onClick={handleDownloadPDF} size="sm" className="bg-green-500 hover:bg-green-600 text-white">
-                <Download className="w-4 h-4 md:mr-2" />
-                <span className="hidden md:inline">Download PDF</span>
-              </Button>
+             <Dialog open={isDownloadDialogOpen} onOpenChange={setIsDownloadDialogOpen}>
+                             <DialogTrigger asChild>
+                               <Button size="sm" className="bg-green-500 hover:bg-green-600 text-white">
+                                 <Download className="w-4 h-4 md:mr-2" />
+                                 <span className="hidden md:inline">Download PDF</span>
+                               </Button>
+                             </DialogTrigger>
+                             <DialogContent>
+                               <DialogHeader>
+                                 <DialogTitle>Download Resume</DialogTitle>
+                               </DialogHeader>
+                               <p className="text-sm text-gray-600">
+                                 Would you like to download your resume as a PDF? This action will also save your resume.
+                               </p>
+                               <DialogFooter>
+                                 <Button
+                                   variant="outline"
+                                   onClick={() => setIsDownloadDialogOpen(false)}
+                                 >
+                                   Cancel
+                                 </Button>
+                                 <Button
+                                   className="bg-green-500 hover:bg-green-600 text-white"
+                                   onClick={async () => {
+                                     await handleDownloadPDF();
+                                     setIsDownloadDialogOpen(false);
+                                   }}
+                                 >
+                                   Save and Download
+                                 </Button>
+                               </DialogFooter>
+                             </DialogContent>
+                           </Dialog>
             </div>
           </div>
         </div>
