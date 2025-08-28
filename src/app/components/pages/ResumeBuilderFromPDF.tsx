@@ -10,7 +10,7 @@ import { Label } from "../ui/label"
 import { Textarea } from "../ui/textarea"
 import { Separator } from "../ui/separator"
 import { Badge } from "../ui/badge"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "../ui/dialog"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible"
 import { toast } from "sonner"
 import Header from "./header"
@@ -197,6 +197,7 @@ export default function ResumeBuilderFromPDF() {
   const [isReorderMode, setIsReorderMode] = useState(false)
   const [draggedSection, setDraggedSection] = useState<string | null>(null)
   const [activeView, setActiveView] = useState<"preview" | "ats">("preview") // Toggle state
+  const [isDownloadDialogOpen, setIsDownloadDialogOpen] = useState(false);
   const [atsScore, setAtsScore] = useState<ATSScore | null>(null) // ATS Score state
   const [atsLoading, setAtsLoading] = useState(false) // ATS Loading state
   const router = useRouter()
@@ -470,6 +471,9 @@ export default function ResumeBuilderFromPDF() {
         await html2pdf().set(opt).from(element).save()
         element.style.width = ""
         await handleSave()
+      setTimeout(() => {
+          router.push("/airesume");
+        }, 3000);
       } else {
         toast.info("Please enter your name, email, and phone number before downloading the resume.")
       }
@@ -496,6 +500,7 @@ export default function ResumeBuilderFromPDF() {
           setSavedResumeId(resumeId)
         }
         toast.success("Resume saved successfully!")
+        setSavedResumeId(null)
       }
     } catch (error) {
       console.error("Failed to save resume:", error)
@@ -1102,14 +1107,39 @@ export default function ResumeBuilderFromPDF() {
               </Link>
             </div>
             <div className="flex items-center space-x-1 md:space-x-3">
-              <Button
-                onClick={handleDownloadPDF}
-                size="sm"
-                className="bg-green-500 hover:bg-green-600 text-white"
-              >
-                <Download className="w-4 h-4 md:mr-2" />
-                <span className="hidden md:inline">Download PDF</span>
-              </Button>
+              <Dialog open={isDownloadDialogOpen} onOpenChange={setIsDownloadDialogOpen}>
+                              <DialogTrigger asChild>
+                                <Button size="sm" className="bg-green-500 hover:bg-green-600 text-white">
+                                  <Download className="w-4 h-4 md:mr-2" />
+                                  <span className="hidden md:inline">Download PDF</span>
+                                </Button>
+                              </DialogTrigger>
+                              <DialogContent>
+                                <DialogHeader>
+                                  <DialogTitle>Download Resume</DialogTitle>
+                                </DialogHeader>
+                                <p className="text-sm text-gray-600">
+                                  Would you like to download your resume as a PDF? This action will also save your resume.
+                                </p>
+                                <DialogFooter>
+                                  <Button
+                                    variant="outline"
+                                    onClick={() => setIsDownloadDialogOpen(false)}
+                                  >
+                                    Cancel
+                                  </Button>
+                                  <Button
+                                    className="bg-green-500 hover:bg-green-600 text-white"
+                                    onClick={async () => {
+                                      await handleDownloadPDF();
+                                      setIsDownloadDialogOpen(false);
+                                    }}
+                                  >
+                                    Save and Download
+                                  </Button>
+                                </DialogFooter>
+                              </DialogContent>
+                            </Dialog>
             </div>
           </div>
         </div>
