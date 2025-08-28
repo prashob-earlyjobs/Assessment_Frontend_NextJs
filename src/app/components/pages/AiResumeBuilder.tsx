@@ -300,6 +300,10 @@ export default function AIResumeBuilder() {
 
   const handleDownloadPDF = async () => {
     const element = document.getElementById("resume-preview");
+    if (isReorderMode){
+        toast.info("Download PDF after saving the order.");
+        return;
+      }
     if (!element) {
       toast.error("Preview not found. Please try again.");
       return;
