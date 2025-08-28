@@ -44,8 +44,9 @@ import {
   Github,
   Globe,
 } from "lucide-react"
+import ATSScoreCard from "../ui/ats-score"
 
-// Interfaces remain unchanged
+// Interfaces (unchanged except for ATSScore)
 interface PersonalInfo {
   fullName: string
   email: string
@@ -117,6 +118,17 @@ interface SectionOrder {
   visible: boolean
 }
 
+interface ATSScore {
+  totalScore: number
+  contactInfoScore: number
+  keywordsScore: number
+  formatScore: number
+  experienceScore: number
+  skillsScore: number
+  suggestions: string[]
+  lastUpdated: Date
+}
+
 const templates = [
   {
     id: "minimal",
@@ -184,6 +196,9 @@ export default function ResumeBuilderFromPDF() {
   const [isTemplateDialogOpen, setIsTemplateDialogOpen] = useState(false)
   const [isReorderMode, setIsReorderMode] = useState(false)
   const [draggedSection, setDraggedSection] = useState<string | null>(null)
+  const [activeView, setActiveView] = useState<"preview" | "ats">("preview") // Toggle state
+  const [atsScore, setAtsScore] = useState<ATSScore | null>(null) // ATS Score state
+  const [atsLoading, setAtsLoading] = useState(false) // ATS Loading state
   const router = useRouter()
   const [aiLoading, setAiLoading] = useState(false)
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(
@@ -317,6 +332,81 @@ export default function ResumeBuilderFromPDF() {
     }
   }, [searchParams, router])
 
+  // ATS Score Analysis
+  const analyzeATS = async () => {
+
+    setAtsLoading(true);
+    try {
+      const resumeContent = JSON.stringify(resumeData);
+      const prompt = `Analyze this resume content: ${resumeContent} for ATS compatibility. Provide scores as JSON object: {
+        "totalScore": number (0-100),
+        "contactInfoScore": number (0-20),
+        "keywordsScore": number (0-25),
+        "formatScore": number (0-20),
+        "experienceScore": number (0-20),
+        "skillsScore": number (0-15),
+        "suggestions": array of strings (3-5 improvement suggestions)
+      }. Ensure the output is valid JSON only.`;
+  
+      const res = await fetch("/api/gemini", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt }),
+      });
+  
+      if (!res.ok) {
+        throw new Error(`API request failed with status ${res.status}`);
+      }
+  
+      const data = await res.json();
+      const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "{}";
+      console.log("Raw responseText:", responseText); // Debug log
+  
+      // Clean and parse JSON
+      let parsedScore;
+      try {
+        const jsonStart = responseText.indexOf("{");
+        const jsonEnd = responseText.lastIndexOf("}") + 1;
+        const cleanJson = jsonStart >= 0 && jsonEnd > jsonStart ? responseText.slice(jsonStart, jsonEnd) : "{}";
+        parsedScore = JSON.parse(cleanJson);
+      } catch (parseError) {
+        console.error("Failed to parse ATS score JSON:", parseError, "Raw response:", responseText);
+        toast.error("Invalid response from ATS analysis. Please try again.");
+        return;
+      }
+  
+      // Validate required fields
+      const requiredFields = [
+        "totalScore",
+        "contactInfoScore",
+        "keywordsScore",
+        "formatScore",
+        "experienceScore",
+        "skillsScore",
+        "suggestions",
+      ];
+      const hasAllFields = requiredFields.every((field) => field in parsedScore && parsedScore[field] !== undefined);
+  
+      if (!hasAllFields) {
+        console.error("Missing required fields in ATS score:", parsedScore);
+        toast.error("Incomplete ATS score data. Please try again.");
+        return;
+      }
+  
+      setAtsScore({
+        ...parsedScore,
+        lastUpdated: new Date(),
+      });
+      toast.success("ATS score computed!");
+    } catch (error) {
+      console.error("Failed to compute ATS score:", error);
+      toast.error("Failed to compute ATS score. Please try again.");
+    } finally {
+      setAtsLoading(false);
+    }
+  };
+  
+
   // Color conversion function (unchanged)
   const convertOklchToRgb = () => {
     const elements = document.querySelectorAll("#resume-preview *")
@@ -354,6 +444,10 @@ export default function ResumeBuilderFromPDF() {
   // PDF download function (unchanged)
   const handleDownloadPDF = async () => {
     const element = document.getElementById("resume-preview")
+    if (isReorderMode){
+        toast.info("Download PDF after saving the order.");
+        return;
+      }
     if (!element) {
       toast.error("Preview not found. Please try again.")
       return
@@ -428,9 +522,9 @@ export default function ResumeBuilderFromPDF() {
         Extracurriculars: ${resumeData.extracurriculars.map(extra => `${extra.activity || "N/A"} - ${extra.role || "N/A"} (${extra.startDate} - ${extra.endDate || "Present"}): ${extra.description || "N/A"}`).join("; ") || "N/A"}
       `
       if (!resumeData.personalInfo.fullName && !resumeData.personalInfo.email && (!resumeData.workExperience.length || !resumeData.education.length)) {
-              toast.info("Please fill in all required fields to generate a summary.");
-              return;
-            }
+        toast.info("Please fill in all required fields to generate a summary.")
+        return
+      }
 
       const prompt = `Generate a concise, ATS-friendly professional summary (30-45 words) for a resume based on the following information. Highlight key achievements, skills, and career goals, tailored to the provided data. Ensure the summary is professional, engaging, and suitable for a resume: ${dataSummary}`
 
@@ -1008,12 +1102,6 @@ export default function ResumeBuilderFromPDF() {
               </Link>
             </div>
             <div className="flex items-center space-x-1 md:space-x-3">
-              {/* <Link href="/myresumes">
-                <Button variant="outline" size="sm" className="hidden sm:flex bg-transparent">
-                  <FileText className="w-4 h-4 md:mr-2" />
-                  <span>My Resumes</span>
-                </Button>
-              </Link> */}
               <Button
                 onClick={handleDownloadPDF}
                 size="sm"
@@ -1637,15 +1725,25 @@ export default function ResumeBuilderFromPDF() {
           <div className="space-y-4 md:space-y-6 max-h-[calc(100vh-120px)] overflow-y-auto lg:sticky lg:top-24">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <h2 className="text-lg font-semibold">Resume Preview</h2>
+                <h2 className="text-lg font-semibold">{activeView === "preview" ? "Resume Preview" : "ATS Score"}</h2>
                 <div className="flex items-center bg-gray-100 rounded-lg p-1">
                   <Button
-                    variant="default"
+                    variant={activeView === "preview" ? "default" : "ghost"}
                     size="sm"
-                    className="h-7 md:h-8 px-2 md:px-3 text-xs bg-orange-500 text-white"
+                    className={`h-7 md:h-8 px-2 md:px-3 text-xs ${activeView === "preview" ? "bg-orange-500 text-white" : "text-gray-600"}`}
+                    onClick={() => setActiveView("preview")}
                   >
                     <Eye className="w-3 h-3 md:mr-1" />
                     <span className="hidden sm:inline">Preview</span>
+                  </Button>
+                  <Button
+                    variant={activeView === "ats" ? "default" : "ghost"}
+                    size="sm"
+                    className={`h-7 md:h-8 px-2 md:px-3 text-xs ${activeView === "ats" ? "bg-orange-500 text-white" : "text-gray-600"}`}
+                    onClick={() => setActiveView("ats")}
+                  >
+                    <Target className="w-3 h-3 md:mr-1" />
+                    <span className="hidden sm:inline">ATS Score</span>
                   </Button>
                 </div>
               </div>
@@ -1716,98 +1814,118 @@ export default function ResumeBuilderFromPDF() {
               </div>
             )}
 
-            <Card>
-              <CardContent className="p-0">
-                <div id="resume-preview" style={{ width: "612px" }}>
-                  <div className="space-y-6">
-                    <div className={`${currentTemplate.headerBg} ${currentTemplate.headerText} p-6 break-inside-avoid`}>
-                      <div className="flex items-center space-x-4">
-                        <div className="flex-1">
-                          <h1 className="text-3xl font-bold">{resumeData.personalInfo.fullName || "John Doe"}</h1>
-                          <p className="text-lg opacity-90 mt-1">
-                            {resumeData.workExperience[0]?.position || "Software Developer"}
-                          </p>
-                          <div className="flex items-center space-x-6 text-sm mt-3 opacity-90">
-                            <span>{resumeData.personalInfo.email || "johndoe68@gmail.com"}</span>
-                            <span>{resumeData.personalInfo.phone || "123456789"}</span>
-                            <span>{resumeData.personalInfo.location || "Hyderabad"}</span>
-                          </div>
-                          <div className="grid grid-cols-3 gap-4 mt-1 text-sm opacity-90">
-                            {resumeData.personalInfo.linkedin && (
-                              <a
-                                href={resumeData.personalInfo.linkedin}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center"
-                              >
-                                <Linkedin className="w-4 h-4 mr-1" /> {resumeData.personalInfo.linkedin.slice(27)}
-                              </a>
-                            )}
-                            {resumeData.personalInfo.website && (
-                              <a
-                                href={resumeData.personalInfo.website}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center"
-                              >
-                                <Globe className="w-4 h-4 mr-1" /> View Website
-                              </a>
-                            )}
-                            {resumeData.personalInfo.github && (
-                              <a
-                                href={resumeData.personalInfo.github}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center"
-                              >
-                                <Github className="w-4 h-4 mr-1" /> {resumeData.personalInfo.github.slice(19)}
-                              </a>
-                            )}
+            {activeView === "preview" ? (
+              <Card>
+                <CardContent className="p-0">
+                  <div id="resume-preview" style={{ width: "612px" }}>
+                    <div className="space-y-6">
+                      <div className={`${currentTemplate.headerBg} ${currentTemplate.headerText} p-6 break-inside-avoid`}>
+                        <div className="flex items-center space-x-4">
+                          <div className="flex-1">
+                            <h1 className="text-3xl font-bold">{resumeData.personalInfo.fullName || "John Doe"}</h1>
+                            <p className="text-lg opacity-90 mt-1">
+                              {resumeData.workExperience[0]?.position || "Software Developer"}
+                            </p>
+                            <div className="flex items-center space-x-6 text-sm mt-3 opacity-90">
+                              <span>{resumeData.personalInfo.email || "johndoe68@gmail.com"}</span>
+                              <span>{resumeData.personalInfo.phone || "123456789"}</span>
+                              <span>{resumeData.personalInfo.location || "Hyderabad"}</span>
+                            </div>
+                            <div className="grid grid-cols-3 gap-4 mt-1 text-sm opacity-90">
+                              {resumeData.personalInfo.linkedin && (
+                                <a
+                                  href={resumeData.personalInfo.linkedin}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center"
+                                >
+                                  <Linkedin className="w-4 h-4 mr-1" /> {resumeData.personalInfo.linkedin.slice(27)}
+                                </a>
+                              )}
+                              {resumeData.personalInfo.website && (
+                                <a
+                                  href={resumeData.personalInfo.website}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center"
+                                >
+                                  <Globe className="w-4 h-4 mr-1" /> View Website
+                                </a>
+                              )}
+                              {resumeData.personalInfo.github && (
+                                <a
+                                  href={resumeData.personalInfo.github}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center"
+                                >
+                                  <Github className="w-4 h-4 mr-1" /> {resumeData.personalInfo.github.slice(19)}
+                                </a>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
 
-                    <div className="px-6 pb-2 space-y-6">
-                      {sectionOrder
-                        .filter((section) => section.visible)
-                        .map((sectionConfig, index) => {
-                          const content = renderSectionContent(sectionConfig)
-                          if (!content) return null
+                      <div className="px-6 pb-2 space-y-6">
+                        {sectionOrder
+                          .filter((section) => section.visible)
+                          .map((sectionConfig, index) => {
+                            const content = renderSectionContent(sectionConfig)
+                            if (!content) return null
 
-                          if (isReorderMode) {
-                            return (
-                              <div
-                                key={sectionConfig.id}
-                                draggable
-                                onDragStart={(e) => handleDragStart(e, sectionConfig.id)}
-                                onDragOver={handleDragOver}
-                                onDrop={(e) => handleDrop(e, sectionConfig.id)}
-                                onDragEnd={handleDragEnd}
-                                className={`border-2 border-dashed border-orange-300 rounded-lg p-4 cursor-move transition-all hover:border-orange-400 hover:shadow-md ${
-                                  draggedSection === sectionConfig.id ? "opacity-50" : "opacity-100"
-                                }`}
-                              >
-                                <div className="flex items-center justify-between mb-2">
-                                  <div className="flex items-center space-x-2">
-                                    <GripVertical className="w-4 h-4 text-orange-500" />
-                                    <span className="text-sm font-medium text-orange-700">
-                                      Drag to reorder: {sectionConfig.name}
-                                    </span>
+                            if (isReorderMode) {
+                              return (
+                                <div
+                                  key={sectionConfig.id}
+                                  draggable
+                                  onDragStart={(e) => handleDragStart(e, sectionConfig.id)}
+                                  onDragOver={handleDragOver}
+                                  onDrop={(e) => handleDrop(e, sectionConfig.id)}
+                                  onDragEnd={handleDragEnd}
+                                  className={`border-2 border-dashed border-orange-300 rounded-lg p-4 cursor-move transition-all hover:border-orange-400 hover:shadow-md ${
+                                    draggedSection === sectionConfig.id ? "opacity-50" : "opacity-100"
+                                  }`}
+                                >
+                                  <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center space-x-2">
+                                      <GripVertical className="w-4 h-4 text-orange-500" />
+                                      <span className="text-sm font-medium text-orange-700">
+                                        Drag to reorder: {sectionConfig.name}
+                                      </span>
+                                    </div>
                                   </div>
+                                  {content}
                                 </div>
-                                {content}
-                              </div>
-                            )
-                          }
+                              )
+                            }
 
-                          return content
-                        })}
+                            return content
+                          })}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            ) : (
+              <ATSScoreCard
+                score={atsScore || {
+                  totalScore: 0,
+                  contactInfoScore: 0,
+                  keywordsScore: 0,
+                  formatScore: 0,
+                  experienceScore: 0,
+                  skillsScore: 0,
+                  suggestions: [],
+                  lastUpdated: new Date(),
+                }}
+                onAnalyze={analyzeATS}
+                onViewSuggestions={() => {
+                  toast.info("Full suggestions view not implemented yet. Please review the quick improvements.")
+                }}
+                loading={atsLoading}
+              />
+            )}
           </div>
         </div>
       </div>
