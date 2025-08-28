@@ -11,7 +11,7 @@ import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { Separator } from "../ui/separator";
 import { Badge } from "../ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "../ui/dialog";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
 import ATSScoreCard from "../ui/ats-score";
 import { toast } from "sonner";
@@ -204,7 +204,8 @@ export default function AIResumeBuilder() {
   const [draggedSection, setDraggedSection] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isAddSectionDialogOpen, setIsAddSectionDialogOpen] = useState(false);
-  const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
+
+  const [isDownloadDialogOpen, setIsDownloadDialogOpen] = useState(false);
   const [aiLoading, setAiLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [savedResumeId, setSavedResumeId] = useState<string | null>(null);
@@ -300,10 +301,10 @@ export default function AIResumeBuilder() {
 
   const handleDownloadPDF = async () => {
     const element = document.getElementById("resume-preview");
-    if (isReorderMode){
-        toast.info("Download PDF after saving the order.");
-        return;
-      }
+    if (isReorderMode) {
+      toast.info("Download PDF after saving the order.");
+      return;
+    }
     if (!element) {
       toast.error("Preview not found. Please try again.");
       return;
@@ -325,6 +326,9 @@ export default function AIResumeBuilder() {
         await html2pdf().set(opt).from(element).save();
         element.style.width = "";
         await handleSave();
+        setTimeout(() => {
+          router.push("/airesume");
+        }, 3000);
       } else {
         toast.info("Please enter your name, email, or phone number before downloading the resume.");
       }
@@ -358,10 +362,6 @@ export default function AIResumeBuilder() {
     } finally {
       setIsSaving(false);
     }
-  };
-
-  const cancelSave = () => {
-    setIsSaveDialogOpen(false);
   };
 
   const prefillSummaryAndSkills = useCallback(async () => {
@@ -426,9 +426,9 @@ export default function AIResumeBuilder() {
       Extracurriculars: ${resumeData.extracurriculars.map(extra => `${extra.activity || "N/A"} - ${extra.role || "N/A"} (${extra.startDate} - ${extra.endDate || "Present"}): ${extra.description || "N/A"}`).join("; ") || "N/A"}
     `;
     if (!resumeData.personalInfo.fullName && !resumeData.personalInfo.email && (!resumeData.workExperience.length || !resumeData.education.length)) {
-            toast.info("Please fill in all required fields to generate a summary.");
-            return;
-          }
+      toast.info("Please fill in all required fields to generate a summary.");
+      return;
+    }
 
       const prompt = `Generate a concise, ATS friendly professional summary (30 words) for a resume based on the following information. Highlight key achievements, skills, and career goals, tailored to the provided data. Ensure the summary is professional, engaging, and suitable for a resume: ${dataSummary}`;
 
@@ -494,81 +494,81 @@ export default function AIResumeBuilder() {
   };
 
   const computeAtsScore = async () => {
-  if (!jobDescription) {
-    toast.info("Job description is required for ATS analysis.");
-    return;
-  }
-
-  setAtsLoading(true);
-  try {
-    const resumeContent = JSON.stringify(resumeData);
-    const prompt = `Analyze this resume content: ${resumeContent} against this job description: "${jobDescription}" for ATS compatibility. Provide scores as JSON object: {
-      "totalScore": number (0-100),
-      "contactInfoScore": number (0-20),
-      "keywordsScore": number (0-25),
-      "formatScore": number (0-20),
-      "experienceScore": number (0-20),
-      "skillsScore": number (0-15),
-      "suggestions": array of strings (3-5 improvement suggestions)
-    }. Ensure the output is valid JSON only.`;
-
-    const res = await fetch("/api/gemini", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt }),
-    });
-
-    if (!res.ok) {
-      throw new Error(`API request failed with status ${res.status}`);
+    if (!jobDescription) {
+      toast.info("Job description is required for ATS analysis.");
+      return;
     }
 
-    const data = await res.json();
-    const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "{}";
-    console.log("Raw responseText:", responseText); // Debug log
-
-    // Clean and parse JSON
-    let parsedScore;
+    setAtsLoading(true);
     try {
-      const jsonStart = responseText.indexOf("{");
-      const jsonEnd = responseText.lastIndexOf("}") + 1;
-      const cleanJson = jsonStart >= 0 && jsonEnd > jsonStart ? responseText.slice(jsonStart, jsonEnd) : "{}";
-      parsedScore = JSON.parse(cleanJson);
-    } catch (parseError) {
-      console.error("Failed to parse ATS score JSON:", parseError, "Raw response:", responseText);
-      toast.error("Invalid response from ATS analysis. Please try again.");
-      return;
+      const resumeContent = JSON.stringify(resumeData);
+      const prompt = `Analyze this resume content: ${resumeContent} against this job description: "${jobDescription}" for ATS compatibility. Provide scores as JSON object: {
+        "totalScore": number (0-100),
+        "contactInfoScore": number (0-20),
+        "keywordsScore": number (0-25),
+        "formatScore": number (0-20),
+        "experienceScore": number (0-20),
+        "skillsScore": number (0-15),
+        "suggestions": array of strings (3-5 improvement suggestions)
+      }. Ensure the output is valid JSON only.`;
+
+      const res = await fetch("/api/gemini", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt }),
+      });
+
+      if (!res.ok) {
+        throw new Error(`API request failed with status ${res.status}`);
+      }
+
+      const data = await res.json();
+      const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "{}";
+      console.log("Raw responseText:", responseText); // Debug log
+
+      // Clean and parse JSON
+      let parsedScore;
+      try {
+        const jsonStart = responseText.indexOf("{");
+        const jsonEnd = responseText.lastIndexOf("}") + 1;
+        const cleanJson = jsonStart >= 0 && jsonEnd > jsonStart ? responseText.slice(jsonStart, jsonEnd) : "{}";
+        parsedScore = JSON.parse(cleanJson);
+      } catch (parseError) {
+        console.error("Failed to parse ATS score JSON:", parseError, "Raw response:", responseText);
+        toast.error("Invalid response from ATS analysis. Please try again.");
+        return;
+      }
+
+      // Validate required fields
+      const requiredFields = [
+        "totalScore",
+        "contactInfoScore",
+        "keywordsScore",
+        "formatScore",
+        "experienceScore",
+        "skillsScore",
+        "suggestions",
+      ];
+      const hasAllFields = requiredFields.every((field) => field in parsedScore && parsedScore[field] !== undefined);
+
+      if (!hasAllFields) {
+        console.error("Missing required fields in ATS score:", parsedScore);
+        toast.error("Incomplete ATS score data. Please try again.");
+        return;
+      }
+
+      setAtsScore({
+        ...parsedScore,
+        lastUpdated: new Date(),
+      });
+      toast.success("ATS score computed!");
+    } catch (error) {
+      console.error("Failed to compute ATS score:", error);
+      toast.error("Failed to compute ATS score. Please try again.");
+    } finally {
+      setAtsLoading(false);
     }
-
-    // Validate required fields
-    const requiredFields = [
-      "totalScore",
-      "contactInfoScore",
-      "keywordsScore",
-      "formatScore",
-      "experienceScore",
-      "skillsScore",
-      "suggestions",
-    ];
-    const hasAllFields = requiredFields.every((field) => field in parsedScore && parsedScore[field] !== undefined);
-
-    if (!hasAllFields) {
-      console.error("Missing required fields in ATS score:", parsedScore);
-      toast.error("Incomplete ATS score data. Please try again.");
-      return;
-    }
-
-    setAtsScore({
-      ...parsedScore,
-      lastUpdated: new Date(),
-    });
-    toast.success("ATS score computed!");
-  } catch (error) {
-    console.error("Failed to compute ATS score:", error);
-    toast.error("Failed to compute ATS score. Please try again.");
-  } finally {
-    setAtsLoading(false);
-  }
-};
+  };
 
   const toggleSection = useCallback((sectionId: string) => {
     setCollapsedSections((prev) => {
@@ -1067,10 +1067,39 @@ export default function AIResumeBuilder() {
               </Link>
             </div>
             <div className="flex items-center space-x-1 md:space-x-3">
-              <Button onClick={handleDownloadPDF} size="sm" className="bg-green-500 hover:bg-green-600 text-white">
-                <Download className="w-4 h-4 md:mr-2" />
-                <span className="hidden md:inline">Download PDF</span>
-              </Button>
+              <Dialog open={isDownloadDialogOpen} onOpenChange={setIsDownloadDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button size="sm" className="bg-green-500 hover:bg-green-600 text-white">
+                    <Download className="w-4 h-4 md:mr-2" />
+                    <span className="hidden md:inline">Download PDF</span>
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Download Resume</DialogTitle>
+                  </DialogHeader>
+                  <p className="text-sm text-gray-600">
+                    Would you like to download your resume as a PDF? This action will also save your resume.
+                  </p>
+                  <DialogFooter>
+                    <Button
+                      variant="outline"
+                      onClick={() => setIsDownloadDialogOpen(false)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      className="bg-green-500 hover:bg-green-600 text-white"
+                      onClick={async () => {
+                        await handleDownloadPDF();
+                        setIsDownloadDialogOpen(false);
+                      }}
+                    >
+                      Save and Download
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
         </div>
