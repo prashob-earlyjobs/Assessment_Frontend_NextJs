@@ -1,6 +1,8 @@
+// app/airesume/page.tsx
 "use client"
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import Header from "./header";
 import { toast } from "sonner";
@@ -22,22 +24,71 @@ import {
   Upload,
   Plus,
   FileText,
-  Sparkles,
   Download,
   Zap,
   Briefcase,
-  Lightbulb,
+  Sparkles
 } from "lucide-react";
 
-export default function Index() {
+export default function AIResume() {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      toast.error("Please select a file.");
+      return;
+    }
+
+    const allowedTypes = ["application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+    if (!allowedTypes.includes(file.type)) {
+      toast.error("Only PDF or Word (.docx) files are supported.");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("File size exceeds 5MB limit.");
+      return;
+    }
+
+    setIsUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("resume", file);
+
+      const response = await fetch("/api/parse-resume", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to parse resume.");
+      }
+
+      const resumeData = await response.json();
+      router.push(`/resumeBuilderFromPDF?resumeData=${encodeURIComponent(JSON.stringify(resumeData))}`);
+
+      toast.success("Resume parsed successfully! Redirecting to builder...");
+      setIsUploadDialogOpen(false);
+    } catch (error: any) {
+      console.error("Error parsing resume:", error);
+      toast.error(error.message || "Failed to parse resume. Please try again.");
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-orange-25 to-white">
-      {/* Header */}
       <Header />
-
-      {/* Hero Section */}
       <div className="container mx-auto px-4 py-16">
         <div className="text-center max-w-4xl mx-auto mb-16">
           <h2 className="text-5xl font-bold text-gray-900 mb-6 leading-tight">
@@ -52,8 +103,6 @@ export default function Index() {
             and instant PDF downloads. Get hired faster with our modern resume
             builder.
           </p>
-
-          {/* Feature highlights */}
           <div className="flex justify-center items-center space-x-8 mb-12 text-sm text-gray-500">
             <div className="flex items-center space-x-2">
               <Zap className="w-4 h-4 text-orange-500" />
@@ -69,48 +118,81 @@ export default function Index() {
             </div>
           </div>
         </div>
-
-        {/* Main Action Cards */}
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {/* Upload Existing Resume Card */}
-          <Card className="relative overflow-hidden border-0 shadow-xl bg-white/80 backdrop-blur-sm hover:shadow-2xl transition-all duration-300 group cursor-pointer" onClick={() => toast.info("Upload functionality coming soon!")}>
-            <CardHeader className="text-center pb-4">
-              <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                <Upload className="w-8 h-8 text-white" />
-              </div>
-              <CardTitle className="text-2xl font-bold text-gray-900 mb-2">
-                Upload Existing Resume
-              </CardTitle>
-              <CardDescription className="text-gray-600 text-base">
-                Have a resume already? Upload it and we'll extract your
-                information automatically using AI parsing.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <div className="space-y-4">
-                <div className="flex justify-center space-x-4 text-sm text-gray-500">
-                  <span className="flex items-center">
-                    <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                    PDF Support
-                  </span>
-                  <span className="flex items-center">
-                    <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                    DOCX Support
-                  </span>
+          <Dialog
+            open={isUploadDialogOpen}
+            onOpenChange={setIsUploadDialogOpen}
+          >
+            <DialogTrigger asChild>
+              <Card className="relative overflow-hidden border-0 shadow-xl bg-white/80 backdrop-blur-sm hover:shadow-2xl transition-all duration-300 group cursor-pointer">
+                <CardHeader className="text-center pb-4">
+                  <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <Upload className="w-8 h-8 text-white" />
+                  </div>
+                  <CardTitle className="text-2xl font-bold text-gray-900 mb-2">
+                    Upload Existing Resume
+                  </CardTitle>
+                  <CardDescription className="text-gray-600 text-base">
+                    Have a resume already? Upload it and we'll extract your
+                    information automatically using AI parsing.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <div className="space-y-4">
+                    <div className="flex justify-center space-x-4 text-sm text-gray-500">
+                      <span className="flex items-center">
+                        <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                        PDF Support
+                      </span>
+                      <span className="flex items-center">
+                        <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                        DOCX Support
+                      </span>
+                    </div>
+                    <Button className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-lg py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                      Upload & Parse Resume
+                      <Upload className="w-5 h-5 ml-2" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </DialogTrigger>
+            <DialogContent className="max-w-md">
+              <DialogHeader>
+                <DialogTitle className="text-center text-xl font-bold text-gray-900">
+                  Upload Resume
+                </DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4 mt-6">
+                <div className="text-center mb-6">
+                  <p className="text-gray-600">
+                    Upload your resume (PDF or Word) to extract and prefill your information.
+                  </p>
                 </div>
-                
-                  <Button 
-                  
-                  className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-lg py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
-                    Upload & Parse Resume
-                    <Upload className="w-5 h-5 ml-2" />
+                <div className="flex justify-center">
+                  <input
+                    type="file"
+                    accept="application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    ref={fileInputRef}
+                    onChange={handleFileUpload}
+                    className="hidden"
+                  />
+                  <Button
+                    onClick={() => fileInputRef.current?.click()}
+                    className="bg-orange-500 hover:bg-orange-600 text-white"
+                    disabled={isUploading}
+                  >
+                    {isUploading ? "Uploading..." : "Choose File"}
+                    <Upload className="w-4 h-4 ml-2" />
                   </Button>
-                
+                </div>
+                <p className="text-xs text-gray-500 text-center">
+                  Supports PDF and Word (.docx) files. Maximum file size: 5MB.
+                </p>
               </div>
-            </CardContent>
-          </Card>
+            </DialogContent>
+          </Dialog>
 
-          {/* Create New Resume Card with Dialog */}
           <Dialog
             open={isCreateDialogOpen}
             onOpenChange={setIsCreateDialogOpen}
@@ -149,22 +231,18 @@ export default function Index() {
                 </CardContent>
               </Card>
             </DialogTrigger>
-
             <DialogContent className="max-w-md">
               <DialogHeader>
                 <DialogTitle className="text-center text-xl font-bold text-gray-900">
                   Choose Resume Type
                 </DialogTitle>
               </DialogHeader>
-
               <div className="space-y-4 mt-6">
                 <div className="text-center mb-6">
                   <p className="text-gray-600">
                     Select the type of resume you'd like to create:
                   </p>
                 </div>
-
-                {/* JDE Option */}
                 <Link href="/airesume/jde" className="block">
                   <Card className="border-2 border-orange-200 hover:border-orange-400 transition-colors cursor-pointer hover:shadow-md">
                     <CardContent className="p-4">
@@ -183,10 +261,7 @@ export default function Index() {
                       </div>
                     </CardContent>
                   </Card>
-                  </Link>
-                
-
-                {/* Standard Option */}
+                </Link>
                 <Link href="/resumeBuilder" className="block">
                   <Card className="border-2 border-gray-200 hover:border-orange-400 transition-colors cursor-pointer hover:shadow-md">
                     <CardContent className="p-4">
@@ -206,29 +281,7 @@ export default function Index() {
                     </CardContent>
                   </Card>
                 </Link>
-
-                {/* AI-Powered Option */}
-                {/* <Link href="/builder?type=ai-enhanced" className="block">
-                  <Card className="border-2 border-purple-200 hover:border-orange-400 transition-colors cursor-pointer hover:shadow-md">
-                    <CardContent className="p-4">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                          <Lightbulb className="w-6 h-6 text-purple-600" />
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-gray-900">
-                            AI-Enhanced Resume
-                          </h3>
-                          <p className="text-sm text-gray-600">
-                            Maximum AI assistance and optimization
-                          </p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link> */}
               </div>
-
               <div className="mt-6 text-center">
                 <p className="text-xs text-gray-500">
                   You can change the resume type later in the builder
@@ -237,9 +290,7 @@ export default function Index() {
             </DialogContent>
           </Dialog>
         </div>
-
-        {/* Additional Features */}
-        <div className="mt-20 text-center max-w-3xl mx-auto">
+         <div className="mt-20 text-center max-w-3xl mx-auto">
           <h3 className="text-2xl font-bold text-gray-900 mb-8">
             Why Choose EarlyJobs-Resume Builder?
           </h3>
