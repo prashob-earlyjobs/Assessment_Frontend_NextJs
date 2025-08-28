@@ -13,10 +13,10 @@ import { Separator } from "../ui/separator"
 import { Badge } from "../ui/badge"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible"
-import ATSScoreCard from "../ui/ats-score"
 import { toast } from "sonner"
 import Header from "./header"
 import html2pdf from "html2pdf.js"
+
 import { oklch, oklab, rgb } from "culori"
 import {
   ArrowLeft,
@@ -377,6 +377,7 @@ export default function ResumeBuilder() {
 
 
   const handleAISuggest = async () => {
+    
     setAiLoading(true);
     try {
       const dataSummary = `
@@ -391,9 +392,12 @@ export default function ResumeBuilder() {
       Achievements: ${resumeData.achievements.map(ach => `${ach.title || "N/A"} (${ach.date || "N/A"}): ${ach.description || "N/A"}`).join("; ") || "N/A"}
       Extracurriculars: ${resumeData.extracurriculars.map(extra => `${extra.activity || "N/A"} - ${extra.role || "N/A"} (${extra.startDate} - ${extra.endDate || "Present"}): ${extra.description || "N/A"}`).join("; ") || "N/A"}
     `;
-
-      const prompt = `Generate a concise, ATS friendly professional summary (45-55 words) for a resume based on the following information. Highlight key achievements, skills, and career goals, tailored to the provided data. Ensure the summary is professional, engaging, and suitable for a resume: ${dataSummary}`;
-
+      if (!resumeData.personalInfo.fullName && !resumeData.personalInfo.email && (!resumeData.workExperience.length || !resumeData.education.length)) {
+        toast.info("Please fill in all required fields to generate a summary.");
+        return;
+      }
+      const prompt = `Generate a concise, ATS friendly professional summary (30-45 words) for a resume based on the following information. Highlight key achievements, skills, and career goals, tailored to the provided data. Ensure the summary is professional, engaging, and suitable for a resume: ${dataSummary}`;
+      
       const res = await fetch("/api/gemini", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -1634,24 +1638,7 @@ export default function ResumeBuilder() {
             )}
 
 
-            {/* <Dialog open={isSaveDialogOpen} onOpenChange={setIsSaveDialogOpen}>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Confirm Save</DialogTitle>
-                </DialogHeader>
-                <div className="py-4">
-                  <p>Are you sure you want to save this resume? This will clear all current data.</p>
-                </div>
-                <div className="flex justify-end space-x-2">
-                  <Button variant="outline" onClick={cancelSave}>
-                    Cancel
-                  </Button>
-                  <Button onClick={confirmSave} className="bg-orange-500 hover:bg-orange-600 text-white">
-                    Save
-                  </Button>
-                </div>
-              </DialogContent>
-            </Dialog> */}
+    
 
             <Card>
               <CardContent className="p-0">

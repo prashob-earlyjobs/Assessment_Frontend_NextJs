@@ -421,6 +421,10 @@ export default function AIResumeBuilder() {
       Achievements: ${resumeData.achievements.map(ach => `${ach.title || "N/A"} (${ach.date || "N/A"}): ${ach.description || "N/A"}`).join("; ") || "N/A"}
       Extracurriculars: ${resumeData.extracurriculars.map(extra => `${extra.activity || "N/A"} - ${extra.role || "N/A"} (${extra.startDate} - ${extra.endDate || "Present"}): ${extra.description || "N/A"}`).join("; ") || "N/A"}
     `;
+    if (!resumeData.personalInfo.fullName && !resumeData.personalInfo.email && (!resumeData.workExperience.length || !resumeData.education.length)) {
+            toast.info("Please fill in all required fields to generate a summary.");
+            return;
+          }
 
       const prompt = `Generate a concise, ATS friendly professional summary (30 words) for a resume based on the following information. Highlight key achievements, skills, and career goals, tailored to the provided data. Ensure the summary is professional, engaging, and suitable for a resume: ${dataSummary}`;
 
