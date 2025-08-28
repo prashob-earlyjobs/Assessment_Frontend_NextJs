@@ -11,7 +11,7 @@ import { Label } from "../ui/label"
 import { Textarea } from "../ui/textarea"
 import { Separator } from "../ui/separator"
 import { Badge } from "../ui/badge"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "../ui/dialog"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible"
 import { toast } from "sonner"
 import Header from "./header"
@@ -310,7 +310,7 @@ export default function ResumeBuilder() {
 
   try {
     if (resumeData.personalInfo.fullName && resumeData.personalInfo.email && resumeData.personalInfo.phone) {
-      console.log("Element dimensions:", element.offsetWidth, element.offsetHeight); 
+       
      
       await html2pdf().set(opt).from(element).save();
       element.style.width = ""; // Reset width after conversion
