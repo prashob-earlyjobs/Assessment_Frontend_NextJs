@@ -149,7 +149,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 const apiService = {
   async saveResume(resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[]) {
     const token = Cookies.get("accessToken");
-    const response = await fetch(`${API_BASE_URL}/resumes`, {
+    const response = await fetch(`${API_BASE_URL}/resumes/fromJDE`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -374,7 +374,7 @@ export default function AIResumeBuilder() {
 
     setIsLoading(true);
     try {
-      const summaryPrompt = `Generate a concise, ATS-friendly professional summary (45-55 words) tailored to the job title "${jobTitle}" and job description: "${jobDescription}". Highlight key achievements, skills, and career goals. Ensure it's professional and engaging.`;
+      const summaryPrompt = `Generate a concise, ATS-friendly professional summary (30-45 words) tailored to the job title "${jobTitle}" and job description: "${jobDescription}". Highlight key achievements, skills, and career goals. Ensure it's professional and engaging.`;
 
       const summaryRes = await fetch("/api/gemini", {
         method: "POST",
@@ -384,7 +384,7 @@ export default function AIResumeBuilder() {
       const summaryData = await summaryRes.json();
       const generatedSummary = summaryData.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
 
-      const skillsPrompt = `Extract and list 8-12 key skills from the job description for "${jobTitle}": "${jobDescription}". Output as a comma-separated list without duplicates.`;
+      const skillsPrompt = `Extract and list 8-10 key skills from the job description for "${jobTitle}": "${jobDescription}". Output as a comma-separated list without duplicates.`;
 
       const skillsRes = await fetch("/api/gemini", {
         method: "POST",
@@ -463,7 +463,7 @@ export default function AIResumeBuilder() {
         return;
       }
 
-      const prompt = `Generate a concise, ATS-friendly job description (3 points, each not more than 20 words) for the position of ${work.position} at ${work.company}. Highlight key responsibilities, achievements, and skills. Ensure it is professional, engaging, and suitable for a resume.`;
+      const prompt = `Generate a concise, ATS-friendly job description (exact 3 points, each not more than 20 words, line by line , without any bullet points) for the position of ${work.position} at ${work.company}. Highlight key responsibilities, achievements, and skills. Ensure it is professional, engaging, and suitable for a resume.`;
 
       const res = await fetch("/api/gemini", {
         method: "POST",
