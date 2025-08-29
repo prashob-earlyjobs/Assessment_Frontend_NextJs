@@ -147,7 +147,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL
 const apiService = {
   async saveResume(resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[]) {
     const token = Cookies.get("accessToken")
-    const response = await fetch(`${API_BASE_URL}/resumes`, {
+    const response = await fetch(`${API_BASE_URL}/resumes/fromPDF`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
