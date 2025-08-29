@@ -1,9 +1,10 @@
 "use client"
 import { useState, useRef, useCallback, useEffect } from "react"
 import type React from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import Cookies from "js-cookie"
 import Link from "next/link"
+import { Buffer } from "buffer"
 import { Button } from "../ui/button"
 import { Card, CardContent, CardHeader } from "../ui/card"
 import { Input } from "../ui/input"
@@ -16,12 +17,12 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/colla
 import { toast } from "sonner"
 import Header from "./header"
 import html2pdf from "html2pdf.js"
-
 import { oklch, oklab, rgb } from "culori"
 import {
   ArrowLeft,
   FileText,
   Download,
+  Pencil,
   Plus,
   Trash2,
   User,
@@ -46,7 +47,6 @@ import {
   Github,
   Globe,
 } from "lucide-react"
-import { GoogleGenerativeAI } from "@google/generative-ai"
 
 interface PersonalInfo {
   fullName: string
@@ -75,7 +75,7 @@ interface WorkExperience {
   startDate: string
   endDate: string
   description: string[]
-  index: number // Changed to number for description point index
+  index: number
 }
 
 interface Project {
@@ -134,23 +134,21 @@ const templates = [
   }
 ]
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL
-
+const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3000"
 
 const apiService = {
-  async saveResume(resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[]) {
+  async saveResume(resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[], pdfBuffer: ArrayBuffer) {
     const token = Cookies.get("accessToken")
-    const response = await fetch(`${API_BASE_URL}/resumes`, {
+    const formData = new FormData()
+    formData.append("resumeData", JSON.stringify({ ...resumeData, template: activeTemplate, sectionOrder }))
+    formData.append("pdf", new Blob([pdfBuffer], { type: "application/pdf" }), `${resumeData.personalInfo.fullName || "resume"}.pdf`)
+
+    const response = await fetch(`${API_BASE_URL}/resumes/fromForm`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "authorization": `Bearer ${token}`,
+        authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({
-        ...resumeData,
-        template: activeTemplate,
-        sectionOrder: sectionOrder,
-      }),
+      body: formData,
     })
 
     if (!response.ok) {
@@ -160,42 +158,64 @@ const apiService = {
     return response.json()
   },
 
-  async updateResume(id: string, resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[]) {
+  async fetchResume(id: string) { 
     const token = Cookies.get("accessToken")
-    const response = await fetch(`${API_BASE_URL}/resume/${id}`, {
-      method: "PUT",
+    if (!token) {
+      throw new Error("No access token found. Please log in.")
+    }
+    const response = await fetch(`${API_BASE_URL}/resumes/${id}`, {
+      method: "GET", 
       headers: {
-        "Content-Type": "application/json",
-        "authorization": `Bearer ${token}`,
+        authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({
-        ...resumeData,
-        template: activeTemplate,
-        sectionOrder: sectionOrder,
-      }),
     })
 
     if (!response.ok) {
-      throw new Error("Failed to update resume")
+      throw new Error(`Failed to fetch resume: ${response.statusText}`)
     }
 
     return response.json()
   },
 
+async updateResume(id: string, resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[], pdfBuffer: ArrayBuffer) {
+  const token = Cookies.get('accessToken');
+  if (!token) {
+    throw new Error('No access token found. Please log in.');
+  }
+  const formData = new FormData();
+  formData.append('resumeData', JSON.stringify({ ...resumeData, template: activeTemplate, sectionOrder }));
+  formData.append('pdf', new Blob([pdfBuffer], { type: 'application/pdf' }), `${resumeData.personalInfo.fullName || 'resume'}.pdf`);
 
+  const response = await fetch(`${API_BASE_URL}/resumes/${id}`, {
+    method: 'PUT',
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to update resume: ${response.statusText}`);
+  }
+
+  return response.json();
+}
 }
 
 export default function ResumeBuilder() {
   const [activeTemplate, setActiveTemplate] = useState("minimal")
   const [isTemplateDialogOpen, setIsTemplateDialogOpen] = useState(false)
   const [isReorderMode, setIsReorderMode] = useState(false)
-
   const [draggedSection, setDraggedSection] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [isAddSectionDialogOpen, setIsAddSectionDialogOpen] = useState(false)
   const router = useRouter()
-    const [isDownloadDialogOpen, setIsDownloadDialogOpen] = useState(false);
+  const searchParams = useSearchParams()
+  const resumeId = searchParams.get("resumeId")
+  const [isDownloadDialogOpen, setIsDownloadDialogOpen] = useState(false)
   const [aiLoading, setAiLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isEditMode, setIsEditMode] = useState(!!resumeId)
 
   // Section collapse states
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(
@@ -245,9 +265,91 @@ export default function ResumeBuilder() {
 
   const [currentSkill, setCurrentSkill] = useState("")
   const [currentCertification, setCurrentCertification] = useState("")
-
   const [isSaving, setIsSaving] = useState(false)
-  const [savedResumeId, setSavedResumeId] = useState<string | null>(null)
+
+  // Load resume data if editing
+ useEffect(() => {
+  if (resumeId) {
+    setIsLoading(true)
+    setIsEditMode(true)
+    apiService
+      .fetchResume(resumeId)
+      .then((result) => {
+        if (result.success && result.data) {
+          setResumeData({
+            personalInfo: {
+              fullName: result.data.personalInfo?.fullName || "",
+              email: result.data.personalInfo?.email || "",
+              phone: result.data.personalInfo?.phone || "",
+              location: result.data.personalInfo?.location || "",
+              linkedin: result.data.personalInfo?.linkedin || "",
+              website: result.data.personalInfo?.website || "",
+              github: result.data.personalInfo?.github || "",
+            },
+            professionalSummary: result.data.professionalSummary || "",
+            education: result.data.education?.map((edu: any) => ({
+              id: edu.id || Date.now().toString(),
+              school: edu.school || "",
+              degree: edu.degree || "",
+              field: edu.field || "",
+              startDate: edu.startDate || "",
+              endDate: edu.endDate || "",
+              gpa: edu.gpa || "",
+            })) || [],
+            workExperience: result.data.workExperience?.map((work: any) => ({
+              id: work.id || Date.now().toString(),
+              company: work.company || "",
+              position: work.position || "",
+              startDate: work.startDate || "",
+              endDate: work.endDate || "",
+              description: Array.isArray(work.description) ? work.description : ["", "", ""],
+              index: work.index || 0,
+            })) || [],
+            skills: Array.isArray(result.data.skills) ? result.data.skills : [],
+            certifications: Array.isArray(result.data.certifications) ? result.data.certifications : [],
+            projects: result.data.projects?.map((proj: any) => ({
+              id: proj.id || Date.now().toString(),
+              name: proj.name || "",
+              description: proj.description || "",
+              technologies: proj.technologies || "",
+              link: proj.link || "",
+            })) || [],
+            achievements: result.data.achievements?.map((ach: any) => ({
+              id: ach.id || Date.now().toString(),
+              title: ach.title || "",
+              description: ach.description || "",
+              date: ach.date || "",
+            })) || [],
+            extracurriculars: result.data.extracurriculars?.map((extra: any) => ({
+              id: extra.id || Date.now().toString(),
+              activity: extra.activity || "",
+              role: extra.role || "",
+              description: extra.description || "",
+              startDate: extra.startDate || "",
+              endDate: extra.endDate || "",
+            })) || [],
+            profilePicture: result.data.profilePicture || null,
+          })
+          setActiveTemplate(result.data.template || "minimal")
+          setSectionOrder(result.data.sectionOrder?.length ? result.data.sectionOrder : sectionOrder)
+          toast.success("Resume loaded for editing")
+        } else {
+          toast.error("Failed to load resume data")
+          router.push("/resumeList")
+        }
+      })
+      .catch((error) => {
+        console.error("Failed to fetch resume:", error)
+        toast.error("Failed to load resume. Please try again.")
+        router.push("/resumeList")
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
+  } else {
+    setIsEditMode(false)
+  }
+}, [resumeId, router])
 
   const convertOklchToRgb = () => {
     const elements = document.querySelectorAll("#resume-preview *")
@@ -282,85 +384,93 @@ export default function ResumeBuilder() {
       })
     })
   }
-
- const handleDownloadPDF = async () => {
-  const element = document.getElementById("resume-preview");
-  if (isReorderMode){
-    toast.info("Download PDF after saving the order.");
-    return;
+const handleSave = async (pdfBuffer: ArrayBuffer) => {
+  setIsSaving(true);
+  try {
+    let result;
+    if (resumeId) {
+      result = await apiService.updateResume(resumeId, resumeData, activeTemplate, sectionOrder, pdfBuffer);
+    } else {
+      result = await apiService.saveResume(resumeData, activeTemplate, sectionOrder, pdfBuffer);
+    }
+    if (result.success) {
+      toast.success(resumeId ? 'Resume updated successfully!' : 'Resume saved successfully!');
+    }
+  } catch (error) {
+    console.error(resumeId ? 'Failed to update resume:' : 'Failed to save resume:', error);
+    toast.error(resumeId ? 'Failed to update resume. Please try again.' : 'Failed to save resume. Please try again.');
+  } finally {
+    setIsSaving(false);
   }
+};
+
+const handleSaveChanges = async () => {
+  const element = document.getElementById('resume-preview');
   if (!element) {
-    toast.error("Preview not found. Please try again.");
+    toast.error('Preview not found. Please try again.');
     return;
   }
 
   convertOklchToRgb();
 
   const opt = {
-    margin: [0.5, 0.125, 0.125, 0.5], // Uniform margins [top, right, bottom, left] in inches
-    filename: `${resumeData.personalInfo.fullName || "resume"}.pdf`,
-    image: { type: "jpeg", quality: 0.98 },
-    html2canvas: { 
-      scale: 4, // Maintain high resolution
-      // Match letter page width at 72 DPI
-      useCORS: false 
-    },
-    jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+    margin: [0.5, 0.125, 0.5, 0.125],
+  };
+
+  try {
+    const pdf = await html2pdf().set(opt).from(element).toPdf().output('arraybuffer');
+    await handleSave(pdf);
+    await html2pdf().set(opt).from(element).save();
+    toast.success('Changes saved and PDF downloaded!');
+    setTimeout(() => {
+      router.push('/resumeList');
+    }, 3000);
+  } catch (error) {
+    console.error('Failed to generate or save PDF:', error);
+    toast.error('Failed to generate or save PDF. Please try again.');
+  }
+};
+
+const handleDownloadPDF = async () => {
+  const element = document.getElementById('resume-preview');
+  if (isReorderMode) {
+    toast.info('Download PDF after saving the order.');
+    return;
+  }
+  if (!element) {
+    toast.error('Preview not found. Please try again.');
+    return;
+  }
+
+  convertOklchToRgb();
+
+  const opt = {
+    margin: [0.5, 0.125, 0.5, 0.125],
+    filename: `${resumeData.personalInfo.fullName || 'resume'}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 4, useCORS: false },
+    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
   };
 
   try {
     if (resumeData.personalInfo.fullName && resumeData.personalInfo.email && resumeData.personalInfo.phone) {
-       
-     
+      const pdf = await html2pdf().set(opt).from(element).toPdf().output('arraybuffer');
+      await handleSave(pdf);
       await html2pdf().set(opt).from(element).save();
-      element.style.width = ""; // Reset width after conversion
-      await handleSave();
       setTimeout(() => {
-          router.push("/airesume");
-        }, 3000);
+        router.push('/resumeList');
+      }, 3000);
     } else {
-      toast.info("Please enter your name, email or phone number before downloading the resume.");
+      toast.info('Please enter your name, email, and phone number before downloading the resume.');
     }
-  } catch (error: any) {
-    console.error("Failed to generate PDF:", error);
-    toast.error("Failed to generate PDF. Please try again.");
+  } catch (error) {
+    console.error('Failed to generate or save PDF:', error);
+    toast.error('Failed to generate or save PDF. Please try again.');
   }
 };
 
-
-  const handleSave = async () => {
-    setIsSaving(true)
-
-    try {
-      let result
-      if (savedResumeId) {
-        result = await apiService.updateResume(savedResumeId, resumeData, activeTemplate, sectionOrder)
-      } else {
-        result = await apiService.saveResume(resumeData, activeTemplate, sectionOrder)
-      }
-
-      if (result.success) {
-        const resumeId = result.data?._id || result.resume?._id || result._id
-        if (resumeId) {
-          setSavedResumeId(resumeId)
-        }
-        toast.success("Resume saved successfully!")
-       
-        setSavedResumeId(null)
-      }
-    } catch (error) {
-      console.error("Failed to save resume:", error)
-    } finally {
-      setIsSaving(false)
-    }
-  }
-
-  
-
-
   const handleAISuggest = async () => {
-    
-    setAiLoading(true);
+    setAiLoading(true)
     try {
       const dataSummary = `
       Name: ${resumeData.personalInfo.fullName || "N/A"}
@@ -373,53 +483,54 @@ export default function ResumeBuilder() {
       Projects: ${resumeData.projects.map(proj => `${proj.name || "N/A"}: ${proj.description || "N/A"} (Technologies: ${proj.technologies || "N/A"})`).join("; ") || "N/A"}
       Achievements: ${resumeData.achievements.map(ach => `${ach.title || "N/A"} (${ach.date || "N/A"}): ${ach.description || "N/A"}`).join("; ") || "N/A"}
       Extracurriculars: ${resumeData.extracurriculars.map(extra => `${extra.activity || "N/A"} - ${extra.role || "N/A"} (${extra.startDate} - ${extra.endDate || "Present"}): ${extra.description || "N/A"}`).join("; ") || "N/A"}
-    `;
+    `
       if (!resumeData.personalInfo.fullName && !resumeData.personalInfo.email && (!resumeData.workExperience.length || !resumeData.education.length)) {
-        toast.info("Please fill in all required fields to generate a summary.");
-        return;
+        toast.info("Please fill in all required fields to generate a summary.")
+        return
       }
-      const prompt = `Generate a concise, ATS friendly professional summary (30-45 words) for a resume based on the following information. Highlight key achievements, skills, and career goals, tailored to the provided data. Ensure the summary is professional, engaging, and suitable for a resume: ${dataSummary}`;
+      const prompt = `Generate a concise, ATS friendly professional summary (30-45 words) for a resume based on the following information. Highlight key achievements, skills, and career goals, tailored to the provided data. Ensure the summary is professional, engaging, and suitable for a resume: ${dataSummary}`
       
       const res = await fetch("/api/gemini", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt }),
-      });
+      })
 
-      const data = await res.json();
+      const data = await res.json()
       const generatedSummary =
-        data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
+        data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || ""
 
       setResumeData((prev) => ({
         ...prev,
         professionalSummary: generatedSummary,
-      }));
-      toast.success("AI-generated summary added to textarea!");
+      }))
+      toast.success("AI-generated summary added to textarea!")
     } catch (error) {
-      console.error("Failed to generate AI suggestion:", error);
-      toast.error("Failed to generate AI suggestion. Please try again.");
+      console.error("Failed to generate AI suggestion:", error)
+      toast.error("Failed to generate AI suggestion. Please try again.")
     } finally {
-      setAiLoading(false);
+      setAiLoading(false)
     }
-  };
+  }
+
   const handleAISuggestForWork = async (id: string) => {
-    setAiLoading(true);
+    setAiLoading(true)
     try {
-      const work = resumeData.workExperience.find((w) => w.id === id);
+      const work = resumeData.workExperience.find((w) => w.id === id)
       if (!work || !work.position || !work.company) {
-        toast.info("Please provide position and company first.");
-        return;
+        toast.info("Please provide position and company first.")
+        return
       }
 
-      const prompt = `Generate a concise, ATS-friendly job description (exact 3 points, each not more than 20 words, line by line , without any bullet points) for the position of ${work.position} at ${work.company}. Highlight key responsibilities, achievements, and skills. Ensure it is professional, engaging, and suitable for a resume.`;
+      const prompt = `Generate a concise, ATS-friendly job description (exact 3 points, each not more than 20 words, line by line , without any bullet points) for the position of ${work.position} at ${work.company}. Highlight key responsibilities, achievements, and skills. Ensure it is professional, engaging, and suitable for a resume.`
 
       const res = await fetch("/api/gemini", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt }),
-      });
+      })
 
-      const data = await res.json();
+      const data = await res.json()
       const generatedDescription =
         data.candidates?.[0]?.content?.parts?.[0]?.text
           ?.trim()
@@ -427,23 +538,22 @@ export default function ResumeBuilder() {
           .slice(0, 3)
           .map((point: string) =>
             point.trim().replace(/^[-•]\s*/, "").trim()
-          ) || [];
+          ) || []
 
       setResumeData((prev) => ({
         ...prev,
         workExperience: prev.workExperience.map((w) =>
           w.id === id ? { ...w, description: generatedDescription } : w
         ),
-      }));
-      toast.success("AI-generated description added!");
+      }))
+      toast.success("AI-generated description added!")
     } catch (error) {
-      console.error("Failed to generate AI suggestion:", error);
-      toast.error("Failed to generate AI suggestion. Please try again.");
+      console.error("Failed to generate AI suggestion:", error)
+      toast.error("Failed to generate AI suggestion. Please try again.")
     } finally {
-      setAiLoading(false);
+      setAiLoading(false)
     }
-  };
-
+  }
 
   const toggleSection = useCallback((sectionId: string) => {
     setCollapsedSections((prev) => {
@@ -577,6 +687,7 @@ export default function ResumeBuilder() {
       }),
     }))
   }, [])
+
   const removeWorkExperience = useCallback((id: string) => {
     setResumeData((prev) => ({
       ...prev,
@@ -950,780 +1061,791 @@ export default function ResumeBuilder() {
               </Link>
             </div>
             <div className="flex items-center space-x-1 md:space-x-3">
-             <Dialog open={isDownloadDialogOpen} onOpenChange={setIsDownloadDialogOpen}>
-                             <DialogTrigger asChild>
-                               <Button size="sm" className="bg-green-500 hover:bg-green-600 text-white">
-                                 <Download className="w-4 h-4 md:mr-2" />
-                                 <span className="hidden md:inline">Download PDF</span>
-                               </Button>
-                             </DialogTrigger>
-                             <DialogContent>
-                               <DialogHeader>
-                                 <DialogTitle>Download Resume</DialogTitle>
-                               </DialogHeader>
-                               <p className="text-sm text-gray-600">
-                                 Would you like to download your resume as a PDF? This action will also save your resume.
-                               </p>
-                               <DialogFooter>
-                                 <Button
-                                   variant="outline"
-                                   onClick={() => setIsDownloadDialogOpen(false)}
-                                 >
-                                   Cancel
-                                 </Button>
-                                 <Button
-                                   className="bg-green-500 hover:bg-green-600 text-white"
-                                   onClick={async () => {
-                                     await handleDownloadPDF();
-                                     setIsDownloadDialogOpen(false);
-                                   }}
-                                 >
-                                   Save and Download
-                                 </Button>
-                               </DialogFooter>
-                             </DialogContent>
-                           </Dialog>
+              <Dialog open={isDownloadDialogOpen} onOpenChange={setIsDownloadDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button size="sm" className="bg-green-500 hover:bg-green-600 text-white">
+                    <Download className="w-4 h-4 md:mr-2" />
+                    <span className="hidden md:inline">{isEditMode ? "Edit and Download" : "Download PDF"}</span>
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>{isEditMode ? "Save and Download Resume" : "Download Resume"}</DialogTitle>
+                  </DialogHeader>
+                  <p className="text-sm text-gray-600">
+                    Would you like to {isEditMode ? "save your changes and " : ""}download your resume as a PDF? This action will also save your resume.
+                  </p>
+                  <DialogFooter>
+                    <Button
+                      variant="outline"
+                      onClick={() => setIsDownloadDialogOpen(false)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      className="bg-green-500 hover:bg-green-600 text-white"
+                      onClick={async () => {
+                        if (isEditMode) {
+                          await handleSaveChanges()
+                        } else {
+                          await handleDownloadPDF()
+                        }
+                        setIsDownloadDialogOpen(false)
+                      }}
+                    >
+                      {isEditMode ? "Save Changes" : "Download PDF"}
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+              <Button
+                size="sm"
+                className="bg-orange-500 hover:bg-orange-600 text-white"
+                onClick={() => router.push("/resumeList")}
+              >
+                <Pencil className="w-4 h-4 md:mr-2" />
+                <span className="hidden md:inline">My Resumes</span>
+              </Button>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="container mx-auto px-2 sm:px-3 md:px-4 py-3 md:py-6 max-w-7xl">
-        <div className="grid lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8">
-          <div className="space-y-3 md:space-y-4 max-h-[calc(100vh-120px)] overflow-y-auto">
-            {sections.map((section) => {
-              const Icon = section.icon
-              const isCollapsed = collapsedSections.has(section.id)
+      {isLoading ? (
+        <div className="container mx-auto px-4 py-6 text-center">
+          <p className="text-lg font-semibold text-gray-700">Loading resume...</p>
+        </div>
+      ) : (
+        <div className="container mx-auto px-2 sm:px-3 md:px-4 py-3 md:py-6 max-w-7xl">
+          <div className="grid lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8">
+            <div className="space-y-3 md:space-y-4 max-h-[calc(100vh-120px)] overflow-y-auto">
+              {sections.map((section) => {
+                const Icon = section.icon
+                const isCollapsed = collapsedSections.has(section.id)
 
-              return (
-                <Collapsible key={section.id} open={!isCollapsed} onOpenChange={() => toggleSection(section.id)}>
-                  <Card className="border-gray-200">
-                    <CollapsibleTrigger asChild>
-                      <CardHeader className="cursor-pointer hover:bg-orange-50 hover:border-orange-200 transition-all duration-200 border border-transparent p-3 md:p-6">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-2 md:space-x-3 min-w-0 flex-1">
-                            <div className="w-5 h-5 md:w-6 md:h-6 rounded flex items-center justify-center text-gray-600 flex-shrink-0">
-                              <Icon className="w-4 h-4 md:w-5 md:h-5" />
-                            </div>
-                            <span className="font-medium text-gray-800 text-sm md:text-base truncate">
-                              {section.name}
-                            </span>
-                            {section.required && (
-                              <Badge
-                                variant="secondary"
-                                className="text-xs bg-orange-100 text-orange-700 hidden sm:inline-flex"
-                              >
-                                Required
-                              </Badge>
-                            )}
-                          </div>
-                          <div className="flex items-center space-x-1 md:space-x-2 flex-shrink-0">
-                            {isCollapsed ? (
-                              <ChevronDown className="w-4 h-4 text-gray-400" />
-                            ) : (
-                              <ChevronUp className="w-4 h-4 text-gray-400" />
-                            )}
-                          </div>
-                        </div>
-                      </CardHeader>
-                    </CollapsibleTrigger>
-
-                    <CollapsibleContent>
-                      <CardContent className="pt-0 px-3 md:px-6 pb-3 md:pb-6 space-y-4">
-                        {section.id === "personal" && (
-                          <div className="space-y-4">
-                            <Separator />
-                            <div className="grid grid-cols-1 gap-3">
-                              <div>
-                                <Label htmlFor="fullName" className="text-sm font-medium">
-                                  Full Name *
-                                </Label>
-                                <Input
-                                  id="fullName"
-                                  placeholder="JohnDoe"
-                                  value={resumeData.personalInfo.fullName}
-                                  onChange={(e) => updatePersonalInfo("fullName", e.target.value)}
-                                  className="h-9 text-sm"
-                                />
+                return (
+                  <Collapsible key={section.id} open={!isCollapsed} onOpenChange={() => toggleSection(section.id)}>
+                    <Card className="border-gray-200">
+                      <CollapsibleTrigger asChild>
+                        <CardHeader className="cursor-pointer hover:bg-orange-50 hover:border-orange-200 transition-all duration-200 border border-transparent p-3 md:p-6">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-2 md:space-x-3 min-w-0 flex-1">
+                              <div className="w-5 h-5 md:w-6 md:h-6 rounded flex items-center justify-center text-gray-600 flex-shrink-0">
+                                <Icon className="w-4 h-4 md:w-5 md:h-5" />
                               </div>
-                              <div>
-                                <Label htmlFor="email" className="text-sm font-medium">
-                                  Email Address *
-                                </Label>
-                                <Input
-                                  id="email"
-                                  type="email"
-                                  placeholder="johndoe68@gmail.com"
-                                  value={resumeData.personalInfo.email}
-                                  onChange={(e) => updatePersonalInfo("email", e.target.value)}
-                                  className="h-9 text-sm"
-                                />
-                              </div>
-                              <div>
-                                <Label htmlFor="phone">Phone Number *</Label>
-                                <Input
-                                  id="phone"
-                                  placeholder="987654321"
-                                  value={resumeData.personalInfo.phone}
-                                  onChange={(e) => updatePersonalInfo("phone", e.target.value)}
-                                />
-                              </div>
-                              <div>
-                                <Label htmlFor="location">Location *</Label>
-                                <Input
-                                  id="location"
-                                  placeholder="Hyderabad"
-                                  value={resumeData.personalInfo.location}
-                                  onChange={(e) => updatePersonalInfo("location", e.target.value)}
-                                />
-                              </div>
-                              <div>
-                                <Label htmlFor="website">Website</Label>
-                                <Input
-                                  id="website"
-                                  placeholder="https://johndoe.netlify.app/"
-                                  value={resumeData.personalInfo.website}
-                                  onChange={(e) => updatePersonalInfo("website", e.target.value)}
-                                />
-                              </div>
-                              <div>
-                                <Label htmlFor="linkedin">LinkedIn</Label>
-                                <Input
-                                  id="linkedin"
-                                  placeholder="https://www.linkedin.com/in/johndoe/"
-                                  value={resumeData.personalInfo.linkedin}
-                                  onChange={(e) => updatePersonalInfo("linkedin", e.target.value)}
-                                />
-                              </div>
-                              <div>
-                                <Label htmlFor="github">GitHub</Label>
-                                <Input
-                                  id="github"
-                                  placeholder="https://github.com/JohnDoe"
-                                  value={resumeData.personalInfo.github}
-                                  onChange={(e) => updatePersonalInfo("github", e.target.value)}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        )}
-
-                        {section.id === "summary" && (
-                          <div className="space-y-4">
-                            <Textarea
-                              placeholder="Write a compelling professional summary that highlights your key achievements and career goals..."
-                              className="min-h-[100px] md:min-h-[120px] text-sm"
-                              value={resumeData.professionalSummary}
-                              onChange={(e) => updateProfessionalSummary(e.target.value)}
-                            />
-                            <Button
-                              variant="outline"
-                              className="bg-orange-500 text-white  hover:bg-white hover:border-orange-500 hover:text-orange-600 p-2 h-auto font-medium"
-                              onClick={handleAISuggest}
-                              disabled={aiLoading}
-                            >
-                              <Sparkles className="w-4 h-4 mr-2 inline-block" />
-                              {aiLoading ? "Generating..." : "AI Suggest"}
-                            </Button>
-                          </div>
-                        )}
-
-                        {section.id === "education" && (
-                          <div className="space-y-4">
-                            {resumeData.education.map((edu) => (
-                              <Card key={edu.id} className="border-gray-200">
-                                <CardContent className="pt-4">
-                                  <div className="space-y-3">
-                                    <div className="grid grid-cols-1 gap-3">
-                                      <div>
-                                        <Label>School/University</Label>
-                                        <Input
-                                          placeholder="University of California"
-                                          value={edu.school}
-                                          onChange={(e) => updateEducation(edu.id, "school", e.target.value)}
-                                        />
-                                      </div>
-                                      <div>
-                                        <Label>Degree</Label>
-                                        <Input
-                                          placeholder="Bachelor of Science"
-                                          value={edu.degree}
-                                          onChange={(e) => updateEducation(edu.id, "degree", e.target.value)}
-                                        />
-                                      </div>
-                                      <div>
-                                        <Label>Field of Study</Label>
-                                        <Input
-                                          placeholder="Computer Science"
-                                          value={edu.field}
-                                          onChange={(e) => updateEducation(edu.id, "field", e.target.value)}
-                                        />
-                                      </div>
-                                      <div>
-                                        <Label>GPA (Optional)</Label>
-                                        <Input
-                                          placeholder="3.8"
-                                          value={edu.gpa}
-                                          onChange={(e) => updateEducation(edu.id, "gpa", e.target.value)}
-                                        />
-                                      </div>
-                                      <div>
-                                        <Label>Start Date</Label>
-                                        <Input
-                                          type="month"
-                                          value={edu.startDate}
-                                          onChange={(e) => updateEducation(edu.id, "startDate", e.target.value)}
-                                        />
-                                      </div>
-                                      <div>
-                                        <Label>End Date</Label>
-                                        <Input
-                                          type="month"
-                                          value={edu.endDate}
-                                          onChange={(e) => updateEducation(edu.id, "endDate", e.target.value)}
-                                        />
-                                      </div>
-                                    </div>
-                                    <Button
-                                      variant="destructive"
-                                      size="sm"
-                                      className="w-fit"
-                                      onClick={() => removeEducation(edu.id)}
-                                    >
-                                      <Trash2 className="w-4 h-4 mr-1" />
-                                      Remove
-                                    </Button>
-                                  </div>
-                                </CardContent>
-                              </Card>
-                            ))}
-                            <Button onClick={addEducation} variant="outline" className="w-full bg-transparent">
-                              <Plus className="w-4 h-4 mr-2" />
-                              Add Education
-                            </Button>
-                          </div>
-                        )}
-
-                        {section.id === "experience" && (
-                          <div className="space-y-4">
-                            {resumeData.workExperience.map((work) => (
-                              <Card key={work.id} className="border-gray-200">
-                                <CardContent className="pt-4">
-                                  <div className="space-y-3">
-                                    <div className="grid grid-cols-1 gap-3">
-                                      <div>
-                                        <Label>Company</Label>
-                                        <Input
-                                          placeholder="Tech Corp"
-                                          value={work.company}
-                                          onChange={(e) => updateWorkExperience(work.id, "company", e.target.value)}
-                                        />
-                                      </div>
-                                      <div>
-                                        <Label>Position</Label>
-                                        <Input
-                                          placeholder="Software Engineer"
-                                          value={work.position}
-                                          onChange={(e) => updateWorkExperience(work.id, "position", e.target.value)}
-                                        />
-                                      </div>
-                                      <div>
-                                        <Label>Start Date</Label>
-                                        <Input
-                                          type="month"
-                                          value={work.startDate}
-                                          onChange={(e) => updateWorkExperience(work.id, "startDate", e.target.value)}
-                                        />
-                                      </div>
-                                      <div>
-                                        <Label>End Date</Label>
-                                        <Input
-                                          type="month"
-                                          value={work.endDate}
-                                          onChange={(e) => updateWorkExperience(work.id, "endDate", e.target.value)}
-                                        />
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <Label className="flex items-center justify-between">Job Description</Label>
-                                      <div className="space-y-2 mt-2">
-                                        {[0, 1, 2].map((index) => (
-                                          <Input
-                                            key={index}
-                                            placeholder={`Description point ${index + 1}`}
-                                            value={work.description[index] || ""}
-                                            onChange={(e) => updateWorkExperience(work.id, "description", e.target.value, index)}
-                                            className="text-sm"
-                                          />
-                                        ))}
-                                      </div>
-                                      <Button
-                                        variant="outline"
-                                        className="bg-orange-500 text-white  hover:bg-white hover:border-orange-500 hover:text-orange-600 p-2 h-auto font-medium mt-2"
-                                        onClick={() => handleAISuggestForWork(work.id)}
-                                        disabled={aiLoading}
-                                      >
-                                        <Sparkles className="w-4 h-4 mr-2 inline-block" />
-                                        {aiLoading ? "Generating..." : "AI Suggest"}
-                                      </Button>
-                                    </div>
-                                    <Button
-                                      variant="destructive"
-                                      size="sm"
-                                      className="w-fit"
-                                      onClick={() => removeWorkExperience(work.id)}
-                                    >
-                                      <Trash2 className="w-4 h-4 mr-1" />
-                                      Remove
-                                    </Button>
-                                  </div>
-                                </CardContent>
-                              </Card>
-                            ))}
-                            <Button onClick={addWorkExperience} variant="outline" className="w-full bg-transparent">
-                              <Plus className="w-4 h-4 mr-2" />
-                              Add Work Experience
-                            </Button>
-                          </div>
-                        )}
-
-                        {section.id === "skills" && (
-                          <div className="space-y-4">
-                            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-                              <Input
-                                placeholder="Add a skill"
-                                value={currentSkill}
-                                onChange={(e) => setCurrentSkill(e.target.value)}
-                                onKeyPress={(e) => {
-                                  if (e.key === "Enter") {
-                                    addSkill(currentSkill)
-                                  }
-                                }}
-                                className="flex-1"
-                              />
-                              <Button onClick={() => addSkill(currentSkill)} className="w-full sm:w-auto">
-                                <Plus className="w-4 h-4 sm:mr-0" />
-                                <span className="ml-2 sm:hidden">Add Skill</span>
-                              </Button>
-                            </div>
-                            <div className="flex flex-wrap gap-2">
-                              {resumeData.skills.map((skill) => (
-                                <Badge key={skill} variant="secondary" className="px-3 py-1">
-                                  {skill}
-                                  <button
-                                    className="ml-2 text-gray-500 hover:text-red-500"
-                                    onClick={() => removeSkill(skill)}
-                                  >
-                                    <Trash2 className="w-3 h-3" />
-                                  </button>
+                              <span className="font-medium text-gray-800 text-sm md:text-base truncate">
+                                {section.name}
+                              </span>
+                              {section.required && (
+                                <Badge
+                                  variant="secondary"
+                                  className="text-xs bg-orange-100 text-orange-700 hidden sm:inline-flex"
+                                >
+                                  Required
                                 </Badge>
-                              ))}
+                              )}
+                            </div>
+                            <div className="flex items-center space-x-1 md:space-x-2 flex-shrink-0">
+                              {isCollapsed ? (
+                                <ChevronDown className="w-4 h-4 text-gray-400" />
+                              ) : (
+                                <ChevronUp className="w-4 h-4 text-gray-400" />
+                              )}
                             </div>
                           </div>
-                        )}
+                        </CardHeader>
+                      </CollapsibleTrigger>
 
-                        {section.id === "certifications" && (
-                          <div className="space-y-4">
-                            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-                              <Input
-                                placeholder="Add a certification"
-                                value={currentCertification}
-                                onChange={(e) => setCurrentCertification(e.target.value)}
-                                onKeyPress={(e) => {
-                                  if (e.key === "Enter") {
-                                    addCertification(currentCertification)
-                                  }
-                                }}
-                                className="flex-1"
+                      <CollapsibleContent>
+                        <CardContent className="pt-0 px-3 md:px-6 pb-3 md:pb-6 space-y-4">
+                          {section.id === "personal" && (
+                            <div className="space-y-4">
+                              <Separator />
+                              <div className="grid grid-cols-1 gap-3">
+                                <div>
+                                  <Label htmlFor="fullName" className="text-sm font-medium">
+                                    Full Name *
+                                  </Label>
+                                  <Input
+                                    id="fullName"
+                                    placeholder="John Doe"
+                                    value={resumeData.personalInfo.fullName}
+                                    onChange={(e) => updatePersonalInfo("fullName", e.target.value)}
+                                    className="h-9 text-sm"
+                                  />
+                                </div>
+                                <div>
+                                  <Label htmlFor="email" className="text-sm font-medium">
+                                    Email Address *
+                                  </Label>
+                                  <Input
+                                    id="email"
+                                    type="email"
+                                    placeholder="johndoe68@gmail.com"
+                                    value={resumeData.personalInfo.email}
+                                    onChange={(e) => updatePersonalInfo("email", e.target.value)}
+                                    className="h-9 text-sm"
+                                  />
+                                </div>
+                                <div>
+                                  <Label htmlFor="phone">Phone Number *</Label>
+                                  <Input
+                                    id="phone"
+                                    placeholder="987654321"
+                                    value={resumeData.personalInfo.phone}
+                                    onChange={(e) => updatePersonalInfo("phone", e.target.value)}
+                                  />
+                                </div>
+                                <div>
+                                  <Label htmlFor="location">Location *</Label>
+                                  <Input
+                                    id="location"
+                                    placeholder="Hyderabad"
+                                    value={resumeData.personalInfo.location}
+                                    onChange={(e) => updatePersonalInfo("location", e.target.value)}
+                                  />
+                                </div>
+                                <div>
+                                  <Label htmlFor="website">Website</Label>
+                                  <Input
+                                    id="website"
+                                    placeholder="https://johndoe.netlify.app/"
+                                    value={resumeData.personalInfo.website}
+                                    onChange={(e) => updatePersonalInfo("website", e.target.value)}
+                                  />
+                                </div>
+                                <div>
+                                  <Label htmlFor="linkedin">LinkedIn</Label>
+                                  <Input
+                                    id="linkedin"
+                                    placeholder="https://www.linkedin.com/in/johndoe/"
+                                    value={resumeData.personalInfo.linkedin}
+                                    onChange={(e) => updatePersonalInfo("linkedin", e.target.value)}
+                                  />
+                                </div>
+                                <div>
+                                  <Label htmlFor="github">GitHub</Label>
+                                  <Input
+                                    id="github"
+                                    placeholder="https://github.com/JohnDoe"
+                                    value={resumeData.personalInfo.github}
+                                    onChange={(e) => updatePersonalInfo("github", e.target.value)}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
+                          {section.id === "summary" && (
+                            <div className="space-y-4">
+                              <Textarea
+                                placeholder="Write a compelling professional summary that highlights your key achievements and career goals..."
+                                className="min-h-[100px] md:min-h-[120px] text-sm"
+                                value={resumeData.professionalSummary}
+                                onChange={(e) => updateProfessionalSummary(e.target.value)}
                               />
                               <Button
-                                onClick={() => addCertification(currentCertification)}
-                                className="w-full sm:w-auto"
+                                variant="outline"
+                                className="bg-orange-500 text-white hover:bg-white hover:border-orange-500 hover:text-orange-600 p-2 h-auto font-medium"
+                                onClick={handleAISuggest}
+                                disabled={aiLoading}
                               >
-                                <Plus className="w-4 h-4 sm:mr-0" />
-                                <span className="ml-2 sm:hidden">Add Certification</span>
+                                <Sparkles className="w-4 h-4 mr-2 inline-block" />
+                                {aiLoading ? "Generating..." : "AI Suggest"}
                               </Button>
                             </div>
-                            <div className="space-y-2">
-                              {resumeData.certifications.map((cert) => (
-                                <div key={cert} className="flex items-center justify-between p-3 border rounded-lg">
-                                  <span>{cert}</span>
-                                  <Button variant="ghost" size="sm" onClick={() => removeCertification(cert)}>
-                                    <Trash2 className="w-4 h-4" />
-                                  </Button>
-                                </div>
+                          )}
+
+                          {section.id === "education" && (
+                            <div className="space-y-4">
+                              {resumeData.education.map((edu) => (
+                                <Card key={edu.id} className="border-gray-200">
+                                  <CardContent className="pt-4">
+                                    <div className="space-y-3">
+                                      <div className="grid grid-cols-1 gap-3">
+                                        <div>
+                                          <Label>School/University</Label>
+                                          <Input
+                                            placeholder="University of California"
+                                            value={edu.school}
+                                            onChange={(e) => updateEducation(edu.id, "school", e.target.value)}
+                                          />
+                                        </div>
+                                        <div>
+                                          <Label>Degree</Label>
+                                          <Input
+                                            placeholder="Bachelor of Science"
+                                            value={edu.degree}
+                                            onChange={(e) => updateEducation(edu.id, "degree", e.target.value)}
+                                          />
+                                        </div>
+                                        <div>
+                                          <Label>Field of Study</Label>
+                                          <Input
+                                            placeholder="Computer Science"
+                                            value={edu.field}
+                                            onChange={(e) => updateEducation(edu.id, "field", e.target.value)}
+                                          />
+                                        </div>
+                                        <div>
+                                          <Label>GPA (Optional)</Label>
+                                          <Input
+                                            placeholder="3.8"
+                                            value={edu.gpa}
+                                            onChange={(e) => updateEducation(edu.id, "gpa", e.target.value)}
+                                          />
+                                        </div>
+                                        <div>
+                                          <Label>Start Date</Label>
+                                          <Input
+                                            type="month"
+                                            value={edu.startDate}
+                                            onChange={(e) => updateEducation(edu.id, "startDate", e.target.value)}
+                                          />
+                                        </div>
+                                        <div>
+                                          <Label>End Date</Label>
+                                          <Input
+                                            type="month"
+                                            value={edu.endDate}
+                                            onChange={(e) => updateEducation(edu.id, "endDate", e.target.value)}
+                                          />
+                                        </div>
+                                      </div>
+                                      <Button
+                                        variant="destructive"
+                                        size="sm"
+                                        className="w-fit"
+                                        onClick={() => removeEducation(edu.id)}
+                                      >
+                                        <Trash2 className="w-4 h-4 mr-1" />
+                                        Remove
+                                      </Button>
+                                    </div>
+                                  </CardContent>
+                                </Card>
                               ))}
+                              <Button onClick={addEducation} variant="outline" className="w-full bg-transparent">
+                                <Plus className="w-4 h-4 mr-2" />
+                                Add Education
+                              </Button>
                             </div>
-                          </div>
-                        )}
+                          )}
 
-                        {section.id === "projects" && (
-                          <div className="space-y-4">
-                            {resumeData.projects.map((project) => (
-                              <Card key={project.id} className="border-gray-200">
-                                <CardContent className="pt-4">
-                                  <div className="space-y-3">
-                                    <div className="grid grid-cols-1 gap-3">
-                                      <div>
-                                        <Label>Project Name</Label>
-                                        <Input
-                                          placeholder="E-commerce Website"
-                                          value={project.name}
-                                          onChange={(e) => updateProject(project.id, "name", e.target.value)}
-                                        />
+                          {section.id === "experience" && (
+                            <div className="space-y-4">
+                              {resumeData.workExperience.map((work) => (
+                                <Card key={work.id} className="border-gray-200">
+                                  <CardContent className="pt-4">
+                                    <div className="space-y-3">
+                                      <div className="grid grid-cols-1 gap-3">
+                                        <div>
+                                          <Label>Company</Label>
+                                          <Input
+                                            placeholder="Tech Corp"
+                                            value={work.company}
+                                            onChange={(e) => updateWorkExperience(work.id, "company", e.target.value)}
+                                          />
+                                        </div>
+                                        <div>
+                                          <Label>Position</Label>
+                                          <Input
+                                            placeholder="Software Engineer"
+                                            value={work.position}
+                                            onChange={(e) => updateWorkExperience(work.id, "position", e.target.value)}
+                                          />
+                                        </div>
+                                        <div>
+                                          <Label>Start Date</Label>
+                                          <Input
+                                            type="month"
+                                            value={work.startDate}
+                                            onChange={(e) => updateWorkExperience(work.id, "startDate", e.target.value)}
+                                          />
+                                        </div>
+                                        <div>
+                                          <Label>End Date</Label>
+                                          <Input
+                                            type="month"
+                                            value={work.endDate}
+                                            onChange={(e) => updateWorkExperience(work.id, "endDate", e.target.value)}
+                                          />
+                                        </div>
                                       </div>
                                       <div>
-                                        <Label>Technologies Used</Label>
-                                        <Input
-                                          placeholder="React, Node.js, MongoDB"
-                                          value={project.technologies}
-                                          onChange={(e) => updateProject(project.id, "technologies", e.target.value)}
-                                        />
+                                        <Label className="flex items-center justify-between">Job Description</Label>
+                                        <div className="space-y-2 mt-2">
+                                          {[0, 1, 2].map((index) => (
+                                            <Input
+                                              key={index}
+                                              placeholder={`Description point ${index + 1}`}
+                                              value={work.description[index] || ""}
+                                              onChange={(e) => updateWorkExperience(work.id, "description", e.target.value, index)}
+                                              className="text-sm"
+                                            />
+                                          ))}
+                                        </div>
+                                        <Button
+                                          variant="outline"
+                                          className="bg-orange-500 text-white hover:bg-white hover:border-orange-500 hover:text-orange-600 p-2 h-auto font-medium mt-2"
+                                          onClick={() => handleAISuggestForWork(work.id)}
+                                          disabled={aiLoading}
+                                        >
+                                          <Sparkles className="w-4 h-4 mr-2 inline-block" />
+                                          {aiLoading ? "Generating..." : "AI Suggest"}
+                                        </Button>
                                       </div>
+                                      <Button
+                                        variant="destructive"
+                                        size="sm"
+                                        className="w-fit"
+                                        onClick={() => removeWorkExperience(work.id)}
+                                      >
+                                        <Trash2 className="w-4 h-4 mr-1" />
+                                        Remove
+                                      </Button>
                                     </div>
-                                    <div>
-                                      <Label>Description</Label>
-                                      <Textarea
-                                        placeholder="Describe the project, your role, and key achievements..."
-                                        className="min-h-[80px]"
-                                        value={project.description}
-                                        onChange={(e) => updateProject(project.id, "description", e.target.value)}
-                                      />
-                                    </div>
-                                    <div>
-                                      <Label>Project Link (Optional)</Label>
-                                      <Input
-                                        placeholder="https://github.com/username/project"
-                                        value={project.link}
-                                        onChange={(e) => updateProject(project.id, "link", e.target.value)}
-                                      />
-                                    </div>
-                                    <Button
-                                      variant="destructive"
-                                      size="sm"
-                                      className="w-fit"
-                                      onClick={() => removeProject(project.id)}
+                                  </CardContent>
+                                </Card>
+                              ))}
+                              <Button onClick={addWorkExperience} variant="outline" className="w-full bg-transparent">
+                                <Plus className="w-4 h-4 mr-2" />
+                                Add Work Experience
+                              </Button>
+                            </div>
+                          )}
+
+                          {section.id === "skills" && (
+                            <div className="space-y-4">
+                              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+                                <Input
+                                  placeholder="Add a skill"
+                                  value={currentSkill}
+                                  onChange={(e) => setCurrentSkill(e.target.value)}
+                                  onKeyPress={(e) => {
+                                    if (e.key === "Enter") {
+                                      addSkill(currentSkill)
+                                    }
+                                  }}
+                                  className="flex-1"
+                                />
+                                <Button onClick={() => addSkill(currentSkill)} className="w-full sm:w-auto">
+                                  <Plus className="w-4 h-4 sm:mr-0" />
+                                  <span className="ml-2 sm:hidden">Add Skill</span>
+                                </Button>
+                              </div>
+                              <div className="flex flex-wrap gap-2">
+                                {resumeData.skills.map((skill) => (
+                                  <Badge key={skill} variant="secondary" className="px-3 py-1">
+                                    {skill}
+                                    <button
+                                      className="ml-2 text-gray-500 hover:text-red-500"
+                                      onClick={() => removeSkill(skill)}
                                     >
-                                      <Trash2 className="w-4 h-4 mr-1" />
-                                      Remove
+                                      <Trash2 className="w-3 h-3" />
+                                    </button>
+                                  </Badge>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {section.id === "certifications" && (
+                            <div className="space-y-4">
+                              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+                                <Input
+                                  placeholder="Add a certification"
+                                  value={currentCertification}
+                                  onChange={(e) => setCurrentCertification(e.target.value)}
+                                  onKeyPress={(e) => {
+                                    if (e.key === "Enter") {
+                                      addCertification(currentCertification)
+                                    }
+                                  }}
+                                  className="flex-1"
+                                />
+                                <Button
+                                  onClick={() => addCertification(currentCertification)}
+                                  className="w-full sm:w-auto"
+                                >
+                                  <Plus className="w-4 h-4 sm:mr-0" />
+                                  <span className="ml-2 sm:hidden">Add Certification</span>
+                                </Button>
+                              </div>
+                              <div className="space-y-2">
+                                {resumeData.certifications.map((cert) => (
+                                  <div key={cert} className="flex items-center justify-between p-3 border rounded-lg">
+                                    <span>{cert}</span>
+                                    <Button variant="ghost" size="sm" onClick={() => removeCertification(cert)}>
+                                      <Trash2 className="w-4 h-4" />
                                     </Button>
                                   </div>
-                                </CardContent>
-                              </Card>
-                            ))}
-                            <Button onClick={addProject} variant="outline" className="w-full bg-transparent">
-                              <Plus className="w-4 h-4 mr-2" />
-                              Add Project
-                            </Button>
-                          </div>
-                        )}
+                                ))}
+                              </div>
+                            </div>
+                          )}
 
-                        {section.id === "achievements" && (
-                          <div className="space-y-4">
-                            {resumeData.achievements.map((achievement) => (
-                              <Card key={achievement.id} className="border-gray-200">
-                                <CardContent className="pt-4">
-                                  <div className="space-y-3">
-                                    <div className="grid grid-cols-1 gap-3">
+                          {section.id === "projects" && (
+                            <div className="space-y-4">
+                              {resumeData.projects.map((project) => (
+                                <Card key={project.id} className="border-gray-200">
+                                  <CardContent className="pt-4">
+                                    <div className="space-y-3">
+                                      <div className="grid grid-cols-1 gap-3">
+                                        <div>
+                                          <Label>Project Name</Label>
+                                          <Input
+                                            placeholder="E-commerce Website"
+                                            value={project.name}
+                                            onChange={(e) => updateProject(project.id, "name", e.target.value)}
+                                          />
+                                        </div>
+                                        <div>
+                                          <Label>Technologies Used</Label>
+                                          <Input
+                                            placeholder="React, Node.js, MongoDB"
+                                            value={project.technologies}
+                                            onChange={(e) => updateProject(project.id, "technologies", e.target.value)}
+                                          />
+                                        </div>
+                                      </div>
                                       <div>
-                                        <Label>Achievement Title</Label>
-                                        <Input
-                                          placeholder="Employee of the Month"
-                                          value={achievement.title}
-                                          onChange={(e) => updateAchievement(achievement.id, "title", e.target.value)}
+                                        <Label>Description</Label>
+                                        <Textarea
+                                          placeholder="Describe the project, your role, and key achievements..."
+                                          className="min-h-[80px]"
+                                          value={project.description}
+                                          onChange={(e) => updateProject(project.id, "description", e.target.value)}
                                         />
                                       </div>
                                       <div>
-                                        <Label>Date</Label>
+                                        <Label>Project Link (Optional)</Label>
                                         <Input
-                                          type="month"
-                                          value={achievement.date}
-                                          onChange={(e) => updateAchievement(achievement.id, "date", e.target.value)}
+                                          placeholder="https://github.com/username/project"
+                                          value={project.link}
+                                          onChange={(e) => updateProject(project.id, "link", e.target.value)}
                                         />
                                       </div>
+                                      <Button
+                                        variant="destructive"
+                                        size="sm"
+                                        className="w-fit"
+                                        onClick={() => removeProject(project.id)}
+                                      >
+                                        <Trash2 className="w-4 h-4 mr-1" />
+                                        Remove
+                                      </Button>
                                     </div>
-                                    <div>
-                                      <Label>Description</Label>
-                                      <Textarea
-                                        placeholder="Describe your achievement and its impact..."
-                                        className="min-h-[80px]"
-                                        value={achievement.description}
-                                        onChange={(e) =>
-                                          updateAchievement(achievement.id, "description", e.target.value)
-                                        }
-                                      />
-                                    </div>
-                                    <Button
-                                      variant="destructive"
-                                      size="sm"
-                                      className="w-fit"
-                                      onClick={() => removeAchievement(achievement.id)}
-                                    >
-                                      <Trash2 className="w-4 h-4 mr-1" />
-                                      Remove
-                                    </Button>
-                                  </div>
-                                </CardContent>
-                              </Card>
-                            ))}
-                            <Button onClick={addAchievement} variant="outline" className="w-full bg-transparent">
-                              <Plus className="w-4 h-4 mr-2" />
-                              Add Achievement
-                            </Button>
-                          </div>
-                        )}
+                                  </CardContent>
+                                </Card>
+                              ))}
+                              <Button onClick={addProject} variant="outline" className="w-full bg-transparent">
+                                <Plus className="w-4 h-4 mr-2" />
+                                Add Project
+                              </Button>
+                            </div>
+                          )}
 
-                        {section.id === "extracurriculars" && (
-                          <div className="space-y-4">
-                            {resumeData.extracurriculars.map((extracurricular) => (
-                              <Card key={extracurricular.id} className="border-gray-200">
-                                <CardContent className="pt-4">
-                                  <div className="space-y-3">
-                                    <div className="grid grid-cols-1 gap-3">
+                          {section.id === "achievements" && (
+                            <div className="space-y-4">
+                              {resumeData.achievements.map((achievement) => (
+                                <Card key={achievement.id} className="border-gray-200">
+                                  <CardContent className="pt-4">
+                                    <div className="space-y-3">
+                                      <div className="grid grid-cols-1 gap-3">
+                                        <div>
+                                          <Label>Achievement Title</Label>
+                                          <Input
+                                            placeholder="Employee of the Month"
+                                            value={achievement.title}
+                                            onChange={(e) => updateAchievement(achievement.id, "title", e.target.value)}
+                                          />
+                                        </div>
+                                        <div>
+                                          <Label>Date</Label>
+                                          <Input
+                                            type="month"
+                                            value={achievement.date}
+                                            onChange={(e) => updateAchievement(achievement.id, "date", e.target.value)}
+                                          />
+                                        </div>
+                                      </div>
                                       <div>
-                                        <Label>Activity</Label>
-                                        <Input
-                                          placeholder="Student Council"
-                                          value={extracurricular.activity}
+                                        <Label>Description</Label>
+                                        <Textarea
+                                          placeholder="Describe your achievement and its impact..."
+                                          className="min-h-[80px]"
+                                          value={achievement.description}
                                           onChange={(e) =>
-                                            updateExtracurricular(extracurricular.id, "activity", e.target.value)
+                                            updateAchievement(achievement.id, "description", e.target.value)
                                           }
                                         />
                                       </div>
-                                      <div>
-                                        <Label>Role</Label>
-                                        <Input
-                                          placeholder="President"
-                                          value={extracurricular.role}
-                                          onChange={(e) =>
-                                            updateExtracurricular(extracurricular.id, "role", e.target.value)
-                                          }
-                                        />
-                                      </div>
-                                      <div>
-                                        <Label>Start Date</Label>
-                                        <Input
-                                          type="month"
-                                          value={extracurricular.startDate}
-                                          onChange={(e) =>
-                                            updateExtracurricular(extracurricular.id, "startDate", e.target.value)
-                                          }
-                                        />
-                                      </div>
-                                      <div>
-                                        <Label>End Date</Label>
-                                        <Input
-                                          type="month"
-                                          value={extracurricular.endDate}
-                                          onChange={(e) =>
-                                            updateExtracurricular(extracurricular.id, "endDate", e.target.value)
-                                          }
-                                        />
-                                      </div>
+                                      <Button
+                                        variant="destructive"
+                                        size="sm"
+                                        className="w-fit"
+                                        onClick={() => removeAchievement(achievement.id)}
+                                      >
+                                        <Trash2 className="w-4 h-4 mr-1" />
+                                        Remove
+                                      </Button>
                                     </div>
-                                    <div>
-                                      <Label>Description</Label>
-                                      <Textarea
-                                        placeholder="Describe your role and responsibilities..."
-                                        className="min-h-[80px]"
-                                        value={extracurricular.description}
-                                        onChange={(e) =>
-                                          updateExtracurricular(extracurricular.id, "description", e.target.value)
-                                        }
-                                      />
-                                    </div>
-                                    <Button
-                                      variant="destructive"
-                                      size="sm"
-                                      className="w-fit"
-                                      onClick={() => removeExtracurricular(extracurricular.id)}
-                                    >
-                                      <Trash2 className="w-4 h-4 mr-1" />
-                                      Remove
-                                    </Button>
-                                  </div>
-                                </CardContent>
-                              </Card>
-                            ))}
-                            <Button onClick={addExtracurricular} variant="outline" className="w-full bg-transparent">
-                              <Plus className="w-4 h-4 mr-2" />
-                              Add Extracurricular Activity
-                            </Button>
-                          </div>
-                        )}
-                      </CardContent>
-                    </CollapsibleContent>
-                  </Card>
-                </Collapsible>
-              )
-            })}
-          </div>
+                                  </CardContent>
+                                </Card>
+                              ))}
+                              <Button onClick={addAchievement} variant="outline" className="w-full bg-transparent">
+                                <Plus className="w-4 h-4 mr-2" />
+                                Add Achievement
+                              </Button>
+                            </div>
+                          )}
 
-          <div className="space-y-4 md:space-y-6 max-h-[calc(100vh-120px)] overflow-y-auto lg:sticky lg:top-24">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <h2 className="text-lg font-semibold">Resume Preview</h2>
-                <div className="flex items-center bg-gray-100 rounded-lg p-1">
+                          {section.id === "extracurriculars" && (
+                            <div className="space-y-4">
+                              {resumeData.extracurriculars.map((extracurricular) => (
+                                <Card key={extracurricular.id} className="border-gray-200">
+                                  <CardContent className="pt-4">
+                                    <div className="space-y-3">
+                                      <div className="grid grid-cols-1 gap-3">
+                                        <div>
+                                          <Label>Activity</Label>
+                                          <Input
+                                            placeholder="Student Council"
+                                            value={extracurricular.activity}
+                                            onChange={(e) =>
+                                              updateExtracurricular(extracurricular.id, "activity", e.target.value)
+                                            }
+                                          />
+                                        </div>
+                                        <div>
+                                          <Label>Role</Label>
+                                          <Input
+                                            placeholder="President"
+                                            value={extracurricular.role}
+                                            onChange={(e) =>
+                                              updateExtracurricular(extracurricular.id, "role", e.target.value)
+                                            }
+                                          />
+                                        </div>
+                                        <div>
+                                          <Label>Start Date</Label>
+                                          <Input
+                                            type="month"
+                                            value={extracurricular.startDate}
+                                            onChange={(e) =>
+                                              updateExtracurricular(extracurricular.id, "startDate", e.target.value)
+                                            }
+                                          />
+                                        </div>
+                                        <div>
+                                          <Label>End Date</Label>
+                                          <Input
+                                            type="month"
+                                            value={extracurricular.endDate}
+                                            onChange={(e) =>
+                                              updateExtracurricular(extracurricular.id, "endDate", e.target.value)
+                                            }
+                                          />
+                                        </div>
+                                      </div>
+                                      <div>
+                                        <Label>Description</Label>
+                                        <Textarea
+                                          placeholder="Describe your role and responsibilities..."
+                                          className="min-h-[80px]"
+                                          value={extracurricular.description}
+                                          onChange={(e) =>
+                                            updateExtracurricular(extracurricular.id, "description", e.target.value)
+                                          }
+                                        />
+                                      </div>
+                                      <Button
+                                        variant="destructive"
+                                        size="sm"
+                                        className="w-fit"
+                                        onClick={() => removeExtracurricular(extracurricular.id)}
+                                      >
+                                        <Trash2 className="w-4 h-4 mr-1" />
+                                        Remove
+                                      </Button>
+                                    </div>
+                                  </CardContent>
+                                </Card>
+                              ))}
+                              <Button onClick={addExtracurricular} variant="outline" className="w-full bg-transparent">
+                                <Plus className="w-4 h-4 mr-2" />
+                                Add Extracurricular Activity
+                              </Button>
+                            </div>
+                          )}
+                        </CardContent>
+                      </CollapsibleContent>
+                    </Card>
+                  </Collapsible>
+                )
+              })}
+            </div>
+
+            <div className="space-y-4 md:space-y-6 max-h-[calc(100vh-120px)] overflow-y-auto lg:sticky lg:top-24">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <h2 className="text-lg font-semibold">Resume Preview</h2>
+                  <div className="flex items-center bg-gray-100 rounded-lg p-1">
+                    <Button
+                      variant="default"
+                      size="sm"
+                      className={`h-7 md:h-8 px-2 md:px-3 text-xs bg-orange-500 text-white`}
+                    >
+                      <Eye className="w-3 h-3 md:mr-1" />
+                      <span className="hidden sm:inline">Preview</span>
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <Dialog open={isTemplateDialogOpen} onOpenChange={setIsTemplateDialogOpen}>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" size="sm">
+                        <Settings className="w-4 h-4 mr-2" />
+                        Template
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-4xl">
+                      <DialogHeader>
+                        <DialogTitle>Choose a Template</DialogTitle>
+                      </DialogHeader>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+                        {templates.map((template) => (
+                          <div
+                            key={template.id}
+                            className={`border-2 rounded-lg p-4 cursor-pointer transition-all hover:shadow-lg ${activeTemplate === template.id ? "border-orange-500 bg-orange-50" : "border-gray-200"}`}
+                            onClick={() => {
+                              setActiveTemplate(template.id)
+                              setIsTemplateDialogOpen(false)
+                            }}
+                          >
+                            <div
+                              className={`w-full h-32 rounded mb-3 ${template.color} flex items-center justify-center text-white font-medium`}
+                            >
+                              {template.name}
+                            </div>
+                            <h3 className="font-medium text-sm">{template.name}</h3>
+                            <p className="text-xs text-gray-500 mt-1">{template.preview}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+
                   <Button
-                    variant="default"
+                    variant={isReorderMode ? "default" : "outline"}
                     size="sm"
-                    className={`h-7 md:h-8 px-2 md:px-3 text-xs bg-orange-500  text-white`}
+                    onClick={() => setIsReorderMode(!isReorderMode)}
                   >
-                    <Eye className="w-3 h-3 md:mr-1" />
-                    <span className="hidden sm:inline">Preview</span>
+                    {isReorderMode ? (
+                      <>
+                        <Save className="w-4 h-4 mr-2" />
+                        Save Order
+                      </>
+                    ) : (
+                      <>
+                        <RotateCcw className="w-4 h-4 mr-2" />
+                        Reorder
+                      </>
+                    )}
                   </Button>
-
-
                 </div>
               </div>
 
-              <div className="flex items-center space-x-2">
-                <Dialog open={isTemplateDialogOpen} onOpenChange={setIsTemplateDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button variant="outline" size="sm">
-                      <Settings className="w-4 h-4 mr-2" />
-                      Template
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-4xl">
-                    <DialogHeader>
-                      <DialogTitle>Choose a Template</DialogTitle>
-                    </DialogHeader>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-                      {templates.map((template) => (
-                        <div
-                          key={template.id}
-                          className={`border-2 rounded-lg p-4 cursor-pointer transition-all hover:shadow-lg ${activeTemplate === template.id ? "border-orange-500 bg-orange-50" : "border-gray-200"}`}
-                          onClick={() => {
-                            setActiveTemplate(template.id)
-                            setIsTemplateDialogOpen(false)
-                          }}
-                        >
-                          <div
-                            className={`w-full h-32 rounded mb-3 ${template.color} flex items-center justify-center text-white font-medium`}
-                          >
-                            {template.name}
-                          </div>
-                          <h3 className="font-medium text-sm">{template.name}</h3>
-                          <p className="text-xs text-gray-500 mt-1">{template.preview}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </DialogContent>
-                </Dialog>
+              {isReorderMode && (
+                <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
+                  <p className="text-sm text-orange-700">
+                    <strong>Reorder Mode:</strong> Drag and drop sections below to reorder them. Personal Information
+                    cannot be moved.
+                  </p>
+                </div>
+              )}
 
-                <Button
-                  variant={isReorderMode ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setIsReorderMode(!isReorderMode)}
-                >
-                  {isReorderMode ? (
-                    <>
-                      <Save className="w-4 h-4 mr-2" />
-                      Save Order
-                    </>
-                  ) : (
-                    <>
-                      <RotateCcw className="w-4 h-4 mr-2" />
-                      Reorder
-                    </>
-                  )}
-                </Button>
-
-              </div>
-            </div>
-
-            {isReorderMode && (
-              <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
-                <p className="text-sm text-orange-700">
-                  <strong>Reorder Mode:</strong> Drag and drop sections below to reorder them. Personal Information
-                  cannot be moved.
-                </p>
-              </div>
-            )}
-
-
-    
-
-            <Card>
-              <CardContent className="p-0">
-                <div id="resume-preview" style={{ width: "612px" }}>
-                  <div className="space-y-6">
-                    <div className={`${currentTemplate.headerBg} ${currentTemplate.headerText} p-6 break-inside-avoid`}>
-                      <div className="flex items-center space-x-4">
-                        <div className="flex-1">
-                          <h1 className="text-3xl font-bold">{resumeData.personalInfo.fullName || "John Doe"}</h1>
-                          <p className="text-lg opacity-90 mt-1">
-                            {resumeData.workExperience[0]?.position || "Software Developer"}
-                          </p>
-                          <div className="flex items-center space-x-6 text-sm mt-3 opacity-90">
-                            <span>{resumeData.personalInfo.email || "johndoe68@gmail.com"}</span>
-                            <span>{resumeData.personalInfo.phone || "123456789"}</span>
-                            <span>{resumeData.personalInfo.location || "Hyderabad"}</span>
-                          </div>
-                          <div className="grid grid-cols-3 gap-4 mt-1 text-sm opacity-90">
-                            {resumeData.personalInfo.linkedin && (
-                              <a href={resumeData.personalInfo.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center">
-                                <Linkedin className="w-4 h-4 mr-1" /> {resumeData.personalInfo.linkedin.slice(27)}
-                              </a>
-                            )}
-                            {resumeData.personalInfo.website && (
-                              <a href={resumeData.personalInfo.website} target="_blank" rel="noopener noreferrer" className="flex items-center">
-                                <Globe className="w-4 h-4 mr-1" /> View Website
-                              </a>
-                            )}
-                            {resumeData.personalInfo.github && (
-                              <a href={resumeData.personalInfo.github} target="_blank" rel="noopener noreferrer" className="flex items-center">
-                                <Github className="w-4 h-4 mr-1" /> {resumeData.personalInfo.github.slice(19)}
-                              </a>
-                            )}
+              <Card>
+                <CardContent className="p-0">
+                  <div id="resume-preview" style={{ width: "612px" }}>
+                    <div className="space-y-6">
+                      <div className={`${currentTemplate.headerBg} ${currentTemplate.headerText} p-6 break-inside-avoid`}>
+                        <div className="flex items-center space-x-4">
+                          <div className="flex-1">
+                            <h1 className="text-3xl font-bold">{resumeData.personalInfo.fullName || "John Doe"}</h1>
+                            <p className="text-lg opacity-90 mt-1">
+                              {resumeData.workExperience[0]?.position || "Software Developer"}
+                            </p>
+                            <div className="flex items-center space-x-6 text-sm mt-3 opacity-90">
+                              <span>{resumeData.personalInfo.email || "johndoe68@gmail.com"}</span>
+                              <span>{resumeData.personalInfo.phone || "123456789"}</span>
+                              <span>{resumeData.personalInfo.location || "Hyderabad"}</span>
+                            </div>
+                            <div className="grid grid-cols-3 gap-4 mt-1 text-sm opacity-90">
+                              {resumeData.personalInfo.linkedin && (
+                                <a href={resumeData.personalInfo.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center">
+                                  <Linkedin className="w-4 h-4 mr-1" /> {resumeData.personalInfo.linkedin.slice(27)}
+                                </a>
+                              )}
+                              {resumeData.personalInfo.website && (
+                                <a href={resumeData.personalInfo.website} target="_blank" rel="noopener noreferrer" className="flex items-center">
+                                  <Globe className="w-4 h-4 mr-1" /> View Website
+                                </a>
+                              )}
+                              {resumeData.personalInfo.github && (
+                                <a href={resumeData.personalInfo.github} target="_blank" rel="noopener noreferrer" className="flex items-center">
+                                  <Github className="w-4 h-4 mr-1" /> {resumeData.personalInfo.github.slice(19)}
+                                </a>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
 
-                    <div className="px-6 pb-2 space-y-6">
-                      {sectionOrder
-                        .filter((section) => section.visible)
-                        .map((sectionConfig, index) => {
-                          const content = renderSectionContent(sectionConfig);
-                          if (!content) return null;
+                      <div className="px-6 pb-2 space-y-6">
+                        {sectionOrder
+                          .filter((section) => section.visible)
+                          .map((sectionConfig, index) => {
+                            const content = renderSectionContent(sectionConfig)
+                            if (!content) return null
 
-                          if (isReorderMode) {
-                            return (
-                              <div
-                                key={sectionConfig.id}
-                                draggable
-                                onDragStart={(e) => handleDragStart(e, sectionConfig.id)}
-                                onDragOver={handleDragOver}
-                                onDrop={(e) => handleDrop(e, sectionConfig.id)}
-                                onDragEnd={handleDragEnd}
-                                className={`border-2 border-dashed border-orange-300 rounded-lg p-4 cursor-move transition-all hover:border-orange-400 hover:shadow-md ${draggedSection === sectionConfig.id ? "opacity-50" : "opacity-100"}`}
-                              >
-                                <div className="flex items-center justify-between mb-2">
-                                  <div className="flex items-center space-x-2">
-                                    <GripVertical className="w-4 h-4 text-orange-500" />
-                                    <span className="text-sm font-medium text-orange-700">
-                                      Drag to reorder: {sectionConfig.name}
-                                    </span>
+                            if (isReorderMode) {
+                              return (
+                                <div
+                                  key={sectionConfig.id}
+                                  draggable
+                                  onDragStart={(e) => handleDragStart(e, sectionConfig.id)}
+                                  onDragOver={handleDragOver}
+                                  onDrop={(e) => handleDrop(e, sectionConfig.id)}
+                                  onDragEnd={handleDragEnd}
+                                  className={`border-2 border-dashed border-orange-300 rounded-lg p-4 cursor-move transition-all hover:border-orange-400 hover:shadow-md ${draggedSection === sectionConfig.id ? "opacity-50" : "opacity-100"}`}
+                                >
+                                  <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center space-x-2">
+                                      <GripVertical className="w-4 h-4 text-orange-500" />
+                                      <span className="text-sm font-medium text-orange-700">
+                                        Drag to reorder: {sectionConfig.name}
+                                      </span>
+                                    </div>
                                   </div>
+                                  {content}
                                 </div>
-                                {content}
-                              </div>
-                            );
-                          }
+                              )
+                            }
 
-                          return content;
-                        })}
+                            return content
+                          })}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }
