@@ -22,6 +22,7 @@ import {
   ArrowLeft,
   FileText,
   Download,
+  Pencil,
   Plus,
   Trash2,
   User,
@@ -1100,6 +1101,14 @@ export default function AIResumeBuilder() {
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
+               <Button
+                size="sm"
+                className="bg-orange-500 hover:bg-orange-600 text-white"
+                onClick={() => router.push("/resumeList")}
+              >
+                <Pencil className="w-4 h-4 md:mr-2" />
+                <span className="hidden md:inline">My Resumes</span>
+              </Button>
             </div>
           </div>
         </div>
