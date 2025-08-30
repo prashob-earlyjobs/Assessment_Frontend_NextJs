@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from "react"
 import { Button } from "../ui/button"
 import { FileText, Download, Search, Upload, Pencil } from "lucide-react"
-import { formatDistanceToNow } from "date-fns"
+import { formatDistanceToNow, format } from "date-fns"
 import Cookies from "js-cookie"
 import Header from "./header"
 import { toast } from "sonner"
@@ -69,7 +69,7 @@ export default function ResumeList() {
     const q = query.trim().toLowerCase()
     if (!q) return resumes
     return resumes.filter((resume) =>
-      (resume.personalInfo?.fullName || `Resume_${resume._id}`)
+      ( `Resume - ${format(new Date(resume.createdAt), "MM-dd-yyyy")}`)
         .toLowerCase()
         .includes(q)
     )
@@ -124,7 +124,7 @@ export default function ResumeList() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-white">
       <Header />
-      <main className="container mx-auto px-4 py-10">
+      <main className="max-w-7xl mx-auto px-8 py-10">
         <section className="mb-8 grid gap-6 md:grid-cols-3">
           <div className="md:col-span-2">
             <h1 className="text-3xl font-bold tracking-tight text-slate-900">
@@ -192,7 +192,7 @@ export default function ResumeList() {
                     </div>
                     <div className="flex-1">
                       <h3 className="truncate text-base font-semibold text-slate-900">
-                        {resume.personalInfo?.fullName || `Resume_${resume._id}`}
+                        {`Resume - ${format(new Date(resume.createdAt), "MM-dd-yyyy")}`}
                       </h3>
                       <p className="mt-1 text-xs text-slate-600">
                         Created{" "}
