@@ -1109,7 +1109,7 @@ export default function ResumeBuilderFromPDF() {
                         <div className="flex items-center space-x-1 md:space-x-3">
                             <Dialog open={isDownloadDialogOpen} onOpenChange={setIsDownloadDialogOpen}>
                                 <DialogTrigger asChild>
-                                    <Button size="sm" className="bg-green-500 hover:bg-green-600 text-white">
+                                    <Button size="sm" className="bg-black hover:bg-gray-800 text-white">
                                         <Download className="w-4 h-4 md:mr-2" />
                                         <span className="hidden md:inline">Download PDF</span>
                                     </Button>
@@ -1142,7 +1142,7 @@ export default function ResumeBuilderFromPDF() {
                             </Dialog>
                             <Button
                                 size="sm"
-                                className="bg-orange-500 hover:bg-orange-600 text-white"
+                                className="bg-white border border-gray-300 text-gray-800 hover:bg-gray-100"
                                 onClick={() => router.push("/resumeList")}
                             >
                                 <Pencil className="w-4 h-4 md:mr-2" />
@@ -1854,7 +1854,7 @@ export default function ResumeBuilderFromPDF() {
                         {activeView === "preview" ? (
                             <Card>
                                 <CardContent className="p-0">
-                                    <div id="resume-preview" style={{ width: "612px" }}>
+                                    <div id="resume-preview" >
                                         <div className="space-y-6">
                                             <div className={`${currentTemplate.headerBg} ${currentTemplate.headerText} p-6 break-inside-avoid`}>
                                                 <div className="flex items-center space-x-4">
@@ -1868,38 +1868,44 @@ export default function ResumeBuilderFromPDF() {
                                                             <span>{resumeData.personalInfo.phone || "123456789"}</span>
                                                             <span>{resumeData.personalInfo.location || "Hyderabad"}</span>
                                                         </div>
-                                                        <div className="grid grid-cols-3 gap-4 mt-1 text-sm opacity-90">
-                                                            {resumeData.personalInfo.linkedin && (
-                                                                <a
-                                                                    href={resumeData.personalInfo.linkedin}
-                                                                    target="_blank"
-                                                                    rel="noopener noreferrer"
-                                                                    className="flex items-center"
-                                                                >
-                                                                    <Linkedin className="w-4 h-4 mr-1" /> {resumeData.personalInfo.linkedin.slice(27)}
-                                                                </a>
-                                                            )}
-                                                            {resumeData.personalInfo.website && (
-                                                                <a
-                                                                    href={resumeData.personalInfo.website}
-                                                                    target="_blank"
-                                                                    rel="noopener noreferrer"
-                                                                    className="flex items-center"
-                                                                >
-                                                                    <Globe className="w-4 h-4 mr-1" /> View Website
-                                                                </a>
-                                                            )}
-                                                            {resumeData.personalInfo.github && (
-                                                                <a
-                                                                    href={resumeData.personalInfo.github}
-                                                                    target="_blank"
-                                                                    rel="noopener noreferrer"
-                                                                    className="flex items-center"
-                                                                >
-                                                                    <Github className="w-4 h-4 mr-1" /> {resumeData.personalInfo.github.slice(19)}
-                                                                </a>
-                                                            )}
-                                                        </div>
+                                                      <div className="grid grid-cols-3 gap-4 mt-1 text-sm opacity-90">
+                                                                                    {resumeData.personalInfo.linkedin && (
+                                                                                      <a
+                                                                                        href={resumeData.personalInfo.linkedin}
+                                                                                        target="_blank"
+                                                                                        rel="noopener noreferrer"
+                                                                                        
+                                                                                      >
+                                                                                        <div className="flex items-center">
+                                                                                          <Linkedin className="w-4 h-4 mr-1"/> {resumeData.personalInfo.linkedin.slice(28)}
+                                                                                        </div>
+                                                                                      </a>
+                                                                                    )}
+                                                                                    {resumeData.personalInfo.website && (
+                                                                                      <a
+                                                                                        href={resumeData.personalInfo.website}
+                                                                                        target="_blank"
+                                                                                        rel="noopener noreferrer"
+                                                                                        
+                                                                                      >
+                                                                                        <div className="flex items-center">
+                                                                                          <Globe className="w-4 h-4 mr-1 " /> View Website
+                                                                                        </div>
+                                                                                      </a>
+                                                                                    )}
+                                                                                    {resumeData.personalInfo.github && (
+                                                                                      <a
+                                                                                        href={resumeData.personalInfo.github}
+                                                                                        target="_blank"
+                                                                                        rel="noopener noreferrer"
+                                                                                        
+                                                                                      >
+                                                                                        <div className="flex items-center">
+                                                                                          <Github className="w-4 h-4 mr-1 " /> {resumeData.personalInfo.github.slice(19)}
+                                                                                        </div>
+                                                                                      </a>
+                                                                                    )}
+                                                                                  </div>
                                                     </div>
                                                 </div>
                                             </div>

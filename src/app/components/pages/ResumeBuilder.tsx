@@ -112,7 +112,7 @@ interface ResumeData {
   projects: Project[]
   achievements: Achievement[]
   extracurriculars: Extracurricular[]
-  profilePicture: string | null
+  
 }
 
 interface SectionOrder {
@@ -139,13 +139,15 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:30
 const apiService = {
   async saveResume(resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[], pdfBuffer: ArrayBuffer) {
     const token = Cookies.get("accessToken")
-    const formData = new FormData()
-    formData.append("resumeData", JSON.stringify({ ...resumeData, template: activeTemplate, sectionOrder }))
-    formData.append("pdf", new Blob([pdfBuffer], { type: "application/pdf" }), `${resumeData.personalInfo.fullName || "resume"}.pdf`)
+      const formData = new FormData();
+      formData.append('resumeData', JSON.stringify({ ...resumeData, template: activeTemplate, sectionOrder }));
+      formData.append('pdf', new Blob([pdfBuffer], { type: 'application/pdf' }), `${resumeData.personalInfo.fullName || 'resume'}.pdf`);
 
+    
     const response = await fetch(`${API_BASE_URL}/resumes/fromForm`, {
       method: "POST",
       headers: {
+        
         authorization: `Bearer ${token}`,
       },
       body: formData,
@@ -249,7 +251,7 @@ export default function ResumeBuilder() {
     projects: [],
     achievements: [],
     extracurriculars: [],
-    profilePicture: null,
+   
   })
 
   const [sectionOrder, setSectionOrder] = useState<SectionOrder[]>([
@@ -328,7 +330,7 @@ export default function ResumeBuilder() {
               startDate: extra.startDate || "",
               endDate: extra.endDate || "",
             })) || [],
-            profilePicture: result.data.profilePicture || null,
+           
           })
           setActiveTemplate(result.data.template || "minimal")
           setSectionOrder(result.data.sectionOrder?.length ? result.data.sectionOrder : sectionOrder)
@@ -1063,7 +1065,7 @@ const handleDownloadPDF = async () => {
             <div className="flex items-center space-x-1 md:space-x-3">
               <Dialog open={isDownloadDialogOpen} onOpenChange={setIsDownloadDialogOpen}>
                 <DialogTrigger asChild>
-                  <Button size="sm" className="bg-green-500 hover:bg-green-600 text-white">
+                  <Button size="sm" className="bg-black hover:bg-gray-800 text-white">
                     <Download className="w-4 h-4 md:mr-2" />
                     <span className="hidden md:inline">{isEditMode ? "Edit and Download" : "Download PDF"}</span>
                   </Button>
@@ -1100,7 +1102,7 @@ const handleDownloadPDF = async () => {
               </Dialog>
               <Button
                 size="sm"
-                className="bg-orange-500 hover:bg-orange-600 text-white"
+                className="bg-white border border-gray-300 text-gray-800"
                 onClick={() => router.push("/resumeList")}
               >
                 <Pencil className="w-4 h-4 md:mr-2" />
@@ -1769,7 +1771,7 @@ const handleDownloadPDF = async () => {
 
               <Card>
                 <CardContent className="p-0">
-                  <div id="resume-preview" style={{ width: "612px" }}>
+                  <div id="resume-preview" >
                     <div className="space-y-6">
                       <div className={`${currentTemplate.headerBg} ${currentTemplate.headerText} p-6 break-inside-avoid`}>
                         <div className="flex items-center space-x-4">
@@ -1783,23 +1785,44 @@ const handleDownloadPDF = async () => {
                               <span>{resumeData.personalInfo.phone || "123456789"}</span>
                               <span>{resumeData.personalInfo.location || "Hyderabad"}</span>
                             </div>
-                            <div className="grid grid-cols-3 gap-4 mt-1 text-sm opacity-90">
-                              {resumeData.personalInfo.linkedin && (
-                                <a href={resumeData.personalInfo.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center">
-                                  <Linkedin className="w-4 h-4 mr-1" /> {resumeData.personalInfo.linkedin.slice(27)}
-                                </a>
-                              )}
-                              {resumeData.personalInfo.website && (
-                                <a href={resumeData.personalInfo.website} target="_blank" rel="noopener noreferrer" className="flex items-center">
-                                  <Globe className="w-4 h-4 mr-1" /> View Website
-                                </a>
-                              )}
-                              {resumeData.personalInfo.github && (
-                                <a href={resumeData.personalInfo.github} target="_blank" rel="noopener noreferrer" className="flex items-center">
-                                  <Github className="w-4 h-4 mr-1" /> {resumeData.personalInfo.github.slice(19)}
-                                </a>
-                              )}
-                            </div>
+                           <div className="grid grid-cols-3 gap-4 mt-1 text-sm opacity-90">
+                                                         {resumeData.personalInfo.linkedin && (
+                                                           <a
+                                                             href={resumeData.personalInfo.linkedin}
+                                                             target="_blank"
+                                                             rel="noopener noreferrer"
+                                                             
+                                                           >
+                                                             <div className="flex items-center">
+                                                               <Linkedin className="w-4 h-4 mr-1"/> {resumeData.personalInfo.linkedin.slice(28)}
+                                                             </div>
+                                                           </a>
+                                                         )}
+                                                         {resumeData.personalInfo.website && (
+                                                           <a
+                                                             href={resumeData.personalInfo.website}
+                                                             target="_blank"
+                                                             rel="noopener noreferrer"
+                                                             
+                                                           >
+                                                             <div className="flex items-center">
+                                                               <Globe className="w-4 h-4 mr-1 " /> View Website
+                                                             </div>
+                                                           </a>
+                                                         )}
+                                                         {resumeData.personalInfo.github && (
+                                                           <a
+                                                             href={resumeData.personalInfo.github}
+                                                             target="_blank"
+                                                             rel="noopener noreferrer"
+                                                             
+                                                           >
+                                                             <div className="flex items-center">
+                                                               <Github className="w-4 h-4 mr-1 " /> {resumeData.personalInfo.github.slice(19)}
+                                                             </div>
+                                                           </a>
+                                                         )}
+                                                       </div>
                           </div>
                         </div>
                       </div>
