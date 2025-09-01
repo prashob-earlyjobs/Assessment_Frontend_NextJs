@@ -568,7 +568,7 @@ export default function ResumeBuilderFromPDF() {
                 return
             }
 
-            const prompt = `Generate a concise, ATS-friendly job description (3 points, each not more than 20 words) for the position of ${work.position} at ${work.company}. Highlight key responsibilities, achievements, and skills. Ensure it is professional, engaging, and suitable for a resume.`
+            const prompt = `Generate a concise, ATS-friendly job description (exactly 3 points, each not more than 20 words, line by line , with solid circular black-filled bullet points, not stars) for the position of ${work.position} at ${work.company}. Highlight key responsibilities, achievements, and skills. Ensure it is professional, engaging, and suitable for a resume.`
 
             const res = await fetch("/api/gemini", {
                 method: "POST",
@@ -928,7 +928,7 @@ export default function ResumeBuilderFromPDF() {
                                         </span>
                                     </div>
                                     {work.description.some((desc) => desc.trim()) && (
-                                        <ul className="text-gray-700 text-sm leading-relaxed list-disc pl-5">
+                                        <ul className="text-gray-700 text-sm leading-relaxed pl-5">
                                             {work.description.map((desc, index) => desc.trim() && <li key={index}>{desc}</li>)}
                                         </ul>
                                     )}
@@ -1034,7 +1034,7 @@ export default function ResumeBuilderFromPDF() {
                             {resumeData.certifications.map((cert) => (
                                 <div key={cert} className="flex items-center">
                                     <div className={`w-2 h-2 ${currentTemplate.accent.replace("text-", "bg-")} rounded-full mr-3`}></div>
-                                    <span className="text-gray-700">{cert}</span>
+                                    <span className={`text-gray-700 ${isGeneratingPDF ? "mb-2" : ""}`}>{cert}</span>
                                 </div>
                             ))}
                         </div>
@@ -1050,7 +1050,7 @@ export default function ResumeBuilderFromPDF() {
                             {resumeData.achievements.map((achievement) => (
                                 <div key={achievement.id} className="flex items-center">
                                     <div className={`w-2 h-2 ${currentTemplate.accent.replace("text-", "bg-")} rounded-full mr-3`}></div>
-                                    <span className="text-gray-700">
+                                    <span className={`text-gray-700 ${isGeneratingPDF ? 'mb-2' : ''}`}>
                                         {achievement.title} - {achievement.description} ({achievement.date})
                                     </span>
                                 </div>
@@ -1881,7 +1881,7 @@ export default function ResumeBuilderFromPDF() {
                                                                                         className="flex items-center"
                                                                                       >
                                                                                         <Linkedin className="w-4 h-4 mr-2 " /> 
-                                                                                        <span className={`font-semibold ${isGeneratingPDF ? 'mb-[1rem]' : ''}`}>{resumeData.personalInfo.linkedin.slice(28)}</span>
+                                                                                        <span className={`font-semibold ${isGeneratingPDF ? 'mb-2' : ''}`}>{resumeData.personalInfo.linkedin.slice(28)}</span>
                                                                                       </a>
                                                                                     )}
                                                                                     {resumeData.personalInfo.website && (
@@ -1892,7 +1892,7 @@ export default function ResumeBuilderFromPDF() {
                                                                                         className="flex items-center"
                                                                                       >
                                                                                         <Globe className="w-4 h-4 mr-2" /> 
-                                                                                        <span className={`font-semibold ${isGeneratingPDF ? 'mb-[1rem]' : ''}`}>View Website</span>
+                                                                                        <span className={`font-semibold ${isGeneratingPDF ? 'mb-2' : ''}`}>View Website</span>
                                                                                       </a>
                                                                                     )}
                                                                                     {resumeData.personalInfo.github && (
@@ -1903,7 +1903,7 @@ export default function ResumeBuilderFromPDF() {
                                                                                         className="flex items-center"
                                                                                       >
                                                                                         <Github className="w-4 h-4 mr-2" /> 
-                                                                                        <span className={`font-semibold ${isGeneratingPDF ? 'mb-[1rem]' : ''}`}>{resumeData.personalInfo.github.slice(19)}</span>
+                                                                                        <span className={`font-semibold ${isGeneratingPDF ? 'mb-2' : ''}`}>{resumeData.personalInfo.github.slice(19)}</span>
                                                                                       </a>
                                                                                     )}
                                                                                   </div>

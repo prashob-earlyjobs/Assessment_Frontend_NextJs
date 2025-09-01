@@ -468,7 +468,7 @@ export default function AIResumeBuilder() {
         return;
       }
 
-      const prompt = `Generate a concise, ATS-friendly job description (exact 3 points, each not more than 20 words, line by line , without any bullet points) for the position of ${work.position} at ${work.company}. Highlight key responsibilities, achievements, and skills. Ensure it is professional, engaging, and suitable for a resume.`;
+      const prompt = `Generate a concise, ATS-friendly job description (exact 3 points, each not more than 20 words, line by line , with solid circular black-filled bullet points, not stars) for the position of ${work.position} at ${work.company}. Highlight key responsibilities, achievements, and skills. Ensure it is professional, engaging, and suitable for a resume.`;
 
       const res = await fetch("/api/gemini", {
         method: "POST",
@@ -885,7 +885,7 @@ export default function AIResumeBuilder() {
                     </span>
                   </div>
                   {work.description.some((desc) => desc.trim()) && (
-                    <ul className="text-gray-700 text-sm leading-relaxed list-disc pl-5">
+                    <ul className="text-gray-700 text-sm leading-relaxed pl-5">
                       {work.description.map((desc, index) => desc.trim() && <li key={index}>{desc}</li>)}
                     </ul>
                   )}
@@ -991,7 +991,7 @@ export default function AIResumeBuilder() {
               {resumeData.certifications.map((cert) => (
                 <div key={cert} className="flex items-center">
                   <div className={`w-2 h-2 ${currentTemplate.accent.replace("text-", "bg-")} rounded-full mr-3`}></div>
-                  <span className="text-gray-700">{cert}</span>
+                  <span className={`text-gray-700 ${isGeneratingPDF ? "mb-[1rem]" : ""}`}>{cert}</span>
                 </div>
               ))}
             </div>
