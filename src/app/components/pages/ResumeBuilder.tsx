@@ -112,7 +112,7 @@ interface ResumeData {
   projects: Project[]
   achievements: Achievement[]
   extracurriculars: Extracurricular[]
-  
+
 }
 
 interface SectionOrder {
@@ -139,15 +139,15 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:30
 const apiService = {
   async saveResume(resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[], pdfBuffer: ArrayBuffer) {
     const token = Cookies.get("accessToken")
-      const formData = new FormData();
-      formData.append('resumeData', JSON.stringify({ ...resumeData, template: activeTemplate, sectionOrder }));
-      formData.append('pdf', new Blob([pdfBuffer], { type: 'application/pdf' }), `${resumeData.personalInfo.fullName || 'resume'}.pdf`);
+    const formData = new FormData();
+    formData.append('resumeData', JSON.stringify({ ...resumeData, template: activeTemplate, sectionOrder }));
+    formData.append('pdf', new Blob([pdfBuffer], { type: 'application/pdf' }), `${resumeData.personalInfo.fullName || 'resume'}.pdf`);
 
-    
+
     const response = await fetch(`${API_BASE_URL}/resumes/fromForm`, {
       method: "POST",
       headers: {
-        
+
         authorization: `Bearer ${token}`,
       },
       body: formData,
@@ -160,13 +160,13 @@ const apiService = {
     return response.json()
   },
 
-  async fetchResume(id: string) { 
+  async fetchResume(id: string) {
     const token = Cookies.get("accessToken")
     if (!token) {
       throw new Error("No access token found. Please log in.")
     }
     const response = await fetch(`${API_BASE_URL}/resumes/${id}`, {
-      method: "GET", 
+      method: "GET",
       headers: {
         authorization: `Bearer ${token}`,
       },
@@ -179,29 +179,29 @@ const apiService = {
     return response.json()
   },
 
-async updateResume(id: string, resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[], pdfBuffer: ArrayBuffer) {
-  const token = Cookies.get('accessToken');
-  if (!token) {
-    throw new Error('No access token found. Please log in.');
+  async updateResume(id: string, resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[], pdfBuffer: ArrayBuffer) {
+    const token = Cookies.get('accessToken');
+    if (!token) {
+      throw new Error('No access token found. Please log in.');
+    }
+    const formData = new FormData();
+    formData.append('resumeData', JSON.stringify({ ...resumeData, template: activeTemplate, sectionOrder }));
+    formData.append('pdf', new Blob([pdfBuffer], { type: 'application/pdf' }), `${resumeData.personalInfo.fullName || 'resume'}.pdf`);
+
+    const response = await fetch(`${API_BASE_URL}/resumes/${id}`, {
+      method: 'PUT',
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to update resume: ${response.statusText}`);
+    }
+
+    return response.json();
   }
-  const formData = new FormData();
-  formData.append('resumeData', JSON.stringify({ ...resumeData, template: activeTemplate, sectionOrder }));
-  formData.append('pdf', new Blob([pdfBuffer], { type: 'application/pdf' }), `${resumeData.personalInfo.fullName || 'resume'}.pdf`);
-
-  const response = await fetch(`${API_BASE_URL}/resumes/${id}`, {
-    method: 'PUT',
-    headers: {
-      authorization: `Bearer ${token}`,
-    },
-    body: formData,
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to update resume: ${response.statusText}`);
-  }
-
-  return response.json();
-}
 }
 
 export default function ResumeBuilder() {
@@ -215,6 +215,7 @@ export default function ResumeBuilder() {
   const searchParams = useSearchParams()
   const resumeId = searchParams.get("resumeId")
   const [isDownloadDialogOpen, setIsDownloadDialogOpen] = useState(false)
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [aiLoading, setAiLoading] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isEditMode, setIsEditMode] = useState(!!resumeId)
@@ -251,7 +252,7 @@ export default function ResumeBuilder() {
     projects: [],
     achievements: [],
     extracurriculars: [],
-   
+
   })
 
   const [sectionOrder, setSectionOrder] = useState<SectionOrder[]>([
@@ -270,88 +271,88 @@ export default function ResumeBuilder() {
   const [isSaving, setIsSaving] = useState(false)
 
   // Load resume data if editing
- useEffect(() => {
-  if (resumeId) {
-    setIsLoading(true)
-    setIsEditMode(true)
-    apiService
-      .fetchResume(resumeId)
-      .then((result) => {
-        if (result.success && result.data) {
-          setResumeData({
-            personalInfo: {
-              fullName: result.data.personalInfo?.fullName || "",
-              email: result.data.personalInfo?.email || "",
-              phone: result.data.personalInfo?.phone || "",
-              location: result.data.personalInfo?.location || "",
-              linkedin: result.data.personalInfo?.linkedin || "",
-              website: result.data.personalInfo?.website || "",
-              github: result.data.personalInfo?.github || "",
-            },
-            professionalSummary: result.data.professionalSummary || "",
-            education: result.data.education?.map((edu: any) => ({
-              id: edu.id || Date.now().toString(),
-              school: edu.school || "",
-              degree: edu.degree || "",
-              field: edu.field || "",
-              startDate: edu.startDate || "",
-              endDate: edu.endDate || "",
-              gpa: edu.gpa || "",
-            })) || [],
-            workExperience: result.data.workExperience?.map((work: any) => ({
-              id: work.id || Date.now().toString(),
-              company: work.company || "",
-              position: work.position || "",
-              startDate: work.startDate || "",
-              endDate: work.endDate || "",
-              description: Array.isArray(work.description) ? work.description : ["", "", ""],
-              index: work.index || 0,
-            })) || [],
-            skills: Array.isArray(result.data.skills) ? result.data.skills : [],
-            certifications: Array.isArray(result.data.certifications) ? result.data.certifications : [],
-            projects: result.data.projects?.map((proj: any) => ({
-              id: proj.id || Date.now().toString(),
-              name: proj.name || "",
-              description: proj.description || "",
-              technologies: proj.technologies || "",
-              link: proj.link || "",
-            })) || [],
-            achievements: result.data.achievements?.map((ach: any) => ({
-              id: ach.id || Date.now().toString(),
-              title: ach.title || "",
-              description: ach.description || "",
-              date: ach.date || "",
-            })) || [],
-            extracurriculars: result.data.extracurriculars?.map((extra: any) => ({
-              id: extra.id || Date.now().toString(),
-              activity: extra.activity || "",
-              role: extra.role || "",
-              description: extra.description || "",
-              startDate: extra.startDate || "",
-              endDate: extra.endDate || "",
-            })) || [],
-           
-          })
-          setActiveTemplate(result.data.template || "minimal")
-          setSectionOrder(result.data.sectionOrder?.length ? result.data.sectionOrder : sectionOrder)
-          toast.success("Resume loaded for editing")
-        } else {
-          toast.error("Failed to load resume data")
+  useEffect(() => {
+    if (resumeId) {
+      setIsLoading(true)
+      setIsEditMode(true)
+      apiService
+        .fetchResume(resumeId)
+        .then((result) => {
+          if (result.success && result.data) {
+            setResumeData({
+              personalInfo: {
+                fullName: result.data.personalInfo?.fullName || "",
+                email: result.data.personalInfo?.email || "",
+                phone: result.data.personalInfo?.phone || "",
+                location: result.data.personalInfo?.location || "",
+                linkedin: result.data.personalInfo?.linkedin || "",
+                website: result.data.personalInfo?.website || "",
+                github: result.data.personalInfo?.github || "",
+              },
+              professionalSummary: result.data.professionalSummary || "",
+              education: result.data.education?.map((edu: any) => ({
+                id: edu.id || Date.now().toString(),
+                school: edu.school || "",
+                degree: edu.degree || "",
+                field: edu.field || "",
+                startDate: edu.startDate || "",
+                endDate: edu.endDate || "",
+                gpa: edu.gpa || "",
+              })) || [],
+              workExperience: result.data.workExperience?.map((work: any) => ({
+                id: work.id || Date.now().toString(),
+                company: work.company || "",
+                position: work.position || "",
+                startDate: work.startDate || "",
+                endDate: work.endDate || "",
+                description: Array.isArray(work.description) ? work.description : ["", "", ""],
+                index: work.index || 0,
+              })) || [],
+              skills: Array.isArray(result.data.skills) ? result.data.skills : [],
+              certifications: Array.isArray(result.data.certifications) ? result.data.certifications : [],
+              projects: result.data.projects?.map((proj: any) => ({
+                id: proj.id || Date.now().toString(),
+                name: proj.name || "",
+                description: proj.description || "",
+                technologies: proj.technologies || "",
+                link: proj.link || "",
+              })) || [],
+              achievements: result.data.achievements?.map((ach: any) => ({
+                id: ach.id || Date.now().toString(),
+                title: ach.title || "",
+                description: ach.description || "",
+                date: ach.date || "",
+              })) || [],
+              extracurriculars: result.data.extracurriculars?.map((extra: any) => ({
+                id: extra.id || Date.now().toString(),
+                activity: extra.activity || "",
+                role: extra.role || "",
+                description: extra.description || "",
+                startDate: extra.startDate || "",
+                endDate: extra.endDate || "",
+              })) || [],
+
+            })
+            setActiveTemplate(result.data.template || "minimal")
+            setSectionOrder(result.data.sectionOrder?.length ? result.data.sectionOrder : sectionOrder)
+            toast.success("Resume loaded for editing")
+          } else {
+            toast.error("Failed to load resume data")
+            router.push("/resumeList")
+          }
+        })
+        .catch((error) => {
+          console.error("Failed to fetch resume:", error)
+          toast.error("Failed to load resume. Please try again.")
           router.push("/resumeList")
-        }
-      })
-      .catch((error) => {
-        console.error("Failed to fetch resume:", error)
-        toast.error("Failed to load resume. Please try again.")
-        router.push("/resumeList")
-      })
-      .finally(() => {
-        setIsLoading(false)
-      })
-  } else {
-    setIsEditMode(false)
-  }
-}, [resumeId, router])
+        })
+        .finally(() => {
+          setIsLoading(false)
+        })
+    } else {
+      setIsEditMode(false)
+    }
+  }, [resumeId, router])
 
   const convertOklchToRgb = () => {
     const elements = document.querySelectorAll("#resume-preview *")
@@ -386,90 +387,96 @@ export default function ResumeBuilder() {
       })
     })
   }
-const handleSave = async (pdfBuffer: ArrayBuffer) => {
-  setIsSaving(true);
-  try {
-    let result;
-    if (resumeId) {
-      result = await apiService.updateResume(resumeId, resumeData, activeTemplate, sectionOrder, pdfBuffer);
-    } else {
-      result = await apiService.saveResume(resumeData, activeTemplate, sectionOrder, pdfBuffer);
+  const handleSave = async (pdfBuffer: ArrayBuffer) => {
+    setIsSaving(true);
+    try {
+      let result;
+      if (resumeId) {
+        result = await apiService.updateResume(resumeId, resumeData, activeTemplate, sectionOrder, pdfBuffer);
+      } else {
+        result = await apiService.saveResume(resumeData, activeTemplate, sectionOrder, pdfBuffer);
+      }
+      if (result.success) {
+        toast.success(resumeId ? 'Resume updated successfully!' : 'Resume saved successfully!');
+      }
+    } catch (error) {
+      console.error(resumeId ? 'Failed to update resume:' : 'Failed to save resume:', error);
+      toast.error(resumeId ? 'Failed to update resume. Please try again.' : 'Failed to save resume. Please try again.');
+    } finally {
+      setIsSaving(false);
     }
-    if (result.success) {
-      toast.success(resumeId ? 'Resume updated successfully!' : 'Resume saved successfully!');
-    }
-  } catch (error) {
-    console.error(resumeId ? 'Failed to update resume:' : 'Failed to save resume:', error);
-    toast.error(resumeId ? 'Failed to update resume. Please try again.' : 'Failed to save resume. Please try again.');
-  } finally {
-    setIsSaving(false);
-  }
-};
-
-const handleSaveChanges = async () => {
-  const element = document.getElementById('resume-preview');
-  if (!element) {
-    toast.error('Preview not found. Please try again.');
-    return;
-  }
-
-  convertOklchToRgb();
-
-  const opt = {
-    margin: [0.5, 0.125, 0.5, 0.125],
   };
 
-  try {
-    const pdf = await html2pdf().set(opt).from(element).toPdf().output('arraybuffer');
-    await handleSave(pdf);
-    await html2pdf().set(opt).from(element).save();
-    toast.success('Changes saved and PDF downloaded!');
-    setTimeout(() => {
-      router.push('/resumeList');
-    }, 3000);
-  } catch (error) {
-    console.error('Failed to generate or save PDF:', error);
-    toast.error('Failed to generate or save PDF. Please try again.');
-  }
-};
+  const handleSaveChanges = async () => {
+    const element = document.getElementById('resume-preview');
+    if (!element) {
+      toast.error('Preview not found. Please try again.');
+      return;
+    }
 
-const handleDownloadPDF = async () => {
-  const element = document.getElementById('resume-preview');
-  if (isReorderMode) {
-    toast.info('Download PDF after saving the order.');
-    return;
-  }
-  if (!element) {
-    toast.error('Preview not found. Please try again.');
-    return;
-  }
+    setIsGeneratingPDF(true);
+    convertOklchToRgb();
 
-  convertOklchToRgb();
+    const opt = {
+      margin: [0.5, 0.125, 0.5, 0.125],
+    };
 
-  const opt = {
-    margin: [0.5, 0.125, 0.5, 0.125],
-    filename: `${resumeData.personalInfo.fullName || 'resume'}.pdf`,
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 4, useCORS: false },
-    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-  };
-
-  try {
-    if (resumeData.personalInfo.fullName && resumeData.personalInfo.email && resumeData.personalInfo.phone) {
+    try {
       const pdf = await html2pdf().set(opt).from(element).toPdf().output('arraybuffer');
       await handleSave(pdf);
       await html2pdf().set(opt).from(element).save();
+      toast.success('Changes saved and PDF downloaded!');
       setTimeout(() => {
         router.push('/resumeList');
       }, 3000);
-    } else {
-      toast.info('Please enter your name, email, and phone number before downloading the resume.');
-    }
-  } catch (error) {
-    console.error('Failed to generate or save PDF:', error);
-    toast.error('Failed to generate or save PDF. Please try again.');
+    } catch (error) {
+      console.error('Failed to generate or save PDF:', error);
+      toast.error('Failed to generate or save PDF. Please try again.');
+    } finally {
+    setIsGeneratingPDF(false);
   }
-};
+  };
+
+  const handleDownloadPDF = async () => {
+    const element = document.getElementById('resume-preview');
+    if (isReorderMode) {
+      toast.info('Download PDF after saving the order.');
+      return;
+    }
+    if (!element) {
+      toast.error('Preview not found. Please try again.');
+      return;
+    }
+
+    setIsGeneratingPDF(true);
+    convertOklchToRgb();
+
+    const opt = {
+      margin: [0.5, 0.125, 0.5, 0.125],
+      filename: `${resumeData.personalInfo.fullName || 'resume'}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 4, useCORS: false },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+    };
+
+    try {
+      if (resumeData.personalInfo.fullName && resumeData.personalInfo.email && resumeData.personalInfo.phone) {
+        const pdf = await html2pdf().set(opt).from(element).toPdf().output('arraybuffer');
+        await handleSave(pdf);
+        await html2pdf().set(opt).from(element).save();
+        setTimeout(() => {
+          router.push('/resumeList');
+        }, 3000);
+      } else {
+        toast.info('Please enter your name, email, and phone number before downloading the resume.');
+      }
+    } catch (error) {
+      console.error('Failed to generate or save PDF:', error);
+      toast.error('Failed to generate or save PDF. Please try again.');
+    } finally {
+      setIsGeneratingPDF(false);
+    }
+  };
 
   const handleAISuggest = async () => {
     setAiLoading(true)
@@ -491,7 +498,7 @@ const handleDownloadPDF = async () => {
         return
       }
       const prompt = `Generate a concise, ATS friendly professional summary (30-45 words) for a resume based on the following information. Highlight key achievements, skills, and career goals, tailored to the provided data. Ensure the summary is professional, engaging, and suitable for a resume: ${dataSummary}`
-      
+
       const res = await fetch("/api/gemini", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -524,7 +531,7 @@ const handleDownloadPDF = async () => {
         return
       }
 
-      const prompt = `Generate a concise, ATS-friendly job description (exact 3 points, each not more than 20 words, line by line , without any bullet points) for the position of ${work.position} at ${work.company}. Highlight key responsibilities, achievements, and skills. Ensure it is professional, engaging, and suitable for a resume.`
+      const prompt = `Generate a concise, ATS-friendly job description (exact 3 points, each not more than 20 words, line by line , with solid circular black-filled bullet points, not stars) for the position of ${work.position} at ${work.company}. Highlight key responsibilities, achievements, and skills. Ensure it is professional, engaging, and suitable for a resume.`
 
       const res = await fetch("/api/gemini", {
         method: "POST",
@@ -885,11 +892,11 @@ const handleDownloadPDF = async () => {
                     <span className="text-gray-500 text-sm">
                       {work.startDate && work.endDate
                         ? `${work.startDate} - ${work.endDate}`
-                        : work.startDate || work.endDate || "2023-08 - Present"}
+                        : work.startDate || work.endDate || "Present"}
                     </span>
                   </div>
                   {work.description.some(desc => desc.trim()) && (
-                    <ul className="text-gray-700 text-sm leading-relaxed list-disc pl-5">
+                    <ul className="text-gray-700 text-sm leading-relaxed  pl-5">
                       {work.description.map((desc, index) => (
                         desc.trim() && <li key={index}>{desc}</li>
                       ))}
@@ -1785,44 +1792,41 @@ const handleDownloadPDF = async () => {
                               <span>{resumeData.personalInfo.phone || "123456789"}</span>
                               <span>{resumeData.personalInfo.location || "Hyderabad"}</span>
                             </div>
-                           <div className="grid grid-cols-3 gap-4 mt-1 text-sm opacity-90">
-                                                         {resumeData.personalInfo.linkedin && (
-                                                           <a
-                                                             href={resumeData.personalInfo.linkedin}
-                                                             target="_blank"
-                                                             rel="noopener noreferrer"
-                                                             
-                                                           >
-                                                             <div className="flex items-center">
-                                                               <Linkedin className="w-4 h-4 mr-1"/> {resumeData.personalInfo.linkedin.slice(28)}
-                                                             </div>
-                                                           </a>
-                                                         )}
-                                                         {resumeData.personalInfo.website && (
-                                                           <a
-                                                             href={resumeData.personalInfo.website}
-                                                             target="_blank"
-                                                             rel="noopener noreferrer"
-                                                             
-                                                           >
-                                                             <div className="flex items-center">
-                                                               <Globe className="w-4 h-4 mr-1 " /> View Website
-                                                             </div>
-                                                           </a>
-                                                         )}
-                                                         {resumeData.personalInfo.github && (
-                                                           <a
-                                                             href={resumeData.personalInfo.github}
-                                                             target="_blank"
-                                                             rel="noopener noreferrer"
-                                                             
-                                                           >
-                                                             <div className="flex items-center">
-                                                               <Github className="w-4 h-4 mr-1 " /> {resumeData.personalInfo.github.slice(19)}
-                                                             </div>
-                                                           </a>
-                                                         )}
-                                                       </div>
+                            <div className="grid grid-cols-3 gap-4 mt-2 text-sm opacity-90 items-center">
+                              {resumeData.personalInfo.linkedin && (
+                                <a
+                                  href={resumeData.personalInfo.linkedin}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center"
+                                >
+                                  <Linkedin className="w-4 h-4 mr-2 " /> 
+                                  <span className={`font-semibold ${isGeneratingPDF ? 'mb-[1rem]' : ''}`}>{resumeData.personalInfo.linkedin.slice(28)}</span>
+                                </a>
+                              )}
+                              {resumeData.personalInfo.website && (
+                                <a
+                                  href={resumeData.personalInfo.website}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center"
+                                >
+                                  <Globe className="w-4 h-4 mr-2" /> 
+                                  <span className={`font-semibold ${isGeneratingPDF ? 'mb-[1rem]' : ''}`}>View Website</span>
+                                </a>
+                              )}
+                              {resumeData.personalInfo.github && (
+                                <a
+                                  href={resumeData.personalInfo.github}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center"
+                                >
+                                  <Github className="w-4 h-4 mr-2" /> 
+                                  <span className={`font-semibold ${isGeneratingPDF ? 'mb-[1rem]' : ''}`}>{resumeData.personalInfo.github.slice(19)}</span>
+                                </a>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
