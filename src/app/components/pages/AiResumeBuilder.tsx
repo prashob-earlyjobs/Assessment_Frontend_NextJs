@@ -212,6 +212,7 @@ export default function AIResumeBuilder() {
   const [savedResumeId, setSavedResumeId] = useState<string | null>(null);
   const [isPrefilled, setIsPrefilled] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [viewMode, setViewMode] = useState<"preview" | "ats">("preview");
   const [atsScore, setAtsScore] = useState<ATSScore | null>(null);
   const [atsLoading, setAtsLoading] = useState(false);
@@ -311,10 +312,11 @@ export default function AIResumeBuilder() {
       return;
     }
 
+    setIsGeneratingPDF(true);
     convertOklchToRgb();
 
     const opt = {
-      margin: [0.5, 0.125, 0.125, 0.5],
+      margin: [0.5, 0.125, 0.5, 0.125],
       filename: `${resumeData.personalInfo.fullName || "resume"}.pdf`,
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: 4,  useCORS: false },
@@ -336,6 +338,8 @@ export default function AIResumeBuilder() {
     } catch (error: any) {
       console.error("Failed to generate PDF:", error);
       toast.error("Failed to generate PDF. Please try again.");
+    } finally {
+      setIsGeneratingPDF(false);
     }
   };
 
@@ -1794,44 +1798,41 @@ export default function AIResumeBuilder() {
                               <span>{resumeData.personalInfo.phone || "123456789"}</span>
                               <span>{resumeData.personalInfo.location || "Hyderabad"}</span>
                             </div>
-                            <div className="grid grid-cols-3 gap-4 mt-1 text-sm opacity-90">
-                              {resumeData.personalInfo.linkedin && (
-                                <a
-                                  href={resumeData.personalInfo.linkedin}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  
-                                >
-                                  <div className="flex items-center">
-                                    <Linkedin className="w-4 h-4 mr-1"/> {resumeData.personalInfo.linkedin.slice(28)}
-                                  </div>
-                                </a>
-                              )}
-                              {resumeData.personalInfo.website && (
-                                <a
-                                  href={resumeData.personalInfo.website}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  
-                                >
-                                  <div className="flex items-center">
-                                    <Globe className="w-4 h-4 mr-1 " /> View Website
-                                  </div>
-                                </a>
-                              )}
-                              {resumeData.personalInfo.github && (
-                                <a
-                                  href={resumeData.personalInfo.github}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  
-                                >
-                                  <div className="flex items-center">
-                                    <Github className="w-4 h-4 mr-1 " /> {resumeData.personalInfo.github.slice(19)}
-                                  </div>
-                                </a>
-                              )}
-                            </div>
+                           <div className="grid grid-cols-3 gap-4 mt-2 text-sm opacity-90 items-center">
+                                                         {resumeData.personalInfo.linkedin && (
+                                                           <a
+                                                             href={resumeData.personalInfo.linkedin}
+                                                             target="_blank"
+                                                             rel="noopener noreferrer"
+                                                             className="flex items-center"
+                                                           >
+                                                             <Linkedin className="w-4 h-4 mr-2 " /> 
+                                                             <span className={`font-semibold ${isGeneratingPDF ? 'mb-[1rem]' : ''}`}>{resumeData.personalInfo.linkedin.slice(28)}</span>
+                                                           </a>
+                                                         )}
+                                                         {resumeData.personalInfo.website && (
+                                                           <a
+                                                             href={resumeData.personalInfo.website}
+                                                             target="_blank"
+                                                             rel="noopener noreferrer"
+                                                             className="flex items-center"
+                                                           >
+                                                             <Globe className="w-4 h-4 mr-2" /> 
+                                                             <span className={`font-semibold ${isGeneratingPDF ? 'mb-[1rem]' : ''}`}>View Website</span>
+                                                           </a>
+                                                         )}
+                                                         {resumeData.personalInfo.github && (
+                                                           <a
+                                                             href={resumeData.personalInfo.github}
+                                                             target="_blank"
+                                                             rel="noopener noreferrer"
+                                                             className="flex items-center"
+                                                           >
+                                                             <Github className="w-4 h-4 mr-2" /> 
+                                                             <span className={`font-semibold ${isGeneratingPDF ? 'mb-[1rem]' : ''}`}>{resumeData.personalInfo.github.slice(19)}</span>
+                                                           </a>
+                                                         )}
+                                                       </div>
                           </div>
                         </div>
                       </div>
