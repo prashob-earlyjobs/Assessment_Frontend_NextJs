@@ -144,6 +144,10 @@ export default function AIResume() {
                         <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
                         PDF Support
                       </span>
+                      <span className="flex items-center">
+                        <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                        DOCX Support
+                      </span>
                      
                     </div>
                     <Button className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-lg py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
