@@ -195,8 +195,19 @@ const EditAssessmentModal: React.FC<EditAssessmentModalProps> = ({
                                     <SelectValue placeholder="Select category" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="technical">Technical</SelectItem>
-                                    <SelectItem value="non-technical">Non-Technical</SelectItem>
+                                    <SelectItem value="Aptitude & Reasoning">Aptitude & Reasoning</SelectItem>
+                                    <SelectItem value="Sales & Marketing">Sales & Marketing</SelectItem>
+                                    <SelectItem value="Customer Support & BPO">Customer Support & BPO</SelectItem>
+                                    <SelectItem value="Data Entry & Back Office">Data Entry & Back Office</SelectItem>
+                                    <SelectItem value="Operations & Admin">Operations & Admin</SelectItem>
+                                    <SelectItem value="Human Resources & Recruitment">Human Resources & Recruitment</SelectItem>
+                                    <SelectItem value="Finance & Accounts">Finance & Accounts</SelectItem>
+                                    <SelectItem value="IT & Technical Support">IT & Technical Support</SelectItem>
+                                    <SelectItem value="Retail & E-commerce">Retail & E-commerce</SelectItem>
+                                    <SelectItem value="Hospitality & Front Desk">Hospitality & Front Desk</SelectItem>
+                                    <SelectItem value="Healthcare (Non-Clinical)">Healthcare (Non-Clinical)</SelectItem>
+                                    <SelectItem value="Internship & Fresher Readiness">Internship & Fresher Readiness</SelectItem>
+                                    <SelectItem value="Behavioral & Soft Skills">Behavioral & Soft Skills</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>

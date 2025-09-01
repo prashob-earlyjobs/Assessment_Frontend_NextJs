@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+/* Custom CSS Variables for EarlyJobs */
+:root {
+  --earlyjobs-orange: #ff6b35;
+  --earlyjobs-navy: #1e3a8a;
+  --earlyjobs-text: #1f2937;
+  --earlyjobs-light-orange: #fff7ed;
+}
+
 /* in your globals.css or tailwind base layer */
 [data-state='open'] button.bg-red-600 {
   color: white !important;
