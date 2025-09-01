@@ -116,18 +116,7 @@ const AssessmentDetails = () => {
   };
 
   const categoryColour = (category) => {
-    switch (category) {
-      case "technical":
-        return "bg-blue-100 text-blue-700";
-      case "non-technical":
-        return "bg-green-100 text-green-700";
-      case "personality":
-        return "bg-yellow-100 text-yellow-700";
-      case "aptitude":
-        return "bg-purple-100 text-purple-700";
-      default:
-        return "bg-gray-100 text-gray-700";
-    }
+    return "bg-blue-100 text-blue-700";
   };
 
   const formatPrice = (price) => {
@@ -291,9 +280,7 @@ const AssessmentDetails = () => {
                       </CardTitle>
                       <div className="flex items-center space-x-2 mt-2">
                         <Badge className="rounded-full text-xs px-2 py-1">
-                          {assessment.category === "non-technical"
-                            ? "Non-Technical"
-                            : "Technical"}
+                          {assessment.category || "Uncategorized"}
                         </Badge>
                         <Badge
                           variant="outline"

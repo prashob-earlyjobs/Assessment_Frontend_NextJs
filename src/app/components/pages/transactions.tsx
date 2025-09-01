@@ -94,18 +94,7 @@ const Transactions = () => {
     };
 
     const categoryColour = (category: string) => {
-        switch (category) {
-            case "technical":
-                return "bg-blue-100 text-blue-700";
-            case "communication":
-                return "bg-green-100 text-green-700";
-            case "personality":
-                return "bg-yellow-100 text-yellow-700";
-            case "aptitude":
-                return "bg-purple-100 text-purple-700";
-            default:
-                return "bg-gray-100 text-gray-700";
-        }
+        return "bg-blue-100 text-blue-700";
     };
 
     const formatPrice = (price) => {
@@ -234,20 +223,7 @@ const Transactions = () => {
                                     <div className="flex items-start justify-between">
                                         <div className="flex items-center space-x-3">
                                             <div className={`p-3 rounded-2xl ${categoryColour(assessment.category)}`}>
-                                                {(() => {
-                                                    switch (assessment.category) {
-                                                        case "technical":
-                                                            return <Code className="h-6 w-6" />;
-                                                        case "communication":
-                                                            return <MessageSquare className="h-6 w-6" />;
-                                                        case "personality":
-                                                            return <Settings className="h-6 w-6" />;
-                                                        case "aptitude":
-                                                            return <BarChart className="h-6 w-6" />;
-                                                        default:
-                                                            return <Award className="h-6 w-6" />;
-                                                    }
-                                                })()}
+                                                <Award className="h-6 w-6" />
                                             </div>
                                             <div>
                                                 <CardTitle className="text-xl">{assessment.title}</CardTitle>
