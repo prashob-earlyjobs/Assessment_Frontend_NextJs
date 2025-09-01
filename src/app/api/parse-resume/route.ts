@@ -21,12 +21,39 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
     }
 
-    const allowedTypes = [
-      'application/pdf',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    // Define supported file types directly in the code
+    const supportedFileTypes = [
+      { extension: '.pdf', mimeType: 'application/pdf' },
+      { extension: '.docx', mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' },
+      { extension: '.doc', mimeType: 'application/msword' },
+      { extension: '.txt', mimeType: 'text/plain' },
+      // Add more file types here as needed, e.g.:
+      // { extension: '.rtf', mimeType: 'application/rtf' },
+      // { extension: '.odt', mimeType: 'application/vnd.oasis.opendocument.text' },
     ];
-    if (!allowedTypes.includes(file.type)) {
-      return NextResponse.json({ error: 'Unsupported file type' }, { status: 400 });
+
+    const fileExtension = path.extname(file.name).toLowerCase();
+    const isValidType = supportedFileTypes.some(
+      (type) => type.extension === fileExtension || type.mimeType === file.type
+    );
+
+    // Log file details for debugging
+    console.log('File details:', {
+      name: file.name,
+      type: file.type,
+      extension: fileExtension,
+      size: file.size,
+    });
+
+    if (!isValidType) {
+      return NextResponse.json(
+        {
+          error: `Unsupported file type: ${file.type} (extension: ${fileExtension}). Supported types: ${supportedFileTypes
+            .map((t) => t.extension)
+            .join(', ')}`,
+        },
+        { status: 400 }
+      );
     }
 
     if (file.size > 5 * 1024 * 1024) {
@@ -40,18 +67,18 @@ export async function POST(request: NextRequest) {
     const tempFilePath = path.join(tempDir, file.name);
     await fs.writeFile(tempFilePath, Buffer.from(buffer));
 
-    // ✅ Use File Manager to upload
+    // Use File Manager to upload
     const fileManager = new GoogleAIFileManager(apiKey);
     const uploadResult = await fileManager.uploadFile(tempFilePath, {
-      mimeType: file.type,
+      mimeType: file.type || getMimeTypeFromExtension(fileExtension, supportedFileTypes),
       displayName: file.name,
     });
 
-    // Now use generative AI model
+    // Use generative AI model
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' });
 
-     const prompt = `
+    const prompt = `
       Extract the following information from the uploaded resume file and return it strictly as a JSON object matching this structure. 
       Do not include any additional text, markdown, or explanations outside the JSON.
       If a field is not present, use an empty string or empty array as appropriate.
@@ -111,7 +138,7 @@ export async function POST(request: NextRequest) {
       {
         fileData: {
           fileUri: uploadResult.file.uri,
-          mimeType: file.type,
+          mimeType: file.type || getMimeTypeFromExtension(fileExtension, supportedFileTypes),
         },
       },
     ]);
@@ -127,4 +154,13 @@ export async function POST(request: NextRequest) {
     console.error('Error in parse-resume:', error);
     return NextResponse.json({ error: 'Failed to parse resume' }, { status: 500 });
   }
+}
+
+// Helper function to map file extensions to MIME types
+function getMimeTypeFromExtension(
+  extension: string,
+  supportedFileTypes: { extension: string; mimeType: string }[]
+): string {
+  const type = supportedFileTypes.find((t) => t.extension === extension);
+  return type ? type.mimeType : 'application/octet-stream';
 }

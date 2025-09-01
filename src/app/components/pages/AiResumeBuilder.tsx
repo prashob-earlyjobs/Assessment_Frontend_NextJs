@@ -331,7 +331,7 @@ export default function AIResumeBuilder() {
         
         await handleSave();
         setTimeout(() => {
-          router.push("/airesume");
+          router.push("/resumeList");
         }, 3000);
       } else {
         toast.info("Please enter your name, email, or phone number before downloading the resume.");
@@ -869,12 +869,12 @@ export default function AIResumeBuilder() {
 
       if (sectionId === "experience" && resumeData.workExperience.length > 0) {
         return (
-          <div key="experience" className="mb-6" style={{ pageBreakInside: "avoid" }}>
+          <div key="experience" className="mb-6" >
             <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Work Experience</h2>
             <div className="space-y-4">
               {resumeData.workExperience.map((work) => (
                 <div key={work.id}>
-                  <div className="flex justify-between items-start mb-2">
+                  <div className="flex justify-between items-start mb-2" style={{ pageBreakInside: "avoid" }}>
                     <div>
                       <h3 className="font-semibold text-gray-900">{work.position || "Software Developer Intern"}</h3>
                       <p className={`${currentTemplate.accent} font-medium`}>{work.company || "Company Name"}</p>
@@ -910,11 +910,11 @@ export default function AIResumeBuilder() {
 
       if (sectionId === "education" && resumeData.education.length > 0) {
         return (
-          <div key="education" className="mb-6" style={{ pageBreakInside: "avoid" }}>
+          <div key="education" className="mb-6" >
             <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Education</h2>
             <div className="space-y-3">
               {resumeData.education.map((edu) => (
-                <div key={edu.id} className="flex justify-between items-start">
+                <div key={edu.id} className="flex justify-between items-start" style={{ pageBreakInside: "avoid" }}>
                   <div>
                     <h3 className="font-semibold text-gray-900">
                       {edu.degree} {edu.field && `in ${edu.field}`}
@@ -925,7 +925,7 @@ export default function AIResumeBuilder() {
                   <span className="text-gray-500 text-sm">
                     {edu.startDate && edu.endDate
                       ? `${edu.startDate} - ${edu.endDate}`
-                      : edu.startDate || edu.endDate || "Date Range"}
+                      : edu.startDate || edu.endDate }
                   </span>
                 </div>
               ))}
@@ -951,12 +951,12 @@ export default function AIResumeBuilder() {
 
       if (sectionId === "projects" && resumeData.projects.length > 0) {
         return (
-          <div key="projects" className="mb-6" style={{ pageBreakInside: "avoid" }}>
+          <div key="projects" className="mb-6" >
             <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Projects</h2>
             <div className="space-y-4">
               {resumeData.projects.map((project) => (
                 <div key={project.id}>
-                  <div className="flex justify-between items-start mb-2">
+                  <div className="flex justify-between items-start mb-2" style={{ pageBreakInside: "avoid" }}>
                     <h3 className="font-semibold text-gray-900">{project.name || "Project Name"}</h3>
                     {project.link && (
                       <a
@@ -986,13 +986,12 @@ export default function AIResumeBuilder() {
 
       if (sectionId === "certifications" && resumeData.certifications.length > 0) {
         return (
-          <div key="certifications" className="mb-6" style={{ pageBreakInside: "avoid" }}>
+          <div key="certifications" className="mb-6" >
             <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Certifications</h2>
             <div className="space-y-2">
               {resumeData.certifications.map((cert) => (
-                <div key={cert} className="flex items-center">
-                  <div className={`w-2 h-2 ${currentTemplate.accent.replace("text-", "bg-")} rounded-full mr-3`}></div>
-                  <span className={`text-gray-700 ${isGeneratingPDF ? "mb-[1rem]" : ""}`}>{cert}</span>
+                <div key={cert} className="flex items-center" style={{ pageBreakInside: "avoid" }}>
+                  <span className={`text-gray-700`}>● {cert}</span>
                 </div>
               ))}
             </div>
@@ -1002,15 +1001,12 @@ export default function AIResumeBuilder() {
 
       if (sectionId === "achievements" && resumeData.achievements.length > 0) {
         return (
-          <div key="achievements" className="mb-6" style={{ pageBreakInside: "avoid" }}>
+          <div key="achievements" className="mb-6" >
             <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Achievements</h2>
             <div className="space-y-2">
               {resumeData.achievements.map((achievement) => (
-                <div key={achievement.id} className="flex items-center">
-                  <div className={`w-2 h-2 ${currentTemplate.accent.replace("text-", "bg-")} rounded-full mr-3`}></div>
-                  <span className="text-gray-700">
-                    {achievement.title} - {achievement.description} ({achievement.date})
-                  </span>
+                <div key={achievement.id} className="flex items-center" style={{ pageBreakInside: "avoid" }}>
+                  <span className={`text-gray-700`}>● {achievement.title} - {achievement.description} ({achievement.date})</span>
                 </div>
               ))}
             </div>
@@ -1020,16 +1016,15 @@ export default function AIResumeBuilder() {
 
       if (sectionId === "extracurriculars" && resumeData.extracurriculars.length > 0) {
         return (
-          <div key="extracurriculars" className="mb-6" style={{ pageBreakInside: "avoid" }}>
+          <div key="extracurriculars" className="mb-6" >
             <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>
               Extracurricular Activities
             </h2>
             <div className="space-y-2">
               {resumeData.extracurriculars.map((extra) => (
-                <div key={extra.id} className="flex items-center">
-                  <div className={`w-2 h-2 ${currentTemplate.accent.replace("text-", "bg-")} rounded-full mr-3`}></div>
-                  <span className="text-gray-700">
-                    {extra.activity} - {extra.role} ({extra.startDate} - {extra.endDate}): {extra.description}
+                <div key={extra.id} className="flex items-center" style={{ pageBreakInside: "avoid" }}>
+                  <span className={`text-gray-700`}>
+                    ● {extra.activity} - {extra.role} ({extra.startDate} - {extra.endDate}): {extra.description}
                   </span>
                 </div>
               ))}
@@ -1797,7 +1792,7 @@ export default function AIResumeBuilder() {
                             <div className="flex items-center space-x-6 text-sm mt-3 opacity-90">
                               <span>{resumeData.personalInfo.email || "johndoe68@gmail.com"}</span>
                               <span>{resumeData.personalInfo.phone || "123456789"}</span>
-                              <span>{resumeData.personalInfo.location || "Hyderabad"}</span>
+                              <span>{resumeData.personalInfo.location }</span>
                             </div>
                            <div className="grid grid-cols-3 gap-4 mt-2 text-sm opacity-90 items-center">
                                                          {resumeData.personalInfo.linkedin && (
