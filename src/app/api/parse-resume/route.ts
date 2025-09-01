@@ -5,6 +5,9 @@ import { GoogleAIFileManager } from '@google/generative-ai/server';
 import { promises as fs } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import Tesseract from 'tesseract.js';
+import { fromPath } from 'pdf2pic';
+import mammoth from 'mammoth';
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,15 +24,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
     }
 
-    // Define supported file types directly in the code
     const supportedFileTypes = [
       { extension: '.pdf', mimeType: 'application/pdf' },
       { extension: '.docx', mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' },
       { extension: '.doc', mimeType: 'application/msword' },
       { extension: '.txt', mimeType: 'text/plain' },
-      // Add more file types here as needed, e.g.:
-      // { extension: '.rtf', mimeType: 'application/rtf' },
-      // { extension: '.odt', mimeType: 'application/vnd.oasis.opendocument.text' },
+      { extension: '.rtf', mimeType: 'application/rtf' },
+      { extension: '.odt', mimeType: 'application/vnd.oasis.opendocument.text' },
     ];
 
     const fileExtension = path.extname(file.name).toLowerCase();
@@ -37,7 +38,6 @@ export async function POST(request: NextRequest) {
       (type) => type.extension === fileExtension || type.mimeType === file.type
     );
 
-    // Log file details for debugging
     console.log('File details:', {
       name: file.name,
       type: file.type,
@@ -61,18 +61,90 @@ export async function POST(request: NextRequest) {
     }
 
     const buffer = await file.arrayBuffer();
-
-    // Create temporary file
     const tempDir = os.tmpdir();
     const tempFilePath = path.join(tempDir, file.name);
     await fs.writeFile(tempFilePath, Buffer.from(buffer));
 
-    // Use File Manager to upload
+    let extractedText = '';
+
+    // Handle PDFs (potentially image-based)
+    if (fileExtension === '.pdf') {
+      try {
+        // Convert PDF to images
+        const outputDir = path.join(tempDir, `pdf_images_${Date.now()}`);
+        await fs.mkdir(outputDir, { recursive: true });
+
+        const options = {
+          density: 100,
+          format: 'png',
+          outputDir,
+          outputName: 'page',
+        };
+
+        const convert = fromPath(tempFilePath, options);
+        const images = await convert.bulk(-1); // Convert all pages
+
+        // Perform OCR on each image
+        for (const image of images) {
+          const imagePath = path.join(outputDir, `page.${image.page}.png`);
+          const { data: { text } } = await Tesseract.recognize(imagePath, 'eng');
+          extractedText += text + '\n';
+        }
+
+        // Clean up image files
+        await fs.rm(outputDir, { recursive: true, force: true });
+      } catch (pdfError) {
+        console.warn('PDF processing failed, attempting direct file upload:', pdfError);
+        // Fallback to original file upload if OCR fails
+        extractedText = '';
+      }
+    }
+    // Handle Word documents (.docx)
+    else if (fileExtension === '.docx') {
+      try {
+        const { value } = await mammoth.extractRawText({ path: tempFilePath });
+        extractedText = value;
+
+        // Check if the extracted text is minimal (indicating possible image-based content)
+        if (value.trim().length < 50) {
+          console.log('Minimal text extracted from .docx, attempting OCR on embedded images');
+          const images = await extractImagesFromDocx(tempFilePath);
+          for (const imagePath of images) {
+            const { data: { text } } = await Tesseract.recognize(imagePath, 'eng');
+            extractedText += text + '\n';
+            await fs.unlink(imagePath); // Clean up image file
+          }
+        }
+      } catch (docxError) {
+        console.warn('DOCX processing failed:', docxError);
+        extractedText = '';
+      }
+    }
+    // Other file types (use original file upload)
+    else {
+      extractedText = '';
+    }
+
     const fileManager = new GoogleAIFileManager(apiKey);
-    const uploadResult = await fileManager.uploadFile(tempFilePath, {
-      mimeType: file.type || getMimeTypeFromExtension(fileExtension, supportedFileTypes),
-      displayName: file.name,
-    });
+    let uploadResult;
+
+    // If OCR extracted text, use it; otherwise, upload the original file
+    if (extractedText.trim().length > 0) {
+      // Create a temporary text file with extracted content
+      const tempTextPath = path.join(tempDir, `${path.basename(file.name, fileExtension)}.txt`);
+      await fs.writeFile(tempTextPath, extractedText);
+      uploadResult = await fileManager.uploadFile(tempTextPath, {
+        mimeType: 'text/plain',
+        displayName: `${file.name}_extracted.txt`,
+      });
+      await fs.unlink(tempTextPath); // Clean up text file
+    } else {
+      // Upload original file as fallback
+      uploadResult = await fileManager.uploadFile(tempFilePath, {
+        mimeType: file.type || getMimeTypeFromExtension(fileExtension, supportedFileTypes),
+        displayName: file.name,
+      });
+    }
 
     // Use generative AI model
     const genAI = new GoogleGenerativeAI(apiKey);
@@ -83,7 +155,7 @@ export async function POST(request: NextRequest) {
       Do not include any additional text, markdown, or explanations outside the JSON.
       If a field is not present, use an empty string or empty array as appropriate.
       For dates, use YYYY-MM format if possible.
-      For descriptions in workExperience, split into an array of up to 3 bullet points.
+      For descriptions in workExperience, split into an array of up to 3 bullet points, circular and black-filled.
       Structure:
       {
         "personalInfo": {
@@ -133,12 +205,13 @@ export async function POST(request: NextRequest) {
         }
       }
     `;
+
     const result = await model.generateContent([
       prompt,
       {
         fileData: {
           fileUri: uploadResult.file.uri,
-          mimeType: file.type || getMimeTypeFromExtension(fileExtension, supportedFileTypes),
+          mimeType: uploadResult.file.mimeType,
         },
       },
     ]);
@@ -146,7 +219,7 @@ export async function POST(request: NextRequest) {
     const jsonText = result.response.text().replace(/```json|```/g, '').trim();
     const parsedData = JSON.parse(jsonText);
 
-    // Clean up temporary file
+    // Clean up original temporary file
     await fs.unlink(tempFilePath);
 
     return NextResponse.json(parsedData);
@@ -163,4 +236,20 @@ function getMimeTypeFromExtension(
 ): string {
   const type = supportedFileTypes.find((t) => t.extension === extension);
   return type ? type.mimeType : 'application/octet-stream';
+}
+
+// Helper function to extract images from a .docx file
+async function extractImagesFromDocx(docxPath: string): Promise<string[]> {
+  const tempDir = os.tmpdir();
+  const imagePaths: string[] = [];
+  
+  try {
+    const result = await mammoth.extractRawText({ path: docxPath });
+   
+    console.warn('Image extraction from .docx not fully implemented; returning empty array');
+    return imagePaths;
+  } catch (error) {
+    console.error('Error extracting images from .docx:', error);
+    return imagePaths;
+  }
 }
