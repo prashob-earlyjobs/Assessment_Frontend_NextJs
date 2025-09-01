@@ -134,7 +134,9 @@ const templates = [
   }
 ]
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3000"
+const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL
+
+
 
 const apiService = {
   async saveResume(resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[], pdfBuffer: ArrayBuffer) {
@@ -179,6 +181,7 @@ const apiService = {
     return response.json()
   },
 
+
   async updateResume(id: string, resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[], pdfBuffer: ArrayBuffer) {
     const token = Cookies.get('accessToken');
     if (!token) {
@@ -202,6 +205,7 @@ const apiService = {
 
     return response.json();
   }
+
 }
 
 export default function ResumeBuilder() {
@@ -478,10 +482,12 @@ export default function ResumeBuilder() {
     }
   };
 
+
   const handleAISuggest = async () => {
     setAiLoading(true)
     try {
       const dataSummary = `
+
       Name: ${resumeData.personalInfo.fullName || "N/A"}
       Email: ${resumeData.personalInfo.email || "N/A"}
       Location: ${resumeData.personalInfo.location || "N/A"}
@@ -492,6 +498,7 @@ export default function ResumeBuilder() {
       Projects: ${resumeData.projects.map(proj => `${proj.name || "N/A"}: ${proj.description || "N/A"} (Technologies: ${proj.technologies || "N/A"})`).join("; ") || "N/A"}
       Achievements: ${resumeData.achievements.map(ach => `${ach.title || "N/A"} (${ach.date || "N/A"}): ${ach.description || "N/A"}`).join("; ") || "N/A"}
       Extracurriculars: ${resumeData.extracurriculars.map(extra => `${extra.activity || "N/A"} - ${extra.role || "N/A"} (${extra.startDate} - ${extra.endDate || "Present"}): ${extra.description || "N/A"}`).join("; ") || "N/A"}
+
     `
       if (!resumeData.personalInfo.fullName && !resumeData.personalInfo.email && (!resumeData.workExperience.length || !resumeData.education.length)) {
         toast.info("Please fill in all required fields to generate a summary.")
@@ -549,20 +556,22 @@ export default function ResumeBuilder() {
             point.trim().replace(/^[-•]\s*/, "").trim()
           ) || []
 
-      setResumeData((prev) => ({
-        ...prev,
-        workExperience: prev.workExperience.map((w) =>
-          w.id === id ? { ...w, description: generatedDescription } : w
-        ),
-      }))
-      toast.success("AI-generated description added!")
-    } catch (error) {
-      console.error("Failed to generate AI suggestion:", error)
-      toast.error("Failed to generate AI suggestion. Please try again.")
-    } finally {
-      setAiLoading(false)
-    }
+
+    setResumeData((prev) => ({
+      ...prev,
+      workExperience: prev.workExperience.map((w) =>
+        w.id === id ? { ...w, description: generatedDescription } : w
+      ),
+    }));
+    toast.success("AI-generated description added!");
+  } catch (error) {
+    console.error("Failed to generate AI suggestion:", error);
+    toast.error("Failed to generate AI suggestion. Please try again.");
+  } finally {
+    setAiLoading(false);
   }
+};
+
 
   const toggleSection = useCallback((sectionId: string) => {
     setCollapsedSections((prev) => {
@@ -1070,6 +1079,7 @@ export default function ResumeBuilder() {
               </Link>
             </div>
             <div className="flex items-center space-x-1 md:space-x-3">
+
               <Dialog open={isDownloadDialogOpen} onOpenChange={setIsDownloadDialogOpen}>
                 <DialogTrigger asChild>
                   <Button size="sm" className="bg-black hover:bg-gray-800 text-white">
@@ -1114,6 +1124,7 @@ export default function ResumeBuilder() {
               >
                 <Pencil className="w-4 h-4 md:mr-2" />
                 <span className="hidden md:inline">My Resumes</span>
+
               </Button>
             </div>
           </div>

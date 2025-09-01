@@ -160,7 +160,7 @@ export const getAssessmentsfromSearch = async ({
 }) => {
   try {
     const response = await axiosInstance.get(
-      `/assessments?category=${category}&title=${searchQuery}&type=${type}&difficulty=${difficulty}&page=${page}&limit=${limit}`
+      `/assessments?category=${encodeURIComponent(category)}&title=${encodeURIComponent(searchQuery)}&type=${encodeURIComponent(type)}&difficulty=${encodeURIComponent(difficulty)}&page=${page}&limit=${limit}`
     );
     return response.data;
   } catch (error) {
