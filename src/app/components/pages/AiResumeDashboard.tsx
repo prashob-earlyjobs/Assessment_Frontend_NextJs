@@ -44,9 +44,9 @@ export default function AIResume() {
       return;
     }
 
-    const allowedTypes = ["application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+    const allowedTypes = ["application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/msword"];
     if (!allowedTypes.includes(file.type)) {
-      toast.error("Only PDF files are supported.");
+      toast.error("Only PDF and Word files are supported.");
       return;
     }
 
