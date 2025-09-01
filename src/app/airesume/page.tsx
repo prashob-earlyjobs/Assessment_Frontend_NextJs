@@ -5,7 +5,7 @@ const AiResumePage = () => {
   return (
     
       <AiResumeDashboard />
-    
+
   );
 };
 

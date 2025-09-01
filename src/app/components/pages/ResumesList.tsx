@@ -1,170 +1,232 @@
-// "use client";
-// import { useEffect, useState } from "react";
-// import { Button } from "../ui/button";
-// import { Edit2, Trash2 } from "lucide-react";
-// import Cookies from "js-cookie";
-// import Header from "./header";
-// import {toast} from "sonner";// Assuming you have a toast component
 
-// const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
-// const token = Cookies.get("accessToken");
+// ResumeList.tsx
+"use client"
+import { useState, useEffect, useMemo } from "react"
+import { Button } from "../ui/button"
+import { FileText, Download, Search, Upload, Pencil } from "lucide-react"
+import { formatDistanceToNow, format } from "date-fns"
+import Cookies from "js-cookie"
+import Header from "./header"
+import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
-// interface Resume {
-//   _id: string;
-//   personalInfo?: {
-//     fullName?: string;
-//   };
-// }
+type Resume = {
+  _id: string
+  personalInfo: { fullName?: string }
+  createdAt: string
+  updatedAt: string
+  pdfBuffer?: Buffer
+}
 
-// export default function ResumeList() {
-//   const [resumes, setResumes] = useState<Resume[]>([]);
-//   const [loading, setLoading] = useState(true);
-//   const [showDeletePopup, setShowDeletePopup] = useState(false);
-//   const [resumeToDelete, setResumeToDelete] = useState<string | null>(null);
+export default function ResumeList() {
+  const [query, setQuery] = useState("")
+  const [resumes, setResumes] = useState<Resume[]>([])
+  const [loading, setLoading] = useState(true)
+  const router = useRouter()
+  const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL 
 
+  useEffect(() => {
+    const fetchResumes = async () => {
+      try {
+        const token = Cookies.get("accessToken")
+        if (!token) {
+          toast.error("Please log in to view your resumes")
+          setLoading(false)
+          return
+        }
 
-//   useEffect(() => {
-//     const fetchResumes = async () => {
-//       try {
-//         const res = await fetch(`${API_URL}/resumes`, {
-//           headers: { authorization: `Bearer ${token}` },
-//         });
-//         const data = await res.json();
-//         setResumes(data.data || []);
-//       } catch (err) {
-//         console.error("Failed to fetch resumes", err);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-//     fetchResumes();
-//   }, []);
+        const response = await fetch(`${API_BASE_URL}/resumes`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
 
-//   const handleDelete = async (id: string) => {
-//     setResumeToDelete(id);
-//     setShowDeletePopup(true);
-//   };
+        const result = await response.json()
+        if (!response.ok) {
+          throw new Error(result.message || "Failed to fetch resumes")
+        }
 
-//   const confirmDelete = async () => {
-//     if (!resumeToDelete) return;
+        if (result.success && result.data) {
+         
+          const sortedResumes = result.data.sort((a: Resume, b: Resume) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          )
+          setResumes(sortedResumes)
+        } else {
+          setResumes([])
+        }
+      } catch (error: any) {
+        toast.error(error.message || "An error occurred while fetching resumes")
+        setResumes([])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchResumes()
+  }, [])
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    if (!q) return resumes
+    return resumes.filter((resume) =>
+      ( `Resume - ${format(new Date(resume.createdAt), "MM-dd-yyyy")}`)
+        .toLowerCase()
+        .includes(q)
+    )
+  }, [query, resumes])
+
+  function bytesToSize(bytes: number) {
+    if (bytes === 0) return "0 B"
+    const k = 1024
+    const sizes = ["B", "KB", "MB", "GB", "TB"] as const
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`
+  }
+
+  const handleEdit = (resumeId: string) => {
+    router.push(`/resumeBuilder?resumeId=${resumeId}`)
+  }
+
+//   const handleDownload = async (resumeId: string, fullName: string) => {
 //     try {
-//       const response = await fetch(`${API_URL}/resumes/${resumeToDelete}`, {
-//         method: "DELETE",
+//       const token = Cookies.get("accessToken")
+//       if (!token) {
+//         toast.error("Please log in to download your resume")
+//         return
+//       }
+
+//       const response = await fetch(`${API_BASE_URL}/resumes/${resumeId}/pdf`, {
 //         headers: {
-//           authorization: `Bearer ${token}`,
+//           Authorization: `Bearer ${token}`,
 //         },
-//       });
+//       })
+
 //       if (!response.ok) {
-//         console.log(token);
-//         throw new Error("Failed to delete");
+//         throw new Error("Failed to download resume")
 //       }
-//       setResumes((prev) => prev.filter((r) => r._id !== resumeToDelete));
-//       toast.success("Resume deleted successfully");
-//     } catch (err) {
-//       console.error(err);
-//     } finally {
-//       setShowDeletePopup(false);
-//       setResumeToDelete(null);
+
+//       const blob = await response.blob()
+//       const url = window.URL.createObjectURL(blob)
+//       const a = document.createElement("a")
+//       a.href = url
+//       a.download = `${fullName || "resume"}.pdf`
+//       document.body.appendChild(a)
+//       a.click()
+//       document.body.removeChild(a)
+//       window.URL.revokeObjectURL(url)
+//       toast.success("Resume downloaded successfully!")
+//     } catch (error: any) {
+//       console.error("Failed to download resume:", error)
+//       toast.error("Failed to download resume. Please try again.")
 //     }
-//   };
+//   }
 
-//   const handleEdit = async (resume: Resume) => {
-//     try {
-//       const response = await fetch(`${API_URL}/resumes/${resume._id}`, {
-//         method: "PUT",
-//         headers: {
-//           "Content-Type": "application/json",
-//           authorization: `Bearer ${token}`,
-//         },
-//         body: JSON.stringify({
-//           ...resume,
-//           personalInfo: {
-//             ...resume.personalInfo,
-//             fullName:
-//               prompt(
-//                 "Edit full name:",
-//                 resume.personalInfo?.fullName || ""
-//               ) || resume.personalInfo?.fullName,
-//           },
-//         }),
-//       });
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-white">
+      <Header />
+      <main className="max-w-7xl mx-auto px-8 py-10">
+        <section className="mb-8 grid gap-6 md:grid-cols-3">
+          <div className="md:col-span-2">
+            <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+              Your Resumes
+            </h1>
+            <p className="mt-2 text-sm text-slate-600">
+              Search and browse all resumes you’ve stored.
+            </p>
+          </div>
+          <div className="flex items-end justify-start md:justify-end">
+            <div className="relative w-full md:w-80">
+              <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input
+                placeholder="Search resumes by name"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="h-10 w-full rounded-md border border-orange-200 bg-white pl-10 pr-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+              />
+            </div>
+          </div>
+        </section>
 
-//       if (!response.ok) throw new Error("Failed to update");
+        {loading ? (
+          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-orange-200 bg-orange-50/40 p-10 text-center">
+            <FileText className="h-10 w-10 text-orange-500" />
+            <h3 className="mt-3 text-lg font-semibold text-slate-900">
+              Loading resumes...
+            </h3>
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-orange-200 bg-orange-50/40 p-10 text-center">
+            <FileText className="h-10 w-10 text-orange-500" />
+            <h3 className="mt-3 text-lg font-semibold text-slate-900">
+              No resumes found
+            </h3>
+            <p className="mt-1 text-sm text-slate-600">
+              Try a different search or create a new resume.
+            </p>
+            <div className="mt-4 flex gap-3">
+              <button
+                onClick={() => setQuery("")}
+                className="inline-flex h-9 items-center rounded-md border border-orange-200 bg-white px-3 text-sm font-medium text-orange-700 transition-colors hover:bg-orange-50 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+              >
+                Clear search
+              </button>
+              <button
+                className="inline-flex h-9 items-center rounded-md bg-orange-500 px-3 text-sm font-medium text-white transition-colors hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+                onClick={() => router.push("/resumeBuilder")}
+              >
+                <Upload className="mr-2 h-4 w-4" /> Create New
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {filtered.map((resume) => (
+              <div
+                key={resume._id}
+                className="group rounded-lg border border-orange-100 bg-white shadow-sm transition-shadow hover:shadow-md"
+              >
+                <div className="p-5">
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-md bg-orange-100 text-orange-600">
+                      <FileText className="h-6 w-6" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="truncate text-base font-semibold text-slate-900">
+                        {`Resume - ${format(new Date(resume.createdAt), "MM-dd-yyyy")}`}
+                      </h3>
+                      <p className="mt-1 text-xs text-slate-600">
+                        Created{" "}
+                        {formatDistanceToNow(new Date(resume.createdAt), {
+                          addSuffix: true,
+                        })}
+                      </p>
+                       <p className="mt-1 text-xs text-slate-600">
+                        Updated{" "}
+                        {formatDistanceToNow(new Date(resume.updatedAt), {
+                          addSuffix: true,
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-4 flex justify-end gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleEdit(resume._id)}
+                      className="border-orange-200 text-orange-700 hover:bg-orange-50"
+                    >
+                      <Pencil className="h-4 w-4 mr-1" /> Edit
+                    </Button>
+                  
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </main>
+    </div>
+  )
+}
 
-//       const updated = await response.json();
-//       setResumes((prev) =>
-//         prev.map((r) => (r._id === resume._id ? updated.data : r))
-//       );
-//     } catch (err) {
-//       console.error(err);
-//     }
-//   };
-
-//   if (loading) return <p>Loading resumes...</p>;
-
-//   return (
-//     <div className="min-h-screen bg-gray-50">
-//       <Header />
-//       <div className="container mx-auto px-4 py-6">
-//         <h1 className="text-2xl font-bold mb-6 text-center">My Resumes</h1>
-//         {resumes.length === 0 ? (
-//           <p className="text-center">No resumes found</p>
-//         ) : (
-//           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
-//             {resumes.map((resume) => (
-//               <div
-//                 key={resume._id}
-//                 className="flex flex-col items-center p-4 border rounded-2xl shadow-sm bg-white hover:shadow-md transition w-full max-w-sm"
-//               >
-//                 <img
-//                   src="resume.profilePicture
-//                   "
-//                   alt="Resume Thumbnail"
-//                   className="w-20 h-20 object-cover rounded mb-2"
-//                 />
-//                 <span className="font-semibold text-lg text-center mb-4">
-//                   {resume.personalInfo?.fullName || "Untitled Resume"}
-//                 </span>
-//                 <div className="flex item-right gap-2">
-//                   <Button
-//                     size="sm"
-//                     variant="outline"
-//                     onClick={() => handleEdit(resume)}
-//                     className="w-full"
-//                   >
-//                     <Edit2 className="w-4 h-4 mr-2" /> Edit
-//                   </Button>
-//                   <Button
-//                     size="sm"
-//                     variant="outline"
-//                     onClick={() => handleDelete(resume._id)}
-//                     className="bg-red-500 text-white"
-//                   >
-//                     <Trash2 className="w-4 h-4 " /> 
-//                   </Button>
-//                 </div>
-//               </div>
-//             ))}
-//           </div>
-//         )}
-//       </div>
-
-//       {showDeletePopup && (
-//         <div className="fixed inset-0 bg-gray-100 bg-opacity-90 flex items-center justify-center z-50">
-//           <div className="bg-white p-6 rounded-lg shadow-lg">
-//             <h2 className="text-lg font-bold mb-4">Confirm Deletion</h2>
-//             <p>Are you sure you want to delete this resume?</p>
-//             <div className="flex justify-end gap-4 mt-4">
-//               <Button variant="outline" onClick={() => setShowDeletePopup(false)}>
-//                 Cancel
-//               </Button>
-//               <Button className="bg-red-500 text-white" onClick={confirmDelete}>
-//                 Delete
-//               </Button>
-//             </div>
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
