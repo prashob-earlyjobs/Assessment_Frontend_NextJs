@@ -1,3 +1,4 @@
+
 "use client";
 import { useState, useRef, useCallback, useEffect } from "react";
 import type React from "react";
@@ -1899,3 +1900,4 @@ export default function AIResumeBuilder() {
     </div>
   );
 }
+

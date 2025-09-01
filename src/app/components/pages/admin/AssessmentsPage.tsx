@@ -277,18 +277,10 @@ const AssessmentsPage: React.FC = () => {
                             </Badge>
                               <Badge
                                 variant="outline"
-                                className={`text-xs flex items-center gap-1 px-2 py-1 rounded-md 
-                                  ${assessment.category === 'technical'
-                                    ? 'bg-blue-100 text-blue-800 border-blue-300'
-                                    : 'bg-yellow-100 text-yellow-800 border-yellow-300'}
-                                `}
+                                className="text-xs flex items-center gap-1 px-2 py-1 rounded-md bg-blue-100 text-blue-800 border-blue-300"
                               >
-                                {assessment.category === 'technical' ? (
-                                  <Code className="w-3.5 h-3.5" />
-                                ) : (
-                                  <BookOpen className="w-3.5 h-3.5" />
-                                )}
-                                {assessment.category==='technical' ? 'Technical' : 'Non-Technical'}
+                                <BookOpen className="w-3.5 h-3.5" />
+                                {assessment.category || 'Uncategorized'}
                               </Badge>
                           </div>
                             {assessment?.tags?.map((tag, index) => (
