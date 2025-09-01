@@ -179,7 +179,7 @@ export default function AIResume() {
                     className="bg-orange-500 hover:bg-orange-600 text-white"
                     disabled={isUploading}
                   >
-                    {isUploading ? "Uploading..." : "Choose File"}
+                    {isUploading ? "Parsing..." : "Choose File"}
                     <Upload className="w-4 h-4 ml-2" />
                   </Button>
                 </div>
