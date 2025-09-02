@@ -1,4 +1,4 @@
-import AIResumeBuilder from "../components/pages/AiResumeBuilder";
+import AIResumeBuilder from "../components/pages/JDEBuilder";
 import ProtectedRoute from "../components/services/protectedRoute";
 const AiResumeBuilderPage = () => {
   return (

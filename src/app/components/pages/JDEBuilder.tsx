@@ -198,7 +198,72 @@ export default function AIResumeBuilder() {
   const searchParams = useSearchParams();
   const jobTitle = searchParams.get("jobTitle") || "";
   const jobDescription = searchParams.get("jobDescription") || "";
+  const parsedResume = searchParams.get("parsedResume") || "";
   const router = useRouter();
+   
+  let parsedResumeData: Partial<ResumeData> = {};
+  try {
+    if (parsedResume) {
+      parsedResumeData   = JSON.parse(decodeURIComponent(parsedResume));
+    }
+  } catch (error) {
+    console.error("Failed to parse parsedResume:", error);
+    toast.error("Invalid resume data provided in query parameters.");
+  }
+  const [resumeData, setResumeData] = useState<ResumeData>({
+    personalInfo: {
+      fullName: parsedResumeData.personalInfo?.fullName || "",
+      email: parsedResumeData.personalInfo?.email || "",
+      phone: parsedResumeData.personalInfo?.phone || "",
+      location: parsedResumeData.personalInfo?.location || "",
+      linkedin: parsedResumeData.personalInfo?.linkedin || "",
+      website: parsedResumeData.personalInfo?.website || "",
+      github: parsedResumeData.personalInfo?.github || "",
+    },
+    professionalSummary: "", // Will be set by prefillSummaryAndSkills
+    education: parsedResumeData.education?.map((edu, index) => ({
+      id: Date.now().toString() + index,
+      school: edu.school || "",
+      degree: edu.degree || "",
+      field: edu.field || "",
+      startDate: edu.startDate || "",
+      endDate: edu.endDate || "",
+      gpa: edu.gpa || "",
+    })) || [],
+    workExperience: parsedResumeData.workExperience?.map((work, index) => ({
+      id: Date.now().toString() + index,
+      company: work.company || "",
+      position: work.position || "",
+      startDate: work.startDate || "",
+      endDate: work.endDate || "",
+      description: work.description || ["", "", ""],
+      index: work.index || index,
+    })) || [],
+    skills: [], // Will be set by prefillSummaryAndSkills
+    certifications: parsedResumeData.certifications || [],
+    projects: parsedResumeData.projects?.map((proj, index) => ({
+      id: Date.now().toString() + index,
+      name: proj.name || "",
+      description: proj.description || "",
+      technologies: proj.technologies || "",
+      link: proj.link || "",
+    })) || [],
+    achievements: parsedResumeData.achievements?.map((ach, index) => ({
+      id: Date.now().toString() + index,
+      title: ach.title || "",
+      description: ach.description || "",
+      date: ach.date || "",
+    })) || [],
+    extracurriculars: parsedResumeData.extracurriculars?.map((extra, index) => ({
+      id: Date.now().toString() + index,
+      activity: extra.activity || "",
+      role: extra.role || "",
+      description: extra.description || "",
+      startDate: extra.startDate || "",
+      endDate: extra.endDate || "",
+    })) || [],
+    profilePicture: parsedResumeData.profilePicture || null,
+  });
 
   const [activeTemplate, setActiveTemplate] = useState("minimal");
   const [isTemplateDialogOpen, setIsTemplateDialogOpen] = useState(false);
@@ -231,26 +296,26 @@ export default function AIResumeBuilder() {
     ])
   );
 
-  const [resumeData, setResumeData] = useState<ResumeData>({
-    personalInfo: {
-      fullName: "",
-      email: "",
-      phone: "",
-      location: "",
-      linkedin: "",
-      website: "",
-      github: "",
-    },
-    professionalSummary: "",
-    education: [],
-    workExperience: [],
-    skills: [],
-    certifications: [],
-    projects: [],
-    achievements: [],
-    extracurriculars: [],
-    profilePicture: null,
-  });
+//   const [resumeData, setResumeData] = useState<ResumeData>({
+//     personalInfo: {
+//       fullName: "",
+//       email: "",
+//       phone: "",
+//       location: "",
+//       linkedin: "",
+//       website: "",
+//       github: "",
+//     },
+//     professionalSummary: "",
+//     education: [],
+//     workExperience: [],
+//     skills: [],
+//     certifications: [],
+//     projects: [],
+//     achievements: [],
+//     extracurriculars: [],
+//     profilePicture: null,
+//   });
 
   const [sectionOrder, setSectionOrder] = useState<SectionOrder[]>([
     { id: "summary", name: "Professional Summary", visible: true },
@@ -317,7 +382,7 @@ export default function AIResumeBuilder() {
     convertOklchToRgb();
 
     const opt = {
-      margin: [0.5, 0.125, 0.5, 0.125],
+      margin: [0.25, 0.125, 0.25, 0.125],
       filename: `${resumeData.personalInfo.fullName || "resume"}.pdf`,
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: 4,  useCORS: false },
@@ -1060,10 +1125,10 @@ export default function AIResumeBuilder() {
         <div className="container max-w-7xl mx-auto px-4 py-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 md:space-x-4">
-              <Link href="/airesume">
+              <Link href="/airesume/jde">
                 <Button variant="ghost" size="sm" className="p-2 md:px-3">
                   <ArrowLeft className="w-4 h-4 md:mr-2" />
-                  <span className="hidden md:inline">Back to Dashboard</span>
+                  <span className="hidden md:inline">Back to JDE</span>
                 </Button>
               </Link>
             </div>
@@ -1895,4 +1960,3 @@ export default function AIResumeBuilder() {
     </div>
   );
 }
-
