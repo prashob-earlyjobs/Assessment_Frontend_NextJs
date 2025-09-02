@@ -134,7 +134,9 @@ const templates = [
   }
 ]
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3000"
+const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL
+
+
 
 const apiService = {
   async saveResume(resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[], pdfBuffer: ArrayBuffer) {
@@ -179,6 +181,7 @@ const apiService = {
     return response.json()
   },
 
+
   async updateResume(id: string, resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[], pdfBuffer: ArrayBuffer) {
     const token = Cookies.get('accessToken');
     if (!token) {
@@ -202,6 +205,7 @@ const apiService = {
 
     return response.json();
   }
+
 }
 
 export default function ResumeBuilder() {
@@ -418,7 +422,7 @@ export default function ResumeBuilder() {
     convertOklchToRgb();
 
     const opt = {
-      margin: [0.5, 0.125, 0.5, 0.125],
+      margin: [0.25, 0.125, 0.25, 0.125],
     };
 
     try {
@@ -452,7 +456,7 @@ export default function ResumeBuilder() {
     convertOklchToRgb();
 
     const opt = {
-      margin: [0.5, 0.125, 0.5, 0.125],
+      margin: [0.25, 0.125, 0.25, 0.125],
       filename: `${resumeData.personalInfo.fullName || 'resume'}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { scale: 4, useCORS: false },
@@ -478,10 +482,12 @@ export default function ResumeBuilder() {
     }
   };
 
+
   const handleAISuggest = async () => {
     setAiLoading(true)
     try {
       const dataSummary = `
+
       Name: ${resumeData.personalInfo.fullName || "N/A"}
       Email: ${resumeData.personalInfo.email || "N/A"}
       Location: ${resumeData.personalInfo.location || "N/A"}
@@ -492,6 +498,7 @@ export default function ResumeBuilder() {
       Projects: ${resumeData.projects.map(proj => `${proj.name || "N/A"}: ${proj.description || "N/A"} (Technologies: ${proj.technologies || "N/A"})`).join("; ") || "N/A"}
       Achievements: ${resumeData.achievements.map(ach => `${ach.title || "N/A"} (${ach.date || "N/A"}): ${ach.description || "N/A"}`).join("; ") || "N/A"}
       Extracurriculars: ${resumeData.extracurriculars.map(extra => `${extra.activity || "N/A"} - ${extra.role || "N/A"} (${extra.startDate} - ${extra.endDate || "Present"}): ${extra.description || "N/A"}`).join("; ") || "N/A"}
+
     `
       if (!resumeData.personalInfo.fullName && !resumeData.personalInfo.email && (!resumeData.workExperience.length || !resumeData.education.length)) {
         toast.info("Please fill in all required fields to generate a summary.")
@@ -549,20 +556,22 @@ export default function ResumeBuilder() {
             point.trim().replace(/^[-•]\s*/, "").trim()
           ) || []
 
-      setResumeData((prev) => ({
-        ...prev,
-        workExperience: prev.workExperience.map((w) =>
-          w.id === id ? { ...w, description: generatedDescription } : w
-        ),
-      }))
-      toast.success("AI-generated description added!")
-    } catch (error) {
-      console.error("Failed to generate AI suggestion:", error)
-      toast.error("Failed to generate AI suggestion. Please try again.")
-    } finally {
-      setAiLoading(false)
-    }
+
+    setResumeData((prev) => ({
+      ...prev,
+      workExperience: prev.workExperience.map((w) =>
+        w.id === id ? { ...w, description: generatedDescription } : w
+      ),
+    }));
+    toast.success("AI-generated description added!");
+  } catch (error) {
+    console.error("Failed to generate AI suggestion:", error);
+    toast.error("Failed to generate AI suggestion. Please try again.");
+  } finally {
+    setAiLoading(false);
   }
+};
+
 
   const toggleSection = useCallback((sectionId: string) => {
     setCollapsedSections((prev) => {
@@ -922,11 +931,11 @@ export default function ResumeBuilder() {
 
       if (sectionId === "education" && resumeData.education.length > 0) {
         return (
-          <div key="education" className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+          <div key="education" className="mb-6" >
             <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Education</h2>
             <div className="space-y-3">
               {resumeData.education.map((edu) => (
-                <div key={edu.id} className="flex justify-between items-start">
+                <div key={edu.id} className="flex justify-between items-start" style={{ pageBreakInside: 'avoid' }}>
                   <div>
                     <h3 className="font-semibold text-gray-900">
                       {edu.degree} {edu.field && `in ${edu.field}`}
@@ -937,7 +946,7 @@ export default function ResumeBuilder() {
                   <span className="text-gray-500 text-sm">
                     {edu.startDate && edu.endDate
                       ? `${edu.startDate} - ${edu.endDate}`
-                      : edu.startDate || edu.endDate || "Date Range"}
+                      : edu.startDate || edu.endDate }
                   </span>
                 </div>
               ))}
@@ -998,13 +1007,13 @@ export default function ResumeBuilder() {
 
       if (sectionId === "certifications" && resumeData.certifications.length > 0) {
         return (
-          <div key="certifications" className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+          <div key="certifications" className="mb-6">
             <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Certifications</h2>
             <div className="space-y-2">
               {resumeData.certifications.map((cert) => (
-                <div key={cert} className="flex items-center">
-                  <div className={`w-2 h-2 ${currentTemplate.accent.replace("text-", "bg-")} rounded-full mr-3`}></div>
-                  <span className="text-gray-700">{cert}</span>
+                <div key={cert} className="flex items-center"  style={{ pageBreakInside: 'avoid' }}>
+                  
+                  <span className={`text-gray-700 `}>● {cert}</span>
                 </div>
               ))}
             </div>
@@ -1014,14 +1023,14 @@ export default function ResumeBuilder() {
 
       if (sectionId === "achievements" && resumeData.achievements.length > 0) {
         return (
-          <div key="achievements" className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+          <div key="achievements" className="mb-6" >
             <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Achievements</h2>
             <div className="space-y-2">
               {resumeData.achievements.map((achievement) => (
-                <div key={achievement.id} className="flex items-center">
-                  <div className={`w-2 h-2 ${currentTemplate.accent.replace("text-", "bg-")} rounded-full mr-3`}></div>
-                  <span className="text-gray-700">
-                    {achievement.title} - {achievement.description} ({achievement.date})
+                <div key={achievement.id} className="flex items-center" style={{ pageBreakInside: 'avoid' }}>
+                 
+                  <span className={`text-gray-700 `}>
+                   ● {achievement.title} - {achievement.description} ({achievement.date})
                   </span>
                 </div>
               ))}
@@ -1032,16 +1041,16 @@ export default function ResumeBuilder() {
 
       if (sectionId === "extracurriculars" && resumeData.extracurriculars.length > 0) {
         return (
-          <div key="extracurriculars" className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+          <div key="extracurriculars" className="mb-6">
             <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>
               Extracurricular Activities
             </h2>
             <div className="space-y-2">
               {resumeData.extracurriculars.map((extra) => (
-                <div key={extra.id} className="flex items-center">
-                  <div className={`w-2 h-2 ${currentTemplate.accent.replace("text-", "bg-")} rounded-full mr-3`}></div>
-                  <span className="text-gray-700">
-                    {extra.activity} - {extra.role} ({extra.startDate} - {extra.endDate}): {extra.description}
+                <div key={extra.id} className="flex items-center"  style={{ pageBreakInside: 'avoid' }}>
+                  
+                  <span className={`text-gray-700 `}>
+                   ● {extra.activity} - {extra.role} ({extra.startDate} - {extra.endDate}): {extra.description}
                   </span>
                 </div>
               ))}
@@ -1070,6 +1079,7 @@ export default function ResumeBuilder() {
               </Link>
             </div>
             <div className="flex items-center space-x-1 md:space-x-3">
+
               <Dialog open={isDownloadDialogOpen} onOpenChange={setIsDownloadDialogOpen}>
                 <DialogTrigger asChild>
                   <Button size="sm" className="bg-black hover:bg-gray-800 text-white">
@@ -1114,6 +1124,7 @@ export default function ResumeBuilder() {
               >
                 <Pencil className="w-4 h-4 md:mr-2" />
                 <span className="hidden md:inline">My Resumes</span>
+
               </Button>
             </div>
           </div>
@@ -1790,7 +1801,7 @@ export default function ResumeBuilder() {
                             <div className="flex items-center space-x-6 text-sm mt-3 opacity-90">
                               <span>{resumeData.personalInfo.email || "johndoe68@gmail.com"}</span>
                               <span>{resumeData.personalInfo.phone || "123456789"}</span>
-                              <span>{resumeData.personalInfo.location || "Hyderabad"}</span>
+                              <span>{resumeData.personalInfo.location }</span>
                             </div>
                             <div className="grid grid-cols-3 gap-4 mt-2 text-sm opacity-90 items-center">
                               {resumeData.personalInfo.linkedin && (
@@ -1801,7 +1812,7 @@ export default function ResumeBuilder() {
                                   className="flex items-center"
                                 >
                                   <Linkedin className="w-4 h-4 mr-2 " /> 
-                                  <span className={`font-semibold ${isGeneratingPDF ? 'mb-[1rem]' : ''}`}>{resumeData.personalInfo.linkedin.slice(28)}</span>
+                                  <span className={`font-semibold ${isGeneratingPDF ? "mb-[1rem]" : ''}`}>{resumeData.personalInfo.linkedin.slice(28)}</span>
                                 </a>
                               )}
                               {resumeData.personalInfo.website && (
@@ -1812,7 +1823,7 @@ export default function ResumeBuilder() {
                                   className="flex items-center"
                                 >
                                   <Globe className="w-4 h-4 mr-2" /> 
-                                  <span className={`font-semibold ${isGeneratingPDF ? 'mb-[1rem]' : ''}`}>View Website</span>
+                                  <span className={`font-semibold ${isGeneratingPDF ? "mb-[1rem]" : ''}`}>View Website</span>
                                 </a>
                               )}
                               {resumeData.personalInfo.github && (
@@ -1823,7 +1834,7 @@ export default function ResumeBuilder() {
                                   className="flex items-center"
                                 >
                                   <Github className="w-4 h-4 mr-2" /> 
-                                  <span className={`font-semibold ${isGeneratingPDF ? 'mb-[1rem]' : ''}`}>{resumeData.personalInfo.github.slice(19)}</span>
+                                  <span className={`font-semibold ${isGeneratingPDF ? "mb-[1rem]" : ''}`}>{resumeData.personalInfo.github.slice(19)}</span>
                                 </a>
                               )}
                             </div>
