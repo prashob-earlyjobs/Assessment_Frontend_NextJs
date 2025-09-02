@@ -44,9 +44,9 @@ export default function AIResume() {
       return;
     }
 
-    const allowedTypes = ["application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+    const allowedTypes = ["application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/msword"];
     if (!allowedTypes.includes(file.type)) {
-      toast.error("Only PDF or Word (.docx) files are supported.");
+      toast.error("Only PDF and Word files are supported.");
       return;
     }
 
@@ -148,6 +148,7 @@ export default function AIResume() {
                         <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
                         DOCX Support
                       </span>
+                     
                     </div>
                     <Button className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-lg py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
                       Upload & Parse Resume
@@ -166,13 +167,13 @@ export default function AIResume() {
               <div className="space-y-4 mt-6">
                 <div className="text-center mb-6">
                   <p className="text-gray-600">
-                    Upload your resume (PDF or Word) to extract and prefill your information.
+                    Upload your resume (PDF) to extract and prefill your information.
                   </p>
                 </div>
                 <div className="flex justify-center">
                   <input
                     type="file"
-                    accept="application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    accept="application/pdf "
                     ref={fileInputRef}
                     onChange={handleFileUpload}
                     className="hidden"
@@ -182,7 +183,7 @@ export default function AIResume() {
                     className="bg-orange-500 hover:bg-orange-600 text-white"
                     disabled={isUploading}
                   >
-                    {isUploading ? "Uploading..." : "Choose File"}
+                    {isUploading ? "Parsing..." : "Choose File"}
                     <Upload className="w-4 h-4 ml-2" />
                   </Button>
                 </div>

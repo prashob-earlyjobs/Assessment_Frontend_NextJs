@@ -931,11 +931,11 @@ export default function ResumeBuilder() {
 
       if (sectionId === "education" && resumeData.education.length > 0) {
         return (
-          <div key="education" className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+          <div key="education" className="mb-6" >
             <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Education</h2>
             <div className="space-y-3">
               {resumeData.education.map((edu) => (
-                <div key={edu.id} className="flex justify-between items-start">
+                <div key={edu.id} className="flex justify-between items-start" style={{ pageBreakInside: 'avoid' }}>
                   <div>
                     <h3 className="font-semibold text-gray-900">
                       {edu.degree} {edu.field && `in ${edu.field}`}
@@ -946,7 +946,7 @@ export default function ResumeBuilder() {
                   <span className="text-gray-500 text-sm">
                     {edu.startDate && edu.endDate
                       ? `${edu.startDate} - ${edu.endDate}`
-                      : edu.startDate || edu.endDate || "Date Range"}
+                      : edu.startDate || edu.endDate }
                   </span>
                 </div>
               ))}
@@ -1007,13 +1007,13 @@ export default function ResumeBuilder() {
 
       if (sectionId === "certifications" && resumeData.certifications.length > 0) {
         return (
-          <div key="certifications" className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+          <div key="certifications" className="mb-6">
             <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Certifications</h2>
             <div className="space-y-2">
               {resumeData.certifications.map((cert) => (
-                <div key={cert} className="flex items-center">
-                  <div className={`w-2 h-2 ${currentTemplate.accent.replace("text-", "bg-")} rounded-full mr-3`}></div>
-                  <span className="text-gray-700">{cert}</span>
+                <div key={cert} className="flex items-center"  style={{ pageBreakInside: 'avoid' }}>
+                  
+                  <span className={`text-gray-700 `}>● {cert}</span>
                 </div>
               ))}
             </div>
@@ -1023,14 +1023,14 @@ export default function ResumeBuilder() {
 
       if (sectionId === "achievements" && resumeData.achievements.length > 0) {
         return (
-          <div key="achievements" className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+          <div key="achievements" className="mb-6" >
             <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Achievements</h2>
             <div className="space-y-2">
               {resumeData.achievements.map((achievement) => (
-                <div key={achievement.id} className="flex items-center">
-                  <div className={`w-2 h-2 ${currentTemplate.accent.replace("text-", "bg-")} rounded-full mr-3`}></div>
-                  <span className="text-gray-700">
-                    {achievement.title} - {achievement.description} ({achievement.date})
+                <div key={achievement.id} className="flex items-center" style={{ pageBreakInside: 'avoid' }}>
+                 
+                  <span className={`text-gray-700 `}>
+                   ● {achievement.title} - {achievement.description} ({achievement.date})
                   </span>
                 </div>
               ))}
@@ -1041,16 +1041,16 @@ export default function ResumeBuilder() {
 
       if (sectionId === "extracurriculars" && resumeData.extracurriculars.length > 0) {
         return (
-          <div key="extracurriculars" className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+          <div key="extracurriculars" className="mb-6">
             <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>
               Extracurricular Activities
             </h2>
             <div className="space-y-2">
               {resumeData.extracurriculars.map((extra) => (
-                <div key={extra.id} className="flex items-center">
-                  <div className={`w-2 h-2 ${currentTemplate.accent.replace("text-", "bg-")} rounded-full mr-3`}></div>
-                  <span className="text-gray-700">
-                    {extra.activity} - {extra.role} ({extra.startDate} - {extra.endDate}): {extra.description}
+                <div key={extra.id} className="flex items-center"  style={{ pageBreakInside: 'avoid' }}>
+                  
+                  <span className={`text-gray-700 `}>
+                   ● {extra.activity} - {extra.role} ({extra.startDate} - {extra.endDate}): {extra.description}
                   </span>
                 </div>
               ))}
@@ -1801,7 +1801,7 @@ export default function ResumeBuilder() {
                             <div className="flex items-center space-x-6 text-sm mt-3 opacity-90">
                               <span>{resumeData.personalInfo.email || "johndoe68@gmail.com"}</span>
                               <span>{resumeData.personalInfo.phone || "123456789"}</span>
-                              <span>{resumeData.personalInfo.location || "Hyderabad"}</span>
+                              <span>{resumeData.personalInfo.location }</span>
                             </div>
                             <div className="grid grid-cols-3 gap-4 mt-2 text-sm opacity-90 items-center">
                               {resumeData.personalInfo.linkedin && (
@@ -1812,7 +1812,7 @@ export default function ResumeBuilder() {
                                   className="flex items-center"
                                 >
                                   <Linkedin className="w-4 h-4 mr-2 " /> 
-                                  <span className={`font-semibold ${isGeneratingPDF ? 'mb-[1rem]' : ''}`}>{resumeData.personalInfo.linkedin.slice(28)}</span>
+                                  <span className={`font-semibold ${isGeneratingPDF ? "mb-[1rem]" : ''}`}>{resumeData.personalInfo.linkedin.slice(28)}</span>
                                 </a>
                               )}
                               {resumeData.personalInfo.website && (
@@ -1823,7 +1823,7 @@ export default function ResumeBuilder() {
                                   className="flex items-center"
                                 >
                                   <Globe className="w-4 h-4 mr-2" /> 
-                                  <span className={`font-semibold ${isGeneratingPDF ? 'mb-[1rem]' : ''}`}>View Website</span>
+                                  <span className={`font-semibold ${isGeneratingPDF ? "mb-[1rem]" : ''}`}>View Website</span>
                                 </a>
                               )}
                               {resumeData.personalInfo.github && (
@@ -1834,7 +1834,7 @@ export default function ResumeBuilder() {
                                   className="flex items-center"
                                 >
                                   <Github className="w-4 h-4 mr-2" /> 
-                                  <span className={`font-semibold ${isGeneratingPDF ? 'mb-[1rem]' : ''}`}>{resumeData.personalInfo.github.slice(19)}</span>
+                                  <span className={`font-semibold ${isGeneratingPDF ? "mb-[1rem]" : ''}`}>{resumeData.personalInfo.github.slice(19)}</span>
                                 </a>
                               )}
                             </div>
