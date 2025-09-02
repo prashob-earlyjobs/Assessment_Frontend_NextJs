@@ -422,7 +422,7 @@ export default function ResumeBuilder() {
     convertOklchToRgb();
 
     const opt = {
-      margin: [0.5, 0.125, 0.5, 0.125],
+      margin: [0.25, 0.125, 0.25, 0.125],
     };
 
     try {
@@ -456,7 +456,7 @@ export default function ResumeBuilder() {
     convertOklchToRgb();
 
     const opt = {
-      margin: [0.5, 0.125, 0.5, 0.125],
+      margin: [0.25, 0.125, 0.25, 0.125],
       filename: `${resumeData.personalInfo.fullName || 'resume'}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { scale: 4, useCORS: false },
