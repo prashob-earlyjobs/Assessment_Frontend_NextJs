@@ -139,6 +139,13 @@ const JDE = () => {
         }
     };
 
+    const handleGenerateResume = (e) => {
+        if (!jobTitle.trim() || !jobDescription.trim()) {
+            e.preventDefault();
+            toast.info("Job Title and Job Description must be filled.");
+        }
+    };
+
     return (
         <>
             <Header />
@@ -282,6 +289,7 @@ const JDE = () => {
                                             <button
                                                 type="submit"
                                                 disabled={uploadLoading}
+                                                onClick={handleGenerateResume}
                                                 className="w-full inline-flex items-center justify-center h-14 px-4 text-lg font-semibold bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg hover:from-orange-600 hover:to-orange-700 hover:shadow-lg hover:shadow-orange-500/30 transition-all duration-300 group disabled:opacity-50 disabled:cursor-not-allowed"
                                             >
                                                 <FileText className="mr-2 h-5 w-5" />
