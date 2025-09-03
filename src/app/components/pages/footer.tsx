@@ -1,6 +1,7 @@
 import { Button } from "../ui/button";
-import { MapPin, Building, GraduationCap, Lightbulb, Users, Tag } from "lucide-react";
+import { MapPin, Building, GraduationCap, Lightbulb, Users, Tag, FileText, BarChart2, Rocket } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 
 const Footer = () => {
@@ -80,26 +81,47 @@ const Footer = () => {
           <div>
             <div className="flex items-center mb-6">
               <Lightbulb className="w-6 h-6 text-orange-500 mr-2" />
-              <h3 className="text-xl font-semibold">Tools</h3>
+              <h3 className="text-xl font-semibold text-orange-400">Tools</h3>
             </div>
-            
             <div className="space-y-4">
-              <div>
-                <a href="#" className="flex items-center text-gray-300 hover:text-orange-500 transition-all duration-300 mb-2">
-                  <Lightbulb className="w-4 h-4 mr-2" />
-                  Suggest a Feature
-                </a>
-              </div>
-              
-              <div>
-                <a href="#" className="flex items-center text-gray-300 hover:text-orange-500 transition-all duration-300 mb-2">
-                  <Users className="w-4 h-4 mr-2" />
-                  Refer a Job Seeker
-                </a>
-              </div>
+              <a
+                href="/airesume"
+                className="flex items-center text-gray-300 hover:text-orange-500 transition-all duration-300 mb-2"
+              >
+                <FileText className="w-5 h-5 mr-2" />
+                AI Resume Builder
+              </a>
+              <a
+                href="/assessments"
+                className="flex items-center text-gray-300 hover:text-orange-500 transition-all duration-300 mb-2"
+              >
+                <BarChart2 className="w-5 h-5 mr-2" />
+                Assessments
+              </a>
+              <button
+                type="button"
+                className="flex items-center text-gray-300 hover:text-orange-500 transition-all duration-300 mb-2 bg-transparent p-0"
+                onClick={() => toast.info("We're working on Auto-Apply! This feature will be updated soon.")}
+                style={{ outline: "none", border: "none" }}
+              >
+                <Rocket className="w-5 h-5 mr-2" />
+                Auto-Apply
+              </button>
+              <a
+                href="#"
+                className="flex items-center text-gray-300 hover:text-orange-500 transition-all duration-300 mb-2"
+              >
+                <Lightbulb className="w-4 h-4 mr-2" />
+                Suggest a Feature
+              </a>
+              <a
+                href="#"
+                className="flex items-center text-gray-300 hover:text-orange-500 transition-all duration-300 mb-2"
+              >
+                <Users className="w-4 h-4 mr-2" />
+                Refer a Job Seeker
+              </a>
             </div>
-
-           
           </div>
             <div>
               <div className="flex items-center mb-4">
@@ -153,7 +175,7 @@ const Footer = () => {
                 <a href="#" className="text-gray-300 hover:text-orange-500 transition-all duration-300">Contact Us</a>
               </div>
               <p className="text-gray-400 text-sm">
-                © 2024 EarlyJobs.ai. All rights reserved.
+                © 2024-25 EarlyJobs.ai. All rights reserved.
               </p>
             </div>
           </div>

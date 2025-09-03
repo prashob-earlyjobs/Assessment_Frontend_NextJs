@@ -1,6 +1,6 @@
 // app/airesume/page.tsx
 "use client"
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
@@ -34,6 +34,7 @@ export default function AIResume() {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [dragActive, setDragActive] = useState(false);
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -44,7 +45,11 @@ export default function AIResume() {
       return;
     }
 
-    const allowedTypes = ["application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/msword"];
+    const allowedTypes = [
+      "application/pdf",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "application/msword",
+    ];
     if (!allowedTypes.includes(file.type)) {
       toast.error("Only PDF and Word files are supported.");
       return;
@@ -82,6 +87,32 @@ export default function AIResume() {
       setIsUploading(false);
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
+      }
+    }
+  };
+
+  // Drag and drop handlers
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setDragActive(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setDragActive(false);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setDragActive(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      // Simulate file input change event for upload
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(file);
+      if (fileInputRef.current) {
+        fileInputRef.current.files = dataTransfer.files;
+        handleFileUpload({ target: fileInputRef.current } as React.ChangeEvent<HTMLInputElement>);
       }
     }
   };
@@ -148,7 +179,6 @@ export default function AIResume() {
                         <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
                         DOCX Support
                       </span>
-                     
                     </div>
                     <Button className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-lg py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
                       Upload & Parse Resume
@@ -167,23 +197,37 @@ export default function AIResume() {
               <div className="space-y-4 mt-6">
                 <div className="text-center mb-6">
                   <p className="text-gray-600">
-                    Upload your resume (PDF) to extract and prefill your information.
+                    Upload your resume (PDF or DOCX) to extract and prefill your information.
                   </p>
                 </div>
-                <div className="flex justify-center">
+                <div
+                  className={`flex flex-col items-center justify-center border-2 rounded-xl px-6 py-8 transition-colors duration-200 cursor-pointer ${dragActive ? "border-orange-500 bg-orange-50" : "border-gray-200 bg-white"}`}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  onClick={() => fileInputRef.current?.click()}
+                  style={{ minHeight: "160px" }}
+                >
+                  <Upload className="w-10 h-10 text-orange-500 mb-2" />
+                  <span className="text-gray-700 font-medium mb-2">
+                    Drag & drop your resume here, or click to select a file
+                  </span>
                   <input
                     type="file"
-                    accept="application/pdf "
+                    accept=".pdf,.doc,.docx"
                     ref={fileInputRef}
                     onChange={handleFileUpload}
                     className="hidden"
                   />
                   <Button
-                    onClick={() => fileInputRef.current?.click()}
-                    className="bg-orange-500 hover:bg-orange-600 text-white"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      fileInputRef.current?.click();
+                    }}
+                    className="mt-4 bg-orange-500 hover:bg-orange-600 text-white"
                     disabled={isUploading}
                   >
-                    {isUploading ? "Parsing..." : "Choose File"}
+                    {isUploading ? "Parsing..." : "Upload"}
                     <Upload className="w-4 h-4 ml-2" />
                   </Button>
                 </div>
