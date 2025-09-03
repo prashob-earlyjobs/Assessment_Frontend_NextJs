@@ -118,7 +118,7 @@ export default function AIResume() {
 
   return (
     <div className="py-16 bg-gradient-to-br from-orange-50 via-orange-25 to-white">
-      <div className="container mx-auto px-4 ">
+      <div className="container mx-auto ">
         <div className="text-center max-w-4xl mx-auto mb-16">
           <h2 className="text-5xl font-bold text-gray-900 mb-6 leading-tight">
             Create Your Perfect Resume in
@@ -147,7 +147,7 @@ export default function AIResume() {
             </div>
           </div>
         </div>
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-8  mx-auto">
   {/* Upload Existing Resume Card */}
   <Dialog open={isUploadDialogOpen} onOpenChange={setIsUploadDialogOpen}>
     <DialogTrigger asChild>
