@@ -41,6 +41,7 @@ import {
     Target,
     Trophy,
     Users,
+    Wand2,
     Linkedin,
     Github,
     Globe,
@@ -202,6 +203,9 @@ export default function ResumeBuilderFromPDF() {
     const [atsScore, setAtsScore] = useState<ATSScore | null>(null) // ATS Score state
     const [atsLoading, setAtsLoading] = useState(false) // ATS Loading state
     const router = useRouter()
+    const [suggestedSkills, setSuggestedSkills] = useState<string[]>([]);
+    const [isSuggestingSkills, setIsSuggestingSkills] = useState(false);
+
     const [aiLoading, setAiLoading] = useState(false)
     const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
     const [collapsedSections, setCollapsedSections] = useState<Set<string>>(
@@ -455,7 +459,7 @@ export default function ResumeBuilderFromPDF() {
             toast.error("Preview not found. Please try again.")
             return
         }
- 
+
         setIsGeneratingPDF(true);
         convertOklchToRgb()
 
@@ -513,7 +517,31 @@ export default function ResumeBuilderFromPDF() {
             setIsSaving(false)
         }
     }
-
+    const handleSuggestSkills = async () => {
+        const position = resumeData.workExperience[0]?.position || resumeData.personalInfo.fullName;
+        if (!position) {
+            toast.info("Please enter your position or job title to get skill suggestions.");
+            return;
+        }
+        setIsSuggestingSkills(true);
+        try {
+            const prompt = `Suggest 8-10 key skills for the position "${position}". Output as a comma-separated list.`;
+            const res = await fetch("/api/gemini", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ prompt }),
+            });
+            const data = await res.json();
+            const skillsText = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
+            const skillsArr = skillsText.split(",").map((s: string) => s.trim()).filter(Boolean);
+            setSuggestedSkills(skillsArr);
+            toast.success("Skills suggested!");
+        } catch (error) {
+            toast.error("Failed to fetch skill suggestions.");
+        } finally {
+            setIsSuggestingSkills(false);
+        }
+    };
     // AI suggest functions (unchanged)
     const handleAISuggest = async () => {
         setAiLoading(true)
@@ -967,7 +995,7 @@ export default function ResumeBuilderFromPDF() {
                                     <span className="text-gray-500 text-sm">
                                         {edu.startDate && edu.endDate
                                             ? `${edu.startDate} - ${edu.endDate}`
-                                            : edu.startDate || edu.endDate }
+                                            : edu.startDate || edu.endDate}
                                     </span>
                                 </div>
                             ))}
@@ -1048,9 +1076,9 @@ export default function ResumeBuilderFromPDF() {
                         <div className="space-y-2">
                             {resumeData.achievements.map((achievement) => (
                                 <div key={achievement.id} className="flex items-center" style={{ pageBreakInside: "avoid" }}>
-                                    
+
                                     <span className={`text-gray-700 `}>
-                                       ● {achievement.title} - {achievement.description} ({achievement.date})
+                                        ● {achievement.title} - {achievement.description} ({achievement.date})
                                     </span>
                                 </div>
                             ))}
@@ -1068,7 +1096,7 @@ export default function ResumeBuilderFromPDF() {
                         <div className="space-y-2">
                             {resumeData.extracurriculars.map((extra) => (
                                 <div key={extra.id} className="flex items-center" style={{ pageBreakInside: "avoid" }}>
-                                   
+
                                     <span className={`text-gray-700`}>
                                         ● {extra.activity} - {extra.role} ({extra.startDate} - {extra.endDate}): {extra.description}
                                     </span>
@@ -1500,7 +1528,32 @@ export default function ResumeBuilderFromPDF() {
                                                                 <Plus className="w-4 h-4 sm:mr-0" />
                                                                 <span className="ml-2 sm:hidden">Add Skill</span>
                                                             </Button>
+                                                            <Button
+                                                                variant="outline"
+                                                                className="bg-orange-500 text-white hover:bg-white hover:border-orange-500 hover:text-orange-600 p-2 h-auto font-medium"
+                                                                onClick={handleSuggestSkills}
+                                                                disabled={isSuggestingSkills}
+                                                            >
+                                                                <Wand2 className="w-4 h-4 mr-2 inline-block" />
+                                                                {isSuggestingSkills ? "Suggesting..." : "Suggest Skills"}
+                                                            </Button>
                                                         </div>
+                                                        {suggestedSkills.length > 0 && (
+                                                            <div className="flex flex-wrap gap-2 mt-2 border border-orange-200 p-2 rounded-lg">
+                                                                <p className="w-full text-sm text-gray-600 mb-1">Suggested Skills (click to add):</p>
+                                                                {suggestedSkills.map((skill) => (
+                                                                    <Badge
+                                                                        key={skill}
+                                                                        variant="secondary"
+                                                                        className="px-3 py-1 cursor-pointer hover:bg-orange-600 hover:text-white"
+                                                                        onClick={() => addSkill(skill)}
+                                                                        title="Click to add"
+                                                                    >
+                                                                        {skill}
+                                                                    </Badge>
+                                                                ))}
+                                                            </div>
+                                                        )}
                                                         <div className="flex flex-wrap gap-2">
                                                             {resumeData.skills.map((skill) => (
                                                                 <Badge key={skill} variant="secondary" className="px-3 py-1">
@@ -1516,7 +1569,7 @@ export default function ResumeBuilderFromPDF() {
                                                         </div>
                                                     </div>
                                                 )}
-
+                                                
                                                 {section.id === "certifications" && (
                                                     <div className="space-y-4">
                                                         <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
@@ -1871,41 +1924,41 @@ export default function ResumeBuilderFromPDF() {
                                                             <span>{resumeData.personalInfo.phone || "123456789"}</span>
                                                             <span>{resumeData.personalInfo.location}</span>
                                                         </div>
-                                                      <div className="grid grid-cols-3 gap-4 mt-2 text-sm opacity-90 items-center">
-                                                                                    {resumeData.personalInfo.linkedin && (
-                                                                                      <a
-                                                                                        href={resumeData.personalInfo.linkedin}
-                                                                                        target="_blank"
-                                                                                        rel="noopener noreferrer"
-                                                                                        className="flex items-center"
-                                                                                      >
-                                                                                        <Linkedin className="w-4 h-4 mr-2 " /> 
-                                                                                        <span className={`font-semibold ${isGeneratingPDF ? 'mb-2' : ''}`}>{resumeData.personalInfo.linkedin.slice(28)}</span>
-                                                                                      </a>
-                                                                                    )}
-                                                                                    {resumeData.personalInfo.website && (
-                                                                                      <a
-                                                                                        href={resumeData.personalInfo.website}
-                                                                                        target="_blank"
-                                                                                        rel="noopener noreferrer"
-                                                                                        className="flex items-center"
-                                                                                      >
-                                                                                        <Globe className="w-4 h-4 mr-2" /> 
-                                                                                        <span className={`font-semibold ${isGeneratingPDF ? 'mb-2' : ''}`}>View Website</span>
-                                                                                      </a>
-                                                                                    )}
-                                                                                    {resumeData.personalInfo.github && (
-                                                                                      <a
-                                                                                        href={resumeData.personalInfo.github}
-                                                                                        target="_blank"
-                                                                                        rel="noopener noreferrer"
-                                                                                        className="flex items-center"
-                                                                                      >
-                                                                                        <Github className="w-4 h-4 mr-2" /> 
-                                                                                        <span className={`font-semibold ${isGeneratingPDF ? 'mb-2' : ''}`}>{resumeData.personalInfo.github.slice(19)}</span>
-                                                                                      </a>
-                                                                                    )}
-                                                                                  </div>
+                                                        <div className="grid grid-cols-3 gap-4 mt-2 text-sm opacity-90 items-center">
+                                                            {resumeData.personalInfo.linkedin && (
+                                                                <a
+                                                                    href={resumeData.personalInfo.linkedin}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className="flex items-center"
+                                                                >
+                                                                    <Linkedin className="w-4 h-4 mr-2 " />
+                                                                    <span className={`font-semibold ${isGeneratingPDF ? 'mb-2' : ''}`}>{resumeData.personalInfo.linkedin.slice(28)}</span>
+                                                                </a>
+                                                            )}
+                                                            {resumeData.personalInfo.website && (
+                                                                <a
+                                                                    href={resumeData.personalInfo.website}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className="flex items-center"
+                                                                >
+                                                                    <Globe className="w-4 h-4 mr-2" />
+                                                                    <span className={`font-semibold ${isGeneratingPDF ? 'mb-2' : ''}`}>View Website</span>
+                                                                </a>
+                                                            )}
+                                                            {resumeData.personalInfo.github && (
+                                                                <a
+                                                                    href={resumeData.personalInfo.github}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className="flex items-center"
+                                                                >
+                                                                    <Github className="w-4 h-4 mr-2" />
+                                                                    <span className={`font-semibold ${isGeneratingPDF ? 'mb-2' : ''}`}>{resumeData.personalInfo.github.slice(19)}</span>
+                                                                </a>
+                                                            )}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
