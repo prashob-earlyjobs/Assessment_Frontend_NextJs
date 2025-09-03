@@ -81,7 +81,7 @@ const Footer = () => {
           <div>
             <div className="flex items-center mb-6">
               <Lightbulb className="w-6 h-6 text-orange-500 mr-2" />
-              <h3 className="text-xl font-semibold text-orange-400">Tools</h3>
+              <h3 className="text-xl font-semibold text-white">Tools</h3>
             </div>
             <div className="space-y-4">
               <a
