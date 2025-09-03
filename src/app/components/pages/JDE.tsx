@@ -1,28 +1,27 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { FileText, Sparkles, ArrowRight, Zap } from "lucide-react";
 import Header from "./header";
 import { toast } from "sonner";
 import Link from "next/link";
+
 const JDE = () => {
     const [jobTitle, setJobTitle] = useState("");
     const [jobDescription, setJobDescription] = useState("");
     const [jdUrl, setJdUrl] = useState("");
     const [aiLoading, setAiLoading] = useState(false);
     const [urlLoading, setUrlLoading] = useState(false);
-
-
-    //   const toast = {
-    //     info: (msg: string) => console.log("Info:", msg),
-    //     success: (msg: string) => console.log("Success:", msg),
-    //     error: (msg: string) => console.log("Error:", msg),
-    //   };
+    const [resumeFile, setResumeFile] = useState(null);
+    const [parsedResume, setParsedResume] = useState(null);
+    const [uploadLoading, setUploadLoading] = useState(false);
+    const resumeInputRef = useRef<HTMLInputElement>(null);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         console.log("Job Title:", jobTitle);
         console.log("Job Description:", jobDescription);
         console.log("JD URL:", jdUrl);
+        console.log("Parsed Resume:", parsedResume);
     };
 
     const handleFetchFromUrl = async () => {
@@ -88,6 +87,62 @@ const JDE = () => {
             toast.error("Failed to generate AI suggestion. Please try again.");
         } finally {
             setAiLoading(false);
+        }
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setResumeFile(file);
+            handleUpload(file);
+        }
+    };
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        const file = e.dataTransfer.files[0];
+        if (file) {
+            setResumeFile(file);
+            handleUpload(file);
+        }
+    };
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+    };
+
+    const handleUpload = async (file) => {
+        if (!file) return;
+
+        setUploadLoading(true);
+        try {
+            const formData = new FormData();
+            formData.append("resume", file);
+
+            const res = await fetch("/api/parse-resume", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (!res.ok) {
+                throw new Error("Failed to parse resume");
+            }
+
+            const data = await res.json();
+            setParsedResume(data);
+            toast.success("Resume parsed successfully!");
+        } catch (error) {
+            console.error("Failed to parse resume:", error);
+            toast.error("Failed to parse resume. Please try again.");
+        } finally {
+            setUploadLoading(false);
+        }
+    };
+
+    const handleGenerateResume = (e) => {
+        if (!jobTitle.trim() || !jobDescription.trim()) {
+            e.preventDefault();
+            toast.info("Job Title and Job Description must be filled.");
         }
     };
 
@@ -184,18 +239,58 @@ const JDE = () => {
                                         </p>
                                     </div>
 
+                                    <div className="space-y-2">
+                                        <label htmlFor="resumeUpload" className="block text-base font-semibold text-gray-900">
+                                            Upload Resume
+                                        </label>
+                                        <div
+                                            className="w-full min-h-32 px-4 py-6 text-base border-2 border-dashed border-gray-200 rounded-lg focus:border-orange-500 focus:outline-none transition-colors flex flex-col items-center justify-center cursor-pointer"
+                                            onDrop={handleDrop}
+                                            onDragOver={handleDragOver}
+                                        >
+                                            <input
+                                                id="resumeUpload"
+                                                type="file"
+                                                accept=".pdf,.doc,.docx"
+                                                onChange={handleFileChange}
+                                                className="hidden"
+                                                ref={resumeInputRef}
+                                            />
+                                            <label htmlFor="resumeUpload" className={`text-gray-500 cursor-pointer`}>
+                                                {uploadLoading ? "Uploading and parsing..." : "Drag and drop your resume here "}
+                                            </label>
+                                            {resumeFile && !uploadLoading && <p className="mt-2 text-sm text-gray-600">{resumeFile.name}</p>}
+                                            <button
+                                                type="button"
+                                                className="mt-4 px-4 py-2 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-600 transition"
+                                                onClick={() => resumeInputRef.current && resumeInputRef.current.click()}
+                                                disabled={uploadLoading}
+                                            >
+                                                {uploadLoading ? "Uploading..." : "Upload Resume"}
+                                            </button>
+                                        </div>
+                                        <p className="text-sm text-gray-500">
+                                            Tip: Upload your existing resume (PDF, DOC, or DOCX) to enhance it based on the job description
+                                        </p>
+                                    </div>
+
                                     <div className="flex flex-col sm:flex-row gap-4">
 
                                         <Link
                                             href={{
                                                 pathname: "/airesumebuilder",
-                                                query: { jobTitle, jobDescription },
+                                                query: {
+                                                    jobTitle,
+                                                    jobDescription,
+                                                    parsedResume: parsedResume ? JSON.stringify(parsedResume) : undefined
+                                                },
                                             }}
                                         >
                                             <button
                                                 type="submit"
-
-                                                className="w-full inline-flex items-center justify-center h-14 px-4 text-lg font-semibold bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg hover:from-orange-600 hover:to-orange-700 hover:shadow-lg hover:shadow-orange-500/30 transition-all duration-300 group"
+                                                disabled={uploadLoading}
+                                                onClick={handleGenerateResume}
+                                                className="w-full inline-flex items-center justify-center h-14 px-4 text-lg font-semibold bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg hover:from-orange-600 hover:to-orange-700 hover:shadow-lg hover:shadow-orange-500/30 transition-all duration-300 group disabled:opacity-50 disabled:cursor-not-allowed"
                                             >
                                                 <FileText className="mr-2 h-5 w-5" />
                                                 Generate Enhanced Resume
