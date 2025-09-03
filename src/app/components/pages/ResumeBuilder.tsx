@@ -18,6 +18,8 @@ import { toast } from "sonner"
 import Header from "./header"
 import html2pdf from "html2pdf.js"
 import { oklch, oklab, rgb } from "culori"
+import { Wand2 } from "lucide-react";
+
 import {
   ArrowLeft,
   FileText,
@@ -218,6 +220,9 @@ export default function ResumeBuilder() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const resumeId = searchParams.get("resumeId")
+  const [suggestedSkills, setSuggestedSkills] = useState<string[]>([]);
+  const [isSuggestingSkills, setIsSuggestingSkills] = useState(false);
+
   const [isDownloadDialogOpen, setIsDownloadDialogOpen] = useState(false)
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [aiLoading, setAiLoading] = useState(false)
@@ -482,6 +487,31 @@ export default function ResumeBuilder() {
     }
   };
 
+   const handleSuggestSkills = async () => {
+    const position = resumeData.workExperience[0]?.position || resumeData.personalInfo.fullName;
+    if (!position) {
+      toast.info("Please enter your position or job title to get skill suggestions.");
+      return;
+    }
+    setIsSuggestingSkills(true);
+    try {
+      const prompt = `Suggest 8-10 key skills for the position "${position}". Output as a comma-separated list.`;
+      const res = await fetch("/api/gemini", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt }),
+      });
+      const data = await res.json();
+      const skillsText = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
+      const skillsArr = skillsText.split(",").map((s: string) => s.trim()).filter(Boolean);
+      setSuggestedSkills(skillsArr);
+      toast.success("Skills suggested!");
+    } catch (error) {
+      toast.error("Failed to fetch skill suggestions.");
+    } finally {
+      setIsSuggestingSkills(false);
+    }
+  };
 
   const handleAISuggest = async () => {
     setAiLoading(true)
@@ -1435,40 +1465,66 @@ export default function ResumeBuilder() {
                             </div>
                           )}
 
-                          {section.id === "skills" && (
-                            <div className="space-y-4">
-                              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-                                <Input
-                                  placeholder="Add a skill"
-                                  value={currentSkill}
-                                  onChange={(e) => setCurrentSkill(e.target.value)}
-                                  onKeyPress={(e) => {
-                                    if (e.key === "Enter") {
-                                      addSkill(currentSkill)
-                                    }
-                                  }}
-                                  className="flex-1"
-                                />
-                                <Button onClick={() => addSkill(currentSkill)} className="w-full sm:w-auto">
-                                  <Plus className="w-4 h-4 sm:mr-0" />
-                                  <span className="ml-2 sm:hidden">Add Skill</span>
-                                </Button>
-                              </div>
-                              <div className="flex flex-wrap gap-2">
-                                {resumeData.skills.map((skill) => (
-                                  <Badge key={skill} variant="secondary" className="px-3 py-1">
-                                    {skill}
-                                    <button
-                                      className="ml-2 text-gray-500 hover:text-red-500"
-                                      onClick={() => removeSkill(skill)}
-                                    >
-                                      <Trash2 className="w-3 h-3" />
-                                    </button>
-                                  </Badge>
-                                ))}
-                              </div>
-                            </div>
-                          )}
+                         {section.id === "skills" && (
+    <div className="space-y-4">
+      <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+        <Input
+          placeholder="Add a skill"
+          value={currentSkill}
+          onChange={(e) => setCurrentSkill(e.target.value)}
+          onKeyPress={(e) => {
+            if (e.key === "Enter") {
+              addSkill(currentSkill)
+            }
+          }}
+          className="flex-1"
+        />
+        <Button onClick={() => addSkill(currentSkill)} className="w-full sm:w-auto">
+          <Plus className="w-4 h-4 sm:mr-0" />
+          <span className="ml-2 sm:hidden">Add Skill</span>
+        </Button>
+        <Button
+          variant="outline"
+          className="bg-orange-500 text-white hover:bg-white hover:border-orange-500 hover:text-orange-600 p-2 h-auto font-medium"
+          onClick={handleSuggestSkills}
+          disabled={isSuggestingSkills}
+        >
+           <Wand2 className="w-4 h-4 mr-2 inline-block" />
+          {isSuggestingSkills ? "Suggesting..." : "Suggest Skills"}
+        </Button>
+      </div>
+      {suggestedSkills.length > 0 && (
+        <div className="flex flex-wrap gap-2 mt-2 border border-orange-200 p-2 rounded-lg">
+          <p className="w-full text-sm text-gray-600 mb-1">Suggested Skills (click to add):</p>
+          {suggestedSkills.map((skill) => (
+            <Badge
+              key={skill}
+              variant="secondary"
+              className="px-3 py-1 cursor-pointer hover:bg-orange-600 hover:text-white"
+              onClick={() => addSkill(skill)}
+              title="Click to add"
+            >
+              {skill}
+              
+            </Badge>
+          ))}
+        </div>
+      )}
+      <div className="flex flex-wrap gap-2">
+        {resumeData.skills.map((skill) => (
+          <Badge key={skill} variant="secondary" className="px-3 py-1 bg-orange-100 rounded-lg">
+            {skill}
+            <button
+              className="ml-2 text-gray-500 hover:text-red-500"
+              onClick={() => removeSkill(skill)}
+            >
+              <Trash2 className="w-3 h-3 text-orange-300 hover:text-red-500" />
+            </button>
+          </Badge>
+        ))}
+      </div>
+    </div>
+  )}
 
                           {section.id === "certifications" && (
                             <div className="space-y-4">
@@ -1796,7 +1852,7 @@ export default function ResumeBuilder() {
                           <div className="flex-1">
                             <h1 className="text-3xl font-bold">{resumeData.personalInfo.fullName || "John Doe"}</h1>
                             <p className="text-lg opacity-90 mt-1">
-                              {resumeData.workExperience[0]?.position || "Software Developer"}
+                              {resumeData.workExperience[0]?.position || "Student"}
                             </p>
                             <div className="flex items-center space-x-6 text-sm mt-3 opacity-90">
                               <span>{resumeData.personalInfo.email || "johndoe68@gmail.com"}</span>

@@ -1852,7 +1852,7 @@ export default function AIResumeBuilder() {
                           <div className="flex-1">
                             <h1 className="text-3xl font-bold">{resumeData.personalInfo.fullName || "John Doe"}</h1>
                             <p className="text-lg opacity-90 mt-1">
-                              {resumeData.workExperience[0]?.position || "Software Developer"}
+                              {resumeData.workExperience[0]?.position || "Student"}
                             </p>
                             <div className="flex items-center space-x-6 text-sm mt-3 opacity-90">
                               <span>{resumeData.personalInfo.email || "johndoe68@gmail.com"}</span>
