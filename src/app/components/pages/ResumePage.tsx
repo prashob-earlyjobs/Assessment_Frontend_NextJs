@@ -1,331 +1,337 @@
-// app/airesume/page.tsx
-"use client"
-import React, { useState, useRef } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import { Button } from "../ui/button";
-import { toast } from "sonner";
+import { Badge } from "../ui/badge";
+import { Card, CardContent } from "../ui/card";
+import Tilt from 'react-parallax-tilt';
+import Link from "next/link";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
-import {
-  Upload,
-  Plus,
-  FileText,
-  Download,
-  Zap,
-  Briefcase,
-  Sparkles
+    Upload,
+    Sparkles,
+    FileText,
+    Zap,
+    CheckCircle,
+    ArrowRight,
+    Download,
+    Star,
+    Users,
+    Trophy
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
-export default function AIResume() {
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-  const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
-  const [dragActive, setDragActive] = useState(false);
-  const router = useRouter();
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) {
-      toast.error("Please select a file.");
-      return;
-    }
-
-    const allowedTypes = [
-      "application/pdf",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      "application/msword",
+export default function Index() {
+    const router = useRouter();
+    const [currentText, setCurrentText] = useState(0);
+    const heroTexts = [
+        "Create a resume that your dream job will notice",
+        "Land interviews with AI-powered resumes",
+        "Build professional resumes in minutes",
+        "Stand out with intelligent resume optimization"
     ];
-    if (!allowedTypes.includes(file.type)) {
-      toast.error("Only PDF and Word files are supported.");
-      return;
-    }
 
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error("File size exceeds 5MB limit.");
-      return;
-    }
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentText((prev) => (prev + 1) % heroTexts.length);
+        }, 3000);
+        return () => clearInterval(interval);
+    }, []);
 
-    setIsUploading(true);
-    try {
-      const formData = new FormData();
-      formData.append("resume", file);
+    const scrollToFeatures = () => {
+        const featuresSection = document.getElementById('features');
+        if (featuresSection) {
+            featuresSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
 
-      const response = await fetch("/api/parse-resume", {
-        method: "POST",
-        body: formData,
-      });
+    return (
+        <div className="min-h-screen bg-gradient-to-br from-white via-orange-50 to-orange-100">
+            <style jsx>{`
+                @keyframes typing {
+                    from { width: 0; }
+                    to { width: 100%; }
+                }
+                @keyframes blink {
+                    50% { opacity: 0; }
+                }
+                .animate-typing {
+                    animation: typing 3s steps(30, end) forwards;
+                }
+                .animate-typing::after {
+                    content: '|';
+                    display: inline-block;
+                    margin-left: 4px;
+                    font-size: 2rem; /* Larger cursor size */
+                    line-height: 1.5rem; /* Adjust line height to align with text */
+                    font-weight: bold; /* Make cursor bolder */
+                    color: #f97316; /* Orange color to match gradient */
+                    animation: blink 0.75s step-end infinite;
+                    vertical-align: middle; /* Align cursor with text */
+                }
+            `}</style>
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to parse resume.");
-      }
+            {/* Hero Section */}
+            <main className="container mx-auto px-6 py-18">
+                <div className="grid lg:grid-cols-2 gap-12 items-center">
+                    {/* Left Content */}
+                    <div className="space-y-8">
+                        <div className="space-y-4">
+                            <div className="inline-flex items-center bg-orange-100 text-orange-700 hover:bg-orange-200 px-3 py-1 rounded-full text-sm font-medium">
+                                <Sparkles className="w-4 h-4 mr-2" />
+                                AI-Powered Resume Builder
+                            </div>
 
-      const resumeData = await response.json();
-      router.push(`/resumeBuilderFromPDF?resumeData=${encodeURIComponent(JSON.stringify(resumeData))}`);
+                            <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
+                                <span className="block">Create a resume</span>
+                                <span className="block">that your dream job</span>
+                                <span className="block bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
+                                    will notice
+                                </span>
+                            </h1>
 
-      toast.success("Resume parsed successfully! Redirecting to builder...");
-      setIsUploadDialogOpen(false);
-    } catch (error: any) {
-      console.error("Error parsing resume:", error);
-      toast.error(error.message || "Failed to parse resume. Please try again.");
-    } finally {
-      setIsUploading(false);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
-    }
-  };
+                            <div className="hidden md:block h-16 flex items-center">
+                                <p
+                                    key={currentText}
+                                    className="text-xl  bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-orange-600 animate-typing overflow-hidden whitespace-nowrap"
+                                >
+                                    {heroTexts[currentText]}
+                                </p>
+                            </div>
+                        </div>
 
-  // Drag and drop handlers
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setDragActive(true);
-  };
+                        <div className="space-y-4">
+                            <p className="text-lg text-gray-600">
+                                Pick a template. Fill in the blanks. Download. Land the job. Simple.
+                            </p>
 
-  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setDragActive(false);
-  };
+                            <div className="flex flex-col sm:flex-row gap-4">
+                                <button
+                                    onClick={() => router.push('/airesume')}
+                                    className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-8 py-4 text-lg rounded-md flex items-center justify-center"
+                                >
+                                    Build your resume
+                                    <ArrowRight className="ml-2 w-5 h-5" />
+                                </button>
+                                <button
+                                    onClick={scrollToFeatures}
+                                    className="bg-white hover:bg-gray-100  text-orange-500 px-8 py-4 text-lg font-semibold rounded-md flex items-center justify-center border border-orange-300"
+                                >
+                                    View Features
+                                    
+                                </button>
+                            </div>
+                        </div>
 
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setDragActive(false);
-    const file = e.dataTransfer.files?.[0];
-    if (file) {
-      // Simulate file input change event for upload
-      const dataTransfer = new DataTransfer();
-      dataTransfer.items.add(file);
-      if (fileInputRef.current) {
-        fileInputRef.current.files = dataTransfer.files;
-        handleFileUpload({ target: fileInputRef.current } as React.ChangeEvent<HTMLInputElement>);
-      }
-    }
-  };
+                        {/* Trust Indicators */}
+                        <div className="space-y-4">
+                            <p className="text-sm text-gray-500 font-medium">Trusted by professionals from</p>
+                            <div className="flex items-center space-x-8 opacity-60">
+                                <div className="text-gray-400 font-semibold">GRUBHUB</div>
+                                <div className="text-gray-400 font-semibold">TRELLO</div>
+                                <div className="text-gray-400 font-semibold">GOOGLE</div>
+                                <div className="text-gray-400 font-semibold">PEXELS</div>
+                            </div>
+                        </div>
+                    </div>
 
-  return (
-    <div className="py-16 bg-gradient-to-br from-orange-50 via-orange-25 to-white">
-      <div className="container mx-auto ">
-        <div className="text-center max-w-4xl mx-auto mb-16">
-          <h2 className="text-5xl font-bold text-gray-900 mb-6 leading-tight">
-            Create Your Perfect Resume in
-            <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
-              {" "}
-              Minutes
-            </span>
-          </h2>
-          <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-            Build professional resumes with AI assistance, beautiful templates,
-            and instant PDF downloads. Get hired faster with our modern resume
-            builder.
-          </p>
-          <div className="flex justify-center items-center space-x-8 mb-12 text-sm text-gray-500">
-            <div className="flex items-center space-x-2">
-              <Zap className="w-4 h-4 text-orange-500" />
-              <span>AI-Powered Suggestions</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <FileText className="w-4 h-4 text-orange-600" />
-              <span>Professional Templates</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Download className="w-4 h-4 text-green-500" />
-              <span>Instant PDF Export</span>
-            </div>
-          </div>
+                    {/* Right Content - Resume Preview */}
+                    <Tilt
+                        tiltMaxAngleX={15}
+                        tiltMaxAngleY={15}
+                        perspective={1000}
+                        transitionSpeed={1000}
+                        scale={1.02}
+                        gyroscope={true}
+                    >
+                        <div className="relative">
+                            <div className="absolute inset-0 bg-gradient-to-r from-orange-200 to-orange-300 rounded-3xl blur-3xl opacity-30"></div>
+                            <div className="relative bg-white rounded-2xl shadow-2xl p-8 max-w-lg mx-auto">
+                                {/* Resume Header */}
+                                <div className="flex items-start space-x-4 mb-6">
+                                    <div className="w-16 h-16 rounded-full overflow-hidden bg-gradient-to-br from-gray-400 to-gray-600 flex items-center justify-center">
+                                        <img
+                                            src="/images/Surabhi.jpg"
+                                            alt="Profile"
+                                            className="w-full h-full object-cover"
+                                            onError={(e) => {
+                                                const target = e.target as HTMLImageElement;
+                                                target.style.display = 'none';
+                                            }}
+                                        />
+                                        <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24" style={{ display: 'none' }}>
+                                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 className="text-xl font-bold text-gray-900">Surabhi Rani</h3>
+                                        <p className="text-gray-600 text-sm">Director</p>
+                                    </div>
+                                </div>
+
+                                {/* Resume Sections */}
+                                <div className="space-y-6">
+                                    <div>
+                                        <h4 className="font-semibold text-gray-900 mb-2">About</h4>
+                                        <div className="space-y-1">
+                                            <div className="h-2 bg-gray-200 rounded w-full"></div>
+                                            <div className="h-2 bg-gray-200 rounded w-4/5"></div>
+                                            <div className="h-2 bg-gray-200 rounded w-3/4"></div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h4 className="font-semibold text-gray-900 mb-2">Experience</h4>
+                                        <div className="space-y-3">
+                                            <div>
+                                                <div className="flex justify-between items-start mb-1">
+                                                    <span className="font-medium text-sm text-gray-800">Director, EarlyJobs</span>
+                                                    <span className="text-xs text-gray-500">Jan 2025 - Present</span>
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <div className="h-1.5 bg-gray-200 rounded w-full"></div>
+                                                    <div className="h-1.5 bg-gray-200 rounded w-5/6"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h4 className="font-semibold text-gray-900 mb-2">Contact</h4>
+                                        <div className="space-y-2 text-sm text-gray-600">
+                                            <div>Phone: 9876543210</div>
+                                            <div>Email: surabhi@earlyjobs.in</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </Tilt>
+                </div>
+
+                {/* Features Section */}
+                <section className="py-20" id="features">
+                    <div className="text-center  mt-20">
+                        <h2 className="text-4xl font-bold text-gray-900 mb-4">
+                            Powerful <span className="text-orange-500">EarlyJobs</span> Features to Land Your Dream Job
+                        </h2>
+                        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                            Transform your career with intelligent resume building tools designed for success
+                        </p>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-8">
+                        {/* Feature 1: Upload & Parse */}
+                        <div onClick={() => router.push('/airesume')}
+                            className="group hover:shadow-xl transition-all duration-300 border-0 shadow-lg bg-white rounded-lg p-8 text-center cursor-pointer">
+                            <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+                                <Upload className="w-8 h-8 text-white" />
+                            </div>
+                            <h3 className="text-2xl font-bold text-gray-900 mb-4">Upload & Parse Resume</h3>
+                            <p className="text-gray-600 mb-6">
+                                Instantly extract and analyze your existing resume. Our AI understands your experience and optimizes it for maximum impact.
+                            </p>
+                            <ul className="space-y-2 text-left">
+                                <li className="flex items-center text-sm text-gray-600">
+                                    <CheckCircle className="w-4 h-4 text-orange-500 mr-2" />
+                                    Smart content extraction
+                                </li>
+                                <li className="flex items-center text-sm text-gray-600">
+                                    <CheckCircle className="w-4 h-4 text-orange-500 mr-2" />
+                                    Format recognition
+                                </li>
+                                <li className="flex items-center text-sm text-gray-600">
+                                    <CheckCircle className="w-4 h-4 text-orange-500 mr-2" />
+                                    Skill identification
+                                </li>
+                            </ul>
+                        </div>
+
+                        {/* Feature 2: JDE Builder */}
+                        <div onClick={() => router.push('/airesume/jde')} className="group hover:shadow-xl transition-all duration-300 border-0 shadow-lg bg-white rounded-lg p-8 text-center cursor-pointer">
+                            <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+                                <Zap className="w-8 h-8 text-white" />
+                            </div>
+                            <h3 className="text-2xl font-bold text-gray-900 mb-4">Build through JDE</h3>
+                            <p className="text-gray-600 mb-6">
+                                Use our Job Description Editor to create targeted resumes. Match your skills perfectly to specific job requirements.
+                            </p>
+                            <ul className="space-y-2 text-left">
+                                <li className="flex items-center text-sm text-gray-600">
+                                    <CheckCircle className="w-4 h-4 text-orange-500 mr-2" />
+                                    Job-specific optimization
+                                </li>
+                                <li className="flex items-center text-sm text-gray-600">
+                                    <CheckCircle className="w-4 h-4 text-orange-500 mr-2" />
+                                    Keyword matching
+                                </li>
+                                <li className="flex items-center text-sm text-gray-600">
+                                    <CheckCircle className="w-4 h-4 text-orange-500 mr-2" />
+                                    ATS compatibility
+                                </li>
+                            </ul>
+                        </div>
+
+                        {/* Feature 3: Create New Resume */}
+                        <div onClick={() => router.push('/airesume')} className="group hover:shadow-xl transition-all duration-300 border-0 shadow-lg bg-white rounded-lg p-8 text-center cursor-pointer">
+                            <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+                                <FileText className="w-8 h-8 text-white" />
+                            </div>
+                            <h3 className="text-2xl font-bold text-gray-900 mb-4">Create New Resume</h3>
+                            <p className="text-gray-600 mb-6">
+                                Start fresh with AI-guided resume creation. Get professional templates and intelligent suggestions every step of the way.
+                            </p>
+                            <ul className="space-y-2 text-left">
+                                <li className="flex items-center text-sm text-gray-600">
+                                    <CheckCircle className="w-4 h-4 text-orange-500 mr-2" />
+                                    Professional templates
+                                </li>
+                                <li className="flex items-center text-sm text-gray-600">
+                                    <CheckCircle className="w-4 h-4 text-orange-500 mr-2" />
+                                    AI writing assistance
+                                </li>
+                                <li className="flex items-center text-sm text-gray-600">
+                                    <CheckCircle className="w-4 h-4 text-orange-500 mr-2" />
+                                    Real-time optimization
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <div className="mt-20 text-center max-w-3xl mx-auto bg-white rounded-2xl p-8 shadow-md">
+                        <h3 className="text-2xl font-bold text-gray-900 mb-8">
+                            Why Choose EarlyJobs-Resume Builder?
+                        </h3>
+                        <div className="grid md:grid-cols-3 gap-6">
+                            <div className="p-6">
+                                <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                                    <Sparkles className="w-6 h-6 text-orange-600" />
+                                </div>
+                                <h4 className="font-semibold text-gray-900 mb-2">AI-Powered</h4>
+                                <p className="text-gray-600 text-sm">
+                                    Smart suggestions for professional summaries and job descriptions
+                                </p>
+                            </div>
+                            <div className="p-6">
+                                <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                                    <FileText className="w-6 h-6 text-orange-600" />
+                                </div>
+                                <h4 className="font-semibold text-gray-900 mb-2">Beautiful Templates</h4>
+                                <p className="text-gray-600 text-sm">
+                                    Choose from modern, ATS-friendly resume templates
+                                </p>
+                            </div>
+                            <div className="p-6">
+                                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                                    <Download className="w-6 h-6 text-green-600" />
+                                </div>
+                                <h4 className="font-semibold text-gray-900 mb-2">Instant Export</h4>
+                                <p className="text-gray-600 text-sm">
+                                    Download your perfect resume as a high-quality PDF
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
         </div>
-          <div className="grid md:grid-cols-3 gap-8  mx-auto">
-  {/* Upload Existing Resume Card */}
-  <Dialog open={isUploadDialogOpen} onOpenChange={setIsUploadDialogOpen}>
-    <DialogTrigger asChild>
-      <Card className="relative overflow-hidden border-0 shadow-md bg-white rounded-xl p-6 text-center hover:shadow-xl transition-all duration-300 cursor-pointer">
-        <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4">
-          <Upload className="w-8 h-8 text-white" />
-        </div>
-        <CardTitle className="text-xl font-semibold text-gray-800 mb-2">
-          Upload Existing Resume
-        </CardTitle>
-        <CardDescription className="text-gray-600 text-sm mb-4">
-          Have a resume already? Upload it and we'll extract your information automatically using AI parsing.
-        </CardDescription>
-        <div className="flex flex-col space-y-2 mb-4 text-sm text-gray-600">
-          <span className="flex items-center justify-center">
-            <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-            PDF Support
-          </span>
-          <span className="flex items-center justify-center">
-            <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-            DOCX Support
-          </span>
-        </div>
-        <Button className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-base py-3 rounded-md shadow-md hover:shadow-lg transition-all duration-300">
-          Upload & Parse Resume
-          <Upload className="w-4 h-4 ml-2" />
-        </Button>
-      </Card>
-    </DialogTrigger>
-    <DialogContent className="max-w-md">
-      <DialogHeader>
-        <DialogTitle className="text-center text-xl font-bold text-gray-900">
-          Upload Resume
-        </DialogTitle>
-      </DialogHeader>
-      <div className="space-y-4 mt-6">
-        <div className="text-center mb-6">
-          <p className="text-gray-600">
-            Upload your resume (PDF or DOCX) to extract and prefill your information.
-          </p>
-        </div>
-        <div
-          className={`flex flex-col items-center justify-center border-2 rounded-xl px-6 py-8 transition-colors duration-200 cursor-pointer ${dragActive ? "border-orange-500 bg-orange-50" : "border-gray-200 bg-white"}`}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-          onClick={() => fileInputRef.current?.click()}
-          style={{ minHeight: "160px" }}
-        >
-          <Upload className="w-10 h-10 text-orange-500 mb-2" />
-          <span className="text-gray-700 font-medium mb-2">
-            Drag & drop your resume here, or click to select a file
-          </span>
-          <input
-            type="file"
-            accept=".pdf,.doc,.docx"
-            ref={fileInputRef}
-            onChange={handleFileUpload}
-            className="hidden"
-          />
-          <Button
-            onClick={(e) => {
-              e.stopPropagation();
-              fileInputRef.current?.click();
-            }}
-            className="mt-4 bg-orange-500 hover:bg-orange-600 text-white"
-            disabled={isUploading}
-          >
-            {isUploading ? "Parsing..." : "Upload"}
-            <Upload className="w-4 h-4 ml-2" />
-          </Button>
-        </div>
-        <p className="text-xs text-gray-500 text-center">
-          Supports PDF and Word (.docx) files. Maximum file size: 5MB.
-        </p>
-      </div>
-    </DialogContent>
-  </Dialog>
-
-  {/* Job Description Enhanced (JDE) Card */}
-  <Link href="/airesume/jde" className="block">
-    <Card className="relative overflow-hidden border-0 shadow-md bg-white rounded-xl p-6 text-center hover:shadow-xl transition-all duration-300 cursor-pointer">
-      <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4">
-        <Briefcase className="w-8 h-8 text-white" />
-      </div>
-
-      <CardTitle className="text-xl font-semibold text-gray-800 mb-2">
-        Job Description Enhanced
-      </CardTitle>
-      <CardDescription className="text-gray-600 text-sm mb-4">
-        Create a resume optimized for specific job descriptions with AI assistance.
-      </CardDescription>
-      <div className="flex flex-col space-y-2 mb-4 text-sm text-gray-600">
-        <span className="flex items-center justify-center">
-          <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-          Job-Tailored AI
-        </span>
-        <span className="flex items-center justify-center">
-          <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-          ATS Optimized
-        </span>
-      </div>
-      <Button className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-base py-3 rounded-md shadow-md hover:shadow-lg transition-all duration-300">
-        Build JDE Resume
-        <Briefcase className="w-4 h-4 ml-2" />
-      </Button>
-    </Card>
-  </Link>
-
-  {/* Create New Resume Card */}
-  <Link href="/resumeBuilder" className="block">
-    <Card className="relative overflow-hidden border-0 shadow-md bg-white rounded-xl p-6 text-center hover:shadow-xl transition-all duration-300">
-      <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4">
-        <Plus className="w-8 h-8 text-white" />
-      </div>
-      <CardTitle className="text-xl font-semibold text-gray-800 mb-2">
-        Create New Resume
-      </CardTitle>
-      <CardDescription className="text-gray-600 text-sm mb-4">
-        Start fresh with our guided builder. Get AI suggestions and choose from beautiful templates.
-      </CardDescription>
-      <div className="flex flex-col space-y-2 mb-4 text-sm text-gray-600">
-        <span className="flex items-center justify-center">
-          <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-          AI Assistance
-        </span>
-        <span className="flex items-center justify-center">
-          <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-          Live Preview
-        </span>
-      </div>
-      <Button className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-base py-3 rounded-md shadow-md hover:shadow-lg transition-all duration-300">
-        Start Building Resume
-        <Plus className="w-4 h-4 ml-2" />
-      </Button>
-    </Card>
-  </Link>
-</div>
-         <div className="mt-20 text-center max-w-3xl mx-auto">
-          <h3 className="text-2xl font-bold text-gray-900 mb-8">
-            Why Choose EarlyJobs-Resume Builder?
-          </h3>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="p-6">
-              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <Sparkles className="w-6 h-6 text-orange-600" />
-              </div>
-              <h4 className="font-semibold text-gray-900 mb-2">AI-Powered</h4>
-              <p className="text-gray-600 text-sm">
-                Smart suggestions for professional summaries and job
-                descriptions
-              </p>
-            </div>
-            <div className="p-6">
-              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <FileText className="w-6 h-6 text-orange-600" />
-              </div>
-              <h4 className="font-semibold text-gray-900 mb-2">
-                Beautiful Templates
-              </h4>
-              <p className="text-gray-600 text-sm">
-                Choose from modern, ATS-friendly resume templates
-              </p>
-            </div>
-            <div className="p-6">
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <Download className="w-6 h-6 text-green-600" />
-              </div>
-              <h4 className="font-semibold text-gray-900 mb-2">
-                Instant Export
-              </h4>
-              <p className="text-gray-600 text-sm">
-                Download your perfect resume as a high-quality PDF
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+    );
 }

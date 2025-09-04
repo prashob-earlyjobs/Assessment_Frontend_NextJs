@@ -149,7 +149,7 @@ export default function AIResume() {
             </div>
           </div>
         </div>
-       <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+      <div className="grid md:grid-cols-3 gap-8  mx-auto">
   {/* Upload Existing Resume Card */}
   <Dialog open={isUploadDialogOpen} onOpenChange={setIsUploadDialogOpen}>
     <DialogTrigger asChild>

@@ -169,14 +169,15 @@ const Footer = () => {
               className="h-[4rem] w-auto cursor-pointer"
             />
             <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-8">
+               <p className="text-gray-400 text-sm">
+                © 2024-25 EarlyJobs.ai. All rights reserved.
+              </p>
               <div className="flex space-x-6">
                 <a href="#" className="text-gray-300 hover:text-orange-500 transition-all duration-300">Privacy Policy</a>
                 <a href="#" className="text-gray-300 hover:text-orange-500 transition-all duration-300">Terms of Service</a>
                 <a href="#" className="text-gray-300 hover:text-orange-500 transition-all duration-300">Contact Us</a>
               </div>
-              <p className="text-gray-400 text-sm">
-                © 2024-25 EarlyJobs.ai. All rights reserved.
-              </p>
+             
             </div>
           </div>
         </div>
