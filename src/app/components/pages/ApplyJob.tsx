@@ -1,156 +1,273 @@
-import { Button } from "../ui/button";
-import { Card } from "../ui/card";
-import { ArrowRight, Users, Building, MapPin } from "lucide-react";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
+import { useMemo, useState } from "react";
 
-const ApplyJobs = () => {
-  const router = useRouter();
+export default function Index() {
+  // Data
+  const categories = useMemo(
+    () => [
+      { icon: "🛍️", title: "Retail & Product", count: "3 jobs" },
+      { icon: "✍️", title: "Content Writer", count: "5 jobs" },
+      { icon: "👥", title: "Human Resource", count: "8 jobs" },
+      { icon: "📊", title: "Market Research", count: "4 jobs" },
+      { icon: "💻", title: "Software", count: "10 jobs" },
+      { icon: "💳", title: "Finance", count: "6 jobs" },
+      { icon: "📈", title: "Management", count: "9 jobs" },
+      { icon: "📣", title: "Marketing & Sales", count: "7 jobs" },
+    ],
+    [],
+  );
+
+  const jobs = useMemo(
+    () => [
+      {
+        company: "Ashford",
+        title: "Lead Quality Control QA",
+        location: "Remote",
+        salary: "$500/hour",
+        tags: ["Full Time", "Senior", "Figma"],
+      },
+      {
+        company: "Percepta",
+        title: "React Native Developer",
+        location: "Germany",
+        salary: "$80/hour",
+        tags: ["App", "PSD", "Remote"],
+      },
+      {
+        company: "Tesla",
+        title: "Senior System Engineer",
+        location: "USA",
+        salary: "$500/hour",
+        tags: ["Figma", "Lead", "Full Time"],
+      },
+      {
+        company: "Bing Search",
+        title: "Full Stack Engineer",
+        location: "New York, USA",
+        salary: "$800/hour",
+        tags: ["React", "Node", "Cloud"],
+      },
+      {
+        company: "Amazon",
+        title: "Frontend Developer",
+        location: "London",
+        salary: "$120k/yr",
+        tags: ["React", "TypeScript", "UI"],
+      },
+      {
+        company: "Aceable, Inc.",
+        title: "Java Software Engineer",
+        location: "Austin, TX",
+        salary: "$140k/yr",
+        tags: ["Java", "Spring", "AWS"],
+      },
+    ],
+    [],
+  );
+
+  // Hero search (field box) state
+  const [category, setCategory] = useState("");
+  const [industry, setIndustry] = useState("");
+  const [location, setLocation] = useState("");
 
   return (
-    <div className="min-h-screen relative">
-      {/* Hero Section with full background image */}
-      <div className="relative w-full h-screen max-h-[900px]">
-        <Image
-          src="/images/LandingImage.jpg"
-          alt="Landing"
-          fill
-          priority
-          className="object-cover object-center"
-        />
-        {/* Orange overlay with 30% opacity */}
-        <div className="absolute inset-0 bg-orange-400 opacity-30"></div>
-        {/* Content over image */}
-        <div className="absolute inset-0 flex flex-col justify-center items-center z-10">
-          <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-6 tracking-tight text-center">
-            Launch Your
-            <span className="bg-gradient-to-r from-orange-500 to-purple-600 bg-clip-text text-transparent"> Career Early</span>
-          </h1>
-          <p className="text-xl text-white max-w-3xl mx-auto mb-10 leading-relaxed text-center">
-            Discover entry-level opportunities and internships from top companies. Start your professional journey with EarlyJobs today.
-          </p>
-          <Button
-            size="lg"
-            onClick={() => router.push("/jobs")}
-            className="px-10 py-3 text-lg font-semibold text-white bg-orange-500 hover:bg-orange-600 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"
-          >
-            Explore Jobs <ArrowRight className="ml-2 h-5 w-5" />
-          </Button>
-        </div>
-      </div>
+    <main className="bg-gradient-to-b from-white via-orange-100/90 to-orange-50/40">
+      {/* Hero */}
+      <section className="relative">
+        {/* Highlighted orange background */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[900px] bg-[radial-gradient(70%_70%_at_15%_5%,rgba(251,146,60,0.6),transparent_60%),radial-gradient(60%_60%_at_85%_10%,rgba(249,115,22,0.55),transparent_60%),radial-gradient(50%_50%_at_50%_40%,rgba(253,186,116,0.4),transparent_70%)]" />
 
-      {/* Stats Section below image */}
-      <div className="w-full flex justify-center bg-white py-0 relative z-20" style={{ marginTop: "-60px" }}>
-        <div className="max-w-2xl w-full bg-white/90 rounded-3xl p-8 shadow-2xl backdrop-blur-md">
-          <div className="grid grid-cols-1 gap-8 text-center sm:grid-cols-3">
-            <div className="group">
-              <h3 className="text-3xl font-extrabold text-orange-600 transition-transform duration-300 group-hover:scale-105">1.5K+</h3>
-              <p className="text-gray-700 text-base">Job Seekers Empowered</p>
-            </div>
-            <div className="group">
-              <h3 className="text-3xl font-extrabold text-orange-600 transition-transform duration-300 group-hover:scale-105">60+</h3>
-              <p className="text-gray-700 text-base">Partner Companies</p>
-            </div>
-            <div className="group">
-              <h3 className="text-3xl font-extrabold text-orange-600 transition-transform duration-300 group-hover:scale-105">90%</h3>
-              <p className="text-gray-700 text-base">Job Match Accuracy</p>
-            </div>
-          </div>
-        </div>
-      </div>
+        <div className="container mx-auto grid gap-12 py-16 md:grid-cols-2 md:items-center lg:py-24">
+          <div>
+            <span className="inline-flex items-center rounded-full border border-orange-200 bg-orange-50 px-3 py-1 text-xs font-semibold text-orange-700">
+              New
+            </span>
+            <h1 className="mt-4 text-4xl font-extrabold leading-tight text-gray-900 sm:text-5xl">
+              EarlyJobs makes it easy to find your next role
+            </h1>
+            <p className="mt-4 max-w-xl text-gray-600">
+              Discover opportunities on EarlyJobs. Search by industry, location, and category — then apply in one click.
+            </p>
 
-      {/* How It Works Section */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 relative z-30">
-        <section className="my-24">
-          <h2 className="text-4xl font-extrabold text-center text-gray-900 mb-16">How It Works</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            <Card className="p-8 text-center bg-white/95 backdrop-blur-md shadow-lg hover:shadow-xl transition-all duration-300 group">
-              <div className="w-16 h-16 bg-orange-500/10 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-orange-500/20 transition-colors duration-300">
-                <span className="text-2xl font-bold text-orange-500 group-hover:text-orange-600">1</span>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4 group-hover:text-orange-600">Create Profile</h3>
-              <p className="text-gray-600 leading-relaxed">Build your student profile with academic achievements, skills, and career interests.</p>
-            </Card>
-            <Card className="p-8 text-center bg-white/95 backdrop-blur-md shadow-lg hover:shadow-xl transition-all duration-300 group">
-              <div className="w-16 h-16 bg-orange-500/10 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-orange-500/20 transition-colors duration-300">
-                <span className="text-2xl font-bold text-orange-500 group-hover:text-orange-600">2</span>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4 group-hover:text-orange-600">Explore Opportunities</h3>
-              <p className="text-gray-600 leading-relaxed">Browse internships, graduate programs, and entry-level positions perfect for beginners.</p>
-            </Card>
-            <Card className="p-8 text-center bg-white/95 backdrop-blur-md shadow-lg hover:shadow-xl transition-all duration-300 group">
-              <div className="w-16 h-16 bg-orange-500/10 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-orange-500/20 transition-colors duration-300">
-                <span className="text-2xl font-bold text-orange-500 group-hover:text-orange-600">3</span>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4 group-hover:text-orange-600">Land Your First Job</h3>
-              <p className="text-gray-600 leading-relaxed">Get mentorship support and connect with recruiters looking for fresh talent.</p>
-            </Card>
-          </div>
-        </section>
-
-        {/* Features Section */}
-        <div className="mt-24 bg-gradient-to-r from-orange-500 to-purple-600 rounded-3xl p-12 shadow-2xl relative overflow-hidden mb-10 ">
-          <h2 className="text-4xl lg:text-5xl font-extrabold text-white mb-8 text-center tracking-tight">
-            Why Choose <span className="text-yellow-300">EarlyJobs</span>?
-          </h2>
-          <p className="text-lg text-white/90 mb-12 text-center max-w-3xl mx-auto">
-            Transform your job search with cutting-edge AI tools designed to empower your career journey.
-          </p>
-          <div className="grid md:grid-cols-2 gap-10">
-            <div className="space-y-8">
-              <div className="flex items-start space-x-4 animate-fadeIn" style={{ animationDelay: "0.2s" }}>
-                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center mt-1 shadow-md">
-                  <span className="text-orange-500 text-xl font-bold">✓</span>
-                </div>
-                <div>
-                  <h4 className="text-xl font-semibold text-white">AI-Powered Career Guidance</h4>
-                  <p className="text-white/80">Personalized job recommendations and career advice based on your unique skills and goals.</p>
-                </div>
-              </div>
-              <div className="flex items-start space-x-4 animate-fadeIn" style={{ animationDelay: "0.4s" }}>
-                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center mt-1 shadow-md">
-                  <span className="text-orange-500 text-xl font-bold">✓</span>
-                </div>
-                <div>
-                  <h4 className="text-xl font-semibold text-white">Smart Resume Optimization</h4>
-                  <p className="text-white/80">AI-driven resume tailoring to match job descriptions and boost your application success.</p>
-                </div>
-              </div>
-            </div>
-            <div className="space-y-8">
-              <div className="flex items-start space-x-4 animate-fadeIn" style={{ animationDelay: "0.6s" }}>
-                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center mt-1 shadow-md">
-                  <span className="text-orange-500 text-xl font-bold">✓</span>
-                </div>
-                <div>
-                  <h4 className="text-xl font-semibold text-white">Efficient Job Applications</h4>
-                  <p className="text-white/80">Apply to multiple jobs effortlessly, streamlining your job search process.</p>
-                </div>
-              </div>
-              <div className="flex items-start space-x-4 animate-fadeIn" style={{ animationDelay: "0.8s" }}>
-                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center mt-1 shadow-md">
-                  <span className="text-orange-500 text-xl font-bold">✓</span>
-                </div>
-                <div>
-                  <h4 className="text-xl font-semibold text-white">Verified Skills Portfolio</h4>
-                  <p className="text-white/80">Earn trusted skill badges through assessments to stand out to employers.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="mt-12 text-center">
-            <Button
-              onClick={() => router.push("/login")}
-              size="lg"
-              className="bg-white text-orange-600 hover:bg-gray-100 rounded-full px-10 py-4 text-lg shadow-lg hover:shadow-xl transition-all duration-300"
+            {/* Enhanced field box (inline) */}
+            <form
+              className="mt-6 w-full rounded-3xl border border-orange-200/80 bg-white/95 p-3 shadow-[0_14px_40px_-12px_rgba(251,146,60,0.35)] ring-1 ring-orange-200/70 backdrop-blur"
+              onSubmit={(e) => {
+                e.preventDefault();
+                const params = new URLSearchParams({ category, industry, location });
+                window.location.href = `/jobs?${params.toString()}`;
+              }}
             >
-              Get Started Now <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+              <div className="grid gap-2 md:grid-cols-[1fr_1fr_1fr_auto]">
+                <label className="flex items-center gap-2 rounded-2xl border border-orange-100 bg-white px-3 py-2 text-sm text-gray-700 focus-within:border-orange-300 focus-within:ring-2 focus-within:ring-orange-200">
+                  <span className="text-orange-500">🏷️</span>
+                  <input
+                    value={industry}
+                    onChange={(e) => setIndustry(e.target.value)}
+                    placeholder="Industry"
+                    className="h-11 w-full bg-transparent placeholder:text-gray-400 focus:outline-none"
+                  />
+                </label>
+                <label className="flex items-center gap-2 rounded-2xl border border-orange-100 bg-white px-3 py-2 text-sm text-gray-700 focus-within:border-orange-300 focus-within:ring-2 focus-within:ring-orange-200">
+                  <span className="text-orange-500">📍</span>
+                  <input
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    placeholder="Location"
+                    className="h-11 w-full bg-transparent placeholder:text-gray-400 focus:outline-none"
+                  />
+                </label>
+                <label className="flex items-center gap-2 rounded-2xl border border-orange-100 bg-white px-3 py-2 text-sm text-gray-700 focus-within:border-orange-300 focus-within:ring-2 focus-within:ring-orange-200">
+                  <span className="text-orange-500">🗂️</span>
+                  <input
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    placeholder="Category"
+                    className="h-11 w-full bg-transparent placeholder:text-gray-400 focus:outline-none"
+                  />
+                </label>
+                <button
+                  type="submit"
+                  className="h-12 rounded-2xl bg-gradient-to-r from-orange-500 to-orange-600 px-6 text-sm font-semibold text-white shadow hover:from-orange-600 hover:to-orange-700"
+                >
+                  Search
+                </button>
+              </div>
+            </form>
+
+            <p className="mt-3 text-sm text-gray-500">
+              Popular searches: <a className="text-orange-700 hover:underline" href="#">Content Writer</a>, {" "}
+              <a className="text-orange-700 hover:underline" href="#">Finance</a>, {" "}
+              <a className="text-orange-700 hover:underline" href="#">Management</a>
+            </p>
+          </div>
+
+          {/* Two images layered with z-index */}
+          <div className="relative h-[420px] md:h-[460px]">
+            {/* Ambient glows */}
+            <div className="absolute -left-6 -top-6 size-28 rounded-3xl bg-orange-200/60 blur-2xl" />
+            <div className="absolute -right-10 bottom-0 size-36 rounded-full bg-orange-300/60 blur-3xl" />
+
+            {/* Decorative grid squares (orange/white) */}
+            <div className="absolute right-2 top-2 h-16 w-16 rounded-lg opacity-40 [background-image:linear-gradient(to_right,rgba(249,115,22,.35)_1px,transparent_1px),linear-gradient(to_bottom,rgba(249,115,22,.35)_1px,transparent_1px)] [background-size:12px_12px]" />
+            <div className="absolute left-4 bottom-1/3 h-14 w-14 rounded-lg opacity-30 [background-image:linear-gradient(to_right,rgba(249,115,22,.3)_1px,transparent_1px),linear-gradient(to_bottom,rgba(249,115,22,.3)_1px,transparent_1px)] [background-size:10px_10px]" />
+
+            {/* Back image with offset outline (not touching) */}
+            <div className="absolute right-2 top-6 z-0">
+              <div className="absolute -left-3 -top-3 h-64 w-[460px] rounded-[2rem] border-4 border-orange-400/70"></div>
+              <img
+                src="/images/HeroImg3.jpg"
+                alt="Team meeting"
+                className="relative h-64 w-[460px] rounded-[2rem] bg-white object-cover shadow-2xl"
+              />
+            </div>
+            {/* Front image with offset outline (not touching) */}
+            <div className="absolute left-4 bottom-4 z-10">
+              <div className="absolute -left-3 -top-3 h-56 w-[360px] rounded-[2rem] border-4 border-orange-400/70"></div>
+              <img
+                src="/images/Networking.jpg"
+                alt="Networking"
+                className="relative h-56 w-[360px] rounded-[2rem] bg-white object-cover shadow-2xl"
+              />
+            </div>
           </div>
         </div>
-      </main>
-    </div>
-  );
-};
+      </section>
 
-export default ApplyJobs;
+      {/* Categories */}
+      <section className="container mx-auto py-12 md:py-16">
+        <div className="mx-auto max-w-2xl text-center">
+          <h2 className="text-3xl font-extrabold tracking-tight text-gray-900">Browse by category</h2>
+          <p className="mt-2 text-gray-600">Find the role that fits. New jobs added daily.</p>
+        </div>
+        <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          {categories.map((c) => (
+            <div key={c.title} className="group rounded-2xl border border-orange-100 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+              <div className="flex items-center gap-3">
+                <div className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-to-br from-orange-50 to-orange-100 text-2xl text-orange-600 ring-1 ring-orange-100">
+                  {c.icon}
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-900">{c.title}</p>
+                  <p className="text-xs text-gray-500">{c.count}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Hiring banner */}
+        <div className="mt-10 rounded-3xl border border-orange-100 bg-gradient-to-r from-orange-50 to-white p-6 shadow-sm sm:p-10">
+          <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-wider text-orange-700">We are hiring</p>
+              <h3 className="mt-1 text-2xl font-bold text-gray-900">Let’s work together & explore opportunities</h3>
+            </div>
+            <a href="/jobs" className="inline-flex h-11 items-center justify-center rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 px-6 text-sm font-semibold text-white shadow hover:from-orange-600 hover:to-orange-700">
+              Apply Now
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Jobs of the day */}
+      <section className="container mx-auto py-12 md:py-16">
+        <div className="mx-auto max-w-2xl text-center">
+          <h2 className="text-3xl font-extrabold tracking-tight text-gray-900">Jobs of the day</h2>
+          <p className="mt-2 text-gray-600">Connect with the right opportunities faster</p>
+        </div>
+
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
+          {["Content Writer","Finance","Human Resource","Management","Market Research","Marketing & Sales","Software"].map((t) => (
+            <button key={t} className="rounded-full border border-orange-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:border-orange-300 hover:bg-orange-50">
+              {t}
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {jobs.map((j) => {
+            const initials = j.company
+              .split(" ")
+              .map((p) => p[0])
+              .join("")
+              .slice(0, 2)
+              .toUpperCase();
+            return (
+              <div key={j.company + j.title} className="flex h-full flex-col justify-between rounded-2xl border border-orange-100 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+                <div className="flex items-start gap-3">
+                  <div className="grid size-12 place-items-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 text-sm font-bold text-white shadow ring-1 ring-orange-500/30">
+                    {initials}
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500">{j.company} • {j.location}</p>
+                    <h3 className="mt-1 text-base font-semibold text-gray-900">{j.title}</h3>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {j.tags.map((t) => (
+                        <span key={t} className="rounded-full border border-orange-200 bg-orange-50 px-2.5 py-1 text-xs font-medium text-orange-700">{t}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-5 flex items-center justify-between">
+                  <p className="text-sm font-semibold text-gray-900">{j.salary}</p>
+                  <a href="/jobs" className="inline-flex h-9 items-center justify-center rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 px-3.5 text-xs font-semibold text-white shadow hover:from-orange-600 hover:to-orange-700">Apply Now</a>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Contact */}
+      <section id="contact" className="container mx-auto py-16">
+        <div className="rounded-3xl border border-orange-100 bg-gradient-to-br from-orange-50 to-white p-8 text-center shadow-sm">
+          <h3 className="text-2xl font-bold text-gray-900">Need help hiring or looking for a role?</h3>
+          <p className="mt-2 text-gray-600">Tell us what you need and we’ll reach out.</p>
+          <a href="mailto:hello@example.com" className="mt-6 inline-flex h-11 items-center justify-center rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 px-6 text-sm font-semibold text-white shadow hover:from-orange-600 hover:to-orange-700">
+            Contact us
+          </a>
+        </div>
+      </section>
+    </main>
+  );
+}
