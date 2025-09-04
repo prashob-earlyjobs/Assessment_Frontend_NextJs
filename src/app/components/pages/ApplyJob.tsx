@@ -82,7 +82,7 @@ export default function Index() {
               New
             </span>
             <h1 className="mt-4 text-4xl font-extrabold leading-tight text-gray-900 sm:text-5xl">
-              EarlyJobs makes it easy to find your next role
+              <span className="text-orange-500">EarlyJobs</span> makes it easy to find your next role
             </h1>
             <p className="mt-4 max-w-xl text-gray-600">
               Discover opportunities on EarlyJobs. Search by industry, location, and category — then apply in one click.
