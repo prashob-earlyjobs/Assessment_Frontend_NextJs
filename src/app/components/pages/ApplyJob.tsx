@@ -1,5 +1,6 @@
 "use client";
 import { useMemo, useState } from "react";
+import JobFairSection from "./Jobfair";
 
 export default function Index() {
   // Data
@@ -20,11 +21,39 @@ export default function Index() {
   const [industry, setIndustry] = useState("");
   const [location, setLocation] = useState("");
   const [jobs, setJobs] = useState([]);
+  const [openFAQ, setOpenFAQ] = useState(null); // State to track which FAQ is open
+
+  const faqs = [
+    {
+      question: "How does EarlyJobs work?",
+      answer: "EarlyJobs is a platform that connects job seekers with opportunities across various industries. Simply search by job role, industry, or location, and apply directly to roles that match your skills and preferences.",
+    },
+    {
+      question: "Is there a cost to use EarlyJobs?",
+      answer: "Job seekers can browse and apply to jobs for free. Employers may have subscription plans for posting jobs, which you can learn more about by contacting our team.",
+    },
+    {
+      question: "How often are new jobs added?",
+      answer: "New jobs are added daily. We work with employers across multiple sectors to ensure a steady stream of fresh opportunities for our users.",
+    },
+    {
+      question: "Can I save jobs to apply later?",
+      answer: "Yes, registered users can save jobs to their profile and return to apply at their convenience. Sign up to access this feature.",
+    },
+    {
+      question: "What industries does EarlyJobs cover?",
+      answer: "EarlyJobs covers a wide range of industries, including Information Technology, Health Care, Banking & Finance, Retail, Manufacturing, SaaS/eCommerce, BPO/KPO, and more.",
+    },
+  ];
+
+  const toggleFAQ = (index) => {
+    setOpenFAQ(openFAQ === index ? null : index);
+  };
 
   return (
-    <main className="bg-gradient-to-b from-white via-orange-100/90 to-orange-50/40 px-2">
+    <div className="bg-gradient-to-b from-white via-orange-100/90 to-orange-50/40 px-4 lg:px-2 py-12 sm:py-0 mt-20 lg:mt-0">
       {/* Hero */}
-      <section className="relative">
+      <section className="relative min-h-screen">
         {/* Highlighted orange background */}
         <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[600px] sm:h-[700px] md:h-[900px] bg-[radial-gradient(70%_70%_at_15%_5%,rgba(251,146,60,0.6),transparent_60%),radial-gradient(60%_60%_at_85%_10%,rgba(249,115,22,0.55),transparent_60%),radial-gradient(50%_50%_at_50%_40%,rgba(253,186,116,0.4),transparent_70%)]" />
 
@@ -41,13 +70,8 @@ export default function Index() {
             </p>
 
             {/* Enhanced field box (stacked on mobile, inline on desktop) */}
-            <form
+            <div
               className="mt-4 w-full rounded-2xl border border-orange-200/80 bg-white/95 p-2 sm:p-3 shadow-[0_10px_30px_-8px_rgba(251,146,60,0.3)] ring-1 ring-orange-200/70 backdrop-blur md:p-3 md:shadow-[0_14px_40px_-12px_rgba(251,146,60,0.35)]"
-              onSubmit={(e) => {
-                e.preventDefault();
-                const params = new URLSearchParams({ industry, location });
-                window.location.href = `/jobs?${params.toString()}`;
-              }}
             >
               <div className="grid gap-2 sm:grid-cols-[2fr_1fr_auto] sm:gap-3 md:gap-2">
                 <label className="flex items-center gap-2 rounded-xl border border-orange-100 bg-white px-2.5 py-1.5 text-sm text-gray-700 focus-within:border-orange-300 focus-within:ring-2 focus-within:ring-orange-200 sm:px-3 sm:py-2 md:px-3 md:py-2">
@@ -69,13 +93,17 @@ export default function Index() {
                   />
                 </label>
                 <button
-                  type="submit"
+                  type="button"
+                  onClick={() => {
+                    const params = new URLSearchParams({ industry, location });
+                    window.location.href = `/jobs?${params.toString()}`;
+                  }}
                   className="h-10 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 px-4 text-sm font-semibold text-white shadow hover:from-orange-600 hover:to-orange-700 sm:h-11 sm:px-6 md:h-12 md:px-6 md:rounded-2xl"
                 >
                   Search
                 </button>
               </div>
-            </form>
+            </div>
 
             <p className="mt-2 text-xs text-gray-500 sm:mt-3 sm:text-sm md:mt-3 md:text-sm">
               Popular searches: <a className="text-orange-700 hover:underline" href="#">Information Technology</a>,{" "}
@@ -95,7 +123,7 @@ export default function Index() {
             <div className="absolute left-2 bottom-1/3 h-10 w-10 rounded-lg opacity-30 [background-image:linear-gradient(to_right,rgba(249,115,22,.3)_1px,transparent_1px),linear-gradient(to_bottom,rgba(249,115,22,.3)_1px,transparent_1px)] [background-size:8px_8px] sm:h-12 sm:w-12 md:h-14 md:w-14" />
 
             {/* Back image with offset outline */}
-            <div className="absolute  right-1 top-4 z-0 sm:right-2 sm:top-6 md:right-2 md:top-6">
+            <div className="relative flex justify-center items-center md:absolute md:right-1 md:top-4 z-0 sm:right-2 sm:top-6 md:right-2 md:top-6">
               <div className="absolute -left-2 -top-2 h-48 w-[360px] rounded-xl md:border-2 md:border-orange-400/70 sm:h-56 sm:w-[400px] md:h-64 md:w-[460px] md:rounded-[2rem] md:border-4"></div>
               <img
                 src="/images/HeroImg3.jpg"
@@ -104,8 +132,8 @@ export default function Index() {
               />
             </div>
             {/* Front image with offset outline */}
-            <div className="absolute hidden md:block left-2 bottom-2 z-10 sm:left-4 sm:bottom-4 md:left-4 md:bottom-4">
-              <div className="absolute -left-2 -top-2 h-40 w-[280px] rounded-xl border-2 border-orange-400/70 sm:h-48 sm:w-[320px] md:h-56 md:w-[360px] md:rounded-[2rem] md:border-4"></div>
+            <div className="relative hidden flex justify-center items-center md:block md:absolute md:left-2 md:bottom-2 z-10 sm:left-4 sm:bottom-4 md:left-4 md:bottom-4">
+              <div className="absolute -left-2 -top-2 h-40 w-[280px] rounded-xl md:border-2 border-orange-400/70 sm:h-48 sm:w-[320px] md:h-56 md:w-[360px] md:rounded-[2rem] md:border-4"></div>
               <img
                 src="/images/Networking.jpg"
                 alt="Networking"
@@ -116,8 +144,12 @@ export default function Index() {
         </div>
       </section>
 
+      <section>
+        <JobFairSection />
+      </section>
+
       {/* Categories */}
-      <section className="container mx-auto py-8 sm:py-12 md:py-12 lg:py-16">
+      <section className="container mx-auto py-2 sm:py-12 md:py-12 lg:py-16">
         <div className="mx-auto max-w-xl text-center">
           <h2 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl md:text-3xl">Browse by Industry</h2>
           <p className="mt-2 text-sm text-gray-600 sm:text-base md:text-base">Find the role that fits. New jobs added daily.</p>
@@ -151,6 +183,37 @@ export default function Index() {
         </div>
       </section>
 
+      {/* FAQ Section */}
+      <section className="container mx-auto py-12 sm:py-16 md:py-16 lg:py-20">
+        <div className="mx-auto max-w-3xl text-center">
+          <h2 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl md:text-3xl">Frequently Asked Questions</h2>
+          <p className="mt-2 text-sm text-gray-600 sm:text-base md:text-base">Get answers to common questions about using EarlyJobs.</p>
+        </div>
+        <div className="mt-8 space-y-4">
+          {faqs.map((faq, index) => (
+            <div
+              key={index}
+              className="rounded-2xl border border-orange-100 bg-white shadow-sm transition-all hover:shadow-md"
+            >
+              <button
+                className="flex w-full items-center justify-between p-4 text-left text-sm font-semibold text-gray-900 sm:p-5 sm:text-base"
+                onClick={() => toggleFAQ(index)}
+              >
+                <span>{faq.question}</span>
+                <span className="text-orange-500">
+                  {openFAQ === index ? "−" : "+"}
+                </span>
+              </button>
+              {openFAQ === index && (
+                <div className="px-4 pb-4 sm:px-5 sm:pb-5">
+                  <p className="text-sm text-gray-600 sm:text-base">{faq.answer}</p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Contact */}
       <section id="contact" className="container mx-auto py-16">
         <div className="rounded-3xl border border-orange-100 bg-gradient-to-br from-orange-50 to-white p-8 text-center shadow-sm">
@@ -161,6 +224,6 @@ export default function Index() {
           </a>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

@@ -43,7 +43,7 @@ export default function Index() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-white via-orange-50 to-orange-100">
+        <div className="min-h-screen bg-gradient-to-br from-white via-orange-50 to-orange-100 mt-20 lg:mt-0">
             <style jsx>{`
                 @keyframes typing {
                     from { width: 0; }
