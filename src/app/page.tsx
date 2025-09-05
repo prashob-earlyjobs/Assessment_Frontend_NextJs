@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from "react";
+import { useState,useEffect } from "react";
 import { Button } from "../app/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "../app/components/ui/toggle-group";
 import { Briefcase, ClipboardCheck, FileText } from "lucide-react";
@@ -39,7 +39,7 @@ const Index = () => {
             alt="EarlyJobs Logo"
             className="h-20 w-auto"
           />
-          {/* <span className="text-xl font-bold text-gray-900">EarlyJobs</span> */}
+         
         </div>
 
         {/* Toggle Section in Navbar */}
