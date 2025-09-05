@@ -124,10 +124,10 @@ export default function Index() {
                         <div className="space-y-4">
                             <p className="text-sm text-gray-500 font-medium">Trusted by professionals from</p>
                             <div className="flex items-center space-x-8 opacity-60">
-                                <div className="text-gray-400 font-semibold">GRUBHUB</div>
-                                <div className="text-gray-400 font-semibold">TRELLO</div>
-                                <div className="text-gray-400 font-semibold">GOOGLE</div>
-                                <div className="text-gray-400 font-semibold">PEXELS</div>
+                                <div className="text-gray-400 font-semibold">COGENT</div>
+                                <div className="text-gray-400 font-semibold">HDFC</div>
+                                <div className="text-gray-400 font-semibold">PAYTM</div>
+                                <div className="text-gray-400 font-semibold">TP</div>
                             </div>
                         </div>
                     </div>
@@ -148,7 +148,7 @@ export default function Index() {
                                 <div className="flex items-start space-x-4 mb-6">
                                     <div className="w-16 h-16 rounded-full overflow-hidden bg-gradient-to-br from-gray-400 to-gray-600 flex items-center justify-center">
                                         <img
-                                            src="/images/Surabhi.jpg"
+                                            src="/images/Resumee.jpg"
                                             alt="Profile"
                                             className="w-full h-full object-cover"
                                             onError={(e) => {
@@ -161,8 +161,8 @@ export default function Index() {
                                         </svg>
                                     </div>
                                     <div>
-                                        <h3 className="text-xl font-bold text-gray-900">Surabhi Rani</h3>
-                                        <p className="text-gray-600 text-sm">Director</p>
+                                        <h3 className="text-xl font-bold text-gray-900">Jashwanth Sheri</h3>
+                                        <p className="text-gray-600 text-sm">Student</p>
                                     </div>
                                 </div>
 
@@ -182,7 +182,7 @@ export default function Index() {
                                         <div className="space-y-3">
                                             <div>
                                                 <div className="flex justify-between items-start mb-1">
-                                                    <span className="font-medium text-sm text-gray-800">Director, EarlyJobs</span>
+                                                    <span className="font-medium text-sm text-gray-800">Intern, EarlyJobs</span>
                                                     <span className="text-xs text-gray-500">Jan 2025 - Present</span>
                                                 </div>
                                                 <div className="space-y-1">
@@ -197,7 +197,7 @@ export default function Index() {
                                         <h4 className="font-semibold text-gray-900 mb-2">Contact</h4>
                                         <div className="space-y-2 text-sm text-gray-600">
                                             <div>Phone: 9876543210</div>
-                                            <div>Email: surabhi@earlyjobs.in</div>
+                                            <div>Email: jashwanth@earlyjobs.in</div>
                                         </div>
                                     </div>
                                 </div>

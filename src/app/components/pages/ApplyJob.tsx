@@ -1,73 +1,80 @@
 import { useMemo, useState } from "react";
 
-export default function Index() {
+export default async function Index() {
   // Data
   const categories = useMemo(
     () => [
-      { icon: "🛍️", title: "Retail & Product", count: "3 jobs" },
-      { icon: "✍️", title: "Content Writer", count: "5 jobs" },
-      { icon: "👥", title: "Human Resource", count: "8 jobs" },
-      { icon: "📊", title: "Market Research", count: "4 jobs" },
-      { icon: "💻", title: "Software", count: "10 jobs" },
-      { icon: "💳", title: "Finance", count: "6 jobs" },
-      { icon: "📈", title: "Management", count: "9 jobs" },
-      { icon: "📣", title: "Marketing & Sales", count: "7 jobs" },
+      { icon: "🛍️", title: "Information Technology", },
+      { icon: "✍️", title: "BPO/KPO", },
+      { icon: "🩺", title: "Health Care", },
+      { icon: "📊", title: "Retail", },
+      { icon: "🏭", title: "Manufacturing",  },
+      { icon: "💳", title: "Banking &Finance", },
+      { icon: "📈", title: "SaaS/eCommerce", },
+      { icon: "👥", title: "Others", },
     ],
     [],
   );
 
-  const jobs = useMemo(
-    () => [
-      {
-        company: "Ashford",
-        title: "Lead Quality Control QA",
-        location: "Remote",
-        salary: "$500/hour",
-        tags: ["Full Time", "Senior", "Figma"],
-      },
-      {
-        company: "Percepta",
-        title: "React Native Developer",
-        location: "Germany",
-        salary: "$80/hour",
-        tags: ["App", "PSD", "Remote"],
-      },
-      {
-        company: "Tesla",
-        title: "Senior System Engineer",
-        location: "USA",
-        salary: "$500/hour",
-        tags: ["Figma", "Lead", "Full Time"],
-      },
-      {
-        company: "Bing Search",
-        title: "Full Stack Engineer",
-        location: "New York, USA",
-        salary: "$800/hour",
-        tags: ["React", "Node", "Cloud"],
-      },
-      {
-        company: "Amazon",
-        title: "Frontend Developer",
-        location: "London",
-        salary: "$120k/yr",
-        tags: ["React", "TypeScript", "UI"],
-      },
-      {
-        company: "Aceable, Inc.",
-        title: "Java Software Engineer",
-        location: "Austin, TX",
-        salary: "$140k/yr",
-        tags: ["Java", "Spring", "AWS"],
-      },
-    ],
-    [],
-  );
+//   const jobs = useMemo(
+//     () => [
+//       {
+//         company: "Ashford",
+//         title: "Lead Quality Control QA",
+//         location: "Remote",
+//         salary: "$500/hour",
+//         tags: ["Full Time", "Senior", "Figma"],
+//       },
+//       {
+//         company: "Percepta",
+//         title: "React Native Developer",
+//         location: "Germany",
+//         salary: "$80/hour",
+//         tags: ["App", "PSD", "Remote"],
+//       },
+//       {
+//         company: "Tesla",
+//         title: "Senior System Engineer",
+//         location: "USA",
+//         salary: "$500/hour",
+//         tags: ["Figma", "Lead", "Full Time"],
+//       },
+//       {
+//         company: "Bing Search",
+//         title: "Full Stack Engineer",
+//         location: "New York, USA",
+//         salary: "$800/hour",
+//         tags: ["React", "Node", "Cloud"],
+//       },
+//       {
+//         company: "Amazon",
+//         title: "Frontend Developer",
+//         location: "London",
+//         salary: "$120k/yr",
+//         tags: ["React", "TypeScript", "UI"],
+//       },
+//       {
+//         company: "Aceable, Inc.",
+//         title: "Java Software Engineer",
+//         location: "Austin, TX",
+//         salary: "$140k/yr",
+//         tags: ["Java", "Spring", "AWS"],
+//       },
+//     ],
+//     [],
+//   );
 
   // Hero search (field box) state
-  const [category, setCategory] = useState("");
+ 
   const [industry, setIndustry] = useState("");
   const [location, setLocation] = useState("");
+  const [jobs, setJobs] = useState([]);
+
+  const response = await fetch('https://apis.earlyjobs.in/api/public/jobs')
+  const data = await response.json();
+  if (response.ok) {
+    setJobs(data.jobs);
+  }
 
   return (
     <main className="bg-gradient-to-b from-white via-orange-100/90 to-orange-50/40">
@@ -93,17 +100,19 @@ export default function Index() {
               className="mt-6 w-full rounded-3xl border border-orange-200/80 bg-white/95 p-3 shadow-[0_14px_40px_-12px_rgba(251,146,60,0.35)] ring-1 ring-orange-200/70 backdrop-blur"
               onSubmit={(e) => {
                 e.preventDefault();
-                const params = new URLSearchParams({ category, industry, location });
+                const params = new URLSearchParams({industry, location });
                 window.location.href = `/jobs?${params.toString()}`;
               }}
             >
-              <div className="grid gap-2 md:grid-cols-[1fr_1fr_1fr_auto]">
+              <div className="grid gap-2 md:grid-cols-[2fr_1fr_auto]">
+               
+                
                 <label className="flex items-center gap-2 rounded-2xl border border-orange-100 bg-white px-3 py-2 text-sm text-gray-700 focus-within:border-orange-300 focus-within:ring-2 focus-within:ring-orange-200">
-                  <span className="text-orange-500">🏷️</span>
+                  <span className="text-orange-500"></span>
                   <input
                     value={industry}
                     onChange={(e) => setIndustry(e.target.value)}
-                    placeholder="Industry"
+                    placeholder="Search Job Role, Industry"
                     className="h-11 w-full bg-transparent placeholder:text-gray-400 focus:outline-none"
                   />
                 </label>
@@ -113,15 +122,6 @@ export default function Index() {
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
                     placeholder="Location"
-                    className="h-11 w-full bg-transparent placeholder:text-gray-400 focus:outline-none"
-                  />
-                </label>
-                <label className="flex items-center gap-2 rounded-2xl border border-orange-100 bg-white px-3 py-2 text-sm text-gray-700 focus-within:border-orange-300 focus-within:ring-2 focus-within:ring-orange-200">
-                  <span className="text-orange-500">🗂️</span>
-                  <input
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    placeholder="Category"
                     className="h-11 w-full bg-transparent placeholder:text-gray-400 focus:outline-none"
                   />
                 </label>
@@ -135,7 +135,7 @@ export default function Index() {
             </form>
 
             <p className="mt-3 text-sm text-gray-500">
-              Popular searches: <a className="text-orange-700 hover:underline" href="#">Content Writer</a>, {" "}
+              Popular searches: <a className="text-orange-700 hover:underline" href="#">Information Technology</a>, {" "}
               <a className="text-orange-700 hover:underline" href="#">Finance</a>, {" "}
               <a className="text-orange-700 hover:underline" href="#">Management</a>
             </p>
@@ -176,7 +176,7 @@ export default function Index() {
       {/* Categories */}
       <section className="container mx-auto py-12 md:py-16">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-extrabold tracking-tight text-gray-900">Browse by category</h2>
+          <h2 className="text-3xl font-extrabold tracking-tight text-gray-900">Browse by Industry</h2>
           <p className="mt-2 text-gray-600">Find the role that fits. New jobs added daily.</p>
         </div>
         <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
@@ -188,7 +188,7 @@ export default function Index() {
                 </div>
                 <div>
                   <p className="font-semibold text-gray-900">{c.title}</p>
-                  <p className="text-xs text-gray-500">{c.count}</p>
+                 
                 </div>
               </div>
             </div>
@@ -210,7 +210,7 @@ export default function Index() {
       </section>
 
       {/* Jobs of the day */}
-      <section className="container mx-auto py-12 md:py-16">
+      {/* <section className="container mx-auto py-12 md:py-16">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-extrabold tracking-tight text-gray-900">Jobs of the day</h2>
           <p className="mt-2 text-gray-600">Connect with the right opportunities faster</p>
@@ -256,14 +256,14 @@ export default function Index() {
             );
           })}
         </div>
-      </section>
+      </section> */}
 
       {/* Contact */}
       <section id="contact" className="container mx-auto py-16">
         <div className="rounded-3xl border border-orange-100 bg-gradient-to-br from-orange-50 to-white p-8 text-center shadow-sm">
           <h3 className="text-2xl font-bold text-gray-900">Need help hiring or looking for a role?</h3>
           <p className="mt-2 text-gray-600">Tell us what you need and we’ll reach out.</p>
-          <a href="mailto:hello@example.com" className="mt-6 inline-flex h-11 items-center justify-center rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 px-6 text-sm font-semibold text-white shadow hover:from-orange-600 hover:to-orange-700">
+          <a href="" className="mt-6 inline-flex h-11 items-center justify-center rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 px-6 text-sm font-semibold text-white shadow hover:from-orange-600 hover:to-orange-700">
             Contact us
           </a>
         </div>
