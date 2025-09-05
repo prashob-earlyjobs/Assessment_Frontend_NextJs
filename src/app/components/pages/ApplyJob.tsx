@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 
-export default async function Index() {
+export default function Index() {
   // Data
   const categories = useMemo(
     () => [
@@ -70,11 +70,11 @@ export default async function Index() {
   const [location, setLocation] = useState("");
   const [jobs, setJobs] = useState([]);
 
-  const response = await fetch('https://apis.earlyjobs.in/api/public/jobs')
-  const data = await response.json();
-  if (response.ok) {
-    setJobs(data.jobs);
-  }
+//   const response = await fetch('https://apis.earlyjobs.in/api/public/jobs')
+//   const data = await response.json();
+//   if (response.ok) {
+//     setJobs(data.jobs);
+//   }
 
   return (
     <main className="bg-gradient-to-b from-white via-orange-100/90 to-orange-50/40">
