@@ -128,69 +128,69 @@ const Footer = () => {
             </Button>
           </div>
         </div>
+<div className="mt-8">
+  {/* Available in section */}
+  <div className="text-orange-600 text-lg font-semibold">
+    <span className="font-bold text-xl block sm:inline">We are available in:</span>
+    <div className="flex flex-wrap gap-3 mt-2 sm:mt-0">
+      <a
+        href="https://earlyjobs.in/franchise/mohali"
+        className="hover:text-orange-300 transition-all duration-300"
+      >
+        Mohali
+      </a>
+      <a
+        href="https://earlyjobs.in/franchise/chandigarh"
+        className="hover:text-orange-300 transition-all duration-300"
+      >
+        Chandigarh
+      </a>
+      <a
+        href="https://earlyjobs.in/franchise/hyderabad"
+        className="hover:text-orange-300 transition-all duration-300"
+      >
+        Hyderabad
+      </a>
+      <a
+        href="https://earlyjobs.in/franchise/chennai"
+        className="hover:text-orange-300 transition-all duration-300"
+      >
+        Chennai
+      </a>
+    </div>
+  </div>
 
-        <div className="mt-8">
-  <p className="text-orange-600 text-lg font-semibold">
-    <span className="font-bold text-xl">We are available in:</span>
-    <span className="ml-3">
-      <a href="https://earlyjobs.in/franchise/mohali" className="hover:text-orange-300 transition-all duration-300">Mohali</a>
-    </span>
-    <span className="ml-3">
-      <a href="https://earlyjobs.in/franchise/chandigarh" className="hover:text-orange-300 transition-all duration-300">Chandigarh</a>
-    </span>
-    <span className="ml-3">
-      <a href="https://earlyjobs.in/franchise/hyderabad" className="hover:text-orange-300 transition-all duration-300">Hyderabad</a>
-    </span>
-    <span className="ml-3">
-      <a href="https://earlyjobs.in/franchise/chennai" className="hover:text-orange-300 transition-all duration-300">Chennai</a>
-    </span>
-  </p>
-
-  <p className="text-white text-sm mt-2">
-    <span className="font-bold">We will be expanding in:</span>
-    <span className="ml-2">
-      <a href="#" className="hover:text-orange-500 transition-all duration-300">Rampur</a>
-    </span>
-    <span className="ml-3">
-      <a href="#" className="hover:text-orange-500 transition-all duration-300">Coimbatore</a>
-    </span>
-    <span className="ml-3">
-      <a href="#" className="hover:text-orange-500 transition-all duration-300">Ghaziabad</a>
-    </span>
-    <span className="ml-3">
-      <a href="#" className="hover:text-orange-500 transition-all duration-300">Lucknow</a>
-    </span>
-    <span className="ml-3">
-      <a href="#" className="hover:text-orange-500 transition-all duration-300">Bangalore Urban</a>
-    </span>
-    <span className="ml-3">
-      <a href="#" className="hover:text-orange-500 transition-all duration-300">Faridabad</a>
-    </span>
-    <span className="ml-3">
-      <a href="#" className="hover:text-orange-500 transition-all duration-300">Bhopal</a>
-    </span>
-    <span className="ml-3">
-      <a href="#" className="hover:text-orange-500 transition-all duration-300">Patna</a>
-    </span>
-    <span className="ml-3">
-      <a href="#" className="hover:text-orange-500 transition-all duration-300">Bijapur</a>
-    </span>
-    <span className="ml-3">
-      <a href="#" className="hover:text-orange-500 transition-all duration-300">Sonipat</a>
-    </span>
-    <span className="ml-3">
-      <a href="#" className="hover:text-orange-500 transition-all duration-300">Ramnagar</a>
-    </span>
-    <span className="ml-3">
-      <a href="#" className="hover:text-orange-500 transition-all duration-300">Gulbarga</a>
-    </span>
-    <span className="ml-3">
-      <a href="#" className="hover:text-orange-500 transition-all duration-300">Ananthapur</a>
-    </span>
-    <span className="ml-3">
-      <a href="#" className="hover:text-orange-500 transition-all duration-300">Mangalore</a>
-    </span>
-  </p>
+  {/* Expanding in section */}
+  <div className="text-white text-sm mt-4">
+    <span className="font-bold block sm:inline">We will be expanding in:</span>
+    <div className="flex flex-wrap gap-3 mt-2 sm:mt-0">
+      {[
+        "Rampur",
+        "Coimbatore",
+        "Ghaziabad",
+        "Lucknow",
+        "Bangalore Urban",
+        "Faridabad",
+        "Bhopal",
+        "Patna",
+        "Bijapur",
+        "Sonipat",
+        "Ramnagar",
+        "Gulbarga",
+        "Ananthapur",
+        "Mangalore",
+      ].map((city) => (
+        <a
+          key={city}
+          href="/"
+          onClick={(e) => e.preventDefault()} // prevents unwanted navigation
+          className="hover:text-orange-500 transition-all duration-300"
+        >
+          {city}
+        </a>
+      ))}
+    </div>
+  </div>
 </div>
 
 

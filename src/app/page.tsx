@@ -37,7 +37,7 @@ const Index = () => {
           <img
             src="/images/logo.png"
             alt="EarlyJobs Logo"
-            className="h-15 w-auto"
+            className="h-10 lg:h-15 w-auto"
           />
          
         </div>
