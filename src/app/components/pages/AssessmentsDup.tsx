@@ -49,7 +49,7 @@ export default function Assessments() {
     {
       icon: <BookOpen className="w-8 h-8" />,
       title: "Lifetime Access",
-      description: "Once enrolled, access your courses anytime, anywhere with lifetime access to all materials and updates."
+      description: "Once enrolled, access yourAssessments anytime, anywhere with lifetime access to all materials and updates."
     },
     {
       icon: <Trophy className="w-8 h-8" />,
@@ -100,7 +100,7 @@ export default function Assessments() {
           </span>
         </h1>
         <p className="hidden md:block text-base sm:text-lg text-orange-100 mb-6 max-w-2xl mx-auto lg:mx-0">
-          Join millions of learners worldwide and unlock your potential with our comprehensive online courses and expert mentorship.
+          Join millions of learners worldwide and unlock your potential with our comprehensive online assessments and expert mentorship.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start mb-6">
           <Button onClick={() => router.push('/assessments')}
@@ -120,7 +120,7 @@ export default function Assessments() {
         <div className="relative w-full sm:w-[28rem] h-[20rem] sm:h-[20rem] animate-float">
           <div className="relative z-20 w-full h-full">
             <img
-              src="/images/HeroImg2.jpg" // Portrait placeholder image
+              src="/images/Assessments.jpg" // Portrait placeholder image
               alt="Person studying online"
               className="w-full h-full object-cover rounded-2xl shadow-2xl transform hover:scale-105 transition-transform duration-500"
             />
@@ -153,7 +153,7 @@ export default function Assessments() {
               <Users className="w-4 h-4 text-blue-500" />
               <div>
                 <div className="text-xs font-medium text-gray-800">Students</div>
-                <div className="text-xs font-bold text-gray-900">1M+</div>
+               
               </div>
             </div>
           </div>
@@ -166,7 +166,7 @@ export default function Assessments() {
       {/* Search Courses Section */}
       <section className="py-10 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Search Courses</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Search Assessments</h2>
           <p className="text-sm sm:text-base text-gray-600 mb-5">Find the perfect course to advance your career</p>
           <div className="relative max-w-2xl mx-auto">
             <div className="flex flex-col sm:flex-row gap-2 items-center">
@@ -228,8 +228,8 @@ export default function Assessments() {
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Our Popular Courses</h2>
-            <p className="text-gray-600">Choose from our most loved courses by students worldwide</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Our Popular Assessments</h2>
+            <p className="text-gray-600">Choose from our most loved assessments by students worldwide</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {courses.map((course, index) => {

@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "../app/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "../app/components/ui/toggle-group";
 import { Briefcase, ClipboardCheck, FileText } from "lucide-react";
@@ -12,6 +12,9 @@ import {useRouter} from "next/navigation";
 const Index = () => {
   const router = useRouter();
   const [activeSection, setActiveSection] = useState("apply");
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [activeSection]);
 
   const renderActiveSection = () => {
     switch (activeSection) {
