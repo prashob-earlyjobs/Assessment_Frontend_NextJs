@@ -43,7 +43,9 @@ export default function Index() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-white via-orange-50 to-orange-100">
+
+        <div className="min-h-screen bg-gradient-to-br from-white via-orange-50 to-orange-100 mt-20 lg:mt-0">
+4443284c79e4fe1c95b1295307ad619b9cf8ccbf
             <style jsx>{`
                 @keyframes typing {
                     from { width: 0; }
@@ -196,8 +198,8 @@ export default function Index() {
                                     <div>
                                         <h4 className="font-semibold text-gray-900 mb-2">Contact</h4>
                                         <div className="space-y-2 text-sm text-gray-600">
-                                            <div>Phone: 9876543210</div>
-                                            <div>Email: jashwanth@earlyjobs.in</div>
+                                            <div>Phone: 9876******</div>
+                                            <div>Email: j*****@earlyjobs.in</div>
                                         </div>
                                     </div>
                                 </div>

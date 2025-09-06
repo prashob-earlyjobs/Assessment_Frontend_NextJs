@@ -9,6 +9,9 @@ import AIResume from "./components/pages/ResumePage";
 import Footer from "./components/pages/footer";
 import {useRouter} from "next/navigation";
 
+import FooterScroll from "./components/pages/FooterScroll";
+
+
 const Index = () => {
   const router = useRouter();
   const [activeSection, setActiveSection] = useState("apply");
@@ -37,7 +40,9 @@ const Index = () => {
           <img
             src="/images/logo.png"
             alt="EarlyJobs Logo"
-            className="h-20 w-auto"
+
+            className="h-10 lg:h-15 w-auto"
+
           />
          
         </div>
@@ -129,6 +134,9 @@ const Index = () => {
 
       {/* Footer */}
       <Footer />
+
+      <FooterScroll />
+
     </div>
   );
 };
