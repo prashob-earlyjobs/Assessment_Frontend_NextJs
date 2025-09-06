@@ -5,9 +5,10 @@ import { Badge } from "../ui/badge";
 import { Star, Search, Play, Users, BookOpen, Trophy, Clock, CheckCircle, ArrowRight, Menu, X } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { getAssessmentsfromSearchLandingPage } from "../services/servicesapis";
 
 const useScrollAnimation = () => {
-const ref = useRef(null);
+    const ref = useRef(null);
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
@@ -40,22 +41,24 @@ export default function Assessments() {
     const [searchQuery, setSearchQuery] = useState("");
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [watchDemo, setWatchDemo] = useState(false);
+    const [searchResults, setSearchResults] = useState([]);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     const features = [
         {
             icon: <Users className="w-8 h-8" />,
             title: "Online Guide",
-            description: "Connect with intelligent AI guides that walk you through every step of your job seeking journey, making complex concepts simple and clear."
+            description: "Connect with intelligent AI guides that walk you through every step of your career journey, making complex concepts simple and clear."
         },
         {
             icon: <BookOpen className="w-8 h-8" />,
             title: "Lifetime Access",
-            description: "Once enrolled, access yourAssessments anytime, anywhere with lifetime access to all materials and updates."
+            description: "Once enrolled, access your Assessments anytime, anywhere with lifetime access to all materials and updates."
         },
         {
             icon: <Trophy className="w-8 h-8" />,
-            title: "100+ Assessments",
-            description: "Join our Community and Unlock Access to Over 100+ Skill-Building Assessments to Level Up Your Future!"
+            title: "300+ Assessments",
+            description: "Join our Community and Unlock Access to Over 300+ Skill-Building Assessments to Level Up Your Future!"
         }
     ];
 
@@ -86,6 +89,42 @@ export default function Assessments() {
         }
     ];
 
+    // Fetch search results when searchQuery changes
+    useEffect(() => {
+        const fetchSearchResults = async () => {
+            if (searchQuery.trim() === "") {
+                setSearchResults([]);
+                setIsDropdownOpen(false);
+                return;
+            }
+
+            try {
+                const response = await getAssessmentsfromSearchLandingPage({ searchQuery });
+                setSearchResults(response.data.assessments || []);
+                setIsDropdownOpen(true);
+            } catch (error) {
+                console.error("Error fetching search results:", error);
+                setSearchResults([]);
+                setIsDropdownOpen(false);
+            }
+        };
+
+        const debounce = setTimeout(() => {
+            fetchSearchResults();
+        }, 300); // Debounce to avoid too many API calls
+
+        return () => clearTimeout(debounce);
+    }, [searchQuery]);
+
+    // Handle clicking a search result
+    const handleSearchResultClick = (assessment) => {
+        router.push(
+            `/assessments/${assessment.title.toLowerCase().replace(/\s+/g, "-")}/${assessment.shortId ? assessment.shortId : assessment._id}`
+        );
+        setSearchQuery("");
+        setIsDropdownOpen(false);
+    };
+
     return (
         <div>
             {/* Hero Section */}
@@ -111,9 +150,10 @@ export default function Assessments() {
                                     View Assessments
                                     <ArrowRight className="inline-block ml-2 w-5 h-5" />
                                 </Button>
-                                <Button onClick={() => setWatchDemo(!watchDemo)}
-                                    className="border-2 border-white text-white hover:bg-white hover:text-orange-600 font-semibold py-2.5 px-5 rounded-xl text-base transition-all duration-300 shadow-lg">
-
+                                <Button
+                                    onClick={() => setWatchDemo(!watchDemo)}
+                                    className="border-2 border-white text-white hover:bg-white hover:text-orange-600 font-semibold py-2.5 px-5 rounded-xl text-base transition-all duration-300 shadow-lg"
+                                >
                                     Watch Demo
                                     <ArrowRight className="inline-block ml-2 w-5 h-5" />
                                 </Button>
@@ -122,7 +162,7 @@ export default function Assessments() {
 
                         {/* Right Video */}
                         <div className="relative lg:order-last order-first flex justify-center mt-10 lg:mt-0">
-                            <div className="relative  w-[28rem] h-[20rem] lg:h-[26rem] lg:w-[40rem] animate-float">
+                            <div className="relative w-[28rem] h-[20rem] lg:h-[26rem] lg:w-[40rem] animate-float">
                                 <div className="relative z-20 w-full h-full">
                                     <video
                                         src="/images/Demo.mp4"
@@ -130,7 +170,6 @@ export default function Assessments() {
                                         muted={!watchDemo}
                                         loop
                                         playsInline
-                                       
                                         controls={watchDemo}
                                         className="w-full h-full object-cover rounded-2xl shadow-2xl"
                                     />
@@ -173,29 +212,48 @@ export default function Assessments() {
             </section>
 
             {/* Search Courses Section */}
-            <section className="py-10 px-4 sm:px-6 lg:px-8 bg-gray-50">
-                <div className="max-w-4xl mx-auto text-center">
-                    <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Search Assessments</h2>
-                    <p className="text-sm sm:text-base text-gray-600 mb-5">Find the perfect course to advance your career</p>
-                    <div className="relative max-w-2xl mx-auto">
-                        <div className="flex flex-col sm:flex-row gap-2 items-center">
-                            <div className="relative flex-1 w-full">
-                                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 sm:w-5 h-4 sm:h-5" />
-                                <Input
-                                    type="text"
-                                    placeholder="What do you want to learn today?"
-                                    className="w-full pl-9 sm:pl-10 pr-3 py-2.5 sm:py-3 text-base border-0 shadow-lg rounded-xl sm:rounded-l-xl sm:rounded-r-none focus:ring-2 focus:ring-orange-500"
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                />
-                            </div>
-                            <Button className="w-full sm:w-auto bg-orange-600 hover:bg-orange-700 text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl sm:rounded-l-none sm:rounded-r-xl shadow-lg font-medium transition-colors">
-                                Search
-                            </Button>
+           <section className="py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
+    <div className="max-w-5xl mx-auto text-center">
+        <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Search Assessments</h2>
+        <p className="text-base sm:text-lg text-gray-600 mb-6">Find the perfect course to advance your career</p>
+        <div className="relative max-w-3xl mx-auto">
+            <div className="flex flex-col sm:flex-row gap-3 items-center">
+                <div className="relative flex-1 w-full ">
+                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 sm:w-6 h-5 sm:h-6" />
+                    <Input
+                        type="text"
+                        placeholder="What do you want to learn today?"
+                        className="w-full text-4xl pl-12 sm:pl-14 pr-4 py-4 sm:py-8  border-0 shadow-lg rounded-xl sm:rounded-l-xl sm:rounded-r-none focus:ring-2 focus:ring-orange-500"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                    {isDropdownOpen && searchResults.length > 0 && (
+                        <div className="absolute z-40 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-xl max-h-64 overflow-y-auto">
+                            {searchResults.map((result) => (
+                                <div
+                                    key={result.assessmentId}
+                                    className="px-4 py-3 hover:bg-orange-50 cursor-pointer transition-colors"
+                                    onClick={() => handleSearchResultClick(result)}
+                                >
+                                    <div className="flex items-center justify-between px-2">
+                                        <span className="text-gray-900 font-medium">{result.title}</span>
+                                        <Badge className="bg-orange-600 text-white">{result.category}</Badge>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
-                    </div>
+                    )}
                 </div>
-            </section>
+                {/* <Button
+                    className="w-full sm:w-auto bg-orange-600 hover:bg-orange-700 text-white px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl sm:rounded-l-none sm:rounded-r-xl shadow-lg font-medium text-lg transition-colors"
+                    onClick={() => setIsDropdownOpen(true)}
+                >
+                    Search
+                </Button> */}
+            </div>
+        </div>
+    </div>
+</section>
 
             {/* Features Section */}
             <section className="py-12 px-4 sm:px-6 lg:px-8">
@@ -295,7 +353,7 @@ export default function Assessments() {
             {/* CTA Section */}
             <section className="py-10 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-orange-500 to-orange-600">
                 <div className="max-w-4xl mx-auto text-center">
-                    <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">Ready to Start Your Job seeking Journey?</h2>
+                    <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">Ready to Start Your Job Seeking Journey?</h2>
                     <p className="text-sm sm:text-base text-orange-100 mb-5 max-w-2xl mx-auto">
                         Join over our job seekers and start building the skills you need to advance your career today.
                     </p>
@@ -318,5 +376,4 @@ export default function Assessments() {
             </section>
         </div>
     );
-
 }

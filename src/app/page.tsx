@@ -127,7 +127,7 @@ const Index = () => {
       {/* Main Content */}
       <main >
         {/* Dynamic Content Based on Active Section */}
-        <div className="animate-in fade-in duration-300">
+        <div className="animate-in fade-in duration-300 px-0 ">
           {renderActiveSection()}
         </div>
       </main>

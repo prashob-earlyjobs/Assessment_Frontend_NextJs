@@ -108,7 +108,7 @@ const Footer = () => {
             <div className="w-full  mt-2 px-4 pb-10">
   {/* Available in section */}
   <div className=" pb-4 mb-6 text-center">
-    <span className=" text-2xl font-bold text-gray-300 block sm:inline">We are available in:</span>
+    <span className=" text-2xl font-bold text-gray-300 block sm:inline">Available in:</span>
     <div className="flex flex-wrap gap-4 mt-3 justify-center">
       <a
         href="https://earlyjobs.in/franchise/mohali"
@@ -139,7 +139,7 @@ const Footer = () => {
 
   {/* Expanding in section */}
   <div className="text-gray-300 mt-6 text-center">
-    <span className=" text-xl font-bold block sm:inline">We will be expanding in:</span>
+    <span className=" text-xl font-bold block sm:inline">Starting Soon:</span>
     <div className="flex flex-wrap gap-4 mt-3 justify-center">
       {[
         "Rampur",
@@ -195,7 +195,7 @@ const Footer = () => {
     </div>
   </div>
 </div>
-            <p className="text-gray-400 text-base font-normal leading-6 text-center mt-8 lg:mt-0">© 2024-25 VICTA EARLYJOBS TECHNOLOGIES PRIVATE LIMITED | <span className="font-semibold">CIN</span>: U78300KA2025PTC198732 | All rights reserved.</p>
+            <p className="text-gray-400 text-base font-normal leading-6 text-center mt-8 lg:mt-0">© 2024-25 Victa EarlyJobs Technologies Private Limited | <span className="font-semibold">CIN</span>: U78300KA2025PTC198732 | All rights reserved.</p>
         </footer>
     );
 };
