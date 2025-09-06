@@ -198,8 +198,8 @@ export default function Index() {
                                     <div>
                                         <h4 className="font-semibold text-gray-900 mb-2">Contact</h4>
                                         <div className="space-y-2 text-sm text-gray-600">
-                                            <div>Phone: 9876543210</div>
-                                            <div>Email: jashwanth@earlyjobs.in</div>
+                                            <div>Phone: 9876******</div>
+                                            <div>Email: j*****@earlyjobs.in</div>
                                         </div>
                                     </div>
                                 </div>

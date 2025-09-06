@@ -62,7 +62,7 @@ const Footer = () => {
                     <Link href="/team" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Our Team</Link>
                     <Link href="/partner-with-us" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Partner With Us</Link>
                     <Link href="/franchise" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Franchise With Us</Link>
-                    <p className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 cursor-pointer lg:mt-6" id="contact-link">Contact Us</p>
+                    <a href="tel:+918217527926" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 cursor-pointer lg:mt-6" id="contact-link">Contact Us</a>
                     <Link href="/story" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Our Story</Link>
                 </div>
                 <div className="flex flex-col">
@@ -74,8 +74,7 @@ const Footer = () => {
                     <Link href="/hr-executive-recruitment-services" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">HR & Executive Recruitment</Link>
                     <Link href="/recruitment-process-outsourcing" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Recruitment Process Outsourcing</Link>
                     <Link href="/value-staffing-service" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Value Staffing Services</Link>
-                    <Link href="/it-staffing-services" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">IT Staffing Services</Link>
-                </div>
+                   </div>
                 <div className="flex flex-col">
                     <h3 className="pt-8 text-white text-base font-semibold uppercase leading-5 lg:pt-12">Tools & Tie-Ups</h3>
                     <Link href="/airesume" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
@@ -96,7 +95,7 @@ const Footer = () => {
                         Auto-Apply
                     </button>
                     
-                    <Link href="#" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
+                    <Link href="https://www.earlyjobs.in/clientele" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
                         <Building className="w-5 h-5 mr-2 inline-block" />
                         Company Tie-Ups
                     </Link>
@@ -106,11 +105,11 @@ const Footer = () => {
                     </Link>
                 </div>
             </div>
-            <div className="w-full  mt-8 px-4 pb-10">
+            <div className="w-full  mt-2 px-4 pb-10">
   {/* Available in section */}
-  <div className=" pb-4 mb-6">
+  <div className=" pb-4 mb-6 text-center">
     <span className=" text-2xl font-bold text-gray-300 block sm:inline">We are available in:</span>
-    <div className="flex flex-wrap gap-4 mt-3">
+    <div className="flex flex-wrap gap-4 mt-3 justify-center">
       <a
         href="https://earlyjobs.in/franchise/mohali"
         className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300"
@@ -139,9 +138,9 @@ const Footer = () => {
   </div>
 
   {/* Expanding in section */}
-  <div className="text-gray-300 mt-6">
+  <div className="text-gray-300 mt-6 text-center">
     <span className=" text-xl font-bold block sm:inline">We will be expanding in:</span>
-    <div className="flex flex-wrap gap-4 mt-3">
+    <div className="flex flex-wrap gap-4 mt-3 justify-center">
       {[
         "Rampur",
         "Coimbatore",

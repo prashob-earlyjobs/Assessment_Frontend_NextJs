@@ -45,7 +45,7 @@ export default function Assessments() {
         {
             icon: <Users className="w-8 h-8" />,
             title: "Online Guide",
-            description: "Connect with intelligent AI guides that walk you through every step of your learning journey, making complex concepts simple, clear, and actionable."
+            description: "Connect with intelligent AI guides that walk you through every step of your job seeking journey, making complex concepts simple and clear."
         },
         {
             icon: <BookOpen className="w-8 h-8" />,
@@ -101,7 +101,7 @@ export default function Assessments() {
                                 </span>
                             </h1>
                             <p className="hidden md:block text-base sm:text-lg text-orange-100 mb-6 max-w-2xl mx-auto lg:mx-0">
-                                Join millions of learners worldwide and unlock your potential with our comprehensive online assessments and expert mentorship.
+                                Join our Job seekers worldwide and unlock your potential with our comprehensive online assessments and expert mentorship.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start mb-6">
                                 <Button
@@ -122,7 +122,7 @@ export default function Assessments() {
 
                         {/* Right Video */}
                         <div className="relative lg:order-last order-first flex justify-center mt-10 lg:mt-0">
-                            <div className="relative w-full sm:w-[28rem] h-[20rem] sm:h-[20rem] animate-float">
+                            <div className="relative  w-[28rem] h-[20rem] lg:h-[26rem] lg:w-[40rem] animate-float">
                                 <div className="relative z-20 w-full h-full">
                                     <video
                                         src="/images/Demo.mp4"
@@ -162,7 +162,7 @@ export default function Assessments() {
                                     <div className="flex items-center gap-2">
                                         <Users className="w-4 h-4 text-blue-500" />
                                         <div>
-                                            <div className="text-xs font-medium text-gray-800">Students</div>
+                                            <div className="text-xs font-medium text-gray-800">Job Seekers</div>
                                         </div>
                                     </div>
                                 </div>
@@ -203,7 +203,7 @@ export default function Assessments() {
                     <div className="text-center mb-10">
                         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Features From Our Assessments</h2>
                         <p className="text-gray-600 max-w-2xl mx-auto">
-                            Discover why students choose <span className="font-semibold text-orange-600">EarlyJobs.ai</span> for their professional development
+                            Discover why job seekers choose <span className="font-semibold text-orange-600">EarlyJobs.ai</span> for their professional development
                         </p>
                     </div>
                     <div className="grid md:grid-cols-3 gap-6">
@@ -239,7 +239,7 @@ export default function Assessments() {
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-10">
                         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Our Popular Assessments</h2>
-                        <p className="text-gray-600">Choose from our most loved assessments by students worldwide</p>
+                        <p className="text-gray-600">Choose from our most loved assessments by job seekers worldwide</p>
                     </div>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {courses.map((course, index) => {
@@ -295,9 +295,9 @@ export default function Assessments() {
             {/* CTA Section */}
             <section className="py-10 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-orange-500 to-orange-600">
                 <div className="max-w-4xl mx-auto text-center">
-                    <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">Ready to Start Your Learning Journey?</h2>
+                    <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">Ready to Start Your Job seeking Journey?</h2>
                     <p className="text-sm sm:text-base text-orange-100 mb-5 max-w-2xl mx-auto">
-                        Join over 1 million students and start building the skills you need to advance your career today.
+                        Join over our job seekers and start building the skills you need to advance your career today.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center max-w-md sm:max-w-none mx-auto">
                         <Button

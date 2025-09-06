@@ -171,8 +171,8 @@ export default function Index() {
         <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-1 lg:grid-cols-4 md:mt-8">
           {categories.map((c) => (
             <div key={c.title} className="group rounded-2xl border border-orange-100 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-              <div className="flex items-center gap-3">
-                <div className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-to-br from-orange-50 to-orange-100 text-2xl text-orange-600 ring-1 ring-orange-100">
+              <div className="flex items-center justify-center gap-3">
+                <div className="grid h-12 w-12 place-items-center  rounded-xl bg-gradient-to-br from-orange-50 to-orange-100 text-2xl text-orange-600 ring-1 ring-orange-100">
                   {c.icon}
                 </div>
                 <div>
@@ -230,16 +230,7 @@ export default function Index() {
       </section>
 
 
-      {/* Contact */}
-      <section id="contact" className="container mx-auto py-16">
-        <div className="rounded-3xl border border-orange-100 bg-gradient-to-br from-orange-50 to-white p-8 text-center shadow-sm">
-          <h3 className="text-2xl font-bold text-gray-900">Need help hiring or looking for a role?</h3>
-          <p className="mt-2 text-gray-600">Tell us what you need and we’ll reach out.</p>
-          <a href="" className="mt-6 inline-flex h-11 items-center justify-center rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 px-6 text-sm font-semibold text-white shadow hover:from-orange-600 hover:to-orange-700">
-            Contact us
-          </a>
-        </div>
-      </section>
+      
     </div>
   );
 }
