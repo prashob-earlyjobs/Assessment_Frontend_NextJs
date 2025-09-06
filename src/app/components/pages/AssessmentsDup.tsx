@@ -64,15 +64,16 @@ export default function Assessments() {
 
     const courses = [
         {
-            id: 1,
+            id: "apache-spark/EJA0185",
             title: "Apache Spark",
             duration: "15 mins",
             price: "₹999",
             image: "/images/course3.jpg",
-            category: "IT & Technical Support"
+            category: "IT & Technical Support",
+            
         },
         {
-            id: 2,
+            id:"team-lead/EJA0023" ,
             title: "Team Lead",
             duration: "15 Mins",
             price: "₹999",
@@ -80,7 +81,7 @@ export default function Assessments() {
             category: "Non-Technical"
         },
         {
-            id: 3,
+            id: "big-data-analytics-with-hadoop/EJA0184",
             title: "Big Data Analytics with Hadoop",
             duration: "15 Min",
             price: "₹999",
@@ -335,7 +336,7 @@ export default function Assessments() {
                                                     {course.price}
                                                 </span>
                                                 <Button
-                                                    onClick={() => router.push("/assessments")}
+                                                    onClick={() => router.push(`/assessments/${course.id}`)}
                                                     className="bg-orange-600 hover:bg-orange-700 text-white px-5 py-2 rounded-lg font-medium transform hover:scale-105 transition-all duration-300"
                                                 >
                                                     Enroll Now
