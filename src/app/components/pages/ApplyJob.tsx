@@ -1,7 +1,7 @@
 "use client";
 import { useMemo, useState } from "react";
 import JobFairSection from "./Jobfair";
-
+import Experience from "./Experience";
 
 export default function Index() {
   // Data
@@ -9,8 +9,8 @@ export default function Index() {
     () => [
       { icon: "🛍️", title: "Information Technology" },
       { icon: "✍️", title: "BPO/KPO" },
-      { icon: "🩺", title: "Health Care" },
-      { icon: "📊", title: "Retail" },
+      { icon: "🩺", title: "HealthCare" },
+      { icon: "📊", title: "Retail & Sales" },
       { icon: "🏭", title: "Manufacturing" },
       { icon: "💳", title: "Banking & Finance" },
       { icon: "📈", title: "SaaS/eCommerce" },
@@ -52,9 +52,9 @@ export default function Index() {
   };
 
   return (
-    <div className="bg-gradient-to-b from-white via-orange-100/90 to-orange-50/40 px-4 lg:px-2 py-12 sm:py-0 mt-20 lg:mt-0">
+    <div className="bg-gradient-to-b from-white via-orange-100/90 to-orange-50/40 px-4 py-12 sm:py-0 mt-20 lg:mt-0 ml-2 mx-auto">
       {/* Hero */}
-      <section className="relative min-h-screen">
+      <section className="relative h-screen">
 
         {/* Highlighted orange background */}
         <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[600px] sm:h-[700px] md:h-[900px] bg-[radial-gradient(70%_70%_at_15%_5%,rgba(251,146,60,0.6),transparent_60%),radial-gradient(60%_60%_at_85%_10%,rgba(249,115,22,0.55),transparent_60%),radial-gradient(50%_50%_at_50%_40%,rgba(253,186,116,0.4),transparent_70%)]" />
@@ -196,7 +196,10 @@ export default function Index() {
           </div>
         </div>
       </section>
-
+      
+      <section>
+        <Experience />
+      </section>
 
       {/* FAQ Section */}
       <section className="container mx-auto py-12 sm:py-16 md:py-16 lg:py-20">

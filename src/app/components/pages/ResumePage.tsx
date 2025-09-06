@@ -45,7 +45,6 @@ export default function Index() {
     return (
 
         <div className="min-h-screen bg-gradient-to-br from-white via-orange-50 to-orange-100 mt-20 lg:mt-0">
-4443284c79e4fe1c95b1295307ad619b9cf8ccbf
             <style jsx>{`
                 @keyframes typing {
                     from { width: 0; }
@@ -219,7 +218,7 @@ export default function Index() {
                         </p>
                     </div>
 
-                    <div className="grid md:grid-cols-3 gap-8">
+                    <div className="grid md:grid-cols-3 gap-8 mt-10">
                         {/* Feature 1: Upload & Parse */}
                         <div onClick={() => router.push('/airesume')}
                             className="group hover:shadow-xl transition-all duration-300 border-0 shadow-lg bg-white rounded-lg p-8 text-center cursor-pointer">
@@ -251,7 +250,7 @@ export default function Index() {
                             <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
                                 <Zap className="w-8 h-8 text-white" />
                             </div>
-                            <h3 className="text-2xl font-bold text-gray-900 mb-4">Build through JDE</h3>
+                            <h3 className="text-2xl font-bold text-gray-900 mb-4">Create by Job Description</h3>
                             <p className="text-gray-600 mb-6">
                                 Use our Job Description Editor to create targeted resumes. Match your skills perfectly to specific job requirements.
                             </p>
@@ -298,7 +297,7 @@ export default function Index() {
                     </div>
                 </section>
                 <section>
-                    <div className="mt-20 text-center max-w-3xl mx-auto bg-white rounded-2xl p-8 shadow-md">
+                    <div className="mt-15 text-center max-w-3xl mx-auto bg-white rounded-2xl p-8 shadow-md">
                         <h3 className="text-2xl font-bold text-gray-900 mb-8">
                             Why Choose EarlyJobs-Resume Builder?
                         </h3>
