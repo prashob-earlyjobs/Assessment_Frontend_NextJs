@@ -45,7 +45,7 @@ export default function Index() {
     return (
 
         <div className="min-h-screen bg-gradient-to-br from-white via-orange-50 to-orange-100 mt-20 lg:mt-0">
-4443284c79e4fe1c95b1295307ad619b9cf8ccbf
+
             <style jsx>{`
                 @keyframes typing {
                     from { width: 0; }
