@@ -8,6 +8,7 @@ import Assessments from "./components/pages/AssessmentsDup";
 import AIResume from "./components/pages/ResumePage";
 import Footer from "./components/pages/footer";
 import {useRouter} from "next/navigation";
+import FooterScroll from "./components/pages/FooterScroll";
 
 const Index = () => {
   const router = useRouter();
@@ -129,6 +130,7 @@ const Index = () => {
 
       {/* Footer */}
       <Footer />
+      <FooterScroll />
     </div>
   );
 };

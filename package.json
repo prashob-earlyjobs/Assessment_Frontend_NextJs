@@ -72,6 +72,7 @@
     "react-helmet-async": "^2.0.5",
     "react-hook-form": "^7.61.1",
     "react-hot-toast": "^2.6.0",
+    "react-icons": "^5.5.0",
     "react-image-crop": "^11.0.10",
     "react-parallax-tilt": "^1.7.307",
     "react-pdf": "^10.0.1",
