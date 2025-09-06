@@ -7,7 +7,7 @@ import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 const useScrollAnimation = () => {
-    const ref = useRef(null);
+const ref = useRef(null);
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
@@ -318,4 +318,5 @@ export default function Assessments() {
             </section>
         </div>
     );
+
 }
