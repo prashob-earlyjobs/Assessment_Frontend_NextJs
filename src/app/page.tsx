@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { Button } from "../app/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "../app/components/ui/toggle-group";
 import { Briefcase, ClipboardCheck, FileText } from "lucide-react";
@@ -70,8 +70,9 @@ const Index = () => {
   };
 
   return (
+    <Suspense fallback={<div>Loading...</div>}>
     <div className="min-h-screen bg-white">
-      {/* Top Navbar */}
+     
       <nav
         className={`bg-gradient-to-br from-orange-400 to-pink-600 shadow-sm transition-transform duration-300 z-30`} // Added z-30
         aria-hidden={!isNavbarVisible}
@@ -210,6 +211,7 @@ const Index = () => {
       {/* Footer */}
       <Footer />
     </div>
+    </Suspense>
   );
 };
 
