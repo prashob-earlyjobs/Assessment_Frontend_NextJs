@@ -201,8 +201,9 @@ const Index = () => {
       </nav>
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-orange-50 to-white">
         <Header />
-        <div className="max-w-7xl mx-auto py-15">
-          <div className="mb-8">
+        <div className="max-w-7xl mx-auto py-15 ">
+          <div className='flex flex-col items-center justify-between lg:flex-row '>
+          <div className="mb-8 ">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent mb-2">
               Candidate Dashboard
             </h1>
@@ -212,17 +213,17 @@ const Index = () => {
           </div>
           
           <div className="mb-8">
-            <div className="max-w-md">
+            <div className='w-[35rem]'>
               <input
                 type="text"
-                placeholder="Search by skills (e.g., Python, React, AWS...)"
+                placeholder="Search by skills (e.g.,Sales, Management, React, Data Science...)"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full px-4 py-3 border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent placeholder-gray-500"
               />
             </div>
           </div>
-          
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {filteredCandidates.map((candidate) => (
               <div 
@@ -321,7 +322,7 @@ const Index = () => {
                   Request {selectedCandidate?.name}'s Profile
                 </h2>
                 <p className="text-gray-600 mb-6">
-                  Please fill out the form below to request {selectedCandidate?.name}'s profile details. After verification of your email, the candidate's details will be sent to you.
+                  Please fill out the form below to request {selectedCandidate?.name}'s profile details. After verification, the candidate's details will be sent to you.
                 </p>
                 <div>
                   <div className="space-y-4">
@@ -383,7 +384,7 @@ const Index = () => {
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">Thank You!</h2>
                 <p className="text-gray-600 mb-6">
                   Thank you, {formData.name}, for your interest in {selectedCandidate?.name}'s profile. 
-                  After verification of your email, the candidate's details will be sent to you.
+                  After verification, the candidate's details will be sent to you.
                 </p>
                 <div className="flex justify-end">
                   <button
