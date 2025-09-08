@@ -7,9 +7,14 @@ import { AiFillInstagram } from "react-icons/ai";
 import { SlLocationPin } from "react-icons/sl";
 import { HiOutlinePhone, HiOutlineMail } from "react-icons/hi";
 import Link from 'next/link';
+import { useRouter } from "next/navigation";
+import FooterScroll from "./FooterScroll";
 
 const Footer = () => {
+    const router = useRouter();
+
     return (
+        <>
         <footer className="w-full flex flex-col items-center py-8 bg-[#0A0F10] text-white md:py-10 lg:py-10 px-3">
             <div className="grid grid-cols-1 gap-5 px-4 w-full sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
                 <div className="flex flex-col">
@@ -110,30 +115,30 @@ const Footer = () => {
   <div className=" pb-4 mb-6 text-center">
     <span className=" text-2xl font-bold text-gray-300 block sm:inline">Available in:</span>
     <div className="flex flex-wrap gap-4 mt-3 justify-center">
-      <a
-        href="https://earlyjobs.in/franchise/mohali"
-        className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300"
+      <p
+        onClick={()=>router.push("/mohali")}
+        className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
       >
         Mohali
-      </a>
-      <a
-        href="https://earlyjobs.in/franchise/chandigarh"
-        className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300"
+      </p>
+      <p
+        onClick={()=>router.push("/chandigarh")}
+        className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
       >
         Chandigarh
-      </a>
+      </p>
       <a
         href="https://earlyjobs.in/franchise/hyderabad"
         className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300"
       >
         Hyderabad
       </a>
-      <a
-        href="https://earlyjobs.in/franchise/chennai"
-        className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300"
+     <p
+        onClick={()=>router.push("/chennai")}
+        className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
       >
         Chennai
-      </a>
+      </p>
     </div>
   </div>
 
@@ -197,6 +202,8 @@ const Footer = () => {
 </div>
             <p className="text-gray-400 text-base font-normal leading-6 text-center mt-8 lg:mt-0">© 2024-25 Victa EarlyJobs Technologies Private Limited | <span className="font-semibold">CIN</span>: U78300KA2025PTC198732 | All rights reserved.</p>
         </footer>
+        <FooterScroll />
+        </>
     );
 };
 

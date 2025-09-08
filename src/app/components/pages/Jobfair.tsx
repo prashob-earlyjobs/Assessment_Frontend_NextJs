@@ -16,7 +16,7 @@ const JobFairSection = () => {
   ];
 
   return (
-    <div className="flex flex-col md:flex-row justify-between items-center p-4 md:p-6 lg:p-8 bg-white">
+    <div className="flex flex-col md:flex-row justify-between items-center p-4 md:p-6 lg:p-8 bg-white mx-auto">
       <div className="w-full md:w-1/4 text-center md:text-left mb-4 md:mb-0">
         <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800">
           Join Our Community <br />

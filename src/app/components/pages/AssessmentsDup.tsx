@@ -2,7 +2,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Card, CardContent } from "../ui/card";
 import { Badge } from "../ui/badge";
-import { Star, Search, Play, Users, BookOpen, Trophy, Clock, CheckCircle, ArrowRight, Menu, X } from "lucide-react";
+import { Star, Search, Play, Users, BookOpen, Trophy, Clock, CheckCircle, ArrowRight, Menu, X, ChevronDown, ChevronUp } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getAssessmentsfromSearchLandingPage } from "../services/servicesapis";
@@ -43,6 +43,7 @@ export default function Assessments() {
     const [watchDemo, setWatchDemo] = useState(false);
     const [searchResults, setSearchResults] = useState([]);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [openFaq, setOpenFaq] = useState(null);
 
     const features = [
         {
@@ -70,10 +71,9 @@ export default function Assessments() {
             price: "₹999",
             image: "/images/course3.jpg",
             category: "IT & Technical Support",
-            
         },
         {
-            id:"team-lead/EJA0023" ,
+            id: "team-lead/EJA0023",
             title: "Team Lead",
             duration: "15 Mins",
             price: "₹999",
@@ -87,6 +87,49 @@ export default function Assessments() {
             price: "₹999",
             image: "/images/course2.jpg",
             category: "Data Science"
+        }
+    ];
+
+    const faqs = [
+        {
+            question: "What are the benefits of taking assessments?",
+            answer: "Assessments help you identify your strengths, improve your skills, and prepare for job opportunities by providing personalized feedback and actionable insights."
+        },
+        {
+            question: "How long do I have access to the assessments?",
+            answer: "Once enrolled, you get lifetime access to all assessment materials and updates, allowing you to revisit content anytime."
+        },
+        {
+            question: "Are the assessments suitable for beginners?",
+            answer: "Yes, our assessments cater to all skill levels, from beginners to advanced professionals, with guided support to ensure effective learning."
+        },
+        {
+            question: "Can I get a certificate after completing an assessment?",
+            answer: "Yes, upon successful completion, you receive a certificate that you can add to your resume or share on professional platforms."
+        },
+        {
+            question: "How are the assessments structured?",
+            answer: "Assessments are structured with interactive modules, quizzes, and practical exercises to ensure a comprehensive learning experience."
+        },
+        {
+            question: "Is there a refund policy for assessments?",
+            answer: "Yes, we offer a 30-day money-back guarantee if you're not satisfied with the assessment experience."
+        },
+        {
+            question: "Can I take assessments on my mobile device?",
+            answer: "Absolutely, our platform is fully responsive, allowing you to take assessments on mobile, tablet, or desktop devices."
+        },
+        {
+            question: "Are there any prerequisites for enrolling?",
+            answer: "Most assessments have no prerequisites, but some advanced ones may recommend prior knowledge, which is detailed in the assessment description."
+        },
+        {
+            question: "How often are new assessments added?",
+            answer: "We regularly update our library, adding new assessments every month to keep content fresh and relevant."
+        },
+        {
+            question: "Can I connect with mentors during assessments?",
+            answer: "Yes, our platform offers access to AI-guided mentorship and support to help you through your learning journey."
         }
     ];
 
@@ -126,11 +169,16 @@ export default function Assessments() {
         setIsDropdownOpen(false);
     };
 
+    // Handle FAQ toggle
+    const toggleFaq = (index) => {
+        setOpenFaq(openFaq === index ? null : index);
+    };
+
     return (
         <div>
             {/* Hero Section */}
-            <section className="h-screen flex items-center relative overflow-hidden bg-gradient-to-br from-orange-400 to-purple-400 pt-0 pb-6 px-2 sm:pt-0 sm:pb-12 sm:px-6 lg:pt-0 lg:pb-12 lg:px-8">
-                <div className="max-w-7xl mx-auto w-full">
+            <section className="h-screen flex items-center relative overflow-hidden bg-gradient-to-br from-orange-400 to-purple-400 pt-0 pb-6  sm:pt-0 sm:pb-12  lg:pt-0 lg:pb-12 px-20">
+                <div className=" w-full">
                     <div className="grid lg:grid-cols-2 gap-6 lg:gap-10 items-center">
                         {/* Left Content */}
                         <div className="animate-fade-in text-center lg:text-left">
@@ -213,48 +261,42 @@ export default function Assessments() {
             </section>
 
             {/* Search Courses Section */}
-           <section className="py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
-    <div className="max-w-5xl mx-auto text-center">
-        <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Search Assessments</h2>
-        <p className="text-base sm:text-lg text-gray-600 mb-6">Find the perfect course to advance your career</p>
-        <div className="relative max-w-3xl mx-auto">
-            <div className="flex flex-col sm:flex-row gap-3 items-center">
-                <div className="relative flex-1 w-full ">
-                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 sm:w-6 h-5 sm:h-6" />
-                    <Input
-                        type="text"
-                        placeholder="What do you want to learn today?"
-                        className="w-full text-4xl pl-12 sm:pl-14 pr-4 py-4 sm:py-8  border-0 shadow-lg rounded-xl sm:rounded-l-xl sm:rounded-r-none focus:ring-2 focus:ring-orange-500"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                    {isDropdownOpen && searchResults.length > 0 && (
-                        <div className="absolute z-40 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-xl max-h-64 overflow-y-auto">
-                            {searchResults.map((result) => (
-                                <div
-                                    key={result.assessmentId}
-                                    className="px-4 py-3 hover:bg-orange-50 cursor-pointer transition-colors"
-                                    onClick={() => handleSearchResultClick(result)}
-                                >
-                                    <div className="flex items-center justify-between px-2">
-                                        <span className="text-gray-900 font-medium">{result.title}</span>
-                                        <Badge className="bg-orange-600 text-white">{result.category}</Badge>
+            <section className="py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
+                <div className="max-w-5xl mx-auto text-center">
+                    <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Search Assessments</h2>
+                    <p className="text-base sm:text-lg text-gray-600 mb-6">Find the perfect course to advance your career</p>
+                    <div className="relative max-w-3xl mx-auto">
+                        <div className="flex flex-col sm:flex-row gap-3 items-center">
+                            <div className="relative flex-1 w-full ">
+                                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 sm:w-6 h-5 sm:h-6" />
+                                <Input
+                                    type="text"
+                                    placeholder="What do you want to learn today?"
+                                    className="w-full text-4xl pl-12 sm:pl-14 pr-4 py-4 sm:py-8  border-0 shadow-lg rounded-xl sm:rounded-l-xl sm:rounded-r-none focus:ring-2 focus:ring-orange-500"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                />
+                                {isDropdownOpen && searchResults.length > 0 && (
+                                    <div className="absolute z-40 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-xl max-h-64 overflow-y-auto">
+                                        {searchResults.map((result) => (
+                                            <div
+                                                key={result.assessmentId}
+                                                className="px-4 py-3 hover:bg-orange-50 cursor-pointer transition-colors"
+                                                onClick={() => handleSearchResultClick(result)}
+                                            >
+                                                <div className="flex items-center justify-between px-2">
+                                                    <span className="text-gray-900 font-medium">{result.title}</span>
+                                                    <Badge className="bg-orange-600 text-white">{result.category}</Badge>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
-                                </div>
-                            ))}
+                                )}
+                            </div>
                         </div>
-                    )}
+                    </div>
                 </div>
-                {/* <Button
-                    className="w-full sm:w-auto bg-orange-600 hover:bg-orange-700 text-white px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl sm:rounded-l-none sm:rounded-r-xl shadow-lg font-medium text-lg transition-colors"
-                    onClick={() => setIsDropdownOpen(true)}
-                >
-                    Search
-                </Button> */}
-            </div>
-        </div>
-    </div>
-</section>
+            </section>
 
             {/* Features Section */}
             <section className="py-12 px-4 sm:px-6 lg:px-8">
@@ -343,6 +385,49 @@ export default function Assessments() {
                                                 </Button>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            </section>
+
+            {/* FAQ Section */}
+            <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+                <div className="max-w-7xl mx-auto">
+                    <div className="text-center mb-10">
+                        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Frequently Asked Questions</h2>
+                        <p className="text-gray-600 max-w-2xl mx-auto">
+                            Got questions? We've got answers about our assessments and how they can help you succeed.
+                        </p>
+                    </div>
+                    <div className="grid lg:grid-cols-2 gap-6">
+                        {faqs.slice(0,  10).map((faq, index) => {
+                            const { ref, isVisible } = useScrollAnimation();
+                            return (
+                                <div
+                                    key={index}
+                                    ref={ref}
+                                    className={`transition-all duration-700 delay-${index * 150} ${isVisible ? "animate-slide-up opacity-100" : "opacity-0 translate-y-10"}`}
+                                >
+                                    <div className="bg-gray-50 rounded-lg shadow-md border-0">
+                                        <button
+                                            className="w-full flex justify-between items-center p-5 text-left text-gray-900 font-semibold text-lg"
+                                            onClick={() => toggleFaq(index)}
+                                        >
+                                            <span>{faq.question}</span>
+                                            {openFaq === index ? (
+                                                <ChevronUp className="w-5 h-5 text-orange-600" />
+                                            ) : (
+                                                <ChevronDown className="w-5 h-5 text-gray-400" />
+                                            )}
+                                        </button>
+                                        {openFaq === index && (
+                                            <div className="p-5 pt-0 text-gray-600">
+                                                <p>{faq.answer}</p>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             );
