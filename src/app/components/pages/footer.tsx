@@ -153,8 +153,6 @@ const Footer = () => {
         "Chengalpattu",
         "Bangalore Urban",
         "Faridabad",
-        "Bhopal",
-        "Patna",
         "Bijapur",
         "Sonipat",
         "Ramnagar",
