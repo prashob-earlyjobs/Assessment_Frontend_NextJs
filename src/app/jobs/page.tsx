@@ -104,7 +104,7 @@ const Jobs = () => {
       params.append("page", cp.toString());
       params.append("pageSize", pageSize.toString());
 
-      const url = `${backendUrl}/api/public/jobs?${params.toString()}`;
+      const url = `${backendUrl}/public/jobs?${params.toString()}`;
       console.log("API URL:", url); // Debug log
 
       console.log("About to make fetch request..."); // Debug log
