@@ -272,7 +272,7 @@ export default function Assessments() {
                                 <Input
                                     type="text"
                                     placeholder="What do you want to learn today?"
-                                    className="w-full text-4xl pl-12 sm:pl-14 pr-4 py-4 sm:py-8  border-0 shadow-lg rounded-xl sm:rounded-l-xl sm:rounded-r-none focus:ring-2 focus:ring-orange-500"
+                                    className="w-full lg:text-2xl pl-12 sm:pl-14 pr-4 py-4 sm:py-8  border-0 shadow-lg rounded-xl sm:rounded-l-xl sm:rounded-r-none focus:ring-2 focus:ring-orange-500"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                 />

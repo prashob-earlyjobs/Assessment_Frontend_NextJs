@@ -2,7 +2,7 @@
 import { useMemo, useState, useRef, useEffect } from "react";
 import JobFairSection from "./Jobfair";
 import Experience from "./Experience";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Search } from "lucide-react";
 
 const useScrollAnimation = () => {
   const ref = useRef(null);
@@ -213,7 +213,7 @@ export default function Index() {
                 <div className="grid gap-2">
                   <div className="relative">
                     <label className="flex items-center gap-2 rounded-xl border border-orange-100 bg-white px-2.5 py-1.5 text-sm text-gray-700 focus-within:border-orange-300 focus-within:ring-2 focus-within:ring-orange-200 sm:px-3 sm:py-2 md:px-3 md:py-2">
-                      <span className="text-orange-500">🔍</span>
+                      <Search className="h-4 w-4 text-gray-400" />
                       <input
                         ref={industryInputRef}
                         value={industry}
@@ -324,7 +324,7 @@ export default function Index() {
         </div>
       </section>
 
-      <section>
+      <section className="hidden md:block">
         <Experience />
       </section>
 
