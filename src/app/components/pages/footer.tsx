@@ -64,7 +64,7 @@ const Footer = () => {
                     <h3 className="pt-8 text-white text-base font-semibold uppercase leading-5 lg:pt-12">Company</h3>
                     <Link href="/about" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">About Us</Link>
                     <Link href="/management" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Management Team</Link>
-                    <Link href="/team" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Our Team</Link>
+                    <Link href="/team" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Blogs</Link>
                     <Link href="/partner-with-us" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Partner With Us</Link>
                     <Link href="/franchise" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Franchise With Us</Link>
                     <a href="tel:+918217527926" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 cursor-pointer lg:mt-6" id="contact-link">Contact Us</a>
@@ -150,7 +150,7 @@ const Footer = () => {
         "Rampur",
         "Coimbatore",
         "Ghaziabad",
-        "Lucknow",
+        "Chengalpattu",
         "Bangalore Urban",
         "Faridabad",
         "Bhopal",

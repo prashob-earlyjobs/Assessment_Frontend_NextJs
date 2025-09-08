@@ -52,7 +52,7 @@ const Jobs = () => {
   const [title, setTitle] = useState("");
   const [searchInput, setSearchInput] = useState("");
 
-  const backendUrl = "https://apis.earlyjobs.in";
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_IN 
 
 
   // Calculate pagination values

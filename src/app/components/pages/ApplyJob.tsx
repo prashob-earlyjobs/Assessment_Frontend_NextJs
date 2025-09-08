@@ -34,7 +34,7 @@ const useScrollAnimation = () => {
 };
 
 export default function Index() {
-  const API_BASE_URL= "https://apis.earlyjobs.in/api";
+  const API_BASE_URL= process.env.NEXT_PUBLIC_BACKEND_URL_IN;
   const categories = useMemo(
     () => [
       { icon: "🛍️", title: "Information Technology" },
