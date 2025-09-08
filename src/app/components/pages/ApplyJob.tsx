@@ -34,7 +34,7 @@ const useScrollAnimation = () => {
 };
 
 export default function Index() {
-  const API_BASE_URL= process.env.NEXT_PUBLIC_BACKEND_URL;
+  const API_BASE_URL= "https://apis.earlyjobs.in/api";
   const categories = useMemo(
     () => [
       { icon: "🛍️", title: "Information Technology" },
@@ -117,7 +117,7 @@ export default function Index() {
       const fetchSuggestions = async () => {
         try {
           const response = await fetch(
-            `https://apis.earlyjobs.in/api/public/jobs?search=${encodeURIComponent(
+            `${API_BASE_URL}/public/jobs?search=${encodeURIComponent(
               industry
             )}&limit=7`
           );
@@ -219,7 +219,7 @@ export default function Index() {
                         value={industry}
                         onChange={(e) => setIndustry(e.target.value)}
                         onKeyDown={handleIndustryKeyDown}
-                        placeholder="Search Job Role, Industry"
+                        placeholder="Search Job Role, Industry, Location"
                         className="h-10 w-full bg-transparent placeholder:text-gray-400 focus:outline-none text-sm sm:h-11 md:h-11"
                       />
                     </label>
