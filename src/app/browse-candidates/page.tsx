@@ -184,14 +184,14 @@ const Index = () => {
             Browse Candidates
           </Button>
           <Button
-            onClick={() => router.push("/colleges")}
+            // onClick={() => router.push("/colleges")}
             className="bg-transparent text-white text-xl font-bold hover:text-orange-600 hover:bg-orange-50 rounded-2xl px-6 py-2 transition-all duration-300"
             aria-label="Colleges"
           >
             Colleges
           </Button>
           <Button
-            onClick={() => router.push("/talent-pool")}
+            //onClick={() => router.push("/talent-pool")}
             className="bg-transparent text-white text-xl font-bold hover:text-orange-600 hover:bg-orange-50 rounded-2xl px-6 py-2 transition-all duration-300"
             aria-label="Talent Pool"
           >
