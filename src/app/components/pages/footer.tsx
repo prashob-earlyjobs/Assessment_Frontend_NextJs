@@ -1,188 +1,208 @@
-import { Button } from "../ui/button";
-import { MapPin, Building, GraduationCap, Lightbulb, Users, Tag, FileText, BarChart2, Rocket } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 
+import { MapPin, Building, GraduationCap, Lightbulb, Users, Tag, FileText, BarChart2, Rocket } from "lucide-react";
+import { toast } from "sonner";
+import React from 'react';
+import { FaFacebook, FaLinkedin } from "react-icons/fa";
+import { AiFillInstagram } from "react-icons/ai";
+import { SlLocationPin } from "react-icons/sl";
+import { HiOutlinePhone, HiOutlineMail } from "react-icons/hi";
+import Link from 'next/link';
+import { useRouter } from "next/navigation";
+import FooterScroll from "./FooterScroll";
 
 const Footer = () => {
-  const router = useRouter();
-  const locations = [
-    "Jobs in Bengaluru", "Jobs in Mumbai", "Jobs in Delhi", , 
-    "Jobs in Hyderabad", "Jobs in Chennai",
-  ];
+    const router = useRouter();
 
-  const jobCategories = [
-    "Software Development", "Data Science", "Digital Marketing", "Design", 
-    "Sales", "Finance", "HR", "Operations", "Content Writing", "Customer Support"
-  ];
-
-  const franchiseLocations = [
-    "Bengaluru Franchise", "Mumbai Franchise", "Delhi Franchise", "Pune Franchise",
-    "Hyderabad Franchise", "Chennai Franchise"
-  ];
-
-  const collegePartners = [
-    "IIT Partnerships", "Engineering Colleges", "Business Schools", "Arts & Science Colleges",
-    "Polytechnic Institutes", "Vocational Training"
-  ];
-
-  const companyPartners = [
-    "Startups", "Tech Giants", "Consulting Firms", "Financial Services",
-    "E-commerce", "Healthcare", "Manufacturing", "Education"
-  ];
-
-  return (
-    <footer className="bg-gray-900 text-white">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-8">
-          
-        
-          <div>
-            <div className="flex items-center mb-4">
-              <MapPin className="w-6 h-6 text-orange-500 mr-2" />
-              <h3 className="text-xl font-semibold">Franchise Locations</h3>
+    return (
+        <>
+        <footer className="w-full flex flex-col items-center py-8 bg-[#0A0F10] text-white md:py-10 lg:py-10 px-3">
+            <div className="grid grid-cols-1 gap-5 px-4 w-full sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
+                <div className="flex flex-col">
+                    <Link href="/" className="mb-5">
+                        <img src="/images/logo.png" alt="earlyjobs" className="w-[130px] h-[90px]" />
+                    </Link>
+                    <div className="flex items-start mb-5">
+                        <SlLocationPin className="text-gray-400 text-2xl mr-2.5" />
+                        <p className="text-gray-400 text-base font-normal leading-6">
+                            53, HustleHub, 5th Cross Rd, near Sony World Signal, 4th Block, Koramangala, Bengaluru, Karnataka 560034
+                        </p>
+                    </div>
+                    <div className="flex items-start mb-5">
+                        <HiOutlineMail className="text-gray-400 text-2xl mr-2.5" />
+                        <a href="mailto:info@earlyjobs.in" className="text-gray-400 text-base font-normal leading-6 no-underline">
+                            info@earlyjobs.in
+                        </a>
+                    </div>
+                    <div className="flex items-start mb-5">
+                        <HiOutlinePhone className="text-gray-400 text-2xl mr-2.5" />
+                        <a href="tel:+918217527926" className="text-gray-400 text-base font-normal leading-6 no-underline">
+                            +91 8217527926
+                        </a>
+                    </div>
+                    <div className="flex items-center mt-5">
+                        <a href="https://www.facebook.com/earlyjobs.in" className="mr-5 no-underline" rel="noreferrer" target="_blank">
+                            <FaFacebook className="text-white text-2xl" />
+                        </a>
+                        <a href="https://www.instagram.com/earlyjobs/" className="mr-5 no-underline" rel="noreferrer" target="_blank">
+                            <AiFillInstagram className="text-white text-3xl" />
+                        </a>
+                        <a href="https://www.linkedin.com/company/earlyjobs/" className="mr-5 no-underline" rel="noreferrer" target="_blank">
+                            <FaLinkedin className="text-white text-2xl" />
+                        </a>
+                    </div>
+                    <h3 className="pt-5 text-white text-base font-semibold uppercase leading-5">Also Available In</h3>
+                    <div className="flex items-center mt-5">
+                        <a href="https://play.google.com/store/apps/details?id=com.victaman.earlyjobs" rel="noreferrer" target="_blank" className="mr-5">
+                            <img src="/images/google-play-badge-logo.svg" alt="google-play" className="w-[120px] select-none" />
+                        </a>
+                        <a href="https://apps.apple.com/in/app/earlyjobs/id6590626019" rel="noreferrer" target="_blank">
+                            <img src="/images/app-store-logo.svg" alt="app-store" className="w-[120px] select-none" />
+                        </a>
+                    </div>
+                </div>
+                <div className="flex flex-col">
+                    <h3 className="pt-8 text-white text-base font-semibold uppercase leading-5 lg:pt-12">Company</h3>
+                    <Link href="/about" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">About Us</Link>
+                    <Link href="/management" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Management Team</Link>
+                    <Link href="/team" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Blogs</Link>
+                    <Link href="/partner-with-us" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Partner With Us</Link>
+                    <Link href="/franchise" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Franchise With Us</Link>
+                    <a href="tel:+918217527926" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 cursor-pointer lg:mt-6" id="contact-link">Contact Us</a>
+                    <Link href="/story" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Our Story</Link>
+                </div>
+                <div className="flex flex-col">
+                    <h3 className="pt-8 text-white text-base font-semibold uppercase leading-5 lg:pt-12">Our Services</h3>
+                    <Link href="/it-recruitment" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">IT Recruitment</Link>
+                    <Link href="/finance-and-accounting-recruitment" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Finance & Accounting Recruitment</Link>
+                    <Link href="/sales-marketing-services" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Sales & Marketing Recruitment</Link>
+                    <Link href="/top-executive-recruitment-firm" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Top Executive Recruitment</Link>
+                    <Link href="/hr-executive-recruitment-services" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">HR & Executive Recruitment</Link>
+                    <Link href="/recruitment-process-outsourcing" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Recruitment Process Outsourcing</Link>
+                    <Link href="/value-staffing-service" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Value Staffing Services</Link>
+                   </div>
+                <div className="flex flex-col">
+                    <h3 className="pt-8 text-white text-base font-semibold uppercase leading-5 lg:pt-12">Tools & Tie-Ups</h3>
+                    <Link href="/airesume" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
+                        <FileText className="w-5 h-5 mr-2 inline-block" />
+                        AI Resume Builder
+                    </Link>
+                    <Link href="/assessments" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
+                        <BarChart2 className="w-5 h-5 mr-2 inline-block" />
+                        Assessments
+                    </Link>
+                    <button
+                        type="button"
+                        className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline text-left lg:mt-6 bg-transparent p-0"
+                        onClick={() => toast.info("We're working on Auto-Apply! This feature will be updated soon.")}
+                        style={{ outline: "none", border: "none" }}
+                    >
+                        <Rocket className="w-5 h-5 mr-2 inline-block" />
+                        Auto-Apply
+                    </button>
+                    
+                    <Link href="https://www.earlyjobs.in/clientele" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
+                        <Building className="w-5 h-5 mr-2 inline-block" />
+                        Company Tie-Ups
+                    </Link>
+                    <Link href="#" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
+                        <GraduationCap className="w-5 h-5 mr-2 inline-block" />
+                        College Tie-Ups
+                    </Link>
+                </div>
             </div>
-             {/* College & Company Tie-ups */}
-          
-            <div className="flex items-center mb-4">
-              <GraduationCap className="w-6 h-6 text-orange-500 mr-2" />
-              <h3 className="text-xl font-semibold">College Tie-ups</h3>
-            </div>
-            {/* <ul className="space-y-2 mb-6">
-              {collegePartners.slice(0, 4).map((partner) => (
-                <li key={partner}>
-                  <a href="#" className="text-gray-300 hover:text-orange-500 transition-all duration-300">
-                    {partner}
-                  </a>
-                </li>
-              ))}
-            </ul> */}
+            <div className="w-full  mt-2 px-4 pb-10">
+  {/* Available in section */}
+  <div className=" pb-4 mb-6 text-center">
+    <span className=" text-2xl font-bold text-gray-300 block sm:inline">Available in:</span>
+    <div className="flex flex-wrap gap-4 mt-3 justify-center">
+      <p
+        onClick={()=>router.push("/mohali")}
+        className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
+      >
+        Mohali
+      </p>
+      <p
+        onClick={()=>router.push("/chandigarh")}
+        className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
+      >
+        Chandigarh
+      </p>
+      <a
+        href="https://earlyjobs.in/franchise/hyderabad"
+        className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300"
+      >
+        Hyderabad
+      </a>
+     <p
+        onClick={()=>router.push("/chennai")}
+        className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
+      >
+        Chennai
+      </p>
+    </div>
+  </div>
 
-            <div className="flex items-center mb-4">
-              <Building className="w-6 h-6 text-orange-500 mr-2" />
-              <h3 className="text-xl font-semibold">Company Tie-ups</h3>
-            </div>
-            {/* <ul className="space-y-2">
-              {companyPartners.slice(0, 4).map((partner) => (
-                <li key={partner}>
-                  <a href="#" className="text-gray-300 hover:text-orange-500 transition-all duration-300">
-                    {partner}
-                  </a>
-                </li>
-              ))}
-            </ul> */}
-          
-           
-          </div>
-
-     
-
-          {/* Tools Section */}
-          <div>
-            <div className="flex items-center mb-6">
-              <Lightbulb className="w-6 h-6 text-orange-500 mr-2" />
-              <h3 className="text-xl font-semibold text-orange-400">Tools</h3>
-            </div>
-            <div className="space-y-4">
-              <a
-                href="/airesume"
-                className="flex items-center text-gray-300 hover:text-orange-500 transition-all duration-300 mb-2"
-              >
-                <FileText className="w-5 h-5 mr-2" />
-                AI Resume Builder
-              </a>
-              <a
-                href="/assessments"
-                className="flex items-center text-gray-300 hover:text-orange-500 transition-all duration-300 mb-2"
-              >
-                <BarChart2 className="w-5 h-5 mr-2" />
-                Assessments
-              </a>
-              <button
-                type="button"
-                className="flex items-center text-gray-300 hover:text-orange-500 transition-all duration-300 mb-2 bg-transparent p-0"
-                onClick={() => toast.info("We're working on Auto-Apply! This feature will be updated soon.")}
-                style={{ outline: "none", border: "none" }}
-              >
-                <Rocket className="w-5 h-5 mr-2" />
-                Auto-Apply
-              </button>
-              <a
-                href="#"
-                className="flex items-center text-gray-300 hover:text-orange-500 transition-all duration-300 mb-2"
-              >
-                <Lightbulb className="w-4 h-4 mr-2" />
-                Suggest a Feature
-              </a>
-              <a
-                href="#"
-                className="flex items-center text-gray-300 hover:text-orange-500 transition-all duration-300 mb-2"
-              >
-                <Users className="w-4 h-4 mr-2" />
-                Refer a Job Seeker
-              </a>
-            </div>
-          </div>
-            <div>
-              <div className="flex items-center mb-4">
-                <Tag className="w-6 h-6 text-orange-500 mr-2" />
-                <h3 className="text-xl font-semibold">Job Categories</h3>
-              </div>
-              <ul className="space-y-2">
-                {jobCategories.slice(0, 5).map((category) => (
-                  <li key={category}>
-                    <a href="#" className="text-gray-300 hover:text-orange-500 transition-all duration-300">
-                      {category}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          {/* Job Locations */}
-          <div>
-            <div className="flex items-center mb-6">
-              <MapPin className="w-6 h-6 text-orange-500 mr-2" />
-              <h3 className="text-xl font-semibold">Job Locations</h3>
-            </div>
-            <ul className="space-y-2">
-              {locations.map((location) => (
-                <li key={location}>
-                  <a href="#" className="text-gray-300 hover:text-orange-500 transition-all duration-300">
-                    {location}
-                  </a>
-                </li>
-              ))}
-            </ul>
-            <Button variant="outline" className="mt-4 bg-orange-500 text-white hover:bg-orange-700 border-0">
-              View All Cities
-            </Button>
-          </div>
-        </div>
-
-        {/* Bottom Section */}
-        <div className="border-t border-gray-700 mt-12 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <img
-              src="/images/logo.png"
-              onClick={() => router.push("/")}
-              alt="EarlyJobs Logo"
-              className="h-[4rem] w-auto cursor-pointer"
-            />
-            <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-8">
-              <div className="flex space-x-6">
-                <a href="#" className="text-gray-300 hover:text-orange-500 transition-all duration-300">Privacy Policy</a>
-                <a href="#" className="text-gray-300 hover:text-orange-500 transition-all duration-300">Terms of Service</a>
-                <a href="#" className="text-gray-300 hover:text-orange-500 transition-all duration-300">Contact Us</a>
-              </div>
-              <p className="text-gray-400 text-sm">
-                © 2024-25 EarlyJobs.ai. All rights reserved.
-              </p>
-            </div>
-          </div>
-        </div>
+  {/* Expanding in section */}
+  <div className="text-gray-300 mt-6 text-center">
+    <span className=" text-xl font-bold block sm:inline">Starting Soon:</span>
+    <div className="flex flex-wrap gap-4 mt-3 justify-center">
+      {[
+        "Rampur",
+        "Coimbatore",
+        "Ghaziabad",
+        "Chengalpattu",
+        "Bangalore Urban",
+        "Faridabad",
+        "Bijapur",
+        "Sonipat",
+        "Ramnagar",
+        "Gulbarga",
+        "Ananthapur",
+        "Mangalore",
+      ].map((city) => (
+        <a
+          key={city}
+          href="/"
+          onClick={(e) => e.preventDefault()}
+          className="text-gray-400  text-lg hover:text-amber-500 transition-all duration-300"
+        >
+          {city}
+        </a>
+      ))}
+    </div>
+  </div>
+</div>
+           <div className="w-full border-t border-gray-300 mt-10 px-4 py-6 ">
+  <div className="flex justify-center items-center text-center">
+    <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-8">
+      <div className="flex space-x-6">
+        <a
+          href="#"
+          className="text-gray-400  text-lg hover:text-amber-500 transition-all duration-300"
+        >
+          Privacy Policy
+        </a>
+        <a
+          href="#"
+          className="text-gray-400  text-lg hover:text-amber-500 transition-all duration-300"
+        >
+          Terms of Service
+        </a>
+        <a
+          href="#"
+          className="text-gray-400  text-lg hover:text-amber-500 transition-all duration-300"
+        >
+          Contact Us
+        </a>
       </div>
-    </footer>
-  );
+    </div>
+  </div>
+</div>
+            <p className="text-gray-400 text-base font-normal leading-6 text-center mt-8 lg:mt-0">© 2024-25 Victa EarlyJobs Technologies Private Limited | <span className="font-semibold">CIN</span>: U78300KA2025PTC198732 | All rights reserved.</p>
+        </footer>
+        <FooterScroll />
+        </>
+    );
 };
 
 export default Footer;

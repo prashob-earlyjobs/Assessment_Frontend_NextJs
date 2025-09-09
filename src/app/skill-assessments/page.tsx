@@ -1,25 +1,24 @@
+
 "use client";
 import { useState, useEffect, useCallback } from "react";
-import { Button } from "../app/components/ui/button";
-import { ToggleGroup, ToggleGroupItem } from "../app/components/ui/toggle-group";
+import { Button } from "../components/ui/button";
+import { ToggleGroup, ToggleGroupItem } from "../components/ui/toggle-group";
 import { Briefcase, ClipboardCheck, FileText } from "lucide-react";
-import Footer from "./components/pages/footer";
+import Assessments from "../components/pages/AssessmentsDup";
+import Footer from "../components/pages/footer";
 import { useRouter, usePathname } from "next/navigation";
-import ApplyJobs from "./components/pages/ApplyJob";
 
-const Index = () => {
+const AssessmentsPage = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const activeSection = pathname === "/" ? "apply" : pathname.slice(1) || "apply";
+  const activeSection = pathname === "/skill-assessments" ? "assessments" : pathname === "/" ? "apply" : pathname.slice(1) || "apply";
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
 
-  // Debounced scroll handler
   const handleScroll = useCallback(() => {
     const currentScrollY = window.scrollY;
     setIsNavbarVisible(currentScrollY <= 50);
   }, []);
 
-  // Handle scroll
   useEffect(() => {
     setIsNavbarVisible(window.scrollY <= 50);
     let timeout;
@@ -134,8 +133,8 @@ const Index = () => {
       </div>
 
       <main>
-        <div className="animate-in fade-in duration-300 ">
-          <ApplyJobs />
+        <div className="animate-in fade-in duration-300">
+          <Assessments />
         </div>
       </main>
 
@@ -144,4 +143,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default AssessmentsPage;

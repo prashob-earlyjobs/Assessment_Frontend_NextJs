@@ -52,7 +52,7 @@ const Jobs = () => {
   const [title, setTitle] = useState("");
   const [searchInput, setSearchInput] = useState("");
 
-  const backendUrl = "https://apis.earlyjobs.in";
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_IN 
 
 
   // Calculate pagination values
@@ -104,7 +104,7 @@ const Jobs = () => {
       params.append("page", cp.toString());
       params.append("pageSize", pageSize.toString());
 
-      const url = `${backendUrl}/api/public/jobs?${params.toString()}`;
+      const url = `${backendUrl}/public/jobs?${params.toString()}`;
       console.log("API URL:", url); // Debug log
 
       console.log("About to make fetch request..."); // Debug log

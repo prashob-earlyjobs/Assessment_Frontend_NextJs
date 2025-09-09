@@ -169,6 +169,17 @@ export const getAssessmentsfromSearch = async ({
     return error;
   }
 };
+export const getAssessmentsfromSearchLandingPage = async ({ searchQuery }) => {
+  try {
+    const response = await axiosInstance.get(
+      `/assessments?title=${encodeURIComponent(searchQuery)}`
+    );
+    return response.data;
+  } catch (error) {
+    toast.error(`${error?.response?.data?.message}.`);
+    return error;
+  }
+};
 
 export const getAssessmentById = async (assessmentId) => {
   try {
