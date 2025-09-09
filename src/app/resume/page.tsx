@@ -44,6 +44,32 @@ const ResumePage = () => {
 
   return (
     <div className="min-h-screen bg-white">
+     <nav
+        className={`bg-gradient-to-br from-orange-400 to-pink-600 shadow-sm transition-transform duration-300 z-30`}
+        aria-hidden={!isNavbarVisible}
+      >
+        <div className="flex items-center justify-end space-x-4 p-2 lg:px-12">
+          <Button
+            onClick={() => router.push("/browse-candidates")}
+            className="bg-transparent text-white text-xl font-bold hover:text-orange-600 hover:bg-orange-50 rounded-2xl px-6 py-2 transition-all duration-300"
+            aria-label="Browse Candidates"
+          >
+            Browse Candidates
+          </Button>
+          <Button
+            className="bg-transparent text-white text-xl font-bold hover:text-orange-600 hover:bg-orange-50 rounded-2xl px-6 py-2 transition-all duration-300"
+            aria-label="Colleges"
+          >
+            Colleges
+          </Button>
+          <Button
+            className="bg-transparent text-white text-xl font-bold hover:text-orange-600 hover:bg-orange-50 rounded-2xl px-6 py-2 transition-all duration-300"
+            aria-label="Talent Pool"
+          >
+            Talent Pool
+          </Button>
+        </div>
+      </nav> 
       <header className="flex items-center justify-between px-4 py-4 lg:px-12 bg-white/80 backdrop-blur-sm md:sticky md:top-0 z-40 shadow-sm">
         <div className="flex items-center space-x-2">
           <img

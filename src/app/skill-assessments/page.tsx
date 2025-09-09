@@ -7,6 +7,7 @@ import { Briefcase, ClipboardCheck, FileText } from "lucide-react";
 import Assessments from "../components/pages/AssessmentsDup";
 import Footer from "../components/pages/footer";
 import { useRouter, usePathname } from "next/navigation";
+import Navbar from "../components/pages/navbar";
 
 const AssessmentsPage = () => {
   const router = useRouter();
@@ -42,6 +43,7 @@ const AssessmentsPage = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      <Navbar />
       <header className="flex items-center justify-between px-4 py-4 lg:px-12 bg-white/80 backdrop-blur-sm md:sticky md:top-0 z-40 shadow-sm">
         <div className="flex items-center space-x-2">
           <img
