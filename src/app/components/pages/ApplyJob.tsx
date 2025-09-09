@@ -187,7 +187,7 @@ export default function Index() {
         <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] bg-[radial-gradient(70%_70%_at_15%_5%,rgba(251,146,60,0.6),transparent_60%),radial-gradient(60%_60%_at_85%_10%,rgba(249,115,22,0.55),transparent_60%),radial-gradient(50%_50%_at_50%_40%,rgba(253,186,116,0.4),transparent_70%)]" />
 
         <div className="container mx-auto grid gap-6 py-6 sm:gap-8 sm:py-8 md:grid-cols-2 md:items-center md:gap-10 md:py-12 lg:py-16">
-          <div className="space-y-4">
+          <div className="space-y-4 lg:mr-10">
             <span className="inline-flex items-center rounded-full border border-orange-200 bg-orange-50 px-2 py-1 text-xs font-semibold text-orange-700 sm:px-3 sm:py-1.5">
               New
             </span>
