@@ -70,7 +70,7 @@ const Index = () => {
   };
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense>
     <div className="min-h-screen bg-white">
      
       <nav
