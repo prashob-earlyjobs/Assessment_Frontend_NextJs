@@ -126,7 +126,7 @@ export default function Index() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-white via-orange-50 to-orange-100 mt-20 lg:mt-0">
+        <div className="min-h-screen bg-gradient-to-br from-white via-orange-50 to-orange-100  lg:mt-0">
             <style jsx>{`
                 @keyframes typing {
                     from { width: 0; }
@@ -152,11 +152,11 @@ export default function Index() {
             `}</style>
 
             {/* Hero Section */}
-            <main className="container mx-auto px-6 py-18">
+            <main className="container mx-auto px-6 py-6 lg:py-16">
                 <div className="grid lg:grid-cols-2 gap-12 items-center">
                     <div className="space-y-8">
                         <div className="space-y-4">
-                            <div className="inline-flex items-center bg-orange-100 text-orange-700 hover:bg-orange-200 px-3 py-1 rounded-full text-sm font-medium">
+                            <div className="hidden md:inline-flex items-center bg-orange-100 text-orange-700 hover:bg-orange-200 px-3 py-1 rounded-full text-sm font-medium">
                                 <Sparkles className="w-4 h-4 mr-2" />
                                 AI-Powered Resume Builder
                             </div>

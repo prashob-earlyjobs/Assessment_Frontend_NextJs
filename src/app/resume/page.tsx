@@ -1,13 +1,14 @@
+
 "use client";
 import { useState, useEffect, useCallback } from "react";
-import { Button } from "../app/components/ui/button";
-import { ToggleGroup, ToggleGroupItem } from "../app/components/ui/toggle-group";
+import { Button } from "../../app/components/ui/button";
+import { ToggleGroup, ToggleGroupItem } from "../../app/components/ui/toggle-group";
 import { Briefcase, ClipboardCheck, FileText } from "lucide-react";
-import Footer from "./components/pages/footer";
+import AIResume from "../components/pages/ResumePage";
+import Footer from "../components/pages/footer";
 import { useRouter, usePathname } from "next/navigation";
-import ApplyJobs from "./components/pages/ApplyJob";
 
-const Index = () => {
+const ResumePage = () => {
   const router = useRouter();
   const pathname = usePathname();
   const activeSection = pathname === "/" ? "apply" : pathname.slice(1) || "apply";
@@ -135,7 +136,7 @@ const Index = () => {
 
       <main>
         <div className="animate-in fade-in duration-300 ">
-          <ApplyJobs />
+          <AIResume />
         </div>
       </main>
 
@@ -144,4 +145,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default ResumePage;

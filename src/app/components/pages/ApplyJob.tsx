@@ -186,7 +186,7 @@ export default function Index() {
   };
 
   return (
-    <div className="bg-gradient-to-b from-white via-orange-100/90 to-orange-50/40 py-12 sm:py-0 mt-20 lg:mt-0 ml-2 mx-auto">
+    <div className="bg-gradient-to-b from-white via-orange-100/90 to-orange-50/40  sm:py-0  lg:mt-0 ml-2 mx-auto">
       <section className="relative h-screen">
         <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[600px] sm:h-[700px] md:h-[900px] bg-[radial-gradient(70%_70%_at_15%_5%,rgba(251,146,60,0.6),transparent_60%),radial-gradient(60%_60%_at_85%_10%,rgba(249,115,22,0.55),transparent_60%),radial-gradient(50%_50%_at_50%_40%,rgba(253,186,116,0.4),transparent_70%)]" />
 
