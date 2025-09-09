@@ -268,7 +268,7 @@ export default function Index() {
             <div className="absolute right-1 top-1 h-12 w-12 rounded-lg opacity-40 [background-image:linear-gradient(to_right,rgba(249,115,22,.35)_1px,transparent_1px),linear-gradient(to_bottom,rgba(249,115,22,.35)_1px,transparent_1px)] [background-size:10px_10px] sm:h-14 sm:w-14 md:h-16 md:w-16" />
             <div className="absolute left-2 bottom-1/3 h-10 w-10 rounded-lg opacity-30 [background-image:linear-gradient(to_right,rgba(249,115,22,.3)_1px,transparent_1px),linear-gradient(to_bottom,rgba(249,115,22,.3)_1px,transparent_1px)] [background-size:8px_8px] sm:h-12 sm:w-12 md:h-14 md:w-14" />
             <div className="relative flex justify-center items-center md:absolute md:right-1 md:top-4 z-0 sm:right-2 sm:top-6 md:right-2 md:top-6">
-              <div className="absolute -left-2 -top-2 h-48 w-[360px] rounded-xl md:border-2 md:border-orange-400/70 sm:h-56 sm:w-[400px] md:h-64 md:w-[460px] md:rounded-[2rem] md:border-4"></div>
+              <div className="hidden md:block absolute -left-2 -top-2 h-48 w-[360px] rounded-xl md:border-2 md:border-orange-400/70 sm:h-56 sm:w-[400px] md:h-64 md:w-[460px] md:rounded-[2rem] md:border-4"></div>
               <img
                 src="/images/HeroImg3.jpg"
                 alt="Team meeting"

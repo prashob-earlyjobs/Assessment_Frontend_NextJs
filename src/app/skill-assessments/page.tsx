@@ -42,7 +42,7 @@ const AssessmentsPage = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      <header className="flex items-center justify-between px-4 py-4 lg:px-12 bg-white/80 backdrop-blur-sm sticky top-0 z-40 shadow-sm">
+      <header className="flex items-center justify-between px-4 py-4 lg:px-12 bg-white/80 backdrop-blur-sm md:sticky md:top-0 z-40 shadow-sm">
         <div className="flex items-center space-x-2">
           <img
             src="/images/logo.png"
@@ -97,7 +97,7 @@ const AssessmentsPage = () => {
         </div>
       </header>
 
-      <div className="md:hidden sticky top-0 z-50 px-4 pt-2 bg-white">
+      <div className="md:hidden sticky top-0 z-50 px-4 pt-2 bg-background">
         <ToggleGroup
           type="single"
           value={activeSection}
