@@ -7,9 +7,14 @@ import { AiFillInstagram } from "react-icons/ai";
 import { SlLocationPin } from "react-icons/sl";
 import { HiOutlinePhone, HiOutlineMail } from "react-icons/hi";
 import Link from 'next/link';
+import { useRouter } from "next/navigation";
+import FooterScroll from "./FooterScroll";
 
 const Footer = () => {
+    const router = useRouter();
+
     return (
+        <>
         <footer className="w-full flex flex-col items-center py-8 bg-[#0A0F10] text-white md:py-10 lg:py-10 px-3">
             <div className="grid grid-cols-1 gap-5 px-4 w-full sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
                 <div className="flex flex-col">
@@ -59,7 +64,7 @@ const Footer = () => {
                     <h3 className="pt-8 text-white text-base font-semibold uppercase leading-5 lg:pt-12">Company</h3>
                     <Link href="/about" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">About Us</Link>
                     <Link href="/management" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Management Team</Link>
-                    <Link href="/team" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Our Team</Link>
+                    <Link href="/team" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Blogs</Link>
                     <Link href="/partner-with-us" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Partner With Us</Link>
                     <Link href="/franchise" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Franchise With Us</Link>
                     <a href="tel:+918217527926" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 cursor-pointer lg:mt-6" id="contact-link">Contact Us</a>
@@ -110,30 +115,30 @@ const Footer = () => {
   <div className=" pb-4 mb-6 text-center">
     <span className=" text-2xl font-bold text-gray-300 block sm:inline">Available in:</span>
     <div className="flex flex-wrap gap-4 mt-3 justify-center">
-      <a
-        href="https://earlyjobs.in/franchise/mohali"
-        className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300"
+      <p
+        onClick={()=>router.push("/mohali")}
+        className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
       >
         Mohali
-      </a>
-      <a
-        href="https://earlyjobs.in/franchise/chandigarh"
-        className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300"
+      </p>
+      <p
+        onClick={()=>router.push("/chandigarh")}
+        className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
       >
         Chandigarh
-      </a>
+      </p>
       <a
         href="https://earlyjobs.in/franchise/hyderabad"
         className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300"
       >
         Hyderabad
       </a>
-      <a
-        href="https://earlyjobs.in/franchise/chennai"
-        className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300"
+     <p
+        onClick={()=>router.push("/chennai")}
+        className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
       >
         Chennai
-      </a>
+      </p>
     </div>
   </div>
 
@@ -145,11 +150,9 @@ const Footer = () => {
         "Rampur",
         "Coimbatore",
         "Ghaziabad",
-        "Lucknow",
+        "Chengalpattu",
         "Bangalore Urban",
         "Faridabad",
-        "Bhopal",
-        "Patna",
         "Bijapur",
         "Sonipat",
         "Ramnagar",
@@ -197,6 +200,8 @@ const Footer = () => {
 </div>
             <p className="text-gray-400 text-base font-normal leading-6 text-center mt-8 lg:mt-0">© 2024-25 Victa EarlyJobs Technologies Private Limited | <span className="font-semibold">CIN</span>: U78300KA2025PTC198732 | All rights reserved.</p>
         </footer>
+        <FooterScroll />
+        </>
     );
 };
 

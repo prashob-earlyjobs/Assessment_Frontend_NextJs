@@ -1,26 +1,25 @@
+
 "use client";
 import { useState, useEffect, useCallback } from "react";
-import { Button } from "../app/components/ui/button";
-import { ToggleGroup, ToggleGroupItem } from "../app/components/ui/toggle-group";
+import { Button } from "../components/ui/button";
+import { ToggleGroup, ToggleGroupItem } from "../components/ui/toggle-group";
 import { Briefcase, ClipboardCheck, FileText } from "lucide-react";
-import Footer from "./components/pages/footer";
+import Assessments from "../components/pages/AssessmentsDup";
+import Footer from "../components/pages/footer";
 import { useRouter, usePathname } from "next/navigation";
-import ApplyJobs from "./components/pages/ApplyJob";
-import Navbar from "./components/pages/navbar";
+import Navbar from "../components/pages/navbar";
 
-const Index = () => {
+const AssessmentsPage = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const activeSection = pathname === "/" ? "apply" : pathname.slice(1) || "apply";
+  const activeSection = pathname === "/skill-assessments" ? "assessments" : pathname === "/" ? "apply" : pathname.slice(1) || "apply";
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
 
-  // Debounced scroll handler
   const handleScroll = useCallback(() => {
     const currentScrollY = window.scrollY;
     setIsNavbarVisible(currentScrollY <= 50);
   }, []);
 
-  // Handle scroll
   useEffect(() => {
     setIsNavbarVisible(window.scrollY <= 50);
     let timeout;
@@ -45,12 +44,12 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
-      <header className="flex items-center justify-between px-4 py-4 lg:px-12 bg-white/80 backdrop-blur-sm sticky md:top-0 z-40 shadow-sm">
+      <header className="flex items-center justify-between px-4 py-4 lg:px-12 bg-white/80 backdrop-blur-sm md:sticky md:top-0 z-40 shadow-sm">
         <div className="flex items-center space-x-2">
           <img
             src="/images/logo.png"
             alt="EarlyJobs Logo"
-            className="h-12 lg:h-16 w-auto"
+            className="h-14 lg:h-16 w-auto"
           />
         </div>
 
@@ -136,8 +135,8 @@ const Index = () => {
       </div>
 
       <main>
-        <div className="animate-in fade-in duration-300 ">
-          <ApplyJobs />
+        <div className="animate-in fade-in duration-300">
+          <Assessments />
         </div>
       </main>
 
@@ -146,4 +145,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default AssessmentsPage;
