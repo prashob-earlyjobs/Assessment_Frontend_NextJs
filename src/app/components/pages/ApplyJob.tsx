@@ -226,7 +226,7 @@ export default function Index() {
                     {suggestions.length > 0 && (
                       <ul
                         ref={dropdownRef}
-                        className="absolute z-10 w-full mt-1 bg-white border border-orange-200 rounded-xl shadow-lg max-h-60 overflow-auto"
+                        className="absolute z-100 w-full mt-1 bg-white border border-orange-200 rounded-xl shadow-lg max-h-60 overflow-auto"
                       >
                         {suggestions.map((suggestion, index) => (
                           <li
@@ -262,7 +262,7 @@ export default function Index() {
             </p>
           </div>
 
-          <div className="relative h-[300px] sm:h-[360px] md:h-[420px] lg:h-[460px]">
+          <div className="relative h-[300px] sm:h-[360px] md:h-[420px] lg:h-[460px] z-0">
             <div className="absolute -left-4 -top-4 size-20 rounded-3xl bg-orange-200/60 blur-xl sm:size-24 sm:blur-2xl md:size-28 md:blur-2xl" />
             <div className="absolute -right-6 bottom-0 size-24 rounded-full bg-orange-300/60 blur-2xl sm:size-28 sm:blur-3xl md:size-36 md:blur-3xl" />
             <div className="absolute right-1 top-1 h-12 w-12 rounded-lg opacity-40 [background-image:linear-gradient(to_right,rgba(249,115,22,.35)_1px,transparent_1px),linear-gradient(to_bottom,rgba(249,115,22,.35)_1px,transparent_1px)] [background-size:10px_10px] sm:h-14 sm:w-14 md:h-16 md:w-16" />

@@ -6,6 +6,7 @@ import { Briefcase, ClipboardCheck, FileText } from "lucide-react";
 import Footer from "./components/pages/footer";
 import { useRouter, usePathname } from "next/navigation";
 import ApplyJobs from "./components/pages/ApplyJob";
+import Navbar from "./components/pages/navbar";
 
 const Index = () => {
   const router = useRouter();
@@ -43,6 +44,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      <Navbar />
       <header className="flex items-center justify-between px-4 py-4 lg:px-12 bg-white/80 backdrop-blur-sm sticky md:top-0 z-40 shadow-sm">
         <div className="flex items-center space-x-2">
           <img
