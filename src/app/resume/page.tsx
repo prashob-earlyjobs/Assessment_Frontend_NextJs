@@ -1,18 +1,35 @@
-
 "use client";
+
 import { useState, useEffect, useCallback } from "react";
 import { Button } from "../../app/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "../../app/components/ui/toggle-group";
-import { Briefcase, ClipboardCheck, FileText } from "lucide-react";
+import { Briefcase, ClipboardCheck, FileText, LogOut, LogIn } from "lucide-react";
 import AIResume from "../components/pages/ResumePage";
 import Footer from "../components/pages/footer";
 import { useRouter, usePathname } from "next/navigation";
+import { useUser } from ".././context";
+import { Avatar, AvatarFallback, AvatarImage } from "../../app/components/ui/avatar";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../../app/components/ui/alert-dialog";
+import { toast } from "sonner";
+import { userLogout } from "../../app/components/services/servicesapis";
+import Navbar from "../components/pages/navbar";
 
 const ResumePage = () => {
   const router = useRouter();
   const pathname = usePathname();
   const activeSection = pathname === "/" ? "apply" : pathname.slice(1) || "apply";
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  const { userCredentials, setUserCredentials } = useUser();
 
   // Debounced scroll handler
   const handleScroll = useCallback(() => {
@@ -42,40 +59,33 @@ const ResumePage = () => {
     }
   };
 
+  const handleProfileClick = () => {
+    router.push("/profile");
+  };
+
+  const handleLogout = async () => {
+    try {
+      const response = await userLogout();
+      if (!response.success) {
+        throw new Error("Logout failed");
+      }
+      toast.success("Logged out successfully!");
+      setUserCredentials(null);
+      router.push("/login");
+    } catch (error) {
+      toast.error("Logout failed. Please try again.");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
-     <nav
-        className={`bg-gradient-to-br from-orange-400 to-pink-600 shadow-sm transition-transform duration-300 z-30`}
-        aria-hidden={!isNavbarVisible}
-      >
-        <div className="flex items-center justify-end space-x-4 p-2 lg:px-12">
-          <Button
-            onClick={() => router.push("/browse-candidates")}
-            className="bg-transparent text-white text-xl font-bold hover:text-orange-600 hover:bg-orange-50 rounded-2xl px-6 py-2 transition-all duration-300"
-            aria-label="Browse Candidates"
-          >
-            Browse Candidates
-          </Button>
-          <Button
-            className="bg-transparent text-white text-xl font-bold hover:text-orange-600 hover:bg-orange-50 rounded-2xl px-6 py-2 transition-all duration-300"
-            aria-label="Colleges"
-          >
-            Colleges
-          </Button>
-          <Button
-            className="bg-transparent text-white text-xl font-bold hover:text-orange-600 hover:bg-orange-50 rounded-2xl px-6 py-2 transition-all duration-300"
-            aria-label="Talent Pool"
-          >
-            Talent Pool
-          </Button>
-        </div>
-      </nav> 
-      <header className="flex items-center justify-between px-4 py-4 lg:px-12 bg-white/80 backdrop-blur-sm md:sticky md:top-0 z-40 shadow-sm">
+      <Navbar />
+      <header className="flex items-center justify-between px-4 py-3 lg:px-12 bg-white/80 backdrop-blur-sm md:sticky md:top-0 z-40 shadow-sm">
         <div className="flex items-center space-x-2">
           <img
             src="/images/logo.png"
             alt="EarlyJobs Logo"
-            className="h-14 lg:h-16 w-auto"
+            className="h-12 lg:h-14 w-auto"
           />
         </div>
 
@@ -115,13 +125,51 @@ const ResumePage = () => {
         </div>
 
         <div className="flex items-center space-x-4">
-          <Button
-            onClick={() => router.push("/login")}
-            className="bg-orange-700 hover:bg-orange-600 text-white rounded-2xl px-4 py-2 lg:px-6 lg:py-2 shadow-lg hover:shadow-xl transition-all duration-300 w-full md:w-auto"
-            aria-label="Sign Up"
-          >
-            Sign Up
-          </Button>
+          {userCredentials !== null ? (
+            <div className="flex items-center space-x-4">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowLogoutDialog(true)}
+                className="rounded-2xl p-3 hover:bg-red-50 hover:text-red-600 transition-colors"
+              >
+                <LogOut className="h-5 w-5" />
+              </Button>
+
+              <div
+                className="flex items-center space-x-3 cursor-pointer"
+                onClick={handleProfileClick}
+              >
+                <Avatar className="h-10 w-10">
+                  <AvatarImage src={userCredentials.avatar} />
+                  <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
+                    {userCredentials?.name
+                      ?.split(" ")
+                      .map((n) => n[0])
+                      .join("")
+                      ?.toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="hidden md:block">
+                  <p className="text-sm font-medium text-gray-900">
+                    {userCredentials.name}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {userCredentials.profile?.preferredJobRole}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <Button
+              onClick={() => router.push("/login")}
+              className="bg-orange-700 hover:bg-orange-600 text-white rounded-2xl px-4 py-2 lg:px-6 lg:py-2 shadow-lg hover:shadow-xl transition-all duration-300 w-full md:w-auto"
+              aria-label="Login"
+            >
+              <LogIn className="h-5 w-5 mr-2" />
+              Login
+            </Button>
+          )}
         </div>
       </header>
 
@@ -161,12 +209,35 @@ const ResumePage = () => {
       </div>
 
       <main>
-        <div className="animate-in fade-in duration-300 ">
+        <div className="animate-in fade-in duration-300">
           <AIResume />
         </div>
       </main>
 
       <Footer />
+
+      <AlertDialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
+        <AlertDialogContent className="rounded-3xl">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirm Logout</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to logout? You will need to sign in again to
+              access your account.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="rounded-2xl">
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleLogout}
+              className="rounded-2xl bg-red-600 hover:bg-red-700"
+            >
+              Logout
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

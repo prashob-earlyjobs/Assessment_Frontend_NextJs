@@ -152,7 +152,7 @@ export default function Index() {
             `}</style>
 
             {/* Hero Section */}
-            <main className="container mx-auto px-6 py-6 lg:py-16">
+            <main className="container mx-auto px-6 py-6 px-6 lg:px-18 lg:py-16">
                 <div className="grid lg:grid-cols-2 gap-12 items-center">
                     <div className="space-y-8">
                         <div className="space-y-4">
