@@ -151,11 +151,11 @@ const Index = () => {
       `}</style>
       <Navbar/> 
       {/* Navigation */}
-      <nav className={`fixed ${isScrolled ? 'top-0' : ''}  w-full bg-white/80 backdrop-blur-lg border-b border-gray-100 z-50 py-2`}>
+      <nav className={`fixed ${isScrolled ? 'top-0' : ''}  w-full bg-white/80 backdrop-blur-lg border-b border-gray-100 z-50 py-4`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div onClick={() => router.push("/")} className="flex items-center">
-              <img src="/images/logo.png" alt="Logo" className="h-12 w-auto" />
+              <img src="/images/logo.png" alt="Logo" className="h-12 lg:h-16 w-auto" />
             </div>
             <div className="hidden md:flex items-center space-x-8">
               <a
@@ -236,7 +236,7 @@ const Index = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-35 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden min-h-screen bg-gradient-to-b from-white via-orange-100/90 to-orange-50/40 ">
+      <section className="pt-40 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden min-h-screen bg-gradient-to-b from-white via-orange-100/90 to-orange-50/40 ">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="animate-fade-in">
