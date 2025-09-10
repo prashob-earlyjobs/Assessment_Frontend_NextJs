@@ -1,6 +1,6 @@
-import Header from "@/app/components/pages/header";
-import Footer from "@/app/components/pages/footer";
-import FinanceAccountingServicePage from "@/app/components/pages/OurServicesPages/FinanceAccountingServicePage";
+import Header from "../../components/pages/header";
+import Footer from "../../components/pages/footer";
+import FinanceAccountingServicePage from "../../components/pages/OurServicesPages/FinanceAccountingServicePage";
 
 const FinanceAndAccountingPage = () => {
     return (

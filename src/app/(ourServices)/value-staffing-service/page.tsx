@@ -1,5 +1,5 @@
-import Header from "@/app/components/pages/header";
-import Footer from "@/app/components/pages/footer";
+import Header from "../../components/pages/header";
+import Footer from "../../components/pages/footer";
 import ValueStaffingServicesPage from "../../components/pages/OurServicesPages/ValueStaffingServicesPage";
 
 const ValueStaffingServicePage = () => {
