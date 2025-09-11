@@ -1,8 +1,8 @@
 .hero-carousel {
   width: 50vw;
   margin: 0 auto;
-  margin-top: 1.25rem;
-  min-height: 529px;
+  margin-top: 1rem;
+  min-height: 429px;
 }
 
 .slick-slider {

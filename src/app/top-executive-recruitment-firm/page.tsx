@@ -1,6 +1,7 @@
-import Header from '../../components/pages/header';
-import Footer from '../../components/pages/footer';
-import TopExecutiveServicePage from '../../components/pages/OurServicesPages/topExecutiveServicePage';
+
+import Header from '../components/pages/header';
+import Footer from '../components/pages/footer';
+import TopExecutiveServicePage from '../components/pages/OurServicesPages/topExecutiveServicePage';
 
 const TopExecutiveRecruitmentFirmPage = () => {
     return (

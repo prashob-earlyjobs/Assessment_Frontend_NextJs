@@ -19,14 +19,14 @@ export default function HeroCarousel() {
   };
 
   return (
-    <div className="hero-carousel" style={{ width: "50vw", margin: "0 auto", marginTop: "1.25rem", minHeight: "529px" }}>
+    <div className="hero-carousel" style={{ width: "50vw", margin: "0 auto", marginTop: "1rem", minHeight: "429px" }}>
       <Slider {...settings}>
         {images.map((src, i) => (
           <div key={i} className="flex justify-center">
             <img
               src={src}
               alt={`Slide ${i + 1}`}
-              className="h-[529px] w-full rounded-2xl shadow-md object-cover"
+              className="h-[429px] w-full rounded-2xl shadow-md object-cover"
               onError={() => console.log(`Failed to load image ${i + 1}`)}
             />
           </div>
