@@ -1,6 +1,6 @@
 import Header from "../components/pages/header";
 import Footer from "../components/pages/footer";
-import ValueStaffingServicesPage from "../components/pages/OurServicesPages/ValueStaffingServicesPage";
+import ValueStaffingServicesPage from "../components/pages/ourServices/ValueStaffingServicesPage";
 
 const ValueStaffingServicePage = () => {
     return (

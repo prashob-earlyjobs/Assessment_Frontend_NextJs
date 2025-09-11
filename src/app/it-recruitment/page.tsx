@@ -1,6 +1,6 @@
 import Header from "../components/pages/header";
 import Footer from "../components/pages/footer";
-import ItRecruitmentServicePage from "../components/pages/OurServicesPages/ItRecruitmentServicePage";
+import ItRecruitmentServicePage from "../components/pages/ourServices/ItRecruitmentServicePage";
 
 const ItRecruitmentPage = () => {
   return (

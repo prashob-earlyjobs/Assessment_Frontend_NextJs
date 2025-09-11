@@ -1,6 +1,6 @@
 import Header from "../components/pages/header";
 import Footer from "../components/pages/footer";
-import SalesMarketingServicePage from "../components/pages/OurServicesPages/SalesMarketingServicePage";
+import SalesMarketingServicePage from "../components/pages/ourServices/SalesMarketingServicePage";
 
 const SalesMarketingPage = () => {
     return (
