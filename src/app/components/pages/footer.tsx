@@ -100,7 +100,7 @@ const Footer = () => {
                         Auto-Apply
                     </button>
                     
-                    <Link href="https://www.earlyjobs.in/clientele" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
+                    <Link href="/clientele" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
                         <Building className="w-5 h-5 mr-2 inline-block" />
                         Company Tie-Ups
                     </Link>

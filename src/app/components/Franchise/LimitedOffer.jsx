@@ -82,8 +82,8 @@
 import React, { useState } from "react";
 import { AlarmClock, Check, ArrowRight } from "lucide-react";
 import "./LimitedOffer.css";
-import RequestForm from "./FranchiseRequestForm"; // Adjust path as needed
-import { PopupModal } from "./Hero"; // Adjust path based on your project
+import RequestForm from "./FranchiseRequestForm"; 
+import { PopupModal } from "./Hero";
 
 const LimitedOffer = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -112,8 +112,7 @@ const LimitedOffer = () => {
                   </h3>
                 </div>
 
-                {/* <p className="offer-subtitle">Only for first 10 sign-ups:</p> */}
-
+               
                 <div className="benefits-list">
                   {[
                     "Marketing & branding support from HQ",
