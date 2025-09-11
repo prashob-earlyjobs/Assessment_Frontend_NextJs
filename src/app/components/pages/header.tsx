@@ -89,7 +89,7 @@ const Header = () => {
               src="/images/logo.png"
               onClick={() => router.push("/")}
               alt="EarlyJobs Logo"
-              className="h-[4rem] w-auto cursor-pointer"
+              className="h-[3.5rem] w-auto cursor-pointer"
             />
           </div>
 
