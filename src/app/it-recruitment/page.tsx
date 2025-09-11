@@ -5,9 +5,9 @@ import ItRecruitmentServicePage from "../components/pages/ourServices/ItRecruitm
 const ItRecruitmentPage = () => {
   return (
     <>
-      <Header />
+      <Header/>
       <ItRecruitmentServicePage />
-      <Footer />
+      <Footer/>
     </>
   );
 };
