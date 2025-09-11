@@ -26,7 +26,7 @@ const JobFairSection = () => {
       <div className="w-full md:w-1/4 text-center md:text-left mb-4 md:mb-0">
         <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800">
           Join Our Community <br />
-          Over <span className="text-orange-500">Top Companies</span>
+          With <span className="text-orange-500">Top Companies</span>
         </h2>
       </div>
       <div className="w-full md:w-3/4 overflow-hidden">

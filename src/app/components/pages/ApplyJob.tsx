@@ -44,7 +44,9 @@ export default function Index() {
       { icon: "🏭", title: "Manufacturing" },
       { icon: "💳", title: "Banking & Finance" },
       { icon: "📈", title: "SaaS/eCommerce" },
-      { icon: "👥", title: "Others" },
+      { icon: "🏨", title: "Tourism/Hospitality" },
+      { icon: "🚚", title: "Logistics/Transport" },
+      
     ],
     []
   );
@@ -60,11 +62,11 @@ export default function Index() {
   const faqs = [
     {
       question: "How does EarlyJobs work?",
-      answer: "EarlyJobs is a platform that connects job seekers with opportunities across various industries. Simply search by job role, industry, or location, and apply directly to roles that match your skills and preferences.",
+      answer: "EarlyJobs is a platform that connects job seekers with opportunities across various industries. Simply search by job role, industry, or location, and apply directly to roles that match your skills and preference.",
     },
     {
       question: "Is there a cost to use EarlyJobs?",
-      answer: "Job seekers can browse and apply to jobs for free. Employers may have subscription plans for posting jobs, which you can learn more about by contacting our team.",
+      answer: "Job seekers can browse and apply jobs for free. Employers may opt subscription plans for posting jobs, which you can learn more about by contacting our team.",
     },
     {
       question: "How often are new jobs added?",
@@ -72,7 +74,7 @@ export default function Index() {
     },
     {
       question: "Can I save jobs to apply later?",
-      answer: "Yes, registered users can save jobs to their profile and return to apply at their convenience. Sign up to access this feature.",
+      answer: "Registered users can save jobs to their profile and return to apply at their convenience. Sign up to access this feature.",
     },
     {
       question: "What industries does EarlyJobs cover?",
@@ -80,7 +82,7 @@ export default function Index() {
     },
     {
       question: "Does EarlyJobs offer resume-building tools?",
-      answer: "Yes, EarlyJobs provides an AI-powered resume builder to help job seekers create professional resumes tailored to their desired roles.",
+      answer: "EarlyJobs provides an AI-powered resume builder to help job seekers create professional resumes tailored to their desired roles.",
     },
     {
       question: "Can I get job alerts for specific roles?",
@@ -92,7 +94,7 @@ export default function Index() {
     },
     {
       question: "Is there support for interview preparation?",
-      answer: "Yes, EarlyJobs offers resources like mock interviews, assessment tools, and career tips to help job seekers prepare effectively.",
+      answer: "EarlyJobs offers resources like mock interviews, assessment tools, and career tips to help job seekers prepare effectively.",
     },
     {
       question: "Can I connect with employers directly?",
@@ -186,7 +188,7 @@ export default function Index() {
   };
 
   return (
-    <div className="bg-gradient-to-b from-white via-orange-100/90 to-orange-50/40  sm:py-0  lg:mt-0 ml-2 mx-auto">
+    <div className="bg-gradient-to-b from-white via-orange-100/90 to-orange-50/40    lg:mt-0  mx-auto">
       <section className="relative h-screen">
         <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[600px] sm:h-[700px] md:h-[900px] bg-[radial-gradient(70%_70%_at_15%_5%,rgba(251,146,60,0.6),transparent_60%),radial-gradient(60%_60%_at_85%_10%,rgba(249,115,22,0.55),transparent_60%),radial-gradient(50%_50%_at_50%_40%,rgba(253,186,116,0.4),transparent_70%)]" />
 
@@ -199,7 +201,7 @@ export default function Index() {
               <span className="text-orange-500">EarlyJobs</span> makes it easy to find your next role
             </h1>
             <p className="mt-3 text-sm text-gray-600 sm:text-base md:mt-4 md:text-base lg:max-w-xl">
-              Discover opportunities on EarlyJobs. Search by industry or category — then apply in one click.
+              Discover opportunities in EarlyJobs. Search by industry or category — apply in one click.
             </p>
 
             <div className="relative mt-4 w-full rounded-2xl border border-orange-200/80 bg-white/95 p-2 sm:p-3 shadow-[0_10px_30px_-8px_rgba(251,146,60,0.3)] ring-1 ring-orange-200/70 backdrop-blur md:p-3 md:shadow-[0_14px_40px_-12px_rgba(251,146,60,0.35)]">
@@ -262,25 +264,25 @@ export default function Index() {
             </p>
           </div>
 
-          <div className="relative h-[300px] sm:h-[360px] md:h-[420px] lg:h-[460px] z-0">
+          <div className="hidden lg:block relative lg:h-[460px] z-0">
             <div className="absolute -left-4 -top-4 size-20 rounded-3xl bg-orange-200/60 blur-xl sm:size-24 sm:blur-2xl md:size-28 md:blur-2xl" />
             <div className="absolute -right-6 bottom-0 size-24 rounded-full bg-orange-300/60 blur-2xl sm:size-28 sm:blur-3xl md:size-36 md:blur-3xl" />
             <div className="absolute right-1 top-1 h-12 w-12 rounded-lg opacity-40 [background-image:linear-gradient(to_right,rgba(249,115,22,.35)_1px,transparent_1px),linear-gradient(to_bottom,rgba(249,115,22,.35)_1px,transparent_1px)] [background-size:10px_10px] sm:h-14 sm:w-14 md:h-16 md:w-16" />
             <div className="absolute left-2 bottom-1/3 h-10 w-10 rounded-lg opacity-30 [background-image:linear-gradient(to_right,rgba(249,115,22,.3)_1px,transparent_1px),linear-gradient(to_bottom,rgba(249,115,22,.3)_1px,transparent_1px)] [background-size:8px_8px] sm:h-12 sm:w-12 md:h-14 md:w-14" />
-            <div className="relative flex justify-center items-center md:absolute md:right-1 md:top-4 z-0 sm:right-2 sm:top-6 md:right-2 md:top-6">
-              <div className="hidden md:block absolute -left-2 -top-2 h-48 w-[360px] rounded-xl md:border-2 md:border-orange-400/70 sm:h-56 sm:w-[400px] md:h-64 md:w-[460px] md:rounded-[2rem] md:border-4"></div>
+            <div className="relative hidden flex justify-center items-center md:block md:absolute md:right-1 md:top-4 z-0 sm:right-2 sm:top-6 md:right-2 md:top-6">
+              <div className="hidden md:block absolute -left-2 -top-2 h-48 w-[360px] rounded-xl  sm:h-56 sm:w-[400px] md:h-64 md:w-[460px] md:rounded-[2rem] "></div>
               <img
                 src="/images/HeroImg3.jpg"
                 alt="Team meeting"
-                className="relative h-48 w-[360px] rounded-xl bg-white object-cover shadow-xl sm:h-56 sm:w-[400px] md:h-64 md:w-[460px] md:rounded-[2rem]"
+                className="relative h-48 w-full rounded-xl bg-white object-cover shadow-xl sm:h-56 sm:w-[400px] md:h-64 md:w-[460px] md:rounded-[2rem]"
               />
             </div>
             <div className="relative hidden flex justify-center items-center md:block md:absolute md:left-2 md:bottom-2 z-10 sm:left-4 sm:bottom-4 md:left-4 md:bottom-4">
-              <div className="absolute -left-2 -top-2 h-40 w-[280px] rounded-xl md:border-2 border-orange-400/70 sm:h-48 sm:w-[320px] md:h-56 md:w-[360px] md:rounded-[2rem] md:border-4"></div>
+              <div className="absolute -left-2 -top-2 h-40 w-[280px] rounded-xl  sm:h-48 sm:w-[320px] md:h-56 md:w-[360px] md:rounded-[2rem] "></div>
               <img
                 src="/images/Networking.jpg"
                 alt="Networking"
-                className="relative h-40 w-[280px] rounded-xl bg-white object-cover shadow-xl sm:h-48 sm:w-[320px] md:h-56 md:w-[360px] md:rounded-[2rem]"
+                className="relative h-40 w-full rounded-xl bg-white object-cover shadow-xl sm:h-48 sm:w-[320px] md:h-56 md:w-[360px] md:rounded-[2rem]"
               />
             </div>
           </div>
@@ -291,12 +293,12 @@ export default function Index() {
         <JobFairSection />
       </section>
 
-      <section className="container mx-auto py-2 sm:py-12 md:py-12 lg:py-16">
-        <div className="mx-auto max-w-xl text-center">
+      <section className="container mx-auto  sm:py-12 md:py-12 lg:py-16">
+        <div className="mx-auto max-w-xl text-center p-3">
           <h2 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl md:text-3xl">Browse by Industry</h2>
           <p className="mt-2 text-sm text-gray-600 sm:text-base md:text-base">Find the role that fits. New jobs added daily.</p>
         </div>
-        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-1 lg:grid-cols-4 md:mt-8">
+        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-1 lg:grid-cols-3 md:mt-8 p-6">
           {categories.map((c) => (
             <div key={c.title} className="group rounded-2xl border border-orange-100 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
               <div className="flex items-center justify-center gap-3">
@@ -324,7 +326,7 @@ export default function Index() {
         </div>
       </section>
 
-      <section className="hidden md:block">
+      <section className="hidden md:block px-6 lg:px-18 mb-16">
         <Experience />
       </section>
 
@@ -333,7 +335,7 @@ export default function Index() {
           <div className="text-center mb-10">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Frequently Asked Questions</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Got questions? We've got answers regarding EarlyJobs.
+              Got questions? We've got answers.
             </p>
           </div>
           <div className="grid lg:grid-cols-2 gap-6">

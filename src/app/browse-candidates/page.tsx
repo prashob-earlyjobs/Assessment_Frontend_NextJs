@@ -176,8 +176,8 @@ const Index = () => {
      <Navbar/>
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-orange-50 to-white">
         <Header />
-        <div className="max-w-7xl mx-auto py-15 ">
-          <div className='flex flex-col items-center justify-between lg:flex-row '>
+        <div className="max-w-7xl mx-auto py-15 px-6">
+          <div className='flex flex-col  justify-between lg:flex-row '>
           <div className="mb-8 ">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent mb-2">
               Candidate Dashboard
@@ -188,7 +188,7 @@ const Index = () => {
           </div>
           
           <div className="mb-8">
-            <div className='w-[35rem]'>
+            <div className=' lg:w-[35rem]'>
               <input
                 type="text"
                 placeholder="Search by skills (e.g.,Sales, Management, React, Data Science...)"

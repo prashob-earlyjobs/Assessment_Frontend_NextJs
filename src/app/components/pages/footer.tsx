@@ -112,7 +112,7 @@ const Footer = () => {
             </div>
             <div className="w-full  mt-2 px-4 pb-10">
   {/* Available in section */}
-  <div className=" pb-4 mb-6 text-center">
+  <div className=" pb-4 mb-6 text-center mt-10 lg:mt-0">
     <span className=" text-2xl font-bold text-gray-300 block sm:inline">Available in:</span>
     <div className="flex flex-wrap gap-4 mt-3 justify-center">
       <p

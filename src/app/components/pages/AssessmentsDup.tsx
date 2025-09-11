@@ -174,7 +174,7 @@ export default function Assessments() {
     return (
         <div>
             {/* Hero Section */}
-            <section className="min-h-screen flex items-center relative overflow-hidden bg-gradient-to-br from-orange-400 to-purple-400 pt-4 pb-6 sm:pt-6 sm:pb-8 lg:pt-0 lg:pb-12 px-4 sm:px-8 md:px-12 lg:px-20">
+            <section className="min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-orange-400 to-purple-400  pb-6 sm:pt-6 sm:pb-8 lg:pt-0 lg:pb-12 px-4 sm:px-8 md:px-12 lg:px-20">
                 <div className="w-full max-w-7xl mx-auto">
                     <div className="grid lg:grid-cols-2 gap-6 lg:gap-10 items-center">
                         {/* Left Content */}

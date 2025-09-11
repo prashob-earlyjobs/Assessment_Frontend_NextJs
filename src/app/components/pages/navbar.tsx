@@ -1,3 +1,4 @@
+"use client"
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
@@ -7,7 +8,7 @@ const Navbar = () => {
 
   return (
     <nav
-      className="bg-gradient-to-r from-orange-400 to-orange-600 shadow-md transition-all duration-300 z-30"
+      className="hidden md:block bg-gradient-to-r from-orange-400 to-orange-600 shadow-md transition-all duration-300 z-30"
     >
       <div className="flex items-center justify-end space-x-6 p-3">
         <Button

@@ -1,18 +1,24 @@
 "use client";
+
+import { useState, useEffect } from "react";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
-import { CheckCircle, Users, Clock, Star, ArrowRight, Play, Zap, Target, Award } from "lucide-react";
+import { CheckCircle, Users, Clock, Star, ArrowRight, Play, Zap, Target, Award, Menu, X, LogIn, LogOut } from "lucide-react";
 import Footer from "../components/pages/footer";
-import { Menu, X } from "lucide-react";
-import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "../components/pages/navbar";
+import { useUser } from "../context";
+import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
+import { toast } from "sonner";
+import { userLogout } from "../components/services/servicesapis";
 
 const Index = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const router = useRouter();
+  const { userCredentials, setUserCredentials } = useUser();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,6 +56,30 @@ const Index = () => {
       });
     };
   }, []);
+
+  const handleProfileClick = () => {
+    router.push("/profile");
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleLogout = async () => {
+    try {
+      const response = await userLogout();
+      if (!response.success) {
+        throw new Error("Logout failed");
+      }
+      toast.success("Logged out successfully!");
+      setUserCredentials(null);
+      router.push("/login");
+    } catch (error) {
+      toast.error("Logout failed. Please try again.");
+    }
+  };
+
+  const handleMobileMenuItemClick = (route: string) => {
+    router.push(route);
+    setIsMobileMenuOpen(false);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -97,20 +127,20 @@ const Index = () => {
           opacity: 0.2;
           z-index: -1;
         }
-          .image-background-opposite {
-  position: relative;
-  border-radius: 1.5rem;
-}
-.image-background-opposite::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(315deg, #ff8c42, #ff4500);
-  border-radius: 1.5rem;
-  transform: rotate(-3deg);
-  opacity: 0.2;
-  z-index: -1;
-}
+        .image-background-opposite {
+          position: relative;
+          border-radius: 1.5rem;
+        }
+        .image-background-opposite::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(315deg, #ff8c42, #ff4500);
+          border-radius: 1.5rem;
+          transform: rotate(-3deg);
+          opacity: 0.2;
+          z-index: -1;
+        }
         .award-icon {
           position: absolute;
           top: 1.5rem;
@@ -149,9 +179,9 @@ const Index = () => {
           font-weight: bold;
         }
       `}</style>
-      <Navbar/> 
+      <Navbar />
       {/* Navigation */}
-      <nav className={`fixed ${isScrolled ? 'top-0' : ''}  w-full bg-white/80 backdrop-blur-lg border-b border-gray-100 z-50 py-3`}>
+      <nav className={`fixed ${isScrolled ? 'top-0' : ''} w-full bg-white/80 backdrop-blur-lg border-b border-gray-100 z-50 py-3`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div onClick={() => router.push("/")} className="flex items-center">
@@ -188,14 +218,90 @@ const Index = () => {
             </div>
             <div className="md:hidden flex items-center">
               <button
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="text-muted-foreground hover:text-orange-500 focus:outline-none"
               >
-                {isOpen ? <X size={28} /> : <Menu size={28} />}
+                {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
               </button>
             </div>
           </div>
         </div>
+        {isMobileMenuOpen && (
+          <div className="md:hidden bg-white/95 backdrop-blur-sm shadow-lg z-50 px-4 py-4 border-b border-orange-100">
+            <div className="flex flex-col space-y-2">
+              {userCredentials !== null && (
+                <div
+                  className="flex items-center space-x-3 cursor-pointer px-4 py-3"
+                  onClick={handleProfileClick}
+                >
+                  <Avatar className="h-10 w-10">
+                    <AvatarImage src={userCredentials.avatar} />
+                    <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
+                      {userCredentials?.name
+                        ?.split(" ")
+                        .map((n) => n[0])
+                        .join("")
+                        ?.toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">
+                      {userCredentials.name}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      {userCredentials.profile?.preferredJobRole}
+                    </p>
+                  </div>
+                </div>
+              )}
+              <Button
+                variant="ghost"
+                className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
+                onClick={() => handleMobileMenuItemClick("/browse-candidates")}
+              >
+                Browse Candidates
+              </Button>
+              <Button
+                variant="ghost"
+                className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
+                onClick={() => handleMobileMenuItemClick("/colleges")}
+              >
+                Colleges
+              </Button>
+              <Button
+                variant="ghost"
+                className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
+                onClick={() => handleMobileMenuItemClick("/talent-pool")}
+              >
+                Talent Pool
+              </Button>
+              {userCredentials !== null ? (
+                <Button
+                  variant="ghost"
+                  className="w-full text-left justify-start text-red-600 hover:bg-red-50 rounded-xl py-3 px-4 transition-all duration-300"
+                  onClick={() => {
+                    handleLogout();
+                    setIsMobileMenuOpen(false);
+                  }}
+                >
+                  <LogOut className="h-5 w-5 mr-2" />
+                  Logout
+                </Button>
+              ) : (
+                <Button
+                  className="w-full text-left justify-start bg-orange-700 hover:bg-orange-600 text-white rounded-xl py-3 px-4 shadow-lg hover:shadow-xl transition-all duration-300"
+                  onClick={() => {
+                    router.push("/login");
+                    setIsMobileMenuOpen(false);
+                  }}
+                >
+                  <LogIn className="h-5 w-5 mr-2" />
+                  Login
+                </Button>
+              )}
+            </div>
+          </div>
+        )}
         {isOpen && (
           <div className="md:hidden bg-background/95 backdrop-blur-md border-t border-orange-200">
             <div className="flex flex-col space-y-4 px-6 py-4">
@@ -236,7 +342,7 @@ const Index = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-40 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden min-h-screen bg-gradient-to-b from-white via-orange-100/90 to-orange-50/40 ">
+      <section className="pt-40 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden min-h-screen bg-gradient-to-b from-white via-orange-100/90 to-orange-50/40">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="animate-fade-in">
@@ -315,7 +421,7 @@ const Index = () => {
               <Card className="bg-gradient-card shadow-card border-orange-100 animate-scale-on-hover">
                 <CardContent className="p-8 text-center">
                   <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-orange flex items-center justify-center">
-                        <Zap className="w-9 h-9 text-white bg-orange-400 p-2 rounded-full " />
+                    <Zap className="w-9 h-9 text-white bg-orange-400 p-2 rounded-full" />
                   </div>
                   <h3 className="text-xl font-bold mb-4">AI-Powered Evaluation</h3>
                   <p className="text-muted-foreground">
@@ -326,7 +432,7 @@ const Index = () => {
               <Card className="bg-gradient-card shadow-card border-orange-100 animate-scale-on-hover">
                 <CardContent className="p-8 text-center">
                   <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-orange flex items-center justify-center">
-                    <Target className="w-9 h-9 text-white bg-orange-400 p-2 rounded-full " />
+                    <Target className="w-9 h-9 text-white bg-orange-400 p-2 rounded-full" />
                   </div>
                   <h3 className="text-xl font-bold mb-4">Targeted Matching</h3>
                   <p className="text-muted-foreground">
@@ -337,7 +443,7 @@ const Index = () => {
               <Card className="bg-gradient-card shadow-card border-orange-100 animate-scale-on-hover">
                 <CardContent className="p-8 text-center">
                   <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-orange flex items-center justify-center">
-                    <Award className="w-9 h-9 text-white bg-orange-400 p-2 rounded-full " />
+                    <Award className="w-9 h-9 text-white bg-orange-400 p-2 rounded-full" />
                   </div>
                   <h3 className="text-xl font-bold mb-4">Verified Profile</h3>
                   <p className="text-muted-foreground">
@@ -351,7 +457,7 @@ const Index = () => {
       </section>
 
       {/* Process Section */}
-     <section id="process" className="py-20">
+      <section id="process" className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16 animate-fade-in">
             <Badge className="mb-6 bg-orange-100 text-orange-700 border-orange-200">
@@ -597,7 +703,7 @@ const Index = () => {
         </div>
       </section>
 
- {/* FAQ Section */}
+      {/* FAQ Section */}
       <section id="faq" className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16 animate-fade-in">
@@ -648,6 +754,7 @@ const Index = () => {
           </div>
         </div>
       </section>
+
       {/* CTA Section */}
       <section className="py-20 bg-orange-500 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fade-in">
@@ -677,8 +784,6 @@ const Index = () => {
           </div>
         </div>
       </section>
-
-      
 
       <Footer />
     </div>

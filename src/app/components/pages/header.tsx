@@ -40,6 +40,15 @@ const Header = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const { userCredentials, setUserCredentials } = useUser();
+  const [isScrolled, setIsScrolled] = useState(false);
+
+    useEffect(() => {
+      const handleScroll = () => {
+        setIsScrolled(window.scrollY > 8);
+      };
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
   const handleProfileClick = () => {
     router.push("/profile");
@@ -70,7 +79,7 @@ const Header = () => {
   }, [showNotifications]);
 
   return (
-    <header className="bg-white border-b border-gray-200 shadow-sm">
+    <header className={`bg-white border-b border-gray-200 shadow-sm ${isScrolled ? 'fixed top-0 left-0 right-0 z-50' : ''}`}>
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
@@ -89,7 +98,7 @@ const Header = () => {
               src="/images/logo.png"
               onClick={() => router.push("/")}
               alt="EarlyJobs Logo"
-              className="h-[3.5rem] w-auto cursor-pointer"
+              className="h-[4rem] w-auto cursor-pointer"
             />
           </div>
 

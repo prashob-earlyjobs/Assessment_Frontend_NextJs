@@ -1,10 +1,9 @@
-
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
 import { Button } from "../components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "../components/ui/toggle-group";
-import { Briefcase, ClipboardCheck, FileText, LogOut, LogIn } from "lucide-react";
+import { Briefcase, ClipboardCheck, FileText, LogOut, LogIn, Menu, X } from "lucide-react";
 import Assessments from "../components/pages/AssessmentsDup";
 import Footer from "../components/pages/footer";
 import { useRouter, usePathname } from "next/navigation";
@@ -14,8 +13,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import {
   AlertDialog,
   AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogFooter,
+  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogHeader,
@@ -30,6 +29,7 @@ const AssessmentsPage = () => {
   const activeSection = pathname === "/skill-assessments" ? "assessments" : pathname === "/" ? "apply" : pathname.slice(1) || "apply";
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { userCredentials, setUserCredentials } = useUser();
 
   // Debounced scroll handler
@@ -62,6 +62,7 @@ const AssessmentsPage = () => {
 
   const handleProfileClick = () => {
     router.push("/profile");
+    setIsMobileMenuOpen(false);
   };
 
   const handleLogout = async () => {
@@ -78,6 +79,11 @@ const AssessmentsPage = () => {
     }
   };
 
+  const handleMobileMenuItemClick = (route: string) => {
+    router.push(route);
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
@@ -86,7 +92,7 @@ const AssessmentsPage = () => {
           <img
             src="/images/logo.png"
             alt="EarlyJobs Logo"
-            className="h-12 lg:h-14 w-auto"
+            className="h-14 lg:h-16 w-auto cursor-pointer"
           />
         </div>
 
@@ -126,8 +132,18 @@ const AssessmentsPage = () => {
         </div>
 
         <div className="flex items-center space-x-4">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="md:hidden rounded-2xl p-3 hover:bg-orange-50 hover:text-orange-600 transition-colors"
+            aria-label="Toggle mobile menu"
+          >
+            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </Button>
+
           {userCredentials !== null ? (
-            <div className="flex items-center space-x-4">
+            <div className="hidden md:flex items-center space-x-4">
               <Button
                 variant="ghost"
                 size="sm"
@@ -164,7 +180,7 @@ const AssessmentsPage = () => {
           ) : (
             <Button
               onClick={() => router.push("/login")}
-              className="bg-orange-700 hover:bg-orange-600 text-white rounded-2xl px-4 py-2 lg:px-6 lg:py-2 shadow-lg hover:shadow-xl transition-all duration-300 w-full md:w-auto"
+              className="hidden md:block bg-orange-700 hover:bg-orange-600 text-white rounded-2xl px-4 py-2 lg:px-6 lg:py-2 shadow-lg hover:shadow-xl transition-all duration-300 w-full md:w-auto"
               aria-label="Login"
             >
               <LogIn className="h-5 w-5 mr-2" />
@@ -173,6 +189,84 @@ const AssessmentsPage = () => {
           )}
         </div>
       </header>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-white/95 backdrop-blur-sm shadow-lg z-50 px-4 py-4 border-b border-orange-100">
+          <div className="flex flex-col space-y-2">
+            {userCredentials !== null && (
+              <div
+                className="flex items-center space-x-3 cursor-pointer px-4 py-3"
+                onClick={handleProfileClick}
+              >
+                <Avatar className="h-10 w-10">
+                  <AvatarImage src={userCredentials.avatar} />
+                  <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
+                    {userCredentials?.name
+                      ?.split(" ")
+                      .map((n) => n[0])
+                      .join("")
+                      ?.toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">
+                    {userCredentials.name}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {userCredentials.profile?.preferredJobRole}
+                  </p>
+                </div>
+              </div>
+            )}
+            <Button
+              variant="ghost"
+              className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
+              onClick={() => handleMobileMenuItemClick("/browse-candidates")}
+            >
+              Browse Candidates
+            </Button>
+            <Button
+              variant="ghost"
+              className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
+              onClick={() => handleMobileMenuItemClick("/college-partnerships")}
+            >
+              Colleges
+            </Button>
+            <Button
+              variant="ghost"
+              className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
+              onClick={() => handleMobileMenuItemClick("/talent-pool")}
+            >
+              Talent Pool
+            </Button>
+            {userCredentials !== null ? (
+              <Button
+                variant="ghost"
+                className="w-full text-left justify-start text-red-600 hover:bg-red-50 rounded-xl py-3 px-4 transition-all duration-300"
+                onClick={() => {
+                  setShowLogoutDialog(true);
+                  setIsMobileMenuOpen(false);
+                }}
+              >
+                <LogOut className="h-5 w-5 mr-2" />
+                Logout
+              </Button>
+            ) : (
+              <Button
+                className="w-full text-left justify-start bg-orange-700 hover:bg-orange-600 text-white rounded-xl py-3 px-4 shadow-lg hover:shadow-xl transition-all duration-300"
+                onClick={() => {
+                  router.push("/login");
+                  setIsMobileMenuOpen(false);
+                }}
+              >
+                <LogIn className="h-5 w-5 mr-2" />
+                Login
+              </Button>
+            )}
+          </div>
+        </div>
+      )}
 
       <div className="md:hidden sticky top-0 z-50 px-4 pt-2 bg-background">
         <ToggleGroup

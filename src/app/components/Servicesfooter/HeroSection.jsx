@@ -4,7 +4,7 @@ import React from 'react';
 
 function HeroSection({heroSectionData}) {
   return (
-    <section className='service-page-hero'>
+    <section className='service-page-hero '>
         <div className='service-page-hero-content'>
             <h3 className="service-page-hero-subheading">{heroSectionData.subheading}</h3>
             <h1 className="service-page-hero-heading">{heroSectionData.heading}</h1>
