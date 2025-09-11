@@ -1,12 +1,13 @@
 import Header from "../components/pages/header";
 import Footer from "../components/pages/footer";
-// import ItRecruitmentServicePage from "../components/pages/ourServices/ItRecruitmentServicePage";
+
+import ITRecruitmentServicePage from "../components/pages/ourServices/ITRecruitmentServicePage"
 
 const ItRecruitmentPage = () => {
   return (
     <>
       <Header/>
-      {/* <ItRecruitmentServicePage /> */}
+      <ITRecruitmentServicePage />
       <Footer/>
     </>
   );
