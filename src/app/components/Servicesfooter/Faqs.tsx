@@ -5,7 +5,7 @@ function Faqs({ servicePageAccordianData }: { servicePageAccordianData: { label:
   const [activeAccordion, setActiveAccordion] = React.useState<number | null>(null);
 
   return (
-    <section className="w-[80%] mx-auto flex flex-col justify-center items-start p-10 bg-white mt-0 md:w-[92%] md:p-0">
+    <section className="w-[80%] mx-auto flex flex-col justify-center items-start py-10 bg-white mt-0 md:w-[92%] ">
       <h1 className="text-[#EB6A4D] text-[30px] font-semibold text-center w-full mb-5 py-[10px] leading-tight md:text-[26px]">
         Frequently Asked Questions
       </h1>

@@ -5,10 +5,11 @@ import { Toaster as Sonner } from "./components/ui/sonner";
 import { AdminProvider } from "./context/AdminContext";
 import { UserProvider } from "./context";
 import QueryProvider from "./components/client/client";
+import ScrollToTop from "./ScrolltoTop";
 
 export const metadata = {
-  title: "EarlyJobs Assessment Platform | Smart Career Assessments & Job Matching",
-  description: "Discover your career potential with EarlyJobs' AI-powered skill assessments, resume builder, career guidance, and bulk job applications. Streamline your job search today!",
+  title: "EarlyJobs – Skill Assessments & Job Matching",
+  description: "Discover your career potential with EarlyJobs – AI-powered skill assessments, resume builder & job matching. Find your perfect role today.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -16,6 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       
       <body>
+        <ScrollToTop/>
         <QueryProvider>
           <TooltipProvider>
             <Toaster />

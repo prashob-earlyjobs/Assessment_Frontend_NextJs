@@ -112,7 +112,7 @@ const Footer = () => {
             </div>
             <div className="w-full  mt-2 px-4 pb-10">
   {/* Available in section */}
-  <div className=" pb-4 mb-6 text-center">
+  <div className=" pb-4 mb-6 text-center mt-10 lg:mt-0">
     <span className=" text-2xl font-bold text-gray-300 block sm:inline">Available in:</span>
     <div className="flex flex-wrap gap-4 mt-3 justify-center">
       <p
@@ -172,24 +172,24 @@ const Footer = () => {
     </div>
   </div>
 </div>
-           <div className="w-full border-t border-gray-300 mt-10 px-4 py-6 ">
+  <div className="w-full border-t border-gray-300 mt-10 px-4 py-6 ">
   <div className="flex justify-center items-center text-center">
     <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-8">
       <div className="flex space-x-6">
         <a
-          href="#"
+          href="/privacy-policy"
           className="text-gray-400  text-lg hover:text-amber-500 transition-all duration-300"
         >
           Privacy Policy
         </a>
         <a
-          href="#"
+          href="/terms-and-conditions"
           className="text-gray-400  text-lg hover:text-amber-500 transition-all duration-300"
         >
-          Terms of Service
+          Terms & Conditions
         </a>
         <a
-          href="#"
+          href="tel:+918217527926"
           className="text-gray-400  text-lg hover:text-amber-500 transition-all duration-300"
         >
           Contact Us
