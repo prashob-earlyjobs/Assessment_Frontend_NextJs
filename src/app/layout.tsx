@@ -5,6 +5,7 @@ import { Toaster as Sonner } from "./components/ui/sonner";
 import { AdminProvider } from "./context/AdminContext";
 import { UserProvider } from "./context";
 import QueryProvider from "./components/client/client";
+import ScrollToTop from "./ScrolltoTop";
 
 export const metadata = {
   title: "EarlyJobs – Skill Assessments & Job Matching",
@@ -16,6 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       
       <body>
+        <ScrollToTop/>
         <QueryProvider>
           <TooltipProvider>
             <Toaster />

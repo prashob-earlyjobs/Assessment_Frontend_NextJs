@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
-import { CheckCircle, Users, Clock, Star, ArrowRight, Play, Zap, Target, Award, Menu, X, LogIn, LogOut } from "lucide-react";
+import { CheckCircle, Users, Clock, Star, ArrowRight, Play, Zap, Target, Award, Menu, X, LogIn, LogOut, ChevronDown, ChevronUp } from "lucide-react";
 import Footer from "../components/pages/footer";
 import { useRouter } from "next/navigation";
 import Navbar from "../components/pages/navbar";
@@ -17,6 +17,7 @@ const Index = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [faqOpen, setFaqOpen] = useState<number | null>(null); // State for FAQ toggle
   const router = useRouter();
   const { userCredentials, setUserCredentials } = useUser();
 
@@ -30,9 +31,9 @@ const Index = () => {
 
   // Smooth scroll handler
   useEffect(() => {
-    const handleSmoothScroll = (e) => {
+    const handleSmoothScroll = (e: any) => {
       e.preventDefault();
-      const targetId = e.currentTarget.getAttribute("href").substring(1); // Remove the '#' from href
+      const targetId = e.currentTarget.getAttribute("href").substring(1);
       const targetElement = document.getElementById(targetId);
       if (targetElement) {
         targetElement.scrollIntoView({
@@ -40,16 +41,14 @@ const Index = () => {
           block: "start",
         });
       }
-      setIsOpen(false); // Close mobile menu after clicking
+      setIsOpen(false);
     };
 
-    // Attach event listeners to all nav links
     const navLinks = document.querySelectorAll('a[href^="#"]');
     navLinks.forEach((link) => {
       link.addEventListener("click", handleSmoothScroll);
     });
 
-    // Cleanup event listeners on component unmount
     return () => {
       navLinks.forEach((link) => {
         link.removeEventListener("click", handleSmoothScroll);
@@ -80,6 +79,31 @@ const Index = () => {
     router.push(route);
     setIsMobileMenuOpen(false);
   };
+
+  // Toggle FAQ item
+  const toggleFaq = (index: number) => {
+    setFaqOpen(faqOpen === index ? null : index);
+  };
+
+  // FAQ data
+  const faqs = [
+    {
+      question: "Do I need to take a skill assessment?",
+      answer: "No — it’s optional. But verified profiles with assessments attract employers faster.",
+    },
+    {
+      question: "How long does it take to join?",
+      answer: "About 20–40 minutes depending on whether you add the optional skill assessment.",
+    },
+    {
+      question: "Who can join?",
+      answer: "Any professional, fresher or experienced, across industries.",
+    },
+    {
+      question: "What happens after joining?",
+      answer: "You get a verified profile badge, appear in employer searches, and start receiving interview opportunities immediately.",
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-background">
@@ -295,7 +319,7 @@ const Index = () => {
                     setIsMobileMenuOpen(false);
                   }}
                 >
-                  <LogIn className="h-5 w-5 mr-2" />
+                  <LogIn className="h-5 h-5 mr-2" />
                   Login
                 </Button>
               )}
@@ -342,36 +366,38 @@ const Index = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-20  pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden min-h-screen bg-gradient-to-b from-white via-orange-100/90 to-orange-50/40">
+      <section className="pt-20 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden min-h-screen bg-gradient-to-b from-white via-orange-100/90 to-orange-50/40">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="animate-fade-in">
               <Badge className="mb-6 bg-orange-100 text-orange-700 border-orange-200">
                 🚀 Join 10,000+ Professionals
               </Badge>
-              <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6">
-                Get Placed <span className="text-gradient-orange">Faster</span>
+              <h1 className="text-3xl md:text-5xl font-bold leading-tight mb-6">
+                Get Hired <span className="text-orange-500">Faster</span><br/>  with AI-Powered Job Placement
               </h1>
               <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-                Our AI-powered platform connects you with top employers across any industry.
-                Get vetted, showcased, and hired in 30 days or less!
+                EarlyJobs.ai connects job seekers with top employers through AI-powered matching, verified profiles, and AI skill assessments. Get vetted, showcased, and hired — all in less time.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-20 lg:mb-0">
                 <Button
                   size="lg"
                   className="bg-orange-500 hover:bg-orange-600 shadow-button text-lg text-white px-8 py-6 animate-scale-on-hover"
+                  onClick={() => router.push("/assessments")}
                 >
                   <Play className="w-5 h-5 mr-2" />
-                  Schedule a Session
+                  Schedule an assessment
                 </Button>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="border-orange-500 text-orange-500 hover:bg-orange-50 text-lg px-8 py-6"
-                >
-                  Learn More
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
+                <a href="#talent-pool">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="border-orange-500 text-orange-500 hover:bg-orange-50 text-lg px-8 py-6"
+                  >
+                    Know More
+                    <ArrowRight className="w-5 h-5 ml-2" />
+                  </Button>
+                </a>
               </div>
               <div className="flex items-center gap-6 mt-8 pt-8 border-t border-orange-100">
                 <div className="flex items-center gap-2">
@@ -406,7 +432,7 @@ const Index = () => {
       <section id="talent-pool" className="py-20 bg-gradient-orange-light">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="animate-fade-in">
-            <Badge className="mb-6 bg-orange-500 text-white">
+            <Badge className="mb-6 bg-orange-500 text-white p-3 text-lg">
               <Users className="w-4 h-4 mr-2" />
               Elite Talent Network
             </Badge>
@@ -460,7 +486,7 @@ const Index = () => {
       <section id="process" className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16 animate-fade-in">
-            <Badge className="mb-6 bg-orange-100 text-orange-700 border-orange-200">
+            <Badge className="mb-6 bg-orange-100 text-orange-700 border-orange-200 p-3 text-lg">
               <Clock className="w-4 h-4 mr-2" />
               Quick & Easy Process
             </Badge>
@@ -481,11 +507,11 @@ const Index = () => {
                   <Badge className="bg-orange-100 text-orange-700">15 Minutes</Badge>
                 </div>
                 <h3 className="text-2xl md:text-3xl font-bold mb-4">
-                  Complete Your Profile With Video Intro
+                  Complete Your Profile
                 </h3>
                 <p className="text-lg text-muted-foreground mb-6">
-                  Use our Video Burst feature to add 20-second video intros about yourself.
-                  Share your basic information, preferred role, and salary expectations.
+                  Add career details, preferences, and a short video intro.
+                  Share your goals, roles, and salary expectations.
                 </p>
                 <ul className="space-y-3">
                   <li className="flex items-center gap-3">
@@ -509,8 +535,7 @@ const Index = () => {
                     alt="Profile completion"
                     className="relative rounded-full shadow-card w-48 h-48 object-cover"
                   />
-                  <div className="award-icon-wrapper" data-step="1">
-                  </div>
+                  <div className="award-icon-wrapper" data-step="1"></div>
                 </div>
               </div>
             </div>
@@ -525,11 +550,10 @@ const Index = () => {
                   <Badge className="bg-orange-100 text-orange-700">15 Minutes</Badge>
                 </div>
                 <h3 className="text-2xl md:text-3xl font-bold mb-4">
-                  Take A Quick Video Skill Assessment
+                  Take A Quick Video Skill Assessment (Optional)
                 </h3>
                 <p className="text-lg text-muted-foreground mb-6">
-                  Meet with one of our AI specialists to finalize your skills assessment.
-                  Demonstrate your expertise through practical scenarios.
+                  Enhance your profile with a verified skill badge. Not mandatory, but highly recommended to stand out.
                 </p>
                 <ul className="space-y-3">
                   <li className="flex items-center gap-3">
@@ -553,8 +577,7 @@ const Index = () => {
                     alt="Skill assessment"
                     className="relative rounded-full shadow-card w-48 h-48 object-cover"
                   />
-                  <div className="award-icon-wrapper" data-step="2">
-                  </div>
+                  <div className="award-icon-wrapper" data-step="2"></div>
                 </div>
               </div>
             </div>
@@ -566,10 +589,10 @@ const Index = () => {
                   <div className="w-12 h-12 rounded-full bg-gradient-orange text-white flex items-center justify-center font-bold text-xl mr-4">
                     3
                   </div>
-                  <Badge className="bg-orange-100 text-orange-700">10 Minutes</Badge>
+                  <Badge className="bg-orange-100 text-orange-700">5 Minutes</Badge>
                 </div>
                 <h3 className="text-2xl md:text-3xl font-bold mb-4">
-                  Get Results
+                  Get Results (If completed the assessment)
                 </h3>
                 <p className="text-lg text-muted-foreground mb-6">
                   Receive a detailed report of your skill assessment, including strengths and areas for improvement.
@@ -597,8 +620,7 @@ const Index = () => {
                     alt="Get results"
                     className="relative rounded-full shadow-card w-48 h-48 object-cover"
                   />
-                  <div className="award-icon-wrapper" data-step="3">
-                  </div>
+                  <div className="award-icon-wrapper" data-step="3"></div>
                 </div>
               </div>
             </div>
@@ -610,14 +632,13 @@ const Index = () => {
                   <div className="w-12 h-12 rounded-full bg-gradient-orange text-white flex items-center justify-center font-bold text-xl mr-4">
                     4
                   </div>
-                  <Badge className="bg-orange-100 text-orange-700">5 Minutes</Badge>
+                  <Badge className="bg-orange-100 text-orange-700">10-20 Minutes</Badge>
                 </div>
                 <h3 className="text-2xl md:text-3xl font-bold mb-4">
                   Welcome to <span className="text-orange-500">EarlyJobs.AI</span>
                 </h3>
                 <p className="text-lg text-muted-foreground mb-6">
-                  Chat with our EarlyJobs Pro program specialist to finalize your profile.
-                  Start receiving matched job opportunities immediately.
+                  Our AI evaluates your profile, verifies your details, and starts connecting you with employers right away.
                 </p>
                 <ul className="space-y-3">
                   <li className="flex items-center gap-3">
@@ -641,8 +662,7 @@ const Index = () => {
                     alt="Job matching"
                     className="relative rounded-full shadow-card w-48 h-48 object-cover"
                   />
-                  <div className="award-icon-wrapper" data-step="4">
-                  </div>
+                  <div className="award-icon-wrapper" data-step="4"></div>
                 </div>
               </div>
             </div>
@@ -654,7 +674,7 @@ const Index = () => {
       <section id="benefits" className="py-20 bg-gradient-orange-light">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16 animate-fade-in">
-            <Badge className="mb-6 bg-orange-500 text-white">
+            <Badge className="mb-6 bg-orange-500 p-3 text-white text-xl">
               <Star className="w-4 h-4 mr-2" />
               Why Choose EarlyJobs.ai
             </Badge>
@@ -669,7 +689,7 @@ const Index = () => {
                   <Clock className="w-6 h-6 text-orange-500" />
                 </div>
                 <h3 className="font-bold mb-2">30-Day Placement</h3>
-                <p className="text-sm text-muted-foreground">Get hired faster than traditional methods</p>
+                <p className="text-sm text-muted-foreground">Faster hiring, less waiting.</p>
               </CardContent>
             </Card>
             <Card className="bg-white shadow-card border-orange-100 animate-scale-on-hover">
@@ -678,7 +698,7 @@ const Index = () => {
                   <Award className="w-6 h-6 text-orange-500" />
                 </div>
                 <h3 className="font-bold mb-2">Verified Skills</h3>
-                <p className="text-sm text-muted-foreground">Stand out with validated expertise</p>
+                <p className="text-sm text-muted-foreground">Build trust with employers instantly.</p>
               </CardContent>
             </Card>
             <Card className="bg-white shadow-card border-orange-100 animate-scale-on-hover">
@@ -687,7 +707,7 @@ const Index = () => {
                   <Users className="w-6 h-6 text-orange-500" />
                 </div>
                 <h3 className="font-bold mb-2">Top Employers</h3>
-                <p className="text-sm text-muted-foreground">Access exclusive job opportunities</p>
+                <p className="text-sm text-muted-foreground">Tap into exclusive, high-quality opportunities.</p>
               </CardContent>
             </Card>
             <Card className="bg-white shadow-card border-orange-100 animate-scale-on-hover">
@@ -696,7 +716,8 @@ const Index = () => {
                   <Zap className="w-6 h-6 text-orange-500" />
                 </div>
                 <h3 className="font-bold mb-2">AI-Powered</h3>
-                <p className="text-sm text-muted-foreground">Smart matching technology</p>
+                <p className="text-sm text-muted-foreground">Smarter job connections across industries.
+</p>
               </CardContent>
             </Card>
           </div>
@@ -707,7 +728,7 @@ const Index = () => {
       <section id="faq" className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16 animate-fade-in">
-            <Badge className="mb-6 bg-orange-100 text-orange-700 border-orange-200">
+            <Badge className="mb-6 bg-orange-100 text-orange-700 border-orange-200 p-3 text-xl">
               <Users className="w-4 h-4 mr-2" />
               Talent Pool FAQs
             </Badge>
@@ -719,38 +740,26 @@ const Index = () => {
             </p>
           </div>
           <div className="grid md:grid-cols-2 gap-8">
-            <Card className="bg-white shadow-card border-orange-100 animate-scale-on-hover">
-              <CardContent className="p-6">
-                <h3 className="text-xl font-bold mb-4">What is the Talent Pool?</h3>
-                <p className="text-muted-foreground">
-                  The Talent Pool is our exclusive network of vetted professionals. Once you join, our AI evaluates your skills and matches you with top employers seeking your expertise.
-                </p>
-              </CardContent>
-            </Card>
-            <Card className="bg-white shadow-card border-orange-100 animate-scale-on-hover">
-              <CardContent className="p-6">
-                <h3 className="text-xl font-bold mb-4">How long does it take to join?</h3>
-                <p className="text-muted-foreground">
-                  The process takes about 40 minutes total: 15 minutes for profile creation, 15 minutes for skill assessment, 10 minutes for results, and 5 minutes to finalize with EarlyJobs Pro.
-                </p>
-              </CardContent>
-            </Card>
-            <Card className="bg-white shadow-card border-orange-100 animate-scale-on-hover">
-              <CardContent className="p-6">
-                <h3 className="text-xl font-bold mb-4">Who can join the Talent Pool?</h3>
-                <p className="text-muted-foreground">
-                  Professionals from any industry with relevant skills and experience can join. Our AI tailors the evaluation to your specific expertise, ensuring a perfect fit.
-                </p>
-              </CardContent>
-            </Card>
-            <Card className="bg-white shadow-card border-orange-100 animate-scale-on-hover">
-              <CardContent className="p-6">
-                <h3 className="text-xl font-bold mb-4">What happens after I join?</h3>
-                <p className="text-muted-foreground">
-                  After joining, you receive a verified profile badge and immediate access to job opportunities matched to your skills, with priority placement to top employers.
-                </p>
-              </CardContent>
-            </Card>
+            {faqs.map((faq, index) => (
+              <Card key={index} className="bg-white shadow-card border-orange-100 animate-scale-on-hover">
+                <CardContent 
+                  className="p-6 cursor-pointer" 
+                  onClick={() => toggleFaq(index)}
+                >
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-lg font-semibold">{faq.question}</h3>
+                    {faqOpen === index ? (
+                      <ChevronUp className="w-6 h-6 text-orange-500" />
+                    ) : (
+                      <ChevronDown className="w-6 h-6 text-orange-500" />
+                    )}
+                  </div>
+                  {faqOpen === index && (
+                    <p className="text-muted-foreground mt-4">{faq.answer}</p>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
@@ -777,8 +786,9 @@ const Index = () => {
               size="lg"
               variant="outline"
               className="border-white text-white hover:bg-white/10 text-lg px-8 py-6"
+              onClick={() => router.push("/login")}
             >
-              Learn More
+              Get Started Free
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           </div>
