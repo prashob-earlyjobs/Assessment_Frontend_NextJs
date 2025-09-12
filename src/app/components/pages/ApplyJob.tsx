@@ -1,3 +1,4 @@
+
 "use client";
 import { useMemo, useState, useRef, useEffect } from "react";
 import JobFairSection from "./Jobfair";
@@ -34,7 +35,7 @@ const useScrollAnimation = () => {
 };
 
 export default function Index() {
-  const API_BASE_URL= process.env.NEXT_PUBLIC_BACKEND_URL_IN;
+  const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL_IN;
   const categories = useMemo(
     () => [
       { icon: "🛍️", title: "Information Technology" },
@@ -46,7 +47,6 @@ export default function Index() {
       { icon: "📈", title: "SaaS/eCommerce" },
       { icon: "🏨", title: "Tourism/Hospitality" },
       { icon: "🚚", title: "Logistics/Transport" },
-      
     ],
     []
   );
@@ -188,7 +188,7 @@ export default function Index() {
   };
 
   return (
-    <div className="bg-gradient-to-b from-white via-orange-100/90 to-orange-50/40    lg:mt-0  mx-auto">
+    <div className="bg-gradient-to-b from-white via-orange-100/90 to-orange-50/40 mx-auto">
       <section className="relative h-screen">
         <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[600px] sm:h-[700px] md:h-[900px] bg-[radial-gradient(70%_70%_at_15%_5%,rgba(251,146,60,0.6),transparent_60%),radial-gradient(60%_60%_at_85%_10%,rgba(249,115,22,0.55),transparent_60%),radial-gradient(50%_50%_at_50%_40%,rgba(253,186,116,0.4),transparent_70%)]" />
 
@@ -204,7 +204,7 @@ export default function Index() {
               Discover opportunities in EarlyJobs. Search by industry or category — apply in one click.
             </p>
 
-            <div className="relative mt-4 w-full rounded-2xl border border-orange-200/80 bg-white/95 p-2 sm:p-3 shadow-[0_10px_30px_-8px_rgba(251,146,60,0.3)] ring-1 ring-orange-200/70 backdrop-blur md:p-3 md:shadow-[0_14px_40px_-12px_rgba(251,146,60,0.35)]">
+            <div className="relative z-50 mt-4 w-full rounded-2xl border border-orange-200/80 bg-white/95 p-2 sm:p-3 shadow-[0_10px_30px_-8px_rgba(251,146,60,0.3)] ring-1 ring-orange-200/70 backdrop-blur md:p-3 md:shadow-[0_14px_40px_-12px_rgba(251,146,60,0.35)]">
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -214,21 +214,22 @@ export default function Index() {
               >
                 <div className="grid gap-2">
                   <div className="relative">
-                    <label className="flex items-center gap-2 rounded-xl border border-orange-100 bg-white px-2.5 py-1.5 text-sm text-gray-700 focus-within:border-orange-300 focus-within:ring-2 focus-within:ring-orange-200 sm:px-3 sm:py-2 md:px-3 md:py-2">
+                    <label className="flex items-center gap-2 rounded-xl border border-orange-200 bg-white px-2.5 py-1.5 text-sm text-gray-700 focus-within:border-orange-300 focus-within:ring-2 focus-within:ring-orange-200 sm:px-3 sm:py-2 md:px-3 md:py-2">
                       <Search className="h-4 w-4 text-gray-400" />
                       <input
                         ref={industryInputRef}
                         value={industry}
                         onChange={(e) => setIndustry(e.target.value)}
                         onKeyDown={handleIndustryKeyDown}
-                        placeholder="Search Job Role, Industry, Location"
+                        placeholder="Search Jobs by Role, Industry, or Location
+"
                         className="h-10 w-full bg-transparent placeholder:text-gray-400 focus:outline-none text-sm sm:h-11 md:h-11"
                       />
                     </label>
                     {suggestions.length > 0 && (
                       <ul
                         ref={dropdownRef}
-                        className="absolute z-100 w-full mt-1 bg-white border border-orange-200 rounded-xl shadow-lg max-h-60 overflow-auto"
+                        className="absolute z-[200] w-full mt-1 bg-white border border-orange-200 rounded-xl shadow-lg max-h-60 overflow-auto"
                       >
                         {suggestions.map((suggestion, index) => (
                           <li
@@ -258,27 +259,52 @@ export default function Index() {
             </div>
 
             <p className="mt-2 text-xs text-gray-500 sm:mt-3 sm:text-sm md:mt-3 md:text-sm">
-              Popular searches: <a className="text-orange-700 hover:underline" href="#">Information Technology</a>,{" "}
-              <a className="text-orange-700 hover:underline" href="#">Finance</a>,{" "}
-              <a className="text-orange-700 hover:underline" href="#">Management</a>
+              Popular searches: <a className="text-orange-700 hover:underline" href="#">IT Jobs</a>,{" "}
+              <a className="text-orange-700 hover:underline" href="#">Finance Jobs</a>,{" "}
+              <a className="text-orange-700 hover:underline" href="#">Management Jobs</a>,{" "}
+              <a className="text-orange-700 hover:underline" href="#">Healthcare Jobs</a>
             </p>
           </div>
 
-          <div className="hidden lg:block relative lg:h-[460px] z-0">
-            <div className="absolute -left-4 -top-4 size-20 rounded-3xl bg-orange-200/60 blur-xl sm:size-24 sm:blur-2xl md:size-28 md:blur-2xl" />
-            <div className="absolute -right-6 bottom-0 size-24 rounded-full bg-orange-300/60 blur-2xl sm:size-28 sm:blur-3xl md:size-36 md:blur-3xl" />
-            <div className="absolute right-1 top-1 h-12 w-12 rounded-lg opacity-40 [background-image:linear-gradient(to_right,rgba(249,115,22,.35)_1px,transparent_1px),linear-gradient(to_bottom,rgba(249,115,22,.35)_1px,transparent_1px)] [background-size:10px_10px] sm:h-14 sm:w-14 md:h-16 md:w-16" />
-            <div className="absolute left-2 bottom-1/3 h-10 w-10 rounded-lg opacity-30 [background-image:linear-gradient(to_right,rgba(249,115,22,.3)_1px,transparent_1px),linear-gradient(to_bottom,rgba(249,115,22,.3)_1px,transparent_1px)] [background-size:8px_8px] sm:h-12 sm:w-12 md:h-14 md:w-14" />
-            <div className="relative hidden flex justify-center items-center md:block md:absolute md:right-1 md:top-4 z-0 sm:right-2 sm:top-6 md:right-2 md:top-6">
-              <div className="hidden md:block absolute -left-2 -top-2 h-48 w-[360px] rounded-xl  sm:h-56 sm:w-[400px] md:h-64 md:w-[460px] md:rounded-[2rem] "></div>
+          <div className="relative lg:h-[460px] z-0">
+            {/* Mobile-only talent pool card */}
+            <div className="block lg:hidden relative z-10">
+              <div className="relative h-64 w-full rounded-xl overflow-hidden shadow-xl">
+                <img
+                  src="/images/Networking.jpg"
+                  alt="Join our talent pool"
+                  className="h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-black/40 flex flex-col justify-end p-6">
+                  <h3 className="text-xl font-bold text-white">Join Our Talent Pool</h3>
+                  <p className="text-sm text-gray-200 mt-1">
+                    Be discovered by top employers. Share your skills and get matched with exciting opportunities.
+                  </p>
+                  <a
+                    href="/join-talent-pool"
+                    className="mt-4 inline-flex h-10 items-center justify-center rounded-xl bg-orange-500 px-6 text-sm font-semibold text-white shadow hover:bg-orange-600"
+                  >
+                    Join Now
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Existing images, hidden in mobile view */}
+            <div className="hidden lg:block absolute -left-4 -top-4 size-20 rounded-3xl bg-orange-200/60 blur-xl sm:size-24 sm:blur-2xl md:size-28 md:blur-2xl" />
+            <div className="hidden lg:block absolute -right-6 bottom-0 size-24 rounded-full bg-orange-300/60 blur-2xl sm:size-28 sm:blur-3xl md:size-36 md:blur-3xl" />
+            <div className="hidden lg:block absolute right-1 top-1 h-12 w-12 rounded-lg opacity-40 [background-image:linear-gradient(to_right,rgba(249,115,22,.35)_1px,transparent_1px),linear-gradient(to_bottom,rgba(249,115,22,.35)_1px,transparent_1px)] [background-size:10px_10px] sm:h-14 sm:w-14 md:h-16 md:w-16" />
+            <div className="hidden lg:block absolute left-2 bottom-1/3 h-10 w-10 rounded-lg opacity-30 [background-image:linear-gradient(to_right,rgba(249,115,22,.3)_1px,transparent_1px),linear-gradient(to_bottom,rgba(249,115,22,.3)_1px,transparent_1px)] [background-size:8px_8px] sm:h-12 sm:w-12 md:h-14 md:w-14" />
+            <div className="hidden lg:block relative flex justify-center items-center md:absolute md:right-1 md:top-4 z-0 sm:right-2 sm:top-6 md:right-2 md:top-6">
+              <div className="absolute -left-2 -top-2 h-48 w-[360px] rounded-xl sm:h-56 sm:w-[400px] md:h-64 md:w-[460px] md:rounded-[2rem]"></div>
               <img
                 src="/images/HeroImg3.jpg"
                 alt="Team meeting"
                 className="relative h-48 w-full rounded-xl bg-white object-cover shadow-xl sm:h-56 sm:w-[400px] md:h-64 md:w-[460px] md:rounded-[2rem]"
               />
             </div>
-            <div className="relative hidden flex justify-center items-center md:block md:absolute md:left-2 md:bottom-2 z-10 sm:left-4 sm:bottom-4 md:left-4 md:bottom-4">
-              <div className="absolute -left-2 -top-2 h-40 w-[280px] rounded-xl  sm:h-48 sm:w-[320px] md:h-56 md:w-[360px] md:rounded-[2rem] "></div>
+            <div className="hidden lg:block relative flex justify-center items-center md:absolute md:left-2 md:bottom-2 z-10 sm:left-4 sm:bottom-4 md:left-4 md:bottom-4">
+              <div className="absolute -left-2 -top-2 h-40 w-[280px] rounded-xl sm:h-48 sm:w-[320px] md:h-56 md:w-[360px] md:rounded-[2rem]"></div>
               <img
                 src="/images/Networking.jpg"
                 alt="Networking"
@@ -293,7 +319,7 @@ export default function Index() {
         <JobFairSection />
       </section>
 
-      <section className="container mx-auto  sm:py-12 md:py-12 lg:py-16">
+      <section className="container mx-auto sm:py-12 md:py-12 lg:py-16">
         <div className="mx-auto max-w-xl text-center p-3">
           <h2 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl md:text-3xl">Browse by Industry</h2>
           <p className="mt-2 text-sm text-gray-600 sm:text-base md:text-base">Find the role that fits. New jobs added daily.</p>
@@ -301,7 +327,7 @@ export default function Index() {
         <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-1 lg:grid-cols-3 md:mt-8 p-6">
           {categories.map((c) => (
             <div key={c.title} className="group rounded-2xl border border-orange-100 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-              <div className="flex items-center justify-center gap-3">
+              <div className="flex items-center lg:ml-27 gap-3">
                 <div className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-to-br from-orange-50 to-orange-100 text-2xl text-orange-600 ring-1 ring-orange-100">
                   {c.icon}
                 </div>
@@ -318,6 +344,8 @@ export default function Index() {
             <div>
               <p className="text-sm font-semibold uppercase tracking-wider text-orange-700">We are hiring</p>
               <h3 className="mt-1 text-2xl font-bold text-gray-900">Let’s work together & explore opportunities</h3>
+              <p className="hidden lg:block text-lg tracking-wider text-gray-700 mt-1 w-[50rem]">Over 100+ leading employers trust EarlyJobs to find the right talent. Build your career with opportunities from startups, enterprises, and global brands.
+</p>
             </div>
             <a href="/jobs" className="inline-flex h-11 items-center justify-center rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 px-6 text-sm font-semibold text-white shadow hover:from-orange-600 hover:to-orange-700">
               Apply Now

@@ -181,7 +181,7 @@ const Index = () => {
       `}</style>
       <Navbar />
       {/* Navigation */}
-      <nav className={`fixed ${isScrolled ? 'top-0' : ''} w-full bg-white/80 backdrop-blur-lg border-b border-gray-100 z-50 py-3`}>
+      <nav className={`sticky top-0 w-full bg-white/80 backdrop-blur-lg border-b border-gray-100 z-50 py-3`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div onClick={() => router.push("/")} className="flex items-center">
@@ -342,7 +342,7 @@ const Index = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-40 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden min-h-screen bg-gradient-to-b from-white via-orange-100/90 to-orange-50/40">
+      <section className="pt-20  pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden min-h-screen bg-gradient-to-b from-white via-orange-100/90 to-orange-50/40">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="animate-fade-in">
@@ -356,7 +356,7 @@ const Index = () => {
                 Our AI-powered platform connects you with top employers across any industry.
                 Get vetted, showcased, and hired in 30 days or less!
               </p>
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-4 mb-20 lg:mb-0">
                 <Button
                   size="lg"
                   className="bg-orange-500 hover:bg-orange-600 shadow-button text-lg text-white px-8 py-6 animate-scale-on-hover"

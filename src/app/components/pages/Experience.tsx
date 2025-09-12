@@ -9,7 +9,7 @@ const Experience = () => {
           Over 1 Year of Impact
         </h1>
         <p className="mt-2 sm:mt-3 text-sm sm:text-lg lg:text-xl text-gray-600 max-w-xs sm:max-w-lg lg:max-w-3xl leading-relaxed">
-          <span className="text-orange-500 font-semibold">EarlyJobs.ai</span> is an ecosystem empowering millions of jobseekers with transformative career opportunities.
+          <span className="text-orange-500 font-semibold">EarlyJobs.ai</span> has already empowered millions of jobseekers with assessments, resumes, and verified job opportunities.
         </p>
       </div>
 

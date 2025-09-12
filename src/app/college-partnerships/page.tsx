@@ -158,7 +158,7 @@ const Index = () => {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       {/* Header */}
-      <header className={`fixed ${isScrolled ? 'top-0' : ''} bg-white shadow-md border-b border-orange-100 sticky z-50`}>
+      <header className={`bg-white shadow-md border-b border-orange-100 sticky top-0 z-50`}>
         <div className="max-w-7xl mx-auto px-4 py-1 lg:py-3 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">

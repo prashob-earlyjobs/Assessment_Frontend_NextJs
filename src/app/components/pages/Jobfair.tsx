@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from "react";
 
-const JobFairSection = () => {
-  const [companyLogoUrls, setCompanyLogoUrls] = useState([]);
+interface Company {
+  logo_url: string;
+}
+
+const JobFairSection: React.FC = () => {
+  const [companyLogoUrls, setCompanyLogoUrls] = useState<string[]>([]);
 
   useEffect(() => {
-    // Fetch company logos from the API
     const fetchLogos = async () => {
       try {
-        const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL_IN
-        const response = await fetch(`${API_BASE_URL}/companies/companies`); // Replace with your actual API endpoint
-        const data = await response.json();
-        // Extract logo URLs from the API response
-        const urls = data.companies.map((company) => company.logo_url);
+        const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL_IN;
+        const response = await fetch(`${API_BASE_URL}/companies/companies`);
+        const data: { companies: Company[] } = await response.json();
+        const urls = data.companies
+          .map((company) => company.logo_url)
+          .filter((url): url is string => !!url); // Ensure only valid URLs are included
         setCompanyLogoUrls(urls);
       } catch (error) {
         console.error("Error fetching company logos:", error);
@@ -21,17 +25,19 @@ const JobFairSection = () => {
     fetchLogos();
   }, []);
 
+  // Calculate animation duration based on number of logos to fit within 45 seconds
+  const animationDuration = companyLogoUrls.length > 0 ? Math.min(45, companyLogoUrls.length * 2) : 45;
+
   return (
     <div className="flex flex-col md:flex-row justify-between items-center p-4 md:p-6 lg:p-8 bg-white mx-auto">
       <div className="w-full md:w-1/4 text-center md:text-left mb-4 md:mb-0">
         <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800">
-          Join Our Community <br />
-          With <span className="text-orange-500">Top Companies</span>
+          Join Top Companies <br />
+          Hiring on <span className="text-orange-500">EarlyJobs</span>
         </h2>
       </div>
       <div className="w-full md:w-3/4 overflow-hidden">
         <div className="marquee">
-          {/* Single Marquee: Moves Left */}
           {companyLogoUrls.length > 0 && (
             <div className="flex space-x-4 animate-marquee-left">
               {[...Array(2)].map((_, setIndex) => (
@@ -48,6 +54,9 @@ const JobFairSection = () => {
                         src={url}
                         alt={`Company ${index + 1}`}
                         className="h-12 md:h-16 lg:h-20 w-auto object-contain max-w-full"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none'; // Hide broken images
+                        }}
                       />
                     </div>
                   ))}
@@ -57,7 +66,6 @@ const JobFairSection = () => {
           )}
         </div>
 
-        {/* Animation Styles */}
         <style>
           {`
             @keyframes marquee-left {
@@ -66,7 +74,7 @@ const JobFairSection = () => {
             }
             .animate-marquee-left {
               display: flex;
-              animation: marquee-left 30s linear infinite;
+              animation: marquee-left ${animationDuration}s linear infinite;
               width: 200%;
             }
           `}
