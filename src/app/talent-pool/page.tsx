@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Head from "next/head"; // Import Head from next/head
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
@@ -17,10 +18,11 @@ const Index = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [faqOpen, setFaqOpen] = useState<number | null>(null); // State for FAQ toggle
+  const [faqOpen, setFaqOpen] = useState<number | null>(null);
   const router = useRouter();
   const { userCredentials, setUserCredentials } = useUser();
 
+  // Handle scroll for sticky navigation
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 5);
@@ -54,6 +56,11 @@ const Index = () => {
         link.removeEventListener("click", handleSmoothScroll);
       });
     };
+  }, []);
+
+  // SEO: Set document title and meta tags dynamically
+  useEffect(() => {
+    document.title = "AI Job Placement in 30 Days | EarlyJobs";
   }, []);
 
   const handleProfileClick = () => {
@@ -107,6 +114,46 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* SEO: Add Head component for meta tags */}
+      <Head>
+        <title>AI Job Placement in 30 Days | EarlyJobs</title>
+        <meta
+          name="description"
+          content="Join EarlyJobs Talent Pool and land jobs faster with AI-powered matching. Optional skill assessments, verified profiles, and a 30-day placement guarantee."
+        />
+        <meta name="keywords" content="AI job placement, EarlyJobs, talent pool, job matching, skill assessments, verified profiles, career acceleration" />
+        <meta name="author" content="EarlyJobs.ai" />
+        <meta name="robots" content="index, follow" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        {/* Open Graph Meta Tags for Social Media */}
+        <meta property="og:title" content="AI Job Placement in 30 Days | EarlyJobs" />
+        <meta
+          property="og:description"
+          content="Join EarlyJobs Talent Pool and land jobs faster with AI-powered matching. Optional skill assessments, verified profiles, and a 30-day placement guarantee."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.earlyjobs.ai/" />
+        <meta property="og:image" content="/images/og-image.jpg" /> {/* Replace with actual image URL */}
+        <meta property="og:site_name" content="EarlyJobs.ai" />
+
+        {/* Twitter Card Meta Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="AI Job Placement in 30 Days | EarlyJobs" />
+        <meta
+          name="twitter:description"
+          content="Join EarlyJobs Talent Pool and land jobs faster with AI-powered matching. Optional skill assessments, verified profiles, and a 30-day placement guarantee."
+        />
+        <meta name="twitter:image" content="/images/twitter-image.jpg" /> {/* Replace with actual image URL */}
+        <meta name="twitter:site" content="@EarlyJobsAI" /> {/* Replace with actual Twitter handle */}
+
+        {/* Canonical URL */}
+        <link rel="canonical" href="https://www.earlyjobs.ai/" />
+
+        {/* Favicon */}
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
       <style>{`
         @keyframes fadeIn {
           from { opacity: 0; }
@@ -209,7 +256,7 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div onClick={() => router.push("/")} className="flex items-center">
-              <img src="/images/logo.png" alt="Logo" className="h-12 lg:h-14 w-auto" />
+              <img src="/images/logo.png" alt="EarlyJobs Logo" className="h-12 lg:h-14 w-auto" />
             </div>
             <div className="hidden md:flex items-center space-x-8">
               <a
@@ -374,7 +421,7 @@ const Index = () => {
                 🚀 Join 10,000+ Professionals
               </Badge>
               <h1 className="text-3xl md:text-5xl font-bold leading-tight mb-6">
-                Get Hired <span className="text-orange-500">Faster</span><br/>  with AI-Powered Job Placement
+                Get Hired <span className="text-orange-500">Faster</span><br/> with AI-Powered Job Placement
               </h1>
               <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
                 EarlyJobs.ai connects job seekers with top employers through AI-powered matching, verified profiles, and AI skill assessments. Get vetted, showcased, and hired — all in less time.
@@ -716,8 +763,7 @@ const Index = () => {
                   <Zap className="w-6 h-6 text-orange-500" />
                 </div>
                 <h3 className="font-bold mb-2">AI-Powered</h3>
-                <p className="text-sm text-muted-foreground">Smarter job connections across industries.
-</p>
+                <p className="text-sm text-muted-foreground">Smarter job connections across industries.</p>
               </CardContent>
             </Card>
           </div>
