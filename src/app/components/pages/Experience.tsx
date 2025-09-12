@@ -9,12 +9,12 @@ const Experience = () => {
           Over 1 Year of Impact
         </h1>
         <p className="mt-2 sm:mt-3 text-sm sm:text-lg lg:text-xl text-gray-600 max-w-xs sm:max-w-lg lg:max-w-3xl leading-relaxed">
-          <span className="text-orange-500 font-semibold">EarlyJobs.ai</span> is an ecosystem empowering millions of jobseekers with transformative career opportunities.
+          <span className="text-orange-500 font-semibold">EarlyJobs.ai</span> has already empowered millions of jobseekers with assessments, resumes, and verified job opportunities.
         </p>
       </div>
 
       {/* Floating badges */}
-      <div className="absolute top-4 sm:top-6 right-10 sm:right-6 bg-white rounded-2xl w-[10rem] h-[8rem] p-3 sm:p-4 shadow-lg z-30 transform transition-all duration-300 hover:scale-105">
+      <div className="absolute top-1/6 right-1/12  bg-white rounded-2xl w-[10rem] h-[8rem] p-3 sm:p-4 shadow-lg z-30 transform transition-all duration-300 hover:scale-105">
         <div className="relative flex items-center gap-2 sm:gap-3 px-6 sm:px-10 py-6 sm:py-8">
           <Briefcase className="absolute top-2 sm:top-3 right-2 sm:right-3 w-4 sm:w-6 h-4 sm:h-6 lg:w-8 lg:h-8 text-green-500" />
           <span className="absolute top-3 sm:top-5 left-3 text-base sm:text-xl font-semibold text-gray-800">
@@ -24,7 +24,7 @@ const Experience = () => {
         </div>
       </div>
 
-      <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 bg-white rounded-2xl w-[10rem] h-[8rem] p-3 sm:p-4 shadow-lg z-30 transform transition-all duration-300 hover:scale-105">
+      <div className="absolute bottom-1/6  left-1/12 bg-white rounded-2xl w-[10rem] h-[8rem] p-3 sm:p-4 shadow-lg z-30 transform transition-all duration-300 hover:scale-105">
         <div className="relative flex items-center gap-2 sm:gap-3 px-6 sm:px-10 py-6 sm:py-8">
           <GraduationCap className="absolute top-2 sm:top-3 right-2 sm:right-3 w-4 sm:w-6 h-4 sm:h-6 lg:w-8 lg:h-8 text-orange-500" />
           <span className="absolute top-3 sm:top-5 left-3 text-base sm:text-xl font-semibold text-gray-800">
@@ -34,21 +34,21 @@ const Experience = () => {
         </div>
       </div>
 
-      <div className="absolute top-1/3 left-4 sm:left-6 bg-white rounded-2xl w-[10rem] h-[8rem] sm:p-4 shadow-lg z-30 transform transition-all duration-300 hover:scale-105">
+      <div className="absolute top-1/6 left-1/8 bg-white rounded-2xl w-[10rem] h-[8rem] sm:p-4 shadow-lg z-30 transform transition-all duration-300 hover:scale-105">
         <div className="relative flex items-center gap-2 sm:gap-3 px-6 sm:px-10 py-6 sm:py-8">
           <Users className="absolute top-0 sm:top-0 right-2 sm:right-3 w-4 sm:w-6 h-4 sm:h-6 lg:w-8 lg:h-8 text-purple-500" />
           <span className="absolute top-2 sm:top-2 left-2 text-base sm:text-xl font-semibold text-gray-800">
-            1500+<br />
+            1700+<br />
             <p className="border-l-4 border-purple-500 pl-2 sm:pl-3 text-sm sm:text-lg font-bold text-gray-600">Candidates Placed</p>
           </span>
         </div>
       </div>
 
-      <div className="absolute bottom-1/3 right-4 sm:right-6 bg-white rounded-2xl w-[10rem] h-[6rem] p-3 sm:p-4 shadow-lg z-30 transform transition-all duration-300 hover:scale-105">
+      <div className="absolute bottom-1/6 right-1/8  bg-white rounded-2xl w-[10rem] h-[6rem] p-3 sm:p-4 shadow-lg z-30 transform transition-all duration-300 hover:scale-105">
         <div className="relative flex items-center gap-2 sm:gap-3 px-6 sm:px-10 py-6 sm:py-8">
           <UserCheck className="absolute top-0 sm:top-0 left-2 sm:left-3 w-4 sm:w-6 h-4 sm:h-6 lg:w-8 lg:h-8 text-blue-500" />
           <span className="absolute top-0 sm:top-0 right-2 text-base sm:text-xl font-semibold text-gray-800 text-right">
-            200+<br />
+            275+<br />
             <span className="border-r-4 border-blue-500 pr-2 sm:pr-3 text-sm sm:text-lg font-bold text-gray-600">Freelancers</span>
           </span>
         </div>

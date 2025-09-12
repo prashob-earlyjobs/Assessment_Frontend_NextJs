@@ -55,7 +55,8 @@ const useScrollAnimation = () => {
 export default function Index() {
     const router = useRouter();
     const [currentText, setCurrentText] = useState(0);
-    const [openFaq, setOpenFaq] = useState(null); // State to track which FAQ is open
+    const [openFaq, setOpenFaq] = useState(null);
+    const [loadingCard, setLoadingCard] = useState(null); // Track which card is loading
 
     const heroTexts = [
         "Create a resume that your dream job will notice",
@@ -76,6 +77,14 @@ export default function Index() {
         if (featuresSection) {
             featuresSection.scrollIntoView({ behavior: 'smooth' });
         }
+    };
+
+    const handleCardClick = (path, cardIndex) => {
+        setLoadingCard(cardIndex); // Set the loading state for the clicked card
+        setTimeout(() => {
+            router.push(path); // Navigate after a delay
+            setLoadingCard(null); // Reset loading state after navigation
+        }, 1500); // 1.5-second delay to show loading effect
     };
 
     const faqs = [
@@ -126,7 +135,7 @@ export default function Index() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-white via-orange-50 to-orange-100  lg:mt-0">
+        <div className="min-h-screen bg-gradient-to-br from-white via-orange-50 to-orange-100 lg:mt-0">
             <style jsx>{`
                 @keyframes typing {
                     from { width: 0; }
@@ -134,6 +143,9 @@ export default function Index() {
                 }
                 @keyframes blink {
                     50% { opacity: 0; }
+                }
+                @keyframes spin {
+                    to { transform: rotate(360deg); }
                 }
                 .animate-typing {
                     animation: typing 3s steps(30, end) forwards;
@@ -149,10 +161,31 @@ export default function Index() {
                     animation: blink 0.75s step-end infinite;
                     vertical-align: middle;
                 }
+                .loading-overlay {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(255, 255, 255, 0.8);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 10;
+                    border-radius: 8px;
+                }
+                .spinner {
+                    width: 40px;
+                    height: 40px;
+                    border: 4px solid #f97316;
+                    border-top: 4px solid transparent;
+                    border-radius: 50%;
+                    animation: spin 2s linear infinite;
+                }
             `}</style>
 
             {/* Hero Section */}
-            <main className="container mx-auto px-6 py-6 lg:py-16">
+            <main className="container mx-auto px-6 py-6 lg:px-18 lg:py-16">
                 <div className="grid lg:grid-cols-2 gap-12 items-center">
                     <div className="space-y-8">
                         <div className="space-y-4">
@@ -160,11 +193,13 @@ export default function Index() {
                                 <Sparkles className="w-4 h-4 mr-2" />
                                 AI-Powered Resume Builder
                             </div>
-                            <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-                                <span className="block">Create a resume</span>
-                                <span className="block">that your dream job</span>
+                            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+                                <span className="block"> Create a Job-Winning Resume with AI</span>
+                                
                                 <span className="block bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
-                                    will notice
+                                    Stand Out. Get Noticed.<br/>
+                                     Land the Interview.
+
                                 </span>
                             </h1>
                             <div className="hidden md:block h-16 flex items-center">
@@ -196,15 +231,6 @@ export default function Index() {
                                 </button>
                             </div>
                         </div>
-                        <div className="space-y-4">
-                            <p className="text-sm text-gray-500 font-medium">Trusted by professionals from</p>
-                            <div className="flex items-center space-x-8 opacity-60">
-                                <div className="text-gray-400 font-semibold">COGENT</div>
-                                <div className="text-gray-400 font-semibold">HDFC</div>
-                                <div className="text-gray-400 font-semibold">PAYTM</div>
-                                <div className="text-gray-400 font-semibold">TP</div>
-                            </div>
-                        </div>
                     </div>
                     <Tilt
                         tiltMaxAngleX={15}
@@ -223,10 +249,7 @@ export default function Index() {
                                             src="/images/Resumee.jpg"
                                             alt="Profile"
                                             className="w-full h-full object-cover"
-                                            onError={(e) => {
-                                                const target = e.target as HTMLImageElement;
-                                                target.style.display = 'none';
-                                            }}
+                                           
                                         />
                                         <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24" style={{ display: 'none' }}>
                                             <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
@@ -281,12 +304,19 @@ export default function Index() {
                             Powerful <span className="text-orange-500">EarlyJobs</span> Features to Land Your Dream Job
                         </h2>
                         <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                            Transform your career with intelligent resume building tools designed for success
+                           Build resumes that employers can’t ignore. With EarlyJobs’ AI-powered resume builder, you’ll have a professional CV ready in minutes.
                         </p>
                     </div>
                     <div className="grid md:grid-cols-3 gap-8 mt-10">
-                        <div onClick={() => router.push('/airesume')}
-                            className="group hover:shadow-xl transition-all duration-300 border-0 shadow-lg bg-white rounded-lg p-8 text-center cursor-pointer">
+                        <div
+                            onClick={() => handleCardClick('/airesume', 0)}
+                            className="relative group hover:shadow-xl transition-all duration-300 border-0 shadow-lg bg-white rounded-lg p-8 text-center cursor-pointer"
+                        >
+                            {loadingCard === 0 && (
+                                <div className="loading-overlay">
+                                    <div className="spinner"></div>
+                                </div>
+                            )}
                             <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
                                 <Upload className="w-8 h-8 text-white" />
                             </div>
@@ -309,7 +339,15 @@ export default function Index() {
                                 </li>
                             </ul>
                         </div>
-                        <div onClick={() => router.push('/airesume/jde')} className="group hover:shadow-xl transition-all duration-300 border-0 shadow-lg bg-white rounded-lg p-8 text-center cursor-pointer">
+                        <div
+                            onClick={() => handleCardClick('/airesume/jde', 1)}
+                            className="relative group hover:shadow-xl transition-all duration-300 border-0 shadow-lg bg-white rounded-lg p-8 text-center cursor-pointer"
+                        >
+                            {loadingCard === 1 && (
+                                <div className="loading-overlay">
+                                    <div className="spinner"></div>
+                                </div>
+                            )}
                             <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
                                 <Zap className="w-8 h-8 text-white" />
                             </div>
@@ -332,7 +370,15 @@ export default function Index() {
                                 </li>
                             </ul>
                         </div>
-                        <div onClick={() => router.push('/airesume')} className="group hover:shadow-xl transition-all duration-300 border-0 shadow-lg bg-white rounded-lg p-8 text-center cursor-pointer">
+                        <div
+                            onClick={() => handleCardClick('/airesume', 2)}
+                            className="relative group hover:shadow-xl transition-all duration-300 border-0 shadow-lg bg-white rounded-lg p-8 text-center cursor-pointer"
+                        >
+                            {loadingCard === 2 && (
+                                <div className="loading-overlay">
+                                    <div className="spinner"></div>
+                                </div>
+                            )}
                             <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
                                 <FileText className="w-8 h-8 text-white" />
                             </div>
@@ -381,7 +427,6 @@ export default function Index() {
                                     </p>
                                 </CardContent>
                             </Card>
-                          
                             <Card className="p-6 border-0 shadow-lg hover:shadow-xl transition-all duration-300">
                                 <CardContent className="pt-6">
                                     <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
@@ -393,7 +438,6 @@ export default function Index() {
                                     </p>
                                 </CardContent>
                             </Card>
-                           
                             <Card className="p-6 border-0 shadow-lg hover:shadow-xl transition-all duration-300 md:col-span-2 lg:col-span-1">
                                 <CardContent className="pt-6">
                                     <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mx-auto mb-4">
@@ -405,7 +449,6 @@ export default function Index() {
                                     </p>
                                 </CardContent>
                             </Card>
-                            
                         </div>
                         <div className="text-center mt-12">
                             <button
@@ -420,47 +463,47 @@ export default function Index() {
                 </section>
 
                 {/* FAQ Section */}
-                <section className="py-16  sm:px-6 lg:px-8 bg-background">
-                               <div className="max-w-7xl mx-auto">
-                                   <div className="text-center mb-10">
-                                       <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Frequently Asked Questions</h2>
-                                       <p className="text-gray-600 max-w-2xl mx-auto">
-                                           Got questions? We've got answers about our Resume Builder and how they can help you succeed.
-                                       </p>
-                                   </div>
-                                   <div className="grid lg:grid-cols-2 gap-6">
-                                       {faqs.slice(0, 10).map((faq, index) => {
-                                           const { ref, isVisible } = useScrollAnimation();
-                                           return (
-                                               <div
-                                                   key={index}
-                                                   ref={ref}
-                                                   className={`transition-all duration-700 delay-${index * 150} ${isVisible ? "animate-slide-up opacity-100" : "opacity-0 translate-y-10"}`}
-                                               >
-                                                   <div className="bg-gray-50 rounded-lg shadow-md border-0">
-                                                       <button
-                                                           className="w-full flex justify-between items-center p-5 text-left text-gray-900 font-semibold text-lg"
-                                                           onClick={() => toggleFaq(index)}
-                                                       >
-                                                           <span>{faq.question}</span>
-                                                           {openFaq === index ? (
-                                                               <ChevronUp className="w-5 h-5 text-orange-600" />
-                                                           ) : (
-                                                               <ChevronDown className="w-5 h-5 text-gray-400" />
-                                                           )}
-                                                       </button>
-                                                       {openFaq === index && (
-                                                           <div className="p-5 pt-0 text-gray-600">
-                                                               <p>{faq.answer}</p>
-                                                           </div>
-                                                       )}
-                                                   </div>
-                                               </div>
-                                           );
-                                       })}
-                                   </div>
-                               </div>
-                           </section>
+                <section className="py-16 sm:px-6 lg:px-8 bg-background">
+                    <div className="max-w-7xl mx-auto">
+                        <div className="text-center mb-10">
+                            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Frequently Asked Questions</h2>
+                            <p className="text-gray-600 max-w-2xl mx-auto">
+                                Got questions? We've got answers about our Resume Builder and how they can help you succeed.
+                            </p>
+                        </div>
+                        <div className="grid lg:grid-cols-2 gap-6">
+                            {faqs.slice(0, 10).map((faq, index) => {
+                                const { ref, isVisible } = useScrollAnimation();
+                                return (
+                                    <div
+                                        key={index}
+                                        ref={ref}
+                                        className={`transition-all duration-700 delay-${index * 150} ${isVisible ? "animate-slide-up opacity-100" : "opacity-0 translate-y-10"}`}
+                                    >
+                                        <div className="bg-gray-50 rounded-lg shadow-md border-0">
+                                            <button
+                                                className="w-full flex justify-between items-center p-5 text-left text-gray-900 font-semibold text-lg"
+                                                onClick={() => toggleFaq(index)}
+                                            >
+                                                <span>{faq.question}</span>
+                                                {openFaq === index ? (
+                                                    <ChevronUp className="w-5 h-5 text-orange-600" />
+                                                ) : (
+                                                    <ChevronDown className="w-5 h-5 text-gray-400" />
+                                                )}
+                                            </button>
+                                            {openFaq === index && (
+                                                <div className="p-5 pt-0 text-gray-600">
+                                                    <p>{faq.answer}</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </section>
             </main>
         </div>
     );

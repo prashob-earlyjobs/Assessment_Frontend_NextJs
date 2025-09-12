@@ -1,4 +1,4 @@
-
+"use client"
 import { MapPin, Building, GraduationCap, Lightbulb, Users, Tag, FileText, BarChart2, Rocket } from "lucide-react";
 import { toast } from "sonner";
 import React from 'react';
@@ -62,9 +62,9 @@ const Footer = () => {
                 </div>
                 <div className="flex flex-col">
                     <h3 className="pt-8 text-white text-base font-semibold uppercase leading-5 lg:pt-12">Company</h3>
-                    <Link href="/about" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">About Us</Link>
-                    <Link href="/management" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Management Team</Link>
-                    <Link href="/team" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Blogs</Link>
+                    <Link href="/about-us" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">About Us</Link>
+                    <Link href="/team" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Team</Link>
+                    <Link href="/blogs" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Blogs</Link>
                     <Link href="/partner-with-us" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Partner With Us</Link>
                     <Link href="/franchise" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Franchise With Us</Link>
                     <a href="tel:+918217527926" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 cursor-pointer lg:mt-6" id="contact-link">Contact Us</a>
@@ -100,7 +100,7 @@ const Footer = () => {
                         Auto-Apply
                     </button>
                     
-                    <Link href="https://www.earlyjobs.in/clientele" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
+                    <Link href="/clientele" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
                         <Building className="w-5 h-5 mr-2 inline-block" />
                         Company Tie-Ups
                     </Link>
@@ -112,7 +112,7 @@ const Footer = () => {
             </div>
             <div className="w-full  mt-2 px-4 pb-10">
   {/* Available in section */}
-  <div className=" pb-4 mb-6 text-center">
+  <div className=" pb-4 mb-6 text-center mt-10 lg:mt-0">
     <span className=" text-2xl font-bold text-gray-300 block sm:inline">Available in:</span>
     <div className="flex flex-wrap gap-4 mt-3 justify-center">
       <p
@@ -172,24 +172,24 @@ const Footer = () => {
     </div>
   </div>
 </div>
-           <div className="w-full border-t border-gray-300 mt-10 px-4 py-6 ">
+  <div className="w-full border-t border-gray-300 mt-10 px-4 py-6 ">
   <div className="flex justify-center items-center text-center">
     <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-8">
       <div className="flex space-x-6">
         <a
-          href="#"
+          href="/privacy-policy"
           className="text-gray-400  text-lg hover:text-amber-500 transition-all duration-300"
         >
           Privacy Policy
         </a>
         <a
-          href="#"
+          href="/terms-and-conditions"
           className="text-gray-400  text-lg hover:text-amber-500 transition-all duration-300"
         >
-          Terms of Service
+          Terms & Conditions
         </a>
         <a
-          href="#"
+          href="tel:+918217527926"
           className="text-gray-400  text-lg hover:text-amber-500 transition-all duration-300"
         >
           Contact Us

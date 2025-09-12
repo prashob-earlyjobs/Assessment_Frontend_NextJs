@@ -1,13 +1,19 @@
-"use client"
+"use client";
+
 import { useState, useEffect } from 'react';
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Card } from "../components/ui/card";
-import { ChevronRight, Brain, FileText, UsersRound, HandCoins, Briefcase, Monitor, BadgeCheck, Rocket, ChevronDown, ChevronUp, CheckCircle } from 'lucide-react';
+import { ChevronRight, Brain, FileText, UsersRound, HandCoins, Briefcase, Monitor, BadgeCheck, Rocket, ChevronDown, ChevronUp, CheckCircle, Menu, X, LogOut, LogIn } from 'lucide-react';
 import Footer from '../components/pages/footer';
 import emailjs from '@emailjs/browser';
 import { toast } from "sonner";
 import Navbar from '../components/pages/navbar';
+import { useRouter } from 'next/navigation';
+import { useUser } from "../context";
+import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
+
+import { userLogout } from "../components/services/servicesapis";
 
 interface Company {
   name: string;
@@ -16,6 +22,9 @@ interface Company {
 
 const Index = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const router = useRouter();
+  const { userCredentials, setUserCredentials } = useUser();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,6 +33,7 @@ const Index = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -117,17 +127,42 @@ const Index = () => {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+    setIsMobileMenuOpen(false); // Close mobile menu after clicking
+  };
+
+  const handleProfileClick = () => {
+    router.push("/profile");
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleLogout = async () => {
+    try {
+      const response = await userLogout();
+      if (!response.success) {
+        throw new Error("Logout failed");
+      }
+      toast.success("Logged out successfully!");
+      setUserCredentials(null);
+      router.push("/login");
+    } catch (error) {
+      toast.error("Logout failed. Please try again.");
+    }
+  };
+
+  const handleMobileMenuItemClick = (route: string) => {
+    router.push(route);
+    setIsMobileMenuOpen(false);
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       {/* Header */}
-      <header className={`fixed ${isScrolled ? 'top-0' : ''}  bg-white shadow-md border-b border-orange-100 sticky z-50`}>
+      <header className={`bg-white shadow-md border-b border-orange-100 sticky top-0 z-50`}>
         <div className="max-w-7xl mx-auto px-4 py-1 lg:py-3 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <img src="/images/logo.png" alt="EarlyJobs.ai" className="h-12 lg:h-16" />
+              <img src="/images/logo.png" onClick={() => router.push("/")} alt="EarlyJobs.ai" className="h-12 lg:h-14" />
             </div>
             <nav className="hidden md:flex space-x-8 items-center">
               <button
@@ -152,10 +187,93 @@ const Index = () => {
                 Login/SignUp
               </Button>
             </nav>
-            <Button className="md:hidden bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-full transition-colors duration-200 font-semibold text-sm">
-              Login/SignUp
-            </Button>
+            <div className="md:hidden flex items-center">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="text-gray-600 hover:text-orange-600 focus:outline-none p-3"
+              >
+                {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+              </Button>
+            </div>
           </div>
+          {isMobileMenuOpen && (
+            <div className="md:hidden bg-white/95 backdrop-blur-sm shadow-lg z-50 px-4 py-4 border-b border-orange-100">
+              <div className="flex flex-col space-y-2">
+                {userCredentials !== null && (
+                  <div
+                    className="flex items-center space-x-3 cursor-pointer px-4 py-3"
+                    onClick={handleProfileClick}
+                  >
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage src={userCredentials.avatar} />
+                      <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
+                        {userCredentials?.name
+                          ?.split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                          ?.toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">
+                        {userCredentials.name}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {userCredentials.profile?.preferredJobRole}
+                      </p>
+                    </div>
+                  </div>
+                )}
+                <Button
+                  variant="ghost"
+                  className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
+                  onClick={() => handleMobileMenuItemClick("/browse-candidates")}
+                >
+                  Browse Candidates
+                </Button>
+                <Button
+                  variant="ghost"
+                  className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
+                  onClick={() => handleMobileMenuItemClick("/colleges")}
+                >
+                  Colleges
+                </Button>
+                <Button
+                  variant="ghost"
+                  className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
+                  onClick={() => handleMobileMenuItemClick("/talent-pool")}
+                >
+                  Talent Pool
+                </Button>
+                {userCredentials !== null ? (
+                  <Button
+                    variant="ghost"
+                    className="w-full text-left justify-start text-red-600 hover:bg-red-50 rounded-xl py-3 px-4 transition-all duration-300"
+                    onClick={() => {
+                      handleLogout();
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    <LogOut className="h-5 w-5 mr-2" />
+                    Logout
+                  </Button>
+                ) : (
+                  <Button
+                    className="w-full text-left justify-start bg-orange-600 hover:bg-orange-700 text-white rounded-xl py-3 px-4 shadow-lg hover:shadow-xl transition-all duration-300"
+                    onClick={() => {
+                      router.push("/login");
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    <LogIn className="h-5 w-5 mr-2" />
+                    Login
+                  </Button>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </header>
 
@@ -178,7 +296,7 @@ const Index = () => {
                   { value: "100+", label: "Employers" },
                   { value: "10+", label: "Colleges Partnered" },
                   { value: "5000+", label: "Monthly Openings" },
-                  { value: "100%", label: "Placement Support" }
+                  { value: "100%", label: "Placement Assistance" }
                 ].map((stat, index) => (
                   <div key={index} className="bg-gradient-to-br from-orange-400 to-orange-600 text-white p-6 rounded-xl text-center shadow-lg hover:shadow-xl transition-shadow duration-200">
                     <div className="text-2xl font-bold">{stat.value}</div>

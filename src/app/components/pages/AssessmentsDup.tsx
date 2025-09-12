@@ -174,20 +174,20 @@ export default function Assessments() {
     return (
         <div>
             {/* Hero Section */}
-            <section className="min-h-screen flex items-center relative overflow-hidden bg-gradient-to-br from-orange-400 to-purple-400 pt-4 pb-6 sm:pt-6 sm:pb-8 lg:pt-0 lg:pb-12 px-4 sm:px-8 md:px-12 lg:px-20">
+            <section className="min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-orange-400 to-purple-400  pb-6 sm:pt-6 sm:pb-8 lg:pt-0 lg:pb-12 px-4 sm:px-8 md:px-12 lg:px-20">
                 <div className="w-full max-w-7xl mx-auto">
                     <div className="grid lg:grid-cols-2 gap-6 lg:gap-10 items-center">
                         {/* Left Content */}
                         <div className="animate-fade-in text-center lg:text-left">
                             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-white leading-tight mb-4">
-                                Develop your skills in a{" "}
+                                Advance Your Career with {" "}
                                 <span className="bg-gradient-to-r from-white to-orange-100 bg-clip-text text-transparent">
-                                    new and unique way
+                                   AI-Powered Skill Assessments
+
                                 </span>
                             </h1>
                             <p className="text-sm sm:text-base md:text-lg text-orange-100 mb-6 max-w-xl mx-auto lg:mx-0">
-                                Join our Job seekers worldwide and unlock your potential with our comprehensive online assessments and expert mentorship.
-                            </p>
+                               Join thousands of job seekers and access 300+ online assessments, expert mentorship, and career certificates.</p>
                             <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start mb-6">
                                 <Button
                                     onClick={() => router.push("/assessments")}
