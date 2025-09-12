@@ -232,7 +232,7 @@ const Index = () => {
                 src="/images/logo.png"
                 onClick={() => router.push("/")}
                 alt="EarlyJobs.ai"
-                className="h-12 lg:h-14"
+                className="h-12 lg:h-14 cursor-pointer"
               />
             </div>
             <nav className="hidden md:flex space-x-8 items-center">
