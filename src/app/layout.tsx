@@ -10,6 +10,20 @@ import ScrollToTop from "./ScrolltoTop";
 export const metadata = {
   title: "EarlyJobs – Skill Assessments & Job Matching",
   description: "Discover your career potential with EarlyJobs – AI-powered skill assessments, resume builder & job matching. Find your perfect role today.",
+  openGraph: {
+    title: "EarlyJobs – Skill Assessments & Job Matching",
+    description: "Discover your career potential with EarlyJobs – AI-powered skill assessments, resume builder & job matching. Find your perfect role today.",
+    images: [
+      {
+        url: "/images/logo.png", 
+        width: 1200,
+        height: 630,
+        alt: "EarlyJobs Open Graph Image",
+      },
+    ],
+    url: "https://www.earlyjobs.ai", 
+    type: "website",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

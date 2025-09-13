@@ -1,11 +1,16 @@
+
 "use client";
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { Button } from "../components/ui/button";
 import { useRouter } from "next/navigation";
+import { useUser } from "../context";
+import { toast } from "sonner";
+import { userLogout } from "../components/services/servicesapis";
+import { Menu, X, LogIn, LogOut } from "lucide-react";
+import { Avatar, AvatarImage, AvatarFallback } from "../components/ui/avatar";
 import Footer from "../components/pages/footer";
 import Navbar from "../components/pages/navbar";
-import { Menu, X, LogIn, LogOut } from "lucide-react"; // Importing icons from lucide-react
-import { Avatar, AvatarImage, AvatarFallback } from "../components/ui/avatar"; // Importing Avatar components from shadcn/ui
 
 const Index = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -17,13 +22,46 @@ const Index = () => {
     email: "",
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // State for mobile menu
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [candidates, setCandidates] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const router = useRouter();
+  const { userCredentials, setUserCredentials } = useUser();
 
-  // Mock userCredentials (since it's not provided in the original code)
-  const userCredentials = null; // Set to null for guest user; could be replaced with actual user data
+  // Fetch candidates from API
+  useEffect(() => {
+    const fetchCandidates = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/browseCandidates/candidates`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
 
-  // Mock functions for header interactions
+        if (!response.ok) {
+          throw new Error('Failed to fetch candidates');
+        }
+
+        const data = await response.json();
+        if (data.success) {
+          setCandidates(data.data);
+        } else {
+          throw new Error(data.message || 'Error fetching candidates');
+        }
+      } catch (err) {
+        setError(err.message);
+        toast.error('Failed to load candidates. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCandidates();
+  }, []);
+
   const scrollToSection = (sectionId) => {
     const section = document.getElementById(sectionId);
     if (section) {
@@ -32,138 +70,29 @@ const Index = () => {
   };
 
   const handleProfileClick = () => {
-    // Placeholder for profile click logic
     router.push("/profile");
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleLogout = async () => {
+    try {
+      const response = await userLogout();
+      if (!response.success) {
+        throw new Error("Logout failed");
+      }
+      toast.success("Logged out successfully!");
+      setUserCredentials(null);
+      router.push("/login");
+    } catch (error) {
+      toast.error("Logout failed. Please try again.");
+    }
+    setIsMobileMenuOpen(false);
   };
 
   const handleMobileMenuItemClick = (path) => {
     router.push(path);
     setIsMobileMenuOpen(false);
   };
-
-  const handleLogout = () => {
-    // Placeholder for logout logic
-    console.log("Logged out");
-    setIsMobileMenuOpen(false);
-  };
-
-  // Mock data (unchanged from original)
-  const mockCandidates = [
-    {
-      _id: "6871e8c991f7f8a2e1874f6b",
-      name: "Chris Reynolds",
-      email: "chris@meetxo.ai",
-      role: "candidate",
-      mobile: "9611329404",
-      avatar: "",
-      profile: {
-        professionalInformation: { workMode: "Full Time" },
-        bio: "Proven software engineer excelling in automation, Python, and mentoring with 16 years of experience in delivering robust solutions.",
-        preferredJobRole: "Senior Software Engineer",
-      },
-      skills: [
-        "Python",
-        "JavaScript",
-        "Bash",
-        "Docker",
-        "AWS",
-        "React",
-        "Node.js",
-        "MongoDB",
-        "PostgreSQL",
-        "Redis",
-        "Git",
-      ],
-      experience: [
-        { title: "Senior Software Engineer", company: "TechCorp Inc", duration: "2020-Present" },
-      ],
-      createdAt: "2025-07-12T04:47:05.281+00:00",
-    },
-    {
-      _id: "6871e8c991f7f8a2e1874f6c",
-      name: "Amanda Chen",
-      email: "amanda@meetxo.ai",
-      role: "candidate",
-      mobile: "9611329405",
-      avatar: "",
-      profile: {
-        professionalInformation: { workMode: "Part Time" },
-        bio: "AI and Math Expert, Educator, Trainer, Innovator, and Leader with 8 years of experience in machine learning and data science.",
-        preferredJobRole: "AI Research Scientist",
-      },
-      skills: ["Mathematics", "AI & LLM Training", "Python", "TensorFlow", "PyTorch", "Data Science"],
-      experience: [{ title: "AI Research Scientist", company: "AI Labs", duration: "2021-Present" }],
-      createdAt: "2025-06-15T10:30:15.281+00:00",
-    },
-    {
-      _id: "6871e8c991f7f8a2e1874f6d",
-      name: "Alex Thompson",
-      email: "alex@meetxo.ai",
-      role: "candidate",
-      mobile: "9611329406",
-      avatar: "",
-      profile: {
-        professionalInformation: { workMode: "Full Time" },
-        bio: "Python Developer specializing in Django, experienced in robust backend development with 3 years of hands-on experience.",
-        preferredJobRole: "Backend Developer",
-      },
-      skills: ["Python", "Django", "Django Rest Framework", "PostgreSQL", "Docker", "Redis", "Celery", "AWS", "Git"],
-      experience: [{ title: "Python Developer", company: "WebDev Solutions", duration: "2022-Present" }],
-      createdAt: "2025-05-20T14:22:33.281+00:00",
-    },
-    {
-      _id: "6871e8c991f7f8a2e1874f6e",
-      name: "Aisha Kumar",
-      email: "aisha@meetxo.ai",
-      role: "candidate",
-      mobile: "9611329407",
-      avatar: "",
-      profile: {
-        professionalInformation: { workMode: "Contract" },
-        bio: "Java Backend Developer with extensive Spring Boot expertise and leadership experience in building scalable enterprise applications.",
-        preferredJobRole: "Senior Java Developer",
-      },
-      skills: ["Core Java", "Spring Boot", "Microservices", "MySQL", "MongoDB", "Kafka", "Docker", "Kubernetes"],
-      experience: [
-        { title: "Senior Java Developer", company: "Enterprise Solutions Ltd", duration: "2020-Present" },
-      ],
-      createdAt: "2025-04-18T09:15:22.281+00:00",
-    },
-    {
-      _id: "6871e8c991f7f8a2e1874f6f",
-      name: "Sophia Park",
-      email: "sophia@meetxo.ai",
-      role: "candidate",
-      mobile: "9611329408",
-      avatar: "",
-      profile: {
-        professionalInformation: { workMode: "Full Time" },
-        bio: "Versatile digital marketing strategist enhancing ROI through innovative campaigns and data-driven approaches with proven results.",
-        preferredJobRole: "Digital Marketing Manager",
-      },
-      skills: ["SEO", "SMM", "SEM", "Google Analytics", "Facebook Ads", "Content Strategy", "Email Marketing"],
-      experience: [
-        { title: "Digital Marketing Manager", company: "Marketing Pro Agency", duration: "2022-Present" },
-      ],
-      createdAt: "2025-03-10T16:45:11.281+00:00",
-    },
-    {
-      _id: "6871e8c991f7f8a2e1874f70",
-      name: "Samuel Singh",
-      email: "samuel@meetxo.ai",
-      role: "candidate",
-      mobile: "9611329409",
-      avatar: "",
-      profile: {
-        professionalInformation: { workMode: "Full Time" },
-        bio: "Creative Java developer, excels in scalable web applications, AWS proficient with strong problem-solving and team collaboration skills.",
-        preferredJobRole: "Full Stack Developer",
-      },
-      skills: ["Java 8/11/17", "Spring Boot", "React", "AWS", "Docker", "Microservices", "PostgreSQL", "Redis"],
-      experience: [{ title: "Full Stack Developer", company: "Innovation Tech", duration: "2021-Present" }],
-      createdAt: "2025-02-28T12:33:44.281+00:00",
-    },
-  ];
 
   const getInitials = (name) => {
     return name
@@ -173,14 +102,19 @@ const Index = () => {
       .toUpperCase()
       .slice(0, 2);
   };
-
-  const calculateExperience = (candidate) => {
-    if (candidate.experience?.length > 0) {
-      return `${candidate.experience.length} years`;
-    }
-    const accountAge = new Date().getFullYear() - new Date(candidate.createdAt).getFullYear();
-    return `${Math.max(1, accountAge)} years`;
-  };
+const calculateExperience = (candidate) => {
+  if (candidate.experience?.length > 0) {
+    const totalExperience = candidate.experience.reduce((acc, exp) => {
+      const from = new Date(exp.from);
+      const to = exp.to ? new Date(exp.to) : new Date();
+      const years = (to.getTime() - from.getTime()) / (1000 * 60 * 60 * 24 * 365);
+      return acc + Math.round(years);
+    }, 0);
+    return `${totalExperience} years`;
+  }
+  const accountAge = new Date().getFullYear() - new Date(candidate.createdAt).getFullYear();
+  return `${Math.max(1, accountAge)} years`;
+};
 
   const getSkillsDisplay = (candidate) => {
     if (candidate.skills?.length > 0) {
@@ -215,16 +149,17 @@ const Index = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Filter candidates based on search term in skills
-  const filteredCandidates = mockCandidates.filter((candidate) => {
-    if (!searchTerm) return true;
-    return candidate.skills.some((skill) => skill.toLowerCase().includes(searchTerm.toLowerCase()));
-  });
+const filteredCandidates = candidates.filter((candidate) => {
+  if (!searchTerm) return true;
+  return (candidate.skills || []).some((skill) =>
+    skill.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+});
 
   return (
     <>
       <Navbar />
-      <header className=" bg-white shadow-md border-b border-orange-100 sticky top-0 z-50">
+      <header className="bg-white shadow-md border-b border-orange-100 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-1 lg:py-3 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
@@ -232,14 +167,41 @@ const Index = () => {
                 src="/images/logo.png"
                 onClick={() => router.push("/")}
                 alt="EarlyJobs.ai"
-                className="h-12 lg:h-14"
+                className="h-12 lg:h-14 cursor-pointer"
               />
             </div>
             <nav className="hidden md:flex space-x-8 items-center">
-             
-              <Button className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-full transition-colors duration-200 font-semibold">
-                Login / SignUp
-              </Button>
+              {userCredentials ? (
+                <div className="flex items-center space-x-4">
+                  <Button
+                    variant="ghost"
+                    className="text-red-600 hover:bg-red-50 rounded-xl py-2 px-4 transition-all duration-300"
+                    onClick={handleLogout}
+                  >
+                    <LogOut className="h-5 w-5 mr-2" />
+                  </Button>
+                  <div className="flex items-center space-x-3 cursor-pointer" onClick={handleProfileClick}>
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage src={userCredentials.avatar} />
+                      <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
+                        {userCredentials?.name
+                          ?.split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                          ?.toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="text-sm font-medium text-gray-900">{userCredentials.name}</span>
+                  </div>
+                </div>
+              ) : (
+                <Button
+                  className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-full transition-colors duration-200 font-semibold"
+                  onClick={() => router.push("/signup")}
+                >
+                  Sign Up
+                </Button>
+              )}
             </nav>
             <div className="md:hidden flex items-center">
               <Button
@@ -301,10 +263,7 @@ const Index = () => {
                   <Button
                     variant="ghost"
                     className="w-full text-left justify-start text-red-600 hover:bg-red-50 rounded-xl py-3 px-4 transition-all duration-300"
-                    onClick={() => {
-                      handleLogout();
-                      setIsMobileMenuOpen(false);
-                    }}
+                    onClick={handleLogout}
                   >
                     <LogOut className="h-5 w-5 mr-2" />
                     Logout
@@ -313,12 +272,12 @@ const Index = () => {
                   <Button
                     className="w-full text-left justify-start bg-orange-600 hover:bg-orange-700 text-white rounded-xl py-3 px-4 shadow-lg hover:shadow-xl transition-all duration-300"
                     onClick={() => {
-                      router.push("/login");
+                      router.push("/signup");
                       setIsMobileMenuOpen(false);
                     }}
                   >
                     <LogIn className="h-5 w-5 mr-2" />
-                    Login
+                    Sign Up
                   </Button>
                 )}
               </div>
@@ -327,7 +286,6 @@ const Index = () => {
         </div>
       </header>
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-orange-50 to-white">
-        
         <div className="max-w-7xl mx-auto py-15 px-6">
           <div className="flex flex-col justify-between lg:flex-row">
             <div className="mb-8">
@@ -336,7 +294,6 @@ const Index = () => {
               </h1>
               <p className="text-lg text-gray-600">Discover talented professionals ready to join your team</p>
             </div>
-
             <div className="mb-8">
               <div className="lg:w-[35rem]">
                 <input
@@ -349,98 +306,107 @@ const Index = () => {
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {filteredCandidates.map((candidate) => (
-              <div
-                key={candidate._id}
-                className="group relative overflow-hidden rounded-2xl border-0 bg-gradient-to-br from-white to-orange-50 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-              >
-                <div className="p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="relative">
-                      <div className="h-16 w-16 rounded-full bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center text-white font-semibold text-lg ring-2 ring-orange-100">
-                        {candidate.avatar ? (
-                          <img
-                            src={candidate.avatar}
-                            alt={candidate.name}
-                            className="h-full w-full rounded-full object-cover"
-                          />
-                        ) : (
-                          getInitials(candidate.name)
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-bold text-lg text-gray-900 truncate">{candidate.name}</h3>
-                        <span className="text-gray-500 text-sm font-medium">
-                          | Exp: {calculateExperience(candidate)}
-                        </span>
-                      </div>
-
-                      <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-2">
-                        {candidate.profile?.bio
-                          ? candidate.profile.bio.substring(0, 120) +
-                            (candidate.profile.bio.length > 120 ? "..." : "")
-                          : `${candidate.role.charAt(0).toUpperCase() + candidate.role.slice(1)} with experience in various projects and technologies.`}
-                      </p>
-
-                      <div className="space-y-3">
-                        <div>
-                          <h4 className="text-sm font-semibold text-gray-900 mb-2">Expert in</h4>
-                          <div className="flex flex-wrap gap-2">
-                            {getSkillsDisplay(candidate).map((skill, index) => (
-                              <span
-                                key={index}
-                                className="bg-orange-100 hover:bg-orange-200 text-orange-800 border border-orange-200 text-xs px-2 py-1 rounded-md font-medium"
-                              >
-                                {skill}
-                              </span>
-                            ))}
-                            {candidate.skills?.length > 3 && (
-                              <span className="bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded-md font-medium">
-                                +{candidate.skills.length - 3} more
-                              </span>
+          {loading ? (
+            <div className="text-center py-10">
+              <p className="text-lg text-gray-600">Loading candidates...</p>
+            </div>
+          ) : error ? (
+            <div className="text-center py-10">
+              <p className="text-lg text-red-600">Error: {error}</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              {filteredCandidates.length > 0 ? (
+                filteredCandidates.map((candidate) => (
+                  <div
+                    key={candidate._id}
+                    className="group relative overflow-hidden rounded-2xl border-0 bg-gradient-to-br from-white to-orange-50 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                  >
+                    <div className="p-6">
+                      <div className="flex items-start gap-4">
+                        <div className="relative">
+                          <div className="h-16 w-16 rounded-full bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center text-white font-semibold text-lg ring-2 ring-orange-100">
+                            {candidate.avatar ? (
+                              <img
+                                src={candidate.avatar}
+                                alt={candidate.name}
+                                className="h-full w-full rounded-full object-cover"
+                              />
+                            ) : (
+                              getInitials(candidate.name)
                             )}
                           </div>
                         </div>
-
-                        <div>
-                          <h4 className="text-sm font-semibold text-gray-900 mb-2">Commitment</h4>
-                          <div className="flex flex-wrap gap-2 mb-4">
-                            {getCommitmentBadges(candidate).map((commitment, index) => (
-                              <span
-                                key={index}
-                                className={
-                                  index === 0
-                                    ? "bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded-md text-sm font-medium"
-                                    : "border border-orange-200 text-orange-700 hover:bg-orange-50 px-3 py-1 rounded-md text-sm font-medium"
-                                }
-                              >
-                                {commitment}
-                              </span>
-                            ))}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h3 className="font-bold text-lg text-gray-900 truncate">{candidate.name}</h3>
+                            <span className="text-gray-500 text-sm font-medium">
+                              | Exp: {calculateExperience(candidate)}
+                            </span>
                           </div>
+                          <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-2">
+                            {candidate.profile?.bio
+                              ? candidate.profile.bio.substring(0, 120) +
+                                (candidate.profile.bio.length > 120 ? "..." : "")
+                              : `${candidate.role.charAt(0).toUpperCase() + candidate.role.slice(1)} with experience in various projects and technologies.`}
+                          </p>
+                          <div className="space-y-3">
+                            <div>
+                              <h4 className="text-sm font-semibold text-gray-900 mb-2">Expert in</h4>
+                              <div className="flex flex-wrap gap-2">
+                                {getSkillsDisplay(candidate).map((skill, index) => (
+                                  <span
+                                    key={index}
+                                    className="bg-orange-100 hover:bg-orange-200 text-orange-800 border border-orange-200 text-xs px-2 py-1 rounded-md font-medium"
+                                  >
+                                    {skill}
+                                  </span>
+                                ))}
+                                {candidate.skills?.length > 3 && (
+                                  <span className="bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded-md font-medium">
+                                    +{candidate.skills.length - 3} more
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                            <div>
+                              <h4 className="text-sm font-semibold text-gray-900 mb-2">Commitment</h4>
+                              <div className="flex flex-wrap gap-2 mb-4">
+                                {getCommitmentBadges(candidate).map((commitment, index) => (
+                                  <span
+                                    key={index}
+                                    className={
+                                      index === 0
+                                        ? "bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded-md text-sm font-medium"
+                                        : "border border-orange-200 text-orange-700 hover:bg-orange-50 px-3 py-1 rounded-md text-sm font-medium"
+                                    }
+                                  >
+                                    {commitment}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => handleViewProfile(candidate)}
+                            className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-medium py-3 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
+                          >
+                            View profile
+                          </button>
                         </div>
                       </div>
-
-                      <button
-                        onClick={() => handleViewProfile(candidate)}
-                        className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-medium py-3 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
-                      >
-                        View profile
-                      </button>
                     </div>
                   </div>
+                ))
+              ) : (
+                <div className="text-center col-span-full py-10">
+                  <p className="text-lg text-gray-600">No candidates match your search criteria.</p>
                 </div>
-              </div>
-            ))}
-          </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
-
-      {/* Dialog for Profile Form */}
       {isDialogOpen && (
         <div className="fixed inset-0 bg-black/20 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl">
@@ -528,7 +494,6 @@ const Index = () => {
           </div>
         </div>
       )}
-
       <Footer />
     </>
   );

@@ -8,6 +8,7 @@ import WhyFranchise from "../components/Franchise/WhyFranchise";
 import EarningModel from "../components/Franchise/EarningModel";
 import SetupRequirements from "../components/Franchise/SetupRequirements";
 import FranchiseRoadmap from "../components/Franchise/FranchiseRoadmap";
+import Navbar from '../components/pages/navbar';
 
 import LimitedOffer from "../components/Franchise/LimitedOffer";
 import FAQ from "../components/Franchise/FAQ";
@@ -19,6 +20,7 @@ const Franchise = () => {
   }, [])
   return (
     <div className="min-h-screen bg-white">
+      <Navbar />
       <Header />
       <Hero />
       <ProblemSolution />
