@@ -582,7 +582,25 @@ const JobDetailsClient = ({ jobData, currentUrl }: JobDetailsClientProps) => {
                   style={{ color: '#ff6b35' }}
                   onClick={() => window.open('/assessments', '_blank')}
                 >
-                  Start Assessments
+                  Get Assessments
+                </Button>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-lg p-4 shadow-sm mt-6">
+              <div className="text-center">
+                <h3 className="font-semibold text-earlyjobs-text mb-3">
+                  Build a Standout Resume!
+                </h3>
+                <p className="text-sm text-gray-700 mb-4">
+                  Use our AI Resume Builder to create a professional resume and increase your chances of landing your dream job!
+                </p>
+                <Button 
+                  className="bg-white hover:bg-gray-50 font-medium px-6 py-2 border-2 border-earlyjobs-orange"
+                  style={{ color: '#ff6b35' }}
+                  onClick={() => window.open('/airesume', '_blank')}
+                >
+                  Create AI Resume
                 </Button>
               </div>
             </div>

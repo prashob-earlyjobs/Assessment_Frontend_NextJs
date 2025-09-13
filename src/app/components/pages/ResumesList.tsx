@@ -1,9 +1,7 @@
-
-// ResumeList.tsx
 "use client"
 import { useState, useEffect, useMemo } from "react"
 import { Button } from "../ui/button"
-import { FileText, Download, Search, Upload, Pencil } from "lucide-react"
+import { FileText, Download, Search, Upload, Pencil, X } from "lucide-react"
 import { formatDistanceToNow, format } from "date-fns"
 import Cookies from "js-cookie"
 import Header from "./header"
@@ -22,6 +20,7 @@ export default function ResumeList() {
   const [query, setQuery] = useState("")
   const [resumes, setResumes] = useState<Resume[]>([])
   const [loading, setLoading] = useState(true)
+  const [showPopup, setShowPopup] = useState(false)
   const router = useRouter()
   const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL 
 
@@ -47,7 +46,6 @@ export default function ResumeList() {
         }
 
         if (result.success && result.data) {
-         
           const sortedResumes = result.data.sort((a: Resume, b: Resume) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
           )
@@ -64,13 +62,20 @@ export default function ResumeList() {
     }
 
     fetchResumes()
+
+    // Show popup after 3 seconds
+    const timer = setTimeout(() => {
+      setShowPopup(true)
+    }, 3000)
+
+    return () => clearTimeout(timer)
   }, [])
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
     if (!q) return resumes
     return resumes.filter((resume) =>
-      ( `Resume - ${format(new Date(resume.createdAt), "MM-dd-yyyy")}`)
+      (`Resume - ${format(new Date(resume.createdAt), "MM-dd-yyyy")}`)
         .toLowerCase()
         .includes(q)
     )
@@ -87,40 +92,6 @@ export default function ResumeList() {
   const handleEdit = (resumeId: string) => {
     router.push(`/resumeBuilder?resumeId=${resumeId}`)
   }
-
-//   const handleDownload = async (resumeId: string, fullName: string) => {
-//     try {
-//       const token = Cookies.get("accessToken")
-//       if (!token) {
-//         toast.error("Please log in to download your resume")
-//         return
-//       }
-
-//       const response = await fetch(`${API_BASE_URL}/resumes/${resumeId}/pdf`, {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//       })
-
-//       if (!response.ok) {
-//         throw new Error("Failed to download resume")
-//       }
-
-//       const blob = await response.blob()
-//       const url = window.URL.createObjectURL(blob)
-//       const a = document.createElement("a")
-//       a.href = url
-//       a.download = `${fullName || "resume"}.pdf`
-//       document.body.appendChild(a)
-//       a.click()
-//       document.body.removeChild(a)
-//       window.URL.revokeObjectURL(url)
-//       toast.success("Resume downloaded successfully!")
-//     } catch (error: any) {
-//       console.error("Failed to download resume:", error)
-//       toast.error("Failed to download resume. Please try again.")
-//     }
-//   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-white">
@@ -201,7 +172,7 @@ export default function ResumeList() {
                           addSuffix: true,
                         })}
                       </p>
-                       <p className="mt-1 text-xs text-slate-600">
+                      <p className="mt-1 text-xs text-slate-600">
                         Updated{" "}
                         {formatDistanceToNow(new Date(resume.updatedAt), {
                           addSuffix: true,
@@ -218,15 +189,72 @@ export default function ResumeList() {
                     >
                       <Pencil className="h-4 w-4 mr-1" /> Edit
                     </Button>
-                  
                   </div>
                 </div>
               </div>
             ))}
           </div>
         )}
+
+        {showPopup && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-8 max-w-2xl w-full mx-4 flex flex-col md:flex-row gap-10 relative">
+              <button
+                onClick={() => setShowPopup(false)}
+                className="absolute top-2 right-2 text-slate-600 hover:text-slate-900"
+              >
+                <X className="h-6 w-6" />
+              </button>
+
+              {/* Skill Assessments Section */}
+              <div className="flex-1">
+                <img
+                  src="/images/Herooo.jpg"
+                  alt="Skill Assessment Promotion"
+                  className="w-full h-32 object-cover rounded-md mb-4"
+                />
+                <h3 className="text-lg font-semibold text-slate-900">
+                  Boost Your Skills with Assessments
+                </h3>
+                <p className="mt-2 text-sm text-slate-600">
+                  Take our tailored skill assessments to identify your strengths and areas for improvement. Unlock personalized learning paths to elevate your career!
+                </p>
+                <div className="text-center">
+                <Button
+                  className="mt-4 bg-orange-500 text-white hover:bg-orange-600"
+                  onClick={() => router.push("/assessments")}
+                >
+                  Get Assessment
+                </Button>
+                </div>
+              </div>
+
+              {/* Job Applications Section */}
+              <div className="flex-1">
+                <img
+                  src="/images/PopupImage2.jpg"
+                  alt="Job Applications Promotion"
+                  className="w-full h-32 object-cover rounded-md mb-4"
+                />
+                <h3 className="text-lg font-semibold text-slate-900">
+                  Apply for Your Dream Job
+                </h3>
+                <p className="mt-2 text-sm text-slate-600">
+                  Explore thousands of job opportunities tailored to your skills and experience. Submit your resume and start your journey to a new career today!
+                </p>
+                <div className="text-center">
+                <Button
+                  className="mt-4 bg-orange-500 text-white hover:bg-orange-600"
+                  onClick={() => router.push("/jobs")}
+                >
+                  Browse Jobs
+                </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   )
 }
-
