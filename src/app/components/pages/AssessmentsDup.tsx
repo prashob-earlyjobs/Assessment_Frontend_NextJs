@@ -174,84 +174,76 @@ export default function Assessments() {
     return (
         <div>
             {/* Hero Section */}
-            <section className="min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-orange-400 to-purple-400  pb-6 sm:pt-6 sm:pb-8 lg:pt-0 lg:pb-12 px-4 sm:px-8 md:px-12 lg:px-20">
-                <div className="w-full max-w-7xl mx-auto">
-                    <div className="grid lg:grid-cols-2 gap-6 lg:gap-10 items-center">
-                        {/* Left Content */}
-                        <div className="animate-fade-in text-center lg:text-left">
-                            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-white leading-tight mb-4">
-                                Advance Your Career with {" "}
-                                <span className="bg-gradient-to-r from-white to-orange-100 bg-clip-text text-transparent">
-                                   AI-Powered Skill Assessments
+           <section className="min-h-[80vh] lg:min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-orange-400 to-purple-400 pb-4 sm:pt-4 sm:pb-6 md:pt-0 lg:pb-12 px-4 sm:px-8 md:px-12 lg:px-20">
+    <div className="w-full mx-auto">
+        <div className="grid lg:grid-cols-2 gap-6 lg:gap-10 items-center">
+            {/* Left Content */}
+            <div className="animate-fade-in text-center lg:text-left">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-white leading-tight mb-4">
+                    Advance Your Career with {" "}
+                    <span className="bg-gradient-to-r from-white to-orange-100 bg-clip-text text-transparent">
+                        AI-Powered Skill Assessments
+                    </span>
+                </h1>
+                <p className="text-sm sm:text-base md:text-lg text-orange-100 mb-6 max-w-xl mx-auto lg:mx-0">
+                    Join thousands of job seekers and access 300+ online assessments, expert mentorship, and career certificates.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start mb-6">
+                    <Button
+                        onClick={() => router.push("/assessments")}
+                        className="bg-white text-orange-600 hover:bg-orange-50 font-semibold py-2 px-4 sm:py-2.5 sm:px-5 rounded-xl text-sm sm:text-base transition-all duration-300 transform hover:scale-105 shadow-lg"
+                    >
+                        View Assessments
+                        <ArrowRight className="inline-block ml-2 w-4 h-4 sm:w-5 sm:h-5" />
+                    </Button>
+                </div>
+            </div>
 
-                                </span>
-                            </h1>
-                            <p className="text-sm sm:text-base md:text-lg text-orange-100 mb-6 max-w-xl mx-auto lg:mx-0">
-                               Join thousands of job seekers and access 300+ online assessments, expert mentorship, and career certificates.</p>
-                            <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start mb-6">
-                                <Button
-                                    onClick={() => router.push("/assessments")}
-                                    className="bg-white text-orange-600 hover:bg-orange-50 font-semibold py-2 px-4 sm:py-2.5 sm:px-5 rounded-xl text-sm sm:text-base transition-all duration-300 transform hover:scale-105 shadow-lg"
-                                >
-                                    View Assessments
-                                    <ArrowRight className="inline-block ml-2 w-4 h-4 sm:w-5 sm:h-5" />
-                                </Button>
-                                {/* <Button
-                                    onClick={() => setWatchDemo(!watchDemo)}
-                                    className="border-2 border-white text-white hover:bg-white hover:text-orange-600 font-semibold py-2 px-4 sm:py-2.5 sm:px-5 rounded-xl text-sm sm:text-base transition-all duration-300 shadow-lg"
-                                >
-                                    Watch Demo
-                                    <ArrowRight className="inline-block ml-2 w-4 h-4 sm:w-5 sm:h-5" />
-                                </Button> */}
-                            </div>
+            {/* Right Video */}
+            <div className="relative lg:order-last order-first flex justify-center mt-6 lg:mt-0">
+                <div className="relative w-full max-w-[20rem] sm:max-w-[28rem] h-[14rem] sm:h-[20rem] lg:h-[23rem] lg:max-w-[38rem] animate-float">
+                    <div className="relative z-20 w-full h-full">
+                        <img
+                            src="/images/Herrrooo.jpg"
+                            className="w-full h-full object-cover rounded-2xl shadow-2xl"
+                        />
+                    </div>
+                    <div className="absolute -top-2 -right-2 bg-white rounded-xl p-1.5 sm:p-2 shadow-xl animate-bounce z-30" style={{ animationDelay: "0.5s" }}>
+                        <div className="flex items-center gap-1 sm:gap-2">
+                            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-500 rounded-full animate-pulse"></div>
+                            <span className="text-xs font-semibold text-gray-800">Online</span>
                         </div>
-
-                        {/* Right Video */}
-                        <div className="relative lg:order-last order-first flex justify-center mt-6 lg:mt-0">
-                            <div className="relative w-full max-w-[20rem] sm:max-w-[28rem] h-[14rem] sm:h-[20rem] lg:h-[26rem] lg:max-w-[40rem] animate-float">
-                                <div className="relative z-20 w-full h-full">
-                                    <img
-                                        src="/images/Herrrooo.jpg"
-                                        
-                                        className="w-full h-full object-cover rounded-2xl shadow-2xl"
-                                    />
-                                </div>
-                                <div className="absolute -top-2 -right-2 bg-white rounded-xl p-1.5 sm:p-2 shadow-xl animate-bounce z-30" style={{ animationDelay: "0.5s" }}>
-                                    <div className="flex items-center gap-1 sm:gap-2">
-                                        <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-500 rounded-full animate-pulse"></div>
-                                        <span className="text-xs font-semibold text-gray-800">Online</span>
-                                    </div>
-                                </div>
-                                <div className="absolute -bottom-2 -left-2 bg-white rounded-xl p-1.5 sm:p-2 shadow-xl animate-bounce z-30" style={{ animationDelay: "1s" }}>
-                                    <div className="flex items-center gap-1 sm:gap-2">
-                                        <Trophy className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-500 animate-pulse" style={{ animationDuration: "3s" }} />
-                                        <span className="text-xs font-semibold text-gray-800">Certificate</span>
-                                    </div>
-                                </div>
-                                <div className="absolute top-1/3 -left-2 sm:-left-4 bg-white rounded-lg p-1.5 sm:p-2 shadow-lg animate-pulse z-30">
-                                    <div className="flex items-center gap-1 sm:gap-2">
-                                        <BookOpen className="w-3 h-3 sm:w-4 sm:h-4 text-orange-500" />
-                                        <div>
-                                            <div className="text-xs font-medium text-gray-800">Progress</div>
-                                            <div className="w-10 sm:w-12 h-1 sm:h-1.5 bg-gray-200 rounded-full">
-                                                <div className="w-7 sm:w-9 h-1 sm:h-1.5 bg-orange-500 rounded-full animate-pulse"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="absolute top-2/3 -right-2 sm:-right-4 bg-white rounded-lg p-1.5 sm:p-2 shadow-lg animate-pulse z-30" style={{ animationDelay: "1.5s" }}>
-                                    <div className="flex items-center gap-1 sm:gap-2">
-                                        <Users className="w-3 h-3 sm:w-4 sm:h-4 text-blue-500" />
-                                        <div>
-                                            <div className="text-xs font-medium text-gray-800">Job Seekers</div>
-                                        </div>
-                                    </div>
+                    </div>
+                    <div className="absolute -bottom-2 -left-2 bg-white rounded-xl p-1.5 sm:p-2 shadow-xl animate-bounce z-30" style={{ animationDelay: "1s" }}>
+                        <div className="flex items-center gap-1 sm:gap-2">
+                            <Trophy className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-500 animate-pulse" style={{ animationDuration: "3s" }} />
+                            <span className="text-xs font-semibold text-gray-800">Certificate</span>
+                        </div>
+                    </div>
+                    <div className="absolute top-1/3 -left-2 sm:-left-4 bg-white rounded-lg p-1.5 sm:p-2 shadow-lg animate-pulse z-30">
+                        <div className="flex items-center gap-1 sm:gap-2">
+                            <BookOpen className="w-3 h-3 sm:w-4 sm:h-4 text-orange-500" />
+                            <div>
+                                <div className="text-xs font-medium text-gray-800">Progress</div>
+                                <div className="w-10 sm:w-12 h-1 sm:h-1.5 bg-gray-200 rounded-full">
+                                    <div className="w-7 sm:w-9 h-1 sm:h-1.5 bg-orange-500 rounded-full animate-pulse"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div className="absolute top-2/3 -right-2 sm:-right-4 bg-white rounded-lg p-1.5 sm:p-2 shadow-lg animate-pulse z-30" style={{ animationDelay: "1.5s" }}>
+                        <div className="flex items-center gap-1 sm:gap-2">
+                            <Users className="w-3 h-3 sm:w-4 sm:h-4 text-blue-500" />
+                            <div>
+                                <div className="text-xs font-medium text-gray-800">Job Seekers</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </section>
+            </div>
+        </div>
+    </div>
+</section>
 
             {/* Search Courses Section */}
             <section className="py-8 sm:py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
@@ -292,32 +284,40 @@ export default function Assessments() {
             </section>
 
             {/* Features Section */}
+
             <section className="py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-8 sm:mb-10">
-                        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-3">Features From Our Assessments</h2>
+                        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+                            Features From Our Assessments
+                        </h2>
                         <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">
-                            Discover why job seekers choose <span className="font-semibold text-orange-600">EarlyJobs.ai</span> for their professional development
+                            Discover why job seekers choose{" "}
+                            <span className="font-semibold text-orange-600">EarlyJobs.ai</span> for
+                            their professional development
                         </p>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6  mb-10">
                         {features.map((feature, index) => {
                             const { ref, isVisible } = useScrollAnimation();
                             return (
                                 <div
                                     key={index}
                                     ref={ref}
-                                    className={`transition-all duration-700 delay-${index * 200} ${isVisible ? "animate-slide-up opacity-100" : "opacity-0 translate-y-10"}`}
+                                    className={`transition-all duration-700 delay-${index * 200
+                                        } ${isVisible ? "animate-slide-up opacity-100" : "opacity-0 translate-y-10"}`}
                                 >
-                                    <div className="bg-white text-center p-4 sm:p-5 hover:shadow-xl transition-all duration-500 transform hover:-translate-y-3 hover:scale-105 border-0 shadow-md rounded-lg group">
-                                        <div className="pt-3 sm:pt-4">
+                                    <div className="bg-white text-center p-4 sm:p-5 border-2 border-gray-100 transition-all duration-500 transform hover:-translate-y-3 hover:scale-105 border-0  rounded-lg group flex flex-col h-64">
+                                        <div className="pt-3 sm:pt-4 flex flex-col items-center flex-grow">
                                             <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-orange-100 rounded-full mb-3 text-orange-600 group-hover:bg-orange-200 group-hover:scale-110 transition-all duration-300">
                                                 {feature.icon}
                                             </div>
                                             <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors">
                                                 {feature.title}
                                             </h3>
-                                            <p className="text-sm sm:text-base text-gray-600">{feature.description}</p>
+                                            <p className="text-sm sm:text-base text-gray-600 overflow">
+                                                {feature.description}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>

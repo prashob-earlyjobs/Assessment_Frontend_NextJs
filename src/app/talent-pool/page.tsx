@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Head from "next/head"; // Import Head from next/head
+import { useState, useEffect, useRef } from "react";
+import Head from "next/head";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
@@ -13,6 +13,35 @@ import { useUser } from "../context";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import { toast } from "sonner";
 import { userLogout } from "../components/services/servicesapis";
+
+const useScrollAnimation = () => {
+    const ref = useRef(null);
+    const [isVisible, setIsVisible] = useState(false);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true);
+                    observer.unobserve(entry.target);
+                }
+            },
+            { threshold: 0.1 }
+        );
+
+        if (ref.current) {
+            observer.observe(ref.current);
+        }
+
+        return () => {
+            if (ref.current) {
+                observer.unobserve(ref.current);
+            }
+        };
+    }, []);
+
+    return { ref, isVisible };
+};
 
 const Index = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -134,7 +163,7 @@ const Index = () => {
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.earlyjobs.ai/" />
-        <meta property="og:image" content="/images/og-image.jpg" /> {/* Replace with actual image URL */}
+        <meta property="og:image" content="/images/og-image.jpg" />
         <meta property="og:site_name" content="EarlyJobs.ai" />
 
         {/* Twitter Card Meta Tags */}
@@ -144,8 +173,8 @@ const Index = () => {
           name="twitter:description"
           content="Join EarlyJobs Talent Pool and land jobs faster with AI-powered matching. Optional skill assessments, verified profiles, and a 30-day placement guarantee."
         />
-        <meta name="twitter:image" content="/images/twitter-image.jpg" /> {/* Replace with actual image URL */}
-        <meta name="twitter:site" content="@EarlyJobsAI" /> {/* Replace with actual Twitter handle */}
+        <meta name="twitter:image" content="/images/twitter-image.jpg" />
+        <meta name="twitter:site" content="@EarlyJobsAI" />
 
         {/* Canonical URL */}
         <link rel="canonical" href="https://www.earlyjobs.ai/" />
@@ -258,65 +287,63 @@ const Index = () => {
             <div onClick={() => router.push("/")} className="flex items-center">
               <img src="/images/logo.png" alt="EarlyJobs Logo" className="h-12 lg:h-14 w-auto cursor-pointer" />
             </div>
-         <div className="hidden md:flex items-center space-x-8">
-  <a
-    href="#talent-pool"
-    className="text-muted-foreground hover:text-orange-500 transition-colors"
-  >
-    Talent Pool
-  </a>
-  <a
-    href="#process"
-    className="text-muted-foreground hover:text-orange-500 transition-colors"
-  >
-    Process
-  </a>
-  <a
-    href="#benefits"
-    className="text-muted-foreground hover:text-orange-500 transition-colors"
-  >
-    Benefits
-  </a>
-  <a
-    href="#faq"
-    className="text-muted-foreground hover:text-orange-500 transition-colors"
-  >
-    FAQ
-  </a>
-  {userCredentials ? (
-    <div className="flex items-center space-x-4">
-       <Button
-        variant="ghost"
-        className="text-red-600 hover:bg-red-50 rounded-xl py-2 px-4 transition-all duration-300"
-        onClick={handleLogout}
-      >
-        <LogOut className="h-5 w-5 mr-2" />
-      
-      </Button>
-      <div className="flex items-center space-x-3 cursor-pointer" onClick={handleProfileClick}>
-        <Avatar className="h-10 w-10">
-          <AvatarImage src={userCredentials.avatar} />
-          <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
-            {userCredentials?.name
-              ?.split(" ")
-              .map((n) => n[0])
-              .join("")
-              ?.toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
-        <span className="text-sm font-medium text-gray-900">{userCredentials.name}</span>
-      </div>
-     
-    </div>
-  ) : (
-    <Button
-      className="bg-orange-500 hover:bg-orange-600 text-white shadow-md rounded-xl"
-      onClick={() => router.push("/signup")}
-    >
-      Sign Up
-    </Button>
-  )}
-</div>
+            <div className="hidden md:flex items-center space-x-8">
+              <a
+                href="#talent-pool"
+                className="text-muted-foreground hover:text-orange-500 transition-colors"
+              >
+                Talent Pool
+              </a>
+              <a
+                href="#process"
+                className="text-muted-foreground hover:text-orange-500 transition-colors"
+              >
+                Process
+              </a>
+              <a
+                href="#benefits"
+                className="text-muted-foreground hover:text-orange-500 transition-colors"
+              >
+                Benefits
+              </a>
+              <a
+                href="#faq"
+                className="text-muted-foreground hover:text-orange-500 transition-colors"
+              >
+                FAQ
+              </a>
+              {userCredentials ? (
+                <div className="flex items-center space-x-4">
+                  <Button
+                    variant="ghost"
+                    className="text-red-600 hover:bg-red-50 rounded-xl py-2 px-4 transition-all duration-300"
+                    onClick={handleLogout}
+                  >
+                    <LogOut className="h-5 w-5 mr-2" />
+                  </Button>
+                  <div className="flex items-center space-x-3 cursor-pointer" onClick={handleProfileClick}>
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage src={userCredentials.avatar} />
+                      <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
+                        {userCredentials?.name
+                          ?.split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                          ?.toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="text-sm font-medium text-gray-900">{userCredentials.name}</span>
+                  </div>
+                </div>
+              ) : (
+                <Button
+                  className="bg-orange-500 hover:bg-orange-600 text-white shadow-md rounded-xl"
+                  onClick={() => router.push("/signup")}
+                >
+                  Sign Up
+                </Button>
+              )}
+            </div>
             <div className="md:hidden flex items-center">
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -365,7 +392,7 @@ const Index = () => {
               <Button
                 variant="ghost"
                 className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
-                onClick={() => handleMobileMenuItemClick("/colleges")}
+                onClick={() => handleMobileMenuItemClick("/college-partnerships")}
               >
                 Colleges
               </Button>
@@ -566,7 +593,9 @@ const Index = () => {
               <Clock className="w-4 h-4 mr-2" />
               Quick & Easy Process
             </Badge>
-            <h2 className="text-3xl md:text-5xl font-bold mb-6">Get Started</h2>
+            <h2 className="text-3xl md:text-5xl font-bold mb-6">
+              Get Started
+            </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Our streamlined process gets you from application to interview-ready in just a few simple steps
             </p>
@@ -815,26 +844,35 @@ const Index = () => {
             </p>
           </div>
           <div className="grid md:grid-cols-2 gap-8">
-            {faqs.map((faq, index) => (
-              <Card key={index} className="bg-white shadow-card border-orange-100 animate-scale-on-hover">
-                <CardContent 
-                  className="p-6 cursor-pointer" 
-                  onClick={() => toggleFaq(index)}
+            {faqs.map((faq, index) => {
+              const { ref, isVisible } = useScrollAnimation();
+              return (
+                <div
+                  key={index}
+                  ref={ref}
+                  className={`transition-all duration-700 delay-${index * 150} ${isVisible ? "animate-slide-up opacity-100" : "opacity-0 translate-y-10"}`}
                 >
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-lg font-semibold">{faq.question}</h3>
-                    {faqOpen === index ? (
-                      <ChevronUp className="w-6 h-6 text-orange-500" />
-                    ) : (
-                      <ChevronDown className="w-6 h-6 text-orange-500" />
-                    )}
-                  </div>
-                  {faqOpen === index && (
-                    <p className="text-muted-foreground mt-4">{faq.answer}</p>
-                  )}
-                </CardContent>
-              </Card>
-            ))}
+                  <Card className="bg-white shadow-card border-orange-100">
+                    <CardContent
+                      className="p-6 cursor-pointer"
+                      onClick={() => toggleFaq(index)}
+                    >
+                      <div className="flex justify-between items-center">
+                        <h3 className="text-lg font-semibold">{faq.question}</h3>
+                        {faqOpen === index ? (
+                          <ChevronUp className="w-6 h-6 text-orange-500" />
+                        ) : (
+                          <ChevronDown className="w-6 h-6 text-orange-500" />
+                        )}
+                      </div>
+                      {faqOpen === index && (
+                        <p className="text-muted-foreground mt-4">{faq.answer}</p>
+                      )}
+                    </CardContent>
+                  </Card>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -850,7 +888,7 @@ const Index = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
-              onClick={()=> router.push("/assessments")}
+              onClick={() => router.push("/assessments")}
               size="lg"
               variant="secondary"
               className="bg-white text-orange-500 hover:bg-gray-100 text-lg px-8 py-6 animate-scale-on-hover"

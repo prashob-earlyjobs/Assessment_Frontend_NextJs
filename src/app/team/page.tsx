@@ -5,7 +5,7 @@ import { MutatingDots } from 'react-loader-spinner';
 import { metaConstants } from '../utils/metaConstants';
 import Header from '../components/pages/header';
 import Footer from '../components/pages/footer';
-
+import Navbar from '../components/pages/navbar';
 const apiStatusConstants = {
     initial: 'INITIAL',
     loading: 'LOADING',
@@ -99,6 +99,7 @@ const TeamPage: React.FC = () => {
         const operatingTeam = teamMembers.filter(member => member.category === 'Operating Team');
         
         return (
+            
             <div className="px-8 py-16 sm:px-6 sm:py-12 max-w-7xl mx-auto">
                 {seniorRecruiters.length > 0 && (
                     <>
@@ -341,6 +342,7 @@ const TeamPage: React.FC = () => {
 
     return (
         <>
+        <Navbar />
         <Header/>
         <div className="min-h-screen bg-gray-50">
             <div className="bg-[#EB6A4D] py-4">

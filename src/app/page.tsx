@@ -88,107 +88,109 @@ const Index = () => {
     <div className="min-h-screen bg-white">
       <Navbar />
       <header className="flex items-center justify-between px-4 py-3 lg:px-18 bg-white/80 backdrop-blur-sm sticky md:top-0 z-300 shadow-sm">
-        <div className="flex items-center space-x-2">
-          <img
-            src="/images/logo.png"
-            alt="EarlyJobs Logo"
-            className="h-14 lg:h-16 w-auto cursor-pointer"
-          />
+  <div className="flex items-center space-x-2">
+    <img
+      src="/images/logo.png"
+      alt="EarlyJobs Logo"
+      className="h-14 lg:h-16 w-auto cursor-pointer"
+    />
+  </div>
+
+  <div className="hidden md:flex items-center">
+    <ToggleGroup
+      type="single"
+      value={activeSection}
+      onValueChange={handleToggleChange}
+      className="bg-orange-50 p-1 rounded-2xl border border-orange-100 pointer-events-auto"
+      aria-label="Section navigation"
+    >
+      <ToggleGroupItem
+        value="apply"
+        className="flex items-center gap-2 px-4 py-2 lg:px-6 lg:py-3 rounded-xl data-[state=on]:bg-orange-500 data-[state=on]:text-white data-[state=on]:shadow-lg text-gray-600 hover:text-orange-600 transition-all duration-300"
+        aria-label="Apply Jobs"
+      >
+        <Briefcase className="h-4 w-4" />
+        Apply Jobs
+      </ToggleGroupItem>
+      <ToggleGroupItem
+        value="assessments"
+        className="flex items-center gap-2 px-4 py-2 lg:px-6 lg:py-3 rounded-xl data-[state=on]:bg-orange-500 data-[state=on]:text-white data-[state=on]:shadow-lg text-gray-600 hover:text-orange-600 transition-all duration-300"
+        aria-label="Assessments"
+      >
+        <ClipboardCheck className="h-4 w-4" />
+        Assessments
+      </ToggleGroupItem>
+      <ToggleGroupItem
+        value="resume"
+        className="flex items-center gap-2 px-4 py-2 lg:px-6 lg:py-3 rounded-xl data-[state=on]:bg-orange-500 data-[state=on]:text-white data-[state=on]:shadow-lg text-gray-600 hover:text-orange-600 transition-all duration-300"
+        aria-label="Resume"
+      >
+        <FileText className="h-4 w-4" />
+        Resume
+      </ToggleGroupItem>
+    </ToggleGroup>
+  </div>
+
+  <div className="flex items-center space-x-4">
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+      className="md:hidden rounded-2xl p-3 hover:bg-orange-50 hover:text-orange-600 transition-colors"
+      aria-label="Toggle mobile menu"
+    >
+      {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+    </Button>
+
+    {userCredentials !== null ? (
+      <div className="hidden md:flex items-center space-x-4">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setShowLogoutDialog(true)}
+          className="rounded-2xl p-3 hover:bg-red-50 hover:text-red-600 transition-colors"
+        >
+          <LogOut className="h-5 w-5" />
+        </Button>
+
+        <div
+          className="flex items-center space-x-3 cursor-pointer"
+          onClick={handleProfileClick}
+        >
+          <Avatar className="h-10 w-10">
+            <AvatarImage src={userCredentials.avatar} />
+            <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
+              {userCredentials?.name
+                ?.split(" ")
+                .map((n) => n[0])
+                .join("")
+                ?.toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <div className="hidden md:block">
+            <p className="text-sm font-medium text-gray-900">
+              {userCredentials.name}
+            </p>
+            <p className="text-xs text-gray-500">
+              {userCredentials.profile?.preferredJobRole}
+            </p>
+          </div>
         </div>
-
-        <div className="hidden md:flex items-center">
-          <ToggleGroup
-            type="single"
-            value={activeSection}
-            onValueChange={handleToggleChange}
-            className="bg-orange-50 p-1 rounded-2xl border border-orange-100 pointer-events-auto"
-            aria-label="Section navigation"
-          >
-            <ToggleGroupItem
-              value="apply"
-              className="flex items-center gap-2 px-4 py-2 lg:px-6 lg:py-3 rounded-xl data-[state=on]:bg-orange-500 data-[state=on]:text-white data-[state=on]:shadow-lg text-gray-600 hover:text-orange-600 transition-all duration-300"
-              aria-label="Apply Jobs"
-            >
-              <Briefcase className="h-4 w-4" />
-              Apply Jobs
-            </ToggleGroupItem>
-            <ToggleGroupItem
-              value="assessments"
-              className="flex items-center gap-2 px-4 py-2 lg:px-6 lg:py-3 rounded-xl data-[state=on]:bg-orange-500 data-[state=on]:text-white data-[state=on]:shadow-lg text-gray-600 hover:text-orange-600 transition-all duration-300"
-              aria-label="Assessments"
-            >
-              <ClipboardCheck className="h-4 w-4" />
-              Assessments
-            </ToggleGroupItem>
-            <ToggleGroupItem
-              value="resume"
-              className="flex items-center gap-2 px-4 py-2 lg:px-6 lg:py-3 rounded-xl data-[state=on]:bg-orange-500 data-[state=on]:text-white data-[state=on]:shadow-lg text-gray-600 hover:text-orange-600 transition-all duration-300"
-              aria-label="Resume"
-            >
-              <FileText className="h-4 w-4" />
-              Resume
-            </ToggleGroupItem>
-          </ToggleGroup>
-        </div>
-
-        <div className="flex items-center space-x-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden rounded-2xl p-3 hover:bg-orange-50 hover:text-orange-600 transition-colors"
-            aria-label="Toggle mobile menu"
-          >
-            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </Button>
-
-          {userCredentials !== null ? (
-            <div className="hidden md:flex items-center space-x-4">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowLogoutDialog(true)}
-                className="rounded-2xl p-3 hover:bg-red-50 hover:text-red-600 transition-colors"
-              >
-                <LogOut className="h-5 w-5" />
-              </Button>
-
-              <div
-                className="flex items-center space-x-3 cursor-pointer"
-                onClick={handleProfileClick}
-              >
-                <Avatar className="h-10 w-10">
-                  <AvatarImage src={userCredentials.avatar} />
-                  <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
-                    {userCredentials?.name
-                      ?.split(" ")
-                      .map((n) => n[0])
-                      .join("")
-                      ?.toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="hidden md:block">
-                  <p className="text-sm font-medium text-gray-900">
-                    {userCredentials.name}
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    {userCredentials.profile?.preferredJobRole}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <Button
-              onClick={() => router.push("/login")}
-              className="hidden md:block flex bg-orange-700 hover:bg-orange-600 text-white rounded-2xl px-4 py-2 lg:px-6 lg:py-2 shadow-lg hover:shadow-xl transition-all duration-300 w-full "
-              aria-label="Login"
-            >
-              <LogIn className="h-5 w-5 mr-2 inline" />
-              Login
-            </Button>
-          )}
-        </div>
-      </header>
+      </div>
+    ) : (
+      <div className="hidden md:flex items-center">
+        <Button
+          onClick={() => router.push("/login")}
+          className="flex bg-orange-700 hover:bg-orange-600 text-white rounded-2xl px-4 py-2 lg:px-6 lg:py-2 shadow-lg hover:shadow-xl transition-all duration-300 w-full"
+          aria-label="Login"
+        >
+          <LogIn className="h-5 w-5 mr-2 inline" />
+          Login
+        </Button>
+      </div>
+    )}
+  </div>
+</header>
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (

@@ -189,10 +189,10 @@ export default function Index() {
 
   return (
     <div className="bg-gradient-to-b from-white via-orange-100/90 to-orange-50/40 mx-auto">
-      <section className="relative h-screen">
+      <section className="relative min-h-[70vh] sm:min-h-[80vh] md:min-h-screen">
         <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[600px] sm:h-[700px] md:h-[900px] bg-[radial-gradient(70%_70%_at_15%_5%,rgba(251,146,60,0.6),transparent_60%),radial-gradient(60%_60%_at_85%_10%,rgba(249,115,22,0.55),transparent_60%),radial-gradient(50%_50%_at_50%_40%,rgba(253,186,116,0.4),transparent_70%)]" />
 
-        <div className="container mx-auto grid gap-8 px-6 pt-8 pb-4 sm:gap-10 sm:py-12 md:grid-cols-2 md:items-center md:gap-12 md:py-16 lg:py-18 lg:px-18">
+        <div className="container mx-auto grid gap-8 px-6 pt-8 pb-4 sm:gap-10 sm:py-12 md:grid-cols-1 lg:grid-cols-2 md:items-center md:gap-12  lg:py-18 lg:px-18">
           <div>
             <span className="inline-flex items-center rounded-full border border-orange-200 bg-orange-50 px-2.5 py-1 text-xs font-semibold text-orange-700 md:px-3 md:py-1">
               New

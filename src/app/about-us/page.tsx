@@ -4,6 +4,7 @@ import { FaLinkedin } from "react-icons/fa";
 import { metaConstants } from '../utils/metaConstants';
 import Header from '../components/pages/header';
 import Footer from '../components/pages/footer';
+import Navbar from '../components/pages/navbar';
 
 const AboutUs = () => {
 
@@ -62,6 +63,7 @@ const AboutUs = () => {
 
     return (
         <div className="min-h-screen bg-white">
+          <Navbar/>
           <Header />
             <div className="relative bg-[#EB6A4D]  text-white py-2 md:py-4">
                 <h1 className="text-lg md:text-xl font-bold text-center">About Us</h1>

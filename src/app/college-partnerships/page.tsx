@@ -1,9 +1,9 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Card } from "../components/ui/card";
-import { ChevronRight, Brain, FileText, UsersRound, HandCoins, Briefcase, Monitor, BadgeCheck, Rocket, ChevronDown, ChevronUp, CheckCircle, Menu, X, LogOut, LogIn } from 'lucide-react';
+import { ChevronRight,GraduationCap, Brain, FileText, UsersRound, HandCoins, Briefcase, Monitor, BadgeCheck, Rocket, ChevronDown, ChevronUp, CheckCircle, Menu, X, LogOut, LogIn } from 'lucide-react';
 import Footer from '../components/pages/footer';
 import emailjs from '@emailjs/browser';
 import { toast } from "sonner";
@@ -17,6 +17,35 @@ interface Company {
   name: string;
   logo_url: string;
 }
+
+const useScrollAnimation = () => {
+    const ref = useRef(null);
+    const [isVisible, setIsVisible] = useState(false);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true);
+                    observer.unobserve(entry.target);
+                }
+            },
+            { threshold: 0.1 }
+        );
+
+        if (ref.current) {
+            observer.observe(ref.current);
+        }
+
+        return () => {
+            if (ref.current) {
+                observer.unobserve(ref.current);
+            }
+        };
+    }, []);
+
+    return { ref, isVisible };
+};
 
 const Index = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -74,7 +103,7 @@ const Index = () => {
 
     // Validation rules
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const phoneRegex = /^[0-9]{10}$/; // Assuming a 10-digit phone number for India
+    const phoneRegex = /^[0-9]{10}$/;
 
     if (!formData.name.trim()) {
       toast.error("Name is required and cannot be empty");
@@ -107,7 +136,6 @@ const Index = () => {
 
     emailjs.init('HodrwiEGOmoi2sAyC');
 
-    // Send email to admin
     try {
       await emailjs.send('service_9h6jj4g', 'template_qvt72y5', {
         name: formData.name,
@@ -123,7 +151,6 @@ const Index = () => {
       console.error('Failed to send admin email:', err);
     }
 
-    // Send confirmation email to user
     try {
       await emailjs.send('service_9h6jj4g', 'template_xiiuysu', {
         name: formData.name,
@@ -176,6 +203,10 @@ const Index = () => {
   const handleMobileMenuItemClick = (route: string) => {
     router.push(route);
     setIsMobileMenuOpen(false);
+  };
+
+  const toggleFaq = (index: number) => {
+    setOpenFaq(openFaq === index ? null : index);
   };
 
   return (
@@ -476,47 +507,39 @@ const Index = () => {
           </div>
         </div>
       </section>
+<section className="bg-white py-20" id="students">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="text-center mb-16">
+      <h2 className="text-4xl font-extrabold text-gray-900 mb-4">
+        <span className="text-orange-600">Benefits</span> to Students
+      </h2>
+      <p className="text-gray-600 max-w-2xl mx-auto">
+        Empowering students with opportunities and skills for success
+      </p>
+    </div>
 
-      <section className="bg-white py-20" id="students">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-extrabold text-gray-900 mb-4">
-              <span className="text-orange-600">Benefits</span> to Students
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">Empowering students with opportunities and skills for success</p>
+    {/* Single responsive grid */}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {[
+        { icon: BadgeCheck, title: "Verified, Skill-Matched Jobs", description: "Access jobs across IT, Core, BFSI, and Startups." },
+        { icon: FileText, title: "ATS-Ready Resumes", description: "Professional resumes and interview prep for success." },
+        { icon: UsersRound, title: "Talent Pool Access", description: "Real-time job updates through our platform." },
+        { icon: Briefcase, title: "Recruitment Internships", description: "Gain hands-on experience with certificates." },
+        { icon: Rocket, title: "Faster Placements", description: "Pan-India recruiter network for quick job matches." },
+        { icon: GraduationCap, title: "Career Guidance", description: "Mentorship and expert advice to shape your career path." }
+      ].map((benefit, index) => (
+        <div key={index} className="text-center">
+          <div className="w-16 h-16 bg-orange-600 rounded-lg mx-auto mb-6 flex items-center justify-center shadow-md">
+            <benefit.icon className="h-8 w-8 text-white" />
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              { icon: BadgeCheck, title: "Verified, Skill-Matched Jobs", description: "Access jobs across IT, Core, BFSI, and Startups." },
-              { icon: FileText, title: "ATS-Ready Resumes", description: "Professional resumes and interview prep for success." },
-              { icon: UsersRound, title: "Talent Pool Access", description: "Real-time job updates through our platform." },
-            ].map((benefit, index) => (
-              <div key={index} className="text-center">
-                <div className="w-16 h-16 bg-orange-600 rounded-lg mx-auto mb-6 flex items-center justify-center shadow-md">
-                  <benefit.icon className="h-8 w-8 text-white" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">{benefit.title}</h3>
-                <p className="text-gray-600">{benefit.description}</p>
-              </div>
-            ))}
-
-            <div className="md:col-span-2 lg:col-span-3 flex justify-center gap-8 mt-10">
-              {[
-                { icon: Briefcase, title: "Recruitment Internships", description: "Gain hands-on experience with certificates." },
-                { icon: Rocket, title: "Faster Placements", description: "Pan-India recruiter network for quick job matches." }
-              ].map((benefit, index) => (
-                <div key={index} className="text-center">
-                  <div className="w-16 h-16 bg-orange-600 rounded-lg mx-auto mb-6 flex items-center justify-center shadow-md">
-                    <benefit.icon className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{benefit.title}</h3>
-                  <p className="text-gray-600">{benefit.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">{benefit.title}</h3>
+          <p className="text-gray-600">{benefit.description}</p>
         </div>
-      </section>
+      ))}
+    </div>
+  </div>
+</section>
+
 
       <section className="bg-orange-50 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -669,29 +692,35 @@ const Index = () => {
                 question: "What happens if students fail or score low in assessments?",
                 answer: "Assessments are not just filters, they are growth tools. Every student receives detailed feedback and recommendations, helping them improve their skills and increase their chances of placement."
               }
-            ].map((faq, index) => (
-              <div 
-                key={index} 
-                className="border border-orange-100 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
-              >
-                <button
-                  className="w-full flex justify-between items-center p-5 text-left"
-                  onClick={() => setOpenFaq(openFaq === index ? null : index)}
+            ].map((faq, index) => {
+              const { ref, isVisible } = useScrollAnimation();
+              return (
+                <div
+                  key={index}
+                  ref={ref}
+                  className={`transition-all duration-700 delay-${index * 150} ${isVisible ? "animate-slide-up opacity-100" : "opacity-0 translate-y-10"}`}
                 >
-                  <span className="text-lg font-semibold text-gray-900">{faq.question}</span>
-                  {openFaq === index ? (
-                    <ChevronUp className="h-5 w-5 text-orange-600" />
-                  ) : (
-                    <ChevronDown className="h-5 w-5 text-orange-600" />
-                  )}
-                </button>
-                {openFaq === index && (
-                  <div className="px-5 pb-5 text-gray-600">
-                    {faq.answer}
+                  <div className="bg-gray-50 rounded-lg shadow-md border-0">
+                    <button
+                      className="w-full flex justify-between items-center p-4 sm:p-5 text-left text-gray-900 font-semibold text-base sm:text-lg"
+                      onClick={() => toggleFaq(index)}
+                    >
+                      <span>{faq.question}</span>
+                      {openFaq === index ? (
+                        <ChevronUp className="w-4 sm:w-5 h-4 sm:h-5 text-orange-600" />
+                      ) : (
+                        <ChevronDown className="w-4 sm:w-5 h-4 sm:h-5 text-gray-400" />
+                      )}
+                    </button>
+                    {openFaq === index && (
+                      <div className="p-4 sm:p-5 pt-0 text-gray-600 text-sm sm:text-base">
+                        <p>{faq.answer}</p>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            ))}
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>

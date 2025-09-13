@@ -9,47 +9,47 @@ const Experience = () => {
           Over 1 Year of Impact
         </h1>
         <p className="mt-2 sm:mt-3 text-sm sm:text-lg lg:text-xl text-gray-600 max-w-xs sm:max-w-lg lg:max-w-3xl leading-relaxed">
-          <span className="text-orange-500 font-semibold">EarlyJobs.ai</span> has already empowered millions of jobseekers with assessments, resumes, and verified job opportunities.
+          <span className="text-orange-500 font-semibold">EarlyJobs.ai</span> has already empowered millions of jobseekers with assessments, resumes, and verified job opportunities.
         </p>
       </div>
 
       {/* Floating badges */}
-      <div className="absolute top-1/6 right-1/12  bg-white rounded-2xl w-[10rem] h-[8rem] p-3 sm:p-4 shadow-lg z-30 transform transition-all duration-300 hover:scale-105">
-        <div className="relative flex items-center gap-2 sm:gap-3 px-6 sm:px-10 py-6 sm:py-8">
-          <Briefcase className="absolute top-2 sm:top-3 right-2 sm:right-3 w-4 sm:w-6 h-4 sm:h-6 lg:w-8 lg:h-8 text-green-500" />
-          <span className="absolute top-3 sm:top-5 left-3 text-base sm:text-xl font-semibold text-gray-800">
+      <div className="absolute top-4 right-4 bg-white rounded-2xl w-[10rem] h-[8rem] p-3 sm:p-4 shadow-lg z-30 transform transition-all duration-300 hover:scale-105 tablet:w-[7rem] tablet:h-[5rem] tablet:p-2">
+        <div className="relative flex items-center gap-2 sm:gap-3 px-6 sm:px-10 py-6 sm:py-8 tablet:px-3 tablet:py-3">
+          <Briefcase className="absolute top-2 sm:top-3 right-2 sm:right-3 w-4 sm:w-6 h-4 sm:h-6 lg:w-8 lg:h-8 text-green-500 tablet:w-4 tablet:h-4" />
+          <span className="absolute top-3 sm:top-5 left-3 text-base sm:text-xl font-semibold text-gray-800 tablet:text-xs tablet:top-2 tablet:left-2">
             100+<br />
-            <span className="border-l-4 border-green-500 pl-2 sm:pl-3 text-sm sm:text-lg font-bold text-gray-600">Companies</span>
+            <span className="border-l-4 border-green-500 pl-2 sm:pl-3 text-sm sm:text-lg font-bold text-gray-600 tablet:text-[0.65rem] tablet:pl-1">Companies</span>
           </span>
         </div>
       </div>
 
-      <div className="absolute bottom-1/6  left-1/12 bg-white rounded-2xl w-[10rem] h-[8rem] p-3 sm:p-4 shadow-lg z-30 transform transition-all duration-300 hover:scale-105">
-        <div className="relative flex items-center gap-2 sm:gap-3 px-6 sm:px-10 py-6 sm:py-8">
-          <GraduationCap className="absolute top-2 sm:top-3 right-2 sm:right-3 w-4 sm:w-6 h-4 sm:h-6 lg:w-8 lg:h-8 text-orange-500" />
-          <span className="absolute top-3 sm:top-5 left-3 text-base sm:text-xl font-semibold text-gray-800">
+      <div className="absolute bottom-4 left-4 bg-white rounded-2xl w-[10rem] h-[8rem] p-3 sm:p-4 shadow-lg z-30 transform transition-all duration-300 hover:scale-105 tablet:w-[7rem] tablet:h-[5rem] tablet:p-2">
+        <div className="relative flex items-center gap-2 sm:gap-3 px-6 sm:px-10 py-6 sm:py-8 tablet:px-3 tablet:py-3">
+          <GraduationCap className="absolute top-2 sm:top-3 right-2 sm:right-3 w-4 sm:w-6 h-4 sm:h-6 lg:w-8 lg:h-8 text-orange-500 tablet:w-4 tablet:h-4" />
+          <span className="absolute top-3 sm:top-5 left-3 text-base sm:text-xl font-semibold text-gray-800 tablet:text-xs tablet:top-2 tablet:left-2">
             100+<br />
-            <span className="border-l-4 border-orange-500 pl-2 sm:pl-3 text-sm sm:text-lg font-bold text-gray-600">Internships</span>
+            <span className="border-l-4 border-orange-500 pl-2 sm:pl-3 text-sm sm:text-lg font-bold text-gray-600 tablet:text-[0.65rem] tablet:pl-1">Internships</span>
           </span>
         </div>
       </div>
 
-      <div className="absolute top-1/6 left-1/8 bg-white rounded-2xl w-[10rem] h-[8rem] sm:p-4 shadow-lg z-30 transform transition-all duration-300 hover:scale-105">
-        <div className="relative flex items-center gap-2 sm:gap-3 px-6 sm:px-10 py-6 sm:py-8">
-          <Users className="absolute top-0 sm:top-0 right-2 sm:right-3 w-4 sm:w-6 h-4 sm:h-6 lg:w-8 lg:h-8 text-purple-500" />
-          <span className="absolute top-2 sm:top-2 left-2 text-base sm:text-xl font-semibold text-gray-800">
+      <div className="absolute top-16 left-4 bg-white rounded-2xl w-[10rem] h-[8rem] sm:p-4 shadow-lg z-30 transform transition-all duration-300 hover:scale-105 tablet:w-[7rem] tablet:h-[5rem] tablet:p-2">
+        <div className="relative flex items-center gap-2 sm:gap-3 px-6 sm:px-10 py-6 sm:py-8 tablet:px-3 tablet:py-3">
+          <Users className="absolute top-0 sm:top-0 right-2 sm:right-3 w-4 sm:w-6 h-4 sm:h-6 lg:w-8 lg:h-8 text-purple-500 tablet:w-4 tablet:h-4" />
+          <span className="absolute top-2 sm:top-2 left-2 text-base sm:text-xl font-semibold text-gray-800 tablet:text-xs tablet:top-1 tablet:left-1">
             1700+<br />
-            <p className="border-l-4 border-purple-500 pl-2 sm:pl-3 text-sm sm:text-lg font-bold text-gray-600">Candidates Placed</p>
+            <p className="border-l-4 border-purple-500 pl-2 sm:pl-3 text-sm sm:text-lg font-bold text-gray-600 tablet:text-[0.65rem] tablet:pl-1">Candidates Placed</p>
           </span>
         </div>
       </div>
 
-      <div className="absolute bottom-1/6 right-1/8  bg-white rounded-2xl w-[10rem] h-[6rem] p-3 sm:p-4 shadow-lg z-30 transform transition-all duration-300 hover:scale-105">
-        <div className="relative flex items-center gap-2 sm:gap-3 px-6 sm:px-10 py-6 sm:py-8">
-          <UserCheck className="absolute top-0 sm:top-0 left-2 sm:left-3 w-4 sm:w-6 h-4 sm:h-6 lg:w-8 lg:h-8 text-blue-500" />
-          <span className="absolute top-0 sm:top-0 right-2 text-base sm:text-xl font-semibold text-gray-800 text-right">
+      <div className="absolute bottom-16 right-4 bg-white rounded-2xl w-[10rem] h-[6rem] p-3 sm:p-4 shadow-lg z-30 transform transition-all duration-300 hover:scale-105 tablet:w-[7rem] tablet:h-[4rem] tablet:p-2">
+        <div className="relative flex items-center gap-2 sm:gap-3 px-6 sm:px-10 py-6 sm:py-8 tablet:px-3 tablet:py-3">
+          <UserCheck className="absolute top-0 sm:top-0 left-2 sm:left-3 w-4 sm:w-6 h-4 sm:h-6 lg:w-8 lg:h-8 text-blue-500 tablet:w-4 tablet:h-4" />
+          <span className="absolute top-0 sm:top-0 right-2 text-base sm:text-xl font-semibold text-gray-800 text-right tablet:text-xs tablet:right-1">
             275+<br />
-            <span className="border-r-4 border-blue-500 pr-2 sm:pr-3 text-sm sm:text-lg font-bold text-gray-600">Freelancers</span>
+            <span className="border-r-4 border-blue-500 pr-2 sm:pr-3 text-sm sm:text-lg font-bold text-gray-600 tablet:text-[0.65rem] tablet:pr-1">Freelancers</span>
           </span>
         </div>
       </div>
@@ -67,7 +67,7 @@ const Experience = () => {
         </svg>
       </div>
 
-      {/* Tailwind animation keyframes */}
+      {/* Tailwind animation keyframes and responsive styles */}
       <style jsx>{`
         @keyframes float {
           0%, 100% { transform: translateY(0); }
@@ -83,7 +83,7 @@ const Experience = () => {
         .animate-fade-in {
           animation: fade-in 1s ease-out;
         }
-        /* Responsive adjustments */
+        /* Mobile adjustments */
         @media (max-width: 640px) {
           .absolute {
             position: static;
@@ -96,6 +96,72 @@ const Experience = () => {
           }
           p {
             font-size: 0.875rem;
+          }
+        }
+        /* Tablet adjustments */
+        @media (min-width: 640px) and (max-width: 1024px) {
+          .tablet\\:w-\\[7rem\\] {
+            width: 7rem;
+          }
+          .tablet\\:h-\\[5rem\\] {
+            height: 5rem;
+          }
+          .tablet\\:h-\\[4rem\\] {
+            height: 4rem;
+          }
+          .tablet\\:p-2 {
+            padding: 0.5rem;
+          }
+          .tablet\\:px-3 {
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+          }
+          .tablet\\:py-3 {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+          }
+          .tablet\\:w-4 {
+            width: 1rem;
+          }
+          .tablet\\:h-4 {
+            height: 1rem;
+          }
+          .tablet\\:text-xs {
+            font-size: 0.75rem;
+          }
+          .tablet\\:text-\\[0\\.65rem\\] {
+            font-size: 0.65rem;
+          }
+          .tablet\\:top-2 {
+            top: 0.5rem;
+          }
+          .tablet\\:left-2 {
+            left: 0.5rem;
+          }
+          .tablet\\:right-1 {
+            right: 0.25rem;
+          }
+          .tablet\\:left-1 {
+            left: 0.25rem;
+          }
+          .tablet\\:top-1 {
+            top: 0.25rem;
+          }
+          .tablet\\:pl-1 {
+            padding-left: 0.25rem;
+          }
+          .tablet\\:pr-1 {
+            padding-right: 0.25rem;
+          }
+          /* Ensure main content is prominent */
+          .text-3xl {
+            font-size: 2rem;
+          }
+          .max-w-lg {
+            max-width: 32rem;
+          }
+          .text-lg {
+            font-size: 1rem;
           }
         }
       `}</style>
