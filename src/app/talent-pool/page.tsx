@@ -850,9 +850,10 @@ const Index = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
+              onClick={()=> router.push("/assessments")}
               size="lg"
               variant="secondary"
-              className="bg-orange-500 text-white hover:bg-orange-600 text-lg px-8 py-6 animate-scale-on-hover"
+              className="bg-white text-orange-500 hover:bg-gray-100 text-lg px-8 py-6 animate-scale-on-hover"
             >
               <Play className="w-5 h-5 mr-2" />
               Schedule Your Assessment

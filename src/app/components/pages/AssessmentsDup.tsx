@@ -196,13 +196,13 @@ export default function Assessments() {
                                     View Assessments
                                     <ArrowRight className="inline-block ml-2 w-4 h-4 sm:w-5 sm:h-5" />
                                 </Button>
-                                <Button
+                                {/* <Button
                                     onClick={() => setWatchDemo(!watchDemo)}
                                     className="border-2 border-white text-white hover:bg-white hover:text-orange-600 font-semibold py-2 px-4 sm:py-2.5 sm:px-5 rounded-xl text-sm sm:text-base transition-all duration-300 shadow-lg"
                                 >
                                     Watch Demo
                                     <ArrowRight className="inline-block ml-2 w-4 h-4 sm:w-5 sm:h-5" />
-                                </Button>
+                                </Button> */}
                             </div>
                         </div>
 
@@ -210,13 +210,9 @@ export default function Assessments() {
                         <div className="relative lg:order-last order-first flex justify-center mt-6 lg:mt-0">
                             <div className="relative w-full max-w-[20rem] sm:max-w-[28rem] h-[14rem] sm:h-[20rem] lg:h-[26rem] lg:max-w-[40rem] animate-float">
                                 <div className="relative z-20 w-full h-full">
-                                    <video
-                                        src="/images/Demo.mp4"
-                                        autoPlay
-                                        muted={!watchDemo}
-                                        loop
-                                        playsInline
-                                        controls={watchDemo}
+                                    <img
+                                        src="/images/Herrrooo.jpg"
+                                        
                                         className="w-full h-full object-cover rounded-2xl shadow-2xl"
                                     />
                                 </div>

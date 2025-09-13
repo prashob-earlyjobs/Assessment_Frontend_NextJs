@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect } from 'react';
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -12,7 +11,6 @@ import Navbar from '../components/pages/navbar';
 import { useRouter } from 'next/navigation';
 import { useUser } from "../context";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
-
 import { userLogout } from "../components/services/servicesapis";
 
 interface Company {
@@ -47,7 +45,6 @@ const Index = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [companies, setCompanies] = useState<Company[]>([]);
 
-  // Backend API URL for fetching company data
   const backendApiUrl = process.env.NEXT_PUBLIC_BACKEND_URL_IN;
 
   useEffect(() => {
@@ -74,13 +71,41 @@ const Index = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!formData.name || !formData.phone || !formData.email || !formData.designation || !formData.collegeName || !formData.location) {
-        toast.error("Please fill in all required fields");
-        return;
+
+    // Validation rules
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^[0-9]{10}$/; // Assuming a 10-digit phone number for India
+
+    if (!formData.name.trim()) {
+      toast.error("Name is required and cannot be empty");
+      return;
+    }
+    if (!phoneRegex.test(formData.phone)) {
+      toast.error("Phone number must be a 10-digit number");
+      return;
+    }
+    if (!emailRegex.test(formData.email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+    if (!formData.designation.trim()) {
+      toast.error("Designation is required and cannot be empty");
+      return;
+    }
+    if (!formData.collegeName.trim()) {
+      toast.error("College Name is required and cannot be empty");
+      return;
+    }
+    if (formData.collegeWebsite && !formData.collegeWebsite.startsWith('http')) {
+      toast.error("College Website must start with 'http' or 'https' if provided");
+      return;
+    }
+    if (!formData.location.trim()) {
+      toast.error("Location is required and cannot be empty");
+      return;
     }
 
-    emailjs.init('HodrwiEGOmoi2sAyC'); // Replace with your EmailJS public key
+    emailjs.init('HodrwiEGOmoi2sAyC');
 
     // Send email to admin
     try {
@@ -121,13 +146,12 @@ const Index = () => {
     });
   };
 
-  // Smooth scroll handler
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-    setIsMobileMenuOpen(false); // Close mobile menu after clicking
+    setIsMobileMenuOpen(false);
   };
 
   const handleProfileClick = () => {
@@ -157,161 +181,156 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-      {/* Header */}
-     <header className={`bg-white shadow-md border-b border-orange-100 sticky top-0 z-50`}>
-  <div className="max-w-7xl mx-auto px-4 py-1 lg:py-3 sm:px-6 lg:px-8">
-    <div className="flex justify-between items-center h-16">
-      <div className="flex items-center">
-        <img src="/images/logo.png" onClick={() => router.push("/")} alt="EarlyJobs.ai" className="h-12 lg:h-14 cursor-pointer" />
-      </div>
-      <nav className="hidden md:flex space-x-8 items-center">
-        <button
-          onClick={() => scrollToSection('overview')}
-          className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-medium"
-        >
-          Overview
-        </button>
-        <button
-          onClick={() => scrollToSection('colleges')}
-          className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-medium"
-        >
-          For Colleges
-        </button>
-        <button
-          onClick={() => scrollToSection('students')}
-          className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-medium"
-        >
-          Students
-        </button>
-        {userCredentials ? (
-          <div className="flex items-center space-x-4">
-             <Button
-              variant="ghost"
-              className="text-red-600 hover:bg-red-50 rounded-xl py-2 px-4 transition-all duration-300"
-              onClick={handleLogout}
-            >
-              <LogOut className="h-5 w-5 mr-2" />
-    
-            </Button>
-            <div className="flex items-center space-x-3 cursor-pointer" onClick={handleProfileClick}>
-              <Avatar className="h-10 w-10">
-                <AvatarImage src={userCredentials.avatar} />
-                <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
-                  {userCredentials?.name
-                    ?.split(" ")
-                    .map((n) => n[0])
-                    .join("")
-                    ?.toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              <span className="text-sm font-medium text-gray-900">{userCredentials.name}</span>
+      <header className={`bg-white shadow-md border-b border-orange-100 sticky top-0 z-50`}>
+        <div className="max-w-7xl mx-auto px-4 py-1 lg:py-3 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center">
+              <img src="/images/logo.png" onClick={() => router.push("/")} alt="EarlyJobs.ai" className="h-12 lg:h-14 cursor-pointer" />
             </div>
-           
+            <nav className="hidden md:flex space-x-8 items-center">
+              <button
+                onClick={() => scrollToSection('overview')}
+                className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-medium"
+              >
+                Overview
+              </button>
+              <button
+                onClick={() => scrollToSection('colleges')}
+                className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-medium"
+              >
+                For Colleges
+              </button>
+              <button
+                onClick={() => scrollToSection('students')}
+                className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-medium"
+              >
+                Students
+              </button>
+              {userCredentials ? (
+                <div className="flex items-center space-x-4">
+                  <Button
+                    variant="ghost"
+                    className="text-red-600 hover:bg-red-50 rounded-xl py-2 px-4 transition-all duration-300"
+                    onClick={handleLogout}
+                  >
+                    <LogOut className="h-5 w-5 mr-2" />
+                  </Button>
+                  <div className="flex items-center space-x-3 cursor-pointer" onClick={handleProfileClick}>
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage src={userCredentials.avatar} />
+                      <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
+                        {userCredentials?.name
+                          ?.split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                          ?.toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="text-sm font-medium text-gray-900">{userCredentials.name}</span>
+                  </div>
+                </div>
+              ) : (
+                <Button
+                  className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-full transition-colors duration-200 font-semibold"
+                  onClick={() => router.push("/signup")}
+                >
+                  Sign Up
+                </Button>
+              )}
+            </nav>
+            <div className="md:hidden flex items-center">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="text-gray-600 hover:text-orange-600 focus:outline-none p-3"
+              >
+                {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+              </Button>
+            </div>
           </div>
-        ) : (
-          <Button
-            className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-full transition-colors duration-200 font-semibold"
-            onClick={() => router.push("/signup")}
-          >
-            Sign Up
-          </Button>
-        )}
-      </nav>
-      <div className="md:hidden flex items-center">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="text-gray-600 hover:text-orange-600 focus:outline-none p-3"
-        >
-          {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-        </Button>
-      </div>
-    </div>
-    {isMobileMenuOpen && (
-      <div className="md:hidden bg-white/95 backdrop-blur-sm shadow-lg z-50 px-4 py-4 border-b border-orange-100">
-        <div className="flex flex-col space-y-2">
-          {userCredentials !== null && (
-            <div
-              className="flex items-center space-x-3 cursor-pointer px-4 py-3"
-              onClick={handleProfileClick}
-            >
-              <Avatar className="h-10 w-10">
-                <AvatarImage src={userCredentials.avatar} />
-                <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
-                  {userCredentials?.name
-                    ?.split(" ")
-                    .map((n) => n[0])
-                    .join("")
-                    ?.toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <p className="text-sm font-medium text-gray-900">
-                  {userCredentials.name}
-                </p>
-                <p className="text-xs text-gray-500">
-                  {userCredentials.profile?.preferredJobRole}
-                </p>
+          {isMobileMenuOpen && (
+            <div className="md:hidden bg-white/95 backdrop-blur-sm shadow-lg z-50 px-4 py-4 border-b border-orange-100">
+              <div className="flex flex-col space-y-2">
+                {userCredentials !== null && (
+                  <div
+                    className="flex items-center space-x-3 cursor-pointer px-4 py-3"
+                    onClick={handleProfileClick}
+                  >
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage src={userCredentials.avatar} />
+                      <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
+                        {userCredentials?.name
+                          ?.split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                          ?.toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">
+                        {userCredentials.name}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {userCredentials.profile?.preferredJobRole}
+                      </p>
+                    </div>
+                  </div>
+                )}
+                <Button
+                  variant="ghost"
+                  className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
+                  onClick={() => handleMobileMenuItemClick("/browse-candidates")}
+                >
+                  Browse Candidates
+                </Button>
+                <Button
+                  variant="ghost"
+                  className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
+                  onClick={() => handleMobileMenuItemClick("/colleges")}
+                >
+                  Colleges
+                </Button>
+                <Button
+                  variant="ghost"
+                  className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
+                  onClick={() => handleMobileMenuItemClick("/talent-pool")}
+                >
+                  Talent Pool
+                </Button>
+                {userCredentials !== null ? (
+                  <Button
+                    variant="ghost"
+                    className="w-full text-left justify-start text-red-600 hover:bg-red-50 rounded-xl py-3 px-4 transition-all duration-300"
+                    onClick={() => {
+                      handleLogout();
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    <LogOut className="h-5 w-5 mr-2" />
+                    Logout
+                  </Button>
+                ) : (
+                  <Button
+                    className="w-full text-left justify-start bg-orange-600 hover:bg-orange-700 text-white rounded-xl py-3 px-4 shadow-lg hover:shadow-xl transition-all duration-300"
+                    onClick={() => {
+                      router.push("/login");
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    <LogIn className="h-5 w-5 mr-2" />
+                    Login
+                  </Button>
+                )}
               </div>
             </div>
           )}
-          <Button
-            variant="ghost"
-            className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
-            onClick={() => handleMobileMenuItemClick("/browse-candidates")}
-          >
-            Browse Candidates
-          </Button>
-          <Button
-            variant="ghost"
-            className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
-            onClick={() => handleMobileMenuItemClick("/colleges")}
-          >
-            Colleges
-          </Button>
-          <Button
-            variant="ghost"
-            className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
-            onClick={() => handleMobileMenuItemClick("/talent-pool")}
-          >
-            Talent Pool
-          </Button>
-          {userCredentials !== null ? (
-            <Button
-              variant="ghost"
-              className="w-full text-left justify-start text-red-600 hover:bg-red-50 rounded-xl py-3 px-4 transition-all duration-300"
-              onClick={() => {
-                handleLogout();
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              <LogOut className="h-5 w-5 mr-2" />
-              Logout
-            </Button>
-          ) : (
-            <Button
-              className="w-full text-left justify-start bg-orange-600 hover:bg-orange-700 text-white rounded-xl py-3 px-4 shadow-lg hover:shadow-xl transition-all duration-300"
-              onClick={() => {
-                router.push("/login");
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              <LogIn className="h-5 w-5 mr-2" />
-              Login
-            </Button>
-          )}
         </div>
-      </div>
-    )}
-  </div>
-</header>
+      </header>
 
-      {/* Hero Section */}
       <section className="bg-gradient-to-b from-white via-orange-100/90 to-orange-50/40 py-8 lg:py-16" id="overview">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-start">
-            {/* Main Content */}
             <div className='lg:mt-20'>
               <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
                 Transform Placements at Your College with <span className="text-orange-600">EarlyJobs.ai</span>
@@ -320,7 +339,6 @@ const Index = () => {
                 AI-powered assessments, verified recruiters, and a connected talent pool to get your students placed faster — at zero cost.
               </p>
 
-              {/* Stats Cards */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 {[
                   { value: "100+", label: "Employers" },
@@ -336,7 +354,6 @@ const Index = () => {
               </div>
             </div>
 
-            {/* Registration Form */}
             <div className="lg:sticky lg:top-8 lg:ml-15">
               <Card className="p-6 shadow-2xl border border-orange-100 w-full">
                 <div className="text-center mb-6">
@@ -431,7 +448,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Section 2: Benefits to Colleges */}
       <section className="bg-orange-50 py-20" id="colleges">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -461,7 +477,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Section 3: Benefits to Students */}
       <section className="bg-white py-20" id="students">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -485,7 +500,6 @@ const Index = () => {
               </div>
             ))}
 
-            {/* Last two items centered */}
             <div className="md:col-span-2 lg:col-span-3 flex justify-center gap-8 mt-10">
               {[
                 { icon: Briefcase, title: "Recruitment Internships", description: "Gain hands-on experience with certificates." },
@@ -504,7 +518,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Section 4: How It Works */}
       <section className="bg-orange-50 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -533,7 +546,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Section 5: Success Stories & Partner Logos */}
       <section className="bg-white py-16 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-8">
           <h2 className="text-3xl font-extrabold text-gray-900 mb-4">
@@ -580,7 +592,6 @@ const Index = () => {
         `}</style>
       </section>
 
-      {/* Section 6: Why EarlyJobs.ai is Different */}
       <section className="bg-orange-50 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -608,7 +619,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* FAQ Section */}
       <section className="bg-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -686,7 +696,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Final CTA Section */}
       <section className="bg-orange-600 py-16">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <h2 className="text-4xl font-extrabold text-white mb-6">
@@ -696,11 +705,11 @@ const Index = () => {
             Join 150+ colleges already transforming placements with EarlyJobs.ai
           </p>
           <div className="flex justify-center space-x-4">
-           <a href="https://calendly.com/prajwal-earlyjobs/30min" target="_blank" rel="noopener noreferrer">
-             <Button className="bg-white text-orange-600 hover:bg-orange-50 px-8 py-3 text-lg font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
-               Book a Free 15-min Call
-             </Button>
-           </a>
+            <a href="https://calendly.com/prajwal-earlyjobs/30min" target="_blank" rel="noopener noreferrer">
+              <Button className="bg-white text-orange-600 hover:bg-orange-50 px-8 py-3 text-lg font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
+                Book a Free 15-min Call
+              </Button>
+            </a>
             <Button 
               className="bg-white text-orange-600 hover:bg-orange-50 px-8 py-3 text-lg font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
               onClick={() => scrollToSection('overview')}
