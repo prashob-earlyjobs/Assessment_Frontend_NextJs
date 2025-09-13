@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Oval } from 'react-loader-spinner';
 import  Header  from '../components/pages/header';
 import Footer from '../components/pages/footer';
+import Navbar from '../components/pages/navbar';
 
 const BlogPage = () => {
     const [blogs, setBlogs] = useState([]);
@@ -62,6 +63,7 @@ const BlogPage = () => {
 
     return (
         <>
+        <Navbar/>
         <Header />
         <div className="max-w-7xl mx-auto min-h-[87vh]  px-8 py-8">
             <div className="text-left mb-10 pb-5">
