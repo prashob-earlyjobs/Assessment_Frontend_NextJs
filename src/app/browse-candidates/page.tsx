@@ -1,11 +1,15 @@
 "use client";
+
 import { useState } from "react";
 import { Button } from "../components/ui/button";
 import { useRouter } from "next/navigation";
+import { useUser } from "../context";
+import { toast } from "sonner";
+import { userLogout } from "../components/services/servicesapis";
+import { Menu, X, LogIn, LogOut } from "lucide-react";
+import { Avatar, AvatarImage, AvatarFallback } from "../components/ui/avatar";
 import Footer from "../components/pages/footer";
 import Navbar from "../components/pages/navbar";
-import { Menu, X, LogIn, LogOut } from "lucide-react"; // Importing icons from lucide-react
-import { Avatar, AvatarImage, AvatarFallback } from "../components/ui/avatar"; // Importing Avatar components from shadcn/ui
 
 const Index = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -17,13 +21,10 @@ const Index = () => {
     email: "",
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // State for mobile menu
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
+  const { userCredentials, setUserCredentials } = useUser();
 
-  // Mock userCredentials (since it's not provided in the original code)
-  const userCredentials = null; // Set to null for guest user; could be replaced with actual user data
-
-  // Mock functions for header interactions
   const scrollToSection = (sectionId) => {
     const section = document.getElementById(sectionId);
     if (section) {
@@ -32,8 +33,23 @@ const Index = () => {
   };
 
   const handleProfileClick = () => {
-    // Placeholder for profile click logic
     router.push("/profile");
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleLogout = async () => {
+    try {
+      const response = await userLogout();
+      if (!response.success) {
+        throw new Error("Logout failed");
+      }
+      toast.success("Logged out successfully!");
+      setUserCredentials(null);
+      router.push("/login");
+    } catch (error) {
+      toast.error("Logout failed. Please try again.");
+    }
+    setIsMobileMenuOpen(false);
   };
 
   const handleMobileMenuItemClick = (path) => {
@@ -41,13 +57,7 @@ const Index = () => {
     setIsMobileMenuOpen(false);
   };
 
-  const handleLogout = () => {
-    // Placeholder for logout logic
-    console.log("Logged out");
-    setIsMobileMenuOpen(false);
-  };
-
-  // Mock data (unchanged from original)
+  // Mock data remains unchanged
   const mockCandidates = [
     {
       _id: "6871e8c991f7f8a2e1874f6b",
@@ -215,7 +225,6 @@ const Index = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Filter candidates based on search term in skills
   const filteredCandidates = mockCandidates.filter((candidate) => {
     if (!searchTerm) return true;
     return candidate.skills.some((skill) => skill.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -224,7 +233,7 @@ const Index = () => {
   return (
     <>
       <Navbar />
-      <header className=" bg-white shadow-md border-b border-orange-100 sticky top-0 z-50">
+      <header className="bg-white shadow-md border-b border-orange-100 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-1 lg:py-3 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
@@ -236,10 +245,38 @@ const Index = () => {
               />
             </div>
             <nav className="hidden md:flex space-x-8 items-center">
-             
-              <Button className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-full transition-colors duration-200 font-semibold">
-                Login / SignUp
-              </Button>
+              {userCredentials ? (
+                <div className="flex items-center space-x-4">
+                  <Button
+                    variant="ghost"
+                    className="text-red-600 hover:bg-red-50 rounded-xl py-2 px-4 transition-all duration-300"
+                    onClick={handleLogout}
+                  >
+                    <LogOut className="h-5 w-5 mr-2" />
+                  </Button>
+                  <div className="flex items-center space-x-3 cursor-pointer" onClick={handleProfileClick}>
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage src={userCredentials.avatar} />
+                      <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
+                        {userCredentials?.name
+                          ?.split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                          ?.toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="text-sm font-medium text-gray-900">{userCredentials.name}</span>
+                  </div>
+                  
+                </div>
+              ) : (
+                <Button
+                  className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-full transition-colors duration-200 font-semibold"
+                  onClick={() => router.push("/signup")}
+                >
+                  Sign Up
+                </Button>
+              )}
             </nav>
             <div className="md:hidden flex items-center">
               <Button
@@ -301,10 +338,7 @@ const Index = () => {
                   <Button
                     variant="ghost"
                     className="w-full text-left justify-start text-red-600 hover:bg-red-50 rounded-xl py-3 px-4 transition-all duration-300"
-                    onClick={() => {
-                      handleLogout();
-                      setIsMobileMenuOpen(false);
-                    }}
+                    onClick={handleLogout}
                   >
                     <LogOut className="h-5 w-5 mr-2" />
                     Logout
@@ -313,12 +347,12 @@ const Index = () => {
                   <Button
                     className="w-full text-left justify-start bg-orange-600 hover:bg-orange-700 text-white rounded-xl py-3 px-4 shadow-lg hover:shadow-xl transition-all duration-300"
                     onClick={() => {
-                      router.push("/login");
+                      router.push("/signup");
                       setIsMobileMenuOpen(false);
                     }}
                   >
                     <LogIn className="h-5 w-5 mr-2" />
-                    Login
+                    Sign Up
                   </Button>
                 )}
               </div>
@@ -327,7 +361,6 @@ const Index = () => {
         </div>
       </header>
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-orange-50 to-white">
-        
         <div className="max-w-7xl mx-auto py-15 px-6">
           <div className="flex flex-col justify-between lg:flex-row">
             <div className="mb-8">
@@ -336,7 +369,6 @@ const Index = () => {
               </h1>
               <p className="text-lg text-gray-600">Discover talented professionals ready to join your team</p>
             </div>
-
             <div className="mb-8">
               <div className="lg:w-[35rem]">
                 <input
@@ -370,7 +402,6 @@ const Index = () => {
                         )}
                       </div>
                     </div>
-
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
                         <h3 className="font-bold text-lg text-gray-900 truncate">{candidate.name}</h3>
@@ -378,14 +409,12 @@ const Index = () => {
                           | Exp: {calculateExperience(candidate)}
                         </span>
                       </div>
-
                       <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-2">
                         {candidate.profile?.bio
                           ? candidate.profile.bio.substring(0, 120) +
                             (candidate.profile.bio.length > 120 ? "..." : "")
                           : `${candidate.role.charAt(0).toUpperCase() + candidate.role.slice(1)} with experience in various projects and technologies.`}
                       </p>
-
                       <div className="space-y-3">
                         <div>
                           <h4 className="text-sm font-semibold text-gray-900 mb-2">Expert in</h4>
@@ -405,7 +434,6 @@ const Index = () => {
                             )}
                           </div>
                         </div>
-
                         <div>
                           <h4 className="text-sm font-semibold text-gray-900 mb-2">Commitment</h4>
                           <div className="flex flex-wrap gap-2 mb-4">
@@ -424,7 +452,6 @@ const Index = () => {
                           </div>
                         </div>
                       </div>
-
                       <button
                         onClick={() => handleViewProfile(candidate)}
                         className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-medium py-3 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
@@ -439,8 +466,6 @@ const Index = () => {
           </div>
         </div>
       </div>
-
-      {/* Dialog for Profile Form */}
       {isDialogOpen && (
         <div className="fixed inset-0 bg-black/20 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl">
@@ -528,7 +553,6 @@ const Index = () => {
           </div>
         </div>
       )}
-
       <Footer />
     </>
   );

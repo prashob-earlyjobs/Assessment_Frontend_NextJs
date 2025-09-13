@@ -127,12 +127,12 @@ const Footer = () => {
       >
         Chandigarh
       </p>
-      <a
-        href="https://earlyjobs.in/franchise/hyderabad"
-        className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300"
+      <p
+        onClick={()=>router.push("/hyderabad")}
+        className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
       >
         Hyderabad
-      </a>
+      </p>
      <p
         onClick={()=>router.push("/chennai")}
         className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"

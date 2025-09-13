@@ -258,35 +258,65 @@ const Index = () => {
             <div onClick={() => router.push("/")} className="flex items-center">
               <img src="/images/logo.png" alt="EarlyJobs Logo" className="h-12 lg:h-14 w-auto cursor-pointer" />
             </div>
-            <div className="hidden md:flex items-center space-x-8">
-              <a
-                href="#talent-pool"
-                className="text-muted-foreground hover:text-orange-500 transition-colors"
-              >
-                Talent Pool
-              </a>
-              <a
-                href="#process"
-                className="text-muted-foreground hover:text-orange-500 transition-colors"
-              >
-                Process
-              </a>
-              <a
-                href="#benefits"
-                className="text-muted-foreground hover:text-orange-500 transition-colors"
-              >
-                Benefits
-              </a>
-              <a
-                href="#faq"
-                className="text-muted-foreground hover:text-orange-500 transition-colors"
-              >
-                FAQ
-              </a>
-              <Button className="bg-orange-500 hover:bg-orange-600 text-white shadow-md rounded-xl">
-                Sign Up
-              </Button>
-            </div>
+         <div className="hidden md:flex items-center space-x-8">
+  <a
+    href="#talent-pool"
+    className="text-muted-foreground hover:text-orange-500 transition-colors"
+  >
+    Talent Pool
+  </a>
+  <a
+    href="#process"
+    className="text-muted-foreground hover:text-orange-500 transition-colors"
+  >
+    Process
+  </a>
+  <a
+    href="#benefits"
+    className="text-muted-foreground hover:text-orange-500 transition-colors"
+  >
+    Benefits
+  </a>
+  <a
+    href="#faq"
+    className="text-muted-foreground hover:text-orange-500 transition-colors"
+  >
+    FAQ
+  </a>
+  {userCredentials ? (
+    <div className="flex items-center space-x-4">
+       <Button
+        variant="ghost"
+        className="text-red-600 hover:bg-red-50 rounded-xl py-2 px-4 transition-all duration-300"
+        onClick={handleLogout}
+      >
+        <LogOut className="h-5 w-5 mr-2" />
+      
+      </Button>
+      <div className="flex items-center space-x-3 cursor-pointer" onClick={handleProfileClick}>
+        <Avatar className="h-10 w-10">
+          <AvatarImage src={userCredentials.avatar} />
+          <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
+            {userCredentials?.name
+              ?.split(" ")
+              .map((n) => n[0])
+              .join("")
+              ?.toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
+        <span className="text-sm font-medium text-gray-900">{userCredentials.name}</span>
+      </div>
+     
+    </div>
+  ) : (
+    <Button
+      className="bg-orange-500 hover:bg-orange-600 text-white shadow-md rounded-xl"
+      onClick={() => router.push("/signup")}
+    >
+      Sign Up
+    </Button>
+  )}
+</div>
             <div className="md:hidden flex items-center">
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -356,7 +386,6 @@ const Index = () => {
                   }}
                 >
                   <LogOut className="h-5 w-5 mr-2" />
-                  Logout
                 </Button>
               ) : (
                 <Button

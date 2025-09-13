@@ -158,124 +158,154 @@ const Index = () => {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       {/* Header */}
-      <header className={`bg-white shadow-md border-b border-orange-100 sticky top-0 z-50`}>
-        <div className="max-w-7xl mx-auto px-4 py-1 lg:py-3 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <img src="/images/logo.png" onClick={() => router.push("/")} alt="EarlyJobs.ai" className="h-12 lg:h-14 cursor-pointer" />
+     <header className={`bg-white shadow-md border-b border-orange-100 sticky top-0 z-50`}>
+  <div className="max-w-7xl mx-auto px-4 py-1 lg:py-3 sm:px-6 lg:px-8">
+    <div className="flex justify-between items-center h-16">
+      <div className="flex items-center">
+        <img src="/images/logo.png" onClick={() => router.push("/")} alt="EarlyJobs.ai" className="h-12 lg:h-14 cursor-pointer" />
+      </div>
+      <nav className="hidden md:flex space-x-8 items-center">
+        <button
+          onClick={() => scrollToSection('overview')}
+          className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-medium"
+        >
+          Overview
+        </button>
+        <button
+          onClick={() => scrollToSection('colleges')}
+          className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-medium"
+        >
+          For Colleges
+        </button>
+        <button
+          onClick={() => scrollToSection('students')}
+          className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-medium"
+        >
+          Students
+        </button>
+        {userCredentials ? (
+          <div className="flex items-center space-x-4">
+             <Button
+              variant="ghost"
+              className="text-red-600 hover:bg-red-50 rounded-xl py-2 px-4 transition-all duration-300"
+              onClick={handleLogout}
+            >
+              <LogOut className="h-5 w-5 mr-2" />
+    
+            </Button>
+            <div className="flex items-center space-x-3 cursor-pointer" onClick={handleProfileClick}>
+              <Avatar className="h-10 w-10">
+                <AvatarImage src={userCredentials.avatar} />
+                <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
+                  {userCredentials?.name
+                    ?.split(" ")
+                    .map((n) => n[0])
+                    .join("")
+                    ?.toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <span className="text-sm font-medium text-gray-900">{userCredentials.name}</span>
             </div>
-            <nav className="hidden md:flex space-x-8 items-center">
-              <button
-                onClick={() => scrollToSection('overview')}
-                className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-medium"
-              >
-                Overview
-              </button>
-              <button
-                onClick={() => scrollToSection('colleges')}
-                className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-medium"
-              >
-                For Colleges
-              </button>
-              <button
-                onClick={() => scrollToSection('students')}
-                className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-medium"
-              >
-                Students
-              </button>
-              <Button className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-full transition-colors duration-200 font-semibold">
-                Login/SignUp
-              </Button>
-            </nav>
-            <div className="md:hidden flex items-center">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="text-gray-600 hover:text-orange-600 focus:outline-none p-3"
-              >
-                {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-              </Button>
-            </div>
+           
           </div>
-          {isMobileMenuOpen && (
-            <div className="md:hidden bg-white/95 backdrop-blur-sm shadow-lg z-50 px-4 py-4 border-b border-orange-100">
-              <div className="flex flex-col space-y-2">
-                {userCredentials !== null && (
-                  <div
-                    className="flex items-center space-x-3 cursor-pointer px-4 py-3"
-                    onClick={handleProfileClick}
-                  >
-                    <Avatar className="h-10 w-10">
-                      <AvatarImage src={userCredentials.avatar} />
-                      <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
-                        {userCredentials?.name
-                          ?.split(" ")
-                          .map((n) => n[0])
-                          .join("")
-                          ?.toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">
-                        {userCredentials.name}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {userCredentials.profile?.preferredJobRole}
-                      </p>
-                    </div>
-                  </div>
-                )}
-                <Button
-                  variant="ghost"
-                  className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
-                  onClick={() => handleMobileMenuItemClick("/browse-candidates")}
-                >
-                  Browse Candidates
-                </Button>
-                <Button
-                  variant="ghost"
-                  className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
-                  onClick={() => handleMobileMenuItemClick("/colleges")}
-                >
-                  Colleges
-                </Button>
-                <Button
-                  variant="ghost"
-                  className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
-                  onClick={() => handleMobileMenuItemClick("/talent-pool")}
-                >
-                  Talent Pool
-                </Button>
-                {userCredentials !== null ? (
-                  <Button
-                    variant="ghost"
-                    className="w-full text-left justify-start text-red-600 hover:bg-red-50 rounded-xl py-3 px-4 transition-all duration-300"
-                    onClick={() => {
-                      handleLogout();
-                      setIsMobileMenuOpen(false);
-                    }}
-                  >
-                    <LogOut className="h-5 w-5 mr-2" />
-                    Logout
-                  </Button>
-                ) : (
-                  <Button
-                    className="w-full text-left justify-start bg-orange-600 hover:bg-orange-700 text-white rounded-xl py-3 px-4 shadow-lg hover:shadow-xl transition-all duration-300"
-                    onClick={() => {
-                      router.push("/login");
-                      setIsMobileMenuOpen(false);
-                    }}
-                  >
-                    <LogIn className="h-5 w-5 mr-2" />
-                    Login
-                  </Button>
-                )}
+        ) : (
+          <Button
+            className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-full transition-colors duration-200 font-semibold"
+            onClick={() => router.push("/signup")}
+          >
+            Sign Up
+          </Button>
+        )}
+      </nav>
+      <div className="md:hidden flex items-center">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="text-gray-600 hover:text-orange-600 focus:outline-none p-3"
+        >
+          {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+        </Button>
+      </div>
+    </div>
+    {isMobileMenuOpen && (
+      <div className="md:hidden bg-white/95 backdrop-blur-sm shadow-lg z-50 px-4 py-4 border-b border-orange-100">
+        <div className="flex flex-col space-y-2">
+          {userCredentials !== null && (
+            <div
+              className="flex items-center space-x-3 cursor-pointer px-4 py-3"
+              onClick={handleProfileClick}
+            >
+              <Avatar className="h-10 w-10">
+                <AvatarImage src={userCredentials.avatar} />
+                <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
+                  {userCredentials?.name
+                    ?.split(" ")
+                    .map((n) => n[0])
+                    .join("")
+                    ?.toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <p className="text-sm font-medium text-gray-900">
+                  {userCredentials.name}
+                </p>
+                <p className="text-xs text-gray-500">
+                  {userCredentials.profile?.preferredJobRole}
+                </p>
               </div>
             </div>
           )}
+          <Button
+            variant="ghost"
+            className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
+            onClick={() => handleMobileMenuItemClick("/browse-candidates")}
+          >
+            Browse Candidates
+          </Button>
+          <Button
+            variant="ghost"
+            className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
+            onClick={() => handleMobileMenuItemClick("/colleges")}
+          >
+            Colleges
+          </Button>
+          <Button
+            variant="ghost"
+            className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
+            onClick={() => handleMobileMenuItemClick("/talent-pool")}
+          >
+            Talent Pool
+          </Button>
+          {userCredentials !== null ? (
+            <Button
+              variant="ghost"
+              className="w-full text-left justify-start text-red-600 hover:bg-red-50 rounded-xl py-3 px-4 transition-all duration-300"
+              onClick={() => {
+                handleLogout();
+                setIsMobileMenuOpen(false);
+              }}
+            >
+              <LogOut className="h-5 w-5 mr-2" />
+              Logout
+            </Button>
+          ) : (
+            <Button
+              className="w-full text-left justify-start bg-orange-600 hover:bg-orange-700 text-white rounded-xl py-3 px-4 shadow-lg hover:shadow-xl transition-all duration-300"
+              onClick={() => {
+                router.push("/login");
+                setIsMobileMenuOpen(false);
+              }}
+            >
+              <LogIn className="h-5 w-5 mr-2" />
+              Login
+            </Button>
+          )}
         </div>
-      </header>
+      </div>
+    )}
+  </div>
+</header>
 
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-white via-orange-100/90 to-orange-50/40 py-8 lg:py-16" id="overview">
