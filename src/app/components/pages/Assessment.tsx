@@ -138,7 +138,7 @@ const Assessment = () => {
             response.message || "Failed to fetch assessment data"
           );
         }
-        const currentDate = new Date(); 
+        const currentDate = new Date();
         const offerValid =
           new Date(response.data.data.assessment.offer.validUntil) >=
           currentDate;
@@ -162,7 +162,6 @@ const Assessment = () => {
           setOrderId(orderResponse.id);
         }
 
-        // Check for existing assessment link
         const matchResponse = await matchAssessmentsDetails(
           userCredentials._id,
           assessment.assessmentId
@@ -170,8 +169,8 @@ const Assessment = () => {
         if (matchResponse.success) {
           setAssessmentDetails(matchResponse.data);
           setAssessmentLink(matchResponse.data.assessmentLink);
-          setShowPayment(false); // Skip payment if link is valid
-          setPaymentCompleted(true); // Simulate payment completion
+          setShowPayment(false);
+          setPaymentCompleted(true);
         }
       } catch (error) {
         if (
@@ -296,7 +295,6 @@ const Assessment = () => {
       if (response.success) {
         setAssessmentDetails(response.data);
         setAssessmentLink(response.data.publicLink);
-        // await storeAssessmentDetails();
       } else {
         throw new Error(response.message || "Failed to get assessment link");
       }
@@ -330,7 +328,6 @@ const Assessment = () => {
 
     setIsLoading(true);
     try {
-      // Generate a new orderId with the updated finalAssessmentFee
       const orderResponse = await getOrderIdForPayment({
         amount: finalAssessmentFee * 100,
         currency: "INR",
@@ -428,7 +425,7 @@ const Assessment = () => {
         <Card className="w-full max-w-md rounded-3xl border-0 shadow-2xl">
           <CardHeader className="text-center pb-4">
             <div className="h-[5rem] flex items-center justify-center mx-auto mb-4">
-               <img
+              <img
                 src="/images/logo.png"
                 alt="EarlyJobs Logo"
                 className="h-[5rem] w-auto"
@@ -560,8 +557,6 @@ const Assessment = () => {
                 ? "Start Assessment"
                 : `Pay ₹${finalAssessmentFee} & Start Assessment`}
             </Button>
-     
-
             {razorpayError && (
               <p className="text-red-500 text-center mt-2">
                 Error loading payment: {razorpayError}
@@ -659,18 +654,60 @@ const Assessment = () => {
                 )}
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-md p-6">
-              <div className="text-center space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900">
+            <DialogContent className="w-full max-w-lg sm:max-w-2xl p-6 sm:p-8 bg-white rounded-2xl">
+              <div className="text-center space-y-6">
+                <h3 className="text-xl sm:text-2xl font-semibold text-gray-900">
                   Assessment Started
                 </h3>
-                <p className="text-sm text-gray-600">
-                  Your assessment is started, kindly complete it in 1hr
+                <p className="text-sm sm:text-base text-gray-600">
+                  Your assessment has started. Please complete it within 1 hour.
                 </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mt-6">
+                  {/* Promotion 1: AI Resume Builder */}
+                  <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 text-left flex flex-col">
+                    <img
+                      src="/images/PopupImage2.jpg"
+                      alt="AI Resume Builder"
+                      className="w-full h-32 sm:h-40 object-cover rounded-lg mb-3"
+                    />
+                    <h4 className="text-lg font-medium text-orange-700 mb-2">
+                      Build Your Perfect Resume
+                    </h4>
+                    <p className="text-sm text-gray-600 mb-3 flex-grow">
+                      Use our AI-powered Resume Builder to create a professional resume tailored to your dream job in minutes.
+                    </p>
+                    <Button
+                      onClick={() => navigate.push("/airesume")}
+                      className="w-full sm:w-auto bg-orange-600 hover:bg-orange-700 text-white rounded-lg text-sm px-4 py-2 mt-auto"
+                    >
+                      Try AI Resume Builder
+                    </Button>
+                  </div>
+                  {/* Promotion 2: Apply Jobs */}
+                  <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 text-left flex flex-col">
+                    <img
+                      src="/images/JobImage.jpg"
+                      alt="Apply Jobs"
+                      className="w-full h-32 sm:h-40 object-cover rounded-lg mb-3"
+                    />
+                    <h4 className="text-lg font-medium text-purple-700 mb-2">
+                      Apply to Top Jobs
+                    </h4>
+                    <p className="text-sm text-gray-600 mb-3 flex-grow">
+                      Explore thousands of job opportunities and apply directly through our platform to land your next career move.
+                    </p>
+                    <Button
+                      onClick={() => navigate.push("/jobs")}
+                      className="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm px-4 py-2 mt-auto"
+                    >
+                      Browse Jobs Now
+                    </Button>
+                  </div>
+                </div>
                 <Button
                   variant="outline"
                   onClick={() => navigate.push("/dashboard")}
-                  className="w-full mt-4"
+                  className="w-full sm:w-auto h-12 rounded-2xl border-gray-200 mt-6"
                 >
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Go to Dashboard

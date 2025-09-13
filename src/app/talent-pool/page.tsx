@@ -13,6 +13,7 @@ import { useUser } from "../context";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import { toast } from "sonner";
 import { userLogout } from "../components/services/servicesapis";
+import Link from "next/link";
 
 const useScrollAnimation = () => {
     const ref = useRef(null);
@@ -483,14 +484,12 @@ const Index = () => {
                 EarlyJobs.ai connects job seekers with top employers through AI-powered matching, verified profiles, and AI skill assessments. Get vetted, showcased, and hired — all in less time.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-20 lg:mb-0">
-                <Button
+                <Link href="https://dev2.earlyjobs.in/talentpoolform/public/686cf7d6d4e9e2a0cd1013dc"><Button
                   size="lg"
-                  className="bg-orange-500 hover:bg-orange-600 shadow-button text-lg text-white px-8 py-6 animate-scale-on-hover"
-                  onClick={() => router.push("/assessments")}
+                  className="bg-orange-500 hover:bg-orange-600 shadow-button text-lg text-white px-8 py-6 animate-scale-on-hover"  
                 >
-                  <Play className="w-5 h-5 mr-2" />
-                  Schedule an assessment
-                </Button>
+                  Register Now 
+                </Button></Link>
                 <a href="#talent-pool" className="hidden md:block">
                   <Button
                     variant="outline"
