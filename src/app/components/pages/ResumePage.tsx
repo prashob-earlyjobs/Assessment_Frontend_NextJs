@@ -307,10 +307,10 @@ export default function Index() {
                            Build resumes that employers can’t ignore. With EarlyJobs’ AI-powered resume builder, you’ll have a professional CV ready in minutes.
                         </p>
                     </div>
-                    <div className="grid md:grid-cols-3 gap-8 mt-10">
+                    <div className="grid lg:grid-cols-3 gap-8 mt-10">
                         <div
                             onClick={() => handleCardClick('/airesume', 0)}
-                            className="relative group hover:shadow-xl transition-all duration-300 border-0 shadow-lg bg-white rounded-lg p-8 text-center cursor-pointer"
+                            className="relative group hover:shadow-xl transition-all duration-300 border-0 shadow-lg bg-white rounded-2xl p-8 text-center cursor-pointer"
                         >
                             {loadingCard === 0 && (
                                 <div className="loading-overlay">

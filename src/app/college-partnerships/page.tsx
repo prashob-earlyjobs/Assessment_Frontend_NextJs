@@ -1,10 +1,9 @@
 "use client";
-
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Card } from "../components/ui/card";
-import { ChevronRight, Brain, FileText, UsersRound, HandCoins, Briefcase, Monitor, BadgeCheck, Rocket, ChevronDown, ChevronUp, CheckCircle, Menu, X, LogOut, LogIn } from 'lucide-react';
+import { ChevronRight,GraduationCap, Brain, FileText, UsersRound, HandCoins, Briefcase, Monitor, BadgeCheck, Rocket, ChevronDown, ChevronUp, CheckCircle, Menu, X, LogOut, LogIn } from 'lucide-react';
 import Footer from '../components/pages/footer';
 import emailjs from '@emailjs/browser';
 import { toast } from "sonner";
@@ -12,13 +11,41 @@ import Navbar from '../components/pages/navbar';
 import { useRouter } from 'next/navigation';
 import { useUser } from "../context";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
-
 import { userLogout } from "../components/services/servicesapis";
 
 interface Company {
   name: string;
   logo_url: string;
 }
+
+const useScrollAnimation = () => {
+    const ref = useRef(null);
+    const [isVisible, setIsVisible] = useState(false);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true);
+                    observer.unobserve(entry.target);
+                }
+            },
+            { threshold: 0.1 }
+        );
+
+        if (ref.current) {
+            observer.observe(ref.current);
+        }
+
+        return () => {
+            if (ref.current) {
+                observer.unobserve(ref.current);
+            }
+        };
+    }, []);
+
+    return { ref, isVisible };
+};
 
 const Index = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -47,7 +74,6 @@ const Index = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [companies, setCompanies] = useState<Company[]>([]);
 
-  // Backend API URL for fetching company data
   const backendApiUrl = process.env.NEXT_PUBLIC_BACKEND_URL_IN;
 
   useEffect(() => {
@@ -74,15 +100,42 @@ const Index = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!formData.name || !formData.phone || !formData.email || !formData.designation || !formData.collegeName || !formData.location) {
-        toast.error("Please fill in all required fields");
-        return;
+
+    // Validation rules
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^[0-9]{10}$/;
+
+    if (!formData.name.trim()) {
+      toast.error("Name is required and cannot be empty");
+      return;
+    }
+    if (!phoneRegex.test(formData.phone)) {
+      toast.error("Phone number must be a 10-digit number");
+      return;
+    }
+    if (!emailRegex.test(formData.email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+    if (!formData.designation.trim()) {
+      toast.error("Designation is required and cannot be empty");
+      return;
+    }
+    if (!formData.collegeName.trim()) {
+      toast.error("College Name is required and cannot be empty");
+      return;
+    }
+    if (formData.collegeWebsite && !formData.collegeWebsite.startsWith('http')) {
+      toast.error("College Website must start with 'http' or 'https' if provided");
+      return;
+    }
+    if (!formData.location.trim()) {
+      toast.error("Location is required and cannot be empty");
+      return;
     }
 
-    emailjs.init('HodrwiEGOmoi2sAyC'); // Replace with your EmailJS public key
+    emailjs.init('HodrwiEGOmoi2sAyC');
 
-    // Send email to admin
     try {
       await emailjs.send('service_9h6jj4g', 'template_qvt72y5', {
         name: formData.name,
@@ -98,7 +151,6 @@ const Index = () => {
       console.error('Failed to send admin email:', err);
     }
 
-    // Send confirmation email to user
     try {
       await emailjs.send('service_9h6jj4g', 'template_xiiuysu', {
         name: formData.name,
@@ -121,13 +173,12 @@ const Index = () => {
     });
   };
 
-  // Smooth scroll handler
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-    setIsMobileMenuOpen(false); // Close mobile menu after clicking
+    setIsMobileMenuOpen(false);
   };
 
   const handleProfileClick = () => {
@@ -154,164 +205,163 @@ const Index = () => {
     setIsMobileMenuOpen(false);
   };
 
+  const toggleFaq = (index: number) => {
+    setOpenFaq(openFaq === index ? null : index);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-      {/* Header */}
-     <header className={`bg-white shadow-md border-b border-orange-100 sticky top-0 z-50`}>
-  <div className="max-w-7xl mx-auto px-4 py-1 lg:py-3 sm:px-6 lg:px-8">
-    <div className="flex justify-between items-center h-16">
-      <div className="flex items-center">
-        <img src="/images/logo.png" onClick={() => router.push("/")} alt="EarlyJobs.ai" className="h-12 lg:h-14 cursor-pointer" />
-      </div>
-      <nav className="hidden md:flex space-x-8 items-center">
-        <button
-          onClick={() => scrollToSection('overview')}
-          className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-medium"
-        >
-          Overview
-        </button>
-        <button
-          onClick={() => scrollToSection('colleges')}
-          className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-medium"
-        >
-          For Colleges
-        </button>
-        <button
-          onClick={() => scrollToSection('students')}
-          className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-medium"
-        >
-          Students
-        </button>
-        {userCredentials ? (
-          <div className="flex items-center space-x-4">
-             <Button
-              variant="ghost"
-              className="text-red-600 hover:bg-red-50 rounded-xl py-2 px-4 transition-all duration-300"
-              onClick={handleLogout}
-            >
-              <LogOut className="h-5 w-5 mr-2" />
-    
-            </Button>
-            <div className="flex items-center space-x-3 cursor-pointer" onClick={handleProfileClick}>
-              <Avatar className="h-10 w-10">
-                <AvatarImage src={userCredentials.avatar} />
-                <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
-                  {userCredentials?.name
-                    ?.split(" ")
-                    .map((n) => n[0])
-                    .join("")
-                    ?.toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              <span className="text-sm font-medium text-gray-900">{userCredentials.name}</span>
+      <header className={`bg-white shadow-md border-b border-orange-100 sticky top-0 z-50`}>
+        <div className="max-w-7xl mx-auto px-4 py-1 lg:py-3 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center">
+              <img src="/images/logo.png" onClick={() => router.push("/")} alt="EarlyJobs.ai" className="h-12 lg:h-14 cursor-pointer" />
             </div>
-           
+            <nav className="hidden md:flex space-x-8 items-center">
+              <button
+                onClick={() => scrollToSection('overview')}
+                className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-medium"
+              >
+                Overview
+              </button>
+              <button
+                onClick={() => scrollToSection('colleges')}
+                className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-medium"
+              >
+                For Colleges
+              </button>
+              <button
+                onClick={() => scrollToSection('students')}
+                className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-medium"
+              >
+                Students
+              </button>
+              {userCredentials ? (
+                <div className="flex items-center space-x-4">
+                  <Button
+                    variant="ghost"
+                    className="text-red-600 hover:bg-red-50 rounded-xl py-2 px-4 transition-all duration-300"
+                    onClick={handleLogout}
+                  >
+                    <LogOut className="h-5 w-5 mr-2" />
+                  </Button>
+                  <div className="flex items-center space-x-3 cursor-pointer" onClick={handleProfileClick}>
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage src={userCredentials.avatar} />
+                      <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
+                        {userCredentials?.name
+                          ?.split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                          ?.toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="text-sm font-medium text-gray-900">{userCredentials.name}</span>
+                  </div>
+                </div>
+              ) : (
+                <Button
+                  className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-full transition-colors duration-200 font-semibold"
+                  onClick={() => router.push("/signup")}
+                >
+                  Sign Up
+                </Button>
+              )}
+            </nav>
+            <div className="md:hidden flex items-center">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="text-gray-600 hover:text-orange-600 focus:outline-none p-3"
+              >
+                {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+              </Button>
+            </div>
           </div>
-        ) : (
-          <Button
-            className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-full transition-colors duration-200 font-semibold"
-            onClick={() => router.push("/signup")}
-          >
-            Sign Up
-          </Button>
-        )}
-      </nav>
-      <div className="md:hidden flex items-center">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="text-gray-600 hover:text-orange-600 focus:outline-none p-3"
-        >
-          {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-        </Button>
-      </div>
-    </div>
-    {isMobileMenuOpen && (
-      <div className="md:hidden bg-white/95 backdrop-blur-sm shadow-lg z-50 px-4 py-4 border-b border-orange-100">
-        <div className="flex flex-col space-y-2">
-          {userCredentials !== null && (
-            <div
-              className="flex items-center space-x-3 cursor-pointer px-4 py-3"
-              onClick={handleProfileClick}
-            >
-              <Avatar className="h-10 w-10">
-                <AvatarImage src={userCredentials.avatar} />
-                <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
-                  {userCredentials?.name
-                    ?.split(" ")
-                    .map((n) => n[0])
-                    .join("")
-                    ?.toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <p className="text-sm font-medium text-gray-900">
-                  {userCredentials.name}
-                </p>
-                <p className="text-xs text-gray-500">
-                  {userCredentials.profile?.preferredJobRole}
-                </p>
+          {isMobileMenuOpen && (
+            <div className="md:hidden bg-white/95 backdrop-blur-sm shadow-lg z-50 px-4 py-4 border-b border-orange-100">
+              <div className="flex flex-col space-y-2">
+                {userCredentials !== null && (
+                  <div
+                    className="flex items-center space-x-3 cursor-pointer px-4 py-3"
+                    onClick={handleProfileClick}
+                  >
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage src={userCredentials.avatar} />
+                      <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
+                        {userCredentials?.name
+                          ?.split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                          ?.toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">
+                        {userCredentials.name}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {userCredentials.profile?.preferredJobRole}
+                      </p>
+                    </div>
+                  </div>
+                )}
+                <Button
+                  variant="ghost"
+                  className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
+                  onClick={() => handleMobileMenuItemClick("/browse-candidates")}
+                >
+                  Browse Candidates
+                </Button>
+                <Button
+                  variant="ghost"
+                  className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
+                  onClick={() => handleMobileMenuItemClick("/colleges")}
+                >
+                  Colleges
+                </Button>
+                <Button
+                  variant="ghost"
+                  className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
+                  onClick={() => handleMobileMenuItemClick("/talent-pool")}
+                >
+                  Talent Pool
+                </Button>
+                {userCredentials !== null ? (
+                  <Button
+                    variant="ghost"
+                    className="w-full text-left justify-start text-red-600 hover:bg-red-50 rounded-xl py-3 px-4 transition-all duration-300"
+                    onClick={() => {
+                      handleLogout();
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    <LogOut className="h-5 w-5 mr-2" />
+                    Logout
+                  </Button>
+                ) : (
+                  <Button
+                    className="w-full text-left justify-start bg-orange-600 hover:bg-orange-700 text-white rounded-xl py-3 px-4 shadow-lg hover:shadow-xl transition-all duration-300"
+                    onClick={() => {
+                      router.push("/login");
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    <LogIn className="h-5 w-5 mr-2" />
+                    Login
+                  </Button>
+                )}
               </div>
             </div>
           )}
-          <Button
-            variant="ghost"
-            className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
-            onClick={() => handleMobileMenuItemClick("/browse-candidates")}
-          >
-            Browse Candidates
-          </Button>
-          <Button
-            variant="ghost"
-            className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
-            onClick={() => handleMobileMenuItemClick("/colleges")}
-          >
-            Colleges
-          </Button>
-          <Button
-            variant="ghost"
-            className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
-            onClick={() => handleMobileMenuItemClick("/talent-pool")}
-          >
-            Talent Pool
-          </Button>
-          {userCredentials !== null ? (
-            <Button
-              variant="ghost"
-              className="w-full text-left justify-start text-red-600 hover:bg-red-50 rounded-xl py-3 px-4 transition-all duration-300"
-              onClick={() => {
-                handleLogout();
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              <LogOut className="h-5 w-5 mr-2" />
-              Logout
-            </Button>
-          ) : (
-            <Button
-              className="w-full text-left justify-start bg-orange-600 hover:bg-orange-700 text-white rounded-xl py-3 px-4 shadow-lg hover:shadow-xl transition-all duration-300"
-              onClick={() => {
-                router.push("/login");
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              <LogIn className="h-5 w-5 mr-2" />
-              Login
-            </Button>
-          )}
         </div>
-      </div>
-    )}
-  </div>
-</header>
+      </header>
 
-      {/* Hero Section */}
       <section className="bg-gradient-to-b from-white via-orange-100/90 to-orange-50/40 py-8 lg:py-16" id="overview">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-start">
-            {/* Main Content */}
             <div className='lg:mt-20'>
               <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
                 Transform Placements at Your College with <span className="text-orange-600">EarlyJobs.ai</span>
@@ -320,7 +370,6 @@ const Index = () => {
                 AI-powered assessments, verified recruiters, and a connected talent pool to get your students placed faster — at zero cost.
               </p>
 
-              {/* Stats Cards */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 {[
                   { value: "100+", label: "Employers" },
@@ -336,7 +385,6 @@ const Index = () => {
               </div>
             </div>
 
-            {/* Registration Form */}
             <div className="lg:sticky lg:top-8 lg:ml-15">
               <Card className="p-6 shadow-2xl border border-orange-100 w-full">
                 <div className="text-center mb-6">
@@ -431,7 +479,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Section 2: Benefits to Colleges */}
       <section className="bg-orange-50 py-20" id="colleges">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -460,51 +507,40 @@ const Index = () => {
           </div>
         </div>
       </section>
+<section className="bg-white py-20" id="students">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="text-center mb-16">
+      <h2 className="text-4xl font-extrabold text-gray-900 mb-4">
+        <span className="text-orange-600">Benefits</span> to Students
+      </h2>
+      <p className="text-gray-600 max-w-2xl mx-auto">
+        Empowering students with opportunities and skills for success
+      </p>
+    </div>
 
-      {/* Section 3: Benefits to Students */}
-      <section className="bg-white py-20" id="students">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-extrabold text-gray-900 mb-4">
-              <span className="text-orange-600">Benefits</span> to Students
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">Empowering students with opportunities and skills for success</p>
+    {/* Single responsive grid */}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {[
+        { icon: BadgeCheck, title: "Verified, Skill-Matched Jobs", description: "Access jobs across IT, Core, BFSI, and Startups." },
+        { icon: FileText, title: "ATS-Ready Resumes", description: "Professional resumes and interview prep for success." },
+        { icon: UsersRound, title: "Talent Pool Access", description: "Real-time job updates through our platform." },
+        { icon: Briefcase, title: "Recruitment Internships", description: "Gain hands-on experience with certificates." },
+        { icon: Rocket, title: "Faster Placements", description: "Pan-India recruiter network for quick job matches." },
+        { icon: GraduationCap, title: "Career Guidance", description: "Mentorship and expert advice to shape your career path." }
+      ].map((benefit, index) => (
+        <div key={index} className="text-center">
+          <div className="w-16 h-16 bg-orange-600 rounded-lg mx-auto mb-6 flex items-center justify-center shadow-md">
+            <benefit.icon className="h-8 w-8 text-white" />
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              { icon: BadgeCheck, title: "Verified, Skill-Matched Jobs", description: "Access jobs across IT, Core, BFSI, and Startups." },
-              { icon: FileText, title: "ATS-Ready Resumes", description: "Professional resumes and interview prep for success." },
-              { icon: UsersRound, title: "Talent Pool Access", description: "Real-time job updates through our platform." },
-            ].map((benefit, index) => (
-              <div key={index} className="text-center">
-                <div className="w-16 h-16 bg-orange-600 rounded-lg mx-auto mb-6 flex items-center justify-center shadow-md">
-                  <benefit.icon className="h-8 w-8 text-white" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">{benefit.title}</h3>
-                <p className="text-gray-600">{benefit.description}</p>
-              </div>
-            ))}
-
-            {/* Last two items centered */}
-            <div className="md:col-span-2 lg:col-span-3 flex justify-center gap-8 mt-10">
-              {[
-                { icon: Briefcase, title: "Recruitment Internships", description: "Gain hands-on experience with certificates." },
-                { icon: Rocket, title: "Faster Placements", description: "Pan-India recruiter network for quick job matches." }
-              ].map((benefit, index) => (
-                <div key={index} className="text-center">
-                  <div className="w-16 h-16 bg-orange-600 rounded-lg mx-auto mb-6 flex items-center justify-center shadow-md">
-                    <benefit.icon className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{benefit.title}</h3>
-                  <p className="text-gray-600">{benefit.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">{benefit.title}</h3>
+          <p className="text-gray-600">{benefit.description}</p>
         </div>
-      </section>
+      ))}
+    </div>
+  </div>
+</section>
 
-      {/* Section 4: How It Works */}
+
       <section className="bg-orange-50 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -533,7 +569,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Section 5: Success Stories & Partner Logos */}
       <section className="bg-white py-16 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-8">
           <h2 className="text-3xl font-extrabold text-gray-900 mb-4">
@@ -580,7 +615,6 @@ const Index = () => {
         `}</style>
       </section>
 
-      {/* Section 6: Why EarlyJobs.ai is Different */}
       <section className="bg-orange-50 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -608,7 +642,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* FAQ Section */}
       <section className="bg-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -659,34 +692,39 @@ const Index = () => {
                 question: "What happens if students fail or score low in assessments?",
                 answer: "Assessments are not just filters, they are growth tools. Every student receives detailed feedback and recommendations, helping them improve their skills and increase their chances of placement."
               }
-            ].map((faq, index) => (
-              <div 
-                key={index} 
-                className="border border-orange-100 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
-              >
-                <button
-                  className="w-full flex justify-between items-center p-5 text-left"
-                  onClick={() => setOpenFaq(openFaq === index ? null : index)}
+            ].map((faq, index) => {
+              const { ref, isVisible } = useScrollAnimation();
+              return (
+                <div
+                  key={index}
+                  ref={ref}
+                  className={`transition-all duration-700 delay-${index * 150} ${isVisible ? "animate-slide-up opacity-100" : "opacity-0 translate-y-10"}`}
                 >
-                  <span className="text-lg font-semibold text-gray-900">{faq.question}</span>
-                  {openFaq === index ? (
-                    <ChevronUp className="h-5 w-5 text-orange-600" />
-                  ) : (
-                    <ChevronDown className="h-5 w-5 text-orange-600" />
-                  )}
-                </button>
-                {openFaq === index && (
-                  <div className="px-5 pb-5 text-gray-600">
-                    {faq.answer}
+                  <div className="bg-gray-50 rounded-lg shadow-md border-0">
+                    <button
+                      className="w-full flex justify-between items-center p-4 sm:p-5 text-left text-gray-900 font-semibold text-base sm:text-lg"
+                      onClick={() => toggleFaq(index)}
+                    >
+                      <span>{faq.question}</span>
+                      {openFaq === index ? (
+                        <ChevronUp className="w-4 sm:w-5 h-4 sm:h-5 text-orange-600" />
+                      ) : (
+                        <ChevronDown className="w-4 sm:w-5 h-4 sm:h-5 text-gray-400" />
+                      )}
+                    </button>
+                    {openFaq === index && (
+                      <div className="p-4 sm:p-5 pt-0 text-gray-600 text-sm sm:text-base">
+                        <p>{faq.answer}</p>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            ))}
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* Final CTA Section */}
       <section className="bg-orange-600 py-16">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <h2 className="text-4xl font-extrabold text-white mb-6">
@@ -696,11 +734,11 @@ const Index = () => {
             Join 150+ colleges already transforming placements with EarlyJobs.ai
           </p>
           <div className="flex justify-center space-x-4">
-           <a href="https://calendly.com/prajwal-earlyjobs/30min" target="_blank" rel="noopener noreferrer">
-             <Button className="bg-white text-orange-600 hover:bg-orange-50 px-8 py-3 text-lg font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
-               Book a Free 15-min Call
-             </Button>
-           </a>
+            <a href="https://calendly.com/prajwal-earlyjobs/30min" target="_blank" rel="noopener noreferrer">
+              <Button className="bg-white text-orange-600 hover:bg-orange-50 px-8 py-3 text-lg font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
+                Book a Free 15-min Call
+              </Button>
+            </a>
             <Button 
               className="bg-white text-orange-600 hover:bg-orange-50 px-8 py-3 text-lg font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
               onClick={() => scrollToSection('overview')}
