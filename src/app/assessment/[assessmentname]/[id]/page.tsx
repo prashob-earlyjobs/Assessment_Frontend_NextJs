@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       siteName: "EarlyJobs",
       images: [
         {
-          url: "https://earlyjobs.ai/assets/og-image.png", // Replace with actual image
+          url: "https://earlyjobs.ai/assets/og-image.png", 
           width: 1200,
           height: 630,
           alt: "Assessment Page",
