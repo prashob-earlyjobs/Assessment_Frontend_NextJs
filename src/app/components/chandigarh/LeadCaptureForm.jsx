@@ -9,6 +9,8 @@ import { Label } from '../ui/label';
 import { useToast } from '../../hooks/use-toast';
 import { MapPin, Phone, Mail, Shield, Clock, Award } from 'lucide-react';
 import emailjs from '@emailjs/browser';
+import {toast} from "sonner";
+
 
 const LeadCaptureSection = () => {
   const [formData, setFormData] = useState({
@@ -20,7 +22,7 @@ const LeadCaptureSection = () => {
     city: 'Chandigarh'
   });
 
-  const { toast } = useToast();
+  
 
   useEffect(() => {
     console.log('EmailJS initialized with account key:', process.env.REACT_APP_FRANCHISE_Chandigarh_EMAILJS_ACCOUNT_KEY);
@@ -35,7 +37,7 @@ const LeadCaptureSection = () => {
         title: "Please fill all required fields",
         variant: "destructive"
       });
-      alert("Please fill all required fields.");
+      toast.info("Please fill all required fields.");
       return;
     }
 
@@ -71,7 +73,7 @@ const LeadCaptureSection = () => {
         title: "Your form is submitted successfully",
         description: "We'll contact you within 24 hours to discuss opportunities in Chandigarh."
       });
-      alert("Your form is submitted successfully! We'll contact you within 24 hours.");
+      toast.success("Your form is submitted successfully! We'll contact you within 24 hours.");
 
       setFormData({
         name: '',
@@ -88,7 +90,7 @@ const LeadCaptureSection = () => {
         description: "There was an error submitting your form. Please try again.",
         variant: "destructive"
       });
-      alert("Submission failed. Please try again.");
+      toast.error("Submission failed. Please try again.");
     }
   };
 

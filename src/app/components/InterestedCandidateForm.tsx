@@ -8,9 +8,14 @@ import { toast } from "sonner";
 import { X } from "lucide-react";
 
 const InterestedCandidateForm = ({ isOpen, onClose, candidateName }) => {
+  const [step, setStep] = useState(1); // Track form step
   const [formData, setFormData] = useState({
     name: "",
+    email: "",
     companyName: "",
+    interviewDate: "",
+    interviewMode: "online", // Default to online
+    companyAddress: "",
     mobile: "+91",
     mobileOtp: "",
   });
@@ -33,7 +38,7 @@ const InterestedCandidateForm = ({ isOpen, onClose, candidateName }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Send OTP via backend API (using Gupshup in backend)
+  // Send OTP via backend API
   const sendOtp = async () => {
     setIsSubmitting(true);
     try {
@@ -75,12 +80,12 @@ const InterestedCandidateForm = ({ isOpen, onClose, candidateName }) => {
         body: JSON.stringify({ ...formData, candidateName }),
       });
 
-      const data = await response.json(); // Parse response to check for OTP errors
+      const data = await response.json();
       if (!response.ok) {
-        if (data.message === "Invalid or expired OTP") {
-          throw new Error("Invalid or expired OTP. Please try again.");
+        if (data.error === "Invalid OTP") {
+          throw new Error("Invalid OTP entered. Please try again.");
         }
-        throw new Error(data.message || "Failed to submit interest");
+        throw new Error(data.error || "Failed to submit interest");
       }
 
       toast.success("Interest expressed successfully! We will contact you soon.");
@@ -92,16 +97,35 @@ const InterestedCandidateForm = ({ isOpen, onClose, candidateName }) => {
     }
   };
 
+  // Handle Next button to move to Step 2
+  const handleNext = (e) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.companyName) {
+      toast.error("Please fill all required fields in Step 1.");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+    setStep(2);
+  };
+
   // Reset form when dialog closes
   useEffect(() => {
     if (!isOpen) {
       setFormData({
         name: "",
+        email: "",
         companyName: "",
+        interviewDate: "",
+        interviewMode: "online",
+        companyAddress: "",
         mobile: "+91",
         mobileOtp: "",
       });
       setMobileOtpSent(false);
+      setStep(1);
     }
   }, [isOpen]);
 
@@ -116,73 +140,146 @@ const InterestedCandidateForm = ({ isOpen, onClose, candidateName }) => {
             <X size={24} />
           </button>
         </div>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Label htmlFor="name">Your Name</Label>
-            <Input
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              placeholder="Enter your name"
-            />
-          </div>
-          <div>
-            <Label htmlFor="companyName">Company Name</Label>
-            <Input
-              id="companyName"
-              name="companyName"
-              value={formData.companyName}
-              onChange={handleChange}
-              required
-              placeholder="Enter company name"
-            />
-          </div>
-          <div>
-            <Label htmlFor="mobile">Mobile Number</Label>
-            <div className="flex space-x-2">
+
+        {step === 1 && (
+          <form onSubmit={handleNext} className="space-y-4">
+            <div>
+              <Label htmlFor="name">Your Name</Label>
               <Input
-                id="mobile"
-                name="mobile"
-                type="tel"
-                value={formData.mobile}
+                id="name"
+                name="name"
+                value={formData.name}
                 onChange={handleChange}
                 required
-                placeholder="+91 Enter mobile number"
-                disabled={mobileOtpSent}
+                placeholder="Enter your name"
               />
+            </div>
+            <div>
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                placeholder="Enter your email"
+              />
+            </div>
+            <div>
+              <Label htmlFor="companyName">Company Name</Label>
+              <Input
+                id="companyName"
+                name="companyName"
+                value={formData.companyName}
+                onChange={handleChange}
+                required
+                placeholder="Enter company name"
+              />
+            </div>
+            <Button
+              type="submit"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md"
+            >
+              Next
+            </Button>
+          </form>
+        )}
+
+        {step === 2 && (
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <Label htmlFor="interviewDate">Interview Schedule Date</Label>
+              <Input
+                id="interviewDate"
+                name="interviewDate"
+                type="date"
+                value={formData.interviewDate}
+                onChange={handleChange}
+                required
+                min={new Date().toISOString().split("T")[0]} // Prevent past dates
+              />
+            </div>
+            <div>
+              <Label htmlFor="interviewMode">Interview Mode</Label>
+              <select
+                id="interviewMode"
+                name="interviewMode"
+                value={formData.interviewMode}
+                onChange={handleChange}
+                className="w-full border rounded-md p-2"
+              >
+                <option value="online">Online</option>
+                <option value="offline">Offline</option>
+              </select>
+            </div>
+            {formData.interviewMode === "offline" && (
+              <div>
+                <Label htmlFor="companyAddress">Company Address</Label>
+                <Input
+                  id="companyAddress"
+                  name="companyAddress"
+                  value={formData.companyAddress}
+                  onChange={handleChange}
+                  required
+                  placeholder="Enter company address"
+                />
+              </div>
+            )}
+            <div>
+              <Label htmlFor="mobile">Mobile Number</Label>
+              <div className="flex space-x-2">
+                <Input
+                  id="mobile"
+                  name="mobile"
+                  type="tel"
+                  value={formData.mobile}
+                  onChange={handleChange}
+                  required
+                  placeholder="+91 Enter mobile number"
+                  disabled={mobileOtpSent}
+                />
+                <Button
+                  type="button"
+                  onClick={sendOtp}
+                  disabled={isSubmitting || mobileOtpSent || formData.mobile.length <= 3}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+                >
+                  {mobileOtpSent ? "Resend OTP" : "Send OTP"}
+                </Button>
+              </div>
+            </div>
+            {mobileOtpSent && (
+              <div>
+                <Label htmlFor="mobileOtp">Mobile OTP</Label>
+                <Input
+                  id="mobileOtp"
+                  name="mobileOtp"
+                  value={formData.mobileOtp}
+                  onChange={handleChange}
+                  required
+                  placeholder="Enter mobile OTP"
+                />
+              </div>
+            )}
+            <div className="flex space-x-2">
               <Button
                 type="button"
-                onClick={sendOtp}
-                disabled={isSubmitting || mobileOtpSent || formData.mobile.length <= 3}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+                onClick={() => setStep(1)}
+                className="w-full bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-md"
               >
-                {mobileOtpSent ? "Resend OTP" : "Send OTP"}
+                Back
+              </Button>
+              <Button
+                type="submit"
+                disabled={isSubmitting || !mobileOtpSent || !formData.mobileOtp}
+                className="w-full bg-orange-600 hover:bg-orange-700 text-white py-2 rounded-md"
+              >
+                {isSubmitting ? "Submitting..." : "Submit Interest"}
               </Button>
             </div>
-          </div>
-          {mobileOtpSent && (
-            <div>
-              <Label htmlFor="mobileOtp">Mobile OTP</Label>
-              <Input
-                id="mobileOtp"
-                name="mobileOtp"
-                value={formData.mobileOtp}
-                onChange={handleChange}
-                required
-                placeholder="Enter mobile OTP"
-              />
-            </div>
-          )}
-          <Button
-            type="submit"
-            disabled={isSubmitting || !mobileOtpSent || !formData.mobileOtp}
-            className="w-full bg-orange-600 hover:bg-orange-700 text-white py-2 rounded-md"
-          >
-            {isSubmitting ? "Submitting..." : "Submit Interest"}
-          </Button>
-        </form>
+          </form>
+        )}
       </div>
     </div>
   );

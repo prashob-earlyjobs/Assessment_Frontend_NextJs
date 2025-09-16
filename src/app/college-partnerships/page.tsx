@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
 import { useUser } from "../context";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import { userLogout } from "../components/services/servicesapis";
+import FeaturedArticles from '../components/pages/articles';
 
 interface Company {
   name: string;
@@ -507,6 +508,7 @@ const Index = () => {
           </div>
         </div>
       </section>
+
 <section className="bg-white py-20" id="students">
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div className="text-center mb-16">
@@ -641,6 +643,8 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      <FeaturedArticles/>
 
       <section className="bg-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
