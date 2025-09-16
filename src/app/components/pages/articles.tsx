@@ -54,7 +54,7 @@ const featuredArticlesData: Article[] = [
 
 // Carousel settings
 const carouselSettings = {
-  dots: true,
+  dots: false,
   infinite: true,
   speed: 500,
   slidesToShow: 4,
@@ -88,9 +88,7 @@ const FeaturedArticles: React.FC = () => {
     <section className="bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-3xl font-bold text-orange-600 mb-4 text-center">Featured In</h2>
-        <p className="text-lg text-gray-700 mb-6 text-center">
-          Below is a list of articles and blogs featuring EarlyJobs' Rs 1.2 crore seed funding round announced in April 2024:
-        </p>
+       
         <Slider {...carouselSettings}>
           {featuredArticlesData.map((article, index) => (
             <div key={index} className="px-2 py-6">
