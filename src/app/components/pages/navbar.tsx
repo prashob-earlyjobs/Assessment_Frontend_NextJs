@@ -29,6 +29,15 @@ const Navbar = () => {
           Colleges
         </Button>
         <Button
+          onClick={() => router.push("/recruiter")}
+          className={`bg-white bg-opacity-20 text-white text-lg font-semibold hover:bg-white hover:text-orange-600 rounded-xl px-4 py-2 transition-all duration-300 ${
+            pathname === "/recruiter" ? "border-b-4 border-white rounded-sm" : ""
+          }`}
+          aria-label="Talent Pool"
+        >
+          Recruiter
+        </Button>
+        <Button
           onClick={() => router.push("/talent-pool")}
           className={`bg-white bg-opacity-20 text-white text-lg font-semibold hover:bg-white hover:text-orange-600 rounded-xl px-4 py-2 transition-all duration-300 ${
             pathname === "/talent-pool" ? "border-b-4 border-white rounded-sm" : ""
