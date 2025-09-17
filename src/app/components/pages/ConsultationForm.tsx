@@ -1,7 +1,10 @@
 "use client";
 import React, { useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
+import { toast } from "sonner";
 
 const ConsultationForm = () => {
+  const sitekey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -9,6 +12,11 @@ const ConsultationForm = () => {
     freelanceRecruiter: false,
     intern: false,
   });
+  const [captchaValue, setCaptchaValue] = useState(null);
+
+  function onChange(value) {
+    setCaptchaValue(value);
+  }
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -22,6 +30,8 @@ const ConsultationForm = () => {
     e.preventDefault();
     // Handle form submission (e.g., send data to an API)
     console.log("Form submitted:", formData);
+    // Show success toast
+    toast.success("Form successfully submitted!");
     // Reset form after submission
     setFormData({
       name: "",
@@ -30,7 +40,15 @@ const ConsultationForm = () => {
       freelanceRecruiter: false,
       intern: false,
     });
+    setCaptchaValue(null); // Reset reCAPTCHA
   };
+
+  // Check if all fields are filled and reCAPTCHA is completed
+  const isFormValid =
+    formData.name.trim() !== "" &&
+    formData.email.trim() !== "" &&
+    formData.number.trim() !== "" &&
+    captchaValue !== null;
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
@@ -98,9 +116,16 @@ const ConsultationForm = () => {
             Become an Intern
           </label>
         </div>
+        <ReCAPTCHA
+          sitekey={sitekey}
+          onChange={onChange}
+        />
         <button
           type="submit"
-          className="bg-orange-500 text-white p-3 rounded-md font-medium hover:bg-orange-600 transition-colors"
+          className={`p-3 rounded-md font-medium transition-colors ${
+            isFormValid ? "bg-orange-500 text-white hover:bg-orange-600" : "bg-gray-300 text-gray-500 cursor-not-allowed"
+          }`}
+          disabled={!isFormValid}
         >
           Submit
         </button>

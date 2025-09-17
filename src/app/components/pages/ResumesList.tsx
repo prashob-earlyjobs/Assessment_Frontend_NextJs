@@ -7,6 +7,10 @@ import Cookies from "js-cookie"
 import Header from "./header"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
+import { isUserLoggedIn, userLogout } from "../../components/services/servicesapis";
+import { useUser } from "../../context";
+import Navbar from "./navbar"
+import Footer from "./footer"
 
 type Resume = {
   _id: string
@@ -21,6 +25,7 @@ export default function ResumeList() {
   const [resumes, setResumes] = useState<Resume[]>([])
   const [loading, setLoading] = useState(true)
   const [showPopup, setShowPopup] = useState(false)
+  const { userCredentials, setUserCredentials } = useUser();
   const router = useRouter()
   const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL 
 
@@ -43,6 +48,7 @@ export default function ResumeList() {
         const result = await response.json()
         if (!response.ok) {
           throw new Error(result.message || "Failed to fetch resumes")
+          
         }
 
         if (result.success && result.data) {
@@ -54,7 +60,14 @@ export default function ResumeList() {
           setResumes([])
         }
       } catch (error: any) {
-        toast.error(error.message || "An error occurred while fetching resumes")
+        
+        if(error.message=="Token is not valid."){
+          toast.error( "Session Expired")
+          // router.push("/login")
+          // await userLogout();
+          setUserCredentials(null)
+          
+        }
         setResumes([])
       } finally {
         setLoading(false)
@@ -94,9 +107,10 @@ export default function ResumeList() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-white">
+    <div className="bg-gradient-to-br from-orange-50 to-white">
+      <Navbar/>
       <Header />
-      <main className="max-w-7xl mx-auto px-8 py-10">
+      <main className="max-w-7xl min-h-screen mx-auto px-8 py-10">
         <section className="mb-8 grid gap-6 md:grid-cols-3">
           <div className="md:col-span-2">
             <h1 className="text-3xl font-bold tracking-tight text-slate-900">
@@ -255,6 +269,7 @@ export default function ResumeList() {
           </div>
         )}
       </main>
+      <Footer/>
     </div>
   )
 }

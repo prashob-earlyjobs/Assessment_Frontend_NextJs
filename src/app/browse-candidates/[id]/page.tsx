@@ -88,9 +88,7 @@ useEffect(() => {
           acc[assessment._id] = assessment.title;
           return acc;
         }, {});
-        setAssessmentTitles(titles); // Update state with fetched titles
-
-        // Proceed only if assessmentsPaid exists and is non-empty
+        setAssessmentTitles(titles);
         if (!selectedCandidate.assessmentsPaid || selectedCandidate.assessmentsPaid.length === 0) {
           throw new Error("No assessments available for this candidate");
         }
@@ -176,9 +174,9 @@ useEffect(() => {
         setAssessmentResults(results);
         setRecording(recordings);
 
-        if (results.length === 0 && recordings.length === 0) {
-          throw new Error("No data available for this candidate's assessments");
-        }
+        // if (results.length === 0 && recordings.length === 0) {
+        //   <div>Candidate Didn't finish his</div>
+        // }
       } catch (err) {
         setError(err.message);
         console.error('Fetch candidate data error:', err);
@@ -380,7 +378,7 @@ useEffect(() => {
                           </div>
                         </div>
                       ) : (
-                        <p className="text-gray-600 text-base">No assessment results available.</p>
+                        <p className="text-gray-600 text-base">Candidate yet to finish his assignment. We will provide you after completion</p>
                       )
                     )}
                     {activeTab === "recording" && (
@@ -416,7 +414,7 @@ useEffect(() => {
                               </div>
                               <div className="w-full h-[400px] bg-white border border-gray-300 rounded-md overflow-hidden">
                                 <iframe
-                                  src={`https://earlyjobs-assessment-1.s3.ap-south-1.amazonaws.com/${selectedCandidate.assessmentsPaid[0].interviewId}/EJ-CERT-2025-${selectedCandidate.assessmentsPaid[0].interviewId.slice(0, 8)}.pdf#toolbar=0&navpanes=0&scrollbar=0`}
+                                  src={`https://earlyjobs-assessment-1.s3.ap-south-1.amazonaws.com/${selectedCandidate.assessmentsPaid[0].interviewId}/EJ-CERT-2025-${selectedCandidate.assessmentsPaid[0].interviewId.slice(0, 8)}.pdf`}
                                   title={`Certificate for ${assessmentTitles[selectedCandidate.assessmentsPaid[0].assessmentId] || 'Unknown Assessment'}`}
                                   className="w-full h-full border-0"
                                 >
