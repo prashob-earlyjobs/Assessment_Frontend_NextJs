@@ -1,7 +1,7 @@
 "use client"
 import { Link } from "next/navigation"
 import React from 'react';
-
+import { useRouter } from "next/navigation";
 import { IoIosArrowDown } from "react-icons/io";
 import { IoFlashOutline } from "react-icons/io5";
 import { PiChats } from "react-icons/pi";
@@ -18,6 +18,7 @@ import { metaConstants } from "../../../utils/metaConstants";
 import Footer from "../footer"
 
 const Recruiter = () => {
+    const router=useRouter();
 
     const logos = [
         { src: '/client_logos/flipkart.png', alt: 'Logo 1' },
@@ -247,8 +248,8 @@ const Recruiter = () => {
                         </div>
                         <div className="landing-page-screen-1-btn-grp">
                             <p className="landing-page-s1-link-btn">Become Freelance Recruiter</p>
-                            <p className="landing-page-s1-link-btn-outline landing-page-s1-link-btn">Explore Jobs</p>
-                            <p  className="landing-page-s1-link-btn-outline landing-page-s1-link-btn">Free Job Posting</p>
+                            <p onClick={()=>router.push("/jobs")} className="landing-page-s1-link-btn-outline landing-page-s1-link-btn">Explore Jobs</p>
+                            {/* <p  className="landing-page-s1-link-btn-outline landing-page-s1-link-btn">Free Job Posting</p> */}
                         </div>
                     </div>
                     <div className="landing-page-screen-1-image-con">
@@ -328,7 +329,7 @@ const Recruiter = () => {
             <div className="landing-page-screen-8-container">
                 <h1 className="landing-page-s8-heading">The problem that job platforms cannot solve, EarlyJobs solves</h1>
                 <p className="landing-page-s8-desc">No pre and post hiring hustle required, we take care of everything. Want to know more?</p>
-                <a href="tel:+918217527926" className="landing-page-s8-btn">Schedule a call</a>
+                <a href="tel:+918217527926" className="landing-page-s8-btn">Apply as a recruiter</a>
             </div>
             <div className="landing-page-screen-2-container">
                 <h2 className="landing-page-s2-heading">MONEY MATTERS</h2>
@@ -376,7 +377,7 @@ const Recruiter = () => {
                         ))}
                     </div>
                     <div className="landing-page-s7-consultation-con">
-                        <ConsultationForm /> 
+                        <ConsultationForm />
                     </div>
                 </div>
             </div>

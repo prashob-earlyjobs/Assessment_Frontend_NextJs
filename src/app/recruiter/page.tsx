@@ -52,14 +52,14 @@ const RecruiterPage= () =>{
         <>
         <Navbar/>
           <header className="bg-white shadow-md border-b border-orange-100 sticky top-0 z-50">
-        <div className="px-10 lg:pl-26 py-3 ">
+        <div className="px-8 lg:pl-26 py-3 ">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <img
                 src="/images/logo.png"
                 onClick={() => router.push("/")}
                 alt="EarlyJobs.ai"
-                className="h-12 lg:h-14 cursor-pointer"
+                className="h-14 lg:h-14 cursor-pointer"
               />
             </div>
             <nav className="hidden md:flex space-x-8 items-center">
