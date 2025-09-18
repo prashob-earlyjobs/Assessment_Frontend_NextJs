@@ -181,7 +181,7 @@ export default function Assessments() {
             
 
             {/* Hero Section */}
-          <section className="min-h-[80vh] lg:min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-orange-400 to-purple-400 pb-4 sm:pt-4 sm:pb-6 md:pt-0 lg:pb-12 px-4 sm:px-8 md:px-12 lg:px-20">
+          <section className="min-h-[90vh]  items-center overflow-hidden bg-gradient-to-br from-orange-400 to-purple-400 pb-4 sm:pt-4 sm:pb-6  lg:py-22 px-4 sm:px-8 md:px-12 lg:px-20">
     <div className="w-full mx-auto">
         <div className="grid lg:grid-cols-2 gap-6 lg:gap-10 items-center">
             <div className="animate-fade-in text-center lg:text-left">

@@ -16,12 +16,13 @@ const ConsultationForm = () => {
     freelanceRecruiter: false,
     intern: false,
   });
-  const [captchaValue, setCaptchaValue] = useState(null);
+  //const [captchaValue, setCaptchaValue] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function onChange(value) {
-    setCaptchaValue(value);
-  }
+  // function onChange(value) {
+    
+  //   setCaptchaValue(value);
+  // }
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -59,7 +60,7 @@ const ConsultationForm = () => {
         freelanceRecruiter: false,
         intern: false,
       });
-      setCaptchaValue(null);
+     // setCaptchaValue(null);
     } catch (error) {
       console.error("EmailJS error:", error);
       toast.error("Failed to submit form. Please try again.");
@@ -71,8 +72,8 @@ const ConsultationForm = () => {
   const isFormValid =
     formData.name.trim() !== "" &&
     formData.email.trim() !== "" &&
-    formData.number.trim() !== "" &&
-    captchaValue !== null;
+    formData.number.trim() !== "" ;
+    // captchaValue === null;
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
@@ -140,10 +141,10 @@ const ConsultationForm = () => {
             Become an Intern
           </label>
         </div>
-        <ReCAPTCHA
+        {/* <ReCAPTCHA
           sitekey={sitekey}
           onChange={onChange}
-        />
+        /> */}
         <button
           type="submit"
           className={`p-3 rounded-md font-medium transition-colors ${
