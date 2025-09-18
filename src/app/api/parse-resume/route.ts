@@ -112,7 +112,7 @@ export async function POST(request: NextRequest) {
           for (const imagePath of images) {
             const { data: { text } } = await Tesseract.recognize(imagePath, 'eng');
             extractedText += text + '\n';
-            await fs.unlink(imagePath); // Clean up image file
+            await fs.unlink(imagePath); 
           }
         }
       } catch (docxError) {
@@ -139,7 +139,7 @@ export async function POST(request: NextRequest) {
       });
       await fs.unlink(tempTextPath); // Clean up text file
     } else {
-      // Upload original file as fallback
+     
       uploadResult = await fileManager.uploadFile(tempFilePath, {
         mimeType: file.type || getMimeTypeFromExtension(fileExtension, supportedFileTypes),
         displayName: file.name,

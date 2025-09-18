@@ -51,7 +51,7 @@ const RecruiterPage= () =>{
     return (
         <>
         <Navbar/>
-          <header className="bg-white shadow-md border-b border-orange-100 sticky top-0 z-50">
+        <header className="bg-white shadow-md border-b border-orange-100 sticky top-0 z-50">
         <div className="px-8 lg:pl-26 py-3 ">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
@@ -90,13 +90,22 @@ const RecruiterPage= () =>{
                   </div>
                 </div>
               ) : (
-                <Button
-                  className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-full transition-colors duration-200 font-semibold"
-                  onClick={() => router.push("/signup")}
-                  aria-label="Sign Up"
+                <div>
+                <a
+                  className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-lg transition-colors duration-200 font-semibold mr-3"
+                  href="https://dev2.earlyjobs.in/login"
+                  aria-label="Login"
                 >
-                  Sign Up
+                  Login
+                </a>
+                <Button
+                  className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-lg transition-colors duration-200 font-semibold"
+                  onClick={() => router.push("/apply-as-a-recruiter")}
+                  aria-label="Login"
+                >
+                  Apply as Recruiter
                 </Button>
+                </div>
               )}
             </nav>
             <div className="md:hidden flex items-center">
