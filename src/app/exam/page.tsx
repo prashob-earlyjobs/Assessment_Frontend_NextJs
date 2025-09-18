@@ -1,6 +1,5 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
 import {
   PlayCircle,
   User,
@@ -17,6 +16,8 @@ import {
   Building2,
 } from "lucide-react";
 import { useState, useEffect } from "react";
+ import { motion, Variants, easeOut } from "framer-motion";
+
 
 interface UserDetails {
   fullName: string;
@@ -59,7 +60,7 @@ export default function AssessmentStart() {
 
     if (userDetails.fullName && userDetails.email && userDetails.phone && userDetails.college) {
       try {
-        const response = await fetch('http://localhost:5000/api/exam/register', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/exam/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -104,14 +105,15 @@ export default function AssessmentStart() {
     },
   };
 
-  const itemVariants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: { duration: 0.6, ease: "easeOut" },
-    },
-  };
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, x: -20 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.6, ease: easeOut },
+  },
+};
 
   const slideVariants = {
     form: { x: "0%" },

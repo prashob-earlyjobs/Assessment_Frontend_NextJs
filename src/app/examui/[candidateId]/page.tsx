@@ -26,7 +26,7 @@ export default function AssessmentExam() {
 
     const fetchQuestions = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/exam/questions/${candidateId}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/exam/questions/${candidateId}`);
         const data = await response.json();
         if (!response.ok) {
           throw new Error(data.message || 'Failed to fetch questions');
@@ -95,7 +95,7 @@ export default function AssessmentExam() {
     setSubmitLoading(true);
     try {
       const submitData = answers.map((ans, idx) => ({ questionIndex: idx, answer: ans }));
-      const response = await fetch(`http://localhost:5000/api/exam/submit/${candidateId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/exam/submit/${candidateId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
