@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "../components/ui/select";
 import { Button } from "../components/ui/button";
+import Footer from "../components/pages/footer";
 
 interface Job {
   id: string;
@@ -33,7 +34,6 @@ interface Job {
   min_experience?: string;
   max_experience?: string;
   city?: string;
-  //   skills?: string[];
   created_at?: string;
 }
 
@@ -43,7 +43,6 @@ const Jobs = () => {
   const [loading, setLoading] = useState(true);
   const [totalJobs, setTotalJobs] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  // const [jobsPerPage] = useState(10);
   const pageSize = 10;
 
   // Filter states
@@ -52,8 +51,11 @@ const Jobs = () => {
   const [title, setTitle] = useState("");
   const [searchInput, setSearchInput] = useState("");
 
-  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_IN 
+  // Sidebar visibility states for mobile/tablet
+  const [isFilterSidebarOpen, setIsFilterSidebarOpen] = useState(false);
+  
 
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_IN;
 
   // Calculate pagination values
   const totalPages = Math.ceil(totalJobs / pageSize);
@@ -86,15 +88,9 @@ const Jobs = () => {
     try {
       console.log("=== fetchJobs called ===");
       setLoading(true);
-      console.log("Fetching jobs..."); // Debug log
+      console.log("Fetching jobs...");
 
-      const {
-        companyName: cn,
-        location: loc,
-        title: tit,
-        searchInput: si,
-        currentPage: cp,
-      } = filtersRef.current;
+      const { companyName: cn, location: loc, title: tit, searchInput: si, currentPage: cp } = filtersRef.current;
 
       const params = new URLSearchParams();
       if (cn) params.append("company", cn);
@@ -105,23 +101,23 @@ const Jobs = () => {
       params.append("pageSize", pageSize.toString());
 
       const url = `${backendUrl}/public/jobs?${params.toString()}`;
-      console.log("API URL:", url); // Debug log
+      console.log("API URL:", url);
 
-      console.log("About to make fetch request..."); // Debug log
+      console.log("About to make fetch request...");
       const response = await fetch(url);
-      console.log("Response received:", response); // Debug log
-      console.log("Response status:", response.status); // Debug log
+      console.log("Response received:", response);
+      console.log("Response status:", response.status);
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
-      console.log("API Response:", data); // Debug log
+      console.log("API Response:", data);
 
       if (data.jobs) {
-        console.log("Setting jobs data:", data.jobs.length, "jobs"); // Debug log
-        console.log("Sample job data:", data.jobs[0]); // Debug log to see structure
+        console.log("Setting jobs data:", data.jobs.length, "jobs");
+        console.log("Sample job data:", data.jobs[0]);
         setJobsData(data.jobs || []);
         setTotalJobs(data.count || 0);
       } else {
@@ -132,10 +128,10 @@ const Jobs = () => {
       console.error("Error fetching jobs:", error);
       setJobsData([]);
     } finally {
-      console.log("Setting loading to false"); // Debug log
+      console.log("Setting loading to false");
       setLoading(false);
     }
-  }, []); // removed jobsPerPage dependency since backend controls page size
+  }, []);
 
   // Call fetchJobs on component mount
   useLayoutEffect(() => {
@@ -164,34 +160,48 @@ const Jobs = () => {
   // Handle page change
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
-    // Scroll to top of the page when changing pages
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleJobClick = (jobId: string) => {
-    // Get the job data to extract the title
     const job = jobsData.find((j) => j.id === jobId);
     if (job) {
-      const jobTitle =
-        job.title
-          ?.toLowerCase()
-          .replace(/\s+/g, "-")
-          .replace(/[^a-z0-9-]/g, "") || "job";
+      const jobTitle = job.title?.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "") || "job";
       router.push(`/jobs/${jobTitle}/${jobId}`);
     } else {
-      // Fallback if job not found
       router.push(`/jobs/job/${jobId}`);
     }
   };
+
+  // Toggle sidebar visibility
+  const toggleFilterSidebar = () => {
+    setIsFilterSidebarOpen(!isFilterSidebarOpen);
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
 
-      <div className="max-w-7xl mx-auto p-6">
-        <div className="flex gap-6">
+      <div className="max-w-7xl mx-auto p-4 sm:p-6">
+        {/* Mobile/Tablet Toggle Buttons */}
+        <div className="flex justify-between mb-4 md:hidden">
+          <Button
+            variant="outline"
+            onClick={toggleFilterSidebar}
+            className="flex items-center gap-2 border border-gray-300"
+          >
+            {isFilterSidebarOpen ? "Hide Filters" : "Apply Filters"}
+          </Button>
+          
+        </div>
+
+        <div className="flex flex-col md:flex-row gap-4 md:gap-6">
           {/* Left Sidebar - Filters */}
-          <div className="w-64 space-y-4">
+          <div
+            className={`w-full md:w-64 space-y-4 ${
+              isFilterSidebarOpen ? "block" : "hidden md:block"
+            }`}
+          >
             <FilterSidebar
               companyName={companyName}
               setCompanyName={setCompanyName}
@@ -207,8 +217,8 @@ const Jobs = () => {
           {/* Main Content */}
           <div className="flex-1 min-w-0">
             {/* Results Header */}
-            <div className="flex justify-between items-center mb-6">
-              <div className="flex-1 max-w-md">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+              <div className="w-full sm:max-w-md">
                 <div className="relative">
                   <svg
                     className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
@@ -234,7 +244,7 @@ const Jobs = () => {
                 </div>
               </div>
               <Select defaultValue="latest">
-                <SelectTrigger className="w-48">
+                <SelectTrigger className="w-full sm:w-48">
                   <SelectValue placeholder="Sort By" />
                 </SelectTrigger>
                 <SelectContent>
@@ -259,8 +269,7 @@ const Jobs = () => {
                       key={job.id}
                       company={job.company_name}
                       logo={
-                        job.company_logo_url ||
-                        "/images/default-company-logo.png"
+                        job.company_logo_url || "/images/default-company-logo.png"
                       }
                       title={job.title || "Job Title Not Available"}
                       jobType={job.jobType || "Full Time"}
@@ -270,8 +279,6 @@ const Jobs = () => {
                       max_experience={job.max_experience || "_"}
                       salary_mode={job.salary_mode || "_"}
                       location={job.city || "Location Not Specified"}
-                      // skills={job.skills || []}
-                      // postedTime={new Date().toISOString()}
                       postedTime={job.created_at || "Not Disclosed"}
                       onJobClick={() => handleJobClick(job.id)}
                     />
@@ -279,7 +286,7 @@ const Jobs = () => {
 
                   {/* Pagination Controls */}
                   {totalPages > 1 && (
-                    <div className="flex items-center justify-center gap-2 mt-8">
+                    <div className="flex items-center justify-center gap-2 mt-8 flex-wrap">
                       <Button
                         variant="outline"
                         size="sm"
@@ -303,39 +310,31 @@ const Jobs = () => {
                         Previous
                       </Button>
 
-                      {/* Page Numbers */}
                       <div className="flex items-center gap-1">
-                        {Array.from(
-                          { length: Math.min(5, totalPages) },
-                          (_, i) => {
-                            let pageNum;
-                            if (totalPages <= 5) {
-                              pageNum = i + 1;
-                            } else if (currentPage <= 3) {
-                              pageNum = i + 1;
-                            } else if (currentPage >= totalPages - 2) {
-                              pageNum = totalPages - 4 + i;
-                            } else {
-                              pageNum = currentPage - 2 + i;
-                            }
-
-                            return (
-                              <Button
-                                key={pageNum}
-                                variant={
-                                  currentPage === pageNum
-                                    ? "default"
-                                    : "outline"
-                                }
-                                size="sm"
-                                onClick={() => handlePageChange(pageNum)}
-                                className="w-8 h-8 p-0"
-                              >
-                                {pageNum}
-                              </Button>
-                            );
+                        {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                          let pageNum;
+                          if (totalPages <= 5) {
+                            pageNum = i + 1;
+                          } else if (currentPage <= 3) {
+                            pageNum = i + 1;
+                          } else if (currentPage >= totalPages - 2) {
+                            pageNum = totalPages - 4 + i;
+                          } else {
+                            pageNum = currentPage - 2 + i;
                           }
-                        )}
+
+                          return (
+                            <Button
+                              key={pageNum}
+                              variant={currentPage === pageNum ? "default" : "outline"}
+                              size="sm"
+                              onClick={() => handlePageChange(pageNum)}
+                              className="w-8 h-8 p-0"
+                            >
+                              {pageNum}
+                            </Button>
+                          );
+                        })}
                       </div>
 
                       <Button
@@ -365,21 +364,26 @@ const Jobs = () => {
                 </>
               ) : (
                 <div className="text-center py-8">
-                  <p className="text-gray-600">
-                    No jobs found. Try adjusting your filters.
-                  </p>
+                  <p className="text-gray-600">No jobs found. Try adjusting your filters.</p>
                 </div>
               )}
             </div>
           </div>
 
-          {/* Right Sidebar */}
-          <div className="w-64 space-y-6">
+         
+          <div
+            className={`w-full md:w-64 space-y-6 
+             
+            }`}
+          >
             <Sidebar />
           </div>
+          
         </div>
       </div>
+      <Footer/>
     </div>
   );
 };
+
 export default Jobs;

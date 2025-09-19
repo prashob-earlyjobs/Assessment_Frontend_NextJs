@@ -2,6 +2,7 @@ import Header from "../../../components/layout/Header";
 import JobDetailsClient from "../../../components/jobs/JobDetailsClient";
 import JobDetailsSEO from "../../../components/seo/JobDetailsSEO";
 import { Metadata } from "next";
+import Footer from "@/app/components/pages/footer";
 
 interface JobDetailsData {
   id: string;
@@ -154,6 +155,7 @@ export default async function JobDetails({ params }: PageProps) {
       <JobDetailsSEO jobData={jobData} currentUrl={currentUrl} />
       <Header />
       <JobDetailsClient jobData={jobData} currentUrl={currentUrl} />
+      <Footer/>
     </>
   );
 }
