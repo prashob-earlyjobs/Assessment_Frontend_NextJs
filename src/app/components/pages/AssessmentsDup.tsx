@@ -6,6 +6,7 @@ import { Star, Search, Play, Users, BookOpen, Trophy, Clock, CheckCircle, ArrowR
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getAssessmentsfromSearchLandingPage } from "../services/servicesapis";
+import FeaturesCarousel from "./features";
 
 const useScrollAnimation = () => {
     const ref = useRef(null);
@@ -180,74 +181,86 @@ export default function Assessments() {
             
 
             {/* Hero Section */}
-            <section className="min-h-[80vh] lg:min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-orange-400 to-purple-400 pb-4 sm:pt-4 sm:pb-6 md:pt-0 lg:pb-12 px-4 sm:px-8 md:px-12 lg:px-20">
-                <div className="w-full mx-auto">
-                    <div className="grid lg:grid-cols-2 gap-6 lg:gap-10 items-center">
-                        <div className="animate-fade-in text-center lg:text-left">
-                            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-white leading-tight mb-4">
-                                Advance Your Career with {" "}
-                                <span className="bg-gradient-to-r from-white to-orange-100 bg-clip-text text-transparent">
-                                    AI-Powered Skill Assessments
-                                </span>
-                            </h1>
-                            <p className="text-sm sm:text-base md:text-lg text-orange-100 mb-6 max-w-xl mx-auto lg:mx-0">
-                                Join thousands of job seekers and access 300+ online assessments, expert mentorship, and career certificates.
-                            </p>
-                            <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start mb-6">
-                                <Button
-                                    onClick={() => router.push("/assessments")}
-                                    className="bg-white text-orange-600 hover:bg-orange-50 font-semibold py-2 px-4 sm:py-2.5 sm:px-5 rounded-xl text-sm sm:text-base transition-all duration-300 transform hover:scale-105 shadow-lg"
-                                >
-                                    View Assessments
-                                    <ArrowRight className="inline-block ml-2 w-4 h-4 sm:w-5 sm:h-5" />
-                                </Button>
-                            </div>
+    <section className=" h-[85vh] md:min-h-[90vh]  items-center overflow-hidden bg-gradient-to-br from-orange-400 to-purple-400 py-22 px-4 sm:px-8 md:px-12 lg:px-20">
+    <div className="w-full mx-auto">
+        <div className="grid lg:grid-cols-2 gap-6 lg:gap-10 items-center">
+            <div className="animate-fade-in text-center lg:text-left">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-white leading-tight mb-4">
+                    Experience the {" "} 
+                    <span className="bg-gradient-to-r from-white to-gray-100 bg-clip-text text-transparent">
+                        Future of interview prep
+                    </span>
+                </h1>
+                <p className="text-sm sm:text-base md:text-lg text-gray-50 mb-6 max-w-xl mx-auto lg:mx-0">
+                    Start your skill assessment practice today and take one step closer to your dream job with confidence.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start mb-6">
+                    <Button
+                        onClick={() => router.push("/assessments")}
+                        className="bg-white text-orange-600 hover:bg-orange-50 font-semibold py-2 px-4 sm:py-2.5 sm:px-5 rounded-xl text-sm sm:text-base transition-all duration-300 transform hover:scale-105 shadow-lg"
+                    >
+                        View Assessments
+                        <ArrowRight className="inline-block ml-2 w-4 h-4 sm:w-5 sm:h-5" />
+                    </Button>
+                </div>
+                {/* <div className="bg-background p-4 rounded-lg hidden sm:hidden md:hidden lg:block">
+                    <h2 className="text-xl font-semibold text-white mb-4">Key Highlights</h2>
+                    <ul className="text-lg text-gray-200 list-none grid grid-cols-2 gap-4">
+                        <li className="flex items-center"><span className="w-4 h-4 mr-2 flex items-center justify-center bg-white  rounded-full text-gray-100"></span> AI Resume Scoring</li>
+                        <li className="flex items-center"><span className="w-4 h-4 mr-2 flex items-center justify-center  bg-white rounded-full text-gray-100"></span> Communication & Confidence Scoring</li>
+                        <li className="flex items-center"><span className="w-4 h-4 mr-2 flex items-center justify-center  bg-white rounded-full text-gray-100"></span> In-Depth Performance Reports</li>
+                        <li className="flex items-center"><span className="w-4 h-4 mr-2 flex items-center justify-center  bg-white  rounded-full text-gray-100"></span> Interview Transcription & Summary</li>
+                        <li className="flex items-center"><span className="w-4 h-4 mr-2 flex items-center justify-center bg-white  rounded-full text-gray-100"></span> AI-Generated Practice Questions</li>
+                        <li className="flex items-center"><span className="w-4 h-4 mr-2 flex items-center justify-center bg-white  rounded-full text-gray-100"></span> Practice Real-time Coding Challenges</li>
+                        <li className="flex items-center"><span className="w-4 h-4 mr-2 flex items-center justify-center bg-white  rounded-full text-gray-100"></span> 24x7 Interview Practice</li>
+                        <li className="flex items-center"><span className="w-4 h-4 mr-2 flex items-center justify-center bg-white  rounded-full text-gray-100"></span> Easy-to-Use Interface</li>
+                    </ul>
+                </div> */}
+            </div>
+            <div className="relative lg:order-last order-first flex justify-center mt-6 lg:mt-0">
+                <div className="relative w-full max-w-[20rem] sm:max-w-[28rem] h-[14rem] sm:h-[20rem] lg:h-[23rem] lg:max-w-[38rem] animate-float">
+                    <div className="relative z-20 w-full h-full">
+                        <img
+                            src="/images/HeroImgAs.jpg"
+                            className="w-full h-full object-cover rounded-2xl shadow-2xl"
+                        />
+                    </div>
+                    <div className="absolute -top-2 -right-2 bg-white rounded-xl p-1.5 sm:p-2 shadow-xl animate-bounce z-30" style={{ animationDelay: "0.5s" }}>
+                        <div className="flex items-center gap-1 sm:gap-2">
+                            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-500 rounded-full animate-pulse"></div>
+                            <span className="text-xs font-semibold text-gray-800">Online</span>
                         </div>
-                        <div className="relative lg:order-last order-first flex justify-center mt-6 lg:mt-0">
-                            <div className="relative w-full max-w-[20rem] sm:max-w-[28rem] h-[14rem] sm:h-[20rem] lg:h-[23rem] lg:max-w-[38rem] animate-float">
-                                <div className="relative z-20 w-full h-full">
-                                    <img
-                                        src="/images/Herrrooo.jpg"
-                                        className="w-full h-full object-cover rounded-2xl shadow-2xl"
-                                    />
-                                </div>
-                                <div className="absolute -top-2 -right-2 bg-white rounded-xl p-1.5 sm:p-2 shadow-xl animate-bounce z-30" style={{ animationDelay: "0.5s" }}>
-                                    <div className="flex items-center gap-1 sm:gap-2">
-                                        <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-500 rounded-full animate-pulse"></div>
-                                        <span className="text-xs font-semibold text-gray-800">Online</span>
-                                    </div>
-                                </div>
-                                <div className="absolute -bottom-2 -left-2 bg-white rounded-xl p-1.5 sm:p-2 shadow-xl animate-bounce z-30" style={{ animationDelay: "1s" }}>
-                                    <div className="flex items-center gap-1 sm:gap-2">
-                                        <Trophy className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-500 animate-pulse" style={{ animationDuration: "3s" }} />
-                                        <span className="text-xs font-semibold text-gray-800">Certificate</span>
-                                    </div>
-                                </div>
-                                <div className="absolute top-1/3 -left-2 sm:-left-4 bg-white rounded-lg p-1.5 sm:p-2 shadow-lg animate-pulse z-30">
-                                    <div className="flex items-center gap-1 sm:gap-2">
-                                        <BookOpen className="w-3 h-3 sm:w-4 sm:h-4 text-orange-500" />
-                                        <div>
-                                            <div className="text-xs font-medium text-gray-800">Progress</div>
-                                            <div className="w-10 sm:w-12 h-1 sm:h-1.5 bg-gray-200 rounded-full">
-                                                <div className="w-7 sm:w-9 h-1 sm:h-1.5 bg-orange-500 rounded-full animate-pulse"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="absolute top-2/3 -right-2 sm:-right-4 bg-white rounded-lg p-1.5 sm:p-2 shadow-lg animate-pulse z-30" style={{ animationDelay: "1.5s" }}>
-                                    <div className="flex items-center gap-1 sm:gap-2">
-                                        <Users className="w-3 h-3 sm:w-4 sm:h-4 text-blue-500" />
-                                        <div>
-                                            <div className="text-xs font-medium text-gray-800">Job Seekers</div>
-                                        </div>
-                                    </div>
+                    </div>
+                    <div className="absolute -bottom-2 -left-2 bg-white rounded-xl p-1.5 sm:p-2 shadow-xl animate-bounce z-30" style={{ animationDelay: "1s" }}>
+                        <div className="flex items-center gap-1 sm:gap-2">
+                            <Trophy className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-500 animate-pulse" style={{ animationDuration: "3s" }} />
+                            <span className="text-xs font-semibold text-gray-800">Certificate</span>
+                        </div>
+                    </div>
+                    <div className="absolute top-1/3 -left-2 sm:-left-4 bg-white rounded-lg p-1.5 sm:p-2 shadow-lg animate-pulse z-30">
+                        <div className="flex items-center gap-1 sm:gap-2">
+                            <BookOpen className="w-3 h-3 sm:w-4 sm:h-4 text-orange-500" />
+                            <div>
+                                <div className="text-xs font-medium text-gray-800">Progress</div>
+                                <div className="w-10 sm:w-12 h-1 sm:h-1.5 bg-gray-200 rounded-full">
+                                    <div className="w-7 sm:w-9 h-1 sm:h-1.5 bg-orange-500 rounded-full animate-pulse"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div className="absolute top-2/3 -right-2 sm:-right-4 bg-white rounded-lg p-1.5 sm:p-2 shadow-lg animate-pulse z-30" style={{ animationDelay: "1.5s" }}>
+                        <div className="flex items-center gap-1 sm:gap-2">
+                            <Users className="w-3 h-3 sm:w-4 sm:h-4 text-blue-500" />
+                            <div>
+                                <div className="text-xs font-medium text-gray-800">Job Seekers</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </section>
-
+            </div>
+        </div>
+    </div>
+</section>
             {/* Search Courses Section */}
             <section className="py-8 sm:py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
                 <div className="max-w-5xl mx-auto text-center">
@@ -287,7 +300,7 @@ export default function Assessments() {
             </section>
 
             {/* Features Section */}
-            <section className="py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+            {/* <section className="py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-8 sm:mb-10">
                         <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-3">
@@ -327,7 +340,8 @@ export default function Assessments() {
                         })}
                     </div>
                 </div>
-            </section>
+            </section> */}
+            <FeaturesCarousel/>
 
             {/* Popular Courses Section */}
             <section className="py-8 sm:py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">

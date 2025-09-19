@@ -37,11 +37,11 @@ import Header from "./header";
 import { toast } from "sonner";
 import { useUser } from "../../context";
 import Login from "./Login";
-import { Dialog, DialogContent,DialogTitle, DialogOverlay } from "../../components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogOverlay } from "../../components/ui/dialog";
 import { useParams, useRouter } from "next/navigation";
 
 const AssessmentDetails = () => {
-  const { id,referalCode } = useParams();
+  const { id, referalCode } = useParams();
   const navigate = useRouter();
   const [assessment, setAssessment] = useState(null);
   const [suggestedAssessments, setSuggestedAssessments] = useState([]);
@@ -92,7 +92,6 @@ const AssessmentDetails = () => {
 
         setSuggestedAssessments(filteredSuggestions);
       } catch (err) {
-        // console.error("Error fetching suggested assessments:", err);
         toast.error("Failed to load suggested assessments");
       } finally {
         setLoadingSuggestions(false);
@@ -145,7 +144,6 @@ const AssessmentDetails = () => {
     }
   };
 
-  // Native share functionality
   const handleNativeShare = async () => {
     const shareData = {
       title: `${assessment.title} - Assessment`,
@@ -160,19 +158,26 @@ const AssessmentDetails = () => {
         toast.error("Native sharing not supported on this device");
       }
     } catch (error) {
-      // console.error("Error sharing:", error);
-      // toast.error("Failed to share assessment");
+      // Fallback for older browsers
+      try {
+        const textArea = document.createElement('textarea');
+        textArea.value = window.location.href;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        toast.success("Assessment link copied to clipboard!");
+      } catch (fallbackError) {
+        toast.error("Failed to copy link to clipboard");
+      }
     }
   };
 
-  // Copy to clipboard functionality
   const handleCopyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
       toast.success("Assessment link copied to clipboard!");
     } catch (error) {
-      // console.error("Error copying to clipboard:", error);
-      
       // Fallback for older browsers
       try {
         const textArea = document.createElement('textarea');
@@ -190,7 +195,7 @@ const AssessmentDetails = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center px-4">
         <div className="text-center text-gray-600">
           Loading assessment details...
         </div>
@@ -200,7 +205,7 @@ const AssessmentDetails = () => {
 
   if (!assessment) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center px-4">
         <div className="text-center">
           <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
           <h3 className="text-xl font-semibold text-gray-900 mb-2">
@@ -221,24 +226,22 @@ const AssessmentDetails = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       <Header />
-      <main className="max-w-7xl mx-auto px-6 py-8">
-        {/* Replace the single button with a flex container */}
-        <div className="flex items-center justify-between mb-6">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        <div className="flex flex-col sm:flex-row items-center justify-between mb-4 sm:mb-6 gap-4">
           <Button
             onClick={() => navigate.push("/assessments")}
             variant="outline"
-            className="rounded-2xl flex items-center"
+            className="rounded-2xl flex items-center w-full sm:w-auto"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Assessments
           </Button>
           
-          {/* Share Dropdown Menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
-                className="rounded-2xl flex items-center"
+                className="rounded-2xl flex items-center w-full sm:w-auto"
               >
                 <Share2 className="h-4 w-4 mr-2" />
                 Share
@@ -260,12 +263,11 @@ const AssessmentDetails = () => {
           </DropdownMenu>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-6">
-          {/* Main Assessment Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
           <div className="lg:col-span-2">
             <Card className="rounded-3xl border-0 shadow-lg">
-              <CardHeader className="pt-6 pb-4">
-                <div className="flex items-start justify-between">
+              <CardHeader className="pt-4 sm:pt-6 pb-4">
+                <div className="flex flex-col sm:flex-row items-start justify-between">
                   <div className="flex items-start space-x-4">
                     <div
                       className={`p-3 rounded-2xl ${categoryColour(
@@ -275,10 +277,10 @@ const AssessmentDetails = () => {
                       {getIcon(assessment.skill)}
                     </div>
                     <div>
-                      <CardTitle className="text-2xl font-bold text-gray-900">
+                      <CardTitle className="text-xl sm:text-2xl font-bold text-gray-900">
                         {assessment.title}
                       </CardTitle>
-                      <div className="flex items-center space-x-2 mt-2">
+                      <div className="flex flex-wrap items-center space-x-2 mt-2 gap-y-2">
                         <Badge className="rounded-full text-xs px-2 py-1">
                           {assessment.category || "Uncategorized"}
                         </Badge>
@@ -311,7 +313,7 @@ const AssessmentDetails = () => {
                     </div>
                   </div>
                   {assessment.isPremium && (
-                    <Badge className="bg-gradient-to-r from-purple-500 via-pink-500 to-purple-600 text-white border-0 rounded-full px-3 py-1 text-xs font-medium shadow-lg">
+                    <Badge className="bg-gradient-to-r from-purple-500 via-pink-500 to-purple-600 text-white border-0 rounded-full px-3 py-1 text-xs font-medium shadow-lg mt-4 sm:mt-0">
                       <Crown className="h-3 w-3 mr-1" />
                       Premium
                       <div className="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
@@ -325,11 +327,11 @@ const AssessmentDetails = () => {
                 </div>
               </CardHeader>
               <CardContent className="pb-6">
-                <CardDescription className="text-base text-gray-600 mb-2">
+                <CardDescription className="text-sm sm:text-base text-gray-600 mb-2">
                   {assessment.description}
                 </CardDescription>
                 <div className="mb-6">
-                  <ul className="flex flex-wrap gap-6 text-sm text-gray-600">
+                  <ul className="flex flex-wrap gap-4 sm:gap-6 text-sm text-gray-600">
                     <li className="flex items-center">
                       <Award className="h-4 w-4 mr-2 text-blue-600" />
                       <span>Certificate upon completion</span>
@@ -358,7 +360,7 @@ const AssessmentDetails = () => {
                     )}
                   </div>
                   <div className="flex items-baseline space-x-2 mb-2">
-                    <span className="text-2xl font-bold text-gray-900">
+                    <span className="text-xl sm:text-2xl font-bold text-gray-900">
                       {formatPrice(assessment?.pricing?.discountedPrice)}
                     </span>
                     {assessment.pricing?.basePrice && (
@@ -367,7 +369,7 @@ const AssessmentDetails = () => {
                       </span>
                     )}
                   </div>
-                  <div className="flex items-center space-x-4 text-xs text-gray-600">
+                  <div className="flex flex-wrap items-center space-x-4 text-xs text-gray-600 gap-y-2">
                     <div className="flex items-center space-x-1">
                       <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                       <span>Instant Access</span>
@@ -410,10 +412,9 @@ const AssessmentDetails = () => {
             </Card>
           </div>
 
-          {/* Suggested Assessments Sidebar */}
           <div className="lg:col-span-1">
             <Card className="rounded-3xl border-0 shadow-lg">
-              <CardHeader className="pt-6 pb-4">
+              <CardHeader className="pt-4 sm:pt-6 pb-4">
                 <CardTitle className="text-lg font-semibold text-gray-900">
                   Suggested Assessments
                 </CardTitle>
@@ -434,7 +435,7 @@ const AssessmentDetails = () => {
                         key={suggestion._id}
                         className="rounded-2xl border-0 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer"
                         onClick={() =>
-                          navigate.push(`/assessments/${suggestion.title.toLowerCase().replace(/\s+/g, "-")}/${suggestion.shortId ? suggestion.shortId : suggestion._id}/${referalCode?referalCode:""}`)
+                          navigate.push(`/assessments/${suggestion.title.toLowerCase().replace(/\s+/g, "-")}/${suggestion.shortId ? suggestion.shortId : suggestion._id}/${referalCode ? referalCode : ""}`)
                         }
                       >
                         <CardContent className="p-4">
@@ -450,7 +451,7 @@ const AssessmentDetails = () => {
                               <h4 className="text-sm font-semibold text-gray-900">
                                 {suggestion.title}
                               </h4>
-                              <div className="flex items-center space-x-2 mt-1">
+                              <div className="flex flex-wrap items-center space-x-2 mt-1 gap-y-2">
                                 <Badge
                                   variant="outline"
                                   className={`rounded-full text-xs px-2 py-0.5 ${getLevelColor(
@@ -476,12 +477,11 @@ const AssessmentDetails = () => {
           </div>
         </div>
 
-        {/* Login Dialog Popup */}
-       <Dialog open={showPopup} onOpenChange={setShowPopup} >
-  <DialogContent className="w-full rounded-2xl p-6 shadow-lg" style={{height:'85vh',overflowY:'scroll'}} >
-    <Login />
-  </DialogContent>
-</Dialog>
+        <Dialog open={showPopup} onOpenChange={setShowPopup}>
+          <DialogContent className="w-full max-w-md sm:max-w-lg rounded-2xl p-6 shadow-lg max-h-[90vh] overflow-y-auto">
+            <Login />
+          </DialogContent>
+        </Dialog>
       </main>
     </div>
   );

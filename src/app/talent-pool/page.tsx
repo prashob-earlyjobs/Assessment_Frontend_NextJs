@@ -9,10 +9,10 @@ import { CheckCircle, Users, Clock, Star, ArrowRight, Play, Zap, Target, Award, 
 import Footer from "../components/pages/footer";
 import { useRouter } from "next/navigation";
 import Navbar from "../components/pages/navbar";
-import { useUser } from "../context";
-import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
+
+
 import { toast } from "sonner";
-import { userLogout } from "../components/services/servicesapis";
+
 import Link from "next/link";
 
 const useScrollAnimation = () => {
@@ -50,7 +50,7 @@ const Index = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
   const router = useRouter();
-  const { userCredentials, setUserCredentials } = useUser();
+  
 
   // Handle scroll for sticky navigation
   useEffect(() => {
@@ -93,24 +93,8 @@ const Index = () => {
     document.title = "AI Job Placement in 30 Days | EarlyJobs";
   }, []);
 
-  const handleProfileClick = () => {
-    router.push("/profile");
-    setIsMobileMenuOpen(false);
-  };
-
-  const handleLogout = async () => {
-    try {
-      const response = await userLogout();
-      if (!response.success) {
-        throw new Error("Logout failed");
-      }
-      toast.success("Logged out successfully!");
-      setUserCredentials(null);
-      router.push("/login");
-    } catch (error) {
-      toast.error("Logout failed. Please try again.");
-    }
-  };
+  
+  
 
   const handleMobileMenuItemClick = (route: string) => {
     router.push(route);
@@ -313,37 +297,14 @@ const Index = () => {
               >
                 FAQ
               </a>
-              {userCredentials ? (
-                <div className="flex items-center space-x-4">
-                  <Button
-                    variant="ghost"
-                    className="text-red-600 hover:bg-red-50 rounded-xl py-2 px-4 transition-all duration-300"
-                    onClick={handleLogout}
-                  >
-                    <LogOut className="h-5 w-5 mr-2" />
-                  </Button>
-                  <div className="flex items-center space-x-3 cursor-pointer" onClick={handleProfileClick}>
-                    <Avatar className="h-10 w-10">
-                      <AvatarImage src={userCredentials.avatar} />
-                      <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
-                        {userCredentials?.name
-                          ?.split(" ")
-                          .map((n) => n[0])
-                          .join("")
-                          ?.toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <span className="text-sm font-medium text-gray-900">{userCredentials.name}</span>
-                  </div>
-                </div>
-              ) : (
-                <Button
+             
+                <Link href="https://dev2.earlyjobs.in/talentpoolform/public/686cf7d6d4e9e2a0cd1013dc"><Button
                   className="bg-orange-500 hover:bg-orange-600 text-white shadow-md rounded-xl"
-                  onClick={() => router.push("/signup")}
+                 
                 >
-                  Sign Up
-                </Button>
-              )}
+                  Register
+                </Button></Link>
+              
             </div>
             <div className="md:hidden flex items-center">
               <button
@@ -358,31 +319,7 @@ const Index = () => {
         {isMobileMenuOpen && (
           <div className="md:hidden bg-white/95 backdrop-blur-sm shadow-lg z-50 px-4 py-4 border-b border-orange-100">
             <div className="flex flex-col space-y-2">
-              {userCredentials !== null && (
-                <div
-                  className="flex items-center space-x-3 cursor-pointer px-4 py-3"
-                  onClick={handleProfileClick}
-                >
-                  <Avatar className="h-10 w-10">
-                    <AvatarImage src={userCredentials.avatar} />
-                    <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
-                      {userCredentials?.name
-                        ?.split(" ")
-                        .map((n) => n[0])
-                        .join("")
-                        ?.toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-sm font-medium text-gray-900">
-                      {userCredentials.name}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      {userCredentials.profile?.preferredJobRole}
-                    </p>
-                  </div>
-                </div>
-              )}
+              
               <Button
                 variant="ghost"
                 className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
@@ -411,29 +348,17 @@ const Index = () => {
               >
                 Talent Pool
               </Button>
-              {userCredentials !== null ? (
-                <Button
-                  variant="ghost"
-                  className="w-full text-left justify-start text-red-600 hover:bg-red-50 rounded-xl py-3 px-4 transition-all duration-300"
-                  onClick={() => {
-                    handleLogout();
-                    setIsMobileMenuOpen(false);
-                  }}
-                >
-                  <LogOut className="h-5 w-5 mr-2" />
-                </Button>
-              ) : (
-                <Button
+              
+                <a href="https://dev2.earlyjobs.in/talentpoolform/public/686cf7d6d4e9e2a0cd1013dc"><Button
                   className="w-full text-left justify-start bg-orange-700 hover:bg-orange-600 text-white rounded-xl py-3 px-4 shadow-lg hover:shadow-xl transition-all duration-300"
                   onClick={() => {
-                    router.push("/login");
                     setIsMobileMenuOpen(false);
                   }}
                 >
                   <LogIn className="h-5 h-5 mr-2" />
-                  Login
-                </Button>
-              )}
+                  Register
+                </Button></a>
+              
             </div>
           </div>
         )}

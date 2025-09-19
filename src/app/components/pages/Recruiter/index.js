@@ -247,7 +247,7 @@ const Recruiter = () => {
                             <img src="/recruitment.png" alt="landing-page-1" className="landing-page-s1-image" />
                         </div>
                         <div className="landing-page-screen-1-btn-grp">
-                            <p className="landing-page-s1-link-btn">Become Freelance Recruiter</p>
+                            <p onClick={()=>router.push("/apply-as-a-recruiter")} className="landing-page-s1-link-btn">Become Freelance Recruiter</p>
                             <p onClick={()=>router.push("/jobs")} className="landing-page-s1-link-btn-outline landing-page-s1-link-btn">Explore Jobs</p>
                             {/* <p  className="landing-page-s1-link-btn-outline landing-page-s1-link-btn">Free Job Posting</p> */}
                         </div>
@@ -329,7 +329,7 @@ const Recruiter = () => {
             <div className="landing-page-screen-8-container">
                 <h1 className="landing-page-s8-heading">The problem that job platforms cannot solve, EarlyJobs solves</h1>
                 <p className="landing-page-s8-desc">No pre and post hiring hustle required, we take care of everything. Want to know more?</p>
-                <a href="tel:+918217527926" className="landing-page-s8-btn">Apply as a recruiter</a>
+                <p onClick={()=>router.push("/apply-as-a-recruiter")} className="landing-page-s8-btn cursor-pointer">Apply as a recruiter</p>
             </div>
             <div className="landing-page-screen-2-container">
                 <h2 className="landing-page-s2-heading">MONEY MATTERS</h2>

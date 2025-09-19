@@ -151,6 +151,7 @@ const Footer = () => {
         "Coimbatore",
         "Ghaziabad",
         "Chengalpattu",
+        "Lucknow",
         "Bangalore Urban",
         "Faridabad",
         "Bijapur",

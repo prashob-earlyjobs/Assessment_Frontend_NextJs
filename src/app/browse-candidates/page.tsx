@@ -3,11 +3,11 @@
 import { useState, useEffect, useMemo } from "react";
 import { Button } from "../components/ui/button";
 import { useRouter } from "next/navigation";
-import { useUser } from "../context";
+
 import { toast } from "sonner";
-import { userLogout } from "../components/services/servicesapis";
+
 import { Menu, X, LogIn, LogOut } from "lucide-react";
-import { Avatar, AvatarImage, AvatarFallback } from "../components/ui/avatar";
+
 import Footer from "../components/pages/footer";
 import Navbar from "../components/pages/navbar";
 
@@ -18,7 +18,7 @@ const Index = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const router = useRouter();
-  const { userCredentials, setUserCredentials } = useUser();
+
 
   useEffect(() => {
     const fetchCandidates = async () => {
@@ -59,25 +59,7 @@ const Index = () => {
     }
   };
 
-  const handleProfileClick = () => {
-    router.push("/profile");
-    setIsMobileMenuOpen(false);
-  };
-
-  const handleLogout = async () => {
-    try {
-      const response = await userLogout();
-      if (!response.success) {
-        throw new Error("Logout failed");
-      }
-      toast.success("Logged out successfully!");
-      setUserCredentials(null);
-      router.push("/login");
-    } catch (error) {
-      toast.error("Logout failed. Please try again.");
-    }
-    setIsMobileMenuOpen(false);
-  };
+  
 
   const handleMobileMenuItemClick = (path) => {
     router.push(path);
@@ -151,41 +133,7 @@ const Index = () => {
               />
             </div>
             <nav className="hidden md:flex space-x-8 items-center">
-              {userCredentials ? (
-                <div className="flex items-center space-x-4">
-                  <Button
-                    variant="ghost"
-                    className="text-red-600 hover:bg-red-50 rounded-xl py-2 px-4 transition-all duration-300"
-                    onClick={handleLogout}
-                    aria-label="Logout"
-                  >
-                    <LogOut className="h-5 w-5 mr-2" />
-                  </Button>
-                  <div
-                    className="flex items-center space-x-3 cursor-pointer"
-                    onClick={handleProfileClick}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => e.key === "Enter" && handleProfileClick()}
-                  >
-                    <Avatar className="h-10 w-10">
-                      <AvatarImage src={userCredentials.avatar} />
-                      <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
-                        {getInitials(userCredentials?.name)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <span className="text-sm font-medium text-gray-900">{userCredentials.name}</span>
-                  </div>
-                </div>
-              ) : (
-                <Button
-                  className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-full transition-colors duration-200 font-semibold"
-                  onClick={() => router.push("/signup")}
-                  aria-label="Sign Up"
-                >
-                  Sign Up
-                </Button>
-              )}
+              
             </nav>
             <div className="md:hidden flex items-center">
               <Button
@@ -202,28 +150,7 @@ const Index = () => {
           {isMobileMenuOpen && (
             <div className="md:hidden bg-white/95 backdrop-blur-sm shadow-lg z-50 px-4 py-4 border-b border-orange-100">
               <div className="flex flex-col space-y-2">
-                {userCredentials && (
-                  <div
-                    className="flex items-center space-x-3 cursor-pointer px-4 py-3"
-                    onClick={handleProfileClick}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => e.key === "Enter" && handleProfileClick()}
-                  >
-                    <Avatar className="h-10 w-10">
-                      <AvatarImage src={userCredentials.avatar} />
-                      <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
-                        {getInitials(userCredentials?.name)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">{userCredentials.name}</p>
-                      <p className="text-xs text-gray-500">
-                        {userCredentials.profile?.preferredJobRole || "No role specified"}
-                      </p>
-                    </div>
-                  </div>
-                )}
+                
                 <Button
                   variant="ghost"
                   className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
@@ -252,29 +179,7 @@ const Index = () => {
                 >
                   Talent Pool
                 </Button>
-                {userCredentials ? (
-                  <Button
-                    variant="ghost"
-                    className="w-full text-left justify-start text-red-600 hover:bg-red-50 rounded-xl py-3 px-4 transition-all duration-300"
-                    onClick={handleLogout}
-                    aria-label="Logout"
-                  >
-                    <LogOut className="h-5 w-5 mr-2" />
-                    Logout
-                  </Button>
-                ) : (
-                  <Button
-                    className="w-full text-left justify-start bg-orange-600 hover:bg-orange-700 text-white rounded-xl py-3 px-4 shadow-lg hover:shadow-xl transition-all duration-300"
-                    onClick={() => {
-                      router.push("/signup");
-                      setIsMobileMenuOpen(false);
-                    }}
-                    aria-label="Sign Up"
-                  >
-                    <LogIn className="h-5 w-5 mr-2" />
-                    Sign Up
-                  </Button>
-                )}
+                
               </div>
             </div>
           )}
