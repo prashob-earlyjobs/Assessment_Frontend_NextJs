@@ -257,7 +257,7 @@ export default function ResumeBuilderFromPDF() {
     const [isSaving, setIsSaving] = useState(false)
     const [savedResumeId, setSavedResumeId] = useState<string | null>(null)
     const searchParams = useSearchParams()
-
+    
     // Prefill resume data from parsed data (unchanged)
     useEffect(() => {
         const resumeDataParam = searchParams.get("resumeData")
