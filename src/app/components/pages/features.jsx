@@ -80,30 +80,24 @@ const features = [
 ];
 
 // Custom arrow components
-const PrevArrow = ({ onClick, currentSlide, slideCount, ...rest }) => {
-  // Filter out currentSlide and other unrecognized props
-  const { currentSlide: _, slideCount: __, ...otherProps } = rest;
+const PrevArrow = ({ onClick, ...rest }) => {
   return (
     <button
       onClick={onClick}
       className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-orange-500 text-white p-2 rounded-full hover:bg-orange-600 transition-colors z-10"
-      {...otherProps}
     >
-      <ChevronLeft className="w-6 h-6 text-orange-600" />
+      <ChevronLeft className="w-6 h-6 text-white" />
     </button>
   );
 };
 
-const NextArrow = ({ onClick, currentSlide, slideCount, ...rest }) => {
-  // Filter out currentSlide and other unrecognized props
-  const { currentSlide: _, slideCount: __, ...otherProps } = rest;
+const NextArrow = ({ onClick, ...rest }) => {
   return (
     <button
       onClick={onClick}
       className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-orange-500 text-white p-2 rounded-full hover:bg-orange-600 transition-colors z-10"
-      {...otherProps}
     >
-      <ChevronRight className="w-6 h-6 text-orange-600" />
+      <ChevronRight className="w-6 h-6 text-white" />
     </button>
   );
 };
@@ -119,30 +113,31 @@ const FeaturesCarousel = () => {
     prevArrow: <PrevArrow />,
     responsive: [
       {
-        breakpoint: 1024,
+        breakpoint: 1280,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 1,
         },
       },
       {
-        breakpoint: 640,
+        breakpoint: 768,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
+          arrows: false, // Hide arrows on mobile for better space usage
         },
       },
     ],
   };
 
   return (
-    <section className="py-8 sm:py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
+    <section className="py-6 sm:py-8 px-4 sm:px-6 lg:px-8 bg-gray-50">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-8 sm:mb-10">
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+        <div className="text-center mb-6 sm:mb-8">
+          <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 mb-2">
             Features From Our Assessments
           </h2>
-          <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xs sm:text-sm md:text-base text-gray-600 max-w-2xl mx-auto">
             Discover why job seekers choose{' '}
             <span className="font-semibold text-orange-600">EarlyJobs.ai</span> for
             their professional development
@@ -152,16 +147,16 @@ const FeaturesCarousel = () => {
           {features.map((feature, index) => (
             <div key={index} className="px-2">
               <div
-                className="bg-white mb-6 text-center p-4 sm:p-5 border-2 border-gray-100 rounded-lg group flex flex-col h-64 transition-all duration-300 hover:bg-orange-500 hover:text-white"
+                className="bg-white mb-4 sm:mb-6 text-center p-3 sm:p-4 border-2 border-gray-100 rounded-lg group flex flex-col h-56  transition-all duration-300 hover:bg-orange-500 hover:text-white"
               >
-                <div className="pt-3 sm:pt-4 flex flex-col items-center flex-grow">
-                  <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-orange-100 rounded-full mb-3 text-orange-600 group-hover:bg-white group-hover:text-orange-500 transition-all duration-300">
+                <div className="pt-2 sm:pt-3 flex flex-col items-center flex-grow overflow-hidden">
+                  <div className="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-orange-100 rounded-full mb-2 sm:mb-3 text-orange-600 group-hover:bg-white group-hover:text-orange-500 transition-all duration-300">
                     {feature.icon}
                   </div>
-                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 group-hover:text-white transition-colors">
+                  <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 mb-1 sm:mb-2 group-hover:text-white transition-colors line-clamp-2">
                     {feature.title}
                   </h3>
-                  <p className="text-sm sm:text-base text-gray-600 group-hover:text-white transition-colors">
+                  <p className="text-xs sm:text-sm text-gray-600 group-hover:text-white transition-colors line-clamp-3 sm:line-clamp-4">
                     {feature.description}
                   </p>
                 </div>

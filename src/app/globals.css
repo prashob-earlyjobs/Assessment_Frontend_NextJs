@@ -21,16 +21,16 @@ body{
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent; /* removes the white bg */
+  background:#f1f1f1; /* removes the white bg */
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.3); /* thumb color */
-  border-radius: 9999px; /* rounded */
+  background-color:#ff6b35; /* thumb color */
+  border-radius: 4px; /* rounded */
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color:#e55a2b;
 }
 
 button.bg-blue-600 {
@@ -47,4 +47,8 @@ button{
 }
 [role='dialog']{  
   background-color:#fff
+}
+html {
+  scrollbar-width: thin; /* Thin scrollbar for Firefox */
+  scrollbar-color: #ff6b35 #f1f1f1; /* Thumb color / Track color */
 }
