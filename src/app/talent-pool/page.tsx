@@ -298,7 +298,7 @@ const Index = () => {
                 FAQ
               </a>
              
-                <Link href="https://dev2.earlyjobs.in/talentpoolform/public/686cf7d6d4e9e2a0cd1013dc"><Button
+                <Link href="https://www.earlyjobs.in/talentpoolform/public/686cf7d6d4e9e2a0cd1013dc"><Button
                   className="bg-orange-500 hover:bg-orange-600 text-white shadow-md rounded-xl"
                  
                 >
