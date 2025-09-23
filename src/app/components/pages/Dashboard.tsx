@@ -6,6 +6,7 @@ import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "../../components/ui/avatar";
 import { Badge } from "../../components/ui/badge";
+import Footer from "./footer";
 
 import Certificate from "../../components/Certificate";
 import {
@@ -345,6 +346,33 @@ const Dashboard = () => {
                   </Button>
                 </CardContent>
               </Card>
+              <Card className="rounded-3xl border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-green-600 to-green-700 text-white">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center justify-between">
+                    <Briefcase className="h-8 w-8" />
+                    <Badge variant="secondary" className="bg-white/20 text-white border-0">
+                      12 New
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <CardTitle className="text-xl mb-2">Job Opportunities</CardTitle>
+                  <CardDescription className="text-green-100 mb-4">
+                    Discover jobs matched to your skills and assessment scores.
+                  </CardDescription>
+                  <Button
+                    onClick={() => navigate.push('/jobs')}
+                    // onClick={() => toast.info("Access granted to selected candidates only")}
+
+                    variant="secondary"
+                    className="w-full rounded-2xl bg-white text-green-600 hover:bg-gray-50"
+                  >
+                    Browse Jobs
+                    {/* <img src="/images/lock.svg" alt="Arrow Right" className="h-4 w-4 ml-2" /> */}
+
+                  </Button>
+                </CardContent>
+              </Card>
               <Card className="rounded-3xl border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-blue-700 to-blue-900 text-white">
                 <CardHeader className="pb-4">
                   <div className="flex items-center justify-between">
@@ -400,33 +428,7 @@ const Dashboard = () => {
                 </CardContent>
               </Card>
 
-              <Card className="rounded-3xl border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-green-600 to-green-700 text-white">
-                <CardHeader className="pb-4">
-                  <div className="flex items-center justify-between">
-                    <Briefcase className="h-8 w-8" />
-                    <Badge variant="secondary" className="bg-white/20 text-white border-0">
-                      12 New
-                    </Badge>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <CardTitle className="text-xl mb-2">Job Opportunities</CardTitle>
-                  <CardDescription className="text-green-100 mb-4">
-                    Discover jobs matched to your skills and assessment scores.
-                  </CardDescription>
-                  <Button
-                    // onClick={() => navigate.push('/jobs')}
-                    onClick={() => toast.info("Access granted to selected candidates only")}
-
-                    variant="secondary"
-                    className="w-full rounded-2xl bg-white text-green-600 hover:bg-gray-50"
-                  >
-                    Browse Jobs
-                    <img src="/images/lock.svg" alt="Arrow Right" className="h-4 w-4 ml-2" />
-
-                  </Button>
-                </CardContent>
-              </Card>
+              
             </div>
 
             <Card className="rounded-3xl border-0 shadow-lg">
@@ -541,6 +543,7 @@ const Dashboard = () => {
           </div>
         </div>
       </main>
+      <Footer/>
     </div>
   );
 };

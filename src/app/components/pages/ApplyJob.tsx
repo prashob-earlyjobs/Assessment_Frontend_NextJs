@@ -204,7 +204,7 @@ export default function Index() {
               Discover opportunities in EarlyJobs. Search by industry or category — apply in one click.
             </p>
 
-            <div className="relative z-50 mt-4 w-full rounded-2xl border border-orange-200/80 bg-white/95 p-2 sm:p-3 shadow-[0_10px_30px_-8px_rgba(251,146,60,0.3)] ring-1 ring-orange-200/70 backdrop-blur md:p-3 md:shadow-[0_14px_40px_-12px_rgba(251,146,60,0.35)]">
+            <div className="relative z-10 mt-4 w-full rounded-2xl border border-orange-200/80 bg-white/95 p-2 sm:p-3 shadow-[0_10px_30px_-8px_rgba(251,146,60,0.3)] ring-1 ring-orange-200/70 backdrop-blur md:p-3 md:shadow-[0_14px_40px_-12px_rgba(251,146,60,0.35)]">
               <form
                 onSubmit={(e) => {
                   e.preventDefault();

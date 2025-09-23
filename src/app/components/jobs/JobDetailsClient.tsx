@@ -7,49 +7,71 @@ import { Badge } from "../ui/badge";
 import { Input } from "../ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Checkbox } from "../ui/checkbox";
-import { X, Bookmark, Share2, Briefcase, IndianRupee, User, Clock, MapPin, Plus, Trash2, ChevronDown, Copy, Linkedin, Facebook, Instagram } from "lucide-react";
+import { X, Bookmark,Globe, Share2, Briefcase, IndianRupee, User, Clock, MapPin, Plus, Trash2, ChevronDown, Copy, Linkedin, Facebook, Instagram, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
+interface JobDetailsData {
+  id: string;
+  title: string;
+  job_id: string;
+  company_name: string;
+  company_logo_url?: string;
+  employment_type?: string;
+  work_type?: string;
+  min_salary?: string | number;
+  max_salary?: string | number;
+  salary_mode?: string;
+  min_experience?: number | string;
+  max_experience?: number | string;
+  city?: string;
+  location?: string;
+  skills?: string | string[];
+  created_at?: string;
+  description?: string;
+  category?: string;
+  commission_fee?: number;
+  commission_type?: string;
+  no_of_openings?: number;
+  status?: string;
+  hiring_need?: string;
+  shift_timings?: string;
+  language?: string;
+  min_age?: number;
+  max_age?: number;
+  qualification?: string;
+  currency?: string;
+  street?: string;
+  area?: string;
+  pincode?: string;
+  keywords?: string;
+  location_link?: string;
+}
+interface ICreateApplicantRequestBody {
+  fullName: string;
+  phone: string;
+  email: string;
+  fatherName: string;
+  dateOfBirth: string; // ISO 8601 date string, e.g., "1995-08-22"
+  gender: 'Male' | 'Female' | 'Other';
+  aadharNumber?: string; // Optional
+  highestQualification: string;
+  currentLocationDetails: string; // The full address object
+  spokenLanguages: string[];
+  totalExperienceYears: number;
+  totalExperienceMonths: number;
+  skills: string[];
+  jobId: string; 
+}
+
 interface JobDetailsClientProps {
-  jobData: {
-    id: string;
-    title: string;
-    company_name: string;
-    company_logo_url?: string;
-    employment_type?: string;
-    work_type?: string;
-    min_salary?: string | number;
-    max_salary?: string | number;
-    salary_mode?: string;
-    min_experience?: number | string;
-    max_experience?: number | string;
-    city?: string;
-    location?: string;
-    skills?: string | string[];
-    created_at?: string;
-    description?: string;
-    category?: string;
-    commission_fee?: number;
-    commission_type?: string;
-    no_of_openings?: number;
-    status?: string;
-    hiring_need?: string;
-    shift_timings?: string;
-    language?: string;
-    min_age?: number;
-    max_age?: number;
-    qualification?: string;
-    currency?: string;
-    street?: string;
-    area?: string;
-    pincode?: string;
-    keywords?: string;
-    location_link?: string;
-  };
+  jobid: string;
   currentUrl: string;
 }
 
-const JobDetailsClient = ({ jobData, currentUrl }: JobDetailsClientProps) => {
+const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
+  const [jobData, setJobData] = useState<JobDetailsData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [showShareDropdown, setShowShareDropdown] = useState(false);
   const [applicationForm, setApplicationForm] = useState({
@@ -69,6 +91,76 @@ const JobDetailsClient = ({ jobData, currentUrl }: JobDetailsClientProps) => {
     spokenLanguages: [] as string[],
     showLanguageDropdown: false
   });
+
+  // Fetch job details
+  useEffect(() => {
+    const fetchJobDetails = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const backendUrl = "https://kind-abnormally-redfish.ngrok-free.app";
+        const response = await fetch(`${backendUrl}/api/public/jobs/${jobid}`);
+        
+        if (!response.ok) {
+          throw new Error(`Failed to fetch job details: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        setJobData(data.data);
+        console.log(data.data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to fetch job details');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchJobDetails();
+  }, [jobid]);
+
+  // Handle click outside to close language dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (!target.closest('.language-dropdown')) {
+        setApplicationForm(prev => ({ ...prev, showLanguageDropdown: false }));
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []); // Empty dependency array ensures it runs once on mount
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-earlyjobs-orange" />
+          <p className="text-gray-600">Loading job details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !jobData) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto p-6">
+          <div className="text-center py-12">
+            <p className="text-red-600 text-lg">Error: {error || 'Job not found'}</p>
+            <a 
+              href="/jobs"
+              className="inline-block mt-4 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+            >
+              Back to Jobs
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const formatRelativeTime = (dateString: string): string => {
     const now = new Date();
@@ -169,132 +261,140 @@ const JobDetailsClient = ({ jobData, currentUrl }: JobDetailsClientProps) => {
   };
 
   const handleSubmitApplication = async () => {
-    // Form validation
-    if (!applicationForm.fullName.trim()) {
-      toast.error("Full Name is required");
-      return;
-    }
-    if (!applicationForm.fatherName.trim()) {
-      toast.error("Father Name is required");
-      return;
-    }
-    if (!applicationForm.email.trim()) {
-      toast.error("Email ID is required");
-      return;
-    }
-    // Email format validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(applicationForm.email.trim())) {
-      toast.error("Please enter a valid email address");
-      return;
-    }
-    if (!applicationForm.phone.trim()) {
-      toast.error("Phone Number is required");
-      return;
-    }
-    // Phone number validation (10 digits for Indian numbers)
-    const phoneRegex = /^[6-9]\d{9}$/;
-    if (!phoneRegex.test(applicationForm.phone.trim())) {
-      toast.error("Please enter a valid 10-digit phone number");
-      return;
-    }
-    if (!applicationForm.dateOfBirth) {
-      toast.error("Date of Birth is required");
-      return;
-    }
-    if (!applicationForm.gender) {
-      toast.error("Gender is required");
-      return;
-    }
-    if (!applicationForm.highestQualification) {
-      toast.error("Highest Qualification is required");
-      return;
-    }
-    if (!applicationForm.currentLocation.trim()) {
-      toast.error("Current Location is required");
-      return;
-    }
-    if (!applicationForm.experienceYears.trim() && !applicationForm.experienceMonths.trim()) {
-      toast.error("Experience (Years or Months) is required");
-      return;
-    }
-    if (applicationForm.skills.length === 0) {
-      toast.error("At least one skill is required");
-      return;
-    }
-    if (applicationForm.spokenLanguages.length === 0) {
-      toast.error("At least one spoken language is required");
-      return;
-    }
+  // Form validation
+  if (!applicationForm.fullName.trim()) {
+    toast.error("Full Name is required");
+    return;
+  }
+  if (!applicationForm.fatherName.trim()) {
+    toast.error("Father Name is required");
+    return;
+  }
+  if (!applicationForm.email.trim()) {
+    toast.error("Email ID is required");
+    return;
+  }
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(applicationForm.email.trim())) {
+    toast.error("Please enter a valid email address");
+    return;
+  }
+  if (!applicationForm.phone.trim()) {
+    toast.error("Phone Number is required");
+    return;
+  }
+  const phoneRegex = /^[6-9]\d{9}$/;
+  if (!phoneRegex.test(applicationForm.phone.trim())) {
+    toast.error("Please enter a valid 10-digit phone number");
+    return;
+  }
+  if (!applicationForm.dateOfBirth) {
+    toast.error("Date of Birth is required");
+    return;
+  }
+  if (!applicationForm.gender) {
+    toast.error("Gender is required");
+    return;
+  }
+  if (!applicationForm.highestQualification) {
+    toast.error("Highest Qualification is required");
+    return;
+  }
+  if (!applicationForm.currentLocation.trim()) {
+    toast.error("Current Location is required");
+    return;
+  }
+  if (!applicationForm.experienceYears.trim() && !applicationForm.experienceMonths.trim()) {
+    toast.error("Experience (Years or Months) is required");
+    return;
+  }
+  if (applicationForm.skills.length === 0) {
+    toast.error("At least one skill is required");
+    return;
+  }
+  if (applicationForm.spokenLanguages.length === 0) {
+    toast.error("At least one spoken language is required");
+    return;
+  }
 
-    try {
-      const candidateDetails = {
-        jobId: jobData.id,
-        fullName: applicationForm.fullName,
-        fatherName: applicationForm.fatherName,
-        email: applicationForm.email,
-        phone: applicationForm.phone,
-        dateOfBirth: applicationForm.dateOfBirth,
-        gender: applicationForm.gender,
-        aadharNumber: applicationForm.aadharNumber,
-        highestQualification: applicationForm.highestQualification,
-        currentLocation: applicationForm.currentLocation,
-        spokenLanguages: applicationForm.spokenLanguages,
-        experienceInYears: applicationForm.experienceYears,
-        experienceInMonths: applicationForm.experienceMonths,
-        skills: applicationForm.skills,
-        jobCategory: jobData.category,
-        offerStatus: 'Ongoing',
-        shiftTimings: jobData.shift_timings,
-        employmentType: jobData.employment_type,
-        subJobId: jobData.id,
-        postedBy: jobData.company_name
-      };
+  // Convert experience fields to numbers
+  const totalExperienceYears = applicationForm.experienceYears.trim()
+    ? parseInt(applicationForm.experienceYears, 10)
+    : 0;
+  const totalExperienceMonths = applicationForm.experienceMonths.trim()
+    ? parseInt(applicationForm.experienceMonths, 10)
+    : 0;
 
-      const url = `https://apis.earlyjobs.in/api/public/jobs`;
-      const options = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(candidateDetails)
-      };
+  if (isNaN(totalExperienceYears) || isNaN(totalExperienceMonths)) {
+    toast.error("Experience Years and Months must be valid numbers");
+    return;
+  }
 
-      const response = await fetch(url, options);
-      const data = await response.json();
+  // Capitalize gender
+  const capitalizedGender = applicationForm.gender.charAt(0).toUpperCase() + applicationForm.gender.slice(1);
 
-      if (response.ok === true) {
-        if (data.error) {
-          toast.error(data.error);
-        } else {
-          toast.success("Application submitted successfully!");
-          setShowApplyModal(false);
-          // Reset form
-          setApplicationForm({
-            fullName: '',
-            fatherName: '',
-            email: '',
-            phone: '',
-            dateOfBirth: '',
-            gender: '',
-            aadharNumber: '',
-            highestQualification: '',
-            currentLocation: '',
-            experienceYears: '',
-            experienceMonths: '',
-            skills: [],
-            newSkill: '',
-            spokenLanguages: [],
-            showLanguageDropdown: false
-          });
-        }
+  try {
+    const candidateDetails: ICreateApplicantRequestBody = {
+      jobId: jobData!.job_id, 
+      fullName: applicationForm.fullName,
+      email: applicationForm.email,
+      fatherName: applicationForm.fatherName,
+      phone: applicationForm.phone,
+      dateOfBirth: applicationForm.dateOfBirth,
+      gender: capitalizedGender as 'Male' | 'Female' | 'Other',
+      aadharNumber: applicationForm.aadharNumber || undefined, // Send undefined if empty
+      highestQualification: applicationForm.highestQualification,
+      currentLocationDetails: applicationForm.currentLocation,
+      spokenLanguages: applicationForm.spokenLanguages,
+      totalExperienceYears,
+      totalExperienceMonths,
+      skills: applicationForm.skills,
+    };
+
+    const url = `https://kind-abnormally-redfish.ngrok-free.app/api/public/jobs/apply`;
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(candidateDetails),
+    };
+    console.log("Submitting application:", candidateDetails);
+
+    const response = await fetch(url, options);
+    const data = await response.json();
+
+    if (response.ok) {
+      if (data.error) {
+        toast.error(data.error);
       } else {
-        toast.error(data.error || "Failed to submit application");
+        toast.success("Application submitted successfully!");
+        setShowApplyModal(false);
+        setApplicationForm({
+          fullName: '',
+          fatherName: '',
+          email: '',
+          phone: '',
+          dateOfBirth: '',
+          gender: '',
+          aadharNumber: '',
+          highestQualification: '',
+          currentLocation: '',
+          experienceYears: '',
+          experienceMonths: '',
+          skills: [],
+          newSkill: '',
+          spokenLanguages: [],
+          showLanguageDropdown: false,
+        });
       }
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to submit application");
+    } else {
+      toast.error(data.error || "Failed to submit application");
     }
-  };
+  } catch (error) {
+    toast.error(error instanceof Error ? error.message : "Failed to submit application");
+  }
+};
 
   const copyUrlToClipboard = async () => {
     try {
@@ -307,8 +407,8 @@ const JobDetailsClient = ({ jobData, currentUrl }: JobDetailsClientProps) => {
   };
 
   const shareToLinkedIn = () => {
-    const shareText = `Check out this ${jobData.title} position at ${jobData.company_name}!`;
-    const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(currentUrl)}&title=${encodeURIComponent(jobData.title || "Job Opportunity")}&summary=${encodeURIComponent(shareText)}`;
+    const shareText = `Check out this ${jobData!.title} position at ${jobData!.company_name}!`;
+    const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(currentUrl)}&title=${encodeURIComponent(jobData!.title || "Job Opportunity")}&summary=${encodeURIComponent(shareText)}`;
     
     window.open(linkedinUrl, '_blank');
     toast.success("Opening LinkedIn sharing dialog...");
@@ -324,7 +424,7 @@ const JobDetailsClient = ({ jobData, currentUrl }: JobDetailsClientProps) => {
   };
 
   const shareToInstagram = () => {
-    const shareText = `Check out this ${jobData.title} position at ${jobData.company_name}!`;
+    const shareText = `Check out this ${jobData!.title} position at ${jobData!.company_name}!`;
     const instagramText = `${shareText}\n\n${currentUrl}`;
     
     try {
@@ -338,34 +438,19 @@ const JobDetailsClient = ({ jobData, currentUrl }: JobDetailsClientProps) => {
   };
 
   // Close share dropdown when clicking outside
-  const handleClickOutside = (event: React.MouseEvent) => {
+  const handleClickOutsideShare = (event: React.MouseEvent) => {
     const target = event.target as Element;
     if (!target.closest('.share-dropdown')) {
       setShowShareDropdown(false);
     }
   };
 
-  // Close language dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Element;
-      if (!target.closest('.language-dropdown')) {
-        setApplicationForm(prev => ({ ...prev, showLanguageDropdown: false }));
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50" onClick={handleClickOutsideShare}>
       <div className="max-w-7xl mx-auto p-4 sm:p-6">
         {/* Page Title */}
         <h1 className="text-xl sm:text-2xl font-bold text-earlyjobs-text mb-4 sm:mb-6">
-          {jobData.title} Job in {(jobData.city && jobData.city.trim()) || 'Remote'} at {jobData.company_name}
+          {jobData.title} Job in {(jobData.city && jobData.city.trim()) } at {jobData.company_name}
         </h1>
         
         <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
@@ -376,7 +461,7 @@ const JobDetailsClient = ({ jobData, currentUrl }: JobDetailsClientProps) => {
               <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-6">
                 <div className="flex gap-3 sm:gap-4">
                   <img 
-                    src={jobData.company_logo_url || "/images/default-company-logo.png"} 
+                    src={jobData.company_logo_url } 
                     alt={`${jobData.company_name} logo`} 
                     className="w-12 h-12 sm:w-16 sm:h-16 rounded object-contain bg-gray-50 p-2"
                   />
@@ -449,6 +534,10 @@ const JobDetailsClient = ({ jobData, currentUrl }: JobDetailsClientProps) => {
                 <div className="flex items-center gap-2">
                   <Briefcase className="w-4 h-4 text-gray-400 flex-shrink-0" />
                   <span className="truncate">{jobData.employment_type || "Not specified"}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Globe className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                  <span className="truncate">{jobData.work_type || "Not specified"}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <IndianRupee className="w-4 h-4 text-gray-400 flex-shrink-0" />
@@ -604,16 +693,6 @@ const JobDetailsClient = ({ jobData, currentUrl }: JobDetailsClientProps) => {
                 </Button>
               </div>
             </div>
-            
-            {/* Disclaimer */}
-            {/* <Card className="p-4 mt-6">
-              <div className="bg-gray-900 text-white text-xs px-2 py-1 rounded mb-2 inline-block">
-                ⚠ Disclaimer
-              </div>
-              <p className="text-xs text-gray-600">
-              EarlyJobs does not charge any money for job applications, interviews, or offers. If anyone asks you for payment in exchange for a job, please treat it as a fraud and report it immediately.
-              </p>
-            </Card> */}
           </div>
         </div>
       </div>
@@ -896,16 +975,14 @@ const JobDetailsClient = ({ jobData, currentUrl }: JobDetailsClientProps) => {
             {/* Modal Footer */}
             <div className="flex flex-col sm:flex-row justify-end gap-3 p-4 sm:p-6">
               <Button
-
                 onClick={() => setShowApplyModal(false)}
                 className="w-full sm:w-auto"
               >
                 Back
               </Button>
               <Button
-                              variant="outline"
-
-                className="bg-earlyjobs-navy hover:bg-earlyjobs-navy/90 w-full sm:w-auto "
+                variant="outline"
+                className="bg-earlyjobs-navy hover:bg-earlyjobs-navy/90 w-full sm:w-auto"
                 onClick={handleSubmitApplication}
               >
                 Submit

@@ -63,9 +63,10 @@ export default function ResumeList() {
         
         if(error.message=="Token is not valid."){
           toast.error( "Session Expired")
-          // router.push("/login")
-          // await userLogout();
+          
+          await userLogout();
           setUserCredentials(null)
+          router.push("/login")
           
         }
         setResumes([])

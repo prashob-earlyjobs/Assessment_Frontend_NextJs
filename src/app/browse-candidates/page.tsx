@@ -3,11 +3,8 @@
 import { useState, useEffect, useMemo } from "react";
 import { Button } from "../components/ui/button";
 import { useRouter } from "next/navigation";
-
 import { toast } from "sonner";
-
 import { Menu, X, LogIn, LogOut } from "lucide-react";
-
 import Footer from "../components/pages/footer";
 import Navbar from "../components/pages/navbar";
 
@@ -18,7 +15,6 @@ const Index = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const router = useRouter();
-
 
   useEffect(() => {
     const fetchCandidates = async () => {
@@ -37,7 +33,41 @@ const Index = () => {
         }
         const data = await response.json();
         if (data.success) {
-          setCandidates(data.data);
+          // Filter candidates who have at least one assessment with valid results
+          const filteredCandidates = [];
+          for (const candidate of data.data) {
+            if (candidate.assessmentsPaid && candidate.assessmentsPaid.length > 0) {
+              let hasValidResults = false;
+              for (const assessment of candidate.assessmentsPaid) {
+                const interviewId = assessment.interviewId;
+                if (!interviewId) continue;
+
+                try {
+                  const resultUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/browseCandidates/getResultForCandidateAssessment/${interviewId}`;
+                  const resultResponse = await fetch(resultUrl, {
+                    method: "GET",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                  });
+                  if (resultResponse.ok) {
+                    const resultText = await resultResponse.text();
+                    const resultData = resultText ? JSON.parse(resultText) : {};
+                    if (resultData.success && resultData.data?.report?.reportSkills) {
+                      hasValidResults = true;
+                      break; // No need to check further assessments
+                    }
+                  }
+                } catch (err) {
+                  console.warn(`Error fetching results for candidate ${candidate._id}, interview ${interviewId}: ${err.message}`);
+                }
+              }
+              if (hasValidResults) {
+                filteredCandidates.push(candidate);
+              }
+            }
+          }
+          setCandidates(filteredCandidates);
         } else {
           throw new Error(data.message || "Error fetching candidates");
         }
@@ -58,8 +88,6 @@ const Index = () => {
       section.scrollIntoView({ behavior: "smooth" });
     }
   };
-
-  
 
   const handleMobileMenuItemClick = (path) => {
     router.push(path);
@@ -132,9 +160,7 @@ const Index = () => {
                 className="h-12 lg:h-14 cursor-pointer"
               />
             </div>
-            <nav className="hidden md:flex space-x-8 items-center">
-              
-            </nav>
+            <nav className="hidden md:flex space-x-8 items-center"></nav>
             <div className="md:hidden flex items-center">
               <Button
                 variant="ghost"
@@ -150,7 +176,6 @@ const Index = () => {
           {isMobileMenuOpen && (
             <div className="md:hidden bg-white/95 backdrop-blur-sm shadow-lg z-50 px-4 py-4 border-b border-orange-100">
               <div className="flex flex-col space-y-2">
-                
                 <Button
                   variant="ghost"
                   className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
@@ -179,7 +204,6 @@ const Index = () => {
                 >
                   Talent Pool
                 </Button>
-                
               </div>
             </div>
           )}

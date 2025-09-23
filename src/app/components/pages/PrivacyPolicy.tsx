@@ -1,5 +1,5 @@
 const PrivacyPolicy = () => (
-  <div className="max-w-3xl mx-auto py-16 px-4">
+  <div className="max-w-3xl mx-auto py-12 px-4">
     <div className="flex flex-col items-center mb-8">
       <img
         src="/images/logo.png"
