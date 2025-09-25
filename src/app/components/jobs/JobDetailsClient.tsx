@@ -98,7 +98,8 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
       try {
         setLoading(true);
         setError(null);
-        const backendUrl = "https://kind-abnormally-redfish.ngrok-free.app";
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_IN.slice(0,-4);
+        
         const response = await fetch(`${backendUrl}/api/public/jobs/${jobid}`);
         
         if (!response.ok) {
