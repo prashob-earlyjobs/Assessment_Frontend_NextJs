@@ -8,6 +8,7 @@ interface PersonalDetails {
   fullName: string;
   dob: string;
   gender: string;
+  countryCode: string; // Added countryCode field
   phone: string;
   email: string;
   address: string;
@@ -63,7 +64,9 @@ const customSelectStyles = {
     borderRadius: '4px',
     minHeight: '38px',
     fontSize: '14px',
-    width: '80px',
+    width: '100px', // Increased width to accommodate longer codes like +91 and +44
+    display: 'flex',
+    alignItems: 'center',
   }),
   dropdownIndicator: (provided: any) => ({
     ...provided,
@@ -75,7 +78,16 @@ const customSelectStyles = {
     backgroundColor: state.isSelected ? '#f97316' : 'white',
     color: state.isSelected ? 'white' : 'black',
   }),
+  singleValue: (provided: any) => ({
+    ...provided,
+    color: '#f97316',
+    marginLeft: '0',
+    whiteSpace: 'nowrap', // Prevent text wrapping
+    overflow: 'visible', // Ensure full text is visible
+  }),
 };
+
+
 
 const customSelectStylesFull = {
   control: (provided: any) => ({
@@ -106,6 +118,7 @@ const MultiStepForm: React.FC = () => {
     fullName: '',
     dob: '',
     gender: 'Male',
+    countryCode: '+91', // Initialize with default country code
     phone: '',
     email: '',
     address: '',
@@ -131,8 +144,8 @@ const MultiStepForm: React.FC = () => {
     idFile: null,
   });
 
-  // Set max date to today (September 18, 2025)
-  const today = new Date('2025-09-18T10:43:00+05:30'); // IST
+  // Set max date to today (September 23, 2025)
+  const today = new Date('2025-09-23T14:55:00+05:30'); // Updated to current date
   const maxDob = `${today.getFullYear() - 18}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
   const handleInputChange = (
@@ -149,6 +162,15 @@ const MultiStepForm: React.FC = () => {
       }));
     } else {
       setState({ ...state, [name]: value });
+    }
+  };
+
+  const handleCountryCodeChange = (selectedOption: SingleValue<{ value: string; label: string }>) => {
+    if (selectedOption) {
+      setPersonalDetails({
+        ...personalDetails,
+        countryCode: selectedOption.value,
+      });
     }
   };
 
@@ -257,7 +279,10 @@ const MultiStepForm: React.FC = () => {
     if (nextStep === 5) {
       setLoading(true);
       const formData = {
-        personalDetails,
+        personalDetails: {
+          ...personalDetails,
+          phone: `${personalDetails.countryCode}${personalDetails.phone}`, // Combine country code and phone
+        },
         qualifications,
         about,
         references,
@@ -316,25 +341,26 @@ const MultiStepForm: React.FC = () => {
         </select>
       </div>
       <div>
-        <label className="block text-sm font-medium text-orange-600">Phone Number *</label>
-        <div className="flex">
-          <Select
-            options={countryOptions}
-            defaultValue={countryOptions[0]}
-            styles={customSelectStyles}
-            className="mr-2"
-          />
-          <input
-            type="number"
-            name="phone"
-            value={personalDetails.phone}
-            onChange={(e) => handleInputChange(e, setPersonalDetails, personalDetails)}
-            className="mt-1 block w-full border border-orange-400 rounded-md p-2 focus:border-orange-600 focus:ring-orange-200"
-            placeholder="9876543210"
-            required
-          />
-        </div>
-      </div>
+  <label className="block text-sm font-medium text-orange-600">Phone Number *</label>
+  <div className="flex">
+    <Select
+      options={countryOptions}
+      value={countryOptions.find((option) => option.value === personalDetails.countryCode)}
+      onChange={handleCountryCodeChange}
+      styles={customSelectStyles}
+      className="mr-2 mt-2 "
+    />
+    <input
+      type="number"
+      name="phone"
+      value={personalDetails.phone}
+      onChange={(e) => handleInputChange(e, setPersonalDetails, personalDetails)}
+      className="mt-1 block w-full border border-orange-400 rounded-md p-2 focus:border-orange-600 focus:ring-orange-200"
+      placeholder="9876543210"
+      required
+    />
+  </div>
+</div>
       <div>
         <label className="block text-sm font-medium text-orange-600">Email *</label>
         <input
@@ -431,7 +457,7 @@ const MultiStepForm: React.FC = () => {
         <div className="flex">
           <input
             type="text"
-            placeholder="Company Name"
+            placeholder=""
             className="mt-1 block w-full border border-orange-400 rounded-md p-2 focus:border-orange-600 focus:ring-orange-200"
             onChange={handleWorkExperienceChange}
           />
@@ -607,7 +633,7 @@ const MultiStepForm: React.FC = () => {
   const renderIdentityProof = () => (
     <form onSubmit={(e) => handleSubmit(e, 5, validateIdentityProof)} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-orange-600">ID Number *</label>
+        <label className="block text-sm font-medium text-orange-600">Aadhar card ID Number *</label>
         <input
           type="text"
           name="idNumber"
@@ -619,7 +645,7 @@ const MultiStepForm: React.FC = () => {
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-orange-600">Upload ID (JPEG/PNG,less than 100KB) *</label>
+        <label className="block text-sm font-medium text-orange-600">Upload ID (JPEG/PNG, less than 100KB) *</label>
         <input
           type="file"
           accept="image/jpeg,image/png"

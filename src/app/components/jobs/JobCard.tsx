@@ -3,20 +3,22 @@
 import { Card } from "../ui/card";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
-import { Bookmark, Clock, Briefcase, IndianRupee, Calendar, MapPin } from "lucide-react";
+import { Bookmark, Clock, Briefcase, IndianRupee, Calendar, MapPin, Globe } from "lucide-react";
+import { useState } from "react";
 
 interface JobCardProps {
   company: string;
   logo: string;
   title: string;
-  jobType: string;
-  min_salary: string;
-  max_salary: string;
-  salary_mode: string;
-  min_experience: string;
-  max_experience: string;
+  employmentType: string; // Maps to employmentType
+  workType?: string; // Maps to workType (e.g., on-site, remote, hybrid)
+  min_salary?: string | number;
+  max_salary?: string | number;
+  salary_mode?: string;
+  min_experience?: string;
+  max_experience?: string;
   location: string;
-  skills?: string[];
+  skills?: string[]; // Optional, for future use if API provides skills
   postedTime: string;
   onJobClick?: () => void;
 }
@@ -25,7 +27,8 @@ const JobCard = ({
   company,
   logo,
   title,
-  jobType,
+  employmentType,
+  workType,
   min_salary,
   max_salary,
   salary_mode,
@@ -36,74 +39,67 @@ const JobCard = ({
   postedTime,
   onJobClick,
 }: JobCardProps) => {
-  const hasMinExp = min_experience && min_experience !== "_";
-  const hasMaxExp = max_experience && max_experience !== "_";
-  const experienceDisplay =
-    hasMinExp && hasMaxExp
-      ? `${min_experience} - ${max_experience} Yrs`
-      : hasMinExp
-      ? `${min_experience} Yrs`
-      : hasMaxExp
-      ? `${max_experience} Yrs`
-      : null;
+  const [isBookmarked, setIsBookmarked] = useState(false);
 
-  const formatRelativeTime = (dateString: string): string => {
-    const now = new Date();
-    const postedDate = new Date(dateString);
-    const diffInMs = now.getTime() - postedDate.getTime();
-    const diffInSeconds = Math.floor(diffInMs / 1000);
-    const diffInMinutes = Math.floor(diffInSeconds / 60);
-    const diffInHours = Math.floor(diffInMinutes / 60);
-    const diffInDays = Math.floor(diffInHours / 24);
-    const diffInWeeks = Math.floor(diffInDays / 7);
-    const diffInMonths = Math.floor(diffInDays / 30);
-
-    if (diffInMonths > 0) {
-      return diffInMonths === 1 ? '1 month ago' : `${diffInMonths} months ago`;
-    } else if (diffInWeeks > 0) {
-      return diffInWeeks === 1 ? '1 week ago' : `${diffInWeeks} weeks ago`;
-    } else if (diffInDays > 0) {
-      return diffInDays === 1 ? '1 day ago' : `${diffInDays} days ago`;
-    } else if (diffInHours > 0) {
-      return diffInHours === 1 ? '1 hour ago' : `${diffInHours} hours ago`;
-    } else if (diffInMinutes > 0) {
-      return diffInMinutes === 1 ? '1 minute ago' : `${diffInMinutes} minutes ago`;
-    } else {
-      return 'Just now';
+  // Normalize employmentType and workType for display
+  const normalizeEmploymentType = (type: string): string => {
+    switch (type.toLowerCase()) {
+      case "full-time":
+      case "permanent employment (full-time)":
+        return "Full Time";
+      case "part-time":
+        return "Part Time";
+      case "internship":
+        return "Internship";
+      case "contract":
+        return "Contract";
+      case "freelance":
+        return "Freelance";
+      default:
+        return type;
     }
   };
 
-  const parseNumber = (value?: string | number | null): number | null => {
-    if (value === null || value === undefined) {
-      console.log("Value is null or undefined");
-      return null;
+  const normalizeWorkType = (type?: string): string => {
+    if (!type) return "Not Specified";
+    switch (type.toLowerCase()) {
+      case "on-site":
+        return "On-site";
+      case "remote":
+        return "Remote";
+      case "hybrid":
+        return "Hybrid";
+      default:
+        return type;
     }
+  };
 
-    if (typeof value === "number") {
-      console.log("Value is already a number:", value);
-      return Number.isFinite(value) ? value : null;
-    }
+  // Experience display logic
+  const experienceDisplay =
+    min_experience && max_experience
+      ? `${min_experience} - ${max_experience} Yrs`
+      : min_experience
+      ? `${min_experience} Yrs`
+      : max_experience
+      ? `${max_experience} Yrs`
+      : null;
 
-    if (typeof value !== "string") {
-      console.log("Value is not a string or number:", value);
-      return null;
-    }
-
-    if (value.trim() === "") {
-      console.log("Value is empty string");
-      return null;
-    }
-
-    // Try to parse the string directly
+  // Salary display logic
+  const parseNumber = (value?: string | number): number | null => {
+    if (value === undefined || value === null) return null;
+    if (typeof value === "number") return Number.isFinite(value) ? value : null;
+    if (typeof value !== "string" || value.trim() === "") return null;
     const num = parseFloat(value);
-
     return Number.isFinite(num) ? num : null;
   };
 
   const toLPA = (amount: number, mode?: string): number => {
     const yearly = mode?.toLowerCase() === "monthly" ? amount * 12 : amount;
+    return yearly / 100000; // Convert to lakhs per annum
+  };
 
-    return yearly / 100000; // convert to lakhs per annum
+  const formatLpa = (value: number): string => {
+    return value >= 10 ? value.toFixed(0) : value.toFixed(1);
   };
 
   const minParsed = parseNumber(min_salary);
@@ -112,31 +108,69 @@ const JobCard = ({
   const minLpa = minParsed != null ? toLPA(minParsed, salary_mode) : null;
   const maxLpa = maxParsed != null ? toLPA(maxParsed, salary_mode) : null;
 
-  const formatLpa = (v: number) => {
-    const fixed = v >= 10 ? v.toFixed(0) : v.toFixed(1);
-    return `${fixed}`;
-  };
-
   const salaryDisplay =
     minLpa != null && maxLpa != null
-      ? `${formatLpa(minLpa)} - ${formatLpa(maxLpa)}`
+      ? `${formatLpa(minLpa)} - ${formatLpa(maxLpa)} LPA`
       : minLpa != null
-      ? `${formatLpa(minLpa)}`
+      ? `${formatLpa(minLpa)} LPA`
       : maxLpa != null
-      ? `${formatLpa(maxLpa)}`
+      ? `${formatLpa(maxLpa)} LPA`
       : null;
+
+  // Format posted time
+  const formatRelativeTime = (dateString: string): string => {
+    try {
+      const now = new Date();
+      const postedDate = new Date(dateString);
+      if (isNaN(postedDate.getTime())) return "Not Disclosed";
+
+      const diffInMs = now.getTime() - postedDate.getTime();
+      const diffInSeconds = Math.floor(diffInMs / 1000);
+      const diffInMinutes = Math.floor(diffInSeconds / 60);
+      const diffInHours = Math.floor(diffInMinutes / 60);
+      const diffInDays = Math.floor(diffInHours / 24);
+      const diffInWeeks = Math.floor(diffInDays / 7);
+      const diffInMonths = Math.floor(diffInDays / 30);
+
+      if (diffInMonths > 0) {
+        return diffInMonths === 1 ? "1 month ago" : `${diffInMonths} months ago`;
+      } else if (diffInWeeks > 0) {
+        return diffInWeeks === 1 ? "1 week ago" : `${diffInWeeks} weeks ago`;
+      } else if (diffInDays > 0) {
+        return diffInDays === 1 ? "1 day ago" : `${diffInDays} days ago`;
+      } else if (diffInHours > 0) {
+        return diffInHours === 1 ? "1 hour ago" : `${diffInHours} hours ago`;
+      } else if (diffInMinutes > 0) {
+        return diffInMinutes === 1 ? "1 minute ago" : `${diffInMinutes} minutes ago`;
+      } else {
+        return "Just now";
+      }
+    } catch {
+      return "Not Disclosed";
+    }
+  };
+
+  // Handle bookmark toggle
+  const handleBookmarkClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent card click when bookmarking
+    setIsBookmarked(!isBookmarked);
+    // Add logic to save bookmark state (e.g., API call) in the future
+  };
 
   return (
     <Card
       className="p-6 hover:shadow-md transition-shadow cursor-pointer"
       onClick={onJobClick}
+      role="article"
+      aria-label={`Job listing for ${title} at ${company}`}
     >
       <div className="flex gap-4">
-        <img
+        {/* <img
           src={logo}
           alt={`${company} logo`}
           className="w-12 h-12 rounded object-contain bg-gray-50 p-1"
-        />
+          onError={(e) => (e.currentTarget.src = "/images/default-company-logo.png")}
+        /> */}
 
         <div className="flex-1">
           <div className="flex justify-between items-start mb-2">
@@ -146,20 +180,32 @@ const JobCard = ({
               </h3>
               <p className="text-gray-600 text-sm">{company}</p>
             </div>
-            <Button variant="ghost" size="sm" className="p-1 h-auto">
-              <Bookmark className="w-4 h-4" />
+            <Button
+              variant="ghost"
+              size="sm"
+              className="p-1 h-auto"
+              onClick={handleBookmarkClick}
+              aria-label={isBookmarked ? "Remove bookmark" : "Bookmark job"}
+            >
+              <Bookmark className={`w-4 h-4 ${isBookmarked ? "fill-current" : ""}`} />
             </Button>
           </div>
 
-          <div className="flex gap-4 mb-3 text-sm text-gray-600">
+          <div className="flex flex-wrap gap-4 mb-3 text-sm text-gray-600">
             <span className="flex items-center gap-1">
               <Briefcase className="w-3 h-3" />
-              {jobType}
+              {normalizeEmploymentType(employmentType)}
             </span>
+            {workType && (
+              <span className="flex items-center gap-1">
+                <Globe className="w-3 h-3" />
+                {normalizeWorkType(workType)}
+              </span>
+            )}
             {salaryDisplay && (
               <span className="flex items-center gap-1">
                 <IndianRupee className="w-3 h-3" />
-                {salaryDisplay} LPA
+                {salaryDisplay}
               </span>
             )}
             {experienceDisplay && (
@@ -186,10 +232,7 @@ const JobCard = ({
                 </Badge>
               ))}
               {skills.length > 3 && (
-                <Badge
-                  variant="secondary"
-                  className="bg-gray-100 text-gray-600"
-                >
+                <Badge variant="secondary" className="bg-gray-100 text-gray-600">
                   +{skills.length - 3}
                 </Badge>
               )}
