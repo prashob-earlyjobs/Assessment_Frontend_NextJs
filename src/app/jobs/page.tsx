@@ -102,7 +102,7 @@ const Jobs = () => {
   const [isFilterSidebarOpen, setIsFilterSidebarOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const backendUrl = "https://kind-abnormally-redfish.ngrok-free.app";
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_IN.slice(0,-4);
 
   // Calculate pagination values
   const totalPages = Math.ceil(totalJobs / pageSize);
