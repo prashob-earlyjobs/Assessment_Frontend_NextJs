@@ -106,7 +106,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function JobDetails({ params }: PageProps) {
   const { jobtitle, jobid } = await params;
   
-  const backendUrl = "https://kind-abnormally-redfish.ngrok-free.app";
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_IN.slice(0,-4);
+  
   
   let jobData: JobDetailsData | null = null;
   let seoError: string | null = null;
