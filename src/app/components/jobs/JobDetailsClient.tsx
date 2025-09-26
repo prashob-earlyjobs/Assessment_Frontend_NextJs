@@ -641,7 +641,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Location:</span>
-                  <span className="font-medium">{jobData.city || 'Remote'}</span>
+                  <span className="font-medium">{jobData.location || 'Remote'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Type:</span>

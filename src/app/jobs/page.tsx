@@ -178,7 +178,7 @@ const Jobs = () => {
         params.append("experience", experienceRange.join(","));
       }
       params.append("page", currentPage.toString());
-      params.append("pageSize", pageSize.toString());
+      params.append("limit", pageSize.toString());
       params.append("status", "published");
 
       const url = `${backendUrl}/api/public/jobs?${params.toString()}`;
