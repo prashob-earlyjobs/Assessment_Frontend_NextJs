@@ -112,7 +112,7 @@ export async function POST(request: NextRequest) {
           for (const imagePath of images) {
             const { data: { text } } = await Tesseract.recognize(imagePath, 'eng');
             extractedText += text + '\n';
-            await fs.unlink(imagePath); // Clean up image file
+            await fs.unlink(imagePath); 
           }
         }
       } catch (docxError) {
@@ -139,7 +139,7 @@ export async function POST(request: NextRequest) {
       });
       await fs.unlink(tempTextPath); // Clean up text file
     } else {
-      // Upload original file as fallback
+     
       uploadResult = await fileManager.uploadFile(tempFilePath, {
         mimeType: file.type || getMimeTypeFromExtension(fileExtension, supportedFileTypes),
         displayName: file.name,
@@ -153,9 +153,10 @@ export async function POST(request: NextRequest) {
     const prompt = `
       Extract the following information from the uploaded resume file and return it strictly as a JSON object matching this structure. 
       Do not include any additional text, markdown, or explanations outside the JSON.
-      If a field is not present, use an empty string or empty array as appropriate.
+      If a field is not present, use an empty string or empty array as appropriate .
       For dates, use YYYY-MM format if possible.
       For descriptions in workExperience, split into an array of up to 3 bullet points, circular and black-filled.
+      Do not include %, &, #, <, >, ", ', or any other URI-reserved characters that can cause URI malformed errors. Replace them safely with plain text equivalents (for example, % → "percent", & → "and").
       Structure:
       {
         "personalInfo": {

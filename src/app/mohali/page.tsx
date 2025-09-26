@@ -13,6 +13,7 @@ import HeroSection from "../components/Mohali/HeroSection";
 import { Shield, Clock, Award } from 'lucide-react';
 import Header from "../components/pages/header";
 import Footer from "../components/pages/footer";
+import Navbar from "../components/pages/navbar";
 const Index = () => {
   const seoData = {
     title: "EarlyJobs Mohali - Leading Job Placement & Career Development Center",
@@ -150,6 +151,7 @@ const Index = () => {
 
   return (
     <>
+    <Navbar />
     <Header/>
     <div className="min-h-screen bg-background">
       {/* Hero Section */}

@@ -65,7 +65,6 @@ const Footer = () => {
                     <Link href="/about-us" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">About Us</Link>
                     <Link href="/team" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Team</Link>
                     <Link href="/blogs" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Blogs</Link>
-                    <Link href="/partner-with-us" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Partner With Us</Link>
                     <Link href="/franchise" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Franchise With Us</Link>
                     <a href="tel:+918217527926" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 cursor-pointer lg:mt-6" id="contact-link">Contact Us</a>
                     <Link href="/story" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Our Story</Link>
@@ -104,10 +103,10 @@ const Footer = () => {
                         <Building className="w-5 h-5 mr-2 inline-block" />
                         Company Tie-Ups
                     </Link>
-                    <p className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
+                    <Link href="/college-tieups" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
                         <GraduationCap className="w-5 h-5 mr-2 inline-block" />
                         College Tie-Ups
-                    </p>
+                    </Link>
                 </div>
             </div>
             <div className="w-full  mt-2 px-4 pb-10">
@@ -151,6 +150,7 @@ const Footer = () => {
         "Coimbatore",
         "Ghaziabad",
         "Chengalpattu",
+        "Lucknow",
         "Bangalore Urban",
         "Faridabad",
         "Bijapur",

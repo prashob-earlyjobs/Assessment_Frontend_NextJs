@@ -2,6 +2,7 @@ import Header from "../../../components/layout/Header";
 import JobDetailsClient from "../../../components/jobs/JobDetailsClient";
 import JobDetailsSEO from "../../../components/seo/JobDetailsSEO";
 import { Metadata } from "next";
+import Footer from "@/app/components/pages/footer";
 
 interface JobDetailsData {
   id: string;
@@ -57,7 +58,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     
     if (response.ok) {
       const data = await response.json();
-      const jobData = data.job || data;
+      const jobData = data.data;
       
       if (jobData) {
         const title = `${jobData.title} Job at ${jobData.company_name} - EarlyJobs`;
@@ -105,15 +106,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function JobDetails({ params }: PageProps) {
   const { jobtitle, jobid } = await params;
   
-  const backendUrl = "https://apis.earlyjobs.in";
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_IN.slice(0,-4);
   
-  // Fetch job data on the server
+  
   let jobData: JobDetailsData | null = null;
-  let error: string | null = null;
+  let seoError: string | null = null;
   
   try {
     const response = await fetch(`${backendUrl}/api/public/jobs/${jobid}`, {
-      next: { revalidate: 3600 } // Revalidate every hour
+      next: { revalidate: 3600 } 
     });
     
     if (!response.ok) {
@@ -121,22 +122,23 @@ export default async function JobDetails({ params }: PageProps) {
     }
     
     const data = await response.json();
-    jobData = data.job || data;
+    jobData = data.data
+    console.log(jobData);
   } catch (err) {
-    error = err instanceof Error ? err.message : 'Failed to fetch job details';
+    seoError = err instanceof Error ? err.message : 'Failed to fetch job details';
   }
 
   // Generate current URL for SEO
   const currentUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/jobs/${jobtitle}/${jobid}`;
 
-  if (error || !jobData) {
+  if (seoError || !jobData) {
     return (
       <div className="min-h-screen bg-gray-50">
         <JobDetailsSEO jobData={null} currentUrl={currentUrl} />
         <Header />
         <div className="max-w-7xl mx-auto p-6">
           <div className="text-center py-12">
-            <p className="text-red-600 text-lg">Error: {error || 'Job not found'}</p>
+            <p className="text-red-600 text-lg">Error: {seoError || 'Job not found'}</p>
             <a 
               href="/jobs"
               className="inline-block mt-4 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
@@ -153,7 +155,8 @@ export default async function JobDetails({ params }: PageProps) {
     <>
       <JobDetailsSEO jobData={jobData} currentUrl={currentUrl} />
       <Header />
-      <JobDetailsClient jobData={jobData} currentUrl={currentUrl} />
+      <JobDetailsClient jobid={jobid} currentUrl={currentUrl} />
+      <Footer/>
     </>
   );
 }

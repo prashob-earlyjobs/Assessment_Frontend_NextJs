@@ -238,37 +238,13 @@ const Index = () => {
               >
                 Students
               </button>
-              {userCredentials ? (
-                <div className="flex items-center space-x-4">
-                  <Button
-                    variant="ghost"
-                    className="text-red-600 hover:bg-red-50 rounded-xl py-2 px-4 transition-all duration-300"
-                    onClick={handleLogout}
-                  >
-                    <LogOut className="h-5 w-5 mr-2" />
-                  </Button>
-                  <div className="flex items-center space-x-3 cursor-pointer" onClick={handleProfileClick}>
-                    <Avatar className="h-10 w-10">
-                      <AvatarImage src={userCredentials.avatar} />
-                      <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
-                        {userCredentials?.name
-                          ?.split(" ")
-                          .map((n) => n[0])
-                          .join("")
-                          ?.toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <span className="text-sm font-medium text-gray-900">{userCredentials.name}</span>
-                  </div>
-                </div>
-              ) : (
-                <Button
-                  className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-full transition-colors duration-200 font-semibold"
-                  onClick={() => router.push("/signup")}
-                >
-                  Sign Up
-                </Button>
-              )}
+               <button
+                onClick={() => scrollToSection('faqs')}
+                className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-medium"
+              >
+                FAQS
+              </button>
+             
             </nav>
             <div className="md:hidden flex items-center">
               <Button
@@ -284,31 +260,7 @@ const Index = () => {
           {isMobileMenuOpen && (
             <div className="md:hidden bg-white/95 backdrop-blur-sm shadow-lg z-50 px-4 py-4 border-b border-orange-100">
               <div className="flex flex-col space-y-2">
-                {userCredentials !== null && (
-                  <div
-                    className="flex items-center space-x-3 cursor-pointer px-4 py-3"
-                    onClick={handleProfileClick}
-                  >
-                    <Avatar className="h-10 w-10">
-                      <AvatarImage src={userCredentials.avatar} />
-                      <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
-                        {userCredentials?.name
-                          ?.split(" ")
-                          .map((n) => n[0])
-                          .join("")
-                          ?.toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">
-                        {userCredentials.name}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {userCredentials.profile?.preferredJobRole}
-                      </p>
-                    </div>
-                  </div>
-                )}
+                
                 <Button
                   variant="ghost"
                   className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
@@ -653,7 +605,7 @@ const Index = () => {
 
       <FeaturedArticles/>
 
-      <section className="bg-white py-20">
+      <section className="bg-white py-20" id="faqs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-extrabold text-gray-900 mb-4">

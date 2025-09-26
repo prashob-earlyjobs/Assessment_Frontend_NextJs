@@ -87,7 +87,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
-      <header className="flex items-center justify-between px-4 py-3 lg:px-18 bg-white/80 backdrop-blur-sm sticky md:top-0 z-300 shadow-sm">
+      <header className="flex items-center justify-between px-4 py-3 lg:px-18 bg-white/80 backdrop-blur-sm sticky md:top-0 z-20 shadow-sm">
   <div className="flex items-center space-x-2">
     <img
       src="/images/logo.png"
@@ -234,6 +234,13 @@ const Index = () => {
               onClick={() => handleMobileMenuItemClick("/college-partnerships")}
             >
               Colleges
+            </Button>
+             <Button
+              variant="ghost"
+              className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
+              onClick={() => handleMobileMenuItemClick("/recruiter")}
+            >
+              Recruiter
             </Button>
             <Button
               variant="ghost"

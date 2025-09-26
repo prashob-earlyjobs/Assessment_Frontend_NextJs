@@ -1,7 +1,14 @@
 "use client";
 import React, { useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
+import { toast } from "sonner";
+import emailjs from "@emailjs/browser";
 
 const ConsultationForm = () => {
+  const sitekey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+  const EMAILJS_SERVICE_ID="service_3ztkc9i";
+  const EMAILJS_TEMPLATE_ID="template_ouifa8u";
+  const EMAILJS_PUBLIC_KEY= "hybgFnKHHM0zlK7SP";
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -9,6 +16,13 @@ const ConsultationForm = () => {
     freelanceRecruiter: false,
     intern: false,
   });
+  //const [captchaValue, setCaptchaValue] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // function onChange(value) {
+    
+  //   setCaptchaValue(value);
+  // }
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -18,19 +32,48 @@ const ConsultationForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission (e.g., send data to an API)
-    console.log("Form submitted:", formData);
-    // Reset form after submission
-    setFormData({
-      name: "",
-      email: "",
-      number: "",
-      freelanceRecruiter: false,
-      intern: false,
-    });
+    setIsSubmitting(true);
+
+    try {
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        phone_number: formData.number,
+        freelance_recruiter: formData.freelanceRecruiter ? "Yes" : "No",
+        intern: formData.intern ? "Yes" : "No",
+      };
+
+      await emailjs.send(
+       EMAILJS_SERVICE_ID,
+       EMAILJS_TEMPLATE_ID,
+        templateParams,
+       EMAILJS_PUBLIC_KEY
+      );
+
+      toast.success("Form successfully submitted! We'll contact you soon.");
+      setFormData({
+        name: "",
+        email: "",
+        number: "",
+        freelanceRecruiter: false,
+        intern: false,
+      });
+     // setCaptchaValue(null);
+    } catch (error) {
+      console.error("EmailJS error:", error);
+      toast.error("Failed to submit form. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  const isFormValid =
+    formData.name.trim() !== "" &&
+    formData.email.trim() !== "" &&
+    formData.number.trim() !== "" ;
+    // captchaValue === null;
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
@@ -98,11 +141,20 @@ const ConsultationForm = () => {
             Become an Intern
           </label>
         </div>
+        {/* <ReCAPTCHA
+          sitekey={sitekey}
+          onChange={onChange}
+        /> */}
         <button
           type="submit"
-          className="bg-orange-500 text-white p-3 rounded-md font-medium hover:bg-orange-600 transition-colors"
+          className={`p-3 rounded-md font-medium transition-colors ${
+            isFormValid && !isSubmitting
+              ? "bg-orange-500 text-white hover:bg-orange-600"
+              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+          }`}
+          disabled={!isFormValid || isSubmitting}
         >
-          Submit
+          {isSubmitting ? "Submitting..." : "Submit"}
         </button>
       </form>
     </div>

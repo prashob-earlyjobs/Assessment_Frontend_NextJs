@@ -3,6 +3,7 @@
 import AssessmentDetails from "@/app/components/pages/AssessmentDetails";
 import type { Metadata } from "next";
 import { getAssessmentById } from "@/app/components/services/servicesapis";
+import Footer from "@/app/components/pages/footer";
 
 type Props = {
   params: Promise<{
@@ -101,5 +102,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default function Page() {
-  return <AssessmentDetails />;
+  return (
+    <>
+  <AssessmentDetails />
+  <Footer/>
+   </>
+  );
 }

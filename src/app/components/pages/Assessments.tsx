@@ -147,18 +147,18 @@ const Assessments = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       <Header />
-      <main className="max-w-7xl mx-auto px-6 py-8">
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
+        <div className="mb-6 sm:mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
             Skill Assessments
           </h2>
-          <p className="text-lg text-gray-600">
+          <p className="text-base sm:text-lg text-gray-600">
             Choose from our comprehensive library of assessments to showcase
             your abilities.
           </p>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-lg border-0 p-6 mb-8">
+        <div className="bg-white rounded-3xl shadow-lg border-0 p-4 sm:p-6 mb-6 sm:mb-8">
           <div className="flex flex-col gap-4">
             {/* Top Row: Search and Level Filter */}
             <div className="flex flex-col lg:flex-row gap-4">
@@ -172,7 +172,7 @@ const Assessments = () => {
                 />
               </div>
               <Select value={selectedLevel} onValueChange={setSelectedLevel}>
-                <SelectTrigger className="w-48 h-12 rounded-2xl border-gray-200 ">
+                <SelectTrigger className="w-full sm:w-48 h-12 rounded-2xl border-gray-200 ">
                   <SelectValue placeholder="All Levels" />
                 </SelectTrigger>
                 <SelectContent className="bg-white rounded-2xl shadow-lg border-gray-200">
@@ -229,7 +229,7 @@ const Assessments = () => {
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {assessments.map((assessment, index) => {
             const isLast = index === assessments.length - 1;
             const Icon = getIcon(assessment.skill);
@@ -237,7 +237,7 @@ const Assessments = () => {
               <Card
                 key={assessment._id}
                 ref={isLast ? lastAssessmentRef : null}
-                className="rounded-3xl border-0 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer"
+                className="rounded-3xl border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer w-full"
                 onClick={() =>
                 navigate.push(
                   `/assessments/${assessment.title.toLowerCase().replace(/\s+/g, "-")}/${assessment.shortId ? assessment.shortId : assessment._id}`
@@ -247,10 +247,10 @@ const Assessments = () => {
               >
                 <CardHeader className="pt-4 pb-4 relative">
                   <div className="flex items-start justify-between ">
-                    <div className="flex items-start space-x-3 w-full justify-between">
-                      <div className="flex items-center space-x-2">
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:space-x-3 w-full justify-between gap-3 sm:gap-0">
+                      <div className="flex items-center space-x-3 w-full">
                         <div
-                          className={`p-3 rounded-2xl ${categoryColour(
+                          className={`p-3 rounded-2xl flex-shrink-0 ${categoryColour(
                             assessment.category
                           )}`}
                         >
@@ -258,17 +258,17 @@ const Assessments = () => {
                         </div>
 
                         <div
-                          className={assessment.isPremium && `max-w-[308px]`}
+                          className={`flex-1 ${assessment.isPremium ? 'max-w-[200px] sm:max-w-[308px]' : 'w-full'}`}
                         >
-                          <CardTitle className="text-xl">
+                          <CardTitle className="text-lg sm:text-xl leading-tight break-words">
                             {assessment.title}
                           </CardTitle>
                           <div
                             className="flex flex-col mt-1"
                             style={{ gap: "8px" }}
                           >
-                            <div className="flex items-center space-x-2">
-                              <Badge className="rounded-full text-xs px-2 py-1">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <Badge className="rounded-full text-xs px-2 py-1 flex-shrink-0">
                                 {assessment.category || "Uncategorized"}
                               </Badge>
                               <Badge
@@ -285,7 +285,7 @@ const Assessments = () => {
                               </div>
                             </div>
                             <div
-                              className="flex w-full space-x-2 gap-[6px]"
+                              className="flex w-full space-x-2 gap-[6px] flex-wrap"
                               style={{ marginLeft: "0px" }}
                             >
                               {assessment?.tags?.length > 0 &&
@@ -303,7 +303,7 @@ const Assessments = () => {
                         </div>
                       </div>
                       {assessment.isPremium && (
-                        <div className="">
+                        <div className="flex-shrink-0">
                           <div className="relative">
                             <Badge className="bg-gradient-to-r from-purple-500 via-pink-500 to-purple-600 text-white border-0 rounded-full px-3 py-1 text-xs font-medium shadow-lg">
                               <Crown className="h-3 w-3 mr-1" />
@@ -324,7 +324,7 @@ const Assessments = () => {
                 <CardContent className="pb-[24px]">
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <CardDescription className="text-sm text-gray-600 mb-3 h-[64px] leading-snug line-clamp-3 cursor-default">
+                      <CardDescription className="text-sm text-gray-600 mb-3 h-[64px] leading-snug line-clamp-3 cursor-default break-words">
                         {assessment.description}
                       </CardDescription>
                     </TooltipTrigger>
@@ -358,7 +358,7 @@ const Assessments = () => {
                         </span>
                       )}
                     </div>
-                    <div className="flex items-center space-x-4 text-xs text-gray-600">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 text-xs text-gray-600">
                       <div className="flex items-center space-x-1">
                         <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                         <span>Instant Access</span>
