@@ -138,6 +138,13 @@ const Footer = () => {
       >
         Chennai
       </p>
+
+          <p
+        onClick={()=>router.push("/rampur")}
+        className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
+      >
+        Rampur
+      </p>
     </div>
   </div>
 
@@ -146,7 +153,7 @@ const Footer = () => {
     <span className=" text-xl font-bold block sm:inline">Starting Soon:</span>
     <div className="flex flex-wrap gap-4 mt-3 justify-center">
       {[
-        "Rampur",
+
         "Coimbatore",
         "Ghaziabad",
         "Chengalpattu",
