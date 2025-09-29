@@ -1,19 +1,19 @@
 "use client"
-import { Button } from "../components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
-import { Input } from "../components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
-import { Badge } from "../components/ui/badge";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card";
+import { Input } from "../../components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
+import { Badge } from "../../components/ui/badge";
 import { Users, Briefcase, Laptop, MapPin, Phone, Mail, Calendar, ArrowRight, Loader2, CheckCircle, Star, Building2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import emailjs from '@emailjs/browser';
 import { toast } from "sonner";
-import FAQSection from "../components/Mohali/faq";
-import HeroSection from "../components/Mohali/HeroSection";
+import FAQSection from "../../components/Mohali/faq";
+import HeroSection from "../../components/Mohali/HeroSection";
 import { Shield, Clock, Award } from 'lucide-react';
-import Header from "../components/pages/header";
-import Footer from "../components/pages/footer";
-import Navbar from "../components/pages/navbar";
+import Header from "../../components/pages/header";
+import Footer from "../../components/pages/footer";
+import Navbar from "../../components/pages/navbar";
 const Index = () => {
   const seoData = {
     title: "EarlyJobs Mohali - Leading Job Placement & Career Development Center",

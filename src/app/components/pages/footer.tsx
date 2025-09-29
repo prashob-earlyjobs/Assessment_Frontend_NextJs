@@ -115,25 +115,25 @@ const Footer = () => {
     <span className=" text-2xl font-bold text-gray-300 block sm:inline">Available in:</span>
     <div className="flex flex-wrap gap-4 mt-3 justify-center">
       <p
-        onClick={()=>router.push("/mohali")}
+        onClick={()=>router.push("/franchise/mohali")}
         className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
       >
         Mohali
       </p>
       <p
-        onClick={()=>router.push("/chandigarh")}
+        onClick={()=>router.push("/franchise/chandigarh")}
         className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
       >
         Chandigarh
       </p>
       <p
-        onClick={()=>router.push("/hyderabad")}
+        onClick={()=>router.push("/franchise/hyderabad")}
         className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
       >
         Hyderabad
       </p>
      <p
-        onClick={()=>router.push("/chennai")}
+        onClick={()=>router.push("/franchise/chennai")}
         className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
       >
         Chennai
@@ -167,14 +167,14 @@ const Footer = () => {
         "Ananthapur",
         "Mangalore",
       ].map((city) => (
-        <a
+        <p
           key={city}
-          href="/"
-          onClick={(e) => e.preventDefault()}
-          className="text-gray-400  text-lg hover:text-amber-500 transition-all duration-300"
+          
+          // onClick={(e) => e.preventDefault()}
+          className="text-gray-400  text-lg hover:text-amber-500 transition-all duration-300 cursor-not-allowed"
         >
           {city}
-        </a>
+        </p>
       ))}
     </div>
   </div>
