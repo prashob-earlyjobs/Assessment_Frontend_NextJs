@@ -61,7 +61,7 @@ Do not include any additional text or explanations.
             },
           ],
           generationConfig: {
-            responseMimeType: 'application/json', // Ensure JSON output
+            responseMimeType: 'application/json', 
           },
         }),
       }

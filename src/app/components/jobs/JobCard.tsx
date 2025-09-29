@@ -165,12 +165,12 @@ const JobCard = ({
       aria-label={`Job listing for ${title} at ${company}`}
     >
       <div className="flex gap-4">
-        {/* <img
+        <img
           src={logo}
           alt={`${company} logo`}
           className="w-12 h-12 rounded object-contain bg-gray-50 p-1"
           onError={(e) => (e.currentTarget.src = "/images/default-company-logo.png")}
-        /> */}
+        />
 
         <div className="flex-1">
           <div className="flex justify-between items-start mb-2">

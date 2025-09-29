@@ -4,18 +4,56 @@ import { Card } from "../ui/card";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { QrCode } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const Sidebar = () => {
+  const router = useRouter();
+
   return (
     <div className="space-y-6">
       {/* New to GetWork Section */}
-      <Card className="p-6 text-center">
+      {/* <Card className="p-6 text-center">
         <h3 className="font-semibold text-lg mb-2">New to EarlyJobs.ai?</h3>
         <Button className="w-full mb-4 bg-earlyjobs-navy hover:bg-earlyjobs-navy/90">
           Upload Resume
         </Button>
         <p className="text-sm text-gray-600">Connect with Hiring Experts</p>
-      </Card>
+      </Card> */}
+      <div className="bg-white rounded-lg p-4 shadow-sm mt-6">
+              <div className="text-center">
+                <h3 className="font-semibold text-earlyjobs-text mb-3">
+                  Want to prove your skills?
+                </h3>
+                <p className="text-sm text-gray-700 mb-4">
+                  Take our EarlyJobs Assessments and boost your chances of getting hired!
+                </p>
+                <Button 
+                  className="bg-white hover:bg-gray-50 font-medium px-6 py-2 border-2 border-earlyjobs-orange"
+                  style={{ color: '#ff6b35' }}
+                  onClick={() => router.push('/assessments')}
+                >
+                  Get Assessments
+                </Button>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-lg p-4 shadow-sm mt-6">
+              <div className="text-center">
+                <h3 className="font-semibold text-earlyjobs-text mb-3">
+                  New to EarlyJobs.ai?
+                </h3>
+                <p className="text-sm text-gray-700 mb-4">
+                  Use our AI Resume Builder to create a professional resume and increase your chances of landing your dream job!
+                </p>
+                <Button 
+                  className="bg-white hover:bg-gray-50 font-medium px-6 py-2 border-2 border-earlyjobs-orange"
+                  style={{ color: '#ff6b35' }}
+                  onClick={() => router.push('/airesume')}
+                >
+                  Create AI Resume
+                </Button>
+              </div>
+            </div>
 
       {/* Launch Your Career Section */}
       <Card className="p-6 text-center">

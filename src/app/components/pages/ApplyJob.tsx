@@ -1,9 +1,10 @@
-
 "use client";
 import { useMemo, useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation"; // Import useRouter
 import JobFairSection from "./Jobfair";
 import Experience from "./Experience";
 import { ChevronDown, ChevronUp, Search } from "lucide-react";
+import Cookies from "js-cookie";
 
 const useScrollAnimation = () => {
   const ref = useRef(null);
@@ -36,6 +37,7 @@ const useScrollAnimation = () => {
 
 export default function Index() {
   const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL_IN;
+  const router = useRouter(); // Initialize useRouter
   const categories = useMemo(
     () => [
       { icon: "🛍️", title: "Information Technology" },
@@ -124,7 +126,7 @@ export default function Index() {
             )}&limit=7`
           );
           const data = await response.json();
-          const filtered = data.jobs.filter(
+          const filtered = data.data.jobs.filter(
             (job) =>
               job.title.toLowerCase().includes(industry.toLowerCase()) ||
               job.company_name.toLowerCase().includes(industry.toLowerCase()) ||
@@ -174,7 +176,7 @@ export default function Index() {
       e.preventDefault();
       const selectedJob = suggestions[highlightedIndex];
       const slug = createSlug(selectedJob.title);
-      window.location.href = `/jobs/${slug}/${selectedJob.id}`;
+      router.push(`/jobs/${slug}/${selectedJob.id}`);
     } else if (e.key === "Escape") {
       setSuggestions([]);
       setHighlightedIndex(-1);
@@ -184,7 +186,7 @@ export default function Index() {
   // Handle suggestion click
   const handleSuggestionClick = (job) => {
     const slug = createSlug(job.title);
-    window.location.href = `/jobs/${slug}/${job.id}`;
+    router.push(`/jobs/${slug}/${job.jobId}`);
   };
 
   return (
@@ -192,7 +194,7 @@ export default function Index() {
       <section className="relative min-h-[70vh] sm:min-h-[80vh] md:min-h-screen">
         <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[600px] sm:h-[700px] md:h-[900px] bg-[radial-gradient(70%_70%_at_15%_5%,rgba(251,146,60,0.6),transparent_60%),radial-gradient(60%_60%_at_85%_10%,rgba(249,115,22,0.55),transparent_60%),radial-gradient(50%_50%_at_50%_40%,rgba(253,186,116,0.4),transparent_70%)]" />
 
-        <div className="container mx-auto grid gap-8 px-6 pt-8 pb-4 sm:gap-10 sm:py-12 md:grid-cols-1 lg:grid-cols-2 md:items-center md:gap-12  lg:py-18 lg:px-18">
+        <div className="container mx-auto grid gap-8 px-6 pt-8 pb-4 sm:gap-10 sm:py-12 md:grid-cols-1 lg:grid-cols-2 md:items-center md:gap-12 lg:py-18 lg:px-18">
           <div>
             <span className="inline-flex items-center rounded-full border border-orange-200 bg-orange-50 px-2.5 py-1 text-xs font-semibold text-orange-700 md:px-3 md:py-1">
               New
@@ -208,52 +210,57 @@ export default function Index() {
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
-                  const params = new URLSearchParams({ industry });
-                  window.location.href = `/jobs?${params.toString()}`;
+                  Cookies.set("searchQuery", industry); // Store search query in sessionStorage
+                  router.push("/jobs"); // Navigate to /jobs without query params
                 }}
               >
                 <div className="grid gap-2">
-                  <div className="relative">
-                    <label className="flex items-center gap-2 rounded-xl border border-orange-200 bg-white px-2.5 py-1.5 text-sm text-gray-700 focus-within:border-orange-300 focus-within:ring-2 focus-within:ring-orange-200 sm:px-3 sm:py-2 md:px-3 md:py-2">
+                  <div className="relative flex items-center">
+                    <label className="flex items-center gap-2 flex-1 rounded-xl border border-orange-200 bg-white px-2.5 py-1.5 text-sm text-gray-700 focus-within:border-orange-300 focus-within:ring-2 focus-within:ring-orange-200 sm:px-3 sm:py-2 md:px-3 md:py-2">
                       <Search className="h-4 w-4 text-gray-400" />
                       <input
                         ref={industryInputRef}
                         value={industry}
                         onChange={(e) => setIndustry(e.target.value)}
                         onKeyDown={handleIndustryKeyDown}
-                        placeholder="Search Jobs by Role, Industry, or Location
-"
+                        placeholder="Search Jobs by Role, Industry, or Location"
                         className="h-10 w-full bg-transparent placeholder:text-gray-400 focus:outline-none text-sm sm:h-11 md:h-11"
                       />
                     </label>
-                    {suggestions.length > 0 && (
-                      <ul
-                        ref={dropdownRef}
-                        className="absolute z-[200] w-full mt-1 bg-white border border-orange-200 rounded-xl shadow-lg max-h-60 overflow-auto"
-                      >
-                        {suggestions.map((suggestion, index) => (
-                          <li
-                            key={suggestion.id}
-                            className={`px-4 py-3 text-sm text-gray-700 cursor-pointer hover:bg-orange-50 flex items-center gap-3 ${
-                              index === highlightedIndex ? "bg-orange-100" : ""
-                            }`}
-                            onClick={() => handleSuggestionClick(suggestion)}
-                          >
-                            <img
-                              src={suggestion.company_logo_url}
-                              alt={`${suggestion.company_name} logo`}
-                              className="w-8 h-8 rounded-full object-contain"
-                            />
-                            <div>
-                              <p className="font-semibold">{suggestion.title}</p>
-                              <p className="text-xs text-gray-500">{suggestion.company_name}</p>
-                              <p className="text-xs text-gray-400">{suggestion.location}</p>
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
+                    <button
+                      type="submit"
+                      className="ml-2 h-10 sm:h-11 md:h-11 px-4 rounded-xl bg-orange-500 text-white font-semibold text-sm hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-200"
+                    >
+                      Search
+                    </button>
                   </div>
+                  {suggestions.length > 0 && (
+                    <ul
+                      ref={dropdownRef}
+                      className="absolute z-[200] w-full bg-white border border-orange-200 rounded-xl shadow-lg max-h-60 overflow-auto top-full mt-2"
+                    >
+                      {suggestions.map((suggestion, index) => (
+                        <li
+                          key={suggestion.id}
+                          className={`px-4 py-3 text-sm text-gray-700 cursor-pointer hover:bg-orange-50 flex items-center gap-3 ${
+                            index === highlightedIndex ? "bg-orange-100" : ""
+                          }`}
+                          onClick={() => handleSuggestionClick(suggestion)}
+                        >
+                          <img
+                            src={suggestion.company_logo_url}
+                            alt={`${suggestion.company_name} logo`}
+                            className="w-8 h-8 rounded-full object-contain"
+                          />
+                          <div>
+                            <p className="font-semibold">{suggestion.title}</p>
+                            <p className="text-sm text-gray-500">{suggestion.companyName}</p>
+                            <p className="text-xs text-gray-400">{suggestion.location}</p>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               </form>
             </div>
@@ -344,8 +351,7 @@ export default function Index() {
             <div>
               <p className="text-sm font-semibold uppercase tracking-wider text-orange-700">We are hiring</p>
               <h3 className="mt-1 text-2xl font-bold text-gray-900">Let’s work together & explore opportunities</h3>
-              <p className="hidden lg:block text-lg tracking-wider text-gray-700 mt-1 w-[50rem]">Over 100+ leading employers trust EarlyJobs to find the right talent. Build your career with opportunities from startups, enterprises, and global brands.
-</p>
+              <p className="hidden lg:block text-lg tracking-wider text-gray-700 mt-1 w-[50rem]">Over 100+ leading employers trust EarlyJobs to find the right talent. Build your career with opportunities from startups, enterprises, and global brands.</p>
             </div>
             <a href="/jobs" className="inline-flex h-11 items-center justify-center rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 px-6 text-sm font-semibold text-white shadow hover:from-orange-600 hover:to-orange-700">
               Apply Now

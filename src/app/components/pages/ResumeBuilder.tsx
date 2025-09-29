@@ -544,7 +544,7 @@ export default function ResumeBuilder() {
 
       const data = await res.json()
       const generatedSummary =
-        data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || ""
+        data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() 
 
       setResumeData((prev) => ({
         ...prev,
