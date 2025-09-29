@@ -1,14 +1,14 @@
 "use client"
-import Header from '../components/pages/header';
-import Footer from '../components/pages/footer';
-import { Badge } from '../components/ui/badge';
+import Header from '../../components/pages/header';
+import Footer from '../../components/pages/footer';
+import { Badge } from '../../components/ui/badge';
 import { Users, Building2, Trophy } from 'lucide-react';
-import HeroSection from '../components/chandigarh/HeroSection';
-import BenefitsSection from '../components/chandigarh/BenefitsSection';
-import HowItWorksSection from '../components/chandigarh/HowItWorksSection';
-import LeadCaptureForm from '../components/chandigarh/LeadCaptureForm';
-import EventsSection from '../components/chandigarh/EventsSection';
-import FAQSection from '../components/chandigarh/FAQSection';
+import HeroSection from '../../components/chandigarh/HeroSection';
+import BenefitsSection from '../../components/chandigarh/BenefitsSection';
+import HowItWorksSection from '../../components/chandigarh/HowItWorksSection';
+import LeadCaptureForm from '../../components/chandigarh/LeadCaptureForm';
+import EventsSection from '../../components/chandigarh/EventsSection';
+import FAQSection from '../../components/chandigarh/FAQSection';
 
 const ChandigarhFranchise = () => {
   return (

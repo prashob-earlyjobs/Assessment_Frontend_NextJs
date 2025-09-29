@@ -1,5 +1,4 @@
 "use client";
-
 import { useRouter, usePathname } from "next/navigation";
 import {
   useState,
@@ -22,6 +21,7 @@ import {
 } from "../components/ui/select";
 import { Button } from "../components/ui/button";
 import Footer from "../components/pages/footer";
+import Cookies from "js-cookie";
 
 interface Job {
   id: string;
@@ -81,6 +81,15 @@ const Jobs = () => {
   const pathname = usePathname();
   const router = useRouter();
 
+  
+  const [searchInput, setSearchInput] = useState(() => {
+    const savedQuery = Cookies.get("searchQuery") ;
+    if (savedQuery) {
+      Cookies.remove("searchQuery"); // Clear after reading
+    }
+    return savedQuery;
+  });
+
   const [rawJobsData, setRawJobsData] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalJobs, setTotalJobs] = useState(0);
@@ -92,7 +101,6 @@ const Jobs = () => {
   const [companyName, setCompanyName] = useState("");
   const [location, setLocation] = useState("");
   const [title, setTitle] = useState("");
-  const [searchInput, setSearchInput] = useState("");
   const [employmentType, setEmploymentType] = useState<string[]>([]);
   const [workType, setWorkType] = useState<string[]>([]);
   const [salaryRange, setSalaryRange] = useState<string[]>([]);
@@ -102,7 +110,7 @@ const Jobs = () => {
   const [isFilterSidebarOpen, setIsFilterSidebarOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_IN.slice(0,-4);
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_IN;
 
   // Calculate pagination values
   const totalPages = Math.ceil(totalJobs / pageSize);
@@ -181,7 +189,7 @@ const Jobs = () => {
       params.append("pageSize", pageSize.toString());
       params.append("status", "published");
 
-      const url = `${backendUrl}/api/public/jobs?${params.toString()}`;
+      const url = `${backendUrl}/public/jobs?${params.toString()}`;
       console.log("API URL:", url);
 
       const response = await fetch(url);
