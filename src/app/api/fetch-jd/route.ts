@@ -44,7 +44,7 @@ Do not include any additional text or explanations.
     }
 
     const geminiResponse = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: {
@@ -68,7 +68,8 @@ Do not include any additional text or explanations.
     );
 
     if (!geminiResponse.ok) {
-      throw new Error(`Gemini API request failed: ${geminiResponse.statusText}`);
+      const errorBody = await geminiResponse.text();
+      throw new Error(`Gemini API request failed: ${geminiResponse.statusText}- ${errorBody}`);
     }
 
     const geminiData = await geminiResponse.json();
