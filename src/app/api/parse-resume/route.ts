@@ -148,7 +148,7 @@ export async function POST(request: NextRequest) {
 
     // Use generative AI model
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
     const prompt = `
       Extract the following information from the uploaded resume file and return it strictly as a JSON object matching this structure. 

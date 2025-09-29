@@ -1,7 +1,7 @@
 
 "use client"
-import Header from "../components/pages/header"
-import Footer from "../components/pages/footer"
+import Header from "../../components/pages/header"
+import Footer from "../../components/pages/footer"
 import { useState } from "react"
 import {
   MapPin,

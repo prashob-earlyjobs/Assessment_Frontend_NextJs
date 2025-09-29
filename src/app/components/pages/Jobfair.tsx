@@ -10,10 +10,10 @@ const JobFairSection: React.FC = () => {
   useEffect(() => {
     const fetchLogos = async () => {
       try {
-        const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL_IN;
-        const response = await fetch(`${API_BASE_URL}/companies/companies`);
-        const data: { companies: Company[] } = await response.json();
-        const urls = data.companies
+        const API_BASE_URL = "https://kind-abnormally-redfish.ngrok-free.app/api/public/companies";
+        const response = await fetch(`${API_BASE_URL}`);
+        const data: Company[] = await response.json(); // Parse response as array of companies
+        const urls = data
           .map((company) => company.logo_url)
           .filter((url): url is string => !!url); // Ensure only valid URLs are included
         setCompanyLogoUrls(urls);
