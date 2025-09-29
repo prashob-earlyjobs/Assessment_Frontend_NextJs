@@ -4,7 +4,7 @@ const Experience = () => {
   return (
     <div className="relative flex justify-center items-center w-full min-h-[24rem] sm:min-h-[28rem] lg:min-h-[32rem] bg-gradient-to-br from-gray-50 to-gray-200 rounded-3xl overflow-hidden py-6 px-4 sm:px-6 lg:px-10 shadow-2xl">
       {/* Main content */}
-      <div className="relative z-20 w-full max-w-5xl mx-auto flex flex-col justify-center items-center text-center gap-4 sm:gap-6">
+      <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col justify-center items-center text-center gap-4 sm:gap-6">
         <h1 className="text-2xl sm:text-3xl lg:text-5xl font-extrabold text-gray-800 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-yellow-500 animate-fade-in">
           Over 1 Year of Impact
         </h1>
@@ -14,7 +14,7 @@ const Experience = () => {
       </div>
 
       {/* Floating badges */}
-      <div className="absolute top-4 right-4 bg-white rounded-2xl w-[10rem] h-[8rem] p-3 sm:p-4 shadow-lg z-30 transform transition-all duration-300 hover:scale-105 tablet:w-[7rem] tablet:h-[5rem] tablet:p-2">
+      <div className="absolute top-4 right-4 bg-white rounded-2xl w-[10rem] h-[8rem] p-3 sm:p-4 shadow-lg z-15 transform transition-all duration-300 hover:scale-105 tablet:w-[7rem] tablet:h-[5rem] tablet:p-2">
         <div className="relative flex items-center gap-2 sm:gap-3 px-6 sm:px-10 py-6 sm:py-8 tablet:px-3 tablet:py-3">
           <Briefcase className="absolute top-2 sm:top-3 right-2 sm:right-3 w-4 sm:w-6 h-4 sm:h-6 lg:w-8 lg:h-8 text-green-500 tablet:w-4 tablet:h-4" />
           <span className="absolute top-3 sm:top-5 left-3 text-base sm:text-xl font-semibold text-gray-800 tablet:text-xs tablet:top-2 tablet:left-2">
@@ -24,7 +24,7 @@ const Experience = () => {
         </div>
       </div>
 
-      <div className="absolute bottom-4 left-4 bg-white rounded-2xl w-[10rem] h-[8rem] p-3 sm:p-4 shadow-lg z-30 transform transition-all duration-300 hover:scale-105 tablet:w-[7rem] tablet:h-[5rem] tablet:p-2">
+      <div className="absolute bottom-4 left-4 bg-white rounded-2xl w-[10rem] h-[8rem] p-3 sm:p-4 shadow-lg z-15 transform transition-all duration-300 hover:scale-105 tablet:w-[7rem] tablet:h-[5rem] tablet:p-2">
         <div className="relative flex items-center gap-2 sm:gap-3 px-6 sm:px-10 py-6 sm:py-8 tablet:px-3 tablet:py-3">
           <GraduationCap className="absolute top-2 sm:top-3 right-2 sm:right-3 w-4 sm:w-6 h-4 sm:h-6 lg:w-8 lg:h-8 text-orange-500 tablet:w-4 tablet:h-4" />
           <span className="absolute top-3 sm:top-5 left-3 text-base sm:text-xl font-semibold text-gray-800 tablet:text-xs tablet:top-2 tablet:left-2">
@@ -34,7 +34,7 @@ const Experience = () => {
         </div>
       </div>
 
-      <div className="absolute top-16 left-4 bg-white rounded-2xl w-[10rem] h-[8rem] sm:p-4 shadow-lg z-30 transform transition-all duration-300 hover:scale-105 tablet:w-[7rem] tablet:h-[5rem] tablet:p-2">
+      <div className="absolute top-16 left-4 bg-white rounded-2xl w-[10rem] h-[8rem] sm:p-4 shadow-lg z-15 transform transition-all duration-300 hover:scale-105 tablet:w-[7rem] tablet:h-[5rem] tablet:p-2">
         <div className="relative flex items-center gap-2 sm:gap-3 px-6 sm:px-10 py-6 sm:py-8 tablet:px-3 tablet:py-3">
           <Users className="absolute top-0 sm:top-0 right-2 sm:right-3 w-4 sm:w-6 h-4 sm:h-6 lg:w-8 lg:h-8 text-purple-500 tablet:w-4 tablet:h-4" />
           <span className="absolute top-2 sm:top-2 left-2 text-base sm:text-xl font-semibold text-gray-800 tablet:text-xs tablet:top-1 tablet:left-1">
@@ -44,7 +44,7 @@ const Experience = () => {
         </div>
       </div>
 
-      <div className="absolute bottom-16 right-4 bg-white rounded-2xl w-[10rem] h-[6rem] p-3 sm:p-4 shadow-lg z-30 transform transition-all duration-300 hover:scale-105 tablet:w-[7rem] tablet:h-[4rem] tablet:p-2">
+      <div className="absolute bottom-16 right-4 bg-white rounded-2xl w-[10rem] h-[6rem] p-3 sm:p-4 shadow-lg z-15 transform transition-all duration-300 hover:scale-105 tablet:w-[7rem] tablet:h-[4rem] tablet:p-2">
         <div className="relative flex items-center gap-2 sm:gap-3 px-6 sm:px-10 py-6 sm:py-8 tablet:px-3 tablet:py-3">
           <UserCheck className="absolute top-0 sm:top-0 left-2 sm:left-3 w-4 sm:w-6 h-4 sm:h-6 lg:w-8 lg:h-8 text-blue-500 tablet:w-4 tablet:h-4" />
           <span className="absolute top-0 sm:top-0 right-2 text-base sm:text-xl font-semibold text-gray-800 text-right tablet:text-xs tablet:right-1">

@@ -324,7 +324,7 @@ const Coimbatore = () => {
     <div className="min-h-screen bg-white text-orange-900">
       {showPopup && <Popup message={showPopup.message} type={showPopup.type} onClose={closePopup} />}
 
-      <section className="relative min-h-screen overflow-hidden">
+      <section className="relative min-h-screen overflow-hidden py-16">
         <div className="absolute inset-0">
           <img
             src="/images/Coimbatore.jpg"

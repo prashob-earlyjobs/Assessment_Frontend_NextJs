@@ -139,11 +139,17 @@ const Footer = () => {
         Chennai
       </p>
 
-          <p
-        onClick={()=>router.push("/rampur")}
+        <p
+        onClick={()=>router.push("/franchise/rampur")}
         className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
       >
         Rampur
+      </p>
+       <p
+        onClick={()=>router.push("/franchise/coimbatore")}
+        className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
+      >
+        Coimbatore
       </p>
     </div>
   </div>
@@ -153,8 +159,6 @@ const Footer = () => {
     <span className=" text-xl font-bold block sm:inline">Starting Soon:</span>
     <div className="flex flex-wrap gap-4 mt-3 justify-center">
       {[
-
-        "Coimbatore",
         "Ghaziabad",
         "Chengalpattu",
         "Lucknow",
