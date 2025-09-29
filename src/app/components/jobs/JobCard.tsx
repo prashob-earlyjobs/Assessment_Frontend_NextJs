@@ -10,15 +10,15 @@ interface JobCardProps {
   company: string;
   logo: string;
   title: string;
-  employmentType: string; // Maps to employmentType
-  workType?: string; // Maps to workType (e.g., on-site, remote, hybrid)
+  employmentType: string;
+  workType?: string;
   min_salary?: string | number;
   max_salary?: string | number;
   salary_mode?: string;
   min_experience?: string;
   max_experience?: string;
   location: string;
-  skills?: string[]; // Optional, for future use if API provides skills
+  skills?: string[];
   postedTime: string;
   onJobClick?: () => void;
 }
@@ -95,7 +95,7 @@ const JobCard = ({
 
   const toLPA = (amount: number, mode?: string): number => {
     const yearly = mode?.toLowerCase() === "monthly" ? amount * 12 : amount;
-    return yearly / 100000; // Convert to lakhs per annum
+    return yearly / 100000;
   };
 
   const formatLpa = (value: number): string => {
@@ -152,9 +152,8 @@ const JobCard = ({
 
   // Handle bookmark toggle
   const handleBookmarkClick = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent card click when bookmarking
+    e.stopPropagation();
     setIsBookmarked(!isBookmarked);
-    // Add logic to save bookmark state (e.g., API call) in the future
   };
 
   return (
@@ -164,34 +163,37 @@ const JobCard = ({
       role="article"
       aria-label={`Job listing for ${title} at ${company}`}
     >
-      <div className="flex gap-4">
-        <img
-          src={logo}
-          alt={`${company} logo`}
-          className="w-12 h-12 rounded object-contain bg-gray-50 p-1"
-          onError={(e) => (e.currentTarget.src = "/images/default-company-logo.png")}
-        />
-
-        <div className="flex-1">
-          <div className="flex justify-between items-start mb-2">
+      <div className="flex flex-col gap-4">
+        {/* Top Box: Logo, Title, Company, and Bookmark */}
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex items-start gap-4">
+            <img
+              src={logo}
+              alt={`${company} logo`}
+              className="w-12 h-12 rounded object-contain bg-gray-50 p-1"
+              onError={(e) => (e.currentTarget.src = "/images/default-company-logo.png")}
+            />
             <div>
               <h3 className="font-semibold text-lg text-earlyjobs-text hover:text-earlyjobs-orange transition-colors">
                 {title}
               </h3>
               <p className="text-gray-600 text-sm">{company}</p>
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="p-1 h-auto"
-              onClick={handleBookmarkClick}
-              aria-label={isBookmarked ? "Remove bookmark" : "Bookmark job"}
-            >
-              <Bookmark className={`w-4 h-4 ${isBookmarked ? "fill-current" : ""}`} />
-            </Button>
           </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="p-1 h-auto"
+            onClick={handleBookmarkClick}
+            aria-label={isBookmarked ? "Remove bookmark" : "Bookmark job"}
+          >
+            <Bookmark className={`w-4 h-4 ${isBookmarked ? "fill-current" : ""}`} />
+          </Button>
+        </div>
 
-          <div className="flex flex-wrap gap-4 mb-3 text-sm text-gray-600">
+        {/* Bottom Box: Job Details */}
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-wrap gap-4 text-sm text-gray-600">
             <span className="flex items-center gap-1">
               <Briefcase className="w-3 h-3" />
               {normalizeEmploymentType(employmentType)}
@@ -221,7 +223,7 @@ const JobCard = ({
           </div>
 
           {skills && skills.length > 0 && (
-            <div className="flex gap-2 mb-3 flex-wrap">
+            <div className="flex gap-2 flex-wrap">
               {skills.slice(0, 3).map((skill, index) => (
                 <Badge
                   key={index}
