@@ -90,13 +90,13 @@ export const userSignup = async ({
   email,
   mobile,
   password,
-  referrerId,
+  
 }: {
   email: string;
   password: string;
   name: string;
   mobile: string;
-  referrerId: string;
+  
 }) => {
   try {
     const response = await axiosInstance.post("/auth/register", {
@@ -104,7 +104,7 @@ export const userSignup = async ({
       password,
       name,
       mobile,
-      referrerId,
+      
     });
     const data = response.data;
     const accessToken = data.data.accessToken; // Corrected destructuring

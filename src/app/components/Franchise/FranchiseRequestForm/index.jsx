@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import ReCAPTCHA from "react-google-recaptcha";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import emailjs from "@emailjs/browser";
 
 const RequestForm = ({ isFranchise }) => {
-  const location = useLocation();
-  const [captchaValue, setCaptchaValue] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -16,7 +12,7 @@ const RequestForm = ({ isFranchise }) => {
   });
 
   useEffect(() => {
-    console.log("isFranchise", location);
+    console.log("isFranchise", isFranchise);
   }, []);
 
   const handleInputChange = (e) => {
@@ -26,21 +22,10 @@ const RequestForm = ({ isFranchise }) => {
     });
   };
 
-  function onChange(value) {
-    setCaptchaValue(value);
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Captcha validation
-    if (!captchaValue) {
-      toast.error("Please verify the captcha");
-      return;
-    }
-
     try {
-      
       const sheetData = {
         name: formData.name,
         email: formData.email,
@@ -65,7 +50,6 @@ const RequestForm = ({ isFranchise }) => {
         throw new Error("Failed to save data to SheetDB");
       }
 
-      
       const emailParams = {
         from_name: formData.name,
         from_email: formData.email,
@@ -101,7 +85,6 @@ const RequestForm = ({ isFranchise }) => {
 
       toast.success("Your request has been submitted successfully");
 
-     
       setFormData({
         name: "",
         email: "",
@@ -116,94 +99,98 @@ const RequestForm = ({ isFranchise }) => {
   };
 
   return (
-    <form className="landing-page-s7-consultation-form" onSubmit={handleSubmit}>
-      {location.pathname === "/franchise" ? null : (
+    <form
+      className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg border-2 border-orange-400"
+      onSubmit={handleSubmit}
+    >
+      {!isFranchise && (
         <>
-          <h2 className="landing-page-s7-consultation-heading">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
             Free Consultation by Expert
           </h2>
-          <hr className="landing-page-s7-consultation-hr" />
+          <hr className="border-gray-300 mb-6" />
         </>
       )}
-      <input
-        type="text"
-        required
-        placeholder="Enter Your Name"
-        className="landing-page-s7-consultation-input"
-        name="name"
-        value={formData.name}
-        onChange={handleInputChange}
-      />
-      <input
-        type="email"
-        required
-        placeholder="Enter Email Id"
-        className="landing-page-s7-consultation-input"
-        name="email"
-        value={formData.email}
-        onChange={handleInputChange}
-      />
-      <input
-        type="tel"
-        required
-        placeholder="Contact Number"
-        className="landing-page-s7-consultation-input"
-        name="contact"
-        value={formData.contact}
-        onChange={handleInputChange}
-      />
-      <input
-        type="text"
-        required
-        placeholder="District"
-        className="landing-page-s7-consultation-input"
-        name="district"
-        value={formData.district}
-        onChange={handleInputChange}
-      />
-      {location.pathname === "/franchise" ? null : (
-        <>
-          <div className="landing-page-s7-consultation-textarea-con">
+      <div className="mb-4">
+        <input
+          type="text"
+          required
+          placeholder="Enter Your Name"
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          name="name"
+          value={formData.name}
+          onChange={handleInputChange}
+        />
+      </div>
+      <div className="mb-4">
+        <input
+          type="email"
+          required
+          placeholder="Enter Email Id"
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          name="email"
+          value={formData.email}
+          onChange={handleInputChange}
+        />
+      </div>
+      <div className="mb-4">
+        <input
+          type="tel"
+          required
+          placeholder="Contact Number"
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          name="contact"
+          value={formData.contact}
+          onChange={handleInputChange}
+        />
+      </div>
+      <div className="mb-4">
+        <input
+          type="text"
+          required
+          placeholder="District"
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          name="district"
+          value={formData.district}
+          onChange={handleInputChange}
+        />
+      </div>
+      {!isFranchise && (
+        <div className="mb-6">
+          <div className="flex items-center mb-2">
             <input
               type="radio"
               required
               name="lookingFor"
               id="Job"
-              className="landing-page-s7-consultation-radio"
+              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
               value="Job"
               onChange={handleInputChange}
             />
-            <label
-              htmlFor="Job"
-              className="landing-page-s7-consultation-radio-label"
-            >
+            <label htmlFor="Job" className="ml-2 text-gray-700">
               Looking For Job
             </label>
           </div>
-          <div className="landing-page-s7-consultation-textarea-con">
+          <div className="flex items-center">
             <input
               type="radio"
               required
               name="lookingFor"
               id="Candidate"
-              className="landing-page-s7-consultation-radio"
+              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
               value="Candidate"
               onChange={handleInputChange}
             />
-            <label
-              htmlFor="Candidate"
-              className="landing-page-s7-consultation-radio-label"
-            >
+            <label htmlFor="Candidate" className="ml-2 text-gray-700">
               Looking For Candidate
             </label>
           </div>
-        </>
+        </div>
       )}
-      <ReCAPTCHA
-        sitekey={"6LdnwcgpAAAAAKUNM_UcDRCQcbUw0B_ICG9VIzxI"}
-        onChange={onChange}
-      />
-      <button type="submit" className="landing-page-s7-consultation-btn">
+      <button
+        type="submit"
+        className="w-full bg-orange-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors"
+      >
         Send
       </button>
     </form>

@@ -248,7 +248,7 @@ export default function Index() {
                           onClick={() => handleSuggestionClick(suggestion)}
                         >
                           <img
-                            src={suggestion.company_logo_url}
+                            src={suggestion.companyLogoUrl}
                             alt={`${suggestion.company_name} logo`}
                             className="w-8 h-8 rounded-full object-contain"
                           />
