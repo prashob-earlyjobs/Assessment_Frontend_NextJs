@@ -251,6 +251,7 @@ export const AddAssessmentModal: React.FC<AddAssessmentModalProps> = ({
                   <SelectItem value="Healthcare (Non-Clinical)">Healthcare (Non-Clinical)</SelectItem>
                   <SelectItem value="Internship & Fresher Readiness">Internship & Fresher Readiness</SelectItem>
                   <SelectItem value="Behavioral & Soft Skills">Behavioral & Soft Skills</SelectItem>
+                  <SelectItem value="Others">Others</SelectItem>
                 </SelectContent>
               </Select>
             </div>

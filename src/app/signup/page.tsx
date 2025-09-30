@@ -25,7 +25,8 @@ function SignupContent() {
     email: "",
     mobile: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
+    avatar: null
   });
   const [otp, setOtp] = useState("");
   const [isOtpDialogOpen, setIsOtpDialogOpen] = useState(false);
@@ -35,6 +36,7 @@ function SignupContent() {
   const [forgotPasswordData, setForgotPasswordData] = useState({ email: "", mobile: "", newPassword: "", confirmPassword: "" });
   const [forgotOtp, setForgotOtp] = useState("");
   const [isEnteringNumber, setIsEnteringNumber] = useState(false);
+  const [avatarPreview, setAvatarPreview] = useState(null);
 
   useEffect(() => {
     const checkUserLoggedIn = async () => {
@@ -61,7 +63,7 @@ function SignupContent() {
       toast.error("Please enter a valid mobile number!");
       return;
     }
-    const isValidEmailOrMobile = (input: string) => {
+    const isValidEmailOrMobile = (input) => {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       const mobileRegex = /^[6-9]\d{9}$/;
       return emailRegex.test(input) || mobileRegex.test(input);
@@ -89,6 +91,26 @@ function SignupContent() {
     }
   };
 
+  const handleAvatarChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (!['image/jpeg', 'image/png'].includes(file.type)) {
+        toast.error("Only .jpg and .png formats are allowed!");
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("File size should not exceed 5MB!");
+        return;
+      }
+      setSignupData({ ...signupData, avatar: file });
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatarPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSignup = async () => {
     if (signupData.password !== signupData.confirmPassword) {
       toast.error("Passwords don't match!");
@@ -112,20 +134,27 @@ function SignupContent() {
     }
 
     try {
+      const formData = new FormData();
+      formData.append('name', signupData.name);
+      formData.append('email', signupData.email);
+      formData.append('mobile', signupData.mobile);
+      formData.append('password', signupData.password);
+      if (signupData.avatar) {
+        formData.append('avatar', signupData.avatar);
+      }
+
       const otpResponse = await sendOtptoMobile({
         phoneNumber: signupData.mobile.replace(/^\+91/, ''),
         email: signupData.email
       });
 
       if (!otpResponse.success) {
-        console.log("otpResponse", otpResponse);
         throw new Error(otpResponse.message || "Failed to send OTP");
       }
 
       setIsOtpDialogOpen(true);
       toast.success("OTP sent to your mobile number and email!");
-    } catch (error: any) {
-      console.log("error", error?.response?.data || error.message || error);
+    } catch (error) {
       toast.error(error?.response?.data?.message || error.message || "Error sending OTP");
     }
   };
@@ -166,12 +195,20 @@ function SignupContent() {
         return;
       }
 
-      const signupResponse = await userSignup(signupData);
+      const formData = new FormData();
+      formData.append('name', signupData.name);
+      formData.append('email', signupData.email);
+      formData.append('mobile', signupData.mobile);
+      formData.append('password', signupData.password);
+      if (signupData.avatar) {
+        formData.append('avatar', signupData.avatar);
+      }
+
+      const signupResponse = await userSignup(formData);
       if (!signupResponse.success) {
         toast.error(signupResponse.data.message);
         return;
       }
-      console.log("signupResponse", signupResponse);
 
       Cookies.set("accessToken", signupResponse.data.accessToken);
       setUserCredentials(signupResponse.data.user);
@@ -189,10 +226,6 @@ function SignupContent() {
       toast.error("Error verifying OTP");
     }
   };
-
-  useEffect(() => {
-    console.log("userCredentials", userCredentials);
-  }, [userCredentials]);
 
   const handleForgotPassword = async () => {
     if (forgotPasswordData.mobile.length !== 10) {
@@ -412,6 +445,26 @@ function SignupContent() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="avatar">Profile Photo</Label>
+                    <div className="flex items-center space-x-4">
+                      <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center">
+                        {avatarPreview ? (
+                          <img src={avatarPreview} alt="Avatar Preview" className="w-full h-full object-cover" />
+                        ) : (
+                          <span className="text-gray-400">No Image</span>
+                        )}
+                      </div>
+                      <Input
+                        id="avatar"
+                        type="file"
+                        accept="image/jpeg,image/png"
+                        onChange={handleAvatarChange}
+                        className="h-12 rounded-2xl border-gray-200 focus:border-orange-500"
+                      />
+                    </div>
+                    <p className="text-sm text-gray-500">Accepted formats: JPG, PNG (Max 5MB)</p>
+                  </div>
                   <div className="space-y-2">
                     <Label htmlFor="name">Full Name</Label>
                     <Input

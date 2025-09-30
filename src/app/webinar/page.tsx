@@ -5,14 +5,13 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Card, CardContent } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
-import { useToast } from "../hooks/use-toast";
+import { toast } from "sonner";
 import { CalendarDays, Clock, Monitor, Gift, Users, TrendingUp, Brain, DollarSign, CheckCircle, Star, MapPin } from "lucide-react";
 import Header from "../components/pages/header";
 import Footer from "../components/pages/footer";
 import emailjs from '@emailjs/browser';
 
 const Index = () => {
-  const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
   const [formData, setFormData] = useState({
     name: "",
@@ -31,33 +30,15 @@ const Index = () => {
     
     // Basic validation
     if (!formData.name || !formData.email || !formData.mobile || !formData.category) {
-      toast({
-        title: "Please fill in all required fields",
-        variant: "destructive"
-      });
+      toast.error("Please fill in all required fields");
       return;
     }
 
     try {
-      // Send email to user
+      // Send email to admin only
       await emailjs.send(
-        'YOUR_SERVICE_ID', // Replace with your EmailJS service ID
-        'YOUR_USER_TEMPLATE_ID', // Replace with your EmailJS user template ID
-        {
-          to_name: formData.name,
-          to_email: formData.email,
-          mobile: formData.mobile,
-          city: formData.city,
-          category: formData.category,
-          join_link: 'YOUR_ZOOM_LINK' // Replace with actual Zoom link
-        },
-        'YOUR_PUBLIC_KEY' // Replace with your EmailJS public key
-      );
-
-      // Send email to admin
-      await emailjs.send(
-        'YOUR_SERVICE_ID', // Replace with your EmailJS service ID
-        'YOUR_ADMIN_TEMPLATE_ID', // Replace with your EmailJS admin template ID
+        'service_ovaxj17',
+        'template_hxxuywh',
         {
           user_name: formData.name,
           user_email: formData.email,
@@ -65,13 +46,12 @@ const Index = () => {
           user_city: formData.city,
           user_category: formData.category
         },
-        'YOUR_PUBLIC_KEY' // Replace with your EmailJS public key
+        'Qz7wBRaW9bttj7rra' 
       );
 
       // Success message
-      toast({
-        title: "Registration Successful!",
-        description: "You'll receive the joining link via email and WhatsApp."
+      toast.success("Registration Successful!", {
+        description: "Your registration details have been sent to the admin."
       });
 
       // Reset form
@@ -83,10 +63,8 @@ const Index = () => {
         category: ""
       });
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to send registration details. Please try again.",
-        variant: "destructive"
+      toast.error("Error", {
+        description: "Failed to send registration details. Please try again."
       });
     }
   };
@@ -108,13 +86,13 @@ const Index = () => {
     <div className="bg-gray-50">
       {/* Hero Section */}
       <Header />
-      <section className="relative min-h-[90vh] bg-gradient-to-r from-orange-500 to-orange-600 text-white overflow-hidden px-4 py-10">
+      <section className="relative min-h-[90vh] bg-gradient-to-r from-orange-500 to-orange-600 text-white overflow-hidden px-4 lg:py-10">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="relative container mx-auto px-10 py-20">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-12 items-center ">
             <div className="space-y-8">
               <div className="space-y-4">
-                <h1 className="text-4xl lg:text-6xl font-bold leading-tight">
+                <h1 className="text-3xl lg:text-6xl font-bold leading-tight">
                   Build Your Business,
                   <span className="block text-white/90">Unlock New Opportunities</span>
                 </h1>
@@ -147,7 +125,7 @@ const Index = () => {
               </Button>
             </div>
             
-            <div className="relative">
+            <div className="relative order-first lg:order-last">
               <img 
                 src="/images/course1.jpg" 
                 alt="Business professionals collaborating in a modern workspace" 
@@ -315,51 +293,7 @@ const Index = () => {
       </section>
 
       {/* Speakers Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-800 mb-6">Meet Your Expert Speakers</h2>
-            <p className="text-xl text-gray-600">
-              Learn from industry leaders and successful entrepreneurs
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {[
-              {
-                name: "Dipanjana Das",
-                role: "Franchise Head",
-                company: "EarlyJobs",
-                bio: "Leading franchise operations across India with 5+ years in recruitment industry"
-              },
-              {
-                name: "Saurav Kumar",
-                role: "Co-founder",
-                company: "EarlyJobs",
-                bio: "Tech entrepreneur with experience in scaling recruitment solutions nationwide"
-              },
-              {
-                name: "Success Partner",
-                role: "Franchise Owner",
-                company: "Guest Speaker",
-                bio: "Successful franchise partner sharing real-world insights and growth strategies"
-              }
-            ].map((speaker, index) => (
-              <Card key={index} className="text-center shadow-lg hover:shadow-xl transition-all duration-300">
-                <CardContent className="p-8">
-                  <div className="w-24 h-24 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full mx-auto mb-6 flex items-center justify-center">
-                    <Users className="w-12 h-12 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-800 mb-2">{speaker.name}</h3>
-                  <p className="text-orange-500 font-semibold mb-1">{speaker.role}</p>
-                  <p className="text-gray-600 mb-4">{speaker.company}</p>
-                  <p className="text-sm text-gray-600 leading-relaxed">{speaker.bio}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
+    
 
       {/* Registration Form */}
       <section id="register" className="py-20 bg-gradient-to-r from-orange-500 to-orange-600 text-white">
@@ -452,9 +386,7 @@ const Index = () => {
                     Yes, Save My Spot!
                   </Button>
                   
-                  <p className="text-sm text-white/70 text-center">
-                    You'll receive joining details via email and WhatsApp instantly after registration.
-                  </p>
+                 
                 </form>
               </CardContent>
             </Card>
@@ -504,6 +436,7 @@ const Index = () => {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 };

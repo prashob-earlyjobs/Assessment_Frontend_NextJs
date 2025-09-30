@@ -85,38 +85,22 @@ export const verifyOtpMobile = async ({ phoneNumber, email, otp }) => {
   }
 };
 
-export const userSignup = async ({
-  name,
-  email,
-  mobile,
-  password,
-  
-}: {
-  email: string;
-  password: string;
-  name: string;
-  mobile: string;
-  
-}) => {
+export const userSignup = async (data) => {
   try {
-    const response = await axiosInstance.post("/auth/register", {
-      email,
-      password,
-      name,
-      mobile,
-      
+    const response = await axiosInstance.post("/auth/register", data, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
     });
-    const data = response.data;
-    const accessToken = data.data.accessToken; // Corrected destructuring
+    const accessToken = response.data.data.accessToken;
 
-    Cookies.set("accessToken", accessToken, { expires: 7 }); // Store token in cookies for 7 days
+    Cookies.set("accessToken", accessToken, { expires: 7 });
     if (accessToken) {
-      axiosInstance.defaults.headers.Authorization = `Bearer ${accessToken}`; // Set for all future requests
+      axiosInstance.defaults.headers.Authorization = `Bearer ${accessToken}`;
     }
-    return data;
+    return response.data;
   } catch (error) {
     toast.error(`${error?.response?.data?.message}.`);
-
     return error;
   }
 };

@@ -281,7 +281,7 @@ const Rampur = () => {
     {
       question: "Which companies hire through EarlyJobs in Rampur?",
       answer:
-        "We partner with 30+ companies ranging from manufacturing units, banks, retail chains, educational institutions, and government organizations. Our partners include both established corporates and growing businesses in the Rampur ecosystem.",
+        "We partner with 100+ companies ranging from manufacturing units, banks, retail chains, educational institutions, and government organizations. Our partners include both established corporates and growing businesses in the Rampur ecosystem.",
     },
     {
       question: "Do you provide training and skill development programs?",
@@ -370,11 +370,11 @@ const Rampur = () => {
               <div className="flex flex-wrap gap-6 pt-4 justify-center text-white">
                 <div className="flex items-center gap-2">
                   <Star className="w-5 h-5 text-yellow-400 fill-current" />
-                  <span className="text-sm">300+ Rampur Placements</span>
+                  <span className="text-sm">1700+ Successful Placements</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Star className="w-5 h-5 text-yellow-400 fill-current" />
-                  <span className="text-sm">30+ Partner Companies</span>
+                  <span className="text-sm">100+ Partner Companies</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Star className="w-5 h-5 text-yellow-400 fill-current" />
@@ -408,13 +408,13 @@ const Rampur = () => {
           <div className="grid md:grid-cols-4 gap-8 mb-16 px-4">
             <Card className="hover:bg-orange-100 transition-all">
               <Building2 className="w-12 h-12 text-orange-600 mx-auto mb-4" />
-              <div className="text-3xl font-bold text-orange-700 mb-2">30+</div>
+              <div className="text-3xl font-bold text-orange-700 mb-2">100+</div>
               <p className="text-orange-800">Partner Companies</p>
             </Card>
 
             <Card className="hover:bg-orange-100 transition-all">
               <Users className="w-12 h-12 text-orange-600 mx-auto mb-4" />
-              <div className="text-3xl font-bold text-orange-700 mb-2">300+</div>
+              <div className="text-3xl font-bold text-orange-700 mb-2">1700+</div>
               <p className="text-orange-800">Successful Placements</p>
             </Card>
 

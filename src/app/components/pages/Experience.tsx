@@ -2,7 +2,7 @@ import { Briefcase, GraduationCap, Users, UserCheck } from "lucide-react";
 
 const Experience = () => {
   return (
-    <div className="relative flex justify-center items-center w-full min-h-[24rem] sm:min-h-[28rem] lg:min-h-[32rem] bg-gradient-to-br from-gray-50 to-gray-200 rounded-3xl overflow-hidden py-6 px-4 sm:px-6 lg:px-10 shadow-2xl">
+    <div className="relative flex justify-center items-center w-full min-h-[24rem] sm:min-h-[28rem] lg:min-h-[32rem] bg-gradient-to-br from-gray-50 to-gray-200 rounded-3xl overflow-hidden py-6 px-4 sm:px-6 lg:px-10 shadow-2xl ">
       {/* Main content */}
       <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col justify-center items-center text-center gap-4 sm:gap-6">
         <h1 className="text-2xl sm:text-3xl lg:text-5xl font-extrabold text-gray-800 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-yellow-500 animate-fade-in">

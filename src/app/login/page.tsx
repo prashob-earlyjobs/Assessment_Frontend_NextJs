@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState, Suspense } from "react";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
@@ -10,15 +10,12 @@ import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../components/ui/dialog";
 import Cookies from "js-cookie";
-import { isUserLoggedIn, resetPassword, sendOtptoMobile, userLogin, userSignup, verifyFranchiseId, verifyOtpMobile } from "../components/services/servicesapis";
+import { isUserLoggedIn, resetPassword, sendOtptoMobile, userLogin, userSignup, verifyOtpMobile } from "../components/services/servicesapis";
 import { useUser } from "@/app/context";
 
 function LoginContent() {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const id = searchParams.get("id") || "";
-  const referalCode = searchParams.get("referalCode") || "";
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { userCredentials, setUserCredentials } = useUser();
@@ -27,7 +24,6 @@ function LoginContent() {
     name: "",
     email: "",
     mobile: "",
-    referrerId: referalCode || id || "",
     password: "",
     confirmPassword: ""
   });
@@ -59,26 +55,10 @@ function LoginContent() {
       }
     };
 
-    const verifyId = async () => {
-      const response = referalCode ? await verifyFranchiseId(referalCode) : await verifyFranchiseId(id);
-      if (!response.success && pathname.includes('/signup')) {
-        toast.error(response.message);
-        router.push('/signup');
-      } else if (!response.success) {
-        toast.success("Invalid Franchise ID!");
-        router.push(`/assessment/${id}`);
-      } else {
-        toast.success("Franchise ID verified successfully!");
-      }
-    };
-
-    if ((id && pathname.includes('/signup')) || referalCode) {
-      verifyId();
-    }
     if (pathname.startsWith('/login') || pathname.startsWith('/signup')) {
       checkUserLoggedIn();
     }
-  }, [id, referalCode, router, pathname, setUserCredentials]);
+  }, [router, pathname, setUserCredentials]);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -187,8 +167,7 @@ function LoginContent() {
     try {
       const otpResponse = await sendOtptoMobile({
         phoneNumber: signupData.mobile.replace(/^\+91/, ''),
-        email: signupData.email,
-        franchiseId: signupData.referrerId
+        email: signupData.email
       });
 
       if (!otpResponse.success) {
@@ -378,20 +357,12 @@ function LoginContent() {
   const [defaultTab, setDefaultTab] = useState('login');
 
   useEffect(() => {
-    if (id) {
-      setDefaultTab('signup');
-    } else if (pathname.includes('signup')) {
+    if (pathname.includes('signup')) {
       setDefaultTab('signup');
     } else {
       setDefaultTab('login');
     }
-    if (id && (pathname.includes("signup") || pathname.includes("login"))) {
-      setSignupData((prev) => ({
-        ...prev,
-        referrerId: id
-      }));
-    }
-  }, [id, pathname]);
+  }, [pathname]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-purple-50 flex items-center justify-center p-4">
@@ -544,17 +515,6 @@ function LoginContent() {
                       inputMode="numeric"
                       required
                       className="h-12 w-full rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500 px-4"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="referrerId">Referrer ID (optional)</Label>
-                    <Input
-                      id="referrerId"
-                      type="text"
-                      placeholder="Enter Referrer ID"
-                      value={id && (pathname.includes("signup") || pathname.includes("login")) ? id : referalCode ? referalCode : signupData.referrerId}
-                      onChange={(e) => setSignupData({ ...signupData, referrerId: e.target.value })}
-                      className="h-12 rounded-2xl border-gray-200 focus:border-orange-500"
                     />
                   </div>
                   <div className="space-y-2">
