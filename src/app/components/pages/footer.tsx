@@ -43,7 +43,7 @@ const Footer = () => {
                         <a href="https://www.facebook.com/earlyjobs.in" className="mr-5 no-underline" rel="noreferrer" target="_blank">
                             <FaFacebook className="text-white text-2xl" />
                         </a>
-                        <a href="https://www.instagram.com/earlyjobs/" className="mr-5 no-underline" rel="noreferrer" target="_blank">
+                        <a href="https://www.instagram.com/earlyjobs.ai/" className="mr-5 no-underline" rel="noreferrer" target="_blank">
                             <AiFillInstagram className="text-white text-3xl" />
                         </a>
                         <a href="https://www.linkedin.com/company/earlyjobs/" className="mr-5 no-underline" rel="noreferrer" target="_blank">

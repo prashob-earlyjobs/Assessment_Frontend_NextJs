@@ -211,7 +211,8 @@ const Assessments = () => {
                 "Hospitality & Front Desk",
                 "Healthcare (Non-Clinical)",
                 "Internship & Fresher Readiness",
-                "Behavioral & Soft Skills"
+                "Behavioral & Soft Skills",
+                "Others"
               ].map((category) => (
                 <button
                   key={category}

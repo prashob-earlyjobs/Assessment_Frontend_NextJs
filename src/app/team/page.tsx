@@ -63,9 +63,8 @@ const TeamPage: React.FC = () => {
 
     const fetchMemberCards = async () => {
         try {
-            const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL_IN.slice(0, -4);
-
-            const response = await fetch(`${backendURL}/admin/teams`);
+           
+            const response = await fetch(`https://apis.earlyjobs.in/admin/teams`);
             const data = await response.json();
             if (response.ok) {
                 const formattedData = data.map((member: any) => ({
