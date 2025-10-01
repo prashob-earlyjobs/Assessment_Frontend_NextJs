@@ -196,5 +196,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   // Combine static, assessment, and job pages
-  return [...staticPages, ...assessmentPages, ...jobPages]
+  return [...staticPages, ...assessmentPages, ...jobPages, ...subJobPages]
 } 

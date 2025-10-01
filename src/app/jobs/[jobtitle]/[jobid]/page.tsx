@@ -51,7 +51,7 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { jobtitle, jobid } = await params;
 
-  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_IN;
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_2_0;
 
   
   try {
