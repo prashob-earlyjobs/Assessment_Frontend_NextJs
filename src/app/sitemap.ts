@@ -154,7 +154,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           .toLowerCase()
         
         return {
-          url: `${baseUrl}/jobs/${jobTitle}/${job._id || job.id}`,
+          url: `${baseUrl}/jobs/${jobTitle}/${job.jobId}`,
           lastModified: new Date(job.updatedAt || job.createdAt || Date.now()),
           changeFrequency: 'daily' as const,
           priority: 0.8,
