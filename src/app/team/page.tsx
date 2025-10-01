@@ -63,7 +63,7 @@ const TeamPage: React.FC = () => {
 
     const fetchMemberCards = async () => {
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL_IN_1}/admin/teams`);
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL_OLD_PORTAL}/admin/teams`);
             const data = await response.json();
             if (response.ok) {
                 const formattedData = data.map((member: any) => ({

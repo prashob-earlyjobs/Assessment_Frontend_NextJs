@@ -98,7 +98,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
       try {
         setLoading(true);
         setError(null);
-        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_IN.slice(0,-4);
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_QA.slice(0,-4);
         
         const response = await fetch(`${backendUrl}/api/public/jobs/${jobid}`);
         

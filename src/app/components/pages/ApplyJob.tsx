@@ -36,7 +36,7 @@ const useScrollAnimation = () => {
 };
 
 export default function Index() {
-  const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL_IN;
+  const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL_QA;
   const router = useRouter(); // Initialize useRouter
   const categories = useMemo(
     () => [
