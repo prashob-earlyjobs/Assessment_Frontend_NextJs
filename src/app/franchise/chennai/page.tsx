@@ -2,6 +2,7 @@
 "use client"
 import Header from "../../components/pages/header"
 import Footer from "../../components/pages/footer"
+import Navbar from "../../components/pages/navbar"
 import { useState } from "react"
 import {
   MapPin,
@@ -167,6 +168,7 @@ const FranchiseChennai = () => {
 
   return (
     <>
+    <Navbar/>
      <Header />
     <div className="min-h-screen bg-white">
      
@@ -405,7 +407,7 @@ const FranchiseChennai = () => {
       </section>
 
       {/* Local Events */}
-      <section id="events" className="py-16 sm:py-20 bg-white">
+      {/* <section id="events" className="py-16 sm:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 sm:mb-16">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-6">
@@ -449,7 +451,7 @@ const FranchiseChennai = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* FAQ Section */}
       <section className="py-16 sm:py-20 bg-gray-100">

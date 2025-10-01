@@ -6,6 +6,7 @@ import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import Header from "../../components/pages/header";
 import Footer from "../../components/pages/footer";
+import Navbar from '../../components/pages/navbar';
 import {
   Select,
   SelectContent,
@@ -29,7 +30,7 @@ import HeroSection from "../../components/franchiseHYD/herosection";
 import AboutSection from "../../components/franchiseHYD/AboutSection";
 import emailjs from "@emailjs/browser";
 import BenefitsSection from "../../components/franchiseHYD/BenefitsSection";
-import LocalEvents from "../../components/franchiseHYD/LocalEvents";
+// import LocalEvents from "../../components/franchiseHYD/LocalEvents";
 import Faq from "../../components/franchiseHYD/faq";
 
 const Index = () => {
@@ -158,6 +159,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50">
+      <Navbar />
       <Header />
       <HeroSection />
       <AboutSection />
@@ -401,7 +403,7 @@ const Index = () => {
           </div>
         </div>
       </section>
-      <LocalEvents />
+      {/* <LocalEvents /> */}
       <Faq />
       <Footer />
     </div>

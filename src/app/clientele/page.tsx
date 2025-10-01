@@ -21,7 +21,7 @@ const Clientele: React.FC = () => {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL_IN}/public/companies`;
+  const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL_2_0}/public/companies`;
   console.log("API URL:", apiUrl);
   useEffect(() => {
     setLoading(true);
