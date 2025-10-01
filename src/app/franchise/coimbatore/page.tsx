@@ -23,6 +23,7 @@ import {
 } from "lucide-react"
 import Header from "@/app/components/pages/header"
 import Footer from "@/app/components/pages/footer"
+import Navbar from "@/app/components/pages/navbar"
 
 const Card = ({ className = "", children, ...props }) => (
   <div className={`bg-white rounded-xl shadow-md p-6 border border-orange-200 ${className}`} {...props}>
@@ -319,6 +320,7 @@ const Coimbatore = () => {
 
   return (
     <>
+    <Navbar />
       <Header />
    
     <div className="min-h-screen bg-white text-orange-900">
@@ -951,7 +953,7 @@ const Coimbatore = () => {
                   <MapPin className="w-8 h-8 text-orange-600 mb-2" />
                   <p className="font-semibold text-orange-700">Visit Us</p>
                   <p className="text-orange-800">
-                    First Floor, 28A, Chintamani Nagar 2nd Street, SaibabaColony, Coimbatore
+                    First Floor, 28A, Chintamani Nagar 2nd Street, SaibabaColony, Coimbatore, PIN- 641011
                   </p>
                 </div>
               </div>

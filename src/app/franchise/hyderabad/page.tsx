@@ -6,6 +6,7 @@ import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import Header from "../../components/pages/header";
 import Footer from "../../components/pages/footer";
+import Navbar from '../../components/pages/navbar';
 import {
   Select,
   SelectContent,
@@ -158,6 +159,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50">
+      <Navbar />
       <Header />
       <HeroSection />
       <AboutSection />

@@ -9,11 +9,13 @@ import HowItWorksSection from '../../components/chandigarh/HowItWorksSection';
 import LeadCaptureForm from '../../components/chandigarh/LeadCaptureForm';
 import EventsSection from '../../components/chandigarh/EventsSection';
 import FAQSection from '../../components/chandigarh/FAQSection';
+import Navbar from '@/app/components/pages/navbar';
 
 const ChandigarhFranchise = () => {
   return (
     <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Hero Section */}
+      <Navbar />
       <Header />
       <HeroSection />
 

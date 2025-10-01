@@ -2,6 +2,7 @@
 "use client"
 import Header from "../../components/pages/header"
 import Footer from "../../components/pages/footer"
+import Navbar from "../../components/pages/navbar"
 import { useState } from "react"
 import {
   MapPin,
@@ -167,6 +168,7 @@ const FranchiseChennai = () => {
 
   return (
     <>
+    <Navbar/>
      <Header />
     <div className="min-h-screen bg-white">
      
