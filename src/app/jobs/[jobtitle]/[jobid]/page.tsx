@@ -64,7 +64,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       const jobData = data.data;
       
       if (jobData) {
-        const title = `${jobData.title} Job at ${jobData.company_name} - EarlyJobs`;
+        const title = `${jobData.title} Job in ${jobData.city || "Remote"} - EarlyJobs`;
         const description = `Apply for ${jobData.title} position at ${jobData.company_name}. ${jobData.employment_type || 'Full-time'} job with competitive salary. ${jobData.city || 'Remote'} location.`;
         
         return {
