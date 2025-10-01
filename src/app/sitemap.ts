@@ -7,7 +7,8 @@ import { getAssessmentsfromSearch } from './components/services/servicesapis'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.earlyjobs.ai'
-  const backendUrl = "https://apis.earlyjobs.in"
+  // const backendUrl = "https://apis.earlyjobs.in"
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_2_0;
 
 
   // Static pages
