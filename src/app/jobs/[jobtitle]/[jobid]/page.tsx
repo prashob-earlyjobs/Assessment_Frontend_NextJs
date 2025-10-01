@@ -106,14 +106,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function JobDetails({ params }: PageProps) {
   const { jobtitle, jobid } = await params;
   
-  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_QA.slice(0,-4);
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_2_0;
   
   
   let jobData: JobDetailsData | null = null;
   let seoError: string | null = null;
   
   try {
-    const response = await fetch(`${backendUrl}/api/public/jobs/${jobid}`, {
+    const response = await fetch(`${backendUrl}/public/jobs/${jobid}`, {
       next: { revalidate: 3600 } 
     });
     

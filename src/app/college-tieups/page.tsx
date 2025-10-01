@@ -22,7 +22,7 @@ interface ApiResponse {
 
 const CollegeTieUp: React.FC = () => {
   const [colleges, setColleges] = useState<College[]>([]);
-  // const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL_QA}/colleges/tie-ups`;
+  // const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL_2_0}/colleges/tie-ups`;
 
   useEffect(() => {
     // Mock data for colleges

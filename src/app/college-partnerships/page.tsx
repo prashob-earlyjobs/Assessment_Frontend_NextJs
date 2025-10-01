@@ -75,7 +75,7 @@ const Index = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [companies, setCompanies] = useState<Company[]>([]);
 
-  const backendApiUrl = process.env.NEXT_PUBLIC_BACKEND_URL_QA;
+  const backendApiUrl = process.env.NEXT_PUBLIC_BACKEND_URL_2_0;
 
   useEffect(() => {
     fetch(`${backendApiUrl}/companies/companies`)
