@@ -50,9 +50,12 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { jobtitle, jobid } = await params;
+
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_IN;
+
   
   try {
-    const response = await fetch(`https://apis.earlyjobs.in/api/public/jobs/${jobid}`, {
+    const response = await fetch(`${backendUrl}/public/jobs/${jobid}`, {
       next: { revalidate: 3600 }
     });
     
@@ -123,13 +126,13 @@ export default async function JobDetails({ params }: PageProps) {
     
     const data = await response.json();
     jobData = data.data
-    console.log(jobData);
+
   } catch (err) {
     seoError = err instanceof Error ? err.message : 'Failed to fetch job details';
   }
 
   // Generate current URL for SEO
-  const currentUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/jobs/${jobtitle}/${jobid}`;
+  const currentUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/jobs/${jobtitle}/${jobid}`;
 
   if (seoError || !jobData) {
     return (
