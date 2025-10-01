@@ -20,7 +20,7 @@ const BlogPage = () => {
         const fetchBlogs = async () => {
             setLoading(true);
             try {
-                const backendURL=process.env.NEXT_PUBLIC_BACKEND_URL_IN.slice(0,-4);
+                const backendURL=process.env.NEXT_PUBLIC_BACKEND_URL_IN_1;
                 const response = await fetch(`${backendURL}/get-blogs`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch blogs');

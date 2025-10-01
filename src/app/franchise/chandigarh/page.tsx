@@ -69,7 +69,7 @@ const ChandigarhFranchise = () => {
       <LeadCaptureForm />
 
       {/* Events Section */}
-      <EventsSection />
+      {/* <EventsSection /> */}
 
       {/* FAQ Section */}
       <FAQSection />

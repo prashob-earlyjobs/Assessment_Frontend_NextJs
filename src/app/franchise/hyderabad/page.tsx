@@ -29,7 +29,7 @@ import HeroSection from "../../components/franchiseHYD/herosection";
 import AboutSection from "../../components/franchiseHYD/AboutSection";
 import emailjs from "@emailjs/browser";
 import BenefitsSection from "../../components/franchiseHYD/BenefitsSection";
-import LocalEvents from "../../components/franchiseHYD/LocalEvents";
+// import LocalEvents from "../../components/franchiseHYD/LocalEvents";
 import Faq from "../../components/franchiseHYD/faq";
 
 const Index = () => {
@@ -401,7 +401,7 @@ const Index = () => {
           </div>
         </div>
       </section>
-      <LocalEvents />
+      {/* <LocalEvents /> */}
       <Faq />
       <Footer />
     </div>

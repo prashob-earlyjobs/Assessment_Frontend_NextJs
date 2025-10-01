@@ -40,7 +40,7 @@ const BlogDetails: React.FC = () => {
     const fetchBlog = async () => {
       try {
         console.log("Fetching blog with slug: ", slug);
-        const backendURL=process.env.NEXT_PUBLIC_BACKEND_URL_IN.slice(0,-4);
+        const backendURL=process.env.NEXT_PUBLIC_BACKEND_URL_IN_1
         const response = await axios.get(`${backendURL}/blogs/${slug}`);
         setBlog(response.data);
       } catch (err) {
@@ -51,7 +51,7 @@ const BlogDetails: React.FC = () => {
 
     const fetchRelatedBlogs = async () => {
       try {
-        const  backendURL=process.env.NEXT_PUBLIC_BACKEND_URL_IN.slice(0,-4);
+        const  backendURL=process.env.NEXT_PUBLIC_BACKEND_URL_IN_1
         const response = await axios.get(`${backendURL}/get-blogs`);
         console.log("Fetched related blogs:", response.data);
         const allBlogs: Blog[] = response.data.blogs;
