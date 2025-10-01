@@ -934,7 +934,7 @@ const Rampur = () => {
                 <div className="flex flex-col items-center">
                   <Phone className="w-8 h-8 text-orange-600 mb-2" />
                   <p className="font-semibold text-orange-700">Call Us</p>
-                  <p className="text-orange-800">+91 8439423438</p>
+                  <p className="text-orange-800">+91 9084712794</p>
                 </div>
 
                 <div className="flex flex-col items-center">
