@@ -431,7 +431,7 @@ const Index = () => {
       </section>
 
       {/* Events Section */}
-      <section className="py-12 md:py-20 px-4 bg-muted/30">
+      {/* <section className="py-12 md:py-20 px-4 bg-muted/30">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12 md:mb-16">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold">
@@ -462,7 +462,7 @@ const Index = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* FAQ Section */}
       <FAQSection />
