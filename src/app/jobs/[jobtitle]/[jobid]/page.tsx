@@ -89,7 +89,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
             card: 'summary_large_image',
             title,
             description,
-            images: ['/assets/og_Jobs.png']
+            images: ['/og_Jobs.png']
           }
         };
       }
