@@ -352,7 +352,9 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
       skills: applicationForm.skills,
     };
 
+
     const url = `${process.env.NEXT_PUBLIC_BACKEND_URL_2_0}/public/jobs/apply`;
+
     const options = {
       method: 'POST',
       headers: {
