@@ -451,7 +451,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
       <div className="max-w-7xl mx-auto p-4 sm:p-6">
         {/* Page Title */}
         <h1 className="text-xl sm:text-2xl font-bold text-earlyjobs-text mb-4 sm:mb-6">
-          {jobData.title} Job in {(jobData.city && jobData.city.trim()) } at {jobData.company_name}
+          {jobData.title} Job in {(jobData.location) } at {jobData.company_name}
         </h1>
         
         <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
