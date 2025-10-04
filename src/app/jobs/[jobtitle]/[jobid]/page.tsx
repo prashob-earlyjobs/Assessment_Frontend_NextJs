@@ -78,7 +78,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
             url: `${process.env.NEXT_PUBLIC_BASE_URL}/jobs/${jobtitle}/${jobid}`,
             images: [
               {
-                url:'/assets/og-image.png',
+                url:'/og_Jobs.png',
                 width: 1200,
                 height: 627,
                 alt: `${jobData.title} at ${jobData.company_name}`
