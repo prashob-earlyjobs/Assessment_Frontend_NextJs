@@ -50,9 +50,12 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { jobtitle, jobid } = await params;
+
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_2_0;
+
   
   try {
-    const response = await fetch(`https://apis.earlyjobs.in/api/public/jobs/${jobid}`, {
+    const response = await fetch(`${backendUrl}/public/jobs/${jobid}`, {
       next: { revalidate: 3600 }
     });
     
@@ -61,7 +64,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       const jobData = data.data;
       
       if (jobData) {
-        const title = `${jobData.title} Job at ${jobData.company_name} - EarlyJobs`;
+        const title = `${jobData.title} Job in ${jobData.city || "Remote"} - EarlyJobs`;
         const description = `Apply for ${jobData.title} position at ${jobData.company_name}. ${jobData.employment_type || 'Full-time'} job with competitive salary. ${jobData.city || 'Remote'} location.`;
         
         return {
@@ -75,7 +78,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
             url: `${process.env.NEXT_PUBLIC_BASE_URL}/jobs/${jobtitle}/${jobid}`,
             images: [
               {
-                url:'/assets/og-image.png',
+                url:'/og_Jobs.png',
                 width: 1200,
                 height: 627,
                 alt: `${jobData.title} at ${jobData.company_name}`
@@ -86,7 +89,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
             card: 'summary_large_image',
             title,
             description,
-            images: ['/assets/og-image.png']
+            images: ['/og_Jobs.png']
           }
         };
       }
@@ -106,14 +109,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function JobDetails({ params }: PageProps) {
   const { jobtitle, jobid } = await params;
   
-  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_IN.slice(0,-4);
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_2_0;
   
   
   let jobData: JobDetailsData | null = null;
   let seoError: string | null = null;
   
   try {
-    const response = await fetch(`${backendUrl}/api/public/jobs/${jobid}`, {
+    const response = await fetch(`${backendUrl}/public/jobs/${jobid}`, {
       next: { revalidate: 3600 } 
     });
     
@@ -123,13 +126,13 @@ export default async function JobDetails({ params }: PageProps) {
     
     const data = await response.json();
     jobData = data.data
-    console.log(jobData);
+
   } catch (err) {
     seoError = err instanceof Error ? err.message : 'Failed to fetch job details';
   }
 
   // Generate current URL for SEO
-  const currentUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/jobs/${jobtitle}/${jobid}`;
+  const currentUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/jobs/${jobtitle}/${jobid}`;
 
   if (seoError || !jobData) {
     return (

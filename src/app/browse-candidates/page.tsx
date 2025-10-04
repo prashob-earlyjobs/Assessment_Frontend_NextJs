@@ -132,9 +132,18 @@ const Index = () => {
     }
     return badges;
   };
+  const generateSlug = (name) => {
+  return name
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '');
+};
 
   const handleViewProfile = (candidate) => {
-    router.push(`/browse-candidates/${candidate._id}`);
+    const slug = generateSlug(candidate.name);
+    console.log("Navigating to candidate profile:", `/browse-candidates/${slug}/${candidate._id}`);
+    router.push(`/browse-candidates/${slug}/${candidate._id}`);
   };
 
   const filteredCandidates = useMemo(() => {

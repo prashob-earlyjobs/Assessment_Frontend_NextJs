@@ -110,7 +110,7 @@ const Jobs = () => {
   const [isFilterSidebarOpen, setIsFilterSidebarOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_IN;
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_2_0;
 
   // Calculate pagination values
   const totalPages = Math.ceil(totalJobs / pageSize);

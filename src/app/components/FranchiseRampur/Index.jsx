@@ -794,7 +794,7 @@ const Rampur = () => {
         </div>
       </section>
 
-      <section className="py-20 bg-orange-50">
+      {/* <section className="py-20 bg-orange-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-orange-700 mb-6">
@@ -882,9 +882,9 @@ const Rampur = () => {
             </Card>
           </div>
         </div>
-      </section>
+      </section> */}
 
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-orange-50">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16">
@@ -934,7 +934,7 @@ const Rampur = () => {
                 <div className="flex flex-col items-center">
                   <Phone className="w-8 h-8 text-orange-600 mb-2" />
                   <p className="font-semibold text-orange-700">Call Us</p>
-                  <p className="text-orange-800">+91 8439423438</p>
+                  <p className="text-orange-800">+91 9084712794</p>
                 </div>
 
                 <div className="flex flex-col items-center">

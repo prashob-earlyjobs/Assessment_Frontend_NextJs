@@ -164,7 +164,12 @@ export const getAssessmentsfromSearch = async ({
     );
     return response.data;
   } catch (error) {
-    toast.error(`${error?.response?.data?.message}.`);
+    // Only show toast on client-side (not during server-side sitemap generation)
+    if (typeof window !== 'undefined') {
+      toast.error(`${error?.response?.data?.message}.`);
+    } else {
+      console.error('Error fetching assessments:', error?.response?.data?.message || error.message);
+    }
 
     return error;
   }
