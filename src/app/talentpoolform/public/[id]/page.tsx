@@ -65,7 +65,7 @@ interface CandidateFormData {
 }
 
 interface AddCandidateFormProps {
-  onBack: () => void;
+
   onSubmit?: (data: CandidateFormData) => void;
   refreshCandidates?: () => void;
   isPublic?: boolean;
@@ -91,7 +91,7 @@ export interface ICreateTallentPoolFormData {
   resume?: string;
 }
 
-export default function PublicTalentPoolForm({ onBack, onSubmit, refreshCandidates }: AddCandidateFormProps) {
+export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: AddCandidateFormProps) {
   //const navigate = useNavigate();
   const { id } = useParams();
   const apiClient = createApplication;
