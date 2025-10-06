@@ -188,7 +188,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       siteName: "EarlyJobs",
       images: [
         {
-          url: `https://earlyjobs-assessment-1.s3.ap-south-1.amazonaws.com/${interviewId}/${fileName}.pdf`, // Optional OG image
+          url: `https://earlyjobs-assessment-1.s3.ap-south-1.amazonaws.com/${interviewId}/${fileName}.pdf`, 
           width: 1200,
           height: 630,
           alt: "EarlyJobs Certificate",
