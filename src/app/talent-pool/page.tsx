@@ -298,12 +298,14 @@ const Index = () => {
                 FAQ
               </a>
              
-                <Link href="https://portal.earlyjobs.ai/talentpoolform/public/68c42a766d9630692f685496"><Button
+                {/* <Link href="https://portal.earlyjobs.ai/talentpoolform/public/68c42a766d9630692f685496"> */}
+                <Button
                   className="bg-orange-500 hover:bg-orange-600 text-white shadow-md rounded-xl"
-                 
+                  onClick={() => router.push("/talentpoolform/public/68c42a766d9630692f685496")}
                 >
                   Register
-                </Button></Link>
+                </Button>
+                {/* </Link> */}
               
             </div>
             <div className="md:hidden flex items-center">
@@ -416,12 +418,13 @@ const Index = () => {
                 EarlyJobs.ai connects job seekers with top employers through AI-powered matching, verified profiles, and AI skill assessments. Get vetted, showcased, and hired — all in less time.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-20 lg:mb-0">
-                <Link href="https://portal.earlyjobs.ai/talentpoolform/public/68c42a766d9630692f685496"><Button
+                <Button
                   size="lg"
-                  className="bg-orange-500 hover:bg-orange-600 shadow-button text-lg text-white px-8 py-6 animate-scale-on-hover"  
+                  className="bg-orange-500 hover:bg-orange-600 shadow-button text-lg text-white px-8 py-6 animate-scale-on-hover"
+                  onClick={() => router.push("/talentpoolform/public/68c42a766d9630692f685496")}  
                 >
                   Register Now 
-                </Button></Link>
+                </Button>
                 <a href="#talent-pool" className="hidden md:block">
                   <Button
                     variant="outline"
