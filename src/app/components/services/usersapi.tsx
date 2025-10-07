@@ -98,31 +98,42 @@ export const createUserOnboarding = async (userId: string, onboardingData: IOnbo
       ...onboardingData,
       updatedDateTime: onboardingData.updatedDateTime || new Date().toISOString()
     };
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_2_0;
+    const response = await fetch(`${backendUrl}/onboarding/user/create-onboarding`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        
+      },
+      body: JSON.stringify(dataWithTimestamp)
+    });
 
-    const response = await axiosInstance.post(
-      `/onboarding/user/create-onboarding`,
-      dataWithTimestamp
-    );
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || `HTTP ${response.status}: Failed to complete onboarding`);
+    }
+
+    const data = await response.json();
 
     if (response.status === 201) {
       toast.success("Onboarding completed successfully");
-      return response.data;
+      return data;
     }
 
-    throw new Error(response.data.message || 'Failed to complete onboarding');
+    throw new Error(data.message || 'Failed to complete onboarding');
 
   } catch (error: any) {
-    console.error("Failed to create onboarding:", error.response?.data?.message);
+    console.error("Failed to create onboarding:", error.message);
     
-    // Handle specific error cases
-    if (error.response?.status === 409) {
+    // Handle specific error cases (note: fetch doesn't throw on HTTP errors, so we handle above)
+    if (error.message.includes('409')) {
       toast.error("Onboarding already exists for this user");
-    } else if (error.response?.status === 403) {
+    } else if (error.message.includes('403')) {
       toast.error("Role mismatch. Cannot create onboarding");
-    } else if (error.response?.status === 404) {
+    } else if (error.message.includes('404')) {
       toast.error("User not found");
     } else {
-      toast.error(`Failed to create onboarding: ${error.response?.data?.message || 'Unknown error'}`);
+      toast.error(`Failed to create onboarding: ${error.message || 'Unknown error'}`);
     }
     
     throw error;
