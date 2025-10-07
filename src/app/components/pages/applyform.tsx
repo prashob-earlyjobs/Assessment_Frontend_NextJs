@@ -1,714 +1,631 @@
 "use client"
-import React, { useState, useEffect } from 'react';
-import Stepper from 'react-stepper-horizontal';
-import Select, { SingleValue } from 'react-select';
-import axios from 'axios';
+import React, { useState, useRef, useEffect } from 'react';
+import { Card, CardContent } from '../../components/ui/card';
+import { Button } from '../../components/ui/button';
+import { StepIndicator } from './StepIndicator';
+import { PersonalDetails, PersonalDetailsRef } from '../steps/PersonalDetails';
+import { Qualification, QualificationRef } from '../steps/Qualification';
+import { About, AboutRef } from '../steps/About';
+import { References, ReferencesRef } from '../steps/References';
+import { Identification } from '../steps/Identification';
+import { createUserOnboarding } from '../services/usersapi';
+import { toast } from 'react-toastify';
 
-interface PersonalDetails {
-  fullName: string;
-  dob: string;
-  gender: string;
-  countryCode: string; // Added countryCode field
-  phone: string;
-  email: string;
-  address: string;
-  languages: string[];
+import { Loader2 } from 'lucide-react';
+
+// Define the IOnboardingData interface
+interface IOnboardingData {
+  updatedDateTime: string;
+  personalDetails: {
+    fullName: string;
+    email: string;
+    role: string;
+    phone: string;
+    wtspNum: string;
+    gender: string;
+    dob: string;
+    applyFor: string;
+    currBuildingNo: string;
+    currStreet: string;
+    currArea: string;
+    currCity: string;
+    currState: string;
+    currPin: string;
+    permBuildingNo: string;
+    permStreet: string;
+    permArea: string;
+    permCity: string;
+    permState: string;
+    permPin: string;
+    languages: string[];
+  };
+  qualification: {
+    highestQualification: string;
+    workExperience: Array<{
+      CompanyName: string;
+      ExperienceYears: string;
+    }>;
+  };
+  about: {
+    questions: Array<{
+      question: string;
+      answer: string;
+    }>;
+  };
+  familyMembers: {
+    [key: string]: {
+      name: string;
+      age: string;
+      relationship: string;
+      organization: string;
+      dependentOnYou: string;
+    };
+  };
+  newIdentityProof: {
+    aadharFront: string;
+    aadharBack: string;
+    aadharNumber: string;
+    panFront: string;
+    panBack: string;
+    panNumber: string;
+    emergencyNumber: string;
+    photo: string;
+  };
+  references: {
+    [key: string]: {
+      name: string;
+      designation: string;
+      organization: string;
+      email: string;
+      phone: string;
+      connection: string;
+    };
+  };
 }
 
-interface Qualification {
-  highestQualification: string;
-  workExperience: { id: number; value: string }[];
-}
-
-interface About {
-  aboutYou: string;
-  hours: string;
-}
-
-interface Reference {
-  name: string;
-  phone: string;
-  email: string;
-}
-
-interface IdentityProof {
-  idNumber: string;
-  idFile: File | null;
+export interface FormData {
+  personalDetails: {
+    fullName: string;
+    dateOfBirth: string;
+    gender: string;
+    phoneNumber: string;
+    whatsappNumber: string;
+    email: string;
+    currentAddress: {
+      buildingFlat: string;
+      street: string;
+      areaVillage: string;
+      cityTownBlock: string;
+      state: string;
+      pincode: string;
+    };
+    permanentAddress: {
+      buildingFlat: string;
+      street: string;
+      areaVillage: string;
+      cityTownBlock: string;
+      state: string;
+      pincode: string;
+    };
+    languages: string[];
+  applyFor: string;
+  spokenLanguages: string[];
+  };
+  qualification: {
+    highestQualification: string;
+    workExperience: Array<{
+      company: string;
+      experienceYears: string;
+    }>;
+  };
+  about: {
+    tellAboutYourself: string;
+    whyJoinHR: string;
+    howContribute: string;
+    hoursContribute: string;
+    categories: string[];
+    availability: string;
+  };
+  references: Array<{
+    name: string;
+    contactNumber: string;
+    email: string;
+    organization: string;
+    designation: string;
+    howTheyKnow: string;
+  }>;
+  identification: {
+    profilePhoto?: string;
+    aadharFront?: string;
+    aadharBack?: string;
+    panFront?: string;
+    panBack?: string;
+    aadharNumber: string;
+    panNumber: string;
+    emergencyContact: string;
+    familyMembers: Array<{
+      name: string;
+      relationship: string;
+      occupation: string;
+      age: string;
+      dependent: boolean;
+    }>;
+  };
 }
 
 const steps = [
-  { title: 'Personal Details' },
-  { title: 'Qualifications' },
-  { title: 'About' },
-  { title: 'References' },
-  { title: 'Identity Proof' },
+  { id: 1, title: 'Personal Details', component: PersonalDetails },
+  { id: 2, title: 'Qualification/Certification', component: Qualification },
+  { id: 3, title: 'About', component: About },
+  { id: 4, title: 'References', component: References },
+  { id: 5, title: 'Identification', component: Identification },
 ];
 
-const countryOptions = [
-  { value: '+91', label: '+91' },
-  { value: '+1', label: '+1' },
-  { value: '+44', label: '+44' },
-];
+interface MultiStepFormProps {
+  onFormSubmit?: () => void;
+  isCompact?: boolean; // New prop to control layout
+}
 
-const languageOptions = [
-  { value: 'English', label: 'English' },
-  { value: 'Hindi', label: 'Hindi' },
-  { value: 'Tamil', label: 'Tamil' },
-  { value: 'Kannada', label: 'Kannada' },
-];
+const MultiStepForm: React.FC<MultiStepFormProps> = ({ onFormSubmit, isCompact = false }) => {
 
-const customSelectStyles = {
-  control: (provided: any) => ({
-    ...provided,
-    border: '1px solid #f97316',
-    borderRadius: '4px',
-    minHeight: '38px',
-    fontSize: '14px',
-    width: '100px', // Increased width to accommodate longer codes like +91 and +44
-    display: 'flex',
-    alignItems: 'center',
-  }),
-  dropdownIndicator: (provided: any) => ({
-    ...provided,
-    color: '#f97316',
-    '&:hover': { color: '#ea580c' },
-  }),
-  option: (provided: any, state: any) => ({
-    ...provided,
-    backgroundColor: state.isSelected ? '#f97316' : 'white',
-    color: state.isSelected ? 'white' : 'black',
-  }),
-  singleValue: (provided: any) => ({
-    ...provided,
-    color: '#f97316',
-    marginLeft: '0',
-    whiteSpace: 'nowrap', // Prevent text wrapping
-    overflow: 'visible', // Ensure full text is visible
-  }),
-};
-
-
-
-const customSelectStylesFull = {
-  control: (provided: any) => ({
-    ...provided,
-    border: '1px solid #f97316',
-    borderRadius: '4px',
-    minHeight: '38px',
-    fontSize: '14px',
-    width: '100%',
-  }),
-  dropdownIndicator: (provided: any) => ({
-    ...provided,
-    color: '#f97316',
-    '&:hover': { color: '#ea580c' },
-  }),
-  option: (provided: any, state: any) => ({
-    ...provided,
-    backgroundColor: state.isSelected ? '#f97316' : 'white',
-    color: state.isSelected ? 'white' : 'black',
-  }),
-};
-
-const MultiStepForm: React.FC = () => {
-  const [currentStep, setCurrentStep] = useState<number>(0);
-  const [error, setError] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
-  const [personalDetails, setPersonalDetails] = useState<PersonalDetails>({
-    fullName: '',
-    dob: '',
-    gender: 'Male',
-    countryCode: '+91', // Initialize with default country code
-    phone: '',
-    email: '',
-    address: '',
-    languages: [],
-  });
-  const [qualifications, setQualifications] = useState<Qualification>({
-    highestQualification: '',
-    workExperience: [],
-  });
-  const [about, setAbout] = useState<About>({
-    aboutYou: '',
-    hours: '',
-  });
-  const [references, setReferences] = useState<{
-    person1: Reference;
-    person2: Reference;
-  }>({
-    person1: { name: '', phone: '', email: '' },
-    person2: { name: '', phone: '', email: '' },
-  });
-  const [identityProof, setIdentityProof] = useState<IdentityProof>({
-    idNumber: '',
-    idFile: null,
-  });
-
-  // Set max date to today (September 23, 2025)
-  const today = new Date('2025-09-23T14:55:00+05:30'); // Updated to current date
-  const maxDob = `${today.getFullYear() - 18}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
-    setState: React.Dispatch<React.SetStateAction<any>>,
-    state: any,
-    nestedKey?: string
-  ) => {
-    const { name, value } = e.target;
-    if (nestedKey) {
-      setState((prev: any) => ({
-        ...prev,
-        [nestedKey]: { ...prev[nestedKey], [name]: value },
-      }));
-    } else {
-      setState({ ...state, [name]: value });
-    }
-  };
-
-  const handleCountryCodeChange = (selectedOption: SingleValue<{ value: string; label: string }>) => {
-    if (selectedOption) {
-      setPersonalDetails({
-        ...personalDetails,
-        countryCode: selectedOption.value,
-      });
-    }
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file && file.size > 100000) {
-      setError('File size should be less than 100KB');
-      return;
-    }
-    if (file && !['image/jpeg', 'image/png'].includes(file.type)) {
-      setError('File type should be JPEG or PNG');
-      return;
-    }
-    setIdentityProof({ ...identityProof, idFile: file || null });
-    setError('');
-  };
-
-  const handleLanguageChange = (selectedOption: SingleValue<{ value: string; label: string }>) => {
-    if (selectedOption && !personalDetails.languages.includes(selectedOption.value)) {
-      setPersonalDetails({
-        ...personalDetails,
-        languages: [...personalDetails.languages, selectedOption.value],
-      });
-    }
-  };
-
-  const handleLanguageRemove = (language: string) => {
-    setPersonalDetails({
-      ...personalDetails,
-      languages: personalDetails.languages.filter((lang) => lang !== language),
-    });
-  };
-
-  const handleWorkExperienceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (value.trim()) {
-      setQualifications({
-        ...qualifications,
-        workExperience: [...qualifications.workExperience, { id: Date.now(), value }],
-      });
-      e.target.value = '';
-    }
-  };
-
-  const handleWorkExperienceRemove = (id: number) => {
-    setQualifications({
-      ...qualifications,
-      workExperience: qualifications.workExperience.filter((exp) => exp.id !== id),
-    });
-  };
-
-  const validatePersonalDetails = (): string => {
-    if (!personalDetails.fullName.trim()) return 'Full name is required';
-    if (!personalDetails.dob) return 'Date of birth is required';
-    if (new Date().getFullYear() - new Date(personalDetails.dob).getFullYear() < 18)
-      return 'Age must be 18 or older';
-    if (personalDetails.phone.length !== 10) return 'Valid phone number is required';
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(personalDetails.email))
-      return 'Valid email is required';
-    if (!personalDetails.address.trim()) return 'Address is required';
-    if (personalDetails.languages.length === 0) return 'Select at least one language';
-    return '';
-  };
-
-  const validateQualifications = (): string => {
-    if (!qualifications.highestQualification) return 'Highest qualification is required';
-    return '';
-  };
-
-  const validateAbout = (): string => {
-    if (about.aboutYou.split(/\s+/).length < 50)
-      return 'About you must be at least 50 words';
-    if (!about.hours) return 'Daily hours contribution is required';
-    return '';
-  };
-
-  const validateReferences = (): string => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!references.person1.name.trim()) return 'Person 1 name is required';
-    if (references.person1.phone.length !== 10) return 'Person 1 valid phone number is required';
-    if (!emailRegex.test(references.person1.email)) return 'Person 1 valid email is required';
-    if (!references.person2.name.trim()) return 'Person 2 name is required';
-    if (references.person2.phone.length !== 10) return 'Person 2 valid phone number is required';
-    if (!emailRegex.test(references.person2.email)) return 'Person 2 valid email is required';
-    if (references.person1.phone === references.person2.phone)
-      return 'Phone numbers must be unique';
-    if (references.person1.email === references.person2.email)
-      return 'Emails must be unique';
-    return '';
-  };
-
-  const validateIdentityProof = (): string => {
-    if (identityProof.idNumber.length !== 12) return 'Valid ID number is required';
-    // if (!identityProof.idFile) return 'ID file is required';
-    return '';
-  };
-
-  const handleSubmit = async (e: React.FormEvent, nextStep: number, validate: () => string) => {
-    e.preventDefault();
-    const validationError = validate();
-    if (validationError) {
-      setError(validationError);
-      return;
-    }
-    setError('');
-    if (nextStep === 5) {
-      setLoading(true);
-      const formData = {
-        personalDetails: {
-          ...personalDetails,
-          phone: `${personalDetails.countryCode}${personalDetails.phone}`, // Combine country code and phone
-        },
-        qualifications,
-        about,
-        references,
-        identityProof: { idNumber: identityProof.idNumber },
-      };
-      try {
-        await axios.post('https://jsonplaceholder.typicode.com/posts', formData);
-        setCurrentStep(5);
-      } catch (error) {
-        setError('Failed to submit form');
-      } finally {
-        setLoading(false);
+  const [currentStep, setCurrentStep] = useState(() => {
+    try {
+      const savedStep = localStorage.getItem('multiStepFormCurrentStep');
+      if (savedStep) {
+        const step = parseInt(savedStep, 10);
+        if (!isNaN(step)) {
+          return step;
+        }
       }
-    } else {
-      setCurrentStep(nextStep);
+    } catch (error) {
+      console.error("Failed to parse current step from local storage", error);
+    }
+    return 1;
+  });
+  const personalDetailsRef = useRef<PersonalDetailsRef>(null);
+  const qualificationRef = useRef<QualificationRef>(null);
+  const aboutRef = useRef<AboutRef>(null);
+  const referencesRef = useRef<ReferencesRef>(null);
+  
+  const [formData, setFormData] = useState<FormData>(() => {
+    try {
+      const savedData = localStorage.getItem('multiStepFormData');
+      if (savedData) {
+        return JSON.parse(savedData);
+      }
+    } catch (error) {
+      console.error("Failed to parse form data from local storage", error);
+    }
+    return {
+      personalDetails: {
+        fullName: '',
+        dateOfBirth: '',
+        gender: '',
+        phoneNumber: '',
+        whatsappNumber: '',
+        email: '',
+        currentAddress: {
+          buildingFlat: '',
+          street: '',
+          areaVillage: '',
+          cityTownBlock: '',
+          state: '',
+          pincode: '',
+        },
+        permanentAddress: {
+          buildingFlat: '',
+          street: '',
+          areaVillage: '',
+          cityTownBlock: '',
+          state: '',
+          pincode: '',
+        },
+        languages: [],
+        spokenLanguages: [],
+        applyFor: '',
+      },
+      qualification: {
+        highestQualification: '',
+        workExperience: [],
+      },
+      about: {
+        tellAboutYourself: '',
+        whyJoinHR: '',
+        howContribute: '',
+        hoursContribute: '',
+        categories: [],
+        availability: '',
+      },
+      references: [
+        {
+          name: '',
+          contactNumber: '',
+          email: '',
+          organization: '',
+          designation: '',
+          howTheyKnow: '',
+        },
+      ],
+      identification: {
+        aadharNumber: '',
+        panNumber: '',
+        emergencyContact: '',
+        familyMembers: [],
+      },
+    };
+  });
+
+  useEffect(() => {
+    localStorage.setItem('multiStepFormData', JSON.stringify(formData));
+  }, [formData]);
+
+  useEffect(() => {
+    localStorage.setItem('multiStepFormCurrentStep', currentStep.toString());
+  }, [currentStep]);
+
+  const updateFormData = (stepData: Partial<FormData>) => {
+    setFormData(prev => ({ ...prev, ...stepData }));
+  };
+
+  const nextStep = () => {
+    // Validate current step before proceeding
+    let isValid = true;
+    
+    if (currentStep === 1) {
+      // Validate Personal Details
+      if (personalDetailsRef.current) {
+        isValid = personalDetailsRef.current.validateForm();
+      }
+    } else if (currentStep === 2) {
+      // Validate Qualification step
+      if (qualificationRef.current) {
+        isValid = qualificationRef.current.validateForm();
+      }
+    } else if (currentStep === 3) {
+      // Validate About step
+      if (aboutRef.current) {
+        isValid = aboutRef.current.validateForm();
+      }
+    } else if (currentStep === 4) {
+      // Validate References step
+      if (referencesRef.current) {
+        isValid = referencesRef.current.validateForm();
+      }
+    }
+    
+    if (isValid && currentStep < steps.length) {
+      setCurrentStep(currentStep + 1);
+    } else if (!isValid) {
+      // Scroll to top to show validation errors
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
-  const renderPersonalDetails = () => (
-    <form onSubmit={(e) => handleSubmit(e, 1, validatePersonalDetails)} className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium text-orange-600">Full Name *</label>
-        <input
-          type="text"
-          name="fullName"
-          value={personalDetails.fullName}
-          onChange={(e) => handleInputChange(e, setPersonalDetails, personalDetails)}
-          className="mt-1 block w-full border border-orange-400 rounded-md p-2 focus:border-orange-600 focus:ring-orange-200"
-          placeholder="John Doe"
-          required
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-orange-600">Date of Birth *</label>
-        <input
-          type="date"
-          name="dob"
-          value={personalDetails.dob}
-          max={maxDob}
-          onChange={(e) => handleInputChange(e, setPersonalDetails, personalDetails)}
-          className="mt-1 block w-full border border-orange-400 rounded-md p-2 focus:border-orange-600 focus:ring-orange-200"
-          required
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-orange-600">Gender *</label>
-        <select
-          name="gender"
-          value={personalDetails.gender}
-          onChange={(e) => handleInputChange(e, setPersonalDetails, personalDetails)}
-          className="mt-1 block w-full border border-orange-400 rounded-md p-2 focus:border-orange-600 focus:ring-orange-200"
-        >
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-          <option value="Other">Other</option>
-        </select>
-      </div>
-      <div>
-  <label className="block text-sm font-medium text-orange-600">Phone Number *</label>
-  <div className="flex">
-    <Select
-      options={countryOptions}
-      value={countryOptions.find((option) => option.value === personalDetails.countryCode)}
-      onChange={handleCountryCodeChange}
-      styles={customSelectStyles}
-      className="mr-2 mt-2 "
-    />
-    <input
-      type="number"
-      name="phone"
-      value={personalDetails.phone}
-      onChange={(e) => handleInputChange(e, setPersonalDetails, personalDetails)}
-      className="mt-1 block w-full border border-orange-400 rounded-md p-2 focus:border-orange-600 focus:ring-orange-200"
-      placeholder="9876543210"
-      required
-    />
-  </div>
-</div>
-      <div>
-        <label className="block text-sm font-medium text-orange-600">Email *</label>
-        <input
-          type="email"
-          name="email"
-          value={personalDetails.email}
-          onChange={(e) => handleInputChange(e, setPersonalDetails, personalDetails)}
-          className="mt-1 block w-full border border-orange-400 rounded-md p-2 focus:border-orange-600 focus:ring-orange-200"
-          placeholder="example@domain.com"
-          required
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-orange-600">Address *</label>
-        <input
-          type="text"
-          name="address"
-          value={personalDetails.address}
-          onChange={(e) => handleInputChange(e, setPersonalDetails, personalDetails)}
-          className="mt-1 block w-full border border-orange-400 rounded-md p-2 focus:border-orange-600 focus:ring-orange-200"
-          placeholder="123 Main St, City"
-          required
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-orange-600">Languages *</label>
-        <div className="flex flex-wrap gap-2 mb-2">
-          {personalDetails.languages.map((lang, index) => (
-            <div key={index} className="flex items-center bg-white border border-orange-200 px-2 py-1 rounded">
-              <span className="text-sm text-orange-600">{lang}</span>
-              <button
-                type="button"
-                onClick={() => handleLanguageRemove(lang)}
-                className="ml-2 text-orange-600 hover:text-orange-800"
-              >
-                ×
-              </button>
-            </div>
-          ))}
-        </div>
-        <Select
-          options={languageOptions}
-          onChange={handleLanguageChange}
-          styles={customSelectStylesFull}
-          placeholder="Select a language"
-        />
-      </div>
-      <p className="text-red-600 text-sm">{error}</p>
-      <div className="flex justify-end gap-4">
-        <button
-          type="submit"
-          className="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700"
-        >
-          Next
-        </button>
-      </div>
-    </form>
-  );
+  const prevStep = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
 
-  const renderQualifications = () => (
-    <form onSubmit={(e) => handleSubmit(e, 2, validateQualifications)} className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium text-orange-600">Highest Qualification *</label>
-        <select
-          name="highestQualification"
-          value={qualifications.highestQualification}
-          onChange={(e) => handleInputChange(e, setQualifications, qualifications)}
-          className="mt-1 block w-full border border-orange-400 rounded-md p-2 focus:border-orange-600 focus:ring-orange-200"
-          required
-        >
-          <option value="">Select</option>
-          <option value="High School">High School</option>
-          <option value="Bachelor's">Bachelor's</option>
-          <option value="Master's">Master's</option>
-          <option value="PhD">PhD</option>
-        </select>
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-orange-600">Work Experience</label>
-        <div className="flex flex-wrap gap-2 mb-2">
-          {qualifications.workExperience.map((exp) => (
-            <div key={exp.id} className="flex items-center bg-white border border-orange-200 px-2 py-1 rounded">
-              <span className="text-sm text-orange-600">{exp.value}</span>
-              <button
-                type="button"
-                onClick={() => handleWorkExperienceRemove(exp.id)}
-                className="ml-2 text-orange-600 hover:text-orange-800"
-              >
-                ×
-              </button>
-            </div>
-          ))}
-        </div>
-        <div className="flex">
-          <input
-            type="text"
-            placeholder=""
-            className="mt-1 block w-full border border-orange-400 rounded-md p-2 focus:border-orange-600 focus:ring-orange-200"
-            onChange={handleWorkExperienceChange}
-          />
-        </div>
-      </div>
-      <p className="text-red-600 text-sm">{error}</p>
-      <div className="flex justify-between gap-4">
-        <button
-          type="button"
-          onClick={() => setCurrentStep(0)}
-          className="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700"
-        >
-          Back
-        </button>
-        <button
-          type="submit"
-          className="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700"
-        >
-          Next
-        </button>
-      </div>
-    </form>
-  );
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const renderAbout = () => (
-    <form onSubmit={(e) => handleSubmit(e, 3, validateAbout)} className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium text-orange-600">About You (min 50 words) *</label>
-        <textarea
-          name="aboutYou"
-          value={about.aboutYou}
-          onChange={(e) => handleInputChange(e, setAbout, about)}
-          className="mt-1 block w-full border border-orange-400 rounded-md p-2 focus:border-orange-600 focus:ring-orange-200"
-          rows={5}
-          placeholder="Describe yourself in at least 50 words"
-          required
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-orange-600">Daily Hours Contribution *</label>
-        <input
-          type="number"
-          name="hours"
-          value={about.hours}
-          onChange={(e) => handleInputChange(e, setAbout, about)}
-          className="mt-1 block w-full border border-orange-400 rounded-md p-2 focus:border-orange-600 focus:ring-orange-200"
-          placeholder="Hours per day"
-          required
-        />
-      </div>
-      <p className="text-red-600 text-sm">{error}</p>
-      <div className="flex justify-between gap-4">
-        <button
-          type="button"
-          onClick={() => setCurrentStep(1)}
-          className="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700"
-        >
-          Back
-        </button>
-        <button
-          type="submit"
-          className="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700"
-        >
-          Next
-        </button>
-      </div>
-    </form>
-  );
+  // Update the handleSubmit function
+  const handleSubmit = async () => {
+    let isValid = true;
+    const validationErrors = [];
 
-  const renderReferences = () => (
-    <form onSubmit={(e) => handleSubmit(e, 4, validateReferences)} className="space-y-4">
-      <div>
-        <h3 className="text-lg font-medium text-orange-600">Reference 1</h3>
-        <div className="space-y-2">
-          <div>
-            <label className="block text-sm font-medium text-orange-600">Name *</label>
-            <input
-              type="text"
-              name="name"
-              value={references.person1.name}
-              onChange={(e) => handleInputChange(e, setReferences, references, 'person1')}
-              className="mt-1 block w-full border border-orange-400 rounded-md p-2 focus:border-orange-600 focus:ring-orange-200"
-              placeholder="John Doe"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-orange-600">Phone *</label>
-            <input
-              type="number"
-              name="phone"
-              value={references.person1.phone}
-              onChange={(e) => handleInputChange(e, setReferences, references, 'person1')}
-              className="mt-1 block w-full border border-orange-400 rounded-md p-2 focus:border-orange-600 focus:ring-orange-200"
-              placeholder="9876543210"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-orange-600">Email *</label>
-            <input
-              type="email"
-              name="email"
-              value={references.person1.email}
-              onChange={(e) => handleInputChange(e, setReferences, references, 'person1')}
-              className="mt-1 block w-full border border-orange-400 rounded-md p-2 focus:border-orange-600 focus:ring-orange-200"
-              placeholder="example@domain.com"
-              required
-            />
-          </div>
-        </div>
-      </div>
-      <div>
-        <h3 className="text-lg font-medium text-orange-600">Reference 2</h3>
-        <div className="space-y-2">
-          <div>
-            <label className="block text-sm font-medium text-orange-600">Name *</label>
-            <input
-              type="text"
-              name="name"
-              value={references.person2.name}
-              onChange={(e) => handleInputChange(e, setReferences, references, 'person2')}
-              className="mt-1 block w-full border border-orange-400 rounded-md p-2 focus:border-orange-600 focus:ring-orange-200"
-              placeholder="Jane Doe"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-orange-600">Phone *</label>
-            <input
-              type="number"
-              name="phone"
-              value={references.person2.phone}
-              onChange={(e) => handleInputChange(e, setReferences, references, 'person2')}
-              className="mt-1 block w-full border border-orange-400 rounded-md p-2 focus:border-orange-600 focus:ring-orange-200"
-              placeholder="9876543210"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-orange-600">Email *</label>
-            <input
-              type="email"
-              name="email"
-              value={references.person2.email}
-              onChange={(e) => handleInputChange(e, setReferences, references, 'person2')}
-              className="mt-1 block w-full border border-orange-400 rounded-md p-2 focus:border-orange-600 focus:ring-orange-200"
-              placeholder="example@domain.com"
-              required
-            />
-          </div>
-        </div>
-      </div>
-      <p className="text-red-600 text-sm">{error}</p>
-      <div className="flex justify-between gap-4">
-        <button
-          type="button"
-          onClick={() => setCurrentStep(2)}
-          className="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700"
-        >
-          Back
-        </button>
-        <button
-          type="submit"
-          className="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700"
-        >
-          Next
-        </button>
-      </div>
-    </form>
-  );
+    // 1. Validate Personal Details
+    if (personalDetailsRef.current) {
+      if (!personalDetailsRef.current.validateForm()) {
+        validationErrors.push('Personal Details section is incomplete');
+        isValid = false;
+      }
+    }
 
-  const renderIdentityProof = () => (
-    <form onSubmit={(e) => handleSubmit(e, 5, validateIdentityProof)} className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium text-orange-600">Aadhar card ID Number *</label>
-        <input
-          type="text"
-          name="idNumber"
-          value={identityProof.idNumber}
-          onChange={(e) => handleInputChange(e, setIdentityProof, identityProof)}
-          className="mt-1 block w-full border border-orange-400 rounded-md p-2 focus:border-orange-600 focus:ring-orange-200"
-          placeholder="123456789012"
-          required
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-orange-600">Upload ID (JPEG/PNG, less than 100KB) *</label>
-        <input
-          type="file"
-          accept="image/jpeg,image/png"
-          onChange={handleFileChange}
-          className="mt-1 block w-full border border-orange-400 rounded-md p-2 focus:border-orange-600 focus:ring-orange-200"
-          required
-        />
-      </div>
-      <p className="text-red-600 text-sm">{error}</p>
-      <div className="flex justify-between gap-4">
-        <button
-          type="button"
-          onClick={() => setCurrentStep(3)}
-          className="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700"
-        >
-          Back
-        </button>
-        <button
-          type="submit"
-          disabled={loading}
-          className="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 disabled:opacity-50"
-        >
-          {loading ? 'Submitting...' : 'Submit'}
-        </button>
-      </div>
-    </form>
-  );
+    // 2. Validate Qualification
+    if (qualificationRef.current) {
+      if (!qualificationRef.current.validateForm()) {
+        validationErrors.push('Qualification section is incomplete');
+        isValid = false;
+      }
+    }
 
-  const renderSuccess = () => (
-    <div className="text-center">
-      <h2 className="text-2xl font-semibold text-orange-600">Thank You!</h2>
-      <p className="mt-4 text-gray-700">Your profile has been submitted successfully. We will get back to you soon.</p>
-    </div>
-  );
+    // 3. Validate About
+    if (aboutRef.current) {
+      if (!aboutRef.current.validateForm()) {
+        validationErrors.push('About section is incomplete');
+        isValid = false;
+      }
+    }
+
+    // 4. Validate References
+    if (referencesRef.current) {
+      if (!referencesRef.current.validateForm()) {
+        validationErrors.push('References section is incomplete');
+        isValid = false;
+      }
+    }
+
+    // 5. Validate Family Members
+    const familyMembers = formData.identification.familyMembers;
+    if (!familyMembers || familyMembers.length < 3) {
+      validationErrors.push('Please add at least 3 family members');
+      isValid = false;
+    } else {
+      // Validate first 3 family members thoroughly
+      for (let i = 0; i < 3; i++) {
+        const member = familyMembers[i];
+        if (!member.name || !member.relationship || !member.occupation || !member.age || member.dependent === undefined) {
+          validationErrors.push(`Family member ${i + 1} has incomplete information`);
+          isValid = false;
+        }
+      }
+    }
+
+    // 6. Validate Identification Documents
+    const identification = formData.identification;
+    if (!identification.aadharNumber || !identification.panNumber || !identification.emergencyContact) {
+      validationErrors.push('Identification details are incomplete');
+      isValid = false;
+    }
+
+    // If validation failed, show errors and return
+    if (!isValid) {
+      // Show all validation errors in a single toast
+      toast.error(
+        <div>
+          <strong>Please fix the following errors:</strong>
+          <ul className="mt-2 list-disc pl-4">
+            {validationErrors.map((error, index) => (
+              <li key={index}>{error}</li>
+            ))}
+          </ul>
+        </div>,
+        {
+          position: "top-center",
+          autoClose: 5000,
+          style: {
+            background: '#FEE2E2',
+            color: '#991B1B',
+            padding: '16px',
+            borderRadius: '8px',
+            maxWidth: '400px'
+          },
+        }
+      );
+      return;
+    }
+
+    // If all validations pass, proceed with form submission
+    try {
+      setIsSubmitting(true);
+      const loadingToast = toast.loading('Submitting your application...', {
+        position: "top-center",
+      });
+
+      
+      const onboardingData: IOnboardingData = {
+        updatedDateTime: new Date().toISOString(),
+        personalDetails: {
+          fullName: formData.personalDetails.fullName,
+          email: formData.personalDetails.email,
+          role: 'applicant', // Default role for anonymous submissions
+          phone: formData.personalDetails.phoneNumber,
+          wtspNum: formData.personalDetails.whatsappNumber,
+          gender: formData.personalDetails.gender,
+          dob: formData.personalDetails.dateOfBirth,
+          applyFor: "hm",
+          currBuildingNo: formData.personalDetails.currentAddress.buildingFlat,
+          currStreet: formData.personalDetails.currentAddress.street,
+          currArea: formData.personalDetails.currentAddress.areaVillage,
+          currCity: formData.personalDetails.currentAddress.cityTownBlock,
+          currState: formData.personalDetails.currentAddress.state,
+          currPin: formData.personalDetails.currentAddress.pincode,
+          permBuildingNo: formData.personalDetails.permanentAddress.buildingFlat,
+          permStreet: formData.personalDetails.permanentAddress.street,
+          permArea: formData.personalDetails.permanentAddress.areaVillage,
+          permCity: formData.personalDetails.permanentAddress.cityTownBlock,
+          permState: formData.personalDetails.permanentAddress.state,
+          permPin: formData.personalDetails.permanentAddress.pincode,
+          languages: formData.personalDetails.languages,
+        },
+        qualification: {
+          highestQualification: formData.qualification.highestQualification,
+          workExperience: formData.qualification.workExperience.map(exp => ({
+            CompanyName: exp.company,
+            ExperienceYears: exp.experienceYears
+          }))
+        },
+        about: {
+          questions: [
+            {
+              question: "Tell about yourself",
+              answer: formData.about.tellAboutYourself
+            },
+            {
+              question: "Why do you want to join HR?",
+              answer: formData.about.whyJoinHR
+            },
+            {
+              question: "How will you contribute?",
+              answer: formData.about.howContribute
+            },
+            {
+              question: "How many hours can you contribute?",
+              answer: formData.about.hoursContribute
+            },
+        
+          ]
+        },
+        familyMembers: formData.identification.familyMembers.reduce((acc, member, index) => ({
+          ...acc,
+          [`member${index + 1}`]: {
+            name: member.name,
+            age: member.age,
+            relationship: member.relationship,
+            organization: member.occupation,
+            dependentOnYou: member.dependent ? "yes" : "no"
+          }
+        }), {}),
+        newIdentityProof: {
+          aadharFront: "https://media.istockphoto.com/id/517188688/photo/mountain-landscape.jpg" ,
+          aadharBack: "https://media.istockphoto.com/id/517188688/photo/mountain-landscape.jpg" ,
+          aadharNumber: formData.identification.aadharNumber,
+          panFront: "https://media.istockphoto.com/id/517188688/photo/mountain-landscape.jpg" ,
+          panBack: "https://media.istockphoto.com/id/517188688/photo/mountain-landscape.jpg" ,
+          panNumber: formData.identification.panNumber,
+          emergencyNumber: formData.identification.emergencyContact,
+          photo: "https://media.istockphoto.com/id/517188688/photo/mountain-landscape.jpg" 
+        },
+        references: formData.references.reduce((acc, ref, index) => ({
+          ...acc,
+          [`person${index + 1}`]: {
+            name: ref.name,
+            designation: ref.designation,
+            organization: ref.organization,
+            email: ref.email,
+            phone: ref.contactNumber,
+            connection: ref.howTheyKnow
+          }
+        }), {})
+      };
+
+      
+      console.log("Submitting onboarding data:", onboardingData);
+      await createUserOnboarding(null, onboardingData);
+
+      // Clear local storage after successful submission
+      localStorage.removeItem('multiStepFormData');
+      localStorage.removeItem('multiStepFormCurrentStep');
+
+      // Dismiss loading toast and show success
+      toast.dismiss(loadingToast);
+      toast.success('✅ Application submitted successfully!', {
+        position: "top-center",
+        autoClose: 1000, // Reduced to 1 second
+        style: {
+          background: '#10B981',
+          color: 'white',
+          padding: '16px',
+          borderRadius: '8px',
+        },
+      });
+
+      // Call the onFormSubmit callback if provided
+      if (onFormSubmit) {
+        onFormSubmit();
+      }
+
+      // Use window.location for full page reload and navigation
+      setTimeout(() => {
+        window.location.href = '/dashboard';
+      }, 1500); // Wait for 1.5 seconds to show the success message
+
+    } catch (error) {
+      console.error('Failed to submit form:', error);
+      toast.error('❌ Failed to submit application. Please try again.', {
+        position: "top-center",
+      autoClose: 5000,
+        style: {
+          background: '#EF4444',
+          color: 'white',
+          padding: '16px',
+          borderRadius: '8px',
+        },
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const currentStepData = steps.find(step => step.id === currentStep);
+  const StepComponent = currentStepData?.component;
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-2xl w-full bg-white shadow-md rounded-lg p-8">
-        <h1 className="text-3xl font-bold text-center text-orange-600 mb-6">
-          Apply as a Recruiter
-        </h1>
-        <div className="mb-8">
-          <Stepper
-            steps={steps}
-            activeStep={currentStep}
-            activeColor="#f97316"
-            completeColor="#f97316"
-            activeTitleColor="#f97316"
-            completeTitleColor="#f97316"
-            circleFontSize={16}
-            titleFontSize={14}
-            size={32}
-            completeBarColor="#f97316"
-          />
-        </div>
-        <div>
-          {currentStep === 0 && renderPersonalDetails()}
-          {currentStep === 1 && renderQualifications()}
-          {currentStep === 2 && renderAbout()}
-          {currentStep === 3 && renderReferences()}
-          {currentStep === 4 && renderIdentityProof()}
-          {currentStep === 5 && renderSuccess()}
-        </div>
+    <div className={isCompact ? "w-full" : "min-h-screen bg-gray-50 py-16 px-2 sm:px-4 lg:px-10"}>
+      <div className="w-full max-w-none mx-auto">
+        <StepIndicator currentStep={currentStep} totalSteps={steps.length} steps={steps} />
+        
+        <Card className="shadow-lg border border-gray-200 w-full bg-white">
+          <CardContent className="p-4 sm:p-6 lg:p-8">
+            <div className="mb-6">
+              <h2 className="text-xl sm:text-2xl font-bold text-orange-600 mb-2">
+                {currentStepData?.title}
+              </h2>
+              {/* <p className="text-sm text-red-500 mb-4">
+                <span className="text-red-500">(*)</span> Indicates required field
+              </p> */}
+            </div>
+
+            <div className="w-full">
+              {currentStep === 1 ? (
+                <PersonalDetails
+                  ref={personalDetailsRef}
+                  formData={formData}
+                  updateFormData={updateFormData}
+                />
+              ) : currentStep === 2 ? (
+                <Qualification
+                  ref={qualificationRef}
+                  formData={formData}
+                  updateFormData={updateFormData}
+                />
+              ) : currentStep === 3 ? (
+                <About
+                  ref={aboutRef}
+                  formData={formData}
+                  updateFormData={updateFormData}
+                />
+              ) : currentStep === 4 ? (
+                <References
+                  ref={referencesRef}
+                  formData={formData}
+                  updateFormData={updateFormData}
+                />
+              ) : StepComponent ? (
+                <StepComponent
+                  formData={formData}
+                  updateFormData={updateFormData}
+                />
+              ) : null}
+            </div>
+
+            <div className="flex flex-col sm:flex-row justify-between gap-4 mt-8 pt-6 border-t border-gray-200">
+              <Button
+                variant="outline"
+                onClick={prevStep}
+                disabled={currentStep === 1}
+                className="px-6 py-2 w-full sm:w-auto order-2 sm:order-1 border-gray-300 text-gray-700 hover:bg-gray-100"
+              >
+                Back
+              </Button>
+
+              {currentStep === steps.length ? (
+                <Button
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
+                  className="px-6 py-2 bg-orange-600 hover:bg-orange-700 text-white w-full sm:w-auto order-1 sm:order-2 relative"
+                >
+                  {isSubmitting ? (
+                    <div className="flex items-center justify-center">
+                      <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                      <span>Submitting...</span>
+                    </div>
+                  ) : (
+                    'Submit Application'
+                  )}
+                </Button>
+              ) : (
+                <Button
+                  onClick={nextStep}
+                  className="px-6 py-2 bg-orange-600 hover:bg-orange-700 text-white w-full sm:w-auto order-1 sm:order-2"
+                >
+                  Save & Next
+                </Button>
+              )}
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
