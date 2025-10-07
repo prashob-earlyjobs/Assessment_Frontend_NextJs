@@ -9,7 +9,7 @@ import { About, AboutRef } from '../steps/About';
 import { References, ReferencesRef } from '../steps/References';
 import { Identification } from '../steps/Identification';
 import { createUserOnboarding } from '../services/usersapi';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 
 import { Loader2 } from 'lucide-react';
 
@@ -295,6 +295,8 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ onFormSubmit, isCompact =
     
     if (isValid && currentStep < steps.length) {
       setCurrentStep(currentStep + 1);
+      // Scroll to top after successful step change
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (!isValid) {
       // Scroll to top to show validation errors
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -304,6 +306,8 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ onFormSubmit, isCompact =
   const prevStep = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
+      // Scroll to top after step change
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -382,8 +386,6 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ onFormSubmit, isCompact =
           </ul>
         </div>,
         {
-          position: "top-center",
-          autoClose: 5000,
           style: {
             background: '#FEE2E2',
             color: '#991B1B',
@@ -399,10 +401,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ onFormSubmit, isCompact =
     // If all validations pass, proceed with form submission
     try {
       setIsSubmitting(true);
-      const loadingToast = toast.loading('Submitting your application...', {
-        position: "top-center",
-      });
-
+      const loadingToast = toast.loading('Submitting your application...');
       
       const onboardingData: IOnboardingData = {
         updatedDateTime: new Date().toISOString(),
@@ -501,8 +500,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ onFormSubmit, isCompact =
       // Dismiss loading toast and show success
       toast.dismiss(loadingToast);
       toast.success('✅ Application submitted successfully!', {
-        position: "top-center",
-        autoClose: 1000, // Reduced to 1 second
+        duration: 1500,
         style: {
           background: '#10B981',
           color: 'white',
@@ -518,14 +516,14 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ onFormSubmit, isCompact =
 
       // Use window.location for full page reload and navigation
       setTimeout(() => {
-        window.location.href = '/dashboard';
+        window.location.href = '/recruiter';
       }, 1500); // Wait for 1.5 seconds to show the success message
 
     } catch (error) {
       console.error('Failed to submit form:', error);
+      
       toast.error('❌ Failed to submit application. Please try again.', {
-        position: "top-center",
-      autoClose: 5000,
+        duration: 5000,
         style: {
           background: '#EF4444',
           color: 'white',

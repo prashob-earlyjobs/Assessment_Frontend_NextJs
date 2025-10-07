@@ -28,6 +28,7 @@ export const Qualification = forwardRef<QualificationRef, QualificationProps>(({
   updateFormData,
 }, ref) => {
   const [errors, setErrors] = useState<ValidationErrors>({});
+  const [previewExp, setPreviewExp] = useState({ company: '', experienceYears: '' });
 
   // Validation functions
   const validateRequired = (value: string, fieldName: string): string | undefined => {
@@ -85,7 +86,15 @@ export const Qualification = forwardRef<QualificationRef, QualificationProps>(({
   };
 
   const addWorkExperience = () => {
-    const newWorkExp = [...formData.qualification.workExperience, { company: '', experienceYears: '' }];
+    let newEntry = { company: '', experienceYears: '' };
+    if (previewExp.company.trim() || previewExp.experienceYears.trim()) {
+      newEntry = { 
+        company: previewExp.company, 
+        experienceYears: previewExp.experienceYears 
+      };
+      setPreviewExp({ company: '', experienceYears: '' }); // Reset preview
+    }
+    const newWorkExp = [...formData.qualification.workExperience, newEntry];
     updateQualification('workExperience', newWorkExp);
   };
 
@@ -168,8 +177,6 @@ export const Qualification = forwardRef<QualificationRef, QualificationProps>(({
           </Button>
         </div>
 
-     
-
         <div className="space-y-4">
           {formData.qualification.workExperience.map((exp, index) => (
             <div key={index} className="border border-gray-200 rounded-lg p-4 space-y-3">
@@ -242,6 +249,8 @@ export const Qualification = forwardRef<QualificationRef, QualificationProps>(({
                 <Input
                   id="newCompany"
                   placeholder="Ex. Microsoft"
+                  value={previewExp.company}
+                  onChange={(e) => setPreviewExp({ ...previewExp, company: e.target.value })}
                   className="mt-1 border focus:ring-form-accent focus:border-form-accent"
                 />
               </div>
@@ -255,13 +264,18 @@ export const Qualification = forwardRef<QualificationRef, QualificationProps>(({
                   type="number"
                   min="0"
                   max="50"
+                  value={previewExp.experienceYears}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, ''); // Only allow numbers
+                    setPreviewExp({ ...previewExp, experienceYears: value });
+                  }}
                   className="mt-1 border focus:ring-form-accent focus:border-form-accent"
                 />
               </div>
             </div>
           
             <p className="text-xs text-gray-500">
-              Fill in both company name and years of experience, then click "Add Experience"
+              Fill in both company name and years of experience, then click "Add" above.
             </p>
           </div>
         )}
