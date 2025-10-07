@@ -1,10 +1,7 @@
-import axios from "axios";
-import axiosInstance from "./apiinterseptor"; // Corrected import path
-import { toast } from "react-toastify"; // Make sure this import exists
-import Cookies from "js-cookie"; // Add this import if not already present
+import { toast } from "react-toastify";
+import Cookies from "js-cookie";
 
-
-// Update the interfaces to match the required format
+// Interfaces remain unchanged
 interface IPersonalDetails {
   fullName: string;
   email: string;
@@ -90,10 +87,15 @@ interface IOnboardingData {
   };
 }
 
-// Update the createUserOnboarding function
+interface FileUploadResponse {
+  success: boolean;
+  fileUrl: string;
+  message: string;
+}
+
+// Create user onboarding function (unchanged)
 export const createUserOnboarding = async (userId: string, onboardingData: IOnboardingData) => {
   try {
-    // Add current timestamp if not provided
     const dataWithTimestamp = {
       ...onboardingData,
       updatedDateTime: onboardingData.updatedDateTime || new Date().toISOString()
@@ -103,7 +105,6 @@ export const createUserOnboarding = async (userId: string, onboardingData: IOnbo
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        
       },
       body: JSON.stringify(dataWithTimestamp)
     });
@@ -125,7 +126,6 @@ export const createUserOnboarding = async (userId: string, onboardingData: IOnbo
   } catch (error: any) {
     console.error("Failed to create onboarding:", error.message);
     
-    // Handle specific error cases (note: fetch doesn't throw on HTTP errors, so we handle above)
     if (error.message.includes('409')) {
       toast.error("Onboarding already exists for this user");
     } else if (error.message.includes('403')) {
@@ -140,59 +140,63 @@ export const createUserOnboarding = async (userId: string, onboardingData: IOnbo
   }
 };
 
-// Generate content using Gemini API
+// Generate content using Gemini API (converted to fetch)
 export const generateGeminiContent = async (prompt: string) => {
-    try {
-        const response = await axiosInstance.post('/ai/gemini', { prompt });
-        console.log("Gemini API response:", response.data);
-        return response.data;
-    } catch (error: any) {
-        console.error("Failed to generate content:", error.response?.data?.message);
-        toast.error(`Failed to generate content: ${error.response?.data?.message || 'Unknown error'}`);
-        throw error;
+  try {
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_2_0;
+    const response = await fetch(`${backendUrl}/ai/gemini`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ prompt })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || `HTTP ${response.status}: Failed to generate content`);
     }
+
+    const data = await response.json();
+    console.log("Gemini API response:", data);
+    return data;
+
+  } catch (error: any) {
+    console.error("Failed to generate content:", error.message);
+    toast.error(`Failed to generate content: ${error.message || 'Unknown error'}`);
+    throw error;
+  }
 };
 
-
+// Generate content from resume using Gemini API (converted to fetch)
 export const generateGeminiContentFromResume = async (file: File) => {
   try {
     const formData = new FormData();
     formData.append("resume", file);
 
-    const response = await axiosInstance.post("/ai/gemini/resume", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_2_0;
+    const response = await fetch(`${backendUrl}/ai/gemini/resume`, {
+      method: 'POST',
+      body: formData
     });
 
-    console.log("Gemini API response:", response.data);
-    return response.data;
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || `HTTP ${response.status}: Failed to generate content`);
+    }
+
+    const data = await response.json();
+    console.log("Gemini API response:", data);
+    return data;
+
   } catch (error: any) {
-    console.error("Failed to generate content:", error.response?.data?.message);
-    toast.error(
-      `Failed to generate content: ${
-        error.response?.data?.message || "Unknown error"
-      }`
-    );
+    console.error("Failed to generate content:", error.message);
+    toast.error(`Failed to generate content: ${error.message || 'Unknown error'}`);
     throw error;
   }
 };
 
-
-/**
- * Interface for file upload response
- */
-interface FileUploadResponse {
-  success: boolean;
-  fileUrl: string;
-  message: string;
-}
-
-/**
- * Upload a file to the server
- * @param file - The file to upload (must be image, PDF, DOC, or DOCX)
- * @returns Promise with the upload response
- */
+// Upload file to server (converted to fetch)
 export const uploadFile = async (
   file: File, 
   folderPath?: string
@@ -225,27 +229,31 @@ export const uploadFile = async (
     
     // Add folder path if provided
     if (folderPath) {
-      // Get current date in YYYY/MM/DD format
       const today = new Date();
       formData.append('folderPath', folderPath);
     }
 
     // Make the upload request
-    const response = await axiosInstance.post('/uploads/file', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_2_0;
+    const response = await fetch(`${backendUrl}/uploads/file`, {
+      method: 'POST',
+      body: formData
     });
 
-    console.log('File uploaded successfully:', response.data);
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || `HTTP ${response.status}: Failed to upload file`);
+    }
+
+    const data = await response.json();
+    console.log('File uploaded successfully:', data);
     toast.success('File uploaded successfully');
 
-    return response.data.data;
+    return data.data;
 
   } catch (error: any) {
-    console.error('Failed to upload file:', error.response?.data?.message || error.message);
-    toast.error(`Failed to upload file: ${error.response?.data?.message || error.message}`);
+    console.error('Failed to upload file:', error.message);
+    toast.error(`Failed to upload file: ${error.message || 'Unknown error'}`);
     throw error;
   }
 };
-
