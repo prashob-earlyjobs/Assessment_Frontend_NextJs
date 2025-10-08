@@ -1,6 +1,13 @@
 import { Metadata } from "next";
 import CandidateProfileClient from "../../../components/pages/CandidateProfileClient";
 
+// Define the props type for the Page component
+type PageProps = {
+  params: {
+    id: string;
+  };
+};
+
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   try {
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -101,6 +108,6 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   };
 }
 
-export default function Page({ params }: { params: { id: string } }) {
+export default function Page({ params }: PageProps) {
   return <CandidateProfileClient id={params.id} />;
 }
