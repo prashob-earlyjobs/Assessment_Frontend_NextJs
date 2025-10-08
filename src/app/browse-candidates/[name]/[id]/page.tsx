@@ -1,12 +1,13 @@
 import { Metadata } from "next";
 import CandidateProfileClient from "../../../components/pages/CandidateProfileClient";
 
-// Define the props type for the Page component, matching the dynamic route
+// Define the props type for the Page component, matching the dynamic route [name]/[id]
 type PageProps = {
   params: {
     id: string;
-    name: string; // Add 'name' to match the dynamic route [name]/[id]
+    name: string;
   };
+  searchParams?: { [key: string]: string | string[] | undefined };
 };
 
 export async function generateMetadata({ params }: { params: { id: string; name: string } }): Promise<Metadata> {
