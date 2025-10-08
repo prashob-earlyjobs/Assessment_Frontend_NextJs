@@ -16,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
       url: `${process.env.NEXT_PUBLIC_BASE_URL}/talent-pool`,
       images: [
         {
-          url: "/images/og-image.jpg",
+          url: `/images/og-talent.jpg`,
           width: 1200,
           height: 627,
           alt: "EarlyJobs Talent Pool",

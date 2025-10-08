@@ -34,7 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
           url: `${process.env.NEXT_PUBLIC_BASE_URL}/browse-candidates`,
           images: [
             {
-              url: "/assets/og-image-candidates.png",
+              url: "/images/og-candidates.jpg",
               width: 1200,
               height: 627,
               alt: "Browse Candidates on EarlyJobs",
@@ -45,7 +45,7 @@ export async function generateMetadata(): Promise<Metadata> {
           card: "summary_large_image",
           title,
           description,
-          images: ["/assets/og-image-candidates.png"],
+          images: ["/images/og-candidates.jpg"],
         },
       };
     } else {

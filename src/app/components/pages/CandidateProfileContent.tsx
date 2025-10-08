@@ -1,15 +1,14 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import { Button } from "../ui/button";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { toast } from "sonner";
 import { X } from "lucide-react";
 import InterestedCandidateForm from "../InterestedCandidateForm";
-import Footer from "./footer";
-import Navbar from "./navbar";
+import Footer from "../pages/footer";
+import Navbar from "../pages/navbar";
 
-export default function CandidateProfileClient({ id }: { id: string }) {
+const CandidateProfileContent = () => {
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -21,6 +20,7 @@ export default function CandidateProfileClient({ id }: { id: string }) {
   const [assessmentTitles, setAssessmentTitles] = useState({});
   const assessmentsPerPage = 3;
   const router = useRouter();
+  const { id } = useParams();
 
   useEffect(() => {
     const fetchCandidate = async () => {
@@ -94,7 +94,6 @@ export default function CandidateProfileClient({ id }: { id: string }) {
           const results = [];
           const recordings = [];
 
-          // Process assessments after titles are fetched
           for (const assessment of selectedCandidate.assessmentsPaid) {
             const interviewId = assessment.interviewId;
             if (!interviewId) {
@@ -102,7 +101,7 @@ export default function CandidateProfileClient({ id }: { id: string }) {
               continue;
             }
 
-            const assessmentTitle = titles[assessment.assessmentId] || "Unknown Assessment";
+            const assessmentTitle = titles[assessment.assessmentId] || 'Unknown Assessment';
             console.log(`Processing assessment ${assessment.assessmentId} with title: ${assessmentTitle}`);
 
             // Fetch assessment results
@@ -121,9 +120,7 @@ export default function CandidateProfileClient({ id }: { id: string }) {
               const resultText = await resultResponse.text();
               const resultData = resultText ? JSON.parse(resultText) : {};
               if (resultData.success && resultData.data?.report?.reportSkills) {
-                const overallScore =
-                  resultData.data.report.reportSkills.reduce((sum, skill) => sum + (skill.score || 0), 0) /
-                    resultData.data.report.reportSkills.length || "N/A";
+                const overallScore = resultData.data.report.reportSkills.reduce((sum, skill) => sum + (skill.score || 0), 0) / resultData.data.report.reportSkills.length || 'N/A';
                 results.push({
                   interviewId,
                   assessmentId: assessment.assessmentId,
@@ -131,9 +128,9 @@ export default function CandidateProfileClient({ id }: { id: string }) {
                   overallScore,
                   skills: resultData.data.report.reportSkills.map((skill) => ({
                     assessmentTitle: skill.skill || assessmentTitle,
-                    score: skill.score != null ? skill.score : "N/A",
-                    status: resultData.data.status === 2 ? "Completed" : "In Progress",
-                    timeConsumed: skill.timeConsumed != null ? skill.timeConsumed : "N/A",
+                    score: skill.score != null ? skill.score : 'N/A',
+                    status: resultData.data.status === 2 ? 'Completed' : 'In Progress',
+                    timeConsumed: skill.timeConsumed != null ? skill.timeConsumed : 'N/A',
                     strengths: skill.summary?.strengths || [],
                     weaknesses: skill.summary?.weakness || [],
                   })),
@@ -163,7 +160,7 @@ export default function CandidateProfileClient({ id }: { id: string }) {
                   assessmentIdVelox: assessment.assessmentIdVelox,
                   assessmentTitle,
                   url: recordingData.data,
-                  type: "video",
+                  type: 'video',
                 });
               }
             } catch (err) {
@@ -175,7 +172,7 @@ export default function CandidateProfileClient({ id }: { id: string }) {
           setRecording(recordings);
         } catch (err) {
           setError(err.message);
-          console.error("Fetch candidate data error:", err);
+          console.error('Fetch candidate data error:', err);
           toast.error(err.message || "Failed to load candidate data.");
         } finally {
           setLoading(false);
@@ -190,26 +187,26 @@ export default function CandidateProfileClient({ id }: { id: string }) {
 
   const getInitials = (name) => {
     return name
-      ?.split(" ")
+      .split(" ")
       .map((word) => word.charAt(0))
       .join("")
       .toUpperCase()
-      .slice(0, 2) || "NA";
+      .slice(0, 2);
   };
 
   const formatTime = (seconds) => {
-    if (seconds == null || isNaN(seconds)) return "0:00";
+    if (seconds == null || isNaN(seconds)) return '0:00';
     const minutes = Math.floor(Number(seconds) / 60);
     const secs = Math.floor(Number(seconds) % 60);
-    return `${minutes}:${secs.toString().padStart(2, "0")}`;
+    return `${minutes}:${secs.toString().padStart(2, '0')}`;
   };
 
   const getScoreBackgroundColor = (score) => {
-    if (score === "N/A") return "bg-gray-200";
+    if (score === 'N/A') return 'bg-gray-200';
     const numericScore = Number(score);
-    if (numericScore < 2) return "bg-red-500";
-    if (numericScore <= 6) return "bg-yellow-500";
-    return "bg-green-500";
+    if (numericScore < 2) return 'bg-red-500';
+    if (numericScore <= 6) return 'bg-yellow-500';
+    return 'bg-green-500';
   };
 
   const indexOfLastAssessment = currentPage * assessmentsPerPage;
@@ -223,7 +220,7 @@ export default function CandidateProfileClient({ id }: { id: string }) {
     <>
       <Navbar />
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-orange-50 to-white">
-        <div className="max-w-7xl mx-auto py-15 px-6">
+        <div className="max-w-7xl mx-auto py-15 px-4 sm:px-6 lg:px-8">
           {loading ? (
             <div className="flex items-center justify-center h-full">
               <div className="flex flex-col items-center">
@@ -239,7 +236,7 @@ export default function CandidateProfileClient({ id }: { id: string }) {
             selectedCandidate && (
               <>
                 <div className="mb-6">
-                  <div className="flex items-start gap-4">
+                  <div className="flex flex-col sm:flex-row items-start gap-4">
                     <div className="relative">
                       <div className="h-16 w-16 rounded-full bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center text-white font-semibold text-lg ring-2 ring-orange-100">
                         {selectedCandidate.avatar ? (
@@ -254,11 +251,11 @@ export default function CandidateProfileClient({ id }: { id: string }) {
                       </div>
                     </div>
                     <div className="flex-1">
-                      <div className="flex justify-between items-center mb-2">
+                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2">
                         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">{selectedCandidate.name}'s Profile Details</h2>
                         <button
                           onClick={() => router.push("/browse-candidates")}
-                          className="text-gray-600 hover:text-orange-600"
+                          className="text-gray-600 hover:text-orange-600 mt-2 sm:mt-0"
                         >
                           <X size={28} />
                         </button>
@@ -270,10 +267,10 @@ export default function CandidateProfileClient({ id }: { id: string }) {
                       </p>
                     </div>
                   </div>
-                  <p className="text-gray-600 mb-4">If your company is interested in selecting this candidate based on their skills and performance, please proceed to express interest.</p>
+                  <p className="text-gray-600 mb-4 text-sm sm:text-base">If your company is interested in selecting this candidate based on their skills and performance, please proceed to express interest.</p>
                   <Button
                     onClick={() => setIsInterestDialogOpen(true)}
-                    className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-md"
+                    className="w-full sm:w-auto bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-md text-base sm:text-lg"
                   >
                     Express Interest
                   </Button>
@@ -284,7 +281,7 @@ export default function CandidateProfileClient({ id }: { id: string }) {
                       <button
                         key={tab}
                         onClick={() => setActiveTab(tab)}
-                        className={`px-4 py-2 sm:px-6 sm:py-3 font-medium text-base sm:text-lg ${
+                        className={`px-4 py-2 sm:px-6 sm:py-3 font-medium text-sm sm:text-base ${
                           activeTab === tab
                             ? "text-orange-600 border-b-2 border-orange-600"
                             : "text-gray-500 hover:text-gray-700"
@@ -308,7 +305,7 @@ export default function CandidateProfileClient({ id }: { id: string }) {
                                   key={result.interviewId}
                                   className={`text-sm font-semibold text-white px-4 py-2 rounded-full ${getScoreBackgroundColor(result.overallScore)}`}
                                 >
-                                  {result.assessmentTitle}: {result.overallScore === "N/A" ? "N/A" : `${result.overallScore.toFixed(1)}/10`}
+                                  {result.assessmentTitle}: {result.overallScore === 'N/A' ? 'N/A' : `${result.overallScore.toFixed(1)}/10`}
                                 </div>
                               ))}
                             </div>
@@ -330,7 +327,7 @@ export default function CandidateProfileClient({ id }: { id: string }) {
                                       <div className="mt-2">
                                         <strong>Scores:</strong>
                                         <ul className="list-disc pl-6 mt-1">
-                                          <li>{skill.score === "N/A" ? "N/A" : `${skill.score}/10`}</li>
+                                          <li>{skill.score === 'N/A' ? 'N/A' : `${skill.score}/10`}</li>
                                         </ul>
                                       </div>
                                       {skill.strengths.length > 0 && (
@@ -364,7 +361,7 @@ export default function CandidateProfileClient({ id }: { id: string }) {
                               <Button
                                 key={page}
                                 onClick={() => paginate(page)}
-                                className={`mx-1 px-3 py-1 ${currentPage === page ? "bg-orange-600 text-white" : "bg-gray-200 text-gray-700"} rounded`}
+                                className={`mx-1 px-3 py-1 ${currentPage === page ? 'bg-orange-600 text-white' : 'bg-gray-200 text-gray-700'} rounded text-sm sm:text-base`}
                               >
                                 {page}
                               </Button>
@@ -372,7 +369,7 @@ export default function CandidateProfileClient({ id }: { id: string }) {
                           </div>
                         </div>
                       ) : (
-                        <p className="text-gray-600 text-base">Candidate yet to finish his assignment. We will provide you after completion</p>
+                        <p className="text-gray-600 text-sm sm:text-base">Candidate yet to finish his assignment. We will provide you after completion</p>
                       )
                     )}
                     {activeTab === "recording" && (
@@ -389,13 +386,13 @@ export default function CandidateProfileClient({ id }: { id: string }) {
                                   Your browser does not support the video tag.
                                 </video>
                               ) : (
-                                <p className="text-gray-600 text-base">Recording format not supported or no URL provided.</p>
+                                <p className="text-gray-600 text-sm sm:text-base">Recording format not supported or no URL provided.</p>
                               )}
                             </div>
                           ))}
                         </div>
                       ) : (
-                        <p className="text-gray-600 text-base">No recordings available.</p>
+                        <p className="text-gray-600 text-sm sm:text-base">No recordings available.</p>
                       )
                     )}
                     {activeTab === "certificates" && (
@@ -404,24 +401,15 @@ export default function CandidateProfileClient({ id }: { id: string }) {
                           <div className="group w-full overflow-hidden rounded-2xl border-0 bg-gradient-to-br from-white to-orange-50 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                             <div className="p-6 flex flex-col items-center">
                               <div className="bg-gray-100 border border-gray-300 p-4 rounded-md mb-4 w-full text-center">
-                                <h3 className="text-lg font-semibold text-gray-800 truncate">{`Certificate for ${assessmentTitles[selectedCandidate.assessmentsPaid[0].assessmentId]}`}</h3>
+                                <h3 className="text-lg font-semibold text-gray-800 truncate">{`Certificate for ${assessmentTitles[selectedCandidate.assessmentsPaid[0].assessmentId] || 'Unknown Assessment'}`}</h3>
                               </div>
                               <div className="w-full h-[400px] bg-white border border-gray-300 rounded-md overflow-hidden">
                                 <iframe
                                   src={`https://earlyjobs-assessment-1.s3.ap-south-1.amazonaws.com/${selectedCandidate.assessmentsPaid[0].interviewId}/EJ-CERT-2025-${selectedCandidate.assessmentsPaid[0].interviewId.slice(0, 8)}.pdf`}
-                                  title={`Certificate for ${assessmentTitles[selectedCandidate.assessmentsPaid[0].assessmentId] || "Unknown Assessment"}`}
+                                  title={`Certificate for ${assessmentTitles[selectedCandidate.assessmentsPaid[0].assessmentId] || 'Unknown Assessment'}`}
                                   className="w-full h-full border-0"
                                 >
-                                  <p>
-                                    Your browser does not support PDFs.{" "}
-                                    <a
-                                      href={`https://earlyjobs-assessment-1.s3.ap-south-1.amazonaws.com/${selectedCandidate.assessmentsPaid[0].interviewId}/EJ-CERT-2025-${selectedCandidate.assessmentsPaid[0].interviewId.slice(0, 8)}.pdf`}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      Download PDF
-                                    </a>
-                                  </p>
+                                  <p>Your browser does not support PDFs. <a href={`https://earlyjobs-assessment-1.s3.ap-south-1.amazonaws.com/${selectedCandidate.assessmentsPaid[0].interviewId}/EJ-CERT-2025-${selectedCandidate.assessmentsPaid[0].interviewId.slice(0, 8)}.pdf`} target="_blank" rel="noopener noreferrer">Download PDF</a></p>
                                 </iframe>
                               </div>
                             </div>
@@ -436,19 +424,21 @@ export default function CandidateProfileClient({ id }: { id: string }) {
                     )}
                   </div>
                 </div>
-                {isInterestDialogOpen && (
-                  <InterestedCandidateForm
-                    isOpen={isInterestDialogOpen}
-                    onClose={() => setIsInterestDialogOpen(false)}
-                    candidateName={selectedCandidate?.name || ""}
-                  />
-                )}
               </>
             )
+          )}
+          {isInterestDialogOpen && (
+            <InterestedCandidateForm
+              isOpen={isInterestDialogOpen}
+              onClose={() => setIsInterestDialogOpen(false)}
+              candidateName={selectedCandidate?.name || ""}
+            />
           )}
         </div>
       </div>
       <Footer />
     </>
   );
-}
+};
+
+export default CandidateProfileContent;

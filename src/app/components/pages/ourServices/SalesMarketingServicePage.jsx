@@ -125,36 +125,7 @@ const servicePageAccordianData = [
 
 const SalesMarketingServicePage = () => {
 
-    useEffect(() => {
-        window.scrollTo(0, 0)
-        document.title = metaConstants.salesRecruitment.title
-
-        const metaDescription = document.querySelector('meta[name="description"]');
-        const metaKeywords = document.querySelector('meta[name="keywords"]');
-        const metaSubject = document.querySelector('meta[name="subject"]');
-        if (metaDescription) {
-            metaDescription.setAttribute('content', metaConstants.salesRecruitment.description);
-        }
-        if (metaKeywords) {
-            metaKeywords.setAttribute('content', metaConstants.salesRecruitment.keywords);
-        }
-        if (metaSubject) {
-            metaSubject.setAttribute('content', metaConstants.salesRecruitment.description);
-        }
-
-        return () => {
-            document.title = metaConstants.title
-            if (metaDescription) {
-                metaDescription.setAttribute('content', metaConstants.description); // Replace with the original content if needed
-            }
-            if (metaKeywords) {
-                metaKeywords.setAttribute('content', metaConstants.keywords);
-            }
-            if (metaSubject) {
-                metaSubject.setAttribute('content', metaConstants.description);
-            }
-        };
-    }, [])
+  
 
     return (
         <div className="service-page-container">
