@@ -52,14 +52,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { jobtitle, jobid } = await params;
   
   try {
-    const response = await fetch(`https://apis.earlyjobs.in/api/public/jobs/${jobid}`, {
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_2_0;
+    const response = await fetch(`${backendUrl}/public/jobs/${jobid}`, {
       next: { revalidate: 3600 }
     });
     
     if (response.ok) {
       const data = await response.json();
       const jobData = data.data;
-      
+      console.log('Job Data for SEO:', jobData);
       if (jobData) {
         const title = `${jobData.title} Job at ${jobData.company_name} - EarlyJobs`;
         const description = `Apply for ${jobData.title} position at ${jobData.company_name}. ${jobData.employment_type || 'Full-time'} job with competitive salary. ${jobData.city || 'Remote'} location.`;
@@ -96,11 +97,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
   
   // Fallback metadata
-  return {
-    title: 'Job Details - EarlyJobs',
-    description: 'Find and apply for the best job opportunities on EarlyJobs.',
-    keywords: 'jobs, careers, employment, earlyjobs'
-  };
+  // return {
+  //   title: 'Job Details - EarlyJobs',
+  //   description: 'Find and apply for the best job opportunities on EarlyJobs.',
+  //   keywords: 'jobs, careers, employment, earlyjobs'
+  // };
 }
 
 export default async function JobDetails({ params }: PageProps) {

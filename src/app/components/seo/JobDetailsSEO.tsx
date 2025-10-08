@@ -15,17 +15,19 @@ interface JobDetailsSEOProps {
     company_logo_url?: string;
     created_at?: string;
     qualification?: string;
+    keywords?: string;
   } | null;
   currentUrl: string;
 }
 
 const JobDetailsSEO = ({ jobData, currentUrl }: JobDetailsSEOProps) => {
+  // Utility function to format salary
   const formatSalary = (minSalary?: string | number, maxSalary?: string | number, salaryMode?: string): string => {
     if (!minSalary && !maxSalary) return "Not Disclosed";
-    
+
     const min = typeof minSalary === 'string' ? parseFloat(minSalary) : minSalary;
     const max = typeof maxSalary === 'string' ? parseFloat(maxSalary) : maxSalary;
-    
+
     if (min && max) {
       const minLpa = salaryMode?.toLowerCase() === "monthly" ? (min * 12) / 100000 : min / 100000;
       const maxLpa = salaryMode?.toLowerCase() === "monthly" ? (max * 12) / 100000 : max / 100000;
@@ -37,10 +39,11 @@ const JobDetailsSEO = ({ jobData, currentUrl }: JobDetailsSEOProps) => {
       const maxLpa = salaryMode?.toLowerCase() === "monthly" ? (max * 12) / 100000 : max / 100000;
       return `${maxLpa >= 10 ? maxLpa.toFixed(0) : maxLpa.toFixed(1)} LPA`;
     }
-    
+
     return "Not Disclosed";
   };
 
+  // Utility function to format experience
   const formatExperience = (minExp?: number | string, maxExp?: number | string): string => {
     const toStr = (v?: number | string) =>
       v === undefined || v === null || v === "_" || v === "" ? null : String(v);
@@ -53,6 +56,7 @@ const JobDetailsSEO = ({ jobData, currentUrl }: JobDetailsSEOProps) => {
     return "Not specified";
   };
 
+  // Fallback metadata when jobData is null
   if (!jobData) {
     return (
       <Head>
@@ -65,34 +69,38 @@ const JobDetailsSEO = ({ jobData, currentUrl }: JobDetailsSEOProps) => {
         <meta property="og:description" content="Find and apply for the best job opportunities on EarlyJobs." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={currentUrl} />
-        <meta property="og:image" content="/images/earlyjobs-logo.png" />
+        <meta property="og:image" content="/assets/og-image.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Job Details - EarlyJobs" />
         <meta name="twitter:description" content="Find and apply for the best job opportunities on EarlyJobs." />
-        <meta name="twitter:image" content="/images/earlyjobs-logo.png" />
+        <meta name="twitter:image" content="/assets/og-image.png" />
         <link rel="canonical" href={currentUrl} />
       </Head>
     );
   }
 
+  // Metadata when jobData is available
+  const title = `${jobData.title} Job at ${jobData.company_name} - EarlyJobs`;
+  const description = `Apply for ${jobData.title} position at ${jobData.company_name}. ${jobData.employment_type || 'Full-time'} job with ${formatSalary(jobData.min_salary, jobData.max_salary, jobData.salary_mode)} salary. ${formatExperience(jobData.min_experience, jobData.max_experience)} experience required.`;
+
   return (
     <Head>
-      <title>{`${jobData.title} Job at ${jobData.company_name} - EarlyJobs`}</title>
-      <meta name="description" content={`Apply for ${jobData.title} position at ${jobData.company_name}. ${jobData.employment_type || 'Full-time'} job with ${formatSalary(jobData.min_salary, jobData.max_salary, jobData.salary_mode)} salary. ${formatExperience(jobData.min_experience, jobData.max_experience)} experience required.`} />
-      <meta name="keywords" content={`${jobData.title}, ${jobData.company_name}, job, career, employment, ${jobData.city || 'remote'}, ${jobData.employment_type || 'full-time'}`} />
+      <title>{title}</title>
+      <meta name="description" content={description} />
+      <meta name="keywords" content={`${jobData.title}, ${jobData.company_name}, job, career, employment, ${jobData.city || 'remote'}, ${jobData.employment_type || 'full-time'}, ${jobData.keywords || ''}`} />
       <meta name="author" content="EarlyJobs" />
       <meta name="robots" content="index, follow" />
-      <meta property="og:title" content={`${jobData.title} Job at ${jobData.company_name}`} />
-      <meta property="og:description" content={`Apply for ${jobData.title} position at ${jobData.company_name}. ${jobData.employment_type || 'Full-time'} job with ${formatSalary(jobData.min_salary, jobData.max_salary, jobData.salary_mode)} salary.`} />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
       <meta property="og:type" content="website" />
       <meta property="og:url" content={currentUrl} />
-      <meta property="og:image" content={jobData.company_logo_url || '/images/earlyjobs-logo.png'} />
+      <meta property="og:image" content={jobData.company_logo_url || '/assets/og-image.png'} />
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={`${jobData.title} Job at ${jobData.company_name}`} />
-      <meta name="twitter:description" content={`Apply for ${jobData.title} position at ${jobData.company_name}. ${jobData.employment_type || 'Full-time'} job with ${formatSalary(jobData.min_salary, jobData.max_salary, jobData.salary_mode)} salary.`} />
-      <meta name="twitter:image" content={jobData.company_logo_url || '/images/earlyjobs-logo.png'} />
+      <meta name="twitter:title" content={title} />
+      <meta name="twitter:description" content={description} />
+      <meta name="twitter:image" content={jobData.company_logo_url || '/assets/og-image.png'} />
       <link rel="canonical" href={currentUrl} />
-      
+
       {/* Structured Data for Job Posting */}
       <script
         type="application/ld+json"
@@ -100,41 +108,43 @@ const JobDetailsSEO = ({ jobData, currentUrl }: JobDetailsSEOProps) => {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "JobPosting",
-            "title": jobData.title,
-            "description": jobData.description?.replace(/<[^>]*>/g, '') || `Job opportunity for ${jobData.title} at ${jobData.company_name}`,
-            "hiringOrganization": {
+            title: jobData.title,
+            description: jobData.description?.replace(/<[^>]*>/g, '') || `Job opportunity for ${jobData.title} at ${jobData.company_name}`,
+            hiringOrganization: {
               "@type": "Organization",
-              "name": jobData.company_name,
-              "logo": jobData.company_logo_url
+              name: jobData.company_name,
+              logo: jobData.company_logo_url,
             },
-            "jobLocation": {
+            jobLocation: {
               "@type": "Place",
-              "address": {
+              address: {
                 "@type": "PostalAddress",
-                "addressLocality": jobData.city || "Remote",
-                "addressCountry": "IN"
-              }
+                addressLocality: jobData.city || "Remote",
+                addressCountry: "IN",
+              },
             },
-            "employmentType": jobData.employment_type || "FULL_TIME",
-            "baseSalary": {
+            employmentType: jobData.employment_type || "FULL_TIME",
+            baseSalary: {
               "@type": "MonetaryAmount",
-              "currency": "INR",
-              "value": {
+              currency: "INR",
+              value: {
                 "@type": "QuantitativeValue",
-                "minValue": jobData.min_salary || 0,
-                "maxValue": jobData.max_salary || 0,
-                "unitText": "YEAR"
-              }
+                minValue: jobData.min_salary || 0,
+                maxValue: jobData.max_salary || 0,
+                unitText: "YEAR",
+              },
             },
-            "qualifications": jobData.qualification || "Not specified",
-            "experienceRequirements": `${formatExperience(jobData.min_experience, jobData.max_experience)}`,
-            "datePosted": jobData.created_at,
-            "validThrough": jobData.created_at ? new Date(new Date(jobData.created_at).getTime() + (30 * 24 * 60 * 60 * 1000)).toISOString() : null,
-            "applicantLocationRequirements": {
+            qualifications: jobData.qualification || "Not specified",
+            experienceRequirements: formatExperience(jobData.min_experience, jobData.max_experience),
+            datePosted: jobData.created_at,
+            validThrough: jobData.created_at
+              ? new Date(new Date(jobData.created_at).getTime() + 30 * 24 * 60 * 60 * 1000).toISOString()
+              : null,
+            applicantLocationRequirements: {
               "@type": "Country",
-              "name": "India"
-            }
-          })
+              name: "India",
+            },
+          }),
         }}
       />
     </Head>
