@@ -1,14 +1,15 @@
 import { Metadata } from "next";
 import CandidateProfileClient from "../../../components/pages/CandidateProfileClient";
 
-// Define the props type for the Page component
+// Define the props type for the Page component, matching the dynamic route
 type PageProps = {
   params: {
     id: string;
+    name: string; // Add 'name' to match the dynamic route [name]/[id]
   };
 };
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { id: string; name: string } }): Promise<Metadata> {
   try {
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
     if (!backendUrl) {
@@ -56,7 +57,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
           title,
           description,
           type: "profile",
-          url: `${process.env.NEXT_PUBLIC_BASE_URL}/browse-candidates/${fullName.toLowerCase().replace(/\s+/g, "-")}/${params.id}`,
+          url: `${process.env.NEXT_PUBLIC_BASE_URL}/browse-candidates/${params.name}/${params.id}`,
           images: [
             {
               url: ogImage,
