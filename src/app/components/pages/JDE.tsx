@@ -4,6 +4,7 @@ import { FileText, Sparkles, ArrowRight, Zap } from "lucide-react";
 import Header from "./header";
 import { toast } from "sonner";
 import Link from "next/link";
+import Navbar from "./navbar";
 
 const JDE = () => {
     const [jobTitle, setJobTitle] = useState("");
@@ -148,6 +149,7 @@ const JDE = () => {
 
     return (
         <>
+            <Navbar />
             <Header />
             <main className="min-h-screen">
                 {/* JDE Form Section */}

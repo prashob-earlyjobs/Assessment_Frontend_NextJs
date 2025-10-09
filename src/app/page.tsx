@@ -89,7 +89,7 @@ const Index = () => {
       <Navbar />
       
       {/* Main Navigation Header */}
-      <header className="flex items-center justify-between px-4 py-4 sm:px-6 lg:px-16 xl:px-24 bg-white/90 backdrop-blur-md sticky top-0 z-40 shadow-sm border-b border-gray-100/50">
+      <header className="flex items-center justify-between px-4 py-4 sm:px-6 lg:px-16 xl:px-24 bg-white/90 backdrop-blur-md lg:sticky top-0 z-40 shadow-sm border-b border-gray-100/50">
         {/* Logo Section */}
         <div className="flex items-center space-x-3">
           <img
@@ -289,7 +289,7 @@ const Index = () => {
       )}
 
       {/* Mobile Sticky Navigation */}
-      <div className="md:hidden sticky top-0 z-30 px-4 pt-3 pb-2 bg-white/80 backdrop-blur-lg border-b border-gray-100">
+      <div className="md:hidden sticky top-0 z-100 px-4 pt-3 pb-2 bg-background  border-b border-gray-100">
         <ToggleGroup
           type="single"
           value={activeSection}

@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
       type: 'website',
       images: [
         {
-          url: '/assets/og-image.jpg', 
+          url: '/assets/og-image.png', 
           width: 1200,
           height: 630,
           alt: 'EarlyJobs.ai - College Placement Platform',
@@ -26,7 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: 'summary_large_image',
       title: 'EarlyJobs.ai - Transform College Placements',
       description: 'AI-powered platform connecting colleges with top recruiters for faster student placements.',
-        images: ['/assets/og-image.jpg'], // Replace with actual Twitter image path
+        images: ['/assets/og-image.png'], // Replace with actual Twitter image path
       },
   };
 }
