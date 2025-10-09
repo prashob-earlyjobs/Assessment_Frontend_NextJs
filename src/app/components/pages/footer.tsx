@@ -40,13 +40,13 @@ const Footer = () => {
                         </a>
                     </div>
                     <div className="flex items-center mt-5">
-                        <a href="https://www.facebook.com/earlyjobs.in" className="mr-5 no-underline" rel="noreferrer" target="_blank">
+                        <a href={process.env.NEXT_PUBLIC_FACEBOOK_URL} className="mr-5 no-underline" rel="noreferrer" target="_blank">
                             <FaFacebook className="text-white text-2xl" />
                         </a>
-                        <a href="https://www.instagram.com/earlyjobs.ai/" className="mr-5 no-underline" rel="noreferrer" target="_blank">
+                        <a href={process.env.NEXT_PUBLIC_INSTAGRAM_URL} className="mr-5 no-underline" rel="noreferrer" target="_blank">
                             <AiFillInstagram className="text-white text-3xl" />
                         </a>
-                        <a href="https://www.linkedin.com/company/earlyjobs/" className="mr-5 no-underline" rel="noreferrer" target="_blank">
+                        <a href={process.env.NEXT_PUBLIC_LINKEDIN_URL} className="mr-5 no-underline" rel="noreferrer" target="_blank">
                             <FaLinkedin className="text-white text-2xl" />
                         </a>
                     </div>

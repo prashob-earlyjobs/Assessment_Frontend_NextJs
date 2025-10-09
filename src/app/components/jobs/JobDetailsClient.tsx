@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { Checkbox } from "../ui/checkbox";
 import { X, Bookmark,Globe, Share2, Briefcase, IndianRupee, User, Clock, MapPin, Plus, Trash2, ChevronDown, Copy, Linkedin, Facebook, Instagram, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { FaLinkedin, FaInstagram } from "react-icons/fa";
 
 interface JobDetailsData {
   id: string;
@@ -453,7 +454,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
       <div className="max-w-7xl mx-auto p-4 sm:p-6">
         {/* Page Title */}
         <h1 className="text-xl sm:text-2xl font-bold text-earlyjobs-text mb-4 sm:mb-6">
-          {jobData.title} Job in {(jobData.location) } at {jobData.company_name}
+          {jobData.title} Job {jobData.city ? `in ${jobData.city}` : ''} at {jobData.company_name}
         </h1>
         
         <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
@@ -635,6 +636,31 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
           {/* Right Sidebar */}
           <div className="w-full lg:w-80">
             <div className="bg-white rounded-lg p-4 shadow-sm">
+              
+              <div className="flex space-x-3 mb-4">
+                {jobData.commission_type === "percentage" &&  <a
+                  href={process.env.NEXT_PUBLIC_LINKEDIN_URL} // LinkedIn URL
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 flex items-center justify-center gap-2 py-2 rounded text-white cursor-pointer 
+             bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 transition"
+                >
+                  <FaLinkedin className="w-5 h-5" />
+                  Join for More Updates
+                </a>}
+               
+
+                {jobData.commission_type === "fixed" && <a
+                  href={process.env.NEXT_PUBLIC_INSTAGRAM_URL} // Instagram URL
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 flex items-center justify-center gap-2 py-2 rounded text-white cursor-pointer 
+             bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 hover:from-yellow-500 hover:via-pink-600 hover:to-purple-700 transitionr"
+                >
+                  <FaInstagram className="w-5 h-5" />
+                  Join for More Updates
+                </a> }
+              </div>
               <h3 className="font-medium text-lg mb-4">Job Summary</h3>
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between">
