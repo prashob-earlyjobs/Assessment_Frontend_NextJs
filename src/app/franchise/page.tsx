@@ -1,38 +1,29 @@
-"use client"
-import React, { useEffect } from 'react';
-import Header from '../components/pages/header';
-import Footer from '../components/pages/footer';
-import Hero from "../components/Franchise/Hero";
-import ProblemSolution from "../components/Franchise/ProblemSolution";
-import WhyFranchise from "../components/Franchise/WhyFranchise";
-import EarningModel from "../components/Franchise/EarningModel";
-import SetupRequirements from "../components/Franchise/SetupRequirements";
-import FranchiseRoadmap from "../components/Franchise/FranchiseRoadmap";
-import Navbar from '../components/pages/navbar';
+import Franchise from "./franchise";
+import { Metadata } from "next";
+export async function generateMetadata(): Promise<Metadata> {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.earlyjobs.ai";
+  return {
+    title: "EarlyJobs Franchise - AI-Powered Recruitment",
+    description:
+      "Join EarlyJobs, India's leading hybrid AI + human recruiter platform. Discover franchise opportunities and revolutionize recruitment with us.",
+    keywords: ["EarlyJobs", "franchise", "recruitment", "AI recruitment", "job placement"],
+    openGraph: {
+      title: "EarlyJobs Franchise",
+      description:
+        "Join EarlyJobs, India's leading hybrid AI + human recruiter platform. Discover franchise opportunities and revolutionize recruitment with us.",
+      url: baseUrl + "/franchise",
+      images: [
+        {
+          url: `/images/og-franchise.jpg`,
+          width: 1200,
+          height: 627,
+          alt: "EarlyJobs Franchise",
+        },
+      ],
+    },
+  };
+}   
 
-import LimitedOffer from "../components/Franchise/LimitedOffer";
-import FAQ from "../components/Franchise/FAQ";
-
-const Franchise = () => {
-  
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
-  return (
-    <div className="min-h-screen bg-white">
-      <Navbar />
-      <Header />
-      <Hero />
-      <ProblemSolution />
-      <WhyFranchise />
-      <EarningModel />
-      <SetupRequirements />
-      <FranchiseRoadmap />
-      <LimitedOffer />
-      <FAQ />
-      <Footer />
-    </div>
-  );
-};
-
-export default Franchise;
+export default function Page() {
+  return <Franchise />;
+}
