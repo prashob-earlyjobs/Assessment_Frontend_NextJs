@@ -10,11 +10,11 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: 'EarlyJobs Chandigarh Franchise',
       description: 'Explore franchise opportunities with EarlyJobs in Chandigarh, combining AI technology and human expertise for exceptional recruitment results.',
-      url: `${baseUrl}/chandigarh-franchise`,
+      url: `${baseUrl}/franchise/chandigarh`,
       type: 'website',
       images: [
         {
-          url: `${baseUrl}/images/chandigarh-franchise-og.jpg`,
+          url: `${baseUrl}/images/og-franchise.jpg`,
           width: 1200,
           height: 630,
           alt: 'EarlyJobs Chandigarh Franchise',
@@ -25,10 +25,10 @@ export async function generateMetadata(): Promise<Metadata> {
       card: 'summary_large_image',
       title: 'EarlyJobs Chandigarh Franchise',
       description: 'Explore franchise opportunities with EarlyJobs in Chandigarh, combining AI technology and human expertise for exceptional recruitment results.',
-      images: [`${baseUrl}/images/chandigarh-franchise-og.jpg`],
+      images: [`/images/og-franchise.jpg`],
     },
     alternates: {
-      canonical: `${baseUrl}/chandigarh-franchise`,
+      canonical: `${baseUrl}/franchise/chandigarh`,
     },
   };
 }

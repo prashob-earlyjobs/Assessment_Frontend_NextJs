@@ -14,41 +14,54 @@ import FeaturedArticles from '../pages/articles';
 interface Company {
   name: string;
   logo_url: string;
+  _id: string;
+}
+
+interface Testimonial {
+
+  designation: string;
+  collegeName: string;
+  collegeLogo: string;
+  review: string;
 }
 
 const useScrollAnimation = () => {
-    const ref = useRef(null);
-    const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
 
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    setIsVisible(true);
-                    observer.unobserve(entry.target);
-                }
-            },
-            { threshold: 0.1 }
-        );
-
-        if (ref.current) {
-            observer.observe(ref.current);
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(entry.target);
         }
+      },
+      { threshold: 0.1 }
+    );
 
-        return () => {
-            if (ref.current) {
-                observer.unobserve(ref.current);
-            }
-        };
-    }, []);
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
 
-    return { ref, isVisible };
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, []);
+
+  return { ref, isVisible };
 };
 
 const HomeContent = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLoadingCompanies, setIsLoadingCompanies] = useState(true);
+  const [companies, setCompanies] = useState<Company[]>([]);
   const router = useRouter();
+
+  const backendApiUrl = process.env.NEXT_PUBLIC_BACKEND_URL_2_0;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -57,6 +70,61 @@ const HomeContent = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    const fetchCompanies = async () => {
+      setIsLoadingCompanies(true);
+      try {
+        const res = await fetch(`${backendApiUrl}/public/companies`);
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        const data = await res.json();
+
+        // Validate and filter companies
+        const fetchedCompanies: Company[] = Array.isArray(data)
+          ? data
+              .filter((company: any) => 
+                company._id && 
+                company.name && 
+                typeof company.name === 'string' && 
+                /^[a-zA-Z0-9\s&.,()-]{3,}$/.test(company.name) // Filter out gibberish names
+              )
+              .map((company: any) => ({
+                _id: company._id,
+                name: company.name,
+                logo_url: company.logo_url && company.logo_url !== "" 
+                  ? company.logo_url 
+                  : 'https://cdn-app.sealsubscriptions.com/shopify/public/img/promo/no-image-placeholder.png' // Fallback logo
+              }))
+          : [];
+
+        // Remove duplicates by _id
+        const uniqueCompanies = Array.from(
+          new Map(
+            fetchedCompanies.map((company) => [company._id, company])
+          ).values()
+        );
+
+        setCompanies(uniqueCompanies);
+      } catch (err) {
+        console.error('Failed to fetch companies:', err);
+        setCompanies([]);
+        toast.error('Failed to load company data. Please try again later.');
+      } finally {
+        setIsLoadingCompanies(false);
+      }
+    };
+
+    if (backendApiUrl) {
+      fetchCompanies();
+    } else {
+      console.error('Backend API URL is not defined');
+      setCompanies([]);
+      setIsLoadingCompanies(false);
+      toast.error('Configuration error. Please contact support.');
+    }
+  }, [backendApiUrl]);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -69,24 +137,6 @@ const HomeContent = () => {
   });
 
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [companies, setCompanies] = useState<Company[]>([]);
-
-  const backendApiUrl = process.env.NEXT_PUBLIC_BACKEND_URL_2_0;
-
-  useEffect(() => {
-    fetch(`${backendApiUrl}/companies/companies`)
-      .then(res => res.json())
-      .then(data => {
-        const fetchedCompanies: Company[] = data.companies.map((company: any) => ({
-          name: company.name,
-          logo_url: company.logo_url
-        }));
-        setCompanies(fetchedCompanies);
-      })
-      .catch(err => {
-        console.error('Failed to fetch companies:', err);
-      });
-  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -190,6 +240,22 @@ const HomeContent = () => {
   const toggleFaq = (index: number) => {
     setOpenFaq(openFaq === index ? null : index);
   };
+
+  // Testimonial data
+  const testimonials: Testimonial[] = [
+    {
+      
+      designation: "Training and Placement Officer (TPO)",
+      collegeName: "Chatrapati Sahu Ji Maharaj University",
+      collegeLogo: "https://csjmu.ac.in/wp-content/uploads/2023/11/rating.png",
+      review:"Appreciate your valuable workshop on CVs and interviews. Your guidance and commitment truly inspire and enhance students’ career readiness and confidence."},
+     {
+      
+      designation: "Training and Placement Officer (TPO)",
+      collegeName: "PCTE Group of Institutes, Ludhiana",
+      collegeLogo: "https://pcte.edu.in/wp-content/uploads/2025/04/Logo-1-28_4.png",
+      review:"Grateful to work with Jyoti Ranjan Sir from EarlyJobs. His dedication and guidance during the PCTE job fair greatly supported our HR selections." }
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -490,27 +556,33 @@ const HomeContent = () => {
           <p className="text-gray-600 max-w-2xl mx-auto text-sm sm:text-base">Join our growing network of industry partners</p>
         </div>
         
-        <div className="relative">
-          <div className="flex animate-marquee space-x-6 py-4 [animation-duration:40s]">
-            {[...companies, ...companies].map((company, index) => (
-              <div 
-                key={`${company.name}-${index}`}
-                className="flex-shrink-0 bg-white border border-orange-100 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow duration-200 flex items-center justify-center w-60 h-30"
-              >
-                <img 
-                  src={company.logo_url} 
-                  alt={company.name} 
-                  className="h-24 w-auto object-contain max-w-full"
-                  onError={(e) => {
-                    e.currentTarget.src = `https://via.placeholder.com/150x60?text=${company.name}`;
-                  }}
-                />
-              </div>
-            ))}
+        {isLoadingCompanies ? (
+          <div className="text-center text-gray-600">Loading companies...</div>
+        ) : companies.length > 0 ? (
+          <div className="relative">
+            <div className="flex animate-marquee space-x-6 py-4 [animation-duration:40s]">
+              {[...companies, ...companies].map((company, index) => (
+                <div 
+                  key={`${company._id}-${index}`}
+                  className="flex-shrink-0 bg-white border border-orange-100 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow duration-200 flex items-center justify-center w-60 h-30"
+                >
+                  <img 
+                    src={company.logo_url} 
+                    alt={company.name} 
+                    className="h-24 w-auto object-contain max-w-full"
+                    onError={(e) => {
+                      e.currentTarget.src = 'https://cdn-app.sealsubscriptions.com/shopify/public/img/promo/no-image-placeholder.png';
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="absolute top-0 left-0 h-full w-16 bg-gradient-to-r from-white to-transparent pointer-events-none"></div>
+            <div className="absolute top-0 right-0 h-full w-16 bg-gradient-to-l from-white to-transparent pointer-events-none"></div>
           </div>
-          <div className="absolute top-0 left-0 h-full w-16 bg-gradient-to-r from-white to-transparent pointer-events-none"></div>
-          <div className="absolute top-0 right-0 h-full w-16 bg-gradient-to-l from-white to-transparent pointer-events-none"></div>
-        </div>
+        ) : (
+          <div className="text-center text-gray-600">No companies available at the moment.</div>
+        )}
 
         <style jsx>{`
           @keyframes marquee {
@@ -526,6 +598,55 @@ const HomeContent = () => {
             animation-play-state: paused;
           }
         `}</style>
+      </section>
+
+      <section className="bg-gray-50 py-20" id="testimonials">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">
+              Real <span className="text-orange-600">Impact </span>. Real <span className="text-orange-600">Voices</span>
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto text-sm sm:text-base">
+             Our workshops are helping students get job-ready with real skills that matter.
+Here’s what colleges and students are saying about their EarlyJobs experience.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <Card
+                key={index}
+                className="p-6 bg-white border border-orange-100 shadow-md hover:shadow-lg transition-shadow duration-200 flex flex-col items-center text-center"
+              >
+                <img
+                  src={testimonial.collegeLogo}
+                  alt={`${testimonial.collegeName} Logo`}
+                  className="h-12 w-auto mb-4 object-contain"
+                  onError={(e) => {
+                    e.currentTarget.src = 'https://cdn-app.sealsubscriptions.com/shopify/public/img/promo/no-image-placeholder.png';
+                  }}
+                />
+                <p className="text-gray-600 text-sm sm:text-base mb-4">{testimonial.review}</p>
+                <p className="text-gray-800 text-xl font-bold">{testimonial.collegeName}</p>
+                <p className="text-gray-900 text-lg">{testimonial.designation}</p>
+               
+              </Card>
+            ))}
+            <Card
+              className="p-6 bg-white border border-orange-100 shadow-md hover:shadow-lg transition-shadow duration-200 flex flex-col items-center justify-center text-center"
+            >
+              <h3 className="text-xl font-extrabold text-orange-600 mb-2">+10 More Reviews</h3>
+              <p className="text-gray-600 text-sm sm:text-base">
+                Discover more success stories from our partner colleges
+              </p>
+              {/* <Button
+                className="mt-4 bg-orange-600 hover:bg-orange-700 text-white text-sm font-semibold rounded-lg"
+                onClick={() => router.push('/testimonials')}
+              >
+                View All Reviews
+              </Button> */}
+            </Card>
+          </div>
+        </div>
       </section>
 
       <section className="bg-orange-50 py-20">

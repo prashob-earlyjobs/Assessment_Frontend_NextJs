@@ -1,6 +1,6 @@
 "use client"
 import { useState, useRef, useCallback, useEffect } from "react"
-import type React from "react"
+import  React from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Cookies from "js-cookie"
 import Link from "next/link"
@@ -18,7 +18,7 @@ import { toast } from "sonner"
 import Header from "./header"
 import html2pdf from "html2pdf.js"
 import { oklch, oklab, rgb } from "culori"
-import { Wand2 } from "lucide-react";
+import { Wand2 } from "lucide-react"
 
 import {
   ArrowLeft,
@@ -49,6 +49,9 @@ import {
   Github,
   Globe,
 } from "lucide-react"
+
+import MinimalTemplate from "../templates/MinimalTemplate"
+import ClassicTemplate from "../templates/classicTemplate"
 
 interface PersonalInfo {
   fullName: string
@@ -114,7 +117,6 @@ interface ResumeData {
   projects: Project[]
   achievements: Achievement[]
   extracurriculars: Extracurricular[]
-
 }
 
 interface SectionOrder {
@@ -133,25 +135,33 @@ const templates = [
     sectionHeader: "text-black border-gray-300",
     accent: "text-black",
     preview: "Clean, professional, black-and-white design",
-  }
+    component: MinimalTemplate,
+  },
+  {
+    id: "classic",
+    name: "Classic",
+    color: "bg-white",
+    headerBg: "bg-white border-b-2 border-gray-300",
+    headerText: "text-gray-900",
+    sectionHeader: "text-xl font-semibold border-b-2 border-gray-300",
+    accent: "text-gray-600",
+    preview: "Traditional resume layout with clear sections",
+    component: ClassicTemplate,
+  },
 ]
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL
 
-
-
 const apiService = {
   async saveResume(resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[], pdfBuffer: ArrayBuffer) {
     const token = Cookies.get("accessToken")
-    const formData = new FormData();
-    formData.append('resumeData', JSON.stringify({ ...resumeData, template: activeTemplate, sectionOrder }));
-    formData.append('pdf', new Blob([pdfBuffer], { type: 'application/pdf' }), `${resumeData.personalInfo.fullName || 'resume'}.pdf`);
-
+    const formData = new FormData()
+    formData.append('resumeData', JSON.stringify({ ...resumeData, template: activeTemplate, sectionOrder }))
+    formData.append('pdf', new Blob([pdfBuffer], { type: 'application/pdf' }), `${resumeData.personalInfo.fullName || 'resume'}.pdf`)
 
     const response = await fetch(`${API_BASE_URL}/resumes/fromForm`, {
       method: "POST",
       headers: {
-
         authorization: `Bearer ${token}`,
       },
       body: formData,
@@ -183,15 +193,14 @@ const apiService = {
     return response.json()
   },
 
-
   async updateResume(id: string, resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[], pdfBuffer: ArrayBuffer) {
-    const token = Cookies.get('accessToken');
+    const token = Cookies.get('accessToken')
     if (!token) {
-      throw new Error('No access token found. Please log in.');
+      throw new Error('No access token found. Please log in.')
     }
-    const formData = new FormData();
-    formData.append('resumeData', JSON.stringify({ ...resumeData, template: activeTemplate, sectionOrder }));
-    formData.append('pdf', new Blob([pdfBuffer], { type: 'application/pdf' }), `${resumeData.personalInfo.fullName || 'resume'}.pdf`);
+    const formData = new FormData()
+    formData.append('resumeData', JSON.stringify({ ...resumeData, template: activeTemplate, sectionOrder }))
+    formData.append('pdf', new Blob([pdfBuffer], { type: 'application/pdf' }), `${resumeData.personalInfo.fullName || 'resume'}.pdf`)
 
     const response = await fetch(`${API_BASE_URL}/resumes/${id}`, {
       method: 'PUT',
@@ -199,39 +208,38 @@ const apiService = {
         authorization: `Bearer ${token}`,
       },
       body: formData,
-    });
+    })
 
     if (!response.ok) {
-      throw new Error(`Failed to update resume: ${response.statusText}`);
+      throw new Error(`Failed to update resume: ${response.statusText}`)
     }
 
-    return response.json();
+    return response.json()
   }
-
 }
 
 export default function ResumeBuilder() {
   const [activeTemplate, setActiveTemplate] = useState("minimal")
   const [isTemplateDialogOpen, setIsTemplateDialogOpen] = useState(false)
-  const [isReorderMode, setIsReorderMode] = useState(false)
+  // const [isReorderMode, setIsReorderMode] = useState(false)
   const [draggedSection, setDraggedSection] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [isAddSectionDialogOpen, setIsAddSectionDialogOpen] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
   const resumeId = searchParams.get("resumeId")
-  const [suggestedSkills, setSuggestedSkills] = useState<string[]>([]);
-  const [isSuggestingSkills, setIsSuggestingSkills] = useState(false);
+  const [suggestedSkills, setSuggestedSkills] = useState<string[]>([])
+  const [isSuggestingSkills, setIsSuggestingSkills] = useState(false)
 
   const [isDownloadDialogOpen, setIsDownloadDialogOpen] = useState(false)
-  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
   const [aiLoading, setAiLoading] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isEditMode, setIsEditMode] = useState(!!resumeId)
 
-  // Section collapse states
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(
     new Set([
+      "personal",
       "summary",
       "education",
       "experience",
@@ -261,10 +269,10 @@ export default function ResumeBuilder() {
     projects: [],
     achievements: [],
     extracurriculars: [],
-
   })
 
   const [sectionOrder, setSectionOrder] = useState<SectionOrder[]>([
+    { id: "personal", name: "Personal Information", visible: true },
     { id: "summary", name: "Professional Summary", visible: true },
     { id: "experience", name: "Work Experience", visible: true },
     { id: "education", name: "Education", visible: true },
@@ -279,7 +287,6 @@ export default function ResumeBuilder() {
   const [currentCertification, setCurrentCertification] = useState("")
   const [isSaving, setIsSaving] = useState(false)
 
-  // Load resume data if editing
   useEffect(() => {
     if (resumeId) {
       setIsLoading(true)
@@ -340,7 +347,6 @@ export default function ResumeBuilder() {
                 startDate: extra.startDate || "",
                 endDate: extra.endDate || "",
               })) || [],
-
             })
             setActiveTemplate(result.data.template || "minimal")
             setSectionOrder(result.data.sectionOrder?.length ? result.data.sectionOrder : sectionOrder)
@@ -396,69 +402,70 @@ export default function ResumeBuilder() {
       })
     })
   }
+
   const handleSave = async (pdfBuffer: ArrayBuffer) => {
-    setIsSaving(true);
+    setIsSaving(true)
     try {
-      let result;
+      let result
       if (resumeId) {
-        result = await apiService.updateResume(resumeId, resumeData, activeTemplate, sectionOrder, pdfBuffer);
+        result = await apiService.updateResume(resumeId, resumeData, activeTemplate, sectionOrder, pdfBuffer)
       } else {
-        result = await apiService.saveResume(resumeData, activeTemplate, sectionOrder, pdfBuffer);
+        result = await apiService.saveResume(resumeData, activeTemplate, sectionOrder, pdfBuffer)
       }
       if (result.success) {
-        toast.success(resumeId ? 'Resume updated successfully!' : 'Resume saved successfully!');
+        toast.success(resumeId ? 'Resume updated successfully!' : 'Resume saved successfully!')
       }
     } catch (error) {
-      console.error(resumeId ? 'Failed to update resume:' : 'Failed to save resume:', error);
-      toast.error(resumeId ? 'Failed to update resume. Please try again.' : 'Failed to save resume. Please try again.');
+      console.error(resumeId ? 'Failed to update resume:' : 'Failed to save resume:', error)
+      toast.error(resumeId ? 'Failed to update resume. Please try again.' : 'Failed to save resume. Please try again.')
     } finally {
-      setIsSaving(false);
+      setIsSaving(false)
     }
-  };
+  }
 
   const handleSaveChanges = async () => {
-    const element = document.getElementById('resume-preview');
+    const element = document.getElementById('resume-preview')
     if (!element) {
-      toast.error('Preview not found. Please try again.');
-      return;
+      toast.error('Preview not found. Please try again.')
+      return
     }
 
-    setIsGeneratingPDF(true);
-    convertOklchToRgb();
+    setIsGeneratingPDF(true)
+    convertOklchToRgb()
 
     const opt = {
       margin: [0.25, 0.125, 0.25, 0.125],
-    };
+    }
 
     try {
-      const pdf = await html2pdf().set(opt).from(element).toPdf().output('arraybuffer');
-      await handleSave(pdf);
-      await html2pdf().set(opt).from(element).save();
-      toast.success('Changes saved and PDF downloaded!');
+      const pdf = await html2pdf().set(opt).from(element).toPdf().output('arraybuffer')
+      await handleSave(pdf)
+      await html2pdf().set(opt).from(element).save()
+      toast.success('Changes saved and PDF downloaded!')
       setTimeout(() => {
-        router.push('/resumeList');
-      }, 3000);
+        router.push('/resumeList')
+      }, 3000)
     } catch (error) {
-      console.error('Failed to generate or save PDF:', error);
-      toast.error('Failed to generate or save PDF. Please try again.');
+      console.error('Failed to generate or save PDF:', error)
+      toast.error('Failed to generate or save PDF. Please try again.')
     } finally {
-    setIsGeneratingPDF(false);
+      setIsGeneratingPDF(false)
+    }
   }
-  };
 
   const handleDownloadPDF = async () => {
-    const element = document.getElementById('resume-preview');
-    if (isReorderMode) {
-      toast.info('Download PDF after saving the order.');
-      return;
-    }
+    const element = document.getElementById('resume-preview')
+    // if (isReorderMode) {
+    //   toast.info('Download PDF after saving the order.')
+    //   return
+    // }
     if (!element) {
-      toast.error('Preview not found. Please try again.');
-      return;
+      toast.error('Preview not found. Please try again.')
+      return
     }
 
-    setIsGeneratingPDF(true);
-    convertOklchToRgb();
+    setIsGeneratingPDF(true)
+    convertOklchToRgb()
 
     const opt = {
       margin: [0.25, 0.125, 0.25, 0.125],
@@ -466,58 +473,57 @@ export default function ResumeBuilder() {
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { scale: 4, useCORS: false },
       jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-    };
+    }
 
     try {
       if (resumeData.personalInfo.fullName && resumeData.personalInfo.email && resumeData.personalInfo.phone) {
-        const pdf = await html2pdf().set(opt).from(element).toPdf().output('arraybuffer');
-        await handleSave(pdf);
-        await html2pdf().set(opt).from(element).save();
+        const pdf = await html2pdf().set(opt).from(element).toPdf().output('arraybuffer')
+        await handleSave(pdf)
+        await html2pdf().set(opt).from(element).save()
         setTimeout(() => {
-          router.push('/resumeList');
-        }, 3000);
+          router.push('/resumeList')
+        }, 3000)
       } else {
-        toast.info('Please enter your name, email, and phone number before downloading the resume.');
+        toast.info('Please enter your name, email, and phone number before downloading the resume.')
       }
     } catch (error) {
-      console.error('Failed to generate or save PDF:', error);
-      toast.error('Failed to generate or save PDF. Please try again.');
+      console.error('Failed to generate or save PDF:', error)
+      toast.error('Failed to generate or save PDF. Please try again.')
     } finally {
-      setIsGeneratingPDF(false);
+      setIsGeneratingPDF(false)
     }
-  };
+  }
 
-   const handleSuggestSkills = async () => {
-    const position = resumeData.workExperience[0]?.position || resumeData.personalInfo.fullName;
+  const handleSuggestSkills = async () => {
+    const position = resumeData.workExperience[0]?.position || resumeData.personalInfo.fullName
     if (!position) {
-      toast.info("Please enter your position or job title to get skill suggestions.");
-      return;
+      toast.info("Please enter your position or job title to get skill suggestions.")
+      return
     }
-    setIsSuggestingSkills(true);
+    setIsSuggestingSkills(true)
     try {
-      const prompt = `Suggest 8-10 key skills for the position "${position}". Output as a comma-separated list.`;
+      const prompt = `Suggest 8-10 key skills for the position "${position}". Output as a comma-separated list.`
       const res = await fetch("/api/gemini", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt }),
-      });
-      const data = await res.json();
-      const skillsText = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
-      const skillsArr = skillsText.split(",").map((s: string) => s.trim()).filter(Boolean);
-      setSuggestedSkills(skillsArr);
-      toast.success("Skills suggested!");
+      })
+      const data = await res.json()
+      const skillsText = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || ""
+      const skillsArr = skillsText.split(",").map((s: string) => s.trim()).filter(Boolean)
+      setSuggestedSkills(skillsArr)
+      toast.success("Skills suggested!")
     } catch (error) {
-      toast.error("Failed to fetch skill suggestions.");
+      toast.error("Failed to fetch skill suggestions.")
     } finally {
-      setIsSuggestingSkills(false);
+      setIsSuggestingSkills(false)
     }
-  };
+  }
 
   const handleAISuggest = async () => {
     setAiLoading(true)
     try {
       const dataSummary = `
-
       Name: ${resumeData.personalInfo.fullName || "N/A"}
       Email: ${resumeData.personalInfo.email || "N/A"}
       Location: ${resumeData.personalInfo.location || "N/A"}
@@ -528,7 +534,6 @@ export default function ResumeBuilder() {
       Projects: ${resumeData.projects.map(proj => `${proj.name || "N/A"}: ${proj.description || "N/A"} (Technologies: ${proj.technologies || "N/A"})`).join("; ") || "N/A"}
       Achievements: ${resumeData.achievements.map(ach => `${ach.title || "N/A"} (${ach.date || "N/A"}): ${ach.description || "N/A"}`).join("; ") || "N/A"}
       Extracurriculars: ${resumeData.extracurriculars.map(extra => `${extra.activity || "N/A"} - ${extra.role || "N/A"} (${extra.startDate} - ${extra.endDate || "Present"}): ${extra.description || "N/A"}`).join("; ") || "N/A"}
-
     `
       if (!resumeData.personalInfo.fullName && !resumeData.personalInfo.email && (!resumeData.workExperience.length || !resumeData.education.length)) {
         toast.info("Please fill in all required fields to generate a summary.")
@@ -543,8 +548,7 @@ export default function ResumeBuilder() {
       })
 
       const data = await res.json()
-      const generatedSummary =
-        data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() 
+      const generatedSummary = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim()
 
       setResumeData((prev) => ({
         ...prev,
@@ -568,7 +572,7 @@ export default function ResumeBuilder() {
         return
       }
 
-      const prompt = `Generate a concise, ATS-friendly job description (exact 3 points, each not more than 20 words, line by line , with solid circular black-filled bullet points, not stars) for the position of ${work.position} at ${work.company}. Highlight key responsibilities, achievements, and skills. Ensure it is professional, engaging, and suitable for a resume.`
+      const prompt = `Generate a concise, ATS-friendly job description (exact 3 points, each not more than 20 words, line by line, with solid circular black-filled bullet points, not stars) for the position of ${work.position} at ${work.company}. Highlight key responsibilities, achievements, and skills. Ensure it is professional, engaging, and suitable for a resume.`
 
       const res = await fetch("/api/gemini", {
         method: "POST",
@@ -577,31 +581,26 @@ export default function ResumeBuilder() {
       })
 
       const data = await res.json()
-      const generatedDescription =
-        data.candidates?.[0]?.content?.parts?.[0]?.text
-          ?.trim()
-          .split("\n")
-          .slice(0, 3)
-          .map((point: string) =>
-            point.trim().replace(/^[-•]\s*/, "").trim()
-          ) || []
+      const generatedDescription = data.candidates?.[0]?.content?.parts?.[0]?.text
+        ?.trim()
+        ?.split("\n")
+        ?.slice(0, 3)
+        ?.map((point: string) => point.trim().replace(/^[-•]\s*/, "").trim()) || []
 
-
-    setResumeData((prev) => ({
-      ...prev,
-      workExperience: prev.workExperience.map((w) =>
-        w.id === id ? { ...w, description: generatedDescription } : w
-      ),
-    }));
-    toast.success("AI-generated description added!");
-  } catch (error) {
-    console.error("Failed to generate AI suggestion:", error);
-    toast.error("Failed to generate AI suggestion. Please try again.");
-  } finally {
-    setAiLoading(false);
+      setResumeData((prev) => ({
+        ...prev,
+        workExperience: prev.workExperience.map((w) =>
+          w.id === id ? { ...w, description: generatedDescription } : w
+        ),
+      }))
+      toast.success("AI-generated description added!")
+    } catch (error) {
+      console.error("Failed to generate AI suggestion:", error)
+      toast.error("Failed to generate AI suggestion. Please try again.")
+    } finally {
+      setAiLoading(false)
+    }
   }
-};
-
 
   const toggleSection = useCallback((sectionId: string) => {
     setCollapsedSections((prev) => {
@@ -870,37 +869,12 @@ export default function ResumeBuilder() {
   }, [])
 
   const sections = [
-    {
-      id: "personal",
-      name: "Personal Information",
-      icon: User,
-      required: true,
-    },
-    {
-      id: "experience",
-      name: "Work Experience",
-      icon: Briefcase,
-      required: false,
-    },
-    {
-      id: "summary",
-      name: "Professional Summary",
-      icon: FileText,
-      required: false,
-    },
-    {
-      id: "education",
-      name: "Education",
-      icon: GraduationCap,
-      required: false,
-    },
+    { id: "personal", name: "Personal Information", icon: User, required: true },
+    { id: "experience", name: "Work Experience", icon: Briefcase, required: false },
+    { id: "summary", name: "Professional Summary", icon: FileText, required: false },
+    { id: "education", name: "Education", icon: GraduationCap, required: false },
     { id: "skills", name: "Skills", icon: Code, required: false },
-    {
-      id: "certifications",
-      name: "Certifications (Optional)",
-      icon: Award,
-      required: false,
-    },
+    { id: "certifications", name: "Certifications (Optional)", icon: Award, required: false },
     { id: "projects", name: "Projects (Optional)", icon: FolderOpen, required: false },
     { id: "achievements", name: "Achievements (Optional)", icon: Trophy, required: false },
     { id: "extracurriculars", name: "Extracurricular Activities (Optional)", icon: Users, required: false },
@@ -915,6 +889,23 @@ export default function ResumeBuilder() {
   const renderSectionContent = useCallback(
     (sectionConfig: SectionOrder) => {
       const sectionId = sectionConfig.id
+
+      if (sectionId === "personal" && (resumeData.personalInfo.fullName || resumeData.personalInfo.email || resumeData.personalInfo.phone || resumeData.personalInfo.location)) {
+        return (
+          <div key="personal" className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+            <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Personal Information</h2>
+            <div className="flex flex-col gap-2">
+              <p><strong>Name:</strong> {resumeData.personalInfo.fullName || "N/A"}</p>
+              <p><strong>Email:</strong> {resumeData.personalInfo.email || "N/A"}</p>
+              <p><strong>Phone:</strong> {resumeData.personalInfo.phone || "N/A"}</p>
+              <p><strong>Location:</strong> {resumeData.personalInfo.location || "N/A"}</p>
+              {resumeData.personalInfo.linkedin && <p><strong>LinkedIn:</strong> <a href={resumeData.personalInfo.linkedin} className="underline">{resumeData.personalInfo.linkedin.slice(28)}</a></p>}
+              {resumeData.personalInfo.website && <p><strong>Website:</strong> <a href={resumeData.personalInfo.website} className="underline">View Website</a></p>}
+              {resumeData.personalInfo.github && <p><strong>GitHub:</strong> <a href={resumeData.personalInfo.github} className="underline">{resumeData.personalInfo.github.slice(19)}</a></p>}
+            </div>
+          </div>
+        )
+      }
 
       if (sectionId === "experience" && resumeData.workExperience.length > 0) {
         return (
@@ -935,7 +926,7 @@ export default function ResumeBuilder() {
                     </span>
                   </div>
                   {work.description.some(desc => desc.trim()) && (
-                    <ul className="text-gray-700 text-sm leading-relaxed  pl-5">
+                    <ul className="text-gray-700 text-sm leading-relaxed pl-5">
                       {work.description.map((desc, index) => (
                         desc.trim() && <li key={index}>{desc}</li>
                       ))}
@@ -1041,8 +1032,7 @@ export default function ResumeBuilder() {
             <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Certifications</h2>
             <div className="space-y-2">
               {resumeData.certifications.map((cert) => (
-                <div key={cert} className="flex items-center"  style={{ pageBreakInside: 'avoid' }}>
-                  
+                <div key={cert} className="flex items-center" style={{ pageBreakInside: 'avoid' }}>
                   <span className={`text-gray-700 `}>● {cert}</span>
                 </div>
               ))}
@@ -1058,9 +1048,8 @@ export default function ResumeBuilder() {
             <div className="space-y-2">
               {resumeData.achievements.map((achievement) => (
                 <div key={achievement.id} className="flex items-center" style={{ pageBreakInside: 'avoid' }}>
-                 
                   <span className={`text-gray-700 `}>
-                   ● {achievement.title} - {achievement.description} ({achievement.date})
+                    ● {achievement.title} - {achievement.description} ({achievement.date})
                   </span>
                 </div>
               ))}
@@ -1077,10 +1066,9 @@ export default function ResumeBuilder() {
             </h2>
             <div className="space-y-2">
               {resumeData.extracurriculars.map((extra) => (
-                <div key={extra.id} className="flex items-center"  style={{ pageBreakInside: 'avoid' }}>
-                  
+                <div key={extra.id} className="flex items-center" style={{ pageBreakInside: 'avoid' }}>
                   <span className={`text-gray-700 `}>
-                   ● {extra.activity} - {extra.role} ({extra.startDate} - {extra.endDate}): {extra.description}
+                    ● {extra.activity} - {extra.role} ({extra.startDate} - {extra.endDate}): {extra.description}
                   </span>
                 </div>
               ))}
@@ -1093,6 +1081,53 @@ export default function ResumeBuilder() {
     },
     [resumeData, currentTemplate],
   )
+
+  const renderTemplate = (templateId: string, resumeData: ResumeData, isGeneratingPDF: boolean) => {
+    const template = templates.find((t) => t.id === templateId) || templates[0]
+    if (template.component) {
+      // Prepare simplified data for the template components
+      const simplifiedData = {
+        personalInfo: resumeData.personalInfo,
+        professionalSummary: resumeData.professionalSummary,
+        education: resumeData.education.map(edu => ({
+          school: edu.school,
+          degree: edu.degree,
+          field: edu.field,
+          startDate: edu.startDate,
+          endDate: edu.endDate,
+          gpa: edu.gpa,
+        })),
+        workExperience: resumeData.workExperience.map(work => ({
+          position: work.position,
+          company: work.company,
+          startDate: work.startDate,
+          endDate: work.endDate,
+          description: work.description,
+        })),
+        skills: resumeData.skills,
+        projects: resumeData.projects.map(proj => ({
+          name: proj.name,
+          description: proj.description,
+          technologies: proj.technologies,
+          link: proj.link,
+        })),
+        achievements: resumeData.achievements.map(ach => ({
+          title: ach.title,
+          description: ach.description,
+          date: ach.date,
+        })),
+        extracurriculars: resumeData.extracurriculars.map(extra => ({
+          activity: extra.activity,
+          role: extra.role,
+          description: extra.description,
+          startDate: extra.startDate,
+          endDate: extra.endDate,
+        })),
+      }
+      return React.createElement(template.component, { data: simplifiedData, isGeneratingPDF })
+    }
+    return null
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -1109,7 +1144,6 @@ export default function ResumeBuilder() {
               </Link>
             </div>
             <div className="flex items-center space-x-1 md:space-x-3">
-
               <Dialog open={isDownloadDialogOpen} onOpenChange={setIsDownloadDialogOpen}>
                 <DialogTrigger asChild>
                   <Button size="sm" className="bg-black hover:bg-gray-800 text-white">
@@ -1154,8 +1188,46 @@ export default function ResumeBuilder() {
               >
                 <Pencil className="w-4 h-4 md:mr-2" />
                 <span className="hidden md:inline">My Resumes</span>
-
               </Button>
+              <Dialog open={isTemplateDialogOpen} onOpenChange={setIsTemplateDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button size="sm" variant="outline">
+                    <Settings className="w-4 h-4 mr-2" />
+                    <span>Change Template</span>
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Select a Template</DialogTitle>
+                  </DialogHeader>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    {templates.map((template) => (
+                      <Card
+                        key={template.id}
+                        className={`cursor-pointer ${activeTemplate === template.id ? "border-orange-500" : "border-gray-200"} hover:border-orange-300 transition-all`}
+                        onClick={() => {
+                          setActiveTemplate(template.id)
+                          setIsTemplateDialogOpen(false)
+                        }}
+                      >
+                        <CardContent className="p-4">
+                          <h3 className="font-semibold text-gray-900">{template.name}</h3>
+                          <p className="text-sm text-gray-600 mt-1">{template.preview}</p>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </DialogContent>
+              </Dialog>
+              {/* <Button
+                size="sm"
+                variant="outline"
+                className={`flex items-center ${isReorderMode ? "bg-orange-500 text-white" : "bg-white text-gray-800"}`}
+                onClick={() => setIsReorderMode(!isReorderMode)}
+              >
+                <GripVertical className="w-4 h-4 mr-2" />
+                <span>{isReorderMode ? "Save Order" : "Reorder Sections"}</span>
+              </Button> */}
             </div>
           </div>
         </div>
@@ -1465,66 +1537,65 @@ export default function ResumeBuilder() {
                             </div>
                           )}
 
-                         {section.id === "skills" && (
-    <div className="space-y-4">
-      <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-        <Input
-          placeholder="Add a skill"
-          value={currentSkill}
-          onChange={(e) => setCurrentSkill(e.target.value)}
-          onKeyPress={(e) => {
-            if (e.key === "Enter") {
-              addSkill(currentSkill)
-            }
-          }}
-          className="flex-1"
-        />
-        <Button onClick={() => addSkill(currentSkill)} className="w-full sm:w-auto">
-          <Plus className="w-4 h-4 sm:mr-0" />
-          <span className="ml-2 sm:hidden">Add Skill</span>
-        </Button>
-        <Button
-          variant="outline"
-          className="bg-orange-500 text-white hover:bg-white hover:border-orange-500 hover:text-orange-600 p-2 h-auto font-medium"
-          onClick={handleSuggestSkills}
-          disabled={isSuggestingSkills}
-        >
-           <Wand2 className="w-4 h-4 mr-2 inline-block" />
-          {isSuggestingSkills ? "Suggesting..." : "Suggest Skills"}
-        </Button>
-      </div>
-      {suggestedSkills.length > 0 && (
-        <div className="flex flex-wrap gap-2 mt-2 border border-orange-200 p-2 rounded-lg">
-          <p className="w-full text-sm text-gray-600 mb-1">Suggested Skills (click to add):</p>
-          {suggestedSkills.map((skill) => (
-            <Badge
-              key={skill}
-              variant="secondary"
-              className="px-3 py-1 cursor-pointer hover:bg-orange-600 hover:text-white"
-              onClick={() => addSkill(skill)}
-              title="Click to add"
-            >
-              {skill}
-              
-            </Badge>
-          ))}
-        </div>
-      )}
-      <div className="flex flex-wrap gap-2">
-        {resumeData.skills.map((skill) => (
-          <Badge key={skill} variant="secondary" className="px-3 py-1 bg-orange-100 rounded-lg">
-            {skill}
-            <button
-              className="ml-2 text-gray-500 hover:text-red-500"
-              onClick={() => removeSkill(skill)}
-            >
-              <Trash2 className="w-3 h-3 text-orange-300 hover:text-red-500" />
-            </button>
-          </Badge>
-        ))}
-      </div>
-    </div>
-  )}
+                          {section.id === "skills" && (
+                            <div className="space-y-4">
+                              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+                                <Input
+                                  placeholder="Add a skill"
+                                  value={currentSkill}
+                                  onChange={(e) => setCurrentSkill(e.target.value)}
+                                  onKeyPress={(e) => {
+                                    if (e.key === "Enter") {
+                                      addSkill(currentSkill)
+                                    }
+                                  }}
+                                  className="flex-1"
+                                />
+                                <Button onClick={() => addSkill(currentSkill)} className="w-full sm:w-auto">
+                                  <Plus className="w-4 h-4 sm:mr-0" />
+                                  <span className="ml-2 sm:hidden">Add Skill</span>
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  className="bg-orange-500 text-white hover:bg-white hover:border-orange-500 hover:text-orange-600 p-2 h-auto font-medium"
+                                  onClick={handleSuggestSkills}
+                                  disabled={isSuggestingSkills}
+                                >
+                                  <Wand2 className="w-4 h-4 mr-2 inline-block" />
+                                  {isSuggestingSkills ? "Suggesting..." : "Suggest Skills"}
+                                </Button>
+                              </div>
+                              {suggestedSkills.length > 0 && (
+                                <div className="flex flex-wrap gap-2 mt-2 border border-orange-200 p-2 rounded-lg">
+                                  <p className="w-full text-sm text-gray-600 mb-1">Suggested Skills (click to add):</p>
+                                  {suggestedSkills.map((skill) => (
+                                    <Badge
+                                      key={skill}
+                                      variant="secondary"
+                                      className="px-3 py-1 cursor-pointer hover:bg-orange-600 hover:text-white"
+                                      onClick={() => addSkill(skill)}
+                                      title="Click to add"
+                                    >
+                                      {skill}
+                                    </Badge>
+                                  ))}
+                                </div>
+                              )}
+                              <div className="flex flex-wrap gap-2">
+                                {resumeData.skills.map((skill) => (
+                                  <Badge key={skill} variant="secondary" className="px-3 py-1 bg-orange-100 rounded-lg">
+                                    {skill}
+                                    <button
+                                      className="ml-2 text-gray-500 hover:text-red-500"
+                                      onClick={() => removeSkill(skill)}
+                                    >
+                                      <Trash2 className="w-3 h-3 text-orange-300 hover:text-red-500" />
+                                    </button>
+                                  </Badge>
+                                ))}
+                              </div>
+                            </div>
+                          )}
 
                           {section.id === "certifications" && (
                             <div className="space-y-4">
@@ -1728,7 +1799,7 @@ export default function ResumeBuilder() {
                                       <div>
                                         <Label>Description</Label>
                                         <Textarea
-                                          placeholder="Describe your role and responsibilities..."
+                                          placeholder="Describe your role and contributions..."
                                           className="min-h-[80px]"
                                           value={extracurricular.description}
                                           onChange={(e) =>
@@ -1751,7 +1822,7 @@ export default function ResumeBuilder() {
                               ))}
                               <Button onClick={addExtracurricular} variant="outline" className="w-full bg-transparent">
                                 <Plus className="w-4 h-4 mr-2" />
-                                Add Extracurricular Activity
+                                Add Extracurricular
                               </Button>
                             </div>
                           )}
@@ -1771,168 +1842,27 @@ export default function ResumeBuilder() {
                     <Button
                       variant="default"
                       size="sm"
-                      className={`h-7 md:h-8 px-2 md:px-3 text-xs bg-orange-500 text-white`}
+                      className="h-7 md:h-8 px-2 md:px-3 text-xs bg-orange-500 text-white"
                     >
                       <Eye className="w-3 h-3 md:mr-1" />
                       <span className="hidden sm:inline">Preview</span>
                     </Button>
                   </div>
                 </div>
-
-                <div className="flex items-center space-x-2">
-                  <Dialog open={isTemplateDialogOpen} onOpenChange={setIsTemplateDialogOpen}>
-                    <DialogTrigger asChild>
-                      <Button variant="outline" size="sm">
-                        <Settings className="w-4 h-4 mr-2" />
-                        Template
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="max-w-4xl">
-                      <DialogHeader>
-                        <DialogTitle>Choose a Template</DialogTitle>
-                      </DialogHeader>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-                        {templates.map((template) => (
-                          <div
-                            key={template.id}
-                            className={`border-2 rounded-lg p-4 cursor-pointer transition-all hover:shadow-lg ${activeTemplate === template.id ? "border-orange-500 bg-orange-50" : "border-gray-200"}`}
-                            onClick={() => {
-                              setActiveTemplate(template.id)
-                              setIsTemplateDialogOpen(false)
-                            }}
-                          >
-                            <div
-                              className={`w-full h-32 rounded mb-3 ${template.color} flex items-center justify-center text-white font-medium`}
-                            >
-                              {template.name}
-                            </div>
-                            <h3 className="font-medium text-sm">{template.name}</h3>
-                            <p className="text-xs text-gray-500 mt-1">{template.preview}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </DialogContent>
-                  </Dialog>
-
-                  <Button
-                    variant={isReorderMode ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setIsReorderMode(!isReorderMode)}
-                  >
-                    {isReorderMode ? (
-                      <>
-                        <Save className="w-4 h-4 mr-2" />
-                        Save Order
-                      </>
-                    ) : (
-                      <>
-                        <RotateCcw className="w-4 h-4 mr-2" />
-                        Reorder
-                      </>
-                    )}
-                  </Button>
-                </div>
+                {/* {isReorderMode && (
+                  <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
+                    <p className="text-sm text-orange-700">
+                      <strong>Reorder Mode:</strong> Drag and drop sections below to reorder them. Personal Information
+                      cannot be moved.
+                    </p>
+                  </div>
+                )} */}
               </div>
-
-              {isReorderMode && (
-                <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
-                  <p className="text-sm text-orange-700">
-                    <strong>Reorder Mode:</strong> Drag and drop sections below to reorder them. Personal Information
-                    cannot be moved.
-                  </p>
-                </div>
-              )}
 
               <Card>
                 <CardContent className="p-0">
-                  <div id="resume-preview" >
-                    <div className="space-y-6">
-                      <div className={`${currentTemplate.headerBg} ${currentTemplate.headerText} p-6 break-inside-avoid`}>
-                        <div className="flex items-center space-x-4">
-                          <div className="flex-1">
-                            <h1 className="text-3xl font-bold">{resumeData.personalInfo.fullName || "John Doe"}</h1>
-                            <p className="text-lg opacity-90 mt-1">
-                              {resumeData.workExperience[0]?.position || "Student"}
-                            </p>
-                            <div className="flex items-center space-x-6 text-sm mt-3 opacity-90">
-                              <span>{resumeData.personalInfo.email || "johndoe68@gmail.com"}</span>
-                              <span>{resumeData.personalInfo.phone || "123456789"}</span>
-                              <span>{resumeData.personalInfo.location }</span>
-                            </div>
-                            <div className="grid grid-cols-3 gap-4 mt-2 text-sm opacity-90 items-center">
-                              {resumeData.personalInfo.linkedin && (
-                                <a
-                                  href={resumeData.personalInfo.linkedin}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="flex items-center"
-                                >
-                                  <Linkedin className="w-4 h-4 mr-2 " /> 
-                                  <span className={`font-semibold ${isGeneratingPDF ? "mb-[1rem]" : ''}`}>{resumeData.personalInfo.linkedin.slice(28)}</span>
-                                </a>
-                              )}
-                              {resumeData.personalInfo.website && (
-                                <a
-                                  href={resumeData.personalInfo.website}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="flex items-center"
-                                >
-                                  <Globe className="w-4 h-4 mr-2" /> 
-                                  <span className={`font-semibold ${isGeneratingPDF ? "mb-[1rem]" : ''}`}>View Website</span>
-                                </a>
-                              )}
-                              {resumeData.personalInfo.github && (
-                                <a
-                                  href={resumeData.personalInfo.github}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="flex items-center"
-                                >
-                                  <Github className="w-4 h-4 mr-2" /> 
-                                  <span className={`font-semibold ${isGeneratingPDF ? "mb-[1rem]" : ''}`}>{resumeData.personalInfo.github.slice(19)}</span>
-                                </a>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="px-6 pb-2 space-y-6">
-                        {sectionOrder
-                          .filter((section) => section.visible)
-                          .map((sectionConfig, index) => {
-                            const content = renderSectionContent(sectionConfig)
-                            if (!content) return null
-
-                            if (isReorderMode) {
-                              return (
-                                <div
-                                  key={sectionConfig.id}
-                                  draggable
-                                  onDragStart={(e) => handleDragStart(e, sectionConfig.id)}
-                                  onDragOver={handleDragOver}
-                                  onDrop={(e) => handleDrop(e, sectionConfig.id)}
-                                  onDragEnd={handleDragEnd}
-                                  className={`border-2 border-dashed border-orange-300 rounded-lg p-4 cursor-move transition-all hover:border-orange-400 hover:shadow-md ${draggedSection === sectionConfig.id ? "opacity-50" : "opacity-100"}`}
-                                >
-                                  <div className="flex items-center justify-between mb-2">
-                                    <div className="flex items-center space-x-2">
-                                      <GripVertical className="w-4 h-4 text-orange-500" />
-                                      <span className="text-sm font-medium text-orange-700">
-                                        Drag to reorder: {sectionConfig.name}
-                                      </span>
-                                    </div>
-                                  </div>
-                                  {content}
-                                </div>
-                              )
-                            }
-
-                            return content
-                          })}
-                      </div>
-                    </div>
+                  <div id="resume-preview">
+                    {renderTemplate(activeTemplate, resumeData,isGeneratingPDF)}
                   </div>
                 </CardContent>
               </Card>
