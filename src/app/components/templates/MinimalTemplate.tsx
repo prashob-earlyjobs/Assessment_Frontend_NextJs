@@ -1,7 +1,6 @@
 import React from 'react';
 import { Badge } from "../../components/ui/badge";
-import { Mail,MapPin, PhoneCallIcon ,Github, Linkedin, Globe} from 'lucide-react';
-
+import { Mail, MapPin, PhoneCallIcon, Github, Linkedin, Globe } from 'lucide-react';
 
 interface PersonalInfo {
   fullName: string;
@@ -110,7 +109,7 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ data, isGeneratingPDF
       {data.professionalSummary && (
         <section className="mb-6">
           <h2 className="text-xl font-bold text-black border-b border-gray-300 pb-2 mb-4">Professional Summary</h2>
-          <p className="text-gray-700 leading-relaxed">{data.professionalSummary}</p>
+          <p className="text-gray-700 leading-relaxed" style={{ pageBreakInside: 'avoid' }}>{data.professionalSummary}</p>
         </section>
       )}
 
@@ -118,7 +117,7 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ data, isGeneratingPDF
         <section className="mb-6">
           <h2 className="text-xl font-bold text-black border-b border-gray-300 pb-2 mb-4">Work Experience</h2>
           {data.workExperience.map((job, index) => (
-            <div key={index} className="mb-4">
+            <div key={index} className="mb-4" style={{ pageBreakInside: 'avoid' }}>
               <div className="flex justify-between">
                 <div>
                   <h3 className="font-semibold text-gray-900">{job.position || 'Software Developer Intern'}</h3>
@@ -144,7 +143,7 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ data, isGeneratingPDF
         <section className="mb-6">
           <h2 className="text-xl font-bold text-black border-b border-gray-300 pb-2 mb-4">Education</h2>
           {data.education.map((edu, index) => (
-            <div key={index} className="mb-2">
+            <div key={index} className="mb-2" style={{ pageBreakInside: 'avoid' }}>
               <div className="flex justify-between">
                 <div>
                   <h3 className="font-semibold text-gray-900">
@@ -169,7 +168,7 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ data, isGeneratingPDF
           <h2 className="text-xl font-bold text-black border-b border-gray-300 pb-2 mb-4">Skills</h2>
           <div className="flex flex-wrap gap-2">
             {data.skills.map((skill) => (
-              <Badge key={skill} variant="secondary" className="text-sm">
+              <Badge key={skill} variant="secondary" className="text-sm" style={{ pageBreakInside: 'avoid' }}>
                 {skill}
               </Badge>
             ))}
@@ -181,7 +180,7 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ data, isGeneratingPDF
         <section className="mb-6">
           <h2 className="text-xl font-bold text-black border-b border-gray-300 pb-2 mb-4">Projects</h2>
           {data.projects.map((project, index) => (
-            <div key={index} className="mb-4">
+            <div key={index} className="mb-4" style={{ pageBreakInside: 'avoid' }}>
               <div className="flex justify-between">
                 <h3 className="font-semibold text-gray-900">{project.name || 'Project Name'}</h3>
                 {project.link && (
@@ -207,7 +206,7 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ data, isGeneratingPDF
         <section className="mb-6">
           <h2 className="text-xl font-bold text-black border-b border-gray-300 pb-2 mb-4">Achievements</h2>
           {data.achievements.map((achievement, index) => (
-            <div key={index} className="mb-2">
+            <div key={index} className="mb-2" style={{ pageBreakInside: 'avoid' }}>
               <p className="text-gray-700">
                 ● {achievement.title} ({achievement.date}): {achievement.description}
               </p>
@@ -220,7 +219,7 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ data, isGeneratingPDF
         <section className="mb-6">
           <h2 className="text-xl font-bold text-black border-b border-gray-300 pb-2 mb-4">Certifications</h2>
           {data.certifications.map((certification, index) => (
-            <div key={index} className="mb-2">
+            <div key={index} className="mb-2" style={{ pageBreakInside: 'avoid' }}>
               <p className="text-gray-800">
                 ● {certification}
               </p>
@@ -233,7 +232,7 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ data, isGeneratingPDF
         <section className="mb-6">
           <h2 className="text-xl font-bold text-black border-b border-gray-300 pb-2 mb-4">Extracurricular Activities</h2>
           {data.extracurriculars.map((extra, index) => (
-            <div key={index} className="mb-2">
+            <div key={index} className="mb-2" style={{ pageBreakInside: 'avoid' }}>
               <div className="flex justify-between">
                 <div>
                   <h3 className="font-semibold text-gray-900">{extra.activity} - {extra.role}</h3>
