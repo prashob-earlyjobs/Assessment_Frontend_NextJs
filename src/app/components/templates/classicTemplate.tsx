@@ -42,11 +42,7 @@ interface Achievement {
   date: string;
 }
 
-interface Certification {
-  title: string;
-  issuer: string;
-  date: string;
-}
+
 
 interface Extracurricular {
   activity: string;
@@ -62,9 +58,9 @@ interface ResumeData {
   education: Education[];
   workExperience: WorkExperience[];
   skills: string[];
+  certifications: string[];
   projects: Project[];
   achievements: Achievement[];
-  certifications: Certification[];
   extracurriculars: Extracurricular[];
 }
 
@@ -84,7 +80,7 @@ const ClassicTemplate: React.FC<ClassicTemplateProps> = ({ data, isGeneratingPDF
 
       <div className="flex flex-col lg:flex-row gap-8 print:flex-row print:gap-8">
         {/* Left Sidebar for Details, Skills, Projects, Achievements, Certifications */}
-        <aside className="w-full lg:w-1/3 bg-background p-5 print:w-1/3 print:bg-white print:shadow-none border-r-2 border-gray-800 space-y-6">
+        <aside className="w-full lg:w-3/7 bg-background p-5 print:w-3/7 print:bg-white print:shadow-none border-r-2 border-gray-800 space-y-6">
           {/* Details (Always Rendered) */}
           <section className="mb-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-4 border-b-2 border-gray-300 pb-2">Details</h2>
@@ -125,8 +121,8 @@ const ClassicTemplate: React.FC<ClassicTemplateProps> = ({ data, isGeneratingPDF
               <h2 className="text-xl font-semibold text-gray-900 mb-4 border-b-2 border-gray-300 pb-2">Skills</h2>
               <div className="flex flex-wrap gap-2">
                 {data.skills.map((skill, index) => (
-                  <span key={index} className="bg-gray-200 text-gray-700 text-sm px-2 py-1 rounded">
-                    {skill}
+                  <span key={index} className="text-gray-700 text-sm   rounded">
+                    ● {skill}
                   </span>
                 ))}
               </div>
@@ -170,8 +166,8 @@ const ClassicTemplate: React.FC<ClassicTemplateProps> = ({ data, isGeneratingPDF
               </h2>
               {data.certifications.map((certification, index) => (
                 <div key={index} className="mb-2">
-                  <p className="text-gray-700">
-                    <strong>{certification.title || 'Certification Title'}</strong> ({certification.date || 'Date'})
+                  <p className="text-gray-800">
+                    ● {certification || 'Certification Title'}
                   </p>
                 </div>
               ))}
@@ -180,7 +176,7 @@ const ClassicTemplate: React.FC<ClassicTemplateProps> = ({ data, isGeneratingPDF
         </aside>
 
         {/* Right Main Content for Summary, Work Experience, Education, Extracurriculars */}
-        <main className="w-full lg:w-2/3 space-y-6 print:w-2/3">
+        <main className="w-full lg:w-4/7 space-y-6 print:w-4/7">
           {/* Professional Summary (Conditionally Rendered) */}
           {data.professionalSummary && (
             <section className="mb-6">
@@ -234,7 +230,7 @@ const ClassicTemplate: React.FC<ClassicTemplateProps> = ({ data, isGeneratingPDF
           {/* Extracurriculars (Conditionally Rendered) */}
           {data.extracurriculars?.length > 0 && (
             <section className="mb-6">
-              <h2 className="text-2xl font-semibold border-b-2 border-gray-300 pb-2 mb-4 flex items-center"><Award className='inline-block mr-2 h-4'/> Extracurriculars</h2>
+              <h2 className="text-2xl font-semibold border-b-2 border-gray-300 pb-2 mb-4 flex items-center"><Award className='inline-block mr-2 h-4'/><span className={isGeneratingPDF ? 'mb-[1rem]' : ''}>Extracurriculars</span></h2>
               {data.extracurriculars.map((extracurricular, index) => (
                 <div key={index} className="mb-2">
                   <p className="text-gray-700"><strong>{extracurricular.activity || 'Activity Title'}</strong> - {extracurricular.role || 'Role'} ({extracurricular.startDate || 'Start Date'} - {extracurricular.endDate || 'End Date'})</p>

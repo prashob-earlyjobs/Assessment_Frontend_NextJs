@@ -1105,6 +1105,7 @@ export default function ResumeBuilder() {
           description: work.description,
         })),
         skills: resumeData.skills,
+        certifications: resumeData.certifications,
         projects: resumeData.projects.map(proj => ({
           name: proj.name,
           description: proj.description,

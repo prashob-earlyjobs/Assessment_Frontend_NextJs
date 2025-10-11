@@ -57,6 +57,7 @@ interface ResumeData {
   education: Education[];
   workExperience: WorkExperience[];
   skills: string[];
+  certifications: string[];
   projects: Project[];
   achievements: Achievement[];
   extracurriculars: Extracurricular[];
@@ -209,6 +210,19 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ data, isGeneratingPDF
             <div key={index} className="mb-2">
               <p className="text-gray-700">
                 ● {achievement.title} ({achievement.date}): {achievement.description}
+              </p>
+            </div>
+          ))}
+        </section>
+      )}
+
+      {data.certifications.length > 0 && (
+        <section className="mb-6">
+          <h2 className="text-xl font-bold text-black border-b border-gray-300 pb-2 mb-4">Certifications</h2>
+          {data.certifications.map((certification, index) => (
+            <div key={index} className="mb-2">
+              <p className="text-gray-800">
+                ● {certification}
               </p>
             </div>
           ))}
