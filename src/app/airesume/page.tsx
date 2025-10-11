@@ -25,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: "EarlyJobs",
       images: [
         {
-          url: `/images/og-resume.png`,
+          url: `/images/og-resume.jpg`,
           width: 1200,
           height: 630,
           alt: "EarlyJobs - AI Resume Builder Tool",
