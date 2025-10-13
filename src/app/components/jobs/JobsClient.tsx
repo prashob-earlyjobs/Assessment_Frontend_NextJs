@@ -310,7 +310,7 @@ const JobsClient = () => {
   }, [companyName, location, title, employmentType, workType, salaryRange, experienceRange, fetchJobs]);
 
   useEffect(()=>{
-    if(searchInput.length === 0) {
+    if(searchInput?.length === 0) {
       fetchJobs();
     }
   },[searchInput])

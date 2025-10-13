@@ -646,7 +646,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                           ${
                             keyword.isShared
                               ? "text-gray-600 border-gray-200 hover:text-orange-600 hover:border-orange-400 cursor-pointer"
-                              : "text-gray-600 border-gray-200 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                              : "text-gray-600 border-gray-200 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed pointer-events-none"
                           }`}
                         
                       >
