@@ -307,7 +307,7 @@ const JobsClient = () => {
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [companyName, location, title, employmentType, workType, salaryRange, experienceRange, fetchJobs]);
+  }, [companyName, location, title, searchInput, employmentType, workType, salaryRange, experienceRange, fetchJobs]);
 
   useEffect(()=>{
     if(searchInput?.length === 0) {
