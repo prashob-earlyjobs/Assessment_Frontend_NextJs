@@ -10,6 +10,8 @@ import { Checkbox } from "../ui/checkbox";
 import { X, Bookmark,Globe, Share2, Briefcase, IndianRupee, User, Clock, MapPin, Plus, Trash2, ChevronDown, Copy, Linkedin, Facebook, Instagram, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { FaLinkedin, FaInstagram } from "react-icons/fa";
+import { useRouter ,useSearchParams, usePathname} from "next/navigation";
+
 
 interface JobDetailsData {
   id: string;
@@ -44,7 +46,8 @@ interface JobDetailsData {
   street?: string;
   area?: string;
   pincode?: string;
-  keywords?: string;
+  keywords?: [{keyword: string ,isShared:boolean}];
+
   location_link?: string;
 }
 interface ICreateApplicantRequestBody {
@@ -75,6 +78,9 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
   const [error, setError] = useState<string | null>(null);
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [showShareDropdown, setShowShareDropdown] = useState(false);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
   const [applicationForm, setApplicationForm] = useState({
     fullName: '',
     fatherName: '',
@@ -449,6 +455,20 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
     }
   };
 
+  const slugify = (text: string) => {
+    return text
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, "-")      // spaces → hyphens
+      .replace(/\./g, "dot")     // dots → "dot"
+      .replace(/[^a-z0-9\-]/g, ""); // remove other non-alphanumeric chars except hyphen
+  };
+
+  const handleKeywordClick = (keyword: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("search", slugify(keyword));
+    router.push(`/jobs?${params.toString()}`);  };
+
   return (
     <div className="min-h-screen bg-gray-50" onClick={handleClickOutsideShare}>
       <div className="max-w-7xl mx-auto p-4 sm:p-6">
@@ -618,15 +638,22 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                 <div className="mb-6">
                   <h3 className="font-medium mb-3">Keywords</h3>
                   <div className="flex gap-2 flex-wrap">
-                    {jobData.keywords.split(',').map((keyword, index) => (
-                      <Badge 
+                    {jobData.keywords.map((keyword,index)=><Badge 
                         key={index}
                         variant="outline"
-                        className="text-xs bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
+                        onClick={() => handleKeywordClick(keyword.keyword)}
+                        className={`text-xs bg-gray-50 border p-1 px-3 transition-colors p-2
+                          ${
+                            keyword.isShared
+                              ? "text-gray-600 border-gray-200 hover:text-orange-600 hover:border-orange-400 cursor-pointer"
+                              : "text-gray-600 border-gray-200 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                          }`}
+                        
                       >
-                        {keyword.trim()}
-                      </Badge>
-                    ))}
+                        {keyword.keyword.trim()}
+                      </Badge>)}
+                      
+                    
                   </div>
                 </div>
               )}
