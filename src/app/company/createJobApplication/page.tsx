@@ -1,4 +1,5 @@
 "use client";
+
 import type React from "react";
 import { toast } from "react-hot-toast";
 import { useState, useCallback, useRef, useEffect } from "react";
@@ -12,7 +13,6 @@ import { Card, CardHeader, CardTitle, CardContent } from "../../components/ui/ca
 import { Plus, X, ArrowRight, ArrowLeft, User, Briefcase, CheckCircle, MapPin, Phone, Mail, Languages, Award, Target, Building, Clock, Loader2, ChevronDown, Check, UploadCloud, Eye } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-
 import { motion, AnimatePresence } from "framer-motion";
 import { createCompanyOnboarding } from "../../components/services/companiesapi";
 import { uploadFile } from "../../components/services/companiesapi";
@@ -47,15 +47,17 @@ interface JobPostingFormData {
   logoUrl: string;
 }
 
+// Define props interface, making them optional since this is a page
 interface AddCandidateFormProps {
-  onBack: () => void;
+  onBack?: () => void;
   onSubmit?: (data: JobPostingFormData) => void;
   refreshCandidates?: () => void;
   isPublic?: boolean;
 }
 
-export default function PublicCompanyOnboard({ onBack, onSubmit, refreshCandidates }: AddCandidateFormProps) {
-  
+// Default export as a page component
+export default function PublicCompanyOnboard({ onBack, onSubmit, refreshCandidates, isPublic }: AddCandidateFormProps = {}) {
+  // Rest of your component code remains the same
   const { id } = useParams();
   const formTopRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState<JobPostingFormData>({
@@ -319,7 +321,6 @@ export default function PublicCompanyOnboard({ onBack, onSubmit, refreshCandidat
     } else if (!validatePhone(formData.hrContact)) {
       newErrors.hrContact = "Please enter a valid 10-digit phone number";
     }
-    // if (!formData.logoUrl) newErrors.logoUrl = "Company logo is required";
     return { isValid: Object.keys(newErrors).length === 0, errors: newErrors };
   };
 
@@ -575,12 +576,6 @@ export default function PublicCompanyOnboard({ onBack, onSubmit, refreshCandidat
                               <Loader2 className="h-5 w-5 text-blue-600 animate-spin" />
                               <span className="text-sm font-medium text-blue-800">Uploading logo...</span>
                             </div>
-                          )}
-                          {showErrors && errors.logoUrl && (
-                            <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                              <X className="h-4 w-4" />
-                              {errors.logoUrl}
-                            </p>
                           )}
                         </div>
                       </div>
