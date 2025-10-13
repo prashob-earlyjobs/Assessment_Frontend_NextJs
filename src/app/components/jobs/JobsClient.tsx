@@ -309,11 +309,6 @@ const JobsClient = () => {
     return () => clearTimeout(timer);
   }, [companyName, location, title, searchInput, employmentType, workType, salaryRange, experienceRange, fetchJobs]);
 
-  useEffect(()=>{
-    if(searchInput?.length === 0) {
-      fetchJobs();
-    }
-  },[searchInput])
   
   // Fetch when page changes
   useEffect(() => {
