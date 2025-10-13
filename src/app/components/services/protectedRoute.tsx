@@ -1,5 +1,6 @@
 "use client";
-import { FC, ReactNode, useEffect, useState } from "react";
+
+import { FC, ReactNode, Suspense, useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Cookies from "js-cookie";
 import { isUserLoggedIn } from "../../components/services/servicesapis";
@@ -33,7 +34,7 @@ const ProtectedRoute: FC<ProtectedRouteProps> = ({ children }) => {
     const checkAuth = async () => {
       try {
         const loggedIn = await isUserLoggedIn();
-        console.log("Authentication response:", loggedIn); // Debug log
+        console.log("Authentication response:", loggedIn);
 
         if (!loggedIn.success || !loggedIn.user) {
           if (isMounted) {
@@ -76,24 +77,11 @@ const ProtectedRoute: FC<ProtectedRouteProps> = ({ children }) => {
     };
   }, [isAuthenticated, setUserCredentials, router]);
 
-  if (isAuthenticated === null) {
-    console.log("Rendering PageLoader, authentication state is null");
-    return <PageLoader />;
-  }
-
-  if (!isAuthenticated) {
-    // Construct the full path including query parameters
-    const fullPath = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : "");
-    const redirectPath = pathname && pathname !== "/login" ? fullPath : "/";
-    console.log("Storing redirect path in localStorage:", redirectPath);
-    localStorage.setItem("redirectAfterLogin", redirectPath);
-    console.log("User not authenticated, redirecting to /login");
-    router.replace("/login");
-    return null;
-  }
-
-  console.log("User authenticated, rendering children");
-  return <>{children}</>;
+  return (
+    <Suspense fallback={<PageLoader />}>
+      {isAuthenticated === null ? null : !isAuthenticated ? null : children}
+    </Suspense>
+  );
 };
 
 export default ProtectedRoute;
