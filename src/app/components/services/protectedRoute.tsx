@@ -1,72 +1,99 @@
 "use client";
 import { FC, ReactNode, useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Cookies from "js-cookie";
 import { isUserLoggedIn } from "../../components/services/servicesapis";
 import { useUser } from "../../context";
 
 const PageLoader: FC = () => {
-    return (
-        <div className="flex items-center justify-center h-screen bg-white">
-            <div className="flex flex-col items-center space-y-4">
-                <div className="w-12 h-12 border-4 border-saffron-500 border-t-transparent rounded-full animate-spin"></div>
-                <p className="text-saffron-600 font-medium">Loading...</p>
-            </div>
-        </div>
-    );
+  return (
+    <div className="flex items-center justify-center h-screen bg-white">
+      <div className="flex flex-col items-center space-y-4">
+        <div className="w-12 h-12 border-4 border-saffron-500 border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-saffron-600 font-medium">Loading...</p>
+      </div>
+    </div>
+  );
 };
 
 interface ProtectedRouteProps {
-    children: ReactNode;
+  children: ReactNode;
 }
 
 const ProtectedRoute: FC<ProtectedRouteProps> = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-    const { userCredentials, setUserCredentials } = useUser();
-    const pathname = usePathname();
-    const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const { setUserCredentials } = useUser();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
-    useEffect(() => {
-        let isMounted = true;
+  useEffect(() => {
+    let isMounted = true;
 
-        const checkAuth = async () => {
-            try {
-                const loggedIn = await isUserLoggedIn();
-                if (loggedIn.success && loggedIn.user.role !== 'super_admin' && loggedIn.user.role !== 'franchise_admin') {
-                    if (isMounted) {
-                        setIsAuthenticated(!!loggedIn); // Convert to boolean
-                        setUserCredentials(loggedIn.user);
-                    }
-                } else {
-                    throw new Error("Admin shouldn't access this page");
-                }
-            } catch (error) {
-                if (isMounted) {
-                    setIsAuthenticated(false);
-                }
-            }
-        };
+    const checkAuth = async () => {
+      try {
+        const loggedIn = await isUserLoggedIn();
+        console.log("Authentication response:", loggedIn); // Debug log
 
-        if (isAuthenticated === null) {
-            checkAuth();
+        if (!loggedIn.success || !loggedIn.user) {
+          if (isMounted) {
+            console.log("User not authenticated, setting isAuthenticated to false");
+            setIsAuthenticated(false);
+          }
+          return;
         }
 
-        return () => {
-            isMounted = false;
-        };
-    }, [pathname, setUserCredentials]);
+        if (loggedIn.user.role === "super_admin" || loggedIn.user.role === "franchise_admin") {
+          if (isMounted) {
+            console.log("Admin user detected, redirecting to /admin");
+            setUserCredentials(loggedIn.user);
+            router.push("/admin");
+          }
+          return;
+        }
 
-    // Handle redirects based on authentication state
+        if (isMounted) {
+          console.log("Non-admin user authenticated, setting isAuthenticated to true");
+          setIsAuthenticated(true);
+          setUserCredentials(loggedIn.user);
+        }
+      } catch (error) {
+        console.error("Authentication check failed:", error);
+        if (isMounted) {
+          console.log("Error occurred, setting isAuthenticated to false");
+          setIsAuthenticated(false);
+        }
+      }
+    };
+
     if (isAuthenticated === null) {
-        return <PageLoader />;
+      console.log("Checking authentication status...");
+      checkAuth();
     }
 
-    if (!isAuthenticated) {
-        router.replace(`/login?from=${encodeURIComponent(pathname)}`);
-        return null;
-    }
+    return () => {
+      isMounted = false;
+    };
+  }, [isAuthenticated, setUserCredentials, router]);
 
-    return <>{children}</>;
+  if (isAuthenticated === null) {
+    console.log("Rendering PageLoader, authentication state is null");
+    return <PageLoader />;
+  }
+
+  if (!isAuthenticated) {
+    // Construct the full path including query parameters
+    const fullPath = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : "");
+    const redirectPath = pathname && pathname !== "/login" ? fullPath : "/";
+    console.log("Storing redirect path in localStorage:", redirectPath);
+    localStorage.setItem("redirectAfterLogin", redirectPath);
+    console.log("User not authenticated, redirecting to /login");
+    router.replace("/login");
+    return null;
+  }
+
+  console.log("User authenticated, rendering children");
+  return <>{children}</>;
 };
 
 export default ProtectedRoute;

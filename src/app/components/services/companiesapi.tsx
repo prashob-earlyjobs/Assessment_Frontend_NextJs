@@ -13,7 +13,7 @@ interface FileUploadResponse {
 
 export const createCompanyOnboarding = async (onboardingData: any) => {
   try {
-    const backendUrl =  'http://localhost:5001/api';
+    const backendUrl =  process.env.NEXT_PUBLIC_BACKEND_URL_2_0;
     const response = await fetch(`${backendUrl}/publicCom/company/onboard`, {
       method: 'POST',
       headers: {
