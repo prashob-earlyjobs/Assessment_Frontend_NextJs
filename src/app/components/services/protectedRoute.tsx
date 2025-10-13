@@ -21,7 +21,7 @@ interface ProtectedRouteProps {
   children: ReactNode;
 }
 
-const ProtectedRoute: FC<ProtectedRouteProps> = ({ children }) => {
+const ProtectedRouteContent: FC<ProtectedRouteProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const { setUserCredentials } = useUser();
   const pathname = usePathname();
@@ -77,9 +77,28 @@ const ProtectedRoute: FC<ProtectedRouteProps> = ({ children }) => {
     };
   }, [isAuthenticated, setUserCredentials, router]);
 
+  if (isAuthenticated === null) {
+    return null; // Let Suspense handle the loading state
+  }
+
+  if (!isAuthenticated) {
+    const fullPath = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : "");
+    const redirectPath = pathname && pathname !== "/login" ? fullPath : "/";
+    console.log("Storing redirect path in localStorage:", redirectPath);
+    localStorage.setItem("redirectAfterLogin", redirectPath);
+    console.log("User not authenticated, redirecting to /login");
+    router.replace("/login");
+    return null;
+  }
+
+  console.log("User authenticated, rendering children");
+  return <>{children}</>;
+};
+
+const ProtectedRoute: FC<ProtectedRouteProps> = ({ children }) => {
   return (
     <Suspense fallback={<PageLoader />}>
-      {isAuthenticated === null ? null : !isAuthenticated ? null : children}
+      <ProtectedRouteContent>{children}</ProtectedRouteContent>
     </Suspense>
   );
 };
