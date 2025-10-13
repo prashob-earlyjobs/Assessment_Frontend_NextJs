@@ -291,17 +291,18 @@ export default function TalentPoolClient() {
               >
                 Talent Pool
               </Button>
-              <a href="https://portal.earlyjobs.ai/talentpoolform/public/68c42a766d9630692f685496">
+              
                 <Button
                   className="w-full text-left justify-start bg-orange-700 hover:bg-orange-600 text-white rounded-xl py-3 px-4 shadow-lg hover:shadow-xl transition-all duration-300"
                   onClick={() => {
-                    setIsMobileMenuOpen(false);
+                    router.push("/talentpoolform/public/68c42a766d9630692f685496");
+                    
                   }}
                 >
                   <LogIn className="h-5 h-5 mr-2" />
                   Register
                 </Button>
-              </a>
+             
             </div>
           </div>
         )}

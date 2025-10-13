@@ -16,7 +16,8 @@ import { Plus, X, UploadCloud, ArrowRight, ArrowLeft, ArrowLeftCircle, User, Bri
 import { createApplication, createTalentPoolcandidatePublic, ILocationDetails } from "../../../components/services/candidateapi";
 //import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-
+import Navbar from "@/app/components/pages/navbar";
+import Footer from "@/app/components/pages/footer";
 import { motion, AnimatePresence } from "framer-motion";
 import { generateGeminiContentFromResume, uploadFile } from "../../../components/services/usersapi";
 
@@ -537,6 +538,7 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
 
   return (
     <div className="min-h-screen">
+        <Navbar />
       <div className="w-full px-6 py-8">
         <div className="mb-8 flex items-center justify-between">
           <div></div>
@@ -552,7 +554,7 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                 <img
                   src='/images/logo.png'
                   alt="TalentHub Logo"
-                  className="w-auto lg:h-16"
+                  className="h-10 md:h-12 lg:h-16"
                 />
               </div>
 
@@ -1383,6 +1385,7 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
             )}
           </form>
         </div>
+        <Footer />
       </div>
   );
 }

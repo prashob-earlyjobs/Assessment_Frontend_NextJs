@@ -176,7 +176,7 @@ export const createTalentPoolcandidatePublic = async (
     }
 
     // Construct the full API endpoint URL manually
-    const apiEndpoint = `${backendUrl}/talentPoolCandidates/68c42a766d9630692f685496/createTalentPoolCandidate`;
+    const apiEndpoint = `${backendUrl}/talentPoolCandidates//createTalentPoolCandidate`;
 
     // Validate required fields according to backend schema
     const requiredFields = [

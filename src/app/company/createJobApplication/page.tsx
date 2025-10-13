@@ -16,6 +16,8 @@ import { useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { createCompanyOnboarding } from "../../components/services/companiesapi";
 import { uploadFile } from "../../components/services/companiesapi";
+import Navbar from "../../components/pages/navbar";
+import Footer from "../../components/pages/footer";
 
 // Update the JobPostingFormData interface
 interface JobPostingFormData {
@@ -458,6 +460,7 @@ export default function PublicCompanyOnboard({ onBack, onSubmit, refreshCandidat
 
   return (
     <div className="min-h-screen">
+      <Navbar />
       <div className="w-full px-6 py-8">
         <div className="mb-8 flex items-center justify-between">
           <div></div>
@@ -1332,6 +1335,7 @@ export default function PublicCompanyOnboard({ onBack, onSubmit, refreshCandidat
           </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 }
