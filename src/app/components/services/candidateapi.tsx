@@ -2,6 +2,7 @@ import axiosInstance from "./apiinterseptor"; // Assuming same interceptor setup
 import { toast } from "react-toastify";
 import axios, { AxiosResponse } from 'axios';
 import { ICreateTallentPoolFormData } from "@/app/talentpoolform/public/[id]/page";
+import { ParamValue } from "next/dist/server/request/params";
 
 // Interface for location details
 export interface ILocationDetails {
@@ -164,7 +165,7 @@ export const createApplication = async (
 
 
 export const createTalentPoolcandidatePublic = async (
-  id: string,
+  id: string | ParamValue ,
   data: ICreateTallentPoolFormData,
   resumeFile?: File
 ): Promise<ICreateApplicationResponse> => {
@@ -176,7 +177,7 @@ export const createTalentPoolcandidatePublic = async (
     }
 
     // Construct the full API endpoint URL manually
-    const apiEndpoint = `${backendUrl}/talentPoolCandidates/68c42a766d9630692f685496/createTalentPoolCandidate`;
+    const apiEndpoint = `${backendUrl}/talentPoolCandidates/${id}/createTalentPoolCandidate`;
 
     // Validate required fields according to backend schema
     const requiredFields = [
