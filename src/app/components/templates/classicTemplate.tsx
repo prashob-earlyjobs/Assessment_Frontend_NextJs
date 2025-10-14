@@ -196,7 +196,7 @@ const ClassicTemplate: React.FC<ClassicTemplateProps> = ({ data, isGeneratingPDF
                   <div className="flex justify-between items-start">
                     <div>
                       <h3 className="font-semibold text-lg">{job.position || 'Sales Manager'}</h3>
-                      <p className="text-gray-600">{job.company || 'Google, New York, NY'}</p>
+                      <p className="font-semibold text-gray-600">{job.company || 'Google, New York, NY'}</p>
                     </div>
                     <span className="text-gray-500 text-sm">{job.startDate || 'Nov 2020'} - {job.endDate || 'Present'}</span>
                   </div>
@@ -216,8 +216,8 @@ const ClassicTemplate: React.FC<ClassicTemplateProps> = ({ data, isGeneratingPDF
                 <div key={index} className="mb-4">
                   <div className="flex justify-between items-start">
                     <div>
-                      <p className="text-gray-600">{edu.degree || 'B.A. Economics'} {edu.field && `in ${edu.field}`}</p>
-                      <p className="text-gray-500 text-sm">{edu.school || 'Columbia University, New York, NY'}</p>
+                      <p className="text-gray-700 font-semibold">{edu.degree || 'B.A. Economics'} {edu.field && `in ${edu.field}`}</p>
+                      <p className="text-gray-600 text-sm">{edu.school || 'Columbia University, New York, NY'}</p>
                     </div>
                     <span className="text-gray-500 text-sm">{edu.startDate || 'Sep 2014'} - {edu.endDate || 'May 2018'}</span>
                   </div>
@@ -227,7 +227,7 @@ const ClassicTemplate: React.FC<ClassicTemplateProps> = ({ data, isGeneratingPDF
             </section>
           )}
 
-          {/* Extracurriculars (Conditionally Rendered) */}
+          
           {data.extracurriculars?.length > 0 && (
             <section className="mb-6">
               <h2 className="text-2xl font-semibold border-b-2 border-gray-300 pb-2 mb-4 flex items-center"><Award className='inline-block mr-2 h-4'/><span className={isGeneratingPDF ? 'mb-[1rem]' : ''}>Extracurriculars</span></h2>

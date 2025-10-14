@@ -235,7 +235,7 @@ export const uploadFile = async (
 
     // Make the upload request
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_2_0;
-    const response = await fetch(`${backendUrl}/uploads/file`, {
+    const response = await fetch(`${backendUrl}/uploads/public/file`, {
       method: 'POST',
       body: formData
     });
