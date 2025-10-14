@@ -248,7 +248,7 @@ const Recruiter = () => {
                         </div>
                         <div className="landing-page-screen-1-btn-grp">
                             <p onClick={()=>router.push("/apply-as-a-recruiter")} className="landing-page-s1-link-btn">Become Freelance Recruiter</p>
-                            <a href="https://portal.earlyjobs.ai/company/createJobApplication" className="landing-page-s1-link-btn-outline landing-page-s1-link-btn">Free Job Posting</a>
+                            <p onClick={()=>router.push("/company/createJobApplication")} className="landing-page-s1-link-btn-outline landing-page-s1-link-btn">Free Job Posting</p>
                             
                         </div>
                     </div>

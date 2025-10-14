@@ -1,3 +1,4 @@
+"use client"
 import React, { useState, useImperativeHandle, forwardRef } from 'react';
 import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
@@ -20,6 +21,7 @@ export interface PersonalDetailsRef {
 }
 
 interface ValidationErrors {
+  recruiterType?: string;
   fullName?: string;
   dateOfBirth?: string;
   gender?: string;
@@ -58,6 +60,12 @@ const languageOptions = [
   'Other'
 ];
 
+const roleOptions = [
+  'Intern Recruiter (Remote)',
+  'Freelance Recruiter (Remote)',
+  'Full-time Recruiter'
+];
+
 const getMaxDate = () => {
   const today = new Date();
   const minAge = 16;
@@ -79,12 +87,10 @@ export const PersonalDetails = forwardRef<PersonalDetailsRef, PersonalDetailsPro
   const handleLanguageChange = (lang: string) => {
     setSelectedLanguages(prev => {
       if (prev.includes(lang)) {
-        // Remove language
         const updated = prev.filter(l => l !== lang);
         updatePersonalDetails('languages', updated);
         return updated;
       } else {
-        // Add language
         const updated = [...prev, lang];
         updatePersonalDetails('languages', updated);
         return updated;
@@ -92,7 +98,11 @@ export const PersonalDetails = forwardRef<PersonalDetailsRef, PersonalDetailsPro
     });
   };
 
-  // Validation functions
+  const validateRecruiterType = (type: string): string | undefined => {
+    if (!type) return 'Please select a role';
+    return undefined;
+  };
+
   const validateFullName = (name: string): string | undefined => {
     if (!name.trim()) return 'Full name is required';
     if (name.trim().length < 2) return 'Name must be at least 2 characters';
@@ -109,21 +119,20 @@ export const PersonalDetails = forwardRef<PersonalDetailsRef, PersonalDetailsPro
 
   const validatePhoneNumber = (phone: string): string | undefined => {
     if (!phone.trim()) return 'Phone number is required';
-    const phoneRegex = /^[6-9]\d{9}$/; // Indian mobile number format
+    const phoneRegex = /^[6-9]\d{9}$/;
     if (!phoneRegex.test(phone)) return 'Please enter a valid 10-digit mobile number starting with 6-9';
     return undefined;
   };
 
   const validateWhatsAppNumber = (phone: string): string | undefined => {
     if (!phone.trim()) return 'WhatsApp number is required';
-    const phoneRegex = /^[6-9]\d{9}$/; // Indian mobile number format
+    const phoneRegex = /^[6-9]\d{9}$/;
     if (!phoneRegex.test(phone)) return 'Please enter a valid 10-digit WhatsApp number starting with 6-9';
     return undefined;
   };
 
   const validateDateOfBirth = (dob: string): string | undefined => {
     if (!dob) return 'Date of birth is required';
-    
     const today = new Date();
     const birthDate = new Date(dob);
     const age = today.getFullYear() - birthDate.getFullYear();
@@ -151,11 +160,10 @@ export const PersonalDetails = forwardRef<PersonalDetailsRef, PersonalDetailsPro
     return undefined;
   };
 
-  // Function to validate all fields at once
   const validateAllFields = (): boolean => {
     const newErrors: ValidationErrors = {};
     
-    // Validate basic fields
+    newErrors.recruiterType = validateRecruiterType(formData.personalDetails.recruiterType);
     newErrors.fullName = validateFullName(formData.personalDetails.fullName);
     newErrors.dateOfBirth = validateDateOfBirth(formData.personalDetails.dateOfBirth);
     newErrors.phoneNumber = validatePhoneNumber(formData.personalDetails.phoneNumber);
@@ -166,7 +174,6 @@ export const PersonalDetails = forwardRef<PersonalDetailsRef, PersonalDetailsPro
       newErrors.gender = 'Gender is required';
     }
     
-    // Validate current address
     newErrors.currentAddress = {
       buildingFlat: validateRequired(formData.personalDetails.currentAddress.buildingFlat, 'Building/Flat No.'),
       street: validateRequired(formData.personalDetails.currentAddress.street, 'Street'),
@@ -176,7 +183,6 @@ export const PersonalDetails = forwardRef<PersonalDetailsRef, PersonalDetailsPro
       pincode: validatePincode(formData.personalDetails.currentAddress.pincode)
     };
     
-    // Validate permanent address
     newErrors.permanentAddress = {
       buildingFlat: validateRequired(formData.personalDetails.permanentAddress.buildingFlat, 'Building/Flat No.'),
       street: validateRequired(formData.personalDetails.permanentAddress.street, 'Street'),
@@ -188,7 +194,6 @@ export const PersonalDetails = forwardRef<PersonalDetailsRef, PersonalDetailsPro
     
     setErrors(newErrors);
     
-    // Check if there are any errors
     const hasErrors = Object.values(newErrors).some(error => {
       if (typeof error === 'string') return error;
       if (typeof error === 'object' && error !== null) {
@@ -200,7 +205,6 @@ export const PersonalDetails = forwardRef<PersonalDetailsRef, PersonalDetailsPro
     return !hasErrors;
   };
 
-  // Expose validation function for parent components
   useImperativeHandle(ref, () => ({
     validateForm: validateAllFields
   }));
@@ -255,6 +259,35 @@ export const PersonalDetails = forwardRef<PersonalDetailsRef, PersonalDetailsPro
 
   return (
     <div className="space-y-6">
+      <div>
+        <Label className="text-sm font-medium text-gray-700">
+          Role <span className="text-red-500">*</span>
+        </Label>
+        <div className="mt-2 space-y-2">
+          {roleOptions.map((role) => (
+            <div key={role} className="flex items-center">
+              <input
+                type="radio"
+                id={role}
+                name="recruiterType"
+                value={role}
+                checked={formData.personalDetails.recruiterType === role}
+                onChange={(e) => {
+                  handleFieldChange('recruiterType', e.target.value, validateRecruiterType);
+                }}
+                className="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"
+              />
+              <Label htmlFor={role} className="ml-2 text-sm text-gray-700 cursor-pointer">
+                {role}
+              </Label>
+            </div>
+          ))}
+        </div>
+        {errors.recruiterType && (
+          <p className="mt-1 text-sm text-red-600">{errors.recruiterType}</p>
+        )}
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <Label htmlFor="fullName" className="text-sm font-medium text-gray-700">
@@ -364,7 +397,6 @@ export const PersonalDetails = forwardRef<PersonalDetailsRef, PersonalDetailsPro
                 placeholder="Ex. 9876543210"
                 value={formData.personalDetails.phoneNumber}
                 onChange={(e) => {
-                  // Only allow numbers and limit to 10 digits
                   const value = e.target.value.replace(/\D/g, '').slice(0, 10);
                   handleFieldChange('phoneNumber', value, validatePhoneNumber);
                 }}
@@ -403,7 +435,6 @@ export const PersonalDetails = forwardRef<PersonalDetailsRef, PersonalDetailsPro
                 placeholder="Ex. 9876543210"
                 value={formData.personalDetails.whatsappNumber}
                 onChange={(e) => {
-                  // Only allow numbers and limit to 10 digits
                   const value = e.target.value.replace(/\D/g, '').slice(0, 10);
                   handleFieldChange('whatsappNumber', value, validateWhatsAppNumber);
                 }}
@@ -439,7 +470,6 @@ export const PersonalDetails = forwardRef<PersonalDetailsRef, PersonalDetailsPro
         </div>
       </div>
 
-      {/* Current Address */}
       <div className="space-y-4">
         <h3 className="text-lg font-medium text-gray-900">Current Address</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -526,7 +556,6 @@ export const PersonalDetails = forwardRef<PersonalDetailsRef, PersonalDetailsPro
               placeholder="Ex. 123456"
               value={formData.personalDetails.currentAddress.pincode}
               onChange={(e) => {
-                // Only allow numbers and limit to 6 digits
                 const value = e.target.value.replace(/\D/g, '').slice(0, 6);
                 handleAddressChange('currentAddress', 'pincode', value, validatePincode);
               }}
@@ -554,7 +583,6 @@ export const PersonalDetails = forwardRef<PersonalDetailsRef, PersonalDetailsPro
                     permanentAddress: { ...formData.personalDetails.currentAddress }
                   }
                 });
-                // Clear permanent address errors when copying
                 setErrors(prev => ({
                   ...prev,
                   permanentAddress: {}
@@ -568,7 +596,6 @@ export const PersonalDetails = forwardRef<PersonalDetailsRef, PersonalDetailsPro
         </div>
       </div>
 
-      {/* Permanent Address */}
       <div className="space-y-4">
         <h3 className="text-lg font-medium text-gray-900">Permanent Address</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -650,7 +677,6 @@ export const PersonalDetails = forwardRef<PersonalDetailsRef, PersonalDetailsPro
               placeholder="Ex. 123456"
               value={formData.personalDetails.permanentAddress.pincode}
               onChange={(e) => {
-                // Only allow numbers and limit to 6 digits
                 const value = e.target.value.replace(/\D/g, '').slice(0, 6);
                 handleAddressChange('permanentAddress', 'pincode', value, validatePincode);
               }}
@@ -666,9 +692,7 @@ export const PersonalDetails = forwardRef<PersonalDetailsRef, PersonalDetailsPro
         </div>
       </div>
 
-      {/* Spoken Languages Section - Reference UI */}
       <div className="space-y-6">
-       
         <div className="space-y-4">
           <Label className="text-sm font-bold text-gray-700">Select Languages *</Label>
           <Select

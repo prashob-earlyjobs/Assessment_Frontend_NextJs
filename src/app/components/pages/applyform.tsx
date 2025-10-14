@@ -17,6 +17,7 @@ import { Loader2 } from 'lucide-react';
 interface IOnboardingData {
   updatedDateTime: string;
   personalDetails: {
+    recruiterType: string;
     fullName: string;
     email: string;
     role: string;
@@ -78,13 +79,14 @@ interface IOnboardingData {
       organization: string;
       email: string;
       phone: string;
-      connection: string;
+      connection: string; 
     };
   };
 }
 
 export interface FormData {
   personalDetails: {
+    recruiterType: string;
     fullName: string;
     dateOfBirth: string;
     gender: string;
@@ -198,6 +200,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ onFormSubmit, isCompact =
     }
     return {
       personalDetails: {
+        recruiterType: '',
         fullName: '',
         dateOfBirth: '',
         gender: '',
@@ -406,6 +409,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ onFormSubmit, isCompact =
       const onboardingData: IOnboardingData = {
         updatedDateTime: new Date().toISOString(),
         personalDetails: {
+          recruiterType: formData.personalDetails.recruiterType,
           fullName: formData.personalDetails.fullName,
           email: formData.personalDetails.email,
           role: 'applicant', // Default role for anonymous submissions

@@ -15,10 +15,12 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Plus, X, UploadCloud, ArrowRight, ArrowLeft, ArrowLeftCircle, User, Briefcase, CheckCircle, MapPin, Phone, Mail, Calendar, FileText, Languages, Award, Target, Building, Clock, Loader2, Search, ChevronDown, Check, Eye } from 'lucide-react';
 import { createApplication, createTalentPoolcandidatePublic, ILocationDetails } from "../../../components/services/candidateapi";
 //import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
-
+import { useParams } from "next/navigation";
+import Navbar from "@/app/components/pages/navbar";
+import Footer from "@/app/components/pages/footer";
 import { motion, AnimatePresence } from "framer-motion";
-import { generateGeminiContentFromResume, uploadFile } from "../../../components/services/usersapi";
+import { generateGeminiContentFromResume} from "../../../components/services/usersapi";
+import { uploadFile } from "../../../components/services/companiesapi";
 
 // Job interface for API response
 interface Job {
@@ -93,7 +95,8 @@ export interface ICreateTallentPoolFormData {
 
 export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: AddCandidateFormProps) {
   //const navigate = useNavigate();
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
+  console.log('Extracted ID:', id);
   const apiClient = createApplication;
   const formTopRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState<CandidateFormData>({
@@ -487,7 +490,7 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
           resume: uploadedURL || undefined,
         };
 
-        const response = await createTalentPoolcandidatePublic(id ?? "", normalizedData, resumeFile || undefined);
+        const response = await createTalentPoolcandidatePublic(id, normalizedData, resumeFile || undefined);
         setSuccessMessage("Your profile has been successfully created! Thank you for registering.");
         setShowSuccessPopup(true);
 
@@ -537,6 +540,7 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
 
   return (
     <div className="min-h-screen">
+        <Navbar />
       <div className="w-full px-6 py-8">
         <div className="mb-8 flex items-center justify-between">
           <div></div>
@@ -552,7 +556,7 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                 <img
                   src='/images/logo.png'
                   alt="TalentHub Logo"
-                  className="w-auto lg:h-16"
+                  className="h-10 md:h-12 lg:h-16"
                 />
               </div>
 
@@ -1383,6 +1387,7 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
             )}
           </form>
         </div>
+        <Footer />
       </div>
   );
 }
