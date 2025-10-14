@@ -7,7 +7,7 @@ import { Badge } from "../ui/badge";
 import { Input } from "../ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Checkbox } from "../ui/checkbox";
-import { X, Bookmark,Globe, Share2, Briefcase, IndianRupee, User, Clock, MapPin, Plus, Trash2, ChevronDown, Copy, Linkedin, Facebook, Instagram, Loader2 } from "lucide-react";
+import { X, Bookmark,Globe, Share2, Briefcase, IndianRupee, User, Clock, MapPin, Plus, Trash2, ChevronDown, Copy, Linkedin, Facebook, Instagram, Loader2, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { FaLinkedin, FaInstagram } from "react-icons/fa";
 import { useRouter ,useSearchParams, usePathname} from "next/navigation";
@@ -47,8 +47,9 @@ interface JobDetailsData {
   area?: string;
   pincode?: string;
   keywords?: [{keyword: string ,isShared:boolean}];
-
+  company_logo?: string;
   location_link?: string;
+  related_jobs?: JobDetailsData[];
 }
 interface ICreateApplicantRequestBody {
   fullName: string;
@@ -106,7 +107,6 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
         setLoading(true);
         setError(null);
         const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_2_0.slice(0,-4);
-        
         const response = await fetch(`${backendUrl}/api/public/jobs/${jobid}`);
         
         if (!response.ok) {
@@ -473,9 +473,19 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
     <div className="min-h-screen bg-gray-50" onClick={handleClickOutsideShare}>
       <div className="max-w-7xl mx-auto p-4 sm:p-6">
         {/* Page Title */}
-        <h1 className="text-xl sm:text-2xl font-bold text-earlyjobs-text mb-4 sm:mb-6">
-          {jobData.title} Job {jobData.city ? `in ${jobData.city}` : ''} at {jobData.company_name}
-        </h1>
+        <div className="flex items-center gap-4 mb-4 sm:mb-6">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => router.back()}
+            className="rounded-full w-10 h-10 p-0 bg-orange-50 hover:bg-orange-100"
+          >
+            <ArrowLeft className="h-5 w-5 text-orange-600" />
+          </Button>
+          <h1 className="text-xl sm:text-2xl font-bold text-earlyjobs-text">
+            {jobData.title} Job {jobData.city ? `in ${jobData.city}` : ''} at {jobData.company_name}
+          </h1>
+        </div>
         
         <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
           {/* Main Content */}
@@ -582,8 +592,8 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                 <h3 className="font-medium mb-2">Location</h3>
                 <div className="flex items-center gap-3">
                   <Badge 
-                    className={`bg-earlyjobs-light-orange text-earlyjobs-orange border-earlyjobs-orange/20 cursor-pointer hover:bg-earlyjobs-navy hover:text-white transition-colors text-xs sm:text-sm ${
-                      jobData.location_link ? 'cursor-pointer hover:bg-earlyjobs-navy hover:text-white transition-colors' : ''
+                    className={`bg-earlyjobs-light-orange text-earlyjobs-orange border-earlyjobs-orange/20 text-xs sm:text-sm ${
+                      jobData.location_link ? 'cursor-pointer' : ''
                     }`}
                     onClick={jobData.location_link ? () => window.open(jobData.location_link, '_blank') : undefined}
                   >
@@ -638,7 +648,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                 <div className="mb-6">
                   <h3 className="font-medium mb-3">Keywords</h3>
                   <div className="flex gap-2 flex-wrap">
-                    {jobData.keywords.map((keyword,index)=><Badge 
+                    {jobData.keywords?.map((keyword,index)=><Badge 
                         key={index}
                         variant="outline"
                         onClick={() => handleKeywordClick(keyword.keyword)}
@@ -749,7 +759,38 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                 </Button>
               </div>
             </div>
+
+            {/* Related Jobs */}
+            {jobData && jobData.related_jobs && jobData.related_jobs.length > 0 && (
+            <div className="bg-white rounded-lg p-4 shadow-sm mt-6">
+              <h3 className="font-semibold text-earlyjobs-text mb-4">Related Jobs</h3>
+              <div className="space-y-3">
+                {jobData?.related_jobs?.map((job,index)=>{
+                  return (
+                    <div key={index} className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:border-earlyjobs-orange hover:bg-orange-50 transition-colors cursor-pointer" onClick={() => {
+                      const jobTitle = job?.title?.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "") || "job";
+                      router.push(`/jobs/${jobTitle}/${job.job_id}`);
+                    }}>
+                  <img 
+                    src={job?.company_logo} 
+                    alt="Company logo" 
+                    className="w-10 h-10 rounded object-contain bg-gray-50 p-1"
+                  />
+                  <div className="flex-1">
+                    <h4 className="font-medium text-sm text-earlyjobs-text">{job?.title}</h4>
+                    <p className="text-xs text-gray-600">{job?.company_name} • {job?.city} • {job?.employment_type}</p>
+                  </div>
+                </div>
+                  )
+                })}
+                
+              </div>
+              
+              
+            </div>
+            )}
           </div>
+          
         </div>
       </div>
 
