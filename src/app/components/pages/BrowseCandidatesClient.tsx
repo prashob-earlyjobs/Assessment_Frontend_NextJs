@@ -178,7 +178,7 @@ export default function BrowseCandidatesClient() {
     const nameSlug = generateSlug(candidate.name);
     const assessmentSlug = generateAssessmentSlug(candidate.firstAssessmentTitle);
     console.log("Navigating to candidate profile:", `/browse-interviewed-candidates/${nameSlug}/${assessmentSlug}/${candidate._id}`);
-    router.push(`/browse-interviewed-candidates/${nameSlug}/${assessmentSlug}/${candidate._id}`);
+    router.push(`/browse-interviewed-candidates/${nameSlug}-${assessmentSlug}/${candidate._id}`);
   };
 
   const filteredCandidates = useMemo(() => {
