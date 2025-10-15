@@ -242,8 +242,8 @@ function LoginContent() {
       toast.success("Account created successfully!");
       const redirectPath = localStorage.getItem("redirectAfterLogin") || '/onboarding';
       console.log("Signup successful, redirecting to:", redirectPath);
-      localStorage.removeItem("redirectAfterLogin"); // Clear stored path
-      router.push(redirectPath);
+     
+      router.push('/onboarding');
     } catch (error) {
       toast.error("Error verifying OTP");
     }

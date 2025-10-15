@@ -231,7 +231,7 @@ const Index = () => {
             <Button
               variant="ghost"
               className="w-full text-left justify-start text-gray-700 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-200 font-medium"
-              onClick={() => handleMobileMenuItemClick("/browse-candidates")}
+              onClick={() => handleMobileMenuItemClick("/browse-interviewed-candidates")}
             >
               <Briefcase className="h-4 w-4 mr-3 text-orange-500" />
               Browse Candidates

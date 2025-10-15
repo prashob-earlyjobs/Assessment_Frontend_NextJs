@@ -245,7 +245,7 @@ export default function TalentPoolClient() {
               </a>
               <Button
                 className="bg-orange-500 hover:bg-orange-600 text-white shadow-md rounded-xl"
-                onClick={() => router.push("/talentpoolform/public/68c42a766d9630692f685496")}
+                onClick={() => router.push("/jointalentpool/public/68c42a766d9630692f685496")}
               >
                 Register
               </Button>
@@ -266,7 +266,7 @@ export default function TalentPoolClient() {
               <Button
                 variant="ghost"
                 className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
-                onClick={() => handleMobileMenuItemClick("/browse-candidates")}
+                onClick={() => handleMobileMenuItemClick("/browse-interviewed-candidates")}
               >
                 Browse Candidates
               </Button>
@@ -295,7 +295,7 @@ export default function TalentPoolClient() {
                 <Button
                   className="w-full text-left justify-start bg-orange-700 hover:bg-orange-600 text-white rounded-xl py-3 px-4 shadow-lg hover:shadow-xl transition-all duration-300"
                   onClick={() => {
-                    router.push("/talentpoolform/public/68c42a766d9630692f685496");
+                    router.push("/jointalentpool/public/68c42a766d9630692f685496");
                     
                   }}
                 >
@@ -362,7 +362,7 @@ export default function TalentPoolClient() {
                 <Button
                   size="lg"
                   className="bg-orange-500 hover:bg-orange-600 shadow-button text-lg text-white px-8 py-6 animate-scale-on-hover"
-                  onClick={() => router.push("/talentpoolform/public/68c42a766d9630692f685496")}
+                  onClick={() => router.push("/jointalentpool/public/68c42a766d9630692f685496")}
                 >
                   Register Now
                 </Button>

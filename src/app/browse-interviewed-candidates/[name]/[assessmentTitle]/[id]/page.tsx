@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button } from "../../../components/ui/button";
+import { Button } from "../../../../components/ui/button";
 import { useRouter, useParams } from "next/navigation";
 import { toast } from "sonner";
 import { X } from "lucide-react";
-import InterestedCandidateForm from "../../../components/InterestedCandidateForm";
-import Footer from "../../../components/pages/footer";
-import Navbar from "../../../components/pages/navbar";
+import InterestedCandidateForm from "../../../../components/InterestedCandidateForm";
+import Footer from "../../../../components/pages/footer";
+import Navbar from "../../../../components/pages/navbar";
 
 const CandidateProfile = () => {
   const [selectedCandidate, setSelectedCandidate] = useState(null);
@@ -262,7 +262,7 @@ useEffect(() => {
                       <div className="flex justify-between items-center mb-2">
                         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">{selectedCandidate.name}'s Profile Details</h2>
                         <button
-                          onClick={() => router.push("/browse-candidates")}
+                          onClick={() => router.push("/browse-interviewed-candidates")}
                           className="text-gray-600 hover:text-orange-600"
                         >
                           <X size={28} />

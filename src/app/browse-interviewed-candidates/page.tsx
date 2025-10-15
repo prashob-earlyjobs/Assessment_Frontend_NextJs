@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
     const data = await response.json();
 
     if (data.success && data.data) {
-      const title = "Browse Top Candidates - EarlyJobs";
+      const title = "Browse Top Interviewed Candidates - EarlyJobs";
       const description = "Discover talented professionals ready to join your team. Browse candidates with verified skills and experience on EarlyJobs.";
       const keywords = "candidates, talent, hiring, professionals, earlyjobs";
 
@@ -31,7 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
           title,
           description,
           type: "website",
-          url: `${process.env.NEXT_PUBLIC_BASE_URL}/browse-candidates`,
+          url: `${process.env.NEXT_PUBLIC_BASE_URL}/browse-interviewed-candidates`,
           images: [
             {
               url: "/images/og-candidates.jpg",

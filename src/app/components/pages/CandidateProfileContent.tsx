@@ -254,7 +254,7 @@ const CandidateProfileContent = () => {
                       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2">
                         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">{selectedCandidate.name}'s Profile Details</h2>
                         <button
-                          onClick={() => router.push("/browse-candidates")}
+                          onClick={() => router.push("/browse-interviewed-candidates")}
                           className="text-gray-600 hover:text-orange-600 mt-2 sm:mt-0"
                         >
                           <X size={28} />
