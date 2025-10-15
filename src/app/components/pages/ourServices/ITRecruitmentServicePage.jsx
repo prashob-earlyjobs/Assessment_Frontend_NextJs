@@ -9,8 +9,6 @@ import HowWeHelpSection from "../../Servicesfooter/HowWeHelpSection";
 import Highlights from "../../Servicesfooter/Highlights";
 import Faqs from "../../Servicesfooter/Faqs";
 import './style.css';
-import { useEffect } from "react";
-import { metaConstants } from "../../../utils/metaConstants"
 
 const heroSectionData = {
     subheading: 'HIRE THE TOP GLOBAL IT TALENT',
@@ -117,37 +115,7 @@ const servicePageAccordianData = [
 
 const ITRecruitmentServicePage = () => {
 
-    useEffect(() => {
-        window.scrollTo(0, 0)
-        document.title = metaConstants.itRecruitment.title
-
-        const metaDescription = document.querySelector('meta[name="description"]');
-        const metaKeywords = document.querySelector('meta[name="keywords"]');
-        const metaSubject = document.querySelector('meta[name="subject"]');
-        if (metaDescription) {
-            metaDescription.setAttribute('content', metaConstants.itRecruitment.description);
-        }
-        if (metaKeywords) {
-            metaKeywords.setAttribute('content', metaConstants.itRecruitment.keywords);
-        }
-        if (metaSubject) {
-            metaSubject.setAttribute('content', metaConstants.itRecruitment.description);
-        }
-
-        return () => {
-            document.title = metaConstants.title
-            if (metaDescription) {
-                metaDescription.setAttribute('content', metaConstants.description); // Replace with the original content if needed
-            }
-            if (metaKeywords) {
-                metaKeywords.setAttribute('content', metaConstants.keywords);
-            }
-            if (metaSubject) {
-                metaSubject.setAttribute('content', metaConstants.description);
-            }
-        };
-    }, [])
-
+  
     return (
         <div className="service-page-container">
             <HeroSection heroSectionData={heroSectionData} />

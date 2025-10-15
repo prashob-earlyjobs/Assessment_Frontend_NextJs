@@ -248,8 +248,8 @@ const Recruiter = () => {
                         </div>
                         <div className="landing-page-screen-1-btn-grp">
                             <p onClick={()=>router.push("/apply-as-a-recruiter")} className="landing-page-s1-link-btn">Become Freelance Recruiter</p>
-                            <p onClick={()=>router.push("/jobs")} className="landing-page-s1-link-btn-outline landing-page-s1-link-btn">Explore Jobs</p>
-                            {/* <p  className="landing-page-s1-link-btn-outline landing-page-s1-link-btn">Free Job Posting</p> */}
+                            <p onClick={()=>router.push("/company/createJobApplication")} className="landing-page-s1-link-btn-outline landing-page-s1-link-btn">Free Job Posting</p>
+                            
                         </div>
                     </div>
                     <div className="landing-page-screen-1-image-con">

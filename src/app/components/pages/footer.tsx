@@ -40,13 +40,13 @@ const Footer = () => {
                         </a>
                     </div>
                     <div className="flex items-center mt-5">
-                        <a href="https://www.facebook.com/earlyjobs.in" className="mr-5 no-underline" rel="noreferrer" target="_blank">
+                        <a href={process.env.NEXT_PUBLIC_FACEBOOK_URL} className="mr-5 no-underline" rel="noreferrer" target="_blank">
                             <FaFacebook className="text-white text-2xl" />
                         </a>
-                        <a href="https://www.instagram.com/earlyjobs.ai/" className="mr-5 no-underline" rel="noreferrer" target="_blank">
+                        <a href={process.env.NEXT_PUBLIC_INSTAGRAM_URL} className="mr-5 no-underline" rel="noreferrer" target="_blank">
                             <AiFillInstagram className="text-white text-3xl" />
                         </a>
-                        <a href="https://www.linkedin.com/company/earlyjobs/" className="mr-5 no-underline" rel="noreferrer" target="_blank">
+                        <a href={process.env.NEXT_PUBLIC_LINKEDIN_URL} className="mr-5 no-underline" rel="noreferrer" target="_blank">
                             <FaLinkedin className="text-white text-2xl" />
                         </a>
                     </div>
@@ -68,6 +68,7 @@ const Footer = () => {
                     <Link href="/franchise" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Franchise With Us</Link>
                     <a href="tel:+918217527926" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 cursor-pointer lg:mt-6" id="contact-link">Contact Us</a>
                     <Link href="/story" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Our Story</Link>
+                    <Link href="/jobs" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Job Openings</Link>
                 </div>
                 <div className="flex flex-col">
                     <h3 className="pt-8 text-white text-base font-semibold uppercase leading-5 lg:pt-12">Our Services</h3>

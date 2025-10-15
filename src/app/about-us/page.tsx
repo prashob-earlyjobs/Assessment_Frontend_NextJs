@@ -1,11 +1,52 @@
-"use client"
-import React, { useEffect } from 'react'
+
+import React from 'react'
 import { FaLinkedin } from "react-icons/fa";
-import { metaConstants } from '../utils/metaConstants';
+import { Metadata } from 'next';    
 import Header from '../components/pages/header';
 import Footer from '../components/pages/footer';
 import Navbar from '../components/pages/navbar';
 
+export async function generateMetadata(): Promise<Metadata> {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.earlyjobs.ai';
+  return {
+    title: 'About EarlyJobs | Empowering Recruitment & Talent Opportunities',
+    description: 'Learn about EarlyJobs, a platform revolutionizing recruitment by empowering freelance recruiters, aspiring professionals, and organizations with flexible remote work and internship opportunities.',
+    keywords: [
+      'EarlyJobs about us',
+      'recruitment platform',
+      'freelance recruitment',
+      'remote work opportunities',
+      'recruitment internships',
+      'executive search firm',
+      'talent acquisition',
+      'recruitment agency India',
+      'Mr. Ravi Prakash Kumar',
+    ],
+    openGraph: {
+      title: 'About EarlyJobs | Empowering Recruitment & Talent Opportunities',
+      description: 'Discover EarlyJobs’ mission to bridge talent and opportunity through innovative recruitment solutions, remote work, and internships.',
+      url: `${baseUrl}/about-us`,
+      type: 'website',
+      images: [
+        {
+          url: `/images/logo.png`,
+          width: 1200,
+          height: 630,
+          alt: 'About EarlyJobs - Recruitment Platform',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'About EarlyJobs | Empowering Recruitment & Talent Opportunities',
+      description: 'Discover EarlyJobs’ mission to bridge talent and opportunity through innovative recruitment solutions, remote work, and internships.',
+      images: [`/images/logo.png`],
+    },
+    alternates: {
+      canonical: `${baseUrl}/about-us`,
+    },
+  };
+}
 const AboutUs = () => {
 
     const culturalFit = [
@@ -30,36 +71,6 @@ const AboutUs = () => {
         },
     ]
 
-    useEffect(() => {
-        window.scrollTo(0, 0)
-        document.title = metaConstants.about.title
-
-        const metaDescription = document.querySelector('meta[name="description"]');
-        const metaKeywords = document.querySelector('meta[name="keywords"]');
-        const metaSubject = document.querySelector('meta[name="subject"]');
-        if (metaDescription) {
-            metaDescription.setAttribute('content', metaConstants.about.description);
-        }
-        if (metaKeywords) {
-            metaKeywords.setAttribute('content', metaConstants.about.keywords);
-        }
-        if (metaSubject) {
-            metaSubject.setAttribute('content', metaConstants.about.description);
-        }
-
-        return () => {
-            document.title = metaConstants.title
-            if (metaDescription) {
-                metaDescription.setAttribute('content', metaConstants.description);
-            }
-            if (metaKeywords) {
-                metaKeywords.setAttribute('content', metaConstants.keywords);
-            }
-            if (metaSubject) {
-                metaSubject.setAttribute('content', metaConstants.description);
-            }
-        };
-    }, [])
 
     return (
         <div className="min-h-screen bg-white">

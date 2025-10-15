@@ -31,9 +31,7 @@ import {
     Code,
     FolderOpen,
     Camera,
-    GripVertical,
     Settings,
-    RotateCcw,
     ChevronDown,
     ChevronUp,
     Save,
@@ -47,6 +45,8 @@ import {
     Globe,
 } from "lucide-react"
 import ATSScoreCard from "../ui/ats-score"
+import MinimalTemplate from "../templates/MinimalTemplate"
+import ClassicTemplate from "../templates/classicTemplate"
 
 // Interfaces (unchanged except for ATSScore)
 interface PersonalInfo {
@@ -114,12 +114,6 @@ interface ResumeData {
     extracurriculars: Extracurricular[]
 }
 
-interface SectionOrder {
-    id: string
-    name: string
-    visible: boolean
-}
-
 interface ATSScore {
     totalScore: number
     contactInfoScore: number
@@ -141,13 +135,25 @@ const templates = [
         sectionHeader: "text-black border-gray-300",
         accent: "text-black",
         preview: "Clean, professional, black-and-white design",
+        component: MinimalTemplate
+    },
+    {
+        id: "classic",
+        name: "Classic",
+        color: "bg-white",
+        headerBg: "bg-white border-b border-gray-300",
+        headerText: "text-gray-900",
+        sectionHeader: "text-gray-900 border-gray-300",
+        accent: "text-blue-600",
+        preview: "Traditional layout with a sidebar for details and skills",
+        component: ClassicTemplate
     },
 ]
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL
 
 const apiService = {
-    async saveResume(resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[]) {
+    async saveResume(resumeData: ResumeData, activeTemplate: string) {
         const token = Cookies.get("accessToken")
         const response = await fetch(`${API_BASE_URL}/resumes/fromPDF`, {
             method: "POST",
@@ -158,7 +164,6 @@ const apiService = {
             body: JSON.stringify({
                 ...resumeData,
                 template: activeTemplate,
-                sectionOrder: sectionOrder,
             }),
         })
 
@@ -169,7 +174,7 @@ const apiService = {
         return response.json()
     },
 
-    async updateResume(id: string, resumeData: ResumeData, activeTemplate: string, sectionOrder: SectionOrder[]) {
+    async updateResume(id: string, resumeData: ResumeData, activeTemplate: string) {
         const token = Cookies.get("accessToken")
         const response = await fetch(`${API_BASE_URL}/resume/${id}`, {
             method: "PUT",
@@ -180,7 +185,6 @@ const apiService = {
             body: JSON.stringify({
                 ...resumeData,
                 template: activeTemplate,
-                sectionOrder: sectionOrder,
             }),
         })
 
@@ -196,18 +200,15 @@ export default function ResumeBuilderFromPDF() {
     const [isLoading, setIsLoading] = useState(true)
     const [activeTemplate, setActiveTemplate] = useState("minimal")
     const [isTemplateDialogOpen, setIsTemplateDialogOpen] = useState(false)
-    const [isReorderMode, setIsReorderMode] = useState(false)
-    const [draggedSection, setDraggedSection] = useState<string | null>(null)
-    const [activeView, setActiveView] = useState<"preview" | "ats">("preview") // Toggle state
-    const [isDownloadDialogOpen, setIsDownloadDialogOpen] = useState(false);
-    const [atsScore, setAtsScore] = useState<ATSScore | null>(null) // ATS Score state
-    const [atsLoading, setAtsLoading] = useState(false) // ATS Loading state
+    const [activeView, setActiveView] = useState<"preview" | "ats">("preview")
+    const [isDownloadDialogOpen, setIsDownloadDialogOpen] = useState(false)
+    const [atsScore, setAtsScore] = useState<ATSScore | null>(null)
+    const [atsLoading, setAtsLoading] = useState(false)
     const router = useRouter()
-    const [suggestedSkills, setSuggestedSkills] = useState<string[]>([]);
-    const [isSuggestingSkills, setIsSuggestingSkills] = useState(false);
-
+    const [suggestedSkills, setSuggestedSkills] = useState<string[]>([])
+    const [isSuggestingSkills, setIsSuggestingSkills] = useState(false)
     const [aiLoading, setAiLoading] = useState(false)
-    const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+    const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
     const [collapsedSections, setCollapsedSections] = useState<Set<string>>(
         new Set([
             "summary",
@@ -241,24 +242,13 @@ export default function ResumeBuilderFromPDF() {
         extracurriculars: [],
     })
 
-    const [sectionOrder, setSectionOrder] = useState<SectionOrder[]>([
-        { id: "summary", name: "Professional Summary", visible: true },
-        { id: "experience", name: "Work Experience", visible: true },
-        { id: "education", name: "Education", visible: true },
-        { id: "skills", name: "Skills", visible: true },
-        { id: "projects", name: "Projects", visible: true },
-        { id: "certifications", name: "Certifications", visible: true },
-        { id: "achievements", name: "Achievements", visible: true },
-        { id: "extracurriculars", name: "Extracurricular Activities", visible: true },
-    ])
-
     const [currentSkill, setCurrentSkill] = useState("")
     const [currentCertification, setCurrentCertification] = useState("")
     const [isSaving, setIsSaving] = useState(false)
     const [savedResumeId, setSavedResumeId] = useState<string | null>(null)
     const searchParams = useSearchParams()
-    
-    // Prefill resume data from parsed data (unchanged)
+
+    // Prefill resume data from parsed data
     useEffect(() => {
         const resumeDataParam = searchParams.get("resumeData")
         if (resumeDataParam) {
@@ -341,10 +331,9 @@ export default function ResumeBuilderFromPDF() {
 
     // ATS Score Analysis
     const analyzeATS = async () => {
-
-        setAtsLoading(true);
+        setAtsLoading(true)
         try {
-            const resumeContent = JSON.stringify(resumeData);
+            const resumeContent = JSON.stringify(resumeData)
             const prompt = `Analyze this resume content: ${resumeContent} for ATS compatibility. Provide scores as JSON object: {
         "totalScore": number (0-100),
         "contactInfoScore": number (0-20),
@@ -353,36 +342,34 @@ export default function ResumeBuilderFromPDF() {
         "experienceScore": number (0-20),
         "skillsScore": number (0-15),
         "suggestions": array of strings (3-5 improvement suggestions)
-      }. Ensure the output is valid JSON only.`;
+      }. Ensure the output is valid JSON only.`
 
             const res = await fetch("/api/gemini", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ prompt }),
-            });
+            })
 
             if (!res.ok) {
-                throw new Error(`API request failed with status ${res.status}`);
+                throw new Error(`API request failed with status ${res.status}`)
             }
 
-            const data = await res.json();
-            const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "{}";
-            console.log("Raw responseText:", responseText); // Debug log
+            const data = await res.json()
+            const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "{}"
+            console.log("Raw responseText:", responseText)
 
-            // Clean and parse JSON
-            let parsedScore;
+            let parsedScore
             try {
-                const jsonStart = responseText.indexOf("{");
-                const jsonEnd = responseText.lastIndexOf("}") + 1;
-                const cleanJson = jsonStart >= 0 && jsonEnd > jsonStart ? responseText.slice(jsonStart, jsonEnd) : "{}";
-                parsedScore = JSON.parse(cleanJson);
+                const jsonStart = responseText.indexOf("{")
+                const jsonEnd = responseText.lastIndexOf("}") + 1
+                const cleanJson = jsonStart >= 0 && jsonEnd > jsonStart ? responseText.slice(jsonStart, jsonEnd) : "{}"
+                parsedScore = JSON.parse(cleanJson)
             } catch (parseError) {
-                console.error("Failed to parse ATS score JSON:", parseError, "Raw response:", responseText);
-                toast.error("Invalid response from ATS analysis. Please try again.");
-                return;
+                console.error("Failed to parse ATS score JSON:", parseError, "Raw response:", responseText)
+                toast.error("Invalid response from ATS analysis. Please try again.")
+                return
             }
 
-            // Validate required fields
             const requiredFields = [
                 "totalScore",
                 "contactInfoScore",
@@ -391,30 +378,29 @@ export default function ResumeBuilderFromPDF() {
                 "experienceScore",
                 "skillsScore",
                 "suggestions",
-            ];
-            const hasAllFields = requiredFields.every((field) => field in parsedScore && parsedScore[field] !== undefined);
+            ]
+            const hasAllFields = requiredFields.every((field) => field in parsedScore && parsedScore[field] !== undefined)
 
             if (!hasAllFields) {
-                console.error("Missing required fields in ATS score:", parsedScore);
-                toast.error("Incomplete ATS score data. Please try again.");
-                return;
+                console.error("Missing required fields in ATS score:", parsedScore)
+                toast.error("Incomplete ATS score data. Please try again.")
+                return
             }
 
             setAtsScore({
                 ...parsedScore,
                 lastUpdated: new Date(),
-            });
-            toast.success("ATS score computed!");
+            })
+            toast.success("ATS score computed!")
         } catch (error) {
-            console.error("Failed to compute ATS score:", error);
-            toast.error("Failed to compute ATS score. Please try again.");
+            console.error("Failed to compute ATS score:", error)
+            toast.error("Failed to compute ATS score. Please try again.")
         } finally {
-            setAtsLoading(false);
+            setAtsLoading(false)
         }
-    };
+    }
 
-
-    // Color conversion function (unchanged)
+    // Color conversion function
     const convertOklchToRgb = () => {
         const elements = document.querySelectorAll("#resume-preview *")
         elements.forEach((element: HTMLElement) => {
@@ -448,19 +434,15 @@ export default function ResumeBuilderFromPDF() {
         })
     }
 
-    // PDF download function (unchanged)
+    // PDF download function
     const handleDownloadPDF = async () => {
         const element = document.getElementById("resume-preview")
-        if (isReorderMode) {
-            toast.info("Download PDF after saving the order.");
-            return;
-        }
         if (!element) {
             toast.error("Preview not found. Please try again.")
             return
         }
 
-        setIsGeneratingPDF(true);
+        setIsGeneratingPDF(true)
         convertOklchToRgb()
 
         const opt = {
@@ -473,13 +455,11 @@ export default function ResumeBuilderFromPDF() {
 
         try {
             if (resumeData.personalInfo.fullName && resumeData.personalInfo.email && resumeData.personalInfo.phone) {
-
                 await html2pdf().set(opt).from(element).save()
-
                 await handleSave()
                 setTimeout(() => {
-                    router.push("/resumeList");
-                }, 3000);
+                    router.push("/resumeList")
+                }, 3000)
             } else {
                 toast.info("Please enter your name, email, and phone number before downloading the resume.")
             }
@@ -487,19 +467,19 @@ export default function ResumeBuilderFromPDF() {
             console.error("Failed to generate PDF:", error)
             toast.error("Failed to generate PDF. Please try again.")
         } finally {
-            setIsGeneratingPDF(false);
+            setIsGeneratingPDF(false)
         }
     }
 
-    // Save function (unchanged)
+    // Save function
     const handleSave = async () => {
         setIsSaving(true)
         try {
             let result
             if (savedResumeId) {
-                result = await apiService.updateResume(savedResumeId, resumeData, activeTemplate, sectionOrder)
+                result = await apiService.updateResume(savedResumeId, resumeData, activeTemplate)
             } else {
-                result = await apiService.saveResume(resumeData, activeTemplate, sectionOrder)
+                result = await apiService.saveResume(resumeData, activeTemplate)
             }
 
             if (result.success) {
@@ -517,32 +497,34 @@ export default function ResumeBuilderFromPDF() {
             setIsSaving(false)
         }
     }
+
     const handleSuggestSkills = async () => {
-        const position = resumeData.workExperience[0]?.position || resumeData.personalInfo.fullName;
+        const position = resumeData.workExperience[0]?.position || resumeData.personalInfo.fullName
         if (!position) {
-            toast.info("Please enter your position or job title to get skill suggestions.");
-            return;
+            toast.info("Please enter your position or job title to get skill suggestions.")
+            return
         }
-        setIsSuggestingSkills(true);
+        setIsSuggestingSkills(true)
         try {
-            const prompt = `Suggest 8-10 key skills for the position "${position}". Output as a comma-separated list.`;
+            const prompt = `Suggest 8-10 key skills for the position "${position}". Output as a comma-separated list.`
             const res = await fetch("/api/gemini", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ prompt }),
-            });
-            const data = await res.json();
-            const skillsText = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
-            const skillsArr = skillsText.split(",").map((s: string) => s.trim()).filter(Boolean);
-            setSuggestedSkills(skillsArr);
-            toast.success("Skills suggested!");
+            })
+            const data = await res.json()
+            const skillsText = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || ""
+            const skillsArr = skillsText.split(",").map((s: string) => s.trim()).filter(Boolean)
+            setSuggestedSkills(skillsArr)
+            toast.success("Skills suggested!")
         } catch (error) {
-            toast.error("Failed to fetch skill suggestions.");
+            toast.error("Failed to fetch skill suggestions.")
         } finally {
-            setIsSuggestingSkills(false);
+            setIsSuggestingSkills(false)
         }
-    };
-    // AI suggest functions (unchanged)
+    }
+
+    // AI suggest functions
     const handleAISuggest = async () => {
         setAiLoading(true)
         try {
@@ -627,7 +609,7 @@ export default function ResumeBuilderFromPDF() {
         }
     }
 
-    // Other functions (unchanged)
+    // Other functions
     const toggleSection = useCallback((sectionId: string) => {
         setCollapsedSections((prev) => {
             const newSet = new Set(prev)
@@ -638,42 +620,6 @@ export default function ResumeBuilderFromPDF() {
             }
             return newSet
         })
-    }, [])
-
-    const handleDragStart = useCallback((e: React.DragEvent, sectionId: string) => {
-        setDraggedSection(sectionId)
-        e.dataTransfer.effectAllowed = "move"
-    }, [])
-
-    const handleDragOver = useCallback((e: React.DragEvent) => {
-        e.preventDefault()
-        e.dataTransfer.dropEffect = "move"
-    }, [])
-
-    const handleDrop = useCallback(
-        (e: React.DragEvent, targetSectionId: string) => {
-            e.preventDefault()
-            if (!draggedSection || draggedSection === targetSectionId) return
-
-            setSectionOrder((prev) => {
-                const newOrder = [...prev]
-                const draggedIndex = newOrder.findIndex((s) => s.id === draggedSection)
-                const targetIndex = newOrder.findIndex((s) => s.id === targetSectionId)
-
-                if (draggedIndex === -1 || targetIndex === -1) return prev
-
-                const [draggedItem] = newOrder.splice(draggedIndex, 1)
-                newOrder.splice(targetIndex, 0, draggedItem)
-
-                return newOrder
-            })
-            setDraggedSection(null)
-        },
-        [draggedSection]
-    )
-
-    const handleDragEnd = useCallback(() => {
-        setDraggedSection(null)
     }, [])
 
     const updatePersonalInfo = useCallback((field: keyof PersonalInfo, value: string) => {
@@ -933,185 +879,6 @@ export default function ResumeBuilderFromPDF() {
 
     const currentTemplate = getCurrentTemplate()
 
-    const renderSectionContent = useCallback(
-        (sectionConfig: SectionOrder) => {
-            const sectionId = sectionConfig.id
-
-            if (sectionId === "experience" && resumeData.workExperience.length > 0) {
-                return (
-                    <div key="experience" className="mb-6" >
-                        <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Work Experience</h2>
-                        <div className="space-y-4">
-                            {resumeData.workExperience.map((work) => (
-                                <div key={work.id}>
-                                    <div className="flex justify-between items-start mb-2" style={{ pageBreakInside: "avoid" }}>
-                                        <div>
-                                            <h3 className="font-semibold text-gray-900">{work.position || "Software Developer Intern"}</h3>
-                                            <p className={`${currentTemplate.accent} font-medium`}>{work.company || "Company Name"}</p>
-                                        </div>
-                                        <span className="text-gray-500 text-sm">
-                                            {work.startDate && work.endDate
-                                                ? `${work.startDate} - ${work.endDate}`
-                                                : work.startDate || work.endDate || "2023-08 - Present"}
-                                        </span>
-                                    </div>
-                                    {work.description.some((desc) => desc.trim()) && (
-                                        <ul className="text-gray-700 text-sm leading-relaxed pl-5">
-                                            {work.description.map((desc, index) => desc.trim() && <li key={index}>{desc}</li>)}
-                                        </ul>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )
-            }
-
-            if (sectionId === "summary" && resumeData.professionalSummary) {
-                return (
-                    <div key="summary" className="mb-6" style={{ pageBreakInside: "avoid" }}>
-                        <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>
-                            Professional Summary
-                        </h2>
-                        <p className="text-gray-700 leading-relaxed">{resumeData.professionalSummary}</p>
-                    </div>
-                )
-            }
-
-            if (sectionId === "education" && resumeData.education.length > 0) {
-                return (
-                    <div key="education" className="mb-6" >
-                        <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Education</h2>
-                        <div className="space-y-3">
-                            {resumeData.education.map((edu) => (
-                                <div key={edu.id} className="flex justify-between items-start" style={{ pageBreakInside: "avoid" }}>
-                                    <div>
-                                        <h3 className="font-semibold text-gray-900">
-                                            {edu.degree} {edu.field && `in ${edu.field}`}
-                                        </h3>
-                                        <p className={`${currentTemplate.accent} font-medium`}>{edu.school}</p>
-                                        {edu.gpa && <p className="text-gray-600 text-sm">GPA: {edu.gpa}</p>}
-                                    </div>
-                                    <span className="text-gray-500 text-sm">
-                                        {edu.startDate && edu.endDate
-                                            ? `${edu.startDate} - ${edu.endDate}`
-                                            : edu.startDate || edu.endDate}
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )
-            }
-
-            if (sectionId === "skills" && resumeData.skills.length > 0) {
-                return (
-                    <div key="skills" className="mb-6" style={{ pageBreakInside: "avoid" }}>
-                        <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Skills</h2>
-                        <div className="flex flex-wrap gap-2">
-                            {resumeData.skills.map((skill) => (
-                                <Badge key={skill} variant="secondary" className="text-sm">
-                                    {skill}
-                                </Badge>
-                            ))}
-                        </div>
-                    </div>
-                )
-            }
-
-            if (sectionId === "projects" && resumeData.projects.length > 0) {
-                return (
-                    <div key="projects" className="mb-6" >
-                        <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Projects</h2>
-                        <div className="space-y-4">
-                            {resumeData.projects.map((project) => (
-                                <div key={project.id}>
-                                    <div className="flex justify-between items-start mb-2" style={{ pageBreakInside: "avoid" }}>
-                                        <h3 className="font-semibold text-gray-900">{project.name || "Project Name"}</h3>
-                                        {project.link && (
-                                            <a
-                                                href={project.link}
-                                                className={`${currentTemplate.accent} text-sm hover:underline`}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                            >
-                                                View Project
-                                            </a>
-                                        )}
-                                    </div>
-                                    {project.technologies && (
-                                        <p className="text-gray-600 text-sm mb-1">
-                                            <span className="font-medium">Technologies:</span> {project.technologies}
-                                        </p>
-                                    )}
-                                    {project.description && (
-                                        <p className="text-gray-700 text-sm leading-relaxed">{project.description}</p>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )
-            }
-
-            if (sectionId === "certifications" && resumeData.certifications.length > 0) {
-                return (
-                    <div key="certifications" className="mb-6" >
-                        <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Certifications</h2>
-                        <div className="space-y-2">
-                            {resumeData.certifications.map((cert) => (
-                                <div key={cert} className="flex items-center" style={{ pageBreakInside: "avoid" }}>
-                                    <span className={`text-gray-700 `}>● {cert}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )
-            }
-
-            if (sectionId === "achievements" && resumeData.achievements.length > 0) {
-                return (
-                    <div key="achievements" className="mb-6" >
-                        <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Achievements</h2>
-                        <div className="space-y-2">
-                            {resumeData.achievements.map((achievement) => (
-                                <div key={achievement.id} className="flex items-center" style={{ pageBreakInside: "avoid" }}>
-
-                                    <span className={`text-gray-700 `}>
-                                        ● {achievement.title} - {achievement.description} ({achievement.date})
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )
-            }
-
-            if (sectionId === "extracurriculars" && resumeData.extracurriculars.length > 0) {
-                return (
-                    <div key="extracurriculars" className="mb-6" >
-                        <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>
-                            Extracurricular Activities
-                        </h2>
-                        <div className="space-y-2">
-                            {resumeData.extracurriculars.map((extra) => (
-                                <div key={extra.id} className="flex items-center" style={{ pageBreakInside: "avoid" }}>
-
-                                    <span className={`text-gray-700`}>
-                                        ● {extra.activity} - {extra.role} ({extra.startDate} - {extra.endDate}): {extra.description}
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )
-            }
-
-            return null
-        },
-        [resumeData, currentTemplate]
-    )
-
     if (isLoading) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -1162,8 +929,8 @@ export default function ResumeBuilderFromPDF() {
                                         <Button
                                             className="bg-green-500 hover:bg-green-600 text-white"
                                             onClick={async () => {
-                                                await handleDownloadPDF();
-                                                setIsDownloadDialogOpen(false);
+                                                await handleDownloadPDF()
+                                                setIsDownloadDialogOpen(false)
                                             }}
                                         >
                                             Save and Download
@@ -1193,21 +960,11 @@ export default function ResumeBuilderFromPDF() {
 
                             return (
                                 <Collapsible key={section.id} open={!isCollapsed} onOpenChange={() => toggleSection(section.id)}>
-                                    <Card
-                                        className="border-gray-200"
-                                        draggable={isReorderMode && !section.required}
-                                        onDragStart={(e) => handleDragStart(e, section.id)}
-                                        onDragOver={handleDragOver}
-                                        onDrop={(e) => handleDrop(e, section.id)}
-                                        onDragEnd={handleDragEnd}
-                                    >
+                                    <Card className="border-gray-200">
                                         <CollapsibleTrigger asChild>
                                             <CardHeader className="cursor-pointer hover:bg-orange-50 hover:border-orange-200 transition-all duration-200 border border-transparent p-3 md:p-6">
                                                 <div className="flex items-center justify-between">
                                                     <div className="flex items-center space-x-2 md:space-x-3 min-w-0 flex-1">
-                                                        {isReorderMode && !section.required && (
-                                                            <GripVertical className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                                                        )}
                                                         <div className="w-5 h-5 md:w-6 md:h-6 rounded flex items-center justify-center text-gray-600 flex-shrink-0">
                                                             <Icon className="w-4 h-4 md:w-5 md:h-5" />
                                                         </div>
@@ -1569,7 +1326,7 @@ export default function ResumeBuilderFromPDF() {
                                                         </div>
                                                     </div>
                                                 )}
-                                                
+
                                                 {section.id === "certifications" && (
                                                     <div className="space-y-4">
                                                         <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
@@ -1858,8 +1615,7 @@ export default function ResumeBuilderFromPDF() {
                                             {templates.map((template) => (
                                                 <div
                                                     key={template.id}
-                                                    className={`border-2 rounded-lg p-4 cursor-pointer transition-all hover:shadow-lg ${activeTemplate === template.id ? "border-orange-500 bg-orange-50" : "border-gray-200"
-                                                        }`}
+                                                    className={`border-2 rounded-lg p-4 cursor-pointer transition-all hover:shadow-lg ${activeTemplate === template.id ? "border-orange-500 bg-orange-50" : "border-gray-200"}`}
                                                     onClick={() => {
                                                         setActiveTemplate(template.id)
                                                         setIsTemplateDialogOpen(false)
@@ -1877,128 +1633,17 @@ export default function ResumeBuilderFromPDF() {
                                         </div>
                                     </DialogContent>
                                 </Dialog>
-
-                                <Button
-                                    variant={isReorderMode ? "default" : "outline"}
-                                    size="sm"
-                                    onClick={() => setIsReorderMode(!isReorderMode)}
-                                >
-                                    {isReorderMode ? (
-                                        <>
-                                            <Save className="w-4 h-4 mr-2" />
-                                            Save Order
-                                        </>
-                                    ) : (
-                                        <>
-                                            <RotateCcw className="w-4 h-4 mr-2" />
-                                            Reorder
-                                        </>
-                                    )}
-                                </Button>
                             </div>
                         </div>
-
-                        {isReorderMode && (
-                            <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
-                                <p className="text-sm text-orange-700">
-                                    <strong>Reorder Mode:</strong> Drag and drop sections below to reorder them. Personal Information cannot
-                                    be moved.
-                                </p>
-                            </div>
-                        )}
 
                         {activeView === "preview" ? (
                             <Card>
                                 <CardContent className="p-0">
-                                    <div id="resume-preview" >
-                                        <div className="space-y-6">
-                                            <div className={`${currentTemplate.headerBg} ${currentTemplate.headerText} p-6 break-inside-avoid`}>
-                                                <div className="flex items-center space-x-4">
-                                                    <div className="flex-1">
-                                                        <h1 className="text-3xl font-bold">{resumeData.personalInfo.fullName || "John Doe"}</h1>
-                                                        <p className="text-lg opacity-90 mt-1">
-                                                            {resumeData.workExperience[0]?.position}
-                                                        </p>
-                                                        <div className="flex items-center space-x-6 text-sm mt-3 opacity-90">
-                                                            <span>{resumeData.personalInfo.email || "johndoe68@gmail.com"}</span>
-                                                            <span>{resumeData.personalInfo.phone || "123456789"}</span>
-                                                            <span>{resumeData.personalInfo.location}</span>
-                                                        </div>
-                                                        <div className="grid grid-cols-3 gap-4 mt-2 text-sm opacity-90 items-center">
-                                                            {resumeData.personalInfo.linkedin && (
-                                                                <a
-                                                                    href={resumeData.personalInfo.linkedin}
-                                                                    target="_blank"
-                                                                    rel="noopener noreferrer"
-                                                                    className="flex items-center"
-                                                                >
-                                                                    <Linkedin className="w-4 h-4 mr-2 " />
-                                                                    <span className={`font-semibold ${isGeneratingPDF ? 'mb-2' : ''}`}>{resumeData.personalInfo.linkedin.slice(28)}</span>
-                                                                </a>
-                                                            )}
-                                                            {resumeData.personalInfo.website && (
-                                                                <a
-                                                                    href={resumeData.personalInfo.website}
-                                                                    target="_blank"
-                                                                    rel="noopener noreferrer"
-                                                                    className="flex items-center"
-                                                                >
-                                                                    <Globe className="w-4 h-4 mr-2" />
-                                                                    <span className={`font-semibold ${isGeneratingPDF ? 'mb-2' : ''}`}>View Website</span>
-                                                                </a>
-                                                            )}
-                                                            {resumeData.personalInfo.github && (
-                                                                <a
-                                                                    href={resumeData.personalInfo.github}
-                                                                    target="_blank"
-                                                                    rel="noopener noreferrer"
-                                                                    className="flex items-center"
-                                                                >
-                                                                    <Github className="w-4 h-4 mr-2" />
-                                                                    <span className={`font-semibold ${isGeneratingPDF ? 'mb-2' : ''}`}>{resumeData.personalInfo.github.slice(19)}</span>
-                                                                </a>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="px-6 pb-2 space-y-6">
-                                                {sectionOrder
-                                                    .filter((section) => section.visible)
-                                                    .map((sectionConfig, index) => {
-                                                        const content = renderSectionContent(sectionConfig)
-                                                        if (!content) return null
-
-                                                        if (isReorderMode) {
-                                                            return (
-                                                                <div
-                                                                    key={sectionConfig.id}
-                                                                    draggable
-                                                                    onDragStart={(e) => handleDragStart(e, sectionConfig.id)}
-                                                                    onDragOver={handleDragOver}
-                                                                    onDrop={(e) => handleDrop(e, sectionConfig.id)}
-                                                                    onDragEnd={handleDragEnd}
-                                                                    className={`border-2 border-dashed border-orange-300 rounded-lg p-4 cursor-move transition-all hover:border-orange-400 hover:shadow-md ${draggedSection === sectionConfig.id ? "opacity-50" : "opacity-100"
-                                                                        }`}
-                                                                >
-                                                                    <div className="flex items-center justify-between mb-2">
-                                                                        <div className="flex items-center space-x-2">
-                                                                            <GripVertical className="w-4 h-4 text-orange-500" />
-                                                                            <span className="text-sm font-medium text-orange-700">
-                                                                                Drag to reorder: {sectionConfig.name}
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                    {content}
-                                                                </div>
-                                                            )
-                                                        }
-
-                                                        return content
-                                                    })}
-                                            </div>
-                                        </div>
+                                    <div id="resume-preview">
+                                        <currentTemplate.component
+                                            data={resumeData}
+                                            isGeneratingPDF={isGeneratingPDF}
+                                        />
                                     </div>
                                 </CardContent>
                             </Card>

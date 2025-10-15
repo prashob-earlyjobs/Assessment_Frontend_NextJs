@@ -34,12 +34,9 @@ import {
   Code,
   FolderOpen,
   Camera,
-  GripVertical,
   Settings,
-  RotateCcw,
   ChevronDown,
   ChevronUp,
-  Save,
   Eye,
   Target,
   Trophy,
@@ -48,6 +45,8 @@ import {
   Github,
   Globe,
 } from "lucide-react";
+import MinimalTemplate from "../templates/MinimalTemplate";
+import ClassicTemplate from "../templates/classicTemplate";
 
 interface PersonalInfo {
   fullName: string;
@@ -144,6 +143,16 @@ const templates = [
     accent: "text-black",
     preview: "Clean, professional, black-and-white design",
   },
+  {
+    id: "classic",
+    name: "Classic",
+    color: "bg-white",
+    headerBg: "bg-white",
+    headerText: "text-gray-900",
+    sectionHeader: "text-gray-900 border-gray-300",
+    accent: "text-blue-600",
+    preview: "Structured layout with sidebar for details and skills",
+  },
 ];
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -200,16 +209,17 @@ export default function AIResumeBuilder() {
   const jobDescription = searchParams.get("jobDescription") || "";
   const parsedResume = searchParams.get("parsedResume") || "";
   const router = useRouter();
-   
+
   let parsedResumeData: Partial<ResumeData> = {};
   try {
     if (parsedResume) {
-      parsedResumeData   = JSON.parse(decodeURIComponent(parsedResume));
+      parsedResumeData = JSON.parse(decodeURIComponent(parsedResume));
     }
   } catch (error) {
     console.error("Failed to parse parsedResume:", error);
     toast.error("Invalid resume data provided in query parameters.");
   }
+
   const [resumeData, setResumeData] = useState<ResumeData>({
     personalInfo: {
       fullName: parsedResumeData.personalInfo?.fullName || "",
@@ -220,7 +230,7 @@ export default function AIResumeBuilder() {
       website: parsedResumeData.personalInfo?.website || "",
       github: parsedResumeData.personalInfo?.github || "",
     },
-    professionalSummary: "", // Will be set by prefillSummaryAndSkills
+    professionalSummary: "",
     education: parsedResumeData.education?.map((edu, index) => ({
       id: Date.now().toString() + index,
       school: edu.school || "",
@@ -239,7 +249,7 @@ export default function AIResumeBuilder() {
       description: work.description || ["", "", ""],
       index: work.index || index,
     })) || [],
-    skills: [], // Will be set by prefillSummaryAndSkills
+    skills: [],
     certifications: parsedResumeData.certifications || [],
     projects: parsedResumeData.projects?.map((proj, index) => ({
       id: Date.now().toString() + index,
@@ -267,11 +277,7 @@ export default function AIResumeBuilder() {
 
   const [activeTemplate, setActiveTemplate] = useState("minimal");
   const [isTemplateDialogOpen, setIsTemplateDialogOpen] = useState(false);
-  const [isReorderMode, setIsReorderMode] = useState(false);
-  const [draggedSection, setDraggedSection] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [isAddSectionDialogOpen, setIsAddSectionDialogOpen] = useState(false);
-
   const [isDownloadDialogOpen, setIsDownloadDialogOpen] = useState(false);
   const [aiLoading, setAiLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -296,28 +302,7 @@ export default function AIResumeBuilder() {
     ])
   );
 
-//   const [resumeData, setResumeData] = useState<ResumeData>({
-//     personalInfo: {
-//       fullName: "",
-//       email: "",
-//       phone: "",
-//       location: "",
-//       linkedin: "",
-//       website: "",
-//       github: "",
-//     },
-//     professionalSummary: "",
-//     education: [],
-//     workExperience: [],
-//     skills: [],
-//     certifications: [],
-//     projects: [],
-//     achievements: [],
-//     extracurriculars: [],
-//     profilePicture: null,
-//   });
-
-  const [sectionOrder, setSectionOrder] = useState<SectionOrder[]>([
+  const [sectionOrder] = useState<SectionOrder[]>([
     { id: "summary", name: "Professional Summary", visible: true },
     { id: "experience", name: "Work Experience", visible: true },
     { id: "education", name: "Education", visible: true },
@@ -369,10 +354,6 @@ export default function AIResumeBuilder() {
 
   const handleDownloadPDF = async () => {
     const element = document.getElementById("resume-preview");
-    if (isReorderMode) {
-      toast.info("Download PDF after saving the order.");
-      return;
-    }
     if (!element) {
       toast.error("Preview not found. Please try again.");
       return;
@@ -385,15 +366,13 @@ export default function AIResumeBuilder() {
       margin: [0.25, 0.125, 0.25, 0.125],
       filename: `${resumeData.personalInfo.fullName || "resume"}.pdf`,
       image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 4,  useCORS: false },
+      html2canvas: { scale: 4, useCORS: false },
       jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
     };
 
     try {
       if (resumeData.personalInfo.fullName && resumeData.personalInfo.email && resumeData.personalInfo.phone) {
-        
         await html2pdf().set(opt).from(element).save();
-        
         await handleSave();
         setTimeout(() => {
           router.push("/resumeList");
@@ -595,9 +574,8 @@ export default function AIResumeBuilder() {
 
       const data = await res.json();
       const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "{}";
-      console.log("Raw responseText:", responseText); // Debug log
+      console.log("Raw responseText:", responseText);
 
-      // Clean and parse JSON
       let parsedScore;
       try {
         const jsonStart = responseText.indexOf("{");
@@ -610,7 +588,6 @@ export default function AIResumeBuilder() {
         return;
       }
 
-      // Validate required fields
       const requiredFields = [
         "totalScore",
         "contactInfoScore",
@@ -643,59 +620,14 @@ export default function AIResumeBuilder() {
 
   const toggleSection = useCallback((sectionId: string) => {
     setCollapsedSections((prev) => {
-      const allSections = new Set<string>([
-        "personal",
-        "summary",
-        "education",
-        "experience",
-        "skills",
-        "certifications",
-        "projects",
-        "achievements",
-        "extracurriculars",
-      ]);
-      if (!prev.has(sectionId)) {
-        return allSections;
+      const newSet = new Set(prev);
+      if (newSet.has(sectionId)) {
+        newSet.delete(sectionId);
+      } else {
+        newSet.add(sectionId);
       }
-      allSections.delete(sectionId);
-      return allSections;
+      return newSet;
     });
-  }, []);
-
-  const handleDragStart = useCallback((e: React.DragEvent, sectionId: string) => {
-    setDraggedSection(sectionId);
-    e.dataTransfer.effectAllowed = "move";
-  }, []);
-
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = "move";
-  }, []);
-
-  const handleDrop = useCallback(
-    (e: React.DragEvent, targetSectionId: string) => {
-      e.preventDefault();
-      if (!draggedSection || draggedSection === targetSectionId) return;
-
-      setSectionOrder((prev) => {
-        const newOrder = [...prev];
-        const draggedIndex = newOrder.findIndex((s) => s.id === draggedSection);
-        const targetIndex = newOrder.findIndex((s) => s.id === targetSectionId);
-
-        if (draggedIndex === -1 || targetIndex === -1) return prev;
-
-        const [draggedItem] = newOrder.splice(draggedIndex, 1);
-        newOrder.splice(targetIndex, 0, draggedItem);
-
-        return newOrder;
-      });
-      setDraggedSection(null);
-    },
-    [draggedSection]
-  );
-
-  const handleDragEnd = useCallback(() => {
-    setDraggedSection(null);
   }, []);
 
   const updatePersonalInfo = useCallback((field: keyof PersonalInfo, value: string) => {
@@ -912,8 +844,8 @@ export default function AIResumeBuilder() {
 
   const sections = [
     { id: "personal", name: "Personal Information", icon: User, required: true },
-    { id: "experience", name: "Work Experience", icon: Briefcase, required: false },
     { id: "summary", name: "Professional Summary", icon: FileText, required: false },
+    { id: "experience", name: "Work Experience", icon: Briefcase, required: false },
     { id: "education", name: "Education", icon: GraduationCap, required: false },
     { id: "skills", name: "Skills", icon: Code, required: false },
     { id: "certifications", name: "Certifications (Optional)", icon: Award, required: false },
@@ -927,181 +859,6 @@ export default function AIResumeBuilder() {
   };
 
   const currentTemplate = getCurrentTemplate();
-
-  const renderSectionContent = useCallback(
-    (sectionConfig: SectionOrder) => {
-      const sectionId = sectionConfig.id;
-
-      if (sectionId === "experience" && resumeData.workExperience.length > 0) {
-        return (
-          <div key="experience" className="mb-6" >
-            <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Work Experience</h2>
-            <div className="space-y-4">
-              {resumeData.workExperience.map((work) => (
-                <div key={work.id}>
-                  <div className="flex justify-between items-start mb-2" style={{ pageBreakInside: "avoid" }}>
-                    <div>
-                      <h3 className="font-semibold text-gray-900">{work.position || "Software Developer Intern"}</h3>
-                      <p className={`${currentTemplate.accent} font-medium`}>{work.company || "Company Name"}</p>
-                    </div>
-                    <span className="text-gray-500 text-sm">
-                      {work.startDate && work.endDate
-                        ? `${work.startDate} - ${work.endDate}`
-                        : work.startDate || work.endDate || "2023-08 - Present"}
-                    </span>
-                  </div>
-                  {work.description.some((desc) => desc.trim()) && (
-                    <ul className="text-gray-700 text-sm leading-relaxed pl-5">
-                      {work.description.map((desc, index) => desc.trim() && <li key={index}>{desc}</li>)}
-                    </ul>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      }
-
-      if (sectionId === "summary" && resumeData.professionalSummary) {
-        return (
-          <div key="summary" className="mb-6" style={{ pageBreakInside: "avoid" }}>
-            <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>
-              Professional Summary
-            </h2>
-            <p className="text-gray-700 leading-relaxed">{resumeData.professionalSummary}</p>
-          </div>
-        );
-      }
-
-      if (sectionId === "education" && resumeData.education.length > 0) {
-        return (
-          <div key="education" className="mb-6" >
-            <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Education</h2>
-            <div className="space-y-3">
-              {resumeData.education.map((edu) => (
-                <div key={edu.id} className="flex justify-between items-start" style={{ pageBreakInside: "avoid" }}>
-                  <div>
-                    <h3 className="font-semibold text-gray-900">
-                      {edu.degree} {edu.field && `in ${edu.field}`}
-                    </h3>
-                    <p className={`${currentTemplate.accent} font-medium`}>{edu.school}</p>
-                    {edu.gpa && <p className="text-gray-600 text-sm">GPA: {edu.gpa}</p>}
-                  </div>
-                  <span className="text-gray-500 text-sm">
-                    {edu.startDate && edu.endDate
-                      ? `${edu.startDate} - ${edu.endDate}`
-                      : edu.startDate || edu.endDate }
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      }
-
-      if (sectionId === "skills" && resumeData.skills.length > 0) {
-        return (
-          <div key="skills" className="mb-6" style={{ pageBreakInside: "avoid" }}>
-            <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Skills</h2>
-            <div className="flex flex-wrap gap-2">
-              {resumeData.skills.map((skill) => (
-                <Badge key={skill} variant="secondary" className="text-sm">
-                  {skill}
-                </Badge>
-              ))}
-            </div>
-          </div>
-        );
-      }
-
-      if (sectionId === "projects" && resumeData.projects.length > 0) {
-        return (
-          <div key="projects" className="mb-6" >
-            <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Projects</h2>
-            <div className="space-y-4">
-              {resumeData.projects.map((project) => (
-                <div key={project.id}>
-                  <div className="flex justify-between items-start mb-2" style={{ pageBreakInside: "avoid" }}>
-                    <h3 className="font-semibold text-gray-900">{project.name || "Project Name"}</h3>
-                    {project.link && (
-                      <a
-                        href={project.link}
-                        className={`${currentTemplate.accent} text-sm hover:underline`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        View Project
-                      </a>
-                    )}
-                  </div>
-                  {project.technologies && (
-                    <p className="text-gray-600 text-sm mb-1">
-                      <span className="font-medium">Technologies:</span> {project.technologies}
-                    </p>
-                  )}
-                  {project.description && (
-                    <p className="text-gray-700 text-sm leading-relaxed">{project.description}</p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      }
-
-      if (sectionId === "certifications" && resumeData.certifications.length > 0) {
-        return (
-          <div key="certifications" className="mb-6" >
-            <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Certifications</h2>
-            <div className="space-y-2">
-              {resumeData.certifications.map((cert) => (
-                <div key={cert} className="flex items-center" style={{ pageBreakInside: "avoid" }}>
-                  <span className={`text-gray-700`}>● {cert}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      }
-
-      if (sectionId === "achievements" && resumeData.achievements.length > 0) {
-        return (
-          <div key="achievements" className="mb-6" >
-            <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>Achievements</h2>
-            <div className="space-y-2">
-              {resumeData.achievements.map((achievement) => (
-                <div key={achievement.id} className="flex items-center" style={{ pageBreakInside: "avoid" }}>
-                  <span className={`text-gray-700`}>● {achievement.title} - {achievement.description} ({achievement.date})</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      }
-
-      if (sectionId === "extracurriculars" && resumeData.extracurriculars.length > 0) {
-        return (
-          <div key="extracurriculars" className="mb-6" >
-            <h2 className={`text-xl font-bold ${currentTemplate.sectionHeader} mb-4 border-b pb-2`}>
-              Extracurricular Activities
-            </h2>
-            <div className="space-y-2">
-              {resumeData.extracurriculars.map((extra) => (
-                <div key={extra.id} className="flex items-center" style={{ pageBreakInside: "avoid" }}>
-                  <span className={`text-gray-700`}>
-                    ● {extra.activity} - {extra.role} ({extra.startDate} - {extra.endDate}): {extra.description}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      }
-
-      return null;
-    },
-    [resumeData, currentTemplate]
-  );
 
   useEffect(() => {
     prefillSummaryAndSkills();
@@ -1166,7 +923,7 @@ export default function AIResumeBuilder() {
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
-               <Button
+              <Button
                 size="sm"
                 className="bg-white border border-gray-300 text-gray-800 hover:bg-gray-100"
                 onClick={() => router.push("/resumeList")}
@@ -1784,14 +1541,14 @@ export default function AIResumeBuilder() {
                   <DialogTrigger asChild>
                     <Button variant="outline" size="sm">
                       <Settings className="w-4 h-4 mr-2" />
-                      Template
+                      Change Template
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="max-w-4xl">
                     <DialogHeader>
                       <DialogTitle>Choose a Template</DialogTitle>
                     </DialogHeader>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 mt-4">
                       {templates.map((template) => (
                         <div
                           key={template.id}
@@ -1813,126 +1570,18 @@ export default function AIResumeBuilder() {
                     </div>
                   </DialogContent>
                 </Dialog>
-
-                <Button
-                  variant={isReorderMode ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setIsReorderMode(!isReorderMode)}
-                >
-                  {isReorderMode ? (
-                    <>
-                      <Save className="w-4 h-4 mr-2" />
-                      Save Order
-                    </>
-                  ) : (
-                    <>
-                      <RotateCcw className="w-4 h-4 mr-2" />
-                      Reorder
-                    </>
-                  )}
-                </Button>
               </div>
             </div>
-
-            {isReorderMode && (
-              <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
-                <p className="text-sm text-orange-700">
-                  <strong>Reorder Mode:</strong> Drag and drop sections below to reorder them. Personal Information cannot be moved.
-                </p>
-              </div>
-            )}
 
             <Card>
               <CardContent className="p-0">
                 {viewMode === "preview" ? (
-                  <div id="resume-preview" >
-                    <div className="space-y-6">
-                      <div className={`${currentTemplate.headerBg} ${currentTemplate.headerText} p-6 break-inside-avoid`}>
-                        <div className="flex items-center space-x-4">
-                          <div className="flex-1">
-                            <h1 className="text-3xl font-bold">{resumeData.personalInfo.fullName || "John Doe"}</h1>
-                            <p className="text-lg opacity-90 mt-1">
-                              {resumeData.workExperience[0]?.position || "Student"}
-                            </p>
-                            <div className="flex items-center space-x-6 text-sm mt-3 opacity-90">
-                              <span>{resumeData.personalInfo.email || "johndoe68@gmail.com"}</span>
-                              <span>{resumeData.personalInfo.phone || "123456789"}</span>
-                              <span>{resumeData.personalInfo.location }</span>
-                            </div>
-                           <div className="grid grid-cols-3 gap-4 mt-2 text-sm opacity-90 items-center">
-                                                         {resumeData.personalInfo.linkedin && (
-                                                           <a
-                                                             href={resumeData.personalInfo.linkedin}
-                                                             target="_blank"
-                                                             rel="noopener noreferrer"
-                                                             className="flex items-center"
-                                                           >
-                                                             <Linkedin className="w-4 h-4 mr-2 " /> 
-                                                             <span className={`font-semibold ${isGeneratingPDF ? 'mb-[1rem]' : ''}`}>{resumeData.personalInfo.linkedin.slice(28)}</span>
-                                                           </a>
-                                                         )}
-                                                         {resumeData.personalInfo.website && (
-                                                           <a
-                                                             href={resumeData.personalInfo.website}
-                                                             target="_blank"
-                                                             rel="noopener noreferrer"
-                                                             className="flex items-center"
-                                                           >
-                                                             <Globe className="w-4 h-4 mr-2" /> 
-                                                             <span className={`font-semibold ${isGeneratingPDF ? 'mb-[1rem]' : ''}`}>View Website</span>
-                                                           </a>
-                                                         )}
-                                                         {resumeData.personalInfo.github && (
-                                                           <a
-                                                             href={resumeData.personalInfo.github}
-                                                             target="_blank"
-                                                             rel="noopener noreferrer"
-                                                             className="flex items-center"
-                                                           >
-                                                             <Github className="w-4 h-4 mr-2" /> 
-                                                             <span className={`font-semibold ${isGeneratingPDF ? 'mb-[1rem]' : ''}`}>{resumeData.personalInfo.github.slice(19)}</span>
-                                                           </a>
-                                                         )}
-                                                       </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="px-6 pb-2 space-y-6">
-                        {sectionOrder
-                          .filter((section) => section.visible)
-                          .map((sectionConfig) => {
-                            const content = renderSectionContent(sectionConfig);
-                            if (!content) return null;
-
-                            if (isReorderMode) {
-                              return (
-                                <div
-                                  key={sectionConfig.id}
-                                  draggable
-                                  onDragStart={(e) => handleDragStart(e, sectionConfig.id)}
-                                  onDragOver={handleDragOver}
-                                  onDrop={(e) => handleDrop(e, sectionConfig.id)}
-                                  onDragEnd={handleDragEnd}
-                                  className={`border-2 border-dashed border-orange-300 rounded-lg p-4 cursor-move transition-all hover:border-orange-400 hover:shadow-md ${draggedSection === sectionConfig.id ? "opacity-50" : "opacity-100"}`}
-                                >
-                                  <div className="flex items-center justify-between mb-2">
-                                    <div className="flex items-center space-x-2">
-                                      <GripVertical className="w-4 h-4 text-orange-500" />
-                                      <span className="text-sm font-medium text-orange-700">
-                                        Drag to reorder: {sectionConfig.name}
-                                      </span>
-                                    </div>
-                                  </div>
-                                  {content}
-                                </div>
-                              );
-                            }
-
-                            return content;
-                          })}
-                      </div>
-                    </div>
+                  <div id="resume-preview">
+                    {activeTemplate === "minimal" ? (
+                      <MinimalTemplate data={resumeData} isGeneratingPDF={isGeneratingPDF} />
+                    ) : (
+                      <ClassicTemplate data={resumeData} isGeneratingPDF={isGeneratingPDF} />
+                    )}
                   </div>
                 ) : (
                   <ATSScoreCard
