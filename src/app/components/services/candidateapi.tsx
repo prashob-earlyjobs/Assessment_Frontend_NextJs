@@ -1,7 +1,7 @@
 import axiosInstance from "./apiinterseptor"; // Assuming same interceptor setup
 import { toast } from "react-toastify";
 import axios, { AxiosResponse } from 'axios';
-import { ICreateTallentPoolFormData } from "@/app/talentpoolform/public/[id]/page";
+import { ICreateTallentPoolFormData } from "@/app/talentpoolform/public/[id]/talentpoolform";
 import { ParamValue } from "next/dist/server/request/params";
 
 // Interface for location details

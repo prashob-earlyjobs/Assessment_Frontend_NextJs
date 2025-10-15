@@ -3,21 +3,21 @@
 import type React from "react";
 import { toast } from "react-hot-toast";
 import { useState, useCallback, useRef, useEffect } from "react";
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
-import { Label } from "../../components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
-import { Textarea } from "../../components/ui/textarea";
-import { Badge } from "../../components/ui/badge";
-import { Card, CardHeader, CardTitle, CardContent } from "../../components/ui/card";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
+import { Textarea } from "../components/ui/textarea";
+import { Badge } from "../components/ui/badge";
+import { Card, CardHeader, CardTitle, CardContent } from "../components/ui/card";
 import { Plus, X, ArrowRight, ArrowLeft, User, Briefcase, CheckCircle, MapPin, Phone, Mail, Languages, Award, Target, Building, Clock, Loader2, ChevronDown, Check, UploadCloud, Eye } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { createCompanyOnboarding } from "../../components/services/companiesapi";
-import { uploadFile } from "../../components/services/companiesapi";
-import Navbar from "../../components/pages/navbar";
-import Footer from "../../components/pages/footer";
+import { createCompanyOnboarding } from "../components/services/companiesapi";
+import { uploadFile } from "../components/services/companiesapi";
+import Navbar from "../components/pages/navbar";
+import Footer from "../components/pages/footer";
 
 // Update the JobPostingFormData interface
 interface JobPostingFormData {
