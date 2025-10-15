@@ -309,7 +309,7 @@ const HomeContent = () => {
                 <Button
                   variant="ghost"
                   className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
-                  onClick={() => handleMobileMenuItemClick("/browse-candidates")}
+                  onClick={() => handleMobileMenuItemClick("/browse-interviewed-candidates")}
                 >
                   Browse Candidates
                 </Button>

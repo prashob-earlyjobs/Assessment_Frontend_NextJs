@@ -37,6 +37,32 @@ export default function BrowseCandidatesClient() {
           for (const candidate of data.data) {
             if (candidate.assessmentsPaid && candidate.assessmentsPaid.length > 0) {
               let hasValidResults = false;
+              let firstAssessmentTitle = "unknown-assessment"; // Default fallback title
+
+              // Fetch assessment titles for the candidate
+              try {
+                const titleUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/browseCandidates/assessments/${candidate._id}`;
+                const titleResponse = await fetch(titleUrl, {
+                  method: "GET",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                });
+                if (titleResponse.ok) {
+                  const titleData = await titleResponse.json();
+                  const titles = titleData.data.reduce((acc, assessment) => {
+                    acc[assessment._id] = assessment.title;
+                    return acc;
+                  }, {});
+                  // Get the title of the first assessment from assessmentsPaid
+                  if (candidate.assessmentsPaid[0]?.assessmentId) {
+                    firstAssessmentTitle = titles[candidate.assessmentsPaid[0].assessmentId] || "unknown-assessment";
+                  }
+                }
+              } catch (err) {
+                console.warn(`Error fetching assessment titles for candidate ${candidate._id}: ${err.message}`);
+              }
+
               for (const assessment of candidate.assessmentsPaid) {
                 const interviewId = assessment.interviewId;
                 if (!interviewId) continue;
@@ -62,7 +88,7 @@ export default function BrowseCandidatesClient() {
                 }
               }
               if (hasValidResults) {
-                filteredCandidates.push(candidate);
+                filteredCandidates.push({ ...candidate, firstAssessmentTitle });
               }
             }
           }
@@ -140,10 +166,19 @@ export default function BrowseCandidatesClient() {
       .replace(/[^a-z0-9-]/g, "");
   };
 
+  const generateAssessmentSlug = (title) => {
+    return title
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9-]/g, "");
+  };
+
   const handleViewProfile = (candidate) => {
-    const slug = generateSlug(candidate.name);
-    console.log("Navigating to candidate profile:", `/browse-candidates/${slug}/${candidate._id}`);
-    router.push(`/browse-candidates/${slug}/${candidate._id}`);
+    const nameSlug = generateSlug(candidate.name);
+    const assessmentSlug = generateAssessmentSlug(candidate.firstAssessmentTitle);
+    console.log("Navigating to candidate profile:", `/browse-interviewed-candidates/${nameSlug}/${assessmentSlug}/${candidate._id}`);
+    router.push(`/browse-interviewed-candidates/${nameSlug}-${assessmentSlug}/${candidate._id}`);
   };
 
   const filteredCandidates = useMemo(() => {
@@ -188,7 +223,7 @@ export default function BrowseCandidatesClient() {
                 <Button
                   variant="ghost"
                   className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
-                  onClick={() => handleMobileMenuItemClick("/browse-candidates")}
+                  onClick={() => handleMobileMenuItemClick("/browse-interviewed-candidates")}
                 >
                   Browse Candidates
                 </Button>
