@@ -18,6 +18,7 @@ import {
   Eye,
   AlertTriangle,
   Calendar,
+  FileText,
   Video,
   MessageSquare,
   ChevronDown,
@@ -31,7 +32,7 @@ import {
 } from "../../components/ui/dialog";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
-import { getPaidAssessments, getResultForCandidateAssessment, getAssessmentById, getRecording, getTranscript } from "../../components/services/servicesapis";
+import { getPaidAssessments, getResultForCandidateAssessment, getAssessmentById, getRecording, getTranscript, createCertificate } from "../../components/services/servicesapis";
 import { useUser } from "../../context";
 import Header from "./header";
 import CertificateWithPDF from "../../components/Certificate";
@@ -212,6 +213,30 @@ const Results = () => {
       toast.success("Preparing your certificate for download...");
     } else {
       toast.error("No certificate data available.");
+    }
+  };
+
+  const handleCreateCertificate = async () => {
+    if (!selectedAssessment || !userCredentials || !certificateData) {
+      toast.error("Missing required data for certificate creation");
+      return;
+    }
+
+    try {
+      const certificatePayload = {
+        userid: userCredentials._id,
+        interviewid: selectedAssessment.interviewId,
+        cerficateno: certificateData.certificateId,
+        assessmentid: selectedAssessment.assessmentData._id || selectedAssessment.assessmentData.id,
+        cerficatelink: `${window.location.origin}/certificate/${selectedAssessment.interviewId}`
+      };
+
+      const result = await createCertificate(certificatePayload);
+      toast.success("Certificate created successfully!");
+      console.log("Certificate created:", result);
+    } catch (error) {
+      console.error("Error creating certificate:", error);
+      // Error toast is handled by the service function
     }
   };
 const formatTime = (seconds) => {
@@ -663,6 +688,15 @@ const formatTime = (seconds) => {
                       <Eye className="w-5 h-5" />
 
                       View Certificate
+                    </Button>
+                    <Button
+                      onClick={handleCreateCertificate}
+                      variant="outline"
+                      className="w-full rounded-2xl border-gray-200 hover:bg-green-50 hover:border-green-300"
+                      disabled={!selectedAssessment || !userCredentials || !certificateData}
+                    >
+                      <FileText className="h-4 w-4 mr-2" />
+                      Create Certificate
                     </Button>
                     <Button
                       onClick={() => navigate.push('/assessments')}

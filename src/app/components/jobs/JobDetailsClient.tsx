@@ -11,6 +11,7 @@ import { X, Bookmark,Globe, Share2, Briefcase, IndianRupee, User, Clock, MapPin,
 import { toast } from "sonner";
 import { FaLinkedin, FaInstagram } from "react-icons/fa";
 import { useRouter ,useSearchParams, usePathname} from "next/navigation";
+import { verifyCertificate } from "../services/servicesapis";
 
 
 interface JobDetailsData {
@@ -50,6 +51,7 @@ interface JobDetailsData {
   company_logo?: string;
   location_link?: string;
   related_jobs?: JobDetailsData[];
+  isExternal?: boolean;
 }
 interface ICreateApplicantRequestBody {
   fullName: string;
@@ -65,7 +67,9 @@ interface ICreateApplicantRequestBody {
   totalExperienceYears: number;
   totalExperienceMonths: number;
   skills: string[];
-  jobId: string; 
+  jobId: string;
+  isExternalJob: boolean;
+  certificateId: string;
 }
 
 interface JobDetailsClientProps {
@@ -99,6 +103,10 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
     spokenLanguages: [] as string[],
     showLanguageDropdown: false
   });
+  const [certificateNumber, setCertificateNumber] = useState(`EJ-CERT-${new Date().getFullYear()}-`);
+  const [certificateVerified, setCertificateVerified] = useState(false);
+  const [verifyingCertificate, setVerifyingCertificate] = useState(false);
+  const [certificateData, setCertificateData] = useState(null);
 
   // Fetch job details
   useEffect(() => {
@@ -140,6 +148,49 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []); // Empty dependency array ensures it runs once on mount
+
+  const handleVerifyCertificate = async () => {
+    console.log("Button clicked! Certificate number:", certificateNumber);
+    
+    if (!certificateNumber.trim()) {
+      toast.error("Please enter a certificate number");
+      return;
+    }
+
+    console.log("Starting verification...");
+    setVerifyingCertificate(true);
+    try {
+      const result = await verifyCertificate(certificateNumber);
+      setCertificateVerified(true);
+      setCertificateData(result?.data?.certificate); // Store certificate data for validation
+      toast.success("Certificate verified successfully!");
+      console.log("Certificate verified:", result);
+      
+      // Auto-fill form fields with user data from certificate (only for external jobs)
+      if (jobData?.isExternal && result?.data?.certificate?.user) {
+        const userData = result.data.certificate.user;
+        setApplicationForm(prev => ({
+          ...prev,
+          fullName: userData.name || '',
+          email: userData.email || '',
+          phone: userData.mobile || ''
+        }));
+ 
+      }
+    } catch (error) {
+      setCertificateVerified(false);
+      console.error("Certificate verification failed:", error);
+    } finally {
+      setVerifyingCertificate(false);
+    }
+  };
+
+  const clearCertificateData = () => {
+    setCertificateNumber(`EJ-CERT-${new Date().getFullYear()}-`);
+    setCertificateVerified(false);
+    setCertificateData(null);
+    setVerifyingCertificate(false);
+  };
 
   if (loading) {
     return (
@@ -296,6 +347,31 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
     toast.error("Please enter a valid 10-digit phone number");
     return;
   }
+
+  // Certificate validation for external jobs
+  if (jobData?.isExternal) {
+    if (!certificateVerified) {
+      toast.error("Please verify your certificate before submitting");
+      return;
+    }
+    if (!certificateData?.user) {
+      toast.error("Certificate data not available. Please verify again");
+      return;
+    }
+    
+    // Check if email matches certificate
+    if (applicationForm.email.trim() !== certificateData.user.email) {
+      toast.error(`Email must match certificate email`);
+      return;
+    }
+    
+    // Check if phone matches certificate
+    if (applicationForm.phone.trim() !== certificateData.user.mobile) {
+      toast.error(`Phone number must match certificate phone`);
+      return;
+    }
+  }
+
   if (!applicationForm.dateOfBirth) {
     toast.error("Date of Birth is required");
     return;
@@ -357,6 +433,8 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
       totalExperienceYears,
       totalExperienceMonths,
       skills: applicationForm.skills,
+      isExternalJob: jobData?.isExternal || false,
+      certificateId: jobData?.isExternal ? certificateData?._id : undefined,
     };
 
 
@@ -369,10 +447,25 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
       },
       body: JSON.stringify(candidateDetails),
     };
-    console.log("Submitting application:", candidateDetails);
 
+    // Debug the new fields specifically
+    console.log("🔍 NEW FIELDS CHECK:");
+    console.log("- isExternalJob:", candidateDetails.isExternalJob, "(type:", typeof candidateDetails.isExternalJob, ")");
+    console.log("- certificateId:", candidateDetails.certificateId, "(type:", typeof candidateDetails.certificateId, ")");
+    console.log("- jobData.isExternal:", jobData?.isExternal);
+    console.log("- certificateData exists:", !!certificateData);
+    console.log("- certificateNumber:", certificateNumber);
+    console.log("📤 FULL PAYLOAD:", candidateDetails);
+
+    console.log("🚀 Making API call to:", url);
+    console.log("📦 Request body:", JSON.stringify(candidateDetails, null, 2));
+    
     const response = await fetch(url, options);
+    console.log("📥 Response status:", response.status);
+    console.log("📥 Response headers:", Object.fromEntries(response.headers.entries()));
+    
     const data = await response.json();
+    console.log("📥 Response data:", data);
 
     if (response.ok) {
       if (data.error) {
@@ -380,6 +473,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
       } else {
         toast.success("Application submitted successfully!");
         setShowApplyModal(false);
+        clearCertificateData(); // Clear certificate data
         setApplicationForm({
           fullName: '',
           fatherName: '',
@@ -399,10 +493,20 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
         });
       }
     } else {
-      toast.error(data.error || "Failed to submit application");
+      // Handle error response - ensure we always pass a string
+      const errorMessage = typeof data.error === 'string' ? data.error : 
+                          data.error?.message || 
+                          data.message || 
+                          "Failed to submit application";
+      toast.error(errorMessage);
+      console.error("❌ Application submission failed:", data);
     }
   } catch (error) {
-    toast.error(error instanceof Error ? error.message : "Failed to submit application");
+    console.error("❌ Application submission error:", error);
+    const errorMessage = error instanceof Error ? error.message : 
+                        typeof error === 'string' ? error : 
+                        "Failed to submit application";
+    toast.error(errorMessage);
   }
 };
 
@@ -492,7 +596,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
           <div className="flex-1">
             <Card className="p-4 sm:p-6">
               {/* Job Header */}
-              <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-6">
+              <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-2">
                 <div className="flex gap-3 sm:gap-4">
                   <img 
                     src={jobData.company_logo_url } 
@@ -562,6 +666,31 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                   </Button>
                 </div>
               </div>
+              
+              {/* Disclaimer - Only show for external jobs */}
+              {jobData.isExternal && (
+                <div className="mb-4 py-2 px-3 bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200 rounded-xl">
+                  <div className="flex items-center gap-3">
+                    <div className="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <svg className="w-3 h-3 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-sm text-orange-700">
+                        Only candidates who have completed the{" "}
+                        <a 
+                          href="/assessments" 
+                          className="text-orange-800 font-semibold hover:text-orange-900 cursor-pointer transition-colors"
+                        >
+                          EarlyJobs AI Assessment
+                        </a>
+                        {" "}Eligible for applying this job
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
               
               {/* Job Details */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 text-sm">
@@ -806,7 +935,10 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => setShowApplyModal(false)}
+                onClick={() => {
+                  clearCertificateData();
+                  setShowApplyModal(false);
+                }}
                 className="h-8 w-8 p-0"
               >
                 <X className="h-4 w-4" />
@@ -816,7 +948,40 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
             {/* Modal Body */}
             <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                {/* Full Name */}
+                {/* EarlyJobs Assessment Certificate Verification - Only for external jobs */}
+                {jobData.isExternal && (
+                  <div className="sm:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      EarlyJobs Assessment Certificate Number <span className="text-red-500">*</span>
+                    </label>
+                    <div className="flex gap-3">
+                      <Input
+                        type="text"
+                        placeholder={`EJ-CERT-${new Date().getFullYear()}-XXXXX`}
+                        className={`flex-1 border-gray-200/50 focus:border-gray-300/70 ${certificateVerified ? 'border-green-500 bg-green-50' : ''}`}
+                        value={certificateNumber}
+                        onChange={(e) => setCertificateNumber(e.target.value)}
+                        required
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className={`px-6 ${certificateVerified ? 'text-green-600 border-green-300 hover:bg-green-50' : 'text-orange-600 border-orange-300 hover:bg-orange-50'}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          console.log("Button clicked directly!");
+                          handleVerifyCertificate();
+                        }}
+                        disabled={verifyingCertificate}
+                      >
+                        {verifyingCertificate ? <Loader2 className="w-4 h-4 animate-spin" /> : certificateVerified ? 'Verified ✓' : 'Verify'}
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
+              {/* Full Name */}
                 <div className="sm:col-span-1">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Full Name <span className="text-red-500">*</span>
