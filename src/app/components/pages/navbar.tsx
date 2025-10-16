@@ -11,9 +11,9 @@ const Navbar = () => {
     <nav className="hidden md:block bg-gradient-to-r from-orange-400 to-orange-600 shadow-md transition-all duration-300 z-30">
       <div className="flex items-center justify-end space-x-6 p-3">
         <Button
-          onClick={() => router.push("/browse-candidates")}
+          onClick={() => router.push("/browse-interviewed-candidates")}
           className={`bg-white bg-opacity-20 text-white text-lg font-semibold hover:bg-white hover:text-orange-600 rounded-xl px-4 py-2 transition-all duration-300 ${
-            pathname === "/browse-candidates" ? "border-b-4 border-white rounded-sm" : ""
+            pathname === "/browse-interviewed-candidates" ? "border-b-4 border-white rounded-sm" : ""
           }`}
           aria-label="Browse Candidates"
         >
