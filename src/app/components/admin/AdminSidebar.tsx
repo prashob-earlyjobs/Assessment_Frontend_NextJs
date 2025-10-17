@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import {
   BarChart,
   Users,
+  UserCircle2,
   User,
   Calendar,
   Settings,
@@ -46,6 +47,12 @@ const menuItems = [
     url: '/admin/franchises',
     icon: Users,
     permission: 'manage_franchises',
+  },
+  {
+    title: 'Team Members',
+    url: '/admin/team',
+    icon: UserCircle2,
+    permission: 'manage_team_members',
   },
   {
     title: 'Transactions',
