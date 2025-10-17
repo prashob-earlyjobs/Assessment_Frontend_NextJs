@@ -75,7 +75,7 @@ const ClassicTemplate: React.FC<ClassicTemplateProps> = ({ data, isGeneratingPDF
       {/* Header with Name, Position */}
       <header className="mb-8 text-center pb-6">
         <h1 className="text-4xl font-bold text-gray-900">{data.personalInfo.fullName || 'Christopher Johnson'}</h1>
-        <p className="text-xl text-gray-600 mt-2">{data.workExperience[0]?.position || 'Sales Manager'}</p>
+        <p className="text-xl text-gray-600 mt-2">{data.workExperience[0]?.position || 'Student'}</p>
       </header>
 
       <div className="flex flex-col lg:flex-row gap-8 print:flex-row print:gap-8">
