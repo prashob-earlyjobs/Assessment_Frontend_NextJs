@@ -752,3 +752,23 @@ export const getFranchises = async () => {
     toast.error(`${error?.response?.data?.message}.`);
   }
 };
+
+export const createCertificate = async (certificateData) => {
+  try {
+    const response = await axiosInstance.post("/certificates", certificateData);
+    return response.data;
+  } catch (error) {
+    toast.error(`${error?.response?.data?.message}.`);
+    throw error;
+  }
+};
+
+export const verifyCertificate = async (certificateNumber) => {
+  try {
+    const response = await axiosInstance.get(`/certificates/verify/${certificateNumber}`);
+    return response.data;
+  } catch (error) {
+    toast.error(`${error?.response?.data?.message}.`);
+    throw error;
+  }
+};
