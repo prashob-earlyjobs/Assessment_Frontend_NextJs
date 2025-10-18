@@ -47,7 +47,21 @@ const RecruiterPageContent = () => {
                 >
                   Apply as Recruiter
                 </Button>
+
+                <Button
+                  className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-lg transition-colors duration-200 font-semibold ml-4"
+                  onClick={() => router.push("/freejobposting")}
+                  aria-label="Free Job Posting"
+                >
+                  Free Job Posting
+                </Button>
+
+
+
+
               </div>
+
+
             </nav>
             <div className="md:hidden flex items-center">
               <Button
