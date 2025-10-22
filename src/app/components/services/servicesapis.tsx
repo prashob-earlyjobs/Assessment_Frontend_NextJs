@@ -565,6 +565,38 @@ export const redeemOffer = async (code: string) => {
     };
   }
 };
+export const updateCertificateLink = async ({ userId, interviewId, certificateLink }) => {
+  try {
+    const token = localStorage.getItem("accessToken");
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+    const response = await fetch(`${backendUrl}/webhook/update-certificate`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        
+      },
+      body: JSON.stringify({
+        userId,
+        interviewId,
+        certificateLink,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || "Failed to update certificate link");
+    }
+
+    return {
+      success: true,
+      data: data.data,
+    };
+  } catch (error) {
+    console.error("Error in updateCertificateLink:", error);
+    throw new Error(error.message || "Failed to update certificate link");
+  }
+};
 
 export const uploadPhoto = async (file: File, candidateId: string) => {
   try {

@@ -1,3 +1,4 @@
+
 "use client";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card";
@@ -31,12 +32,160 @@ import {
   DialogTitle,
 } from "../../components/ui/dialog";
 import { toast } from "sonner";
-import { useEffect, useState } from "react";
-import { getPaidAssessments, getResultForCandidateAssessment, getAssessmentById, getRecording, getTranscript, createCertificate } from "../../components/services/servicesapis";
+import { useEffect, useState, useRef } from "react";
+import { getPaidAssessments, getResultForCandidateAssessment, getAssessmentById, getRecording, getTranscript, uploadPhoto, updateCertificateLink } from "../../components/services/servicesapis";
 import { useUser } from "../../context";
 import Header from "./header";
 import CertificateWithPDF from "../../components/Certificate";
-import { useRouter,useParams } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
+import html2pdf from "html2pdf.js";
+
+const Certificate = ({ 
+  candidateName, 
+  assessmentName, 
+  score, 
+  date, 
+  commScore, 
+  proctScore, 
+  skillsVerified, 
+  certificateId, 
+  isPDFGenerating 
+}) => {
+  return (
+    <div className="w-full h-full" id="certificate" style={{ overflow: "hidden", backgroundColor: "#FFFFFF" }}>
+      <div className="border-8 relative h-full p-4" style={{ borderColor: "#F97316" }}>
+        {/* Border Decorations */}
+        <div className="absolute top-2 left-2 w-8 h-8 border-l-4 border-t-4" style={{ borderColor: "#F97316" }}></div>
+        <div className="absolute top-2 right-2 w-8 h-8 border-r-4 border-t-4" style={{ borderColor: "#F97316" }}></div>
+        <div className="absolute bottom-2 left-2 w-8 h-8 border-l-4 border-b-4" style={{ borderColor: "#F97316" }}></div>
+        <div className="absolute bottom-2 right-2 w-8 h-8 border-r-4 border-b-4" style={{ borderColor: "#F97316" }}></div>
+
+        {/* Header */}
+        <div className="text-center mb-4">
+          <img
+            src="/images/logo.png"
+            alt="EarlyJobs Logo"
+            className="h-16 w-auto mx-auto mb-3"
+          />
+          <h1 className={`text-4xl font-bold ${isPDFGenerating && "mb-[1rem]"}`} style={{ color: "#1F2937" }}>
+            CERTIFICATE OF ACHIEVEMENT
+          </h1>
+          <div className="w-32 h-1 mx-auto mb-4" style={{ background: "linear-gradient(to right, #F97316, #9333EA)" }} />
+        </div>
+
+        {/* Main Content */}
+        <div className="text-center mb-6">
+          <p className="text-lg mb-2" style={{ color: "#4B5563" }}>This is to certify that</p>
+          <h2 className="text-3xl font-bold border-b-2 pb-2 inline-block mb-2" style={{ color: "#1F2937", borderColor: "#D1D5DB" }}>
+            {candidateName}
+          </h2>
+          <p className="text-lg mb-2" style={{ color: "#4B5563" }}>has successfully completed the</p>
+          <h3 className="text-2xl font-semibold mb-2" style={{ color: "#F97316" }}>{assessmentName}</h3>
+          <p className="text-lg mb-2" style={{ color: "#4B5563" }}>with a score of</p>
+
+          {/* Score badges */}
+          <div className="flex flex-wrap justify-center items-center gap-2 px-4 py-2 rounded-full w-fit mx-auto mb-6">
+            <div
+              className={`px-3 ${isPDFGenerating ? "" : "py-1"} rounded-full flex items-center gap-1 border`} 
+              style={{ backgroundColor: "#FFFFFF", color: "#15803D", borderColor: "#16A34A" }}
+            >
+              <span className={`text-sm font-medium ${isPDFGenerating && "mb-[1rem]"}`} style={{ color: "#15803D" }}>
+                Overall Score:
+              </span>
+              <span className={`text-sm font-bold ${isPDFGenerating && "mb-[1rem]"}`} style={{ color: "#16A34A" }}>
+                {score}/10
+              </span>
+            </div>
+            <div
+              className="px-3 py-1 rounded-full flex items-center gap-1 border"
+              style={{ backgroundColor: "#FFFFFF", color: "#15803D", borderColor: "#16A34A" }}
+            >
+              <span className={`text-sm font-medium ${isPDFGenerating && "mb-[1rem]"}`} style={{ color: "#15803D" }}>
+                Communication:
+              </span>
+              <span className={`text-sm font-bold ${isPDFGenerating && "mb-[1rem]"}`} style={{ color: "#16A34A" }}>
+                {commScore}/10
+              </span>
+            </div>
+            <div
+              className="px-3 py-1 rounded-full flex items-center gap-1 border"
+              style={{ backgroundColor: "#FFFFFF", color: "#15803D", borderColor: "#16A34A" }}
+            >
+              <span className={`text-sm font-medium ${isPDFGenerating && "mb-[1rem]"}`} style={{ color: "#15803D" }}>
+                Proctoring:
+              </span>
+              <span className={`text-sm font-bold ${isPDFGenerating && "mb-[1rem]"}`} style={{ color: "#16A34A" }}>
+                {proctScore}/10
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Skills Verified */}
+        <div className="mb-8">
+          <h4 className="text-lg font-semibold mb-4 text-center flex items-center justify-center gap-2" style={{ color: "#374151" }}>
+            <div className="h-5 w-5" style={{ color: "#16A34A" }} />
+            <span className={`${isPDFGenerating && "mb-[1rem]"}`}>Skills Verified</span>
+          </h4>
+          <div className="flex flex-wrap justify-center gap-2 max-w-[9in] mx-auto">
+            {skillsVerified?.map((skill, index) => (
+              <div
+                key={index}
+                className="px-3 py-1"
+                style={{ backgroundColor: "#EDE9FE", color: "#9333EA" }}
+              >
+                <span className={`${isPDFGenerating && "mb-[0.5rem]"}`}>{skill}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div
+          className={`flex justify-between items-end mt-12 px-12 ${isPDFGenerating && "mt-[1rem]"}`}
+          style={{ position: "absolute", display: "flex", width: "100%", bottom: "24px" }}
+        >
+          <div className="text-center">
+            <div className="w-48 border-b-2 mb-2 mx-auto" style={{ borderColor: "#9CA3AF" }}></div>
+            <p className="text-sm" style={{ color: "#4B5563" }}>Authorized Signature</p>
+            <p className={`text-xs ${isPDFGenerating && "mb-[0.5rem]"}`} style={{ color: "#6B7280" }}>
+              EarlyJobs Certification Authority
+            </p>
+          </div>
+          <div className="text-right space-y-2" style={{ color: "#4B5563" }}>
+            <div className="flex items-center gap-2">
+              <div className="h-4 w-4" style={{ color: "#4B5563" }} />
+              <span className={`text-sm ${isPDFGenerating && "mb-[0.5rem]"}`} style={{ color: "#4B5563" }}>Date: {date}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="h-4 w-4" style={{ color: "#4B5563" }} />
+              <span className={`text-sm ${isPDFGenerating && "mb-[0.5rem]"}`} style={{ color: "#4B5563" }}>
+                Certificate ID: {certificateId}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* QR Code Placeholder */}
+        <div className="absolute top-8 right-8 w-16 h-16 flex items-center justify-center">
+          <img
+            src="/images/qrcode_earlyjobs.png"
+            className="border rounded-md"
+            alt="QR Code"
+            style={{ borderColor: "#D1D5DB" }}
+          />
+        </div>
+        <div className={`absolute ${isPDFGenerating && "mb-[0.5rem]"} bottom-[4.5rem] left-[4.5rem]`}>
+          <img
+            src="/images/signature.png"
+            alt="Signature of Cofounder"
+            className="max-w-[11rem]"
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Results = () => {
   const navigate = useRouter();
@@ -56,6 +205,8 @@ const Results = () => {
   const [videoError, setVideoError] = useState(null);
   const [transcriptError, setTranscriptError] = useState(null);
   const [showTranscript, setShowTranscript] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const certificateRef = useRef(null);
 
   const getAssessmentsData = async (assessments) => {
     const assessmentPromises = assessments.map(async (assessment) => {
@@ -101,7 +252,7 @@ const Results = () => {
         }
       } catch (error) {
         setError(error.message || "Failed to fetch assessments");
-        // toast.error(error.message || "Failed to fetch assessments");
+        toast.error(error.message || "Failed to fetch assessments");
       } finally {
         setLoading(false);
       }
@@ -124,7 +275,6 @@ const Results = () => {
       setVideoError(null);
       setTranscriptError(null);
 
-      // Fetch assessment results
       try {
         const response = await getResultForCandidateAssessment(selectedAssessment.interviewId);
         if (!response.success) {
@@ -139,7 +289,6 @@ const Results = () => {
         toast.error("Assessment is not yet completed or does not reviewed.");
       }
 
-      // Fetch video recording
       try {
         setVideoLoading(true);
         const videoResponse = await getRecording(selectedAssessment.interviewId);
@@ -149,12 +298,10 @@ const Results = () => {
         setVideoUrl(videoResponse.data);
       } catch (error) {
         setVideoError(error.message || "Video recording not available");
-        // toast.error(error.message || "Video recording not available");
       } finally {
         setVideoLoading(false);
       }
 
-      // Fetch transcript
       try {
         setTranscriptLoading(true);
         const transcriptResponse = await getTranscript(selectedAssessment.interviewId);
@@ -164,7 +311,6 @@ const Results = () => {
         setTranscript(transcriptResponse.data);
       } catch (error) {
         setTranscriptError(error.message || "Transcript not available");
-        // toast.error(error.message || "Transcript not available");
       } finally {
         setTranscriptLoading(false);
       }
@@ -178,7 +324,7 @@ const Results = () => {
   }, [selectedAssessment]);
 
   useEffect(() => {
-    if (!error && selectedAssessment && completedAssessments) {
+    if (!error && selectedAssessment && completedAssessments && results?.report) {
       const matchedAssessment = completedAssessments.find(
         (assessment) => assessment.interviewId === selectedAssessment.interviewId
       );
@@ -206,6 +352,61 @@ const Results = () => {
     }
   }, [error, selectedAssessment, completedAssessments, userCredentials, results]);
 
+  useEffect(() => {
+    const uploadCertificate = async () => {
+      if (!certificateData || !selectedAssessment || !userCredentials || !certificateRef.current) {
+        return;
+      }
+
+      try {
+        const opt = {
+          margin: [0, 0, 0, 0],
+          filename: `${certificateData.certificateId}.pdf`,
+          image: { type: "jpeg", quality: 0.98 },
+          html2canvas: { scale: 2, useCORS: true },
+          jsPDF: {
+            unit: "in",
+            format: [11, 8.5],
+            orientation: "landscape",
+          },
+        };
+
+        const blob = await html2pdf().set(opt).from(certificateRef.current).output("blob");
+        const file = new File([blob], opt.filename, { type: "application/pdf" });
+
+        const response = await uploadPhoto(file, certificateData.interviewId);
+        let uploadedUrl = typeof response === 'string' ? response : response.fileUrl;
+
+        if (!uploadedUrl) {
+          throw new Error("No URL returned from upload");
+        }
+
+        // Construct the public certificate link
+        const certificateLink = uploadedUrl;
+
+        // Update the user model with the certificate link
+        const res= await updateCertificateLink({
+          userId: userCredentials._id,
+          interviewId: certificateData.interviewId,
+          certificateLink: certificateLink,
+        });
+        if (!res.success) {
+           console.log("Failed to update certificate link:");
+        }
+        else{
+          console.log("Certificate link updated successfully:", res.data);
+        }
+        toast.success("Certificate created and uploaded successfully!");
+      } catch (error) {
+        console.error("Error creating certificate:", error);
+        toast.error("Failed to create certificate. Please try again.");
+      }
+    };
+
+    if (certificateData) {
+      uploadCertificate();
+    }
+  }, [certificateData, selectedAssessment, userCredentials]);
 
   const handleDownloadReport = () => {
     if (certificateData) {
@@ -216,39 +417,6 @@ const Results = () => {
     }
   };
 
-  const handleCreateCertificate = async () => {
-    if (!selectedAssessment || !userCredentials || !certificateData) {
-      toast.error("Missing required data for certificate creation");
-      return;
-    }
-
-    try {
-      const certificatePayload = {
-        userid: userCredentials._id,
-        interviewid: selectedAssessment.interviewId,
-        cerficateno: certificateData.certificateId,
-        assessmentid: selectedAssessment.assessmentData._id || selectedAssessment.assessmentData.id,
-        cerficatelink: `${window.location.origin}/certificate/${selectedAssessment.interviewId}`
-      };
-
-      const result = await createCertificate(certificatePayload);
-      toast.success("Certificate created successfully!");
-      console.log("Certificate created:", result);
-    } catch (error) {
-      console.error("Error creating certificate:", error);
-      // Error toast is handled by the service function
-    }
-  };
-const formatTime = (seconds) => {
-  const mins = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60);
-  return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-};
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
   const handleShareResults = () => {
     navigator.clipboard.writeText(window.location.href);
     toast.success("Results link copied to clipboard!");
@@ -270,6 +438,16 @@ const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = Math.floor(seconds % 60);
     return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+  };
+
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
   };
 
   if (loading) {
@@ -353,11 +531,11 @@ const formatTime = (seconds) => {
                             </div>
                           </div>
                         </div>
-                         <div className="text-center">
-                          <div className={`w-32 h-32 rounded-full border-8 ${getScoreBg(results?.report?.communicationScore || 0)} flex items-center justify-center mx-auto mb-4`}>
+                        <div className="text-center">
+                          <div className={`w-32 h-32 rounded-full border-8 ${getScoreBg(results?.proctoringEventsData?.proctoringEvents?.proctoringScore || 0)} flex items-center justify-center mx-auto mb-4`}>
                             <div className="text-center">
                               <div className={`text-4xl font-bold ${getScoreColor(results?.proctoringEventsData?.proctoringEvents?.proctoringScore || 0)}`}>
-                                {results?.proctoringEventsData.proctoringEvents.proctoringScore || 0}/10
+                                {results?.proctoringEventsData?.proctoringEvents?.proctoringScore || 0}/10
                               </div>
                               <div className="text-sm text-gray-600">Proctoring Score</div>
                             </div>
@@ -367,71 +545,69 @@ const formatTime = (seconds) => {
                     </CardContent>
                   </Card>
 
-                <Card className="rounded-3xl border-0 shadow-lg">
-      <CardHeader 
-        className="cursor-pointer flex flex-row justify-between items-center"
-        onClick={toggleDropdown}
-      >
-        <div>
-          <CardTitle className="flex items-center space-x-2">
-            <div className="flex items-center space-x-2">
-            <Eye className="h-6 w-6 text-orange-600" />
-            <div className="flex flex-col">
-            <span>Proctoring Summary</span>
-            <CardDescription className="text-sm text-gray-600 mt-1">Monitoring and integrity details</CardDescription>
-            </div>
-            </div>
-          </CardTitle>
-        </div>
-         
-      <ChevronUp
-  className="h-6 w-6 text-gray-600 transition-transform duration-300"
-  style={{ transform: isOpen ? "rotate(180deg)" : "rotate(0deg)" }}
-/>
-         
-      </CardHeader>
-      {isOpen && (
-        <CardContent>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between p-4 bg-orange-50 rounded-2xl">
-              <div className="flex items-center space-x-3">
-                <AlertTriangle className="h-6 w-6 text-orange-600" />
-                <span className="font-medium">Proctoring Score</span>
-              </div>
-              <span className="text-2xl font-bold text-orange-600">
-                {results?.proctoringEventsData?.proctoringEvents?.proctoringScore || 0}/10
-              </span>
-            </div>
-            <div className="grid grid-cols-3 gap-4 text-sm text-gray-600">
-              <div>Blur Events: {results?.proctoringEventsData?.proctoringEvents?.blurEventCount || 0}</div>
-              <div>Camera Off: {results?.proctoringEventsData?.proctoringEvents?.disableCameraEventCount || 0}</div>
-              <div>Mute Events: {results?.proctoringEventsData?.proctoringEvents?.muteEventCount || 0}</div>
-            </div>
-            <ul className="space-y-2">
-              {results?.proctoringEventsData?.proctoringEvents?.proctoringLogs?.map((log, index) => {
-                const eventTime = log.eventTimestamp >= 0 ? log.eventTimestamp.toFixed(1) : (log.eventTimestamp * -1).toFixed(1);
-                const isMultipleSpeaker = log.event?.eventType === "MultipleSpeaker";
-                return (
-                  <li
-                    key={index}
-                    className={`flex items-center space-x-3 p-2 rounded-lg ${isMultipleSpeaker ? "bg-yellow-50" : "bg-gray-50"}`}
-                  >
-                    <span className={`w-2 h-2 rounded-full ${isMultipleSpeaker ? "bg-yellow-600" : "bg-gray-400"}`}></span>
-                    <span className="text-sm text-gray-700">
-                      {log.event?.eventType || "Unknown"} at {eventTime} sec
-                    </span>
-                  </li>
-                );
-              }) || <li className="text-gray-500">No proctoring logs available</li>}
-            </ul>
-            <p className="text-sm text-gray-500 mt-2">
-              Interview lasted {(results?.proctoringEventsData?.proctoringEvents?.proctoringLogs?.[results.proctoringEventsData?.proctoringEvents?.proctoringLogs.length - 1]?.eventTimestamp / 60)?.toFixed(1) || 0} minutes with{" "}
-              {results?.proctoringEventsData?.proctoringEvents?.proctoringLogs?.filter(log => log.event?.eventType === "MultipleSpeaker").length || 0} multiple speaker events.
-            </p>
-          </div>
-        </CardContent>
-      )}
-    </Card>
+                  <Card className="rounded-3xl border-0 shadow-lg">
+                    <CardHeader 
+                      className="cursor-pointer flex flex-row justify-between items-center"
+                      onClick={toggleDropdown}
+                    >
+                      <div>
+                        <CardTitle className="flex items-center space-x-2">
+                          <div className="flex items-center space-x-2">
+                            <Eye className="h-6 w-6 text-orange-600" />
+                            <div className="flex flex-col">
+                              <span>Proctoring Summary</span>
+                              <CardDescription className="text-sm text-gray-600 mt-1">Monitoring and integrity details</CardDescription>
+                            </div>
+                          </div>
+                        </CardTitle>
+                      </div>
+                      <ChevronUp
+                        className="h-6 w-6 text-gray-600 transition-transform duration-300"
+                        style={{ transform: isOpen ? "rotate(180deg)" : "rotate(0deg)" }}
+                      />
+                    </CardHeader>
+                    {isOpen && (
+                      <CardContent>
+                        <div className="space-y-4">
+                          <div className="flex items-center justify-between p-4 bg-orange-50 rounded-2xl">
+                            <div className="flex items-center space-x-3">
+                              <AlertTriangle className="h-6 w-6 text-orange-600" />
+                              <span className="font-medium">Proctoring Score</span>
+                            </div>
+                            <span className="text-2xl font-bold text-orange-600">
+                              {results?.proctoringEventsData?.proctoringEvents?.proctoringScore || 0}/10
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-3 gap-4 text-sm text-gray-600">
+                            <div>Blur Events: {results?.proctoringEventsData?.proctoringEvents?.blurEventCount || 0}</div>
+                            <div>Camera Off: {results?.proctoringEventsData?.proctoringEvents?.disableCameraEventCount || 0}</div>
+                            <div>Mute Events: {results?.proctoringEventsData?.proctoringEvents?.muteEventCount || 0}</div>
+                          </div>
+                          <ul className="space-y-2">
+                            {results?.proctoringEventsData?.proctoringEvents?.proctoringLogs?.map((log, index) => {
+                              const eventTime = log.eventTimestamp >= 0 ? log.eventTimestamp.toFixed(1) : (log.eventTimestamp * -1).toFixed(1);
+                              const isMultipleSpeaker = log.event?.eventType === "MultipleSpeaker";
+                              return (
+                                <li
+                                  key={index}
+                                  className={`flex items-center space-x-3 p-2 rounded-lg ${isMultipleSpeaker ? "bg-yellow-50" : "bg-gray-50"}`}
+                                >
+                                  <span className={`w-2 h-2 rounded-full ${isMultipleSpeaker ? "bg-yellow-600" : "bg-gray-400"}`}></span>
+                                  <span className="text-sm text-gray-700">
+                                    {log.event?.eventType || "Unknown"} at {eventTime} sec
+                                  </span>
+                                </li>
+                              );
+                            }) || <li className="text-gray-500">No proctoring logs available</li>}
+                          </ul>
+                          <p className="text-sm text-gray-500 mt-2">
+                            Interview lasted {(results?.proctoringEventsData?.proctoringEvents?.proctoringLogs?.[results.proctoringEventsData?.proctoringEvents?.proctoringLogs.length - 1]?.eventTimestamp / 60)?.toFixed(1) || 0} minutes with{" "}
+                            {results?.proctoringEventsData?.proctoringEvents?.proctoringLogs?.filter(log => log.event?.eventType === "MultipleSpeaker").length || 0} multiple speaker events.
+                          </p>
+                        </div>
+                      </CardContent>
+                    )}
+                  </Card>
 
                   <Card className="rounded-3xl border-0 shadow-lg">
                     <CardHeader>
@@ -443,7 +619,6 @@ const formatTime = (seconds) => {
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-6">
-                        {/* Video Player */}
                         <div className="space-y-2">
                           <h3 className="text-lg font-medium text-gray-900">Video Recording</h3>
                           {videoLoading ? (
@@ -470,7 +645,6 @@ const formatTime = (seconds) => {
                           )}
                         </div>
 
-                        {/* Transcript */}
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
                             <h3 className="text-lg font-medium text-gray-900">Conversation Transcript</h3>
@@ -495,37 +669,35 @@ const formatTime = (seconds) => {
                           ) : showTranscript && transcript.length > 0 ? (
                             <div className="max-h-96 overflow-y-auto bg-gray-50 rounded-2xl p-4 flex flex-col gap-2">
                               {transcript.map((line, index) => {
-                                                
-                                                const startTime = formatTime(line.start);
-                                                const endTime = formatTime(line.end);
-                                                const duration = line.end - line.start;
-                                                const timetaken = formatTime(duration);
-                                                return(
-                                            <div
-                                                key={index}
-                                                style={{width: "100%"}}
-                                                className={`p-4 rounded-xl shadow-md ${
-                                                line.speaker === 0
-                                                    ? "bg-blue-100 self-start text-left"
-                                                    : "bg-green-100 self-start text-left"
-                                                }`}
-                                            >
-                                                <div style={{display: "flex", justifyContent: "space-between"}}>
-                                                <p className="text-sm text-gray-600">
-                                                    <strong>
-                                                    {line.speaker === 0
-                                                        ? `AI bot (${startTime} - ${endTime})`
-                                                        : `You (${startTime} - ${endTime})`}
-                                                    :
-                                                    </strong> 
-                                                    </p>
-                                                    <p className="text-sm text-gray-600">
-                                                        {timetaken}
-                                                    </p>
-                                                    </div>
-                                                <p className="whitespace-pre-wrap text-gray-800">{line.text}</p>
-                                            </div>
-                                            )})}
+                                const startTime = formatTime(line.start);
+                                const endTime = formatTime(line.end);
+                                const duration = line.end - line.start;
+                                const timetaken = formatTime(duration);
+                                return (
+                                  <div
+                                    key={index}
+                                    style={{ width: "100%" }}
+                                    className={`p-4 rounded-xl shadow-md ${
+                                      line.speaker === 0
+                                        ? "bg-blue-100 self-start text-left"
+                                        : "bg-green-100 self-start text-left"
+                                    }`}
+                                  >
+                                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                      <p className="text-sm text-gray-600">
+                                        <strong>
+                                          {line.speaker === 0
+                                            ? `AI bot (${startTime} - ${endTime})`
+                                            : `You (${startTime} - ${endTime})`}
+                                          :
+                                        </strong>
+                                      </p>
+                                      <p className="text-sm text-gray-600">{timetaken}</p>
+                                    </div>
+                                    <p className="whitespace-pre-wrap text-gray-800">{line.text}</p>
+                                  </div>
+                                );
+                              })}
                             </div>
                           ) : showTranscript ? (
                             <div className="flex items-center justify-center h-64 bg-gray-100 rounded-2xl text-gray-600">
@@ -661,10 +833,10 @@ const formatTime = (seconds) => {
                   </Card>
                 )}
 
-                <Dialog open={showCertificateDialog} onOpenChange={setShowCertificateDialog} >
-                  <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto" style={{paddingLeft: "0rem", paddingRight: "0rem", backgroundColor: "white"}}>
+                <Dialog open={showCertificateDialog} onOpenChange={setShowCertificateDialog}>
+                  <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto" style={{ paddingLeft: "0rem", paddingRight: "0rem", backgroundColor: "white" }}>
                     <DialogHeader>
-                      <DialogTitle className="flex items-center justify-between" style={{marginLeft: "2rem", }}>
+                      <DialogTitle className="flex items-center justify-between" style={{ marginLeft: "2rem" }}>
                         <span>Your Certificate</span>
                       </DialogTitle>
                     </DialogHeader>
@@ -686,17 +858,15 @@ const formatTime = (seconds) => {
                       disabled={!certificateData || error}
                     >
                       <Eye className="w-5 h-5" />
-
                       View Certificate
                     </Button>
                     <Button
-                      onClick={handleCreateCertificate}
+                      onClick={handleShareResults}
                       variant="outline"
                       className="w-full rounded-2xl border-gray-200 hover:bg-green-50 hover:border-green-300"
-                      disabled={!selectedAssessment || !userCredentials || !certificateData}
                     >
-                      <FileText className="h-4 w-4 mr-2" />
-                      Create Certificate
+                      <Share2 className="h-4 w-4 mr-2" />
+                      Share Results
                     </Button>
                     <Button
                       onClick={() => navigate.push('/assessments')}
@@ -713,6 +883,24 @@ const formatTime = (seconds) => {
           </>
         )}
       </main>
+      {certificateData && (
+        <div
+          style={{ position: "absolute", left: "-9999px", top: "-9999px" }}
+          ref={certificateRef}
+        >
+          <div
+            style={{
+              width: "11in",
+              height: "8.5in",
+              padding: "0.5in",
+              boxSizing: "border-box",
+              overflow: "hidden",
+            }}
+          >
+            <Certificate {...certificateData} isPDFGenerating={true} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
