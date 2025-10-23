@@ -63,7 +63,7 @@ const languageOptions = [
 const roleOptions = [
   'Intern Recruiter (Remote)',
   'Freelance Recruiter (Remote)',
-  'Full-time Recruiter'
+  'Full-time Recruiter (Bengaluru)',
 ];
 
 const getMaxDate = () => {
