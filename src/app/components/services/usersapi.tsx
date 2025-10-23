@@ -101,7 +101,7 @@ export const createUserOnboarding = async (userId: string, onboardingData: IOnbo
       updatedDateTime: onboardingData.updatedDateTime || new Date().toISOString()
     };
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_2_0;
-    const response = await fetch(`${backendUrl}/onboarding/user/create-onboarding`, {
+    const response = await fetch(`${backendUrl}/recruiter/create-onboarding`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -235,7 +235,7 @@ export const uploadFile = async (
 
     // Make the upload request
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_2_0;
-    const response = await fetch(`${backendUrl}/uploads/public/file`, {
+    const response = await fetch(`${backendUrl}/publicCom/file`, {
       method: 'POST',
       body: formData
     });
