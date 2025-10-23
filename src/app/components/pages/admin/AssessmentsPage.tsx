@@ -27,6 +27,7 @@ import {
   getRecording,
   getTranscript,
   uploadPhoto,
+  createCertificate,
   updateCertificateLink,
 } from "../../../components/services/servicesapis";
 import { toast } from "sonner";
@@ -217,19 +218,19 @@ const AssessmentsPage: React.FC = () => {
       }
       setResult(response);
 
-      // Fetch recording
-      const recordingResponse = await getRecording(candidate.interviewId);
-      if (!recordingResponse.success) {
-        throw new Error(recordingResponse.message);
-      }
-      setRecording(recordingResponse.data);
+      // // Fetch recording
+      // const recordingResponse = await getRecording(candidate.interviewId);
+      // if (!recordingResponse.success) {
+      //   throw new Error(recordingResponse.message);
+      // }
+      // setRecording(recordingResponse.data);
 
-      // Fetch transcript
-      const transcriptResponse = await getTranscript(candidate.interviewId);
-      if (!transcriptResponse.success) {
-        throw new Error(transcriptResponse.message);
-      }
-      setTranscript(transcriptResponse.data);
+      // // Fetch transcript
+      // const transcriptResponse = await getTranscript(candidate.interviewId);
+      // if (!transcriptResponse.success) {
+      //   throw new Error(transcriptResponse.message);
+      // }
+      // setTranscript(transcriptResponse.data);
 
       // Construct certificate data using selectedAssessment.title
       const skillsVerified = response.data?.report?.reportSkills
@@ -275,7 +276,8 @@ const AssessmentsPage: React.FC = () => {
         // Wait for DOM rendering and images to load
         await new Promise((resolve) => setTimeout(resolve, 500));
         await waitForImages(certificateElement);
-
+        
+        
         const opt = {
           margin: [0, 0, 0, 0],
           filename: `${certificateData.certificateId}.pdf`,
@@ -308,18 +310,31 @@ const AssessmentsPage: React.FC = () => {
           throw new Error("No URL returned from upload");
         }
 
-        // Log certificate data to console after successful upload
-        console.log("Certificate Data:", certificateData);
-       
-        const backendUrl= process.env.NEXT_PUBLIC_BACKEND_URL;
+         const backendUrl= process.env.NEXT_PUBLIC_BACKEND_URL;
         const candidateDetailsResponse=  await fetch(`${backendUrl}/candidate/id-by-interview/${certificateData.interviewId}`)
         const data= await candidateDetailsResponse.json();
         const userId = data.userId;
 
+        const certificatePayload = {
+        userid: userId,
+        interviewid: certificateData.interviewId,
+        certificateno: certificateData.certificateId,
+        assessmentid: selectedAssessment?._id,
+        certificatelink: uploadedUrl
+      };
+
+      const certificateResponse = await createCertificate(certificatePayload);
+      const certificateDbId = certificateResponse.data.certificate._id;
+
+        // Log certificate data to console after successful upload
+        console.log("Certificate Data:", certificateData);
+       
+       
+
         const updateResponse = await updateCertificateLink({
           userId: userId,
           interviewId: certificateData.interviewId,
-          certificateLink: uploadedUrl,
+          certificateId: certificateDbId,
         });
 
         if (!updateResponse.success) {

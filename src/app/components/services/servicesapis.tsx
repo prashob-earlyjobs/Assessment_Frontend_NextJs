@@ -565,11 +565,11 @@ export const redeemOffer = async (code: string) => {
     };
   }
 };
-export const updateCertificateLink = async ({ userId, interviewId, certificateLink }) => {
+export const updateCertificateLink = async ({ userId, interviewId, certificateId }) => {
   try {
-    const token = localStorage.getItem("accessToken");
+   
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-    const response = await fetch(`${backendUrl}/webhook/update-certificate`, {
+    const response = await fetch(`${backendUrl}/certificates/update-certificate`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -578,7 +578,7 @@ export const updateCertificateLink = async ({ userId, interviewId, certificateLi
       body: JSON.stringify({
         userId,
         interviewId,
-        certificateLink,
+        certificateId,
       }),
     });
 
@@ -593,7 +593,7 @@ export const updateCertificateLink = async ({ userId, interviewId, certificateLi
       data: data.data,
     };
   } catch (error) {
-    console.error("Error in updateCertificateLink:", error);
+    console.error("Error in updateCertificateId:", error);
     throw new Error(error.message || "Failed to update certificate link");
   }
 };
