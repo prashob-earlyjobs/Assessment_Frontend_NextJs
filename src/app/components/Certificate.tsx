@@ -448,6 +448,7 @@ import { Badge } from "../components/ui/badge";
 import { Award, Calendar, User, CheckCircle, Download, Share2, Copy } from "lucide-react";
 import { toast } from "sonner";
 import { uploadPhoto } from "../components/services/servicesapis";
+import { createCertificate } from "../components/services/servicesapis";
 import {
   FacebookShareButton,
   LinkedinShareButton,
@@ -703,7 +704,6 @@ const CertificateWithPDF: React.FC<CertificateProps> = ({
   };
 
   useEffect(() => {
-    // Only run URL transformation after fileUrl is set
     if (fileUrl) {
       try {
         const url = new URL(fileUrl);
@@ -757,6 +757,7 @@ const CertificateWithPDF: React.FC<CertificateProps> = ({
       setIsPDFGenerating(false);
     }
   };
+  
 
   const sendPDFToBackend = async () => {
     if (!certificateRef.current || !interviewId || !certificateId) {

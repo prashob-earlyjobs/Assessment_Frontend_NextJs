@@ -11,12 +11,12 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: "Free Job Posting | EarlyJobs",
       description:
-        "Post jobs for free on EarlyJobs and hire smarter with AI-powered matching and verified candidates. Start hiring today — no fees, just results.",
+        "Post jobs for free on EarlyJobs and hire smarter with AI-powered matching and verified candidates. Start hiring today .",
       type: "website",
       url: `${process.env.NEXT_PUBLIC_BASE_URL}/freejobposting`,
       images: [
         {
-          url: `/images/og-free-job.jpg`,
+          url: `/images/og-free-job.png`,
           width: 1200,
           height: 627,
           alt: "Free Job Posting - EarlyJobs",
@@ -28,7 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: "Free Job Posting | EarlyJobs",
       description:
         "Hire faster with EarlyJobs. Post jobs for free and connect with verified candidates instantly.",
-      images: ["/images/og-free-job.jpg"],
+      images: ["/images/og-free-job.png"],
     },
     robots: "index, follow",
     viewport: "width=device-width, initial-scale=1.0",
