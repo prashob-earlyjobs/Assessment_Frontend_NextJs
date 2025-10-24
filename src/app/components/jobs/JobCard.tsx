@@ -21,6 +21,7 @@ interface JobCardProps {
   skills?: string[];
   postedTime: string;
   onJobClick?: () => void;
+  onCompanyClick?: () => void;
 }
 
 const JobCard = ({
@@ -38,6 +39,7 @@ const JobCard = ({
   skills,
   postedTime,
   onJobClick,
+  onCompanyClick,
 }: JobCardProps) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
 
@@ -156,6 +158,14 @@ const JobCard = ({
     setIsBookmarked(!isBookmarked);
   };
 
+  // Handle company name click
+  const handleCompanyClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent triggering the job card click
+    if (onCompanyClick) {
+      onCompanyClick();
+    }
+  };
+
   return (
     <Card
       className="p-6 hover:shadow-md transition-shadow cursor-pointer"
@@ -177,7 +187,13 @@ const JobCard = ({
               <h3 className="font-semibold text-lg text-earlyjobs-text hover:text-earlyjobs-orange transition-colors">
                 {title}
               </h3>
-              <p className="text-gray-600 text-sm">{company}</p>
+              <p 
+                className="text-gray-600 text-sm hover:text-orange-300 cursor-pointer"
+                onClick={handleCompanyClick}
+                title={`Click to search jobs from ${company}`}
+              >
+                {company}
+              </p>
             </div>
           </div>
           <Button
