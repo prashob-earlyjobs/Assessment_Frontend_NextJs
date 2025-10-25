@@ -89,7 +89,7 @@ const Index = () => {
       <Navbar />
       
       {/* Main Navigation Header */}
-      <header className="flex items-center justify-between px-4 py-4 sm:px-6 lg:px-16 xl:px-24 bg-white/90 backdrop-blur-md sticky top-0 z-40 shadow-sm border-b border-gray-100/50">
+      <header className="flex items-center justify-between px-4 py-4 sm:px-6 lg:px-16 xl:px-24 bg-white/90 backdrop-blur-md lg:sticky top-0 z-40 shadow-sm border-b border-gray-100/50">
         {/* Logo Section */}
         <div className="flex items-center space-x-3">
           <img
@@ -231,7 +231,7 @@ const Index = () => {
             <Button
               variant="ghost"
               className="w-full text-left justify-start text-gray-700 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-200 font-medium"
-              onClick={() => handleMobileMenuItemClick("/browse-candidates")}
+              onClick={() => handleMobileMenuItemClick("/browse-interviewed-candidates")}
             >
               <Briefcase className="h-4 w-4 mr-3 text-orange-500" />
               Browse Candidates
@@ -289,7 +289,7 @@ const Index = () => {
       )}
 
       {/* Mobile Sticky Navigation */}
-      <div className="md:hidden sticky top-0 z-30 px-4 pt-3 pb-2 bg-white/80 backdrop-blur-lg border-b border-gray-100">
+      <div className="md:hidden sticky top-0 z-100 px-4 pt-3 pb-2 bg-background  border-b border-gray-100">
         <ToggleGroup
           type="single"
           value={activeSection}

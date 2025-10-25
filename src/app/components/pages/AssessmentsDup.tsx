@@ -180,9 +180,9 @@ export default function Assessments() {
         <div>
             
 
-            
-    <section className=" h-[85vh] md:min-h-[95vh]  items-center overflow-hidden bg-gradient-to-br from-orange-400 to-purple-400 py-22 px-4 sm:px-8 md:px-12 lg:px-20">
-    <div className="w-full mx-auto">
+
+    <section className="h-[85vh]  items-center overflow-hidden bg-gradient-to-br from-orange-400 to-purple-400  px-4 sm:px-8 md:px-12 lg:px-20">
+    <div className="w-full mx-auto pt-20 lg:pt-40">
         <div className="grid lg:grid-cols-2 gap-6 lg:gap-10 items-center">
             <div className="animate-fade-in text-center lg:text-left">
                 <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-white leading-tight mb-4">

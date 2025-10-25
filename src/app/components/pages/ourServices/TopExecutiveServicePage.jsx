@@ -1,7 +1,6 @@
 "use client"
 import { FaRocket, FaUserClock, FaGripLinesVertical, FaPaintBrush, FaStar } from "react-icons/fa";
-// import ConsultationForm from '../../components/ConsultationForm';
-// import ClientCarousel from "../../components/ClientCarousal";
+
 import HeroSection from "../../Servicesfooter/HeroSection";
 import RecruitingProcess from "../../Servicesfooter/RecruitingProcess";
 import HowWeHelpSection from "../../Servicesfooter/HowWeHelpSection";
@@ -10,7 +9,7 @@ import Faqs from "../../Servicesfooter/Faqs";
 import './style.css';
 import { useEffect } from "react";
 import React from 'react';
-import { metaConstants } from "../../../utils/metaConstants";
+
 
 const heroSectionData = {
     subheading: 'STRENGTHENING YOUR LEADERSHIP PIPELINE',
@@ -145,38 +144,7 @@ const servicePageAccordianData = [
 
 const TopExecutiveServicePage = () => {
 
-    useEffect(() => {
-        window.scrollTo(0, 0)
-        document.title = metaConstants.topExecutiveRecruitment.title
-
-        const metaDescription = document.querySelector('meta[name="description"]');
-        const metaKeywords = document.querySelector('meta[name="keywords"]');
-        const metaSubject = document.querySelector('meta[name="subject"]');
-        if (metaDescription) {
-            metaDescription.setAttribute('content', metaConstants.topExecutiveRecruitment.description);
-        }
-        if (metaKeywords) {
-            metaKeywords.setAttribute('content', metaConstants.topExecutiveRecruitment.keywords);
-        }
-        if (metaSubject) {
-            metaSubject.setAttribute('content', metaConstants.topExecutiveRecruitment.description);
-        }
-
-
-        return () => {
-            document.title = metaConstants.title
-            if (metaDescription) {
-                metaDescription.setAttribute('content', metaConstants.description); // Replace with the original content if needed
-            }
-            if (metaKeywords) {
-                metaKeywords.setAttribute('content', metaConstants.keywords);
-            }
-            if (metaSubject) {
-                metaSubject.setAttribute('content', metaConstants.description);
-            }
-
-        };
-    }, [])
+    
 
     return (
         <div className="service-page-container">

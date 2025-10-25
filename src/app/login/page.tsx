@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState, Suspense } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
@@ -16,6 +16,7 @@ import { useUser } from "@/app/context";
 function LoginContent() {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { userCredentials, setUserCredentials } = useUser();
@@ -44,12 +45,18 @@ function LoginContent() {
     const checkUserLoggedIn = async () => {
       const response = await isUserLoggedIn();
       if (response.success && (response.user.role === 'super_admin' || response.user.role === 'franchise_admin')) {
-        router.push('/admin');
+        console.log("Admin user detected, redirecting to /admin");
         setUserCredentials(response.user);
+        router.push('/admin');
       } else if (response.success && response.user.role !== 'super_admin' && response.user.role !== 'franchise_admin') {
-        router.push('/dashboard');
+        const redirectPath = localStorage.getItem("redirectAfterLogin") || '/dashboard';
+        console.log("Non-admin user authenticated, redirecting to:", redirectPath);
+        setUserCredentials(response.user);
+        localStorage.removeItem("redirectAfterLogin"); // Clear stored path
+        router.push(redirectPath);
       } else {
         if (!pathname.includes('signup')) {
+          console.log("User not authenticated, staying on login/signup page");
           router.push('/login');
         }
       }
@@ -132,6 +139,9 @@ function LoginContent() {
       setTimeout(() => {
         window.location.reload();
       }, 100);
+      console.log("Login successful, redirecting to:", redirectPath);
+      localStorage.removeItem("redirectAfterLogin"); // Clear stored path
+      router.push(redirectPath);
     }
   };
 
@@ -246,13 +256,10 @@ function LoginContent() {
       setIsOtpTimerActive(false);
       setOtpTimer(30);
       toast.success("Account created successfully!");
-      if (pathname.startsWith('/login') || pathname.startsWith('/signup')) {
-        router.push('/onboarding');
-        return;
-      }
-      setTimeout(() => {
-        window.location.reload();
-      }, 100);
+      const redirectPath = localStorage.getItem("redirectAfterLogin") || '/onboarding';
+      console.log("Signup successful, redirecting to:", redirectPath);
+     
+      router.push('/onboarding');
     } catch (error) {
       toast.error("Error verifying OTP");
     }
@@ -361,7 +368,10 @@ function LoginContent() {
 
   const handleGoogleAuth = () => {
     toast.success("Google authentication initiated!");
-    router.push('/dashboard');
+    const redirectPath = localStorage.getItem("redirectAfterLogin") || '/dashboard';
+    console.log("Google auth initiated, redirecting to:", redirectPath);
+    localStorage.removeItem("redirectAfterLogin"); // Clear stored path
+    router.push(redirectPath);
   };
 
   const [defaultTab, setDefaultTab] = useState('login');

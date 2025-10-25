@@ -1,3 +1,4 @@
+"use client";
 import React, { ReactNode, useState } from 'react';
 import { SidebarProvider } from '../../components/ui/sidebar';
 import { AdminSidebar } from './AdminSidebar';

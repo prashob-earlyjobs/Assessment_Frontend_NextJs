@@ -484,9 +484,10 @@ import { Badge } from "../../components/ui/badge";
 import { ArrowLeft, ArrowRight, Upload, X, Check, Calendar, Search } from "lucide-react";
 import { toast } from "sonner";
 import { Textarea } from "../../components/ui/textarea";
-import { completeProfile, getColleges } from "../../components/services/servicesapis";
+import { completeProfile, getColleges, uploadPhoto } from "../../components/services/servicesapis";
 import { format } from "date-fns";
 import { useUser } from "../../context";
+import { Avatar, AvatarImage, AvatarFallback } from "../../components/ui/avatar";
 // import debounce from "lodash/debounce";
 // import { a } from "node_modules/framer-motion/dist/types.d-D0HXPxHm";
 
@@ -494,6 +495,7 @@ const Onboarding = () => {
   const navigate = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const { userCredentials } = useUser();
+  const photoInputRef = useRef(null);
   const [formData, setFormData] = useState({
     resumeUrl: null,
     college: null,
@@ -503,6 +505,7 @@ const Onboarding = () => {
     gender: "",
     PrefJobLocations: [], // Repurposed to store selected colleges
     PreferredJobRole: "",
+    avatar: "",
   });
   const [errors, setErrors] = useState({
     skills: "",
@@ -613,6 +616,25 @@ const Onboarding = () => {
     }
   };
 
+  const handlePhotoUpload = async (event) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Photo size should be less than 5MB");
+        return;
+      }
+      try {
+        const url = await uploadPhoto(file, userCredentials.email);
+        if (url) {
+          setFormData((prev) => ({ ...prev, avatar: url }));
+          toast.success("Photo uploaded successfully!");
+        }
+      } catch {
+        toast.error("Failed to upload photo. Please try again.");
+      }
+    }
+  };
+
   const handleNext = async () => {
     if (!validateStep(currentStep)) {
       toast.error("Please fill all required fields before proceeding.");
@@ -626,10 +648,14 @@ const Onboarding = () => {
       setCurrentStep(currentStep + 1);
     } else {
       try {
+        console.log("Submitting form data:", formData);
         const response = await completeProfile(formData);
         if (response.success) {
           toast.success("Onboarding completed successfully!");
-          navigate.push('/dashboard');
+         const redirectPath = localStorage.getItem("redirectAfterLogin") || '/dashboard';
+         localStorage.removeItem("redirectAfterLogin"); 
+         navigate.push(redirectPath);
+
         } else {
           toast.error("Failed to complete onboarding. Please try again.");
         }
@@ -676,6 +702,35 @@ const Onboarding = () => {
           <CardContent className="p-8">
             {currentStep === 1 && (
               <div className="space-y-6">
+                <div className="flex items-center space-x-6">
+                  <Avatar className="h-24 w-24">
+                    <AvatarImage
+                      src={formData.avatar || "/placeholder-avatar.jpg"}
+                      alt="Profile"
+                    />
+                    <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white text-xl">
+                      {userCredentials.name.charAt(0)?.toUpperCase() || "U"}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="space-y-2">
+                    <Button
+                      variant="outline"
+                      className="rounded-2xl border-gray-300 hover:bg-orange-100 focus:bg-orange-200"
+                      onClick={() => photoInputRef.current?.click()}
+                    >
+                      <Upload className="h-4 w-4 mr-2" />
+                      Upload Photo
+                    </Button>
+                    <input
+                      ref={photoInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handlePhotoUpload}
+                      className="hidden"
+                    />
+                    <p className="text-xs text-gray-500">Max size: 5MB</p>
+                  </div>
+                </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="dob" className="text-sm font-medium text-gray-700">

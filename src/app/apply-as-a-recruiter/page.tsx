@@ -6,7 +6,9 @@ const page=()=>{
     return(
         <>
         <Navbar/>
-        <MultiStepForm/>
+        <div className="px-4 md:px-10 lg:px-25">
+          <MultiStepForm/>
+        </div>
         <Footer/>
         </>
     )

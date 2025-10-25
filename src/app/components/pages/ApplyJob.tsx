@@ -335,7 +335,7 @@ export default function Index() {
       </section>
 
       {/* Browse by Industry Section */}
-      <section className="py-12 sm:py-16 lg:py-20">
+      <section className="py-12 sm:py-16 lg:py-20 bg-orange-50">
         <div className="container mx-auto px-6 sm:px-8 lg:px-16 xl:px-24">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl lg:text-5xl">Browse by Industry</h2>

@@ -1,5 +1,5 @@
 "use client";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import {
   useState,
   useEffect,
@@ -105,6 +105,7 @@ const JobsClient = () => {
   const [workType, setWorkType] = useState<string[]>([]);
   const [salaryRange, setSalaryRange] = useState<string[]>([]);
   const [experienceRange, setExperienceRange] = useState<string[]>([]);
+  const searchParams = useSearchParams();
 
   // Sidebar visibility states for mobile/tablet
   const [isFilterSidebarOpen, setIsFilterSidebarOpen] = useState(false);
@@ -263,6 +264,32 @@ const JobsClient = () => {
     return sortedJobs;
   }, [rawJobsData, sortBy, searchInput]);
 
+  
+  useEffect(() => {
+    const keywordFromUrl = searchParams.get("search") || ""; // read 'search' param
+    const normalizedSearchKeyword = keywordFromUrl
+    .replace(/dot/g, ".")      // "dot" → "."
+    .replace(/-/g, " ");
+    
+    if (normalizedSearchKeyword) {
+      setSearchInput(normalizedSearchKeyword);
+    }
+  }, [searchParams]);
+
+
+  useEffect(() => {
+    if (!searchInput) return; // skip if empty
+
+    const slug = searchInput
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/\./g, "dot");
+
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("search", slug);
+    router.replace(`?${params.toString()}`); // replace to avoid adding history entries
+  }, [searchInput]);
   // Call fetchJobs on component mount
   useLayoutEffect(() => {
     console.log("=== Component mounted, calling fetchJobs... ===");
@@ -282,6 +309,7 @@ const JobsClient = () => {
     return () => clearTimeout(timer);
   }, [companyName, location, title, searchInput, employmentType, workType, salaryRange, experienceRange, fetchJobs]);
 
+  
   // Fetch when page changes
   useEffect(() => {
     fetchJobs();
@@ -386,8 +414,36 @@ const JobsClient = () => {
                     placeholder="Search jobs by title, company, or keywords..."
                     value={searchInput}
                     onChange={(e) => setSearchInput(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-earlyjobs-orange focus:border-transparent"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        fetchJobs();
+                      }
+                    }}
+                    className="w-full pl-10 pr-24 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-earlyjobs-orange focus:border-transparent"
                   />
+                  <button
+                    onClick={() => fetchJobs()}
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white px-3 py-1 rounded text-sm flex items-center gap-1 z-10"
+                    style={{ backgroundColor: '#ff6b35' }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e55a2b'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ff6b35'}
+                  >
+                    <svg
+                      className="w-3 h-3"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M21 21l-4.34-4.34"
+                      />
+                      <circle cx="11" cy="11" r="8" />
+                    </svg>
+                    Search
+                  </button>
                 </div>
               </div>
               <Select value={sortBy} onValueChange={setSortBy}>

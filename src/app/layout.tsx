@@ -8,14 +8,14 @@ import QueryProvider from "./components/client/client";
 import ScrollToTop from "./ScrolltoTop";
 
 export const metadata = {
-  title: "EarlyJobs – Skill Assessments & Job Matching",
+  title: "EarlyJobs – Fast Growing Platform for Jobs, Recruiters & Colleges",
   description: "Discover your career potential with EarlyJobs – AI-powered skill assessments, resume builder & job matching. Find your perfect role today.",
   openGraph: {
-    title: "EarlyJobs – Skill Assessments & Job Matching",
+    title: "EarlyJobs – Fast Growing Platform for Jobs, Recruiters & Colleges",
     description: "Discover your career potential with EarlyJobs – AI-powered skill assessments, resume builder & job matching. Find your perfect role today.",
     images: [
       {
-        url: "/images/logo.png", 
+        url: "/images/company_logo.jpg", 
         width: 1200,
         height: 630,
         alt: "EarlyJobs Open Graph Image",

@@ -7,8 +7,12 @@ import { Badge } from "../ui/badge";
 import { Input } from "../ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Checkbox } from "../ui/checkbox";
-import { X, Bookmark,Globe, Share2, Briefcase, IndianRupee, User, Clock, MapPin, Plus, Trash2, ChevronDown, Copy, Linkedin, Facebook, Instagram, Loader2 } from "lucide-react";
+import { X, Bookmark,Globe, Share2, Briefcase, IndianRupee, User, Clock, MapPin, Plus, Trash2, ChevronDown, Copy, Linkedin, Facebook, Instagram, Loader2, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
+import { FaLinkedin, FaInstagram } from "react-icons/fa";
+import { useRouter ,useSearchParams, usePathname} from "next/navigation";
+import { verifyCertificate } from "../services/servicesapis";
+
 
 interface JobDetailsData {
   id: string;
@@ -43,8 +47,11 @@ interface JobDetailsData {
   street?: string;
   area?: string;
   pincode?: string;
-  keywords?: string;
+  keywords?: [{keyword: string ,isShared:boolean}];
+  company_logo?: string;
   location_link?: string;
+  related_jobs?: JobDetailsData[];
+  isExternal?: boolean;
 }
 interface ICreateApplicantRequestBody {
   fullName: string;
@@ -60,7 +67,9 @@ interface ICreateApplicantRequestBody {
   totalExperienceYears: number;
   totalExperienceMonths: number;
   skills: string[];
-  jobId: string; 
+  jobId: string;
+  isExternalJob: boolean;
+  certificateId: string;
 }
 
 interface JobDetailsClientProps {
@@ -74,6 +83,9 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
   const [error, setError] = useState<string | null>(null);
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [showShareDropdown, setShowShareDropdown] = useState(false);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
   const [applicationForm, setApplicationForm] = useState({
     fullName: '',
     fatherName: '',
@@ -91,6 +103,10 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
     spokenLanguages: [] as string[],
     showLanguageDropdown: false
   });
+  const [certificateNumber, setCertificateNumber] = useState(`EJ-CERT-${new Date().getFullYear()}-`);
+  const [certificateVerified, setCertificateVerified] = useState(false);
+  const [verifyingCertificate, setVerifyingCertificate] = useState(false);
+  const [certificateData, setCertificateData] = useState(null);
 
   // Fetch job details
   useEffect(() => {
@@ -99,7 +115,6 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
         setLoading(true);
         setError(null);
         const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_2_0.slice(0,-4);
-        
         const response = await fetch(`${backendUrl}/api/public/jobs/${jobid}`);
         
         if (!response.ok) {
@@ -133,6 +148,49 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []); // Empty dependency array ensures it runs once on mount
+
+  const handleVerifyCertificate = async () => {
+    console.log("Button clicked! Certificate number:", certificateNumber);
+    
+    if (!certificateNumber.trim()) {
+      toast.error("Please enter a certificate number");
+      return;
+    }
+
+    console.log("Starting verification...");
+    setVerifyingCertificate(true);
+    try {
+      const result = await verifyCertificate(certificateNumber);
+      setCertificateVerified(true);
+      setCertificateData(result?.data?.certificate); // Store certificate data for validation
+      toast.success("Certificate verified successfully!");
+      console.log("Certificate verified:", result);
+      
+      // Auto-fill form fields with user data from certificate (only for external jobs)
+      if (jobData?.isExternal && result?.data?.certificate?.user) {
+        const userData = result.data.certificate.user;
+        setApplicationForm(prev => ({
+          ...prev,
+          fullName: userData.name || '',
+          email: userData.email || '',
+          phone: userData.mobile || ''
+        }));
+ 
+      }
+    } catch (error) {
+      setCertificateVerified(false);
+      console.error("Certificate verification failed:", error);
+    } finally {
+      setVerifyingCertificate(false);
+    }
+  };
+
+  const clearCertificateData = () => {
+    setCertificateNumber(`EJ-CERT-${new Date().getFullYear()}-`);
+    setCertificateVerified(false);
+    setCertificateData(null);
+    setVerifyingCertificate(false);
+  };
 
   if (loading) {
     return (
@@ -289,6 +347,31 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
     toast.error("Please enter a valid 10-digit phone number");
     return;
   }
+
+  // Certificate validation for external jobs
+  if (jobData?.isExternal) {
+    if (!certificateVerified) {
+      toast.error("Please verify your certificate before submitting");
+      return;
+    }
+    if (!certificateData?.user) {
+      toast.error("Certificate data not available. Please verify again");
+      return;
+    }
+    
+    // Check if email matches certificate
+    if (applicationForm.email.trim() !== certificateData.user.email) {
+      toast.error(`Email must match certificate email`);
+      return;
+    }
+    
+    // Check if phone matches certificate
+    if (applicationForm.phone.trim() !== certificateData.user.mobile) {
+      toast.error(`Phone number must match certificate phone`);
+      return;
+    }
+  }
+
   if (!applicationForm.dateOfBirth) {
     toast.error("Date of Birth is required");
     return;
@@ -350,6 +433,8 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
       totalExperienceYears,
       totalExperienceMonths,
       skills: applicationForm.skills,
+      isExternalJob: jobData?.isExternal || false,
+      certificateId: jobData?.isExternal ? certificateData?._id : undefined,
     };
 
 
@@ -362,10 +447,25 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
       },
       body: JSON.stringify(candidateDetails),
     };
-    console.log("Submitting application:", candidateDetails);
 
+    // Debug the new fields specifically
+    // console.log("🔍 NEW FIELDS CHECK:");
+    // console.log("- isExternalJob:", candidateDetails.isExternalJob, "(type:", typeof candidateDetails.isExternalJob, ")");
+    // console.log("- certificateId:", candidateDetails.certificateId, "(type:", typeof candidateDetails.certificateId, ")");
+    // console.log("- jobData.isExternal:", jobData?.isExternal);
+    // console.log("- certificateData exists:", !!certificateData);
+    // console.log("- certificateNumber:", certificateNumber);
+    // console.log("📤 FULL PAYLOAD:", candidateDetails);
+
+    // console.log("🚀 Making API call to:", url);
+    // console.log("📦 Request body:", JSON.stringify(candidateDetails, null, 2));
+    
     const response = await fetch(url, options);
+    // console.log("📥 Response status:", response.status);
+    // console.log("📥 Response headers:", Object.fromEntries(response.headers.entries()));
+    
     const data = await response.json();
+    // console.log("📥 Response data:", data);
 
     if (response.ok) {
       if (data.error) {
@@ -373,6 +473,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
       } else {
         toast.success("Application submitted successfully!");
         setShowApplyModal(false);
+        clearCertificateData(); // Clear certificate data
         setApplicationForm({
           fullName: '',
           fatherName: '',
@@ -392,10 +493,20 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
         });
       }
     } else {
-      toast.error(data.error || "Failed to submit application");
+      // Handle error response - ensure we always pass a string
+      const errorMessage = typeof data.error === 'string' ? data.error : 
+                          data.error?.message || 
+                          data.message || 
+                          "Failed to submit application";
+      toast.error(errorMessage);
+      console.error("❌ Application submission failed:", data);
     }
   } catch (error) {
-    toast.error(error instanceof Error ? error.message : "Failed to submit application");
+    console.error("❌ Application submission error:", error);
+    const errorMessage = error instanceof Error ? error.message : 
+                        typeof error === 'string' ? error : 
+                        "Failed to submit application";
+    toast.error(errorMessage);
   }
 };
 
@@ -448,20 +559,44 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
     }
   };
 
+  const slugify = (text: string) => {
+    return text
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, "-")      // spaces → hyphens
+      .replace(/\./g, "dot")     // dots → "dot"
+      .replace(/[^a-z0-9\-]/g, ""); // remove other non-alphanumeric chars except hyphen
+  };
+
+  const handleKeywordClick = (keyword: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("search", slugify(keyword));
+    router.push(`/jobs?${params.toString()}`);  };
+
   return (
     <div className="min-h-screen bg-gray-50" onClick={handleClickOutsideShare}>
       <div className="max-w-7xl mx-auto p-4 sm:p-6">
         {/* Page Title */}
-        <h1 className="text-xl sm:text-2xl font-bold text-earlyjobs-text mb-4 sm:mb-6">
-          {jobData.title} Job in {(jobData.location) } at {jobData.company_name}
-        </h1>
+        <div className="flex items-center gap-4 mb-4 sm:mb-6">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => router.back()}
+            className="rounded-full w-10 h-10 p-0 bg-orange-50 hover:bg-orange-100"
+          >
+            <ArrowLeft className="h-5 w-5 text-orange-600" />
+          </Button>
+          <h1 className="text-xl sm:text-2xl font-bold text-earlyjobs-text">
+            {jobData.title} Job {jobData.city ? `in ${jobData.city}` : ''} at {jobData.company_name}
+          </h1>
+        </div>
         
         <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
           {/* Main Content */}
           <div className="flex-1">
             <Card className="p-4 sm:p-6">
               {/* Job Header */}
-              <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-6">
+              <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-2">
                 <div className="flex gap-3 sm:gap-4">
                   <img 
                     src={jobData.company_logo_url } 
@@ -532,6 +667,31 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                 </div>
               </div>
               
+              {/* Disclaimer - Only show for external jobs */}
+              {jobData.isExternal && (
+                <div className="mb-4 py-2 px-3 bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200 rounded-xl">
+                  <div className="flex items-center gap-3">
+                    <div className="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <svg className="w-3 h-3 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-sm text-orange-700">
+                        Only candidates who have completed the{" "}
+                        <a 
+                          href="/assessments" 
+                          className="text-orange-800 font-semibold hover:text-orange-900 cursor-pointer transition-colors"
+                        >
+                          EarlyJobs AI Assessment
+                        </a>
+                        {" "}Eligible for applying this job
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
               {/* Job Details */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 text-sm">
                 <div className="flex items-center gap-2">
@@ -561,8 +721,8 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                 <h3 className="font-medium mb-2">Location</h3>
                 <div className="flex items-center gap-3">
                   <Badge 
-                    className={`bg-earlyjobs-light-orange text-earlyjobs-orange border-earlyjobs-orange/20 cursor-pointer hover:bg-earlyjobs-navy hover:text-white transition-colors text-xs sm:text-sm ${
-                      jobData.location_link ? 'cursor-pointer hover:bg-earlyjobs-navy hover:text-white transition-colors' : ''
+                    className={`bg-earlyjobs-light-orange text-earlyjobs-orange border-earlyjobs-orange/20 text-xs sm:text-sm ${
+                      jobData.location_link ? 'cursor-pointer' : ''
                     }`}
                     onClick={jobData.location_link ? () => window.open(jobData.location_link, '_blank') : undefined}
                   >
@@ -617,15 +777,22 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                 <div className="mb-6">
                   <h3 className="font-medium mb-3">Keywords</h3>
                   <div className="flex gap-2 flex-wrap">
-                    {jobData.keywords.split(',').map((keyword, index) => (
-                      <Badge 
+                    {jobData.keywords?.map((keyword,index)=><Badge 
                         key={index}
                         variant="outline"
-                        className="text-xs bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
+                        onClick={() => handleKeywordClick(keyword.keyword)}
+                        className={`text-xs bg-gray-50 border p-1 px-3 transition-colors p-2
+                          ${
+                            keyword.isShared
+                              ? "text-gray-600 border-gray-200 hover:text-orange-600 hover:border-orange-400 cursor-pointer"
+                              : "text-gray-600 border-gray-200 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed pointer-events-none"
+                          }`}
+                        
                       >
-                        {keyword.trim()}
-                      </Badge>
-                    ))}
+                        {keyword.keyword.trim()}
+                      </Badge>)}
+                      
+                    
                   </div>
                 </div>
               )}
@@ -635,6 +802,31 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
           {/* Right Sidebar */}
           <div className="w-full lg:w-80">
             <div className="bg-white rounded-lg p-4 shadow-sm">
+              
+              <div className="flex space-x-3 mb-4">
+                {jobData.commission_type === "percentage" &&  <a
+                  href={process.env.NEXT_PUBLIC_LINKEDIN_URL} // LinkedIn URL
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 flex items-center justify-center gap-2 py-2 rounded text-white cursor-pointer 
+             bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 transition"
+                >
+                  <FaLinkedin className="w-5 h-5" />
+                  Join for More Updates
+                </a>}
+               
+
+                {jobData.commission_type === "fixed" && <a
+                  href={process.env.NEXT_PUBLIC_INSTAGRAM_URL} // Instagram URL
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 flex items-center justify-center gap-2 py-2 rounded text-white cursor-pointer 
+             bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 hover:from-yellow-500 hover:via-pink-600 hover:to-purple-700 transitionr"
+                >
+                  <FaInstagram className="w-5 h-5" />
+                  Join for More Updates
+                </a> }
+              </div>
               <h3 className="font-medium text-lg mb-4">Job Summary</h3>
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between">
@@ -696,7 +888,38 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                 </Button>
               </div>
             </div>
+
+            {/* Related Jobs */}
+            {jobData && jobData.related_jobs && jobData.related_jobs.length > 0 && (
+            <div className="bg-white rounded-lg p-4 shadow-sm mt-6">
+              <h3 className="font-semibold text-earlyjobs-text mb-4">Related Jobs</h3>
+              <div className="space-y-3">
+                {jobData?.related_jobs?.map((job,index)=>{
+                  return (
+                    <div key={index} className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:border-earlyjobs-orange hover:bg-orange-50 transition-colors cursor-pointer" onClick={() => {
+                      const jobTitle = job?.title?.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "") || "job";
+                      router.push(`/jobs/${jobTitle}/${job.job_id}`);
+                    }}>
+                  <img 
+                    src={job?.company_logo} 
+                    alt="Company logo" 
+                    className="w-10 h-10 rounded object-contain bg-gray-50 p-1"
+                  />
+                  <div className="flex-1">
+                    <h4 className="font-medium text-sm text-earlyjobs-text">{job?.title}</h4>
+                    <p className="text-xs text-gray-600">{job?.company_name} • {job?.city} • {job?.employment_type}</p>
+                  </div>
+                </div>
+                  )
+                })}
+                
+              </div>
+              
+              
+            </div>
+            )}
           </div>
+          
         </div>
       </div>
 
@@ -712,7 +935,10 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => setShowApplyModal(false)}
+                onClick={() => {
+                  clearCertificateData();
+                  setShowApplyModal(false);
+                }}
                 className="h-8 w-8 p-0"
               >
                 <X className="h-4 w-4" />
@@ -722,7 +948,40 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
             {/* Modal Body */}
             <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                {/* Full Name */}
+                {/* EarlyJobs Assessment Certificate Verification - Only for external jobs */}
+                {jobData.isExternal && (
+                  <div className="sm:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      EarlyJobs Assessment Certificate Number <span className="text-red-500">*</span>
+                    </label>
+                    <div className="flex gap-3">
+                      <Input
+                        type="text"
+                        placeholder={`EJ-CERT-${new Date().getFullYear()}-XXXXX`}
+                        className={`flex-1 border-gray-200/50 focus:border-gray-300/70 ${certificateVerified ? 'border-green-500 bg-green-50' : ''}`}
+                        value={certificateNumber}
+                        onChange={(e) => setCertificateNumber(e.target.value)}
+                        required
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className={`px-6 ${certificateVerified ? 'text-green-600 border-green-300 hover:bg-green-50' : 'text-orange-600 border-orange-300 hover:bg-orange-50'}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          console.log("Button clicked directly!");
+                          handleVerifyCertificate();
+                        }}
+                        disabled={verifyingCertificate}
+                      >
+                        {verifyingCertificate ? <Loader2 className="w-4 h-4 animate-spin" /> : certificateVerified ? 'Verified ✓' : 'Verify'}
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
+              {/* Full Name */}
                 <div className="sm:col-span-1">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Full Name <span className="text-red-500">*</span>

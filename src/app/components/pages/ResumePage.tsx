@@ -211,7 +211,7 @@ export default function Index() {
                                 </p>
                             </div>
                         </div>
-                        <div className="space-y-4">
+                        <div className="space-y-6 lg:space-y-4">
                             <p className="text-lg text-gray-600">
                                 Pick a template. Fill in the blanks. Download. Land the job. Simple.
                             </p>

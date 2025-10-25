@@ -565,6 +565,38 @@ export const redeemOffer = async (code: string) => {
     };
   }
 };
+export const updateCertificateLink = async ({ userId, interviewId, certificateId }) => {
+  try {
+   
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+    const response = await fetch(`${backendUrl}/certificates/update-certificate`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        
+      },
+      body: JSON.stringify({
+        userId,
+        interviewId,
+        certificateId,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || "Failed to update certificate link");
+    }
+
+    return {
+      success: true,
+      data: data.data,
+    };
+  } catch (error) {
+    console.error("Error in updateCertificateId:", error);
+    throw new Error(error.message || "Failed to update certificate link");
+  }
+};
 
 export const uploadPhoto = async (file: File, candidateId: string) => {
   try {
@@ -763,5 +795,24 @@ export const getAssessmentSuggestions = async (page = 1) => {
   } catch (error) {
     toast.error(`${error?.response?.data?.message}.`);
     return error;
+  }
+};
+export const createCertificate = async (certificateData) => {
+  try {
+    const response = await axiosInstance.post("/certificates", certificateData);
+    return response.data;
+  } catch (error) {
+    toast.error(`${error?.response?.data?.message}.`);
+    throw error;
+  }
+};
+
+export const verifyCertificate = async (certificateNumber) => {
+  try {
+    const response = await axiosInstance.get(`/certificates/verify/${certificateNumber}`);
+    return response.data;
+  } catch (error) {
+    toast.error(`${error?.response?.data?.message}.`);
+    throw error;
   }
 };
