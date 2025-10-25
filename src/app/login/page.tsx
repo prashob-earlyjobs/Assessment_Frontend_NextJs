@@ -115,6 +115,16 @@ function LoginContent() {
       Cookies.set("accessToken", response.data.accessToken, { expires: 7 });
       setUserCredentials(response.data.user);
       toast.success("Login successful!");
+      
+      // Check for redirect after login
+      const redirectPath = typeof window !== 'undefined' ? sessionStorage.getItem('redirectAfterLogin') : null;
+      
+      if (redirectPath) {
+        sessionStorage.removeItem('redirectAfterLogin');
+        router.push(redirectPath);
+        return;
+      }
+      
       if (pathname.startsWith('/login') || pathname.startsWith('/signup')) {
         router.push('/dashboard');
         return;

@@ -752,3 +752,16 @@ export const getFranchises = async () => {
     toast.error(`${error?.response?.data?.message}.`);
   }
 };
+
+
+export const getAssessmentSuggestions = async (page = 1) => {
+  try {
+    const response = await axiosInstance.get(`/assessments/getAssessmentSuggestions`, {
+      params: { page },
+    });
+    return response;
+  } catch (error) {
+    toast.error(`${error?.response?.data?.message}.`);
+    return error;
+  }
+};
