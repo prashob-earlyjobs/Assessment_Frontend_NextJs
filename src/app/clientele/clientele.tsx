@@ -15,6 +15,7 @@ interface Company {
   created_at: string;
   updated_at: string;
   referred_by: string | null;
+  is_external_company: boolean;
 }
 
 const Clientele: React.FC = () => {
@@ -33,7 +34,7 @@ const Clientele: React.FC = () => {
         return response.json();
       })
       .then((data: Company[]) => {
-        const validCompanies = data.filter((company) =>
+        const validCompanies = data.filter((company) => company.is_external_company).filter((company) =>
           /^[a-zA-Z0-9\s.,&-]+$/.test(company.name)
         );
         setCompanies(validCompanies);
