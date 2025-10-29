@@ -254,7 +254,12 @@ const HomeContent = () => {
       designation: "Training and Placement Officer (TPO)",
       collegeName: "PCTE Group of Institutes, Ludhiana",
       collegeLogo: "https://pcte.edu.in/wp-content/uploads/2025/04/Logo-1-28_4.png",
-      review:"Grateful to work with Jyoti Ranjan Sir from EarlyJobs. His dedication and guidance during the PCTE job fair greatly supported our HR selections." }
+      review:"Grateful to work with Jyoti Ranjan Sir from EarlyJobs. His dedication and guidance during the PCTE job fair greatly supported our HR selections." },
+      {
+      designation: "Geography Student",
+      collegeName: "Paulami",
+      collegeLogo: "/homepage_imgs/connect.png",
+      review:"The AI Assessment was relevant to my field especially the GIS-related questions. Overall, it was a great experience, and I’d definitely recommend it to other students preparing for interviews!"},
   ];
 
   return (
@@ -631,20 +636,7 @@ Here’s what colleges and students are saying about their EarlyJobs experience
                
               </Card>
             ))}
-            <Card
-              className="p-6 bg-white border border-orange-100 shadow-md hover:shadow-lg transition-shadow duration-200 flex flex-col items-center justify-center text-center"
-            >
-              <h3 className="text-xl font-extrabold text-orange-600 mb-2">+10 More Reviews</h3>
-              <p className="text-gray-600 text-sm sm:text-base">
-                Discover more success stories from our partner colleges
-              </p>
-              {/* <Button
-                className="mt-4 bg-orange-600 hover:bg-orange-700 text-white text-sm font-semibold rounded-lg"
-                onClick={() => router.push('/testimonials')}
-              >
-                View All Reviews
-              </Button> */}
-            </Card>
+            
           </div>
         </div>
       </section>
