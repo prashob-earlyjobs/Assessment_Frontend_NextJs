@@ -167,7 +167,7 @@ const Footer = () => {
         "Faridabad",
         "Bijapur",
         "Sonipat",
-        "Ramnagar",
+        "Ramanagara",
         "Gulbarga",
         "Ananthapur",
         "Mangalore",
@@ -175,7 +175,7 @@ const Footer = () => {
         <p
           key={city}
           
-          // onClick={(e) => e.preventDefault()}
+          onClick={()=>router.push(`/franchise/${city.toLowerCase()}`)}
           className="text-gray-400  text-lg hover:text-amber-500 transition-all duration-300 cursor-not-allowed"
         >
           {city}

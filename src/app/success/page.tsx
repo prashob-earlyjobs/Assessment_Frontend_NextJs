@@ -52,10 +52,10 @@ export default function AssessmentSuccess() {
 
         {/* Action buttons */}
         <div className="mt-8 space-y-3">
-          <button className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg shadow-orange-500/30">
-            Return to Dashboard
+          <button onClick={() => window.location.href = '/'} className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg shadow-orange-500/30">
+            Return to Home
           </button>
-          <button className="w-full bg-gray-700/50 hover:bg-gray-600/50 text-orange-400 font-medium py-2 px-6 rounded-lg border border-orange-500/30 transition-all duration-300">
+          <button onClick={() => window.location.href = '/exam'} className="w-full bg-gray-700/50 hover:bg-gray-600/50 text-orange-400 font-medium py-2 px-6 rounded-lg border border-orange-500/30 transition-all duration-300">
             Close Session
           </button>
         </div>
