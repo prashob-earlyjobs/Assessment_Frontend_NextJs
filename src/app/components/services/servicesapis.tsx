@@ -785,6 +785,18 @@ export const getFranchises = async () => {
   }
 };
 
+
+export const getAssessmentSuggestions = async (page = 1) => {
+  try {
+    const response = await axiosInstance.get(`/assessments/getAssessmentSuggestions`, {
+      params: { page },
+    });
+    return response;
+  } catch (error) {
+    toast.error(`${error?.response?.data?.message}.`);
+    return error;
+  }
+};
 export const createCertificate = async (certificateData) => {
   try {
     const response = await axiosInstance.post("/certificates", certificateData);

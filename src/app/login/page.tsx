@@ -122,7 +122,23 @@ function LoginContent() {
       Cookies.set("accessToken", response.data.accessToken, { expires: 7 });
       setUserCredentials(response.data.user);
       toast.success("Login successful!");
-      const redirectPath = localStorage.getItem("redirectAfterLogin") || '/dashboard';
+      
+      // Check for redirect after login
+      const redirectPath = typeof window !== 'undefined' ? sessionStorage.getItem('redirectAfterLogin') : null;
+      
+      if (redirectPath) {
+        sessionStorage.removeItem('redirectAfterLogin');
+        router.push(redirectPath);
+        return;
+      }
+      
+      if (pathname.startsWith('/login') || pathname.startsWith('/signup')) {
+        router.push('/dashboard');
+        return;
+      }
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
       console.log("Login successful, redirecting to:", redirectPath);
       localStorage.removeItem("redirectAfterLogin"); // Clear stored path
       router.push(redirectPath);
