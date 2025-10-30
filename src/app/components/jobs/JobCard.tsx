@@ -8,6 +8,7 @@ import { useState } from "react";
 
 interface JobCardProps {
   company: string;
+  brandName?: string;
   logo: string;
   title: string;
   employmentType: string;
@@ -25,6 +26,7 @@ interface JobCardProps {
 
 const JobCard = ({
   company,
+  brandName,
   logo,
   title,
   employmentType,
@@ -161,23 +163,23 @@ const JobCard = ({
       className="p-6 hover:shadow-md transition-shadow cursor-pointer"
       onClick={onJobClick}
       role="article"
-      aria-label={`Job listing for ${title} at ${company}`}
+      aria-label={`Job listing for ${title} at ${brandName }`}
     >
       <div className="flex flex-col gap-4">
         {/* Top Box: Logo, Title, Company, and Bookmark */}
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-4">
             <img
-              src={logo}
-              alt={`${company} logo`}
+              src={logo || "/images/company_placeholder.png"}
+              alt={`${brandName } logo`}
               className="w-12 h-12 rounded object-contain bg-gray-50 p-1"
-              onError={(e) => (e.currentTarget.src = "/images/default-company-logo.png")}
+              onError={(e) => (e.currentTarget.src = "/images/logo.png")}
             />
             <div>
               <h3 className="font-semibold text-lg text-earlyjobs-text hover:text-earlyjobs-orange transition-colors">
                 {title}
               </h3>
-              <p className="text-gray-600 text-sm">{company}</p>
+              <p className="text-gray-600 text-sm">{brandName }</p>
             </div>
           </div>
           <Button
