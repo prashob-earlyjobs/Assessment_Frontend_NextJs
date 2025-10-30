@@ -19,6 +19,7 @@ interface JobDetailsData {
   title: string;
   job_id: string;
   company_name: string;
+  brand_name?: string;
   company_logo_url?: string;
   employment_type?: string;
   work_type?: string;
@@ -599,7 +600,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
               <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-2">
                 <div className="flex gap-3 sm:gap-4">
                   <img 
-                    src={jobData.company_logo_url } 
+                    src={jobData.company_logo_url || "/images/company_placeholder.png"} 
                     alt={`${jobData.company_name} logo`} 
                     className="w-12 h-12 sm:w-16 sm:h-16 rounded object-contain bg-gray-50 p-2"
                   />
@@ -607,7 +608,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                     <h2 className="text-lg sm:text-xl font-semibold text-earlyjobs-text mb-1">
                       {jobData.title}
                     </h2>
-                    <p className="text-sm sm:text-base text-gray-600">{jobData.company_name}</p>
+                    <p className="text-sm sm:text-base text-gray-600">{jobData.brand_name}</p>
                   </div>
                 </div>
                 
