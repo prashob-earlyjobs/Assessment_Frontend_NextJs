@@ -34,7 +34,7 @@ const Clientele: React.FC = () => {
         return response.json();
       })
       .then((data: Company[]) => {
-        const validCompanies = data.filter((company) => company.is_external_company).filter((company) =>
+        const validCompanies = data.filter((company) => !company.is_external_company).filter((company) =>
           /^[a-zA-Z0-9\s.,&-]+$/.test(company.name)
         );
         setCompanies(validCompanies);

@@ -32,9 +32,9 @@ type FormDataType = {
   coordinatorName: string;
   eventType: EventType;
   date: string;
-  feedback1: string;
-  feedback2: string;
-  feedback3: string;
+  feedback1: string;            // experience (textarea)
+  feedback2: boolean;           // benefits (yes/no)
+  feedback3: boolean;           // collaborate again (yes/no)
   testimonial: string;
   permission: boolean;
 };
@@ -46,8 +46,8 @@ type FormStringKey = StringKeys<FormDataType>;
 
 
 export default function CollegeFeedbackForm() {
-    const router = useRouter();
-  
+  const router = useRouter();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState<FormDataType>({
@@ -62,9 +62,9 @@ export default function CollegeFeedbackForm() {
       otherText: ''
     },
     date: '',
-    feedback1: '',
-    feedback2: '',
-    feedback3: '',
+    feedback1: '',      // experience
+    feedback2: false,   // benefits (yes/no)
+    feedback3: false,   // collaborate again (yes/no)
     testimonial: '',
     permission: false
   });
@@ -110,8 +110,8 @@ export default function CollegeFeedbackForm() {
       'Event Type': eventType,
       'Date': formData.date,
       'Experience': formData.feedback1 || 'N/A',
-      'Benefits': formData.feedback2 || 'N/A',
-      'Collaborate again': formData.feedback3 || 'N/A',
+      'Benefits': formData.feedback2 ? 'Yes' : 'No',
+      'Collaborate again': formData.feedback3 ? 'Yes' : 'No',
       'Testimonial': formData.testimonial || 'N/A',
       'Permission to Share': formData.permission ? 'Yes' : 'No',
       'Submitted At': new Date().toLocaleString()
@@ -137,8 +137,8 @@ export default function CollegeFeedbackForm() {
           eventType: { workshop: false, aiAssessment: false, placementDrive: false, other: false, otherText: '' },
           date: '',
           feedback1: '',
-          feedback2: '',
-          feedback3: '',
+          feedback2: false,
+          feedback3: false,
           testimonial: '',
           permission: false
         });
@@ -311,22 +311,58 @@ export default function CollegeFeedbackForm() {
                     Please share your feedback (3–4 lines):
                   </h3>
 
-                  {[
-                    { label: "How was your experience with EarlyJobs?", key: 'feedback1' as FormStringKey },
-                    { label: "Were students engaged and benefited?", key: 'feedback2' as FormStringKey },
-                    { label: "Would you like to collaborate again?", key: 'feedback3' as FormStringKey },
-                  ].map((field, idx) => (
-                    <div key={idx} className="space-y-1">
-                      <Label className="text-sm font-medium text-orange-700">{field.label}</Label>
-                      <Textarea
-                        value={formData[field.key]}
-                        onChange={(e) => handleStringFieldChange(field.key, (e.target as HTMLTextAreaElement).value)}
-                        placeholder="Your thoughts..."
-                        className="min-h-[80px] border-orange-300 focus:border-orange-500 focus:ring-orange-500 resize-none"
-                        rows={3}
-                      />
+                  <div className="space-y-1">
+                    <Label className="text-sm font-medium text-orange-700">How was your experience with EarlyJobs?</Label>
+                    <Textarea
+                      value={formData.feedback1}
+                      onChange={(e) => setFormData(prev => ({ ...prev, feedback1: (e.target as HTMLTextAreaElement).value }))}
+                      placeholder="Your thoughts..."
+                      className="min-h-[80px] border-orange-300 focus:border-orange-500 focus:ring-orange-500 resize-none"
+                      rows={3}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div className="flex items-center space-x-3 p-3 bg-white rounded-lg border border-orange-100">
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900">Did students benefit from the event?</p>
+                        <p className="text-xs text-gray-500">Select Yes or No</p>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <label className="flex items-center space-x-2 cursor-pointer">
+                          <Checkbox
+                            id="benefits_yes"
+                            checked={formData.feedback2}
+                            onCheckedChange={(checked) => {
+                              if (checked !== 'indeterminate') setFormData(prev => ({ ...prev, feedback2: checked }));
+                            }}
+                            className="border-orange-500 text-orange-500"
+                          />
+                          <span className="text-sm">Yes</span>
+                        </label>
+                      </div>
                     </div>
-                  ))}
+
+                    <div className="flex items-center space-x-3 p-3 bg-white rounded-lg border border-orange-100">
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900">Would you like to collaborate again?</p>
+                        <p className="text-xs text-gray-500">Select Yes or No</p>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <label className="flex items-center space-x-2 cursor-pointer">
+                          <Checkbox
+                            id="collab_yes"
+                            checked={formData.feedback3}
+                            onCheckedChange={(checked) => {
+                              if (checked !== 'indeterminate') setFormData(prev => ({ ...prev, feedback3: checked }));
+                            }}
+                            className="border-orange-500 text-orange-500"
+                          />
+                          <span className="text-sm">Yes</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Testimonial */}

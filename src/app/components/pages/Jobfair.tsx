@@ -14,9 +14,9 @@ const JobFairSection: React.FC = () => {
         const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL_2_0}/public/companies`;
         const response = await fetch(`${API_BASE_URL}`);
         const data: Company[] = await response.json(); // Parse response as array of companies
-        const urls = data.filter((company) => company.is_external_company)
+        const urls = data.filter((company) => !company.is_external_company)
           .map((company) => company.logo_url)
-          .filter((url): url is string => !!url); // Ensure only valid URLs are included
+          .filter((url): url is string => !!url); 
         setCompanyLogoUrls(urls);
        
       } catch (error) {
