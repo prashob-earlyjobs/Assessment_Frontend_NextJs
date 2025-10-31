@@ -47,6 +47,9 @@ export default function Login() {
       if (response.success && (response.user.role === 'super_admin' || response.user.role === 'franchise_admin')) {
         router.push('/admin');
         setUserCredentials(response.user);
+      } else if (response.success && response.user.role === 'creator') {
+        router.push('/creator');
+        setUserCredentials(response.user);
       } else if (response.success && response.user.role !== 'super_admin' && response.user.role !== 'franchise_admin') {
         router.push('/dashboard');
       } else {
