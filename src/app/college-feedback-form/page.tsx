@@ -179,7 +179,7 @@ export default function CollegeFeedbackForm() {
         <header className="bg-white shadow-sm border-b border-orange-200">
           <div className="max-w-4xl mx-auto px-4 py-6">
             <div className="flex items-center justify-center gap-3">
-              <img src="/images/logo.png" className='h-[4rem]' onClick={()=> router.push("/")}/>
+              <img src="/images/logo.png" className='h-[4rem] cursor-pointer' onClick={()=> router.push("/")}/>
             </div>
           </div>
         </header>
