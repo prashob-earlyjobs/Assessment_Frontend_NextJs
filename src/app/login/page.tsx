@@ -48,6 +48,11 @@ function LoginContent() {
         console.log("Admin user detected, redirecting to /admin");
         setUserCredentials(response.user);
         router.push('/admin');
+      } else if (response.success && response.user.role === 'creator') {
+        console.log("Creator user authenticated, redirecting to /creator");
+        setUserCredentials(response.user);
+        localStorage.removeItem("redirectAfterLogin");
+        router.push('/creator');
       } else if (response.success && response.user.role !== 'super_admin' && response.user.role !== 'franchise_admin') {
         const redirectPath = localStorage.getItem("redirectAfterLogin") || '/dashboard';
         console.log("Non-admin user authenticated, redirecting to:", redirectPath);

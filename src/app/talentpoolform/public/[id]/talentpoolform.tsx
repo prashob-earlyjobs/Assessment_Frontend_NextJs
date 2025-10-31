@@ -135,6 +135,9 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [uploadedURL, setUploadedURL] = useState<string | null>(null);
+  // Local input states to allow clearing and typing freely
+  const [experienceYearsInput, setExperienceYearsInput] = useState<string>("");
+  const [experienceMonthsInput, setExperienceMonthsInput] = useState<string>("");
 
   // Jobs state
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -523,7 +526,8 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
   const getInputClassName = (fieldName: string, baseClassName: string = "") => {
     const hasError = showErrors && errors[fieldName];
     const errorClasses = hasError ? "border-red-500 focus:border-red-500 focus:ring-red-500 bg-red-50" : "";
-    return `${baseClassName} ${errorClasses}`.trim();
+    const placeholderClasses = "placeholder:text-gray-400 placeholder:opacity-60";
+    return `${baseClassName} ${errorClasses} ${placeholderClasses}`.trim();
   };
   const handlePreviewResume = () => {
     if (uploadedURL) {
@@ -1017,8 +1021,26 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                         id="experienceYears"
                         type="number"
                         min="0"
-                        value={formData.totalExperienceYears || ""}
-                        onChange={(e) => handleInputChange("totalExperienceYears", Number.parseInt(e.target.value) || 0)}
+                        value={experienceYearsInput}
+                        onChange={(e) => {
+                          setExperienceYearsInput(e.target.value);
+                        }}
+                        onBlur={(e) => {
+                          const v = e.target.value.trim();
+                          if (v === "") {
+                            setExperienceYearsInput("");
+                            handleInputChange("totalExperienceYears", 0);
+                          } else {
+                            const parsed = Number.parseInt(v, 10);
+                            if (!Number.isNaN(parsed) && parsed >= 0) {
+                              handleInputChange("totalExperienceYears", parsed);
+                              setExperienceYearsInput(String(parsed));
+                            } else {
+                              setExperienceYearsInput("");
+                              handleInputChange("totalExperienceYears", 0);
+                            }
+                          }
+                        }}
                         className={getInputClassName("totalExperienceYears", "h-12 rounded-xl border-gray-200 focus:border-orange-400 focus:ring-orange-400 bg-white/50 font-medium")}
                         required
                       />
@@ -1039,8 +1061,26 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                         type="number"
                         min="0"
                         max="11"
-                        value={formData.totalExperienceMonths || ""}
-                        onChange={(e) => handleInputChange("totalExperienceMonths", Number.parseInt(e.target.value) || 0)}
+                        value={experienceMonthsInput}
+                        onChange={(e) => {
+                          setExperienceMonthsInput(e.target.value);
+                        }}
+                        onBlur={(e) => {
+                          const v = e.target.value.trim();
+                          if (v === "") {
+                            setExperienceMonthsInput("");
+                            handleInputChange("totalExperienceMonths", 0);
+                          } else {
+                            const parsed = Number.parseInt(v, 10);
+                            if (!Number.isNaN(parsed) && parsed >= 0 && parsed <= 11) {
+                              handleInputChange("totalExperienceMonths", parsed);
+                              setExperienceMonthsInput(String(parsed));
+                            } else {
+                              setExperienceMonthsInput("");
+                              handleInputChange("totalExperienceMonths", 0);
+                            }
+                          }
+                        }}
                         className={getInputClassName("totalExperienceMonths", "h-12 rounded-xl border-gray-200 focus:border-orange-400 focus:ring-orange-400 bg-white/50 font-medium")}
                       />
                       {showErrors && errors.totalExperienceMonths && (
