@@ -529,6 +529,7 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
     const placeholderClasses = "placeholder:text-gray-400 placeholder:opacity-60";
     return `${baseClassName} ${errorClasses} ${placeholderClasses}`.trim();
   };
+  
   const handlePreviewResume = () => {
     if (uploadedURL) {
       try {

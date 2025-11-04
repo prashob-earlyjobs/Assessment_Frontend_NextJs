@@ -19,6 +19,7 @@ export interface UserCredentials {
   lastLogin: string;
   mobile: string;
   name: string;
+  userId: string;
   profile: {
     resumeUrl?: string | null;
     gender: string;
