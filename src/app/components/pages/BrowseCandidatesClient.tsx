@@ -258,7 +258,7 @@ export default function BrowseCandidatesClient() {
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8">
             <div className="mb-6 lg:mb-0">
               <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">
-                Candidate Dashboard
+                Browse Candidate 
               </h1>
               <p className="text-lg text-gray-600 mt-2">
                 Discover talented professionals ready to join your team
