@@ -258,7 +258,7 @@ export default function BrowseCandidatesClient() {
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8">
             <div className="mb-6 lg:mb-0">
               <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">
-                Candidate Dashboard
+                Browse Candidate 
               </h1>
               <p className="text-lg text-gray-600 mt-2">
                 Discover talented professionals ready to join your team
@@ -276,9 +276,46 @@ export default function BrowseCandidatesClient() {
             </div>
           </div>
           {loading ? (
-            <div className="text-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-orange-600 mx-auto"></div>
-              <p className="text-lg text-gray-600 mt-4">Loading candidates...</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div
+                  key={i}
+                  className="rounded-2xl border-0 bg-white shadow-lg overflow-hidden"
+                >
+                  <div className="p-6 flex flex-col h-full animate-pulse">
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="flex-shrink-0">
+                        <div className="h-16 w-16 rounded-full bg-gray-200"></div>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="h-5 bg-gray-200 rounded w-3/4 mb-2"></div>
+                        <div className="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
+                        <div className="h-3 bg-gray-200 rounded w-full mb-2"></div>
+                        <div className="h-3 bg-gray-200 rounded w-5/6"></div>
+                      </div>
+                    </div>
+                    <div className="flex-1 space-y-4">
+                      <div>
+                        <div className="h-4 bg-gray-200 rounded w-20 mb-2"></div>
+                        <div className="flex flex-wrap gap-2">
+                          <div className="h-6 bg-gray-200 rounded w-16"></div>
+                          <div className="h-6 bg-gray-200 rounded w-20"></div>
+                          <div className="h-6 bg-gray-200 rounded w-14"></div>
+                          <div className="h-6 bg-gray-200 rounded w-18"></div>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="h-4 bg-gray-200 rounded w-24 mb-2"></div>
+                        <div className="flex flex-wrap gap-2">
+                          <div className="h-7 bg-gray-200 rounded w-20"></div>
+                          <div className="h-7 bg-gray-200 rounded w-20"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="h-11 bg-gray-200 rounded-lg mt-6"></div>
+                  </div>
+                </div>
+              ))}
             </div>
           ) : error ? (
             <div className="text-center py-12">

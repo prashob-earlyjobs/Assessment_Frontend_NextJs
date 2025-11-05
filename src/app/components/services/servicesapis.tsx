@@ -90,22 +90,22 @@ export const userSignup = async ({
   email,
   mobile,
   password,
-  
+  referrerId,
+
 }: {
   email: string;
   password: string;
   name: string;
   mobile: string;
-  
+  referrerId?: string; // optional referral id captured from `ref`
+
 }) => {
   try {
-    const response = await axiosInstance.post("/auth/register", {
-      email,
-      password,
-      name,
-      mobile,
-      
-    });
+    const payload: any = { email, password, name, mobile };
+    if (referrerId) payload.referrerId = referrerId;
+
+
+    const response = await axiosInstance.post("/auth/register", payload);
     const data = response.data;
     const accessToken = data.data.accessToken; // Corrected destructuring
 
@@ -305,6 +305,7 @@ export const getUsersForFranchise = async ({
   }
 };
 
+
 export const setUserStatusAactivity = async (userId, isActive) => {
   try {
     const response = await axiosInstance.put(`/admin/users/${userId}/status`, {
@@ -472,6 +473,42 @@ export const getTransactionsForFranchisenAdmin = async (
   } catch (error) {
     const errorMessage =
       error?.response?.data?.message || "Failed to fetch transactions";
+    toast.error(`${errorMessage}.`);
+    return { success: false, message: errorMessage, error };
+  }
+};
+
+export const getReferredUsers = async ({
+  userId,
+  searchQuery = '',
+  role = 'candidate',
+  page = 1,
+  limit = 10,
+}) => {
+  try {
+    const response = await axiosInstance.get(
+      `/admin/getReferredUsers/${userId}?page=${page}&limit=${limit}`
+    );
+    return response.data;
+  } catch (error) {
+    toast.error(`${error?.response?.data?.message}.`);
+    return error;
+  }
+};
+
+export const getReferredTransactions = async ({
+  userId,
+  page = 1,
+  limit = 10,
+}) => {
+  try {
+    const response = await axiosInstance.get(
+      `/admin/getReferredTransactions/${userId}?page=${page}&limit=${limit}`
+    );
+    return response.data;
+  } catch (error) {
+    const errorMessage =
+      error?.response?.data?.message || "Failed to fetch referred transactions";
     toast.error(`${errorMessage}.`);
     return { success: false, message: errorMessage, error };
   }

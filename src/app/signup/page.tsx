@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState, Suspense } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
@@ -19,14 +19,17 @@ function SignupContent() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { userCredentials, setUserCredentials } = useUser();
+  const searchParams = useSearchParams();
   const [loginData, setLoginData] = useState({ emailormobile: "", password: "" });
   const [signupData, setSignupData] = useState({
     name: "",
     email: "",
     mobile: "",
+    referrerId: "",
     password: "",
     confirmPassword: ""
   });
+  
   const [otp, setOtp] = useState("");
   const [isOtpDialogOpen, setIsOtpDialogOpen] = useState(false);
   const [isForgotPasswordDialogOpen, setIsForgotPasswordDialogOpen] = useState(false);
@@ -37,6 +40,13 @@ function SignupContent() {
   const [isEnteringNumber, setIsEnteringNumber] = useState(false);
 
   useEffect(() => {
+    // Capture ref query param as referrerId for attribution
+    const ref = searchParams?.get?.('ref') || "";
+    console.log("ref", ref);
+    if (ref) {
+      setSignupData((prev) => ({ ...prev, referrerId: ref }));
+    }
+
     const checkUserLoggedIn = async () => {
       const response = await isUserLoggedIn();
       if (response.success && (response.user.role === 'super_admin' || response.user.role === 'franchise_admin')) {
@@ -166,7 +176,13 @@ function SignupContent() {
         return;
       }
 
-      const signupResponse = await userSignup(signupData);
+      const signupResponse = await userSignup({
+        name: signupData.name,
+        email: signupData.email,
+        mobile: signupData.mobile,
+        password: signupData.password,
+        referrerId: signupData.referrerId,
+      });
       if (!signupResponse.success) {
         toast.error(signupResponse.data.message);
         return;
@@ -331,7 +347,7 @@ function SignupContent() {
             />
           </div>
           <h1 className="text-3xl font-bold text-gray-900">Welcome to EarlyJobs</h1>
-          <p className="text-gray-600 mt-2">Your career journey starts here</p>
+          <p className="text-gray-600 mt-2">Your career journey starts her</p>
         </div>
 
         <Card className="shadow-2xl border-0 rounded-3xl overflow-hidden">
