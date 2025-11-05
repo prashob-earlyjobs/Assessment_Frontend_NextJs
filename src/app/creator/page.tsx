@@ -44,13 +44,13 @@ export default function CreatorDashboardPage() {
   const [error, setError] = useState<string | null>(null);
   const [candidates, setCandidates] = useState<any[]>([]);
   const [transactions, setTransactions] = useState<any[]>([]);
-  const baseCoupon = `EJ-${(userCredentials?.userId || '').slice(-6).toUpperCase()}`;
-  const coupon5 = `${baseCoupon}-5`;
-  const coupon10 = `${baseCoupon}-10`;
-  const coupon15 = `${baseCoupon}-15`;
+  const baseCoupon = `EJ${(userCredentials?.userId || '').slice(-6).toUpperCase()}`;
+  const coupon5 = `${baseCoupon}5`;
+  const coupon10 = `${baseCoupon}10`;
+  const coupon15 = `${baseCoupon}15`;
   const [selectedDiscount, setSelectedDiscount] = useState<5 | 10 | 15>(5);
   const currentCoupon = selectedDiscount === 5 ? coupon5 : selectedDiscount === 10 ? coupon10 : coupon15;
-  const inviteLink = `https://earlyjobs./signup?ref=${userCredentials?.userId}`;
+  const inviteLink = `https://earlyjobs.ai/signup?ref=${userCredentials?.userId}`;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -121,6 +121,30 @@ export default function CreatorDashboardPage() {
     }
   };
 
+  const generateSlug = (name: string) => {
+    return name
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9-]/g, "");
+  };
+
+  const generateAssessmentSlug = (title: string) => {
+    if (!title) return "assessment";
+    return title
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9-]/g, "");
+  };
+
+  const getProfileUrl = (candidate: any) => {
+    const nameSlug = generateSlug(candidate?.name || "candidate");
+    const assessmentSlug = generateAssessmentSlug(candidate?.firstAssessmentTitle || "assessment");
+    const candidateId = candidate?._id || candidate?.userId;
+    return `/browse-interviewed-candidates/${nameSlug}-${assessmentSlug}/${candidateId}`;
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-purple-50">
       <Header />
@@ -132,7 +156,7 @@ export default function CreatorDashboardPage() {
             </h2>
             <p className="text-lg text-gray-600">Overview of your assessments and earnings.</p>
           </div>
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <div className="hidden sm:flex items-center gap-2 mr-2 px-3 py-1.5 rounded-full bg-orange-50 border border-orange-200 text-orange-700 text-sm">
               <span className="font-medium">Coupon:</span>
               <span className="font-semibold">{currentCoupon}</span>
@@ -163,7 +187,7 @@ export default function CreatorDashboardPage() {
               </div>
             </div>
           
-          </div>
+          </div> */}
         </div>
 
         <Card className="border-0  mb-8">
@@ -273,11 +297,7 @@ export default function CreatorDashboardPage() {
                         .join('')
                         .toUpperCase()
                         .slice(0, 2);
-                      // const slug = `${(c?.name || 'candidate')}`
-                      //   .replace(/\s+/g, '-')
-                      //   .replace(/[^a-zA-Z0-9\-]/g, '')
-                      //   .toLowerCase();
-                      // const profileUrl = `/browse-interviewed-candidates/${slug}/${c?.userId}`;
+                      const profileUrl = getProfileUrl(c);
                       return (
                         <div key={c?._id} className="p-4 rounded-2xl border border-gray-100 hover:bg-gray-50 flex items-center justify-between">
                           <div className="flex items-center gap-3">
@@ -294,14 +314,14 @@ export default function CreatorDashboardPage() {
                               <p className="text-sm text-gray-600">{(c?.role || '').toString().replace(/^./, (ch: string) => ch.toUpperCase())}</p>
                             </div>
                           </div>
-                          {/* <Button
+                          <Button
                             variant="ghost"
                             className="h-8 px-2 text-gray-600 hover:text-gray-900"
-                            onClick={() => typeof window !== 'undefined' && window.location.assign(profileUrl)}
+                            onClick={() => router.push(profileUrl)}
                             title="View candidate profile"
                           >
                             <Copy className="h-4 w-4 mr-1" /> View
-                          </Button> */}
+                          </Button>
                         </div>
                       );
                     })
