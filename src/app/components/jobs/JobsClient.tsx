@@ -12,7 +12,6 @@ import Header from "../layout/Header";
 import FilterSidebar from "./FilterSidebar";
 import JobCard from "./JobCard";
 import Sidebar from "./Sidebar";
-import { JobCardsShimmer } from "../ui/shimmer";
 import {
   Select,
   SelectContent,
@@ -97,7 +96,6 @@ const JobsClient = () => {
   const [totalJobs, setTotalJobs] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState("latest");
-  const [hasInitiallyLoaded, setHasInitiallyLoaded] = useState(false);
   const pageSize = 10;
 
   // Filter states
@@ -218,21 +216,18 @@ const JobsClient = () => {
         console.log("Sample job data:", normalizedJobs[0]);
         setRawJobsData(normalizedJobs || []);
         setTotalJobs(data.totalResults || 0);
-        setHasInitiallyLoaded(true); // Mark that initial load is complete
       } else {
         console.error("Failed to fetch jobs:", data.message || "No jobs data");
         setRawJobsData([]);
-        setHasInitiallyLoaded(true); // Mark as loaded even if no data
       }
     } catch (error) {
       console.error("Error fetching jobs:", error);
       setRawJobsData([]);
-      setHasInitiallyLoaded(true); // Mark as loaded even on error
     } finally {
       console.log("Setting loading to false");
       setLoading(false);
     }
-  }, [backendUrl, pageSize]);
+  }, [backendUrl]);
 
   // Sort jobs based on sortBy value
   const jobsData = useMemo(() => {
@@ -300,22 +295,26 @@ const JobsClient = () => {
   useLayoutEffect(() => {
     console.log("=== Component mounted, calling fetchJobs... ===");
     fetchJobs();
-  }, []); // Only run on mount, not when fetchJobs changes
+  }, [fetchJobs]);
 
-  // Debounced search effect - handles all filter changes
+  // Debounced search effect
   useEffect(() => {
-    // Skip the first render to avoid duplicate calls with useLayoutEffect
-    if (!hasInitiallyLoaded) return;
-    
     const timer = setTimeout(() => {
-      console.log("=== Filter changed, calling fetchJobs... ===");
-      fetchJobs();
+      if (currentPage === 1) {
+        fetchJobs();
+      } else {
+        setCurrentPage(1);
+      }
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [companyName, location, title, searchInput, employmentType, workType, salaryRange, experienceRange, currentPage, sortBy, hasInitiallyLoaded]);
+  }, [companyName, location, title, searchInput, employmentType, workType, salaryRange, experienceRange, fetchJobs]);
 
-  // Remove the separate page change effect since it's now handled above
+  
+  // Fetch when page changes
+  useEffect(() => {
+    fetchJobs();
+  }, [currentPage, fetchJobs]);
 
   // Handle page change
   const handlePageChange = (newPage: number) => {
@@ -332,12 +331,6 @@ const JobsClient = () => {
     } else {
       router.push(`/jobs/job/${jobId}`);
     }
-  };
-
-  // Handle company name click to search for jobs from that company
-  const handleCompanyClick = (companyName: string) => {
-    setSearchInput(companyName);
-    setCurrentPage(1); // Reset to first page when searching
   };
 
   // Toggle sidebar visibility
@@ -424,14 +417,13 @@ const JobsClient = () => {
                     onChange={(e) => setSearchInput(e.target.value)}
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
-                        // Let the debounced effect handle the API call
-                        setCurrentPage(1);
+                        fetchJobs();
                       }
                     }}
                     className="w-full pl-10 pr-24 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-earlyjobs-orange focus:border-transparent"
                   />
                   <button
-                    onClick={() => setCurrentPage(1)}
+                    onClick={() => fetchJobs()}
                     className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white px-3 py-1 rounded text-sm flex items-center gap-1 z-10"
                     style={{ backgroundColor: '#ff6b35' }}
                     onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e55a2b'}
@@ -470,7 +462,10 @@ const JobsClient = () => {
             {/* Job Cards */}
             <div className="space-y-4">
               {loading ? (
-                <JobCardsShimmer count={5} />
+                <div className="text-center py-8">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-earlyjobs-orange mx-auto"></div>
+                  <p className="mt-4 text-gray-600">Loading jobs...</p>
+                </div>
               ) : jobsData.length > 0 ? (
                 <>
                   {jobsData.map((job) => (
@@ -490,7 +485,6 @@ const JobsClient = () => {
                       location={job.location || "Location Not Specified"}
                       postedTime={job.createdAt || "Not Disclosed"}
                       onJobClick={() => handleJobClick(job.jobId)}
-                      onCompanyClick={() => handleCompanyClick(job.companyName)}
                     />
                   ))}
 

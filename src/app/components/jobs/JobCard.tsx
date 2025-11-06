@@ -22,7 +22,6 @@ interface JobCardProps {
   skills?: string[];
   postedTime: string;
   onJobClick?: () => void;
-  onCompanyClick?: () => void;
 }
 
 const JobCard = ({
@@ -41,7 +40,6 @@ const JobCard = ({
   skills,
   postedTime,
   onJobClick,
-  onCompanyClick,
 }: JobCardProps) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
 
@@ -158,14 +156,6 @@ const JobCard = ({
   const handleBookmarkClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsBookmarked(!isBookmarked);
-  };
-
-  // Handle company name click
-  const handleCompanyClick = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent triggering the job card click
-    if (onCompanyClick) {
-      onCompanyClick();
-    }
   };
 
   return (
