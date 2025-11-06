@@ -53,6 +53,15 @@ const ProtectedRouteContent: FC<ProtectedRouteProps> = ({ children }) => {
           return;
         }
 
+        if (loggedIn.user.role === "creator") {
+          if (isMounted) {
+            console.log("Creator user detected, redirecting to /creator");
+            setUserCredentials(loggedIn.user);
+            router.push("/creator");
+          }
+          return;
+        }
+
         if (isMounted) {
           console.log("Non-admin user authenticated, setting isAuthenticated to true");
           setIsAuthenticated(true);

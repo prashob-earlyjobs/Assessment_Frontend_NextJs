@@ -35,8 +35,9 @@ import {
   BarChart,
   Settings,
   Zap,
+  Sparkles,
 } from "lucide-react";
-import { getAssessmentsfromSearch } from "../../components/services/servicesapis";
+import { getAssessmentsfromSearch, getAssessmentSuggestions } from "../../components/services/servicesapis";
 import Header from "./header";
 import { toast } from "sonner";
 import {
@@ -52,9 +53,11 @@ const Assessments = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedSkill, setSelectedSkill] = useState("all");
   const [selectedLevel, setSelectedLevel] = useState("all");
-
+  const [showingSuggestions, setShowingSuggestions] = useState(false);
+  const [loadingSuggestions, setLoadingSuggestions] = useState(false);
   const [assessments, setAssessments] = useState([]);
   const [page, setPage] = useState(1);
+  const [suggestionsPage, setSuggestionsPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
 
@@ -66,14 +69,20 @@ const Assessments = () => {
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasMore) {
-          setPage((prev) => prev + 1);
+          if (showingSuggestions) {
+            setSuggestionsPage((prev) => prev + 1);
+          } else {
+            setPage((prev) => prev + 1);
+          }
         }
       });
       if (node) observer.current.observe(node);
     },
-    [loading, hasMore]
+    [loading, hasMore, showingSuggestions]
   );
 
+
+  
   const getAssessments = async () => {
     setLoading(true);
     const params = {
@@ -107,15 +116,161 @@ const Assessments = () => {
   };
 
   useEffect(() => {
-    setAssessments([]);
-    setPage(1);
-    setHasMore(true);
+    if (!showingSuggestions) {
+      setAssessments([]);
+      setPage(1);
+      setHasMore(true);
+    }
   }, [searchQuery, selectedSkill, selectedLevel]);
 
   useEffect(() => {
-    getAssessments();
-  }, [page, searchQuery, selectedSkill, selectedLevel]);
+    if (!showingSuggestions) {
+      getAssessments();
+    }
+  }, [page, searchQuery, selectedSkill, selectedLevel, showingSuggestions]);
 
+  // New useEffect for suggestions pagination
+  useEffect(() => {
+    if (showingSuggestions && suggestionsPage > 1) {
+      loadMoreSuggestions();
+    }
+  }, [suggestionsPage]);
+
+  const loadMoreSuggestions = async () => {
+    if (loading) return;
+    
+    setLoading(true);
+    try {
+      const response = await getAssessmentSuggestions(suggestionsPage);
+      console.log("Loading more suggestions, page:", suggestionsPage, response);
+      const data = response.data.suggestions;
+      
+      if (response.data.success && data && data.length > 0) {
+        // Remove duplicates based on _id
+        setAssessments((prev) => {
+          const existingIds = new Set(prev.map(assessment => assessment._id));
+          const uniqueFetched = data.filter(assessment => !existingIds.has(assessment._id));
+          return [...prev, ...uniqueFetched];
+        });
+        
+        setHasMore(data.length === LIMIT);
+      } else {
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error("Error loading more suggestions:", error);
+      
+      // Handle specific error cases
+      const status = error?.response?.status;
+      const message = error?.response?.data?.message || '';
+      
+      if (status === 400 && (message.toLowerCase().includes('profile') || 
+          message.toLowerCase().includes('skills') || 
+          message.toLowerCase().includes('experience'))) {
+        // Profile issue - stop loading and switch back to regular assessments
+        toast.error("Profile incomplete. Switching to all assessments.");
+        resetToAllAssessments();
+      } else if (status === 401) {
+        // Unauthorized - switch back to regular assessments
+        toast.error("Session expired. Showing all assessments.");
+        resetToAllAssessments();
+      } else {
+        setHasMore(false);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getSuggestedAssessments = async () => {
+    setLoadingSuggestions(true);
+  
+    try {
+      const response = await getAssessmentSuggestions(1);
+      console.log("response", response);
+  
+      if (!response || response.status !== 200) {
+        // Don't throw a plain Error — preserve response
+        throw { response };
+      }
+  
+      const data = response.data?.suggestions || [];
+      console.log("data", data);
+  
+      if (data.length > 0) {
+        setAssessments(data);
+        setShowingSuggestions(true);
+        setSuggestionsPage(1);
+        setHasMore(data.length === LIMIT);
+        toast.success(`✨ Showing ${data.length} AI-recommended assessments for you!`);
+      } else {
+        toast.info("No AI suggestions available at the moment.");
+      }
+  
+    } catch (error) {
+      console.log("Error fetching suggestions:", error);
+  
+      // Properly extract status and message
+      const status = error?.response?.status;
+      const message = error?.response?.response?.data?.message || error.message || "Unknown error";
+  
+      console.log("status", status, "message", message);
+  
+      if (status === 400) {
+        if (/profile|skills|experience/i.test(message)) {
+          toast.error(message || "Please complete your profile to get personalized suggestions");
+          setTimeout(() => navigate.push('/profile'), 1000);
+        } else {
+          toast.error(message || "Bad request. Please check your profile and try again.");
+        }
+  
+      } else if (status === 401 || status === 403 || status === 404) {
+        toast.error("Please login to get personalized suggestions");
+        if (typeof window !== 'undefined') {
+          sessionStorage.setItem('redirectAfterLogin', '/assessments');
+        }
+        setTimeout(() => navigate.push('/login'), 1500);
+  
+      } else {
+        toast.error(message || "Failed to generate suggestions. Please try again.");
+      }
+  
+    } finally {
+      setLoadingSuggestions(false);
+    }
+  };
+  
+  
+  const resetToAllAssessments = async () => {
+    setShowingSuggestions(false);
+    setAssessments([]);
+    setPage(1);
+    setHasMore(true);
+    setSuggestionsPage(1);
+    
+    // Force reload of assessments
+    setLoading(true);
+    const params = {
+      page: 1,
+      limit: LIMIT,
+      type: "",
+      difficulty: selectedLevel !== "all" ? selectedLevel : "",
+      searchQuery: searchQuery || "",
+      category: selectedSkill !== "all" ? selectedSkill : "",
+    };
+    
+    try {
+      const response = await getAssessmentsfromSearch(params);
+      const fetched = response.data.assessments;
+      setAssessments(fetched);
+      setHasMore(fetched.length === LIMIT);
+    } catch (err) {
+      console.error("Error fetching assessments:", err);
+      toast.error("Failed to fetch assessments");
+    } finally {
+      setLoading(false);
+    }
+  };
   const getLevelColor = (level: string) => {
     switch (level) {
       case "Beginner":
@@ -148,15 +303,67 @@ const Assessments = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       <Header />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
-        <div className="mb-6 sm:mb-8">
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-            Skill Assessments
-          </h2>
-          <p className="text-base sm:text-lg text-gray-600">
-            Choose from our comprehensive library of assessments to showcase
-            your abilities.
-          </p>
-        </div>
+      <div className="mb-6 sm:mb-8">
+  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2">
+    <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+      {showingSuggestions ? "AI-Recommended Assessments" : "Skill Assessments"}
+    </h2>
+    <div className="flex items-center gap-2">
+      {showingSuggestions && (
+        <Button
+          onClick={resetToAllAssessments}
+          variant="outline"
+          className="rounded-2xl px-4 h-10 sm:h-12 border-gray-300 hover:bg-gray-100"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Show All
+        </Button>
+      )}
+      <Button
+        onClick={getSuggestedAssessments}
+        disabled={loadingSuggestions}
+        className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-2xl px-4 sm:px-6 h-10 sm:h-12 shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {loadingSuggestions ? (
+          <>
+            <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+            <span className="hidden sm:inline">Analyzing...</span>
+            <span className="sm:hidden">...</span>
+          </>
+        ) : (
+          <>
+            <Sparkles className="h-4 w-4 sm:h-5 sm:w-5" />
+            <span className="hidden sm:inline">Suggest for Me</span>
+            <span className="sm:hidden">Suggest</span>
+          </>
+        )}
+      </Button>
+    </div>
+  </div>
+  <p className="text-base sm:text-lg text-gray-600">
+    {showingSuggestions 
+      ? "Personalized assessments based on your profile, skills, and career goals"
+      : "Choose from our comprehensive library of assessments to showcase your abilities."
+    }
+  </p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         <div className="bg-white rounded-3xl shadow-lg border-0 p-4 sm:p-6 mb-6 sm:mb-8">
           <div className="flex flex-col gap-4">
@@ -236,175 +443,237 @@ const Assessments = () => {
             const Icon = getIcon(assessment.skill);
             return (
               <Card
-                key={assessment._id}
-                ref={isLast ? lastAssessmentRef : null}
-                className="rounded-3xl border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer w-full"
-                onClick={() =>
+              key={assessment._id}
+              ref={isLast ? lastAssessmentRef : null}
+              className="rounded-3xl border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer w-full"
+              onClick={() =>
                 navigate.push(
                   `/assessments/${assessment.title.toLowerCase().replace(/\s+/g, "-")}/${assessment.shortId ? assessment.shortId : assessment._id}`
                 )
               }
-
-              >
-                <CardHeader className="pt-4 pb-4 relative">
-                  <div className="flex items-start justify-between ">
-                    <div className="flex flex-col sm:flex-row sm:items-start sm:space-x-3 w-full justify-between gap-3 sm:gap-0">
-                      <div className="flex items-center space-x-3 w-full">
-                        <div
-                          className={`p-3 rounded-2xl flex-shrink-0 ${categoryColour(
-                            assessment.category
-                          )}`}
-                        >
-                          <Award className="h-6 w-6" />
-                        </div>
-
-                        <div
-                          className={`flex-1 ${assessment.isPremium ? 'max-w-[200px] sm:max-w-[308px]' : 'w-full'}`}
-                        >
-                          <CardTitle className="text-lg sm:text-xl leading-tight break-words">
+            >
+              <CardHeader className="pt-4 pb-4 relative">
+                <div className="flex items-start justify-between ">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:space-x-3 w-full justify-between gap-3 sm:gap-0">
+                    <div className="flex items-center space-x-3 w-full">
+                      <div
+                        className={`p-3 rounded-2xl flex-shrink-0 ${categoryColour(
+                          assessment.category
+                        )}`}
+                      >
+                        <Award className="h-6 w-6" />
+                      </div>
+            
+                      <div
+                        className={`flex-1 ${assessment.isPremium ? 'max-w-[200px] sm:max-w-[308px]' : 'w-full'}`}
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <CardTitle className="text-lg sm:text-xl leading-tight break-words flex-1">
                             {assessment.title}
                           </CardTitle>
-                          <div
-                            className="flex flex-col mt-1"
-                            style={{ gap: "8px" }}
-                          >
-                            <div className="flex flex-wrap items-center gap-2">
-                              <Badge className="rounded-full text-xs px-2 py-1 flex-shrink-0">
-                                {assessment.category || "Uncategorized"}
-                              </Badge>
-                              <Badge
-                                variant="outline"
-                                className={`rounded-full text-xs px-2 py-1 ${getLevelColor(
-                                  assessment.difficulty
-                                )}`}
-                              >
-                                {assessment.difficulty}
-                              </Badge>
-                              <div className="flex items-center space-x-1 text-sm text-gray-500">
-                                <Clock className="h-4 w-4" />
-                                <span>{assessment.timeLimit} min</span>
-                              </div>
-                            </div>
-                            <div
-                              className="flex w-full space-x-2 gap-[6px] flex-wrap"
-                              style={{ marginLeft: "0px" }}
-                            >
-                              {assessment?.tags?.length > 0 &&
-                                assessment.tags.map((tag) => (
-                                  <Badge
-                                    key={tag}
-                                    variant="secondary"
-                                    className="rounded-full text-center text-[8px] px-2 py-1 bg-blue-100 text-blue-700 whitespace-nowrap"
-                                  >
-                                    {tag}
-                                  </Badge>
-                                ))}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      {assessment.isPremium && (
-                        <div className="flex-shrink-0">
-                          <div className="relative">
-                            <Badge className="bg-gradient-to-r from-purple-500 via-pink-500 to-purple-600 text-white border-0 rounded-full px-3 py-1 text-xs font-medium shadow-lg">
-                              <Crown className="h-3 w-3 mr-1" />
-                              Premium
-                              <div className="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
-                                <div className="bubble bubble1"></div>
-                                <div className="bubble bubble2"></div>
-                                <div className="bubble bubble3"></div>
-                                <div className="bubble bubble4"></div>
-                              </div>
+                          {showingSuggestions && assessment.aiInsights?.matchScore && (
+                            <Badge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white border-0 flex-shrink-0 ml-2">
+                              {assessment.aiInsights.matchScore}% Match
                             </Badge>
+                          )}
+                        </div>
+                        <div
+                          className="flex flex-col mt-1"
+                          style={{ gap: "8px" }}
+                        >
+                          <div className="flex flex-wrap items-center gap-2">
+                            <Badge className="rounded-full text-xs px-2 py-1 flex-shrink-0">
+                              {assessment.category || "Uncategorized"}
+                            </Badge>
+                            <Badge
+                              variant="outline"
+                              className={`rounded-full text-xs px-2 py-1 ${getLevelColor(
+                                assessment.difficulty
+                              )}`}
+                            >
+                              {assessment.difficulty}
+                            </Badge>
+                            <div className="flex items-center space-x-1 text-sm text-gray-500">
+                              <Clock className="h-4 w-4" />
+                              <span>{assessment.timeLimit} min</span>
+                            </div>
+                          </div>
+                          <div
+                            className="flex w-full space-x-2 gap-[6px] flex-wrap"
+                            style={{ marginLeft: "0px" }}
+                          >
+                            {assessment?.tags?.length > 0 &&
+                              assessment.tags.map((tag) => (
+                                <Badge
+                                  key={tag}
+                                  variant="secondary"
+                                  className="rounded-full text-center text-[8px] px-2 py-1 bg-blue-100 text-blue-700 whitespace-nowrap"
+                                >
+                                  {tag}
+                                </Badge>
+                              ))}
                           </div>
                         </div>
-                      )}
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="pb-[24px]">
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <CardDescription className="text-sm text-gray-600 mb-3 h-[64px] leading-snug line-clamp-3 cursor-default break-words">
-                        {assessment.description}
-                      </CardDescription>
-                    </TooltipTrigger>
-                    <TooltipContent className="max-w-xs text-sm text-gray-600 bg-white shadow-lg rounded-lg p-3  border-gray-200">
-                      {assessment.description}
-                    </TooltipContent>
-                  </Tooltip>
-                  <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-4 mb-6 border border-[#2C84DB]">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center space-x-2">
-                        <Zap className="h-5 w-5 text-blue-600" />
-                        <span className="text-sm font-medium text-gray-700">
-                          {assessment.offer?.title}
-                        </span>
-                      </div>
-                      {assessment?.offer?.value > 0 && (
-                        <Badge className="bg-green-100 text-green-700 border-0 rounded-full px-2 py-1 text-xs font-medium">
-                          {assessment.offer.type === "percentage"
-                            ? `${assessment.offer.value}% OFF`
-                            : formatPrice(assessment.offer.value)}
-                        </Badge>
-                      )}
-                    </div>
-                    <div className="flex items-baseline space-x-2 mb-2">
-                      <span className="text-2xl font-bold text-gray-900">
-                        {formatPrice(assessment?.pricing?.discountedPrice)}
-                      </span>
-                      {assessment.pricing?.basePrice && (
-                        <span className="text-sm text-gray-500 line-through">
-                          {formatPrice(assessment?.pricing?.basePrice)}
-                        </span>
-                      )}
-                    </div>
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 text-xs text-gray-600">
-                      <div className="flex items-center space-x-1">
-                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                        <span>Instant Access</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                        <span>Detailed Reports</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                        <span>Certificate</span>
                       </div>
                     </div>
-                    {assessment.offer?.validUntil && (
-                      <div className="text-xs mt-2 text-gray-400">
-                        <span className="font-medium text-gray-700">
-                          Valid until:{" "}
-                        </span>
-                        {new Date(
-                          assessment.offer.validUntil
-                        ).toLocaleDateString()}
+                    {assessment.isPremium && (
+                      <div className="flex-shrink-0">
+                        <div className="relative">
+                          <Badge className="bg-gradient-to-r from-purple-500 via-pink-500 to-purple-600 text-white border-0 rounded-full px-3 py-1 text-xs font-medium shadow-lg">
+                            <Crown className="h-3 w-3 mr-1" />
+                            Premium
+                            <div className="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
+                              <div className="bubble bubble1"></div>
+                              <div className="bubble bubble2"></div>
+                              <div className="bubble bubble3"></div>
+                              <div className="bubble bubble4"></div>
+                            </div>
+                          </Badge>
+                        </div>
                       </div>
                     )}
                   </div>
-                  
-                  <Button
-                    onClick={(e) => {
-                      e.stopPropagation(); // Prevent card click navigation
-                      navigate.push(`/assessmentpayment/${assessment._id}`);
-                    }}
-                    className="w-full h-12 bg-blue-600 hover:bg-blue-700 rounded-2xl text-base shadow-lg hover:shadow-xl transition-all duration-300"
-                    style={{ maxHeight: "46px" }}
-                  >
-                    <Play className="h-4 w-4 mr-2" />
-                    Start Test
-                  </Button>
-                </CardContent>
-              </Card>
+                </div>
+              </CardHeader>
+              <CardContent className="pb-[24px]">
+                {/* AI Insights Section - Only shown when showing suggestions */}
+                {showingSuggestions && assessment.aiInsights && (
+                  <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl p-4 mb-4 border border-purple-200">
+                    <div className="flex items-start gap-2 mb-3">
+                      <Sparkles className="h-5 w-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                      <div className="flex-1">
+                        <p className="text-sm font-semibold text-gray-900 mb-1">
+                          Why this assessment?
+                        </p>
+                        <p className="text-sm text-gray-700 leading-relaxed">
+                          {assessment.aiInsights.reason}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {assessment.aiInsights.careerImpact && (
+                      <div className="flex items-start gap-2 pt-3 border-t border-purple-200">
+                        <Award className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                        <div className="flex-1">
+                          <p className="text-xs font-semibold text-gray-900 mb-1">Career Impact:</p>
+                          <p className="text-xs text-gray-700 leading-relaxed">
+                            {assessment.aiInsights.careerImpact}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                    
+                    <div className="flex items-center justify-between mt-3 pt-3 border-t border-purple-200">
+                      {assessment.aiInsights.estimatedPerformance && (
+                        <p className="text-xs text-gray-600">
+                          <span className="font-medium">Expected:</span>{' '}
+                          {assessment.aiInsights.estimatedPerformance}
+                        </p>
+                      )}
+                      {assessment.aiInsights.priority && (
+                        <Badge 
+                          className={`text-xs ${
+                            assessment.aiInsights.priority === 'high' 
+                              ? 'bg-red-100 text-red-700' 
+                              : 'bg-blue-100 text-blue-700'
+                          } border-0`}
+                        >
+                          {assessment.aiInsights.priority === 'high' ? '🔥 High Priority' : '📌 Recommended'}
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
+                )}
+            
+                {/* Regular Description */}
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <CardDescription className="text-sm text-gray-600 mb-3 h-[64px] leading-snug line-clamp-3 cursor-default break-words">
+                      {assessment.description}
+                    </CardDescription>
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-xs text-sm text-gray-600 bg-white shadow-lg rounded-lg p-3  border-gray-200">
+                    {assessment.description}
+                  </TooltipContent>
+                </Tooltip>
+            
+                {/* Pricing Section */}
+                <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-4 mb-6 border border-[#2C84DB]">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center space-x-2">
+                      <Zap className="h-5 w-5 text-blue-600" />
+                      <span className="text-sm font-medium text-gray-700">
+                        {assessment.offer?.title}
+                      </span>
+                    </div>
+                    {assessment?.offer?.value > 0 && (
+                      <Badge className="bg-green-100 text-green-700 border-0 rounded-full px-2 py-1 text-xs font-medium">
+                        {assessment.offer.type === "percentage"
+                          ? `${assessment.offer.value}% OFF`
+                          : formatPrice(assessment.offer.value)}
+                      </Badge>
+                    )}
+                  </div>
+                  <div className="flex items-baseline space-x-2 mb-2">
+                    <span className="text-2xl font-bold text-gray-900">
+                      {formatPrice(assessment?.pricing?.discountedPrice)}
+                    </span>
+                    {assessment.pricing?.basePrice && (
+                      <span className="text-sm text-gray-500 line-through">
+                        {formatPrice(assessment?.pricing?.basePrice)}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 text-xs text-gray-600">
+                    <div className="flex items-center space-x-1">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span>Instant Access</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span>Detailed Reports</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                      <span>Certificate</span>
+                    </div>
+                  </div>
+                  {assessment.offer?.validUntil && (
+                    <div className="text-xs mt-2 text-gray-400">
+                      <span className="font-medium text-gray-700">
+                        Valid until:{" "}
+                      </span>
+                      {new Date(
+                        assessment.offer.validUntil
+                      ).toLocaleDateString()}
+                    </div>
+                  )}
+                </div>
+                
+                <Button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate.push(`/assessmentpayment/${assessment._id}`);
+                  }}
+                  className="w-full h-12 bg-blue-600 hover:bg-blue-700 rounded-2xl text-base shadow-lg hover:shadow-xl transition-all duration-300"
+                  style={{ maxHeight: "46px" }}
+                >
+                  <Play className="h-4 w-4 mr-2" />
+                  Start Test
+                </Button>
+              </CardContent>
+            </Card>
             );
           })}
         </div>
 
         {loading && (
-          <div className="text-center py-6 text-gray-600">
-            Loading more assessments...
+          <div className="flex flex-col items-center justify-center py-8">
+            <div className="relative">
+              <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+              <div className="absolute inset-0 w-12 h-12 border-4 border-transparent border-r-purple-600 rounded-full animate-spin animation-delay-150"></div>
+            </div>
+            <p className="mt-4 text-sm text-gray-600 font-medium">Loading more assessments...</p>
           </div>
         )}
 
@@ -462,6 +731,10 @@ export default Assessments;
 if (typeof window !== "undefined") {
   const style = document.createElement("style");
   style.innerHTML = `
+.animation-delay-150 {
+  animation-delay: 150ms;
+}
+
 .bubble {
   position: absolute;
   border: 1px solid rgba(255, 255, 255);

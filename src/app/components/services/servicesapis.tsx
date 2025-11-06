@@ -48,8 +48,8 @@ export const isUserLoggedIn = async () => {
 };
 
 export const sendOtptoMobile = async (
-  { phoneNumber, email, franchiseId = "" },
-  tochangePassword = false
+  { phoneNumber, email, franchiseId = "", toLogin = false },
+  tochangePassword = false,
 ) => {
   try {
     const response = await axiosInstance.post("/auth/send-otp", {
@@ -57,6 +57,7 @@ export const sendOtptoMobile = async (
       email,
       franchiseId,
       tochangePassword,
+      toLogin,
     });
 
     return {
@@ -67,16 +68,19 @@ export const sendOtptoMobile = async (
     return {
       success: false,
       message: error.response?.data?.message || "Error sending OTP",
+      statusCode: error.response?.status,
+      data: error.response?.data,
     };
   }
 };
 
-export const verifyOtpMobile = async ({ phoneNumber, email, otp }) => {
+export const verifyOtpMobile = async ({ phoneNumber, email, otp, toLogin = false }) => {
   try {
     const response = await axiosInstance.post("/auth/verify-otp", {
       phoneNumber,
       email,
       otp,
+      toLogin,
     });
 
     return response.data;
@@ -90,21 +94,27 @@ export const userSignup = async ({
   email,
   mobile,
   password,
-  
+  referrerId,
+  experienceLevel,
+  currentCity
 }: {
   email: string;
-  password: string;
+  password?: string;
   name: string;
   mobile: string;
-  
+  referrerId?: string;
+  experienceLevel?: string;
+  currentCity?: string;
 }) => {
   try {
     const response = await axiosInstance.post("/auth/register", {
       email,
-      password,
+      password: password || "",
       name,
       mobile,
-      
+      experienceLevel,
+      currentCity,
+      referrerId
     });
     const data = response.data;
     const accessToken = data.data.accessToken; // Corrected destructuring
@@ -305,6 +315,7 @@ export const getUsersForFranchise = async ({
   }
 };
 
+
 export const setUserStatusAactivity = async (userId, isActive) => {
   try {
     const response = await axiosInstance.put(`/admin/users/${userId}/status`, {
@@ -472,6 +483,42 @@ export const getTransactionsForFranchisenAdmin = async (
   } catch (error) {
     const errorMessage =
       error?.response?.data?.message || "Failed to fetch transactions";
+    toast.error(`${errorMessage}.`);
+    return { success: false, message: errorMessage, error };
+  }
+};
+
+export const getReferredUsers = async ({
+  userId,
+  searchQuery = '',
+  role = 'candidate',
+  page = 1,
+  limit = 10,
+}) => {
+  try {
+    const response = await axiosInstance.get(
+      `/admin/getReferredUsers/${userId}?page=${page}&limit=${limit}`
+    );
+    return response.data;
+  } catch (error) {
+    toast.error(`${error?.response?.data?.message}.`);
+    return error;
+  }
+};
+
+export const getReferredTransactions = async ({
+  userId,
+  page = 1,
+  limit = 10,
+}) => {
+  try {
+    const response = await axiosInstance.get(
+      `/admin/getReferredTransactions/${userId}?page=${page}&limit=${limit}`
+    );
+    return response.data;
+  } catch (error) {
+    const errorMessage =
+      error?.response?.data?.message || "Failed to fetch referred transactions";
     toast.error(`${errorMessage}.`);
     return { success: false, message: errorMessage, error };
   }
@@ -785,6 +832,18 @@ export const getFranchises = async () => {
   }
 };
 
+
+export const getAssessmentSuggestions = async (page = 1) => {
+  try {
+    const response = await axiosInstance.get(`/assessments/getAssessmentSuggestions`, {
+      params: { page },
+    });
+    return response;
+  } catch (error) {
+    toast.error(`${error?.response?.data?.message}.`);
+    return error;
+  }
+};
 export const createCertificate = async (certificateData) => {
   try {
     const response = await axiosInstance.post("/certificates", certificateData);

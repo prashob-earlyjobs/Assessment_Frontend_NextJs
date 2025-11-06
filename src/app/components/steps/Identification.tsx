@@ -610,7 +610,7 @@ export const Identification = forwardRef<IdentificationRef, IdentificationProps>
       {/* Aadhar Card upload below Aadhar number */}
       <div className="space-y-2">
         <Label className="text-sm font-medium text-gray-700">
-          Aadhar Card <span className="text-red-500">*</span>
+          Aadhar Card
         </Label>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
@@ -693,7 +693,7 @@ export const Identification = forwardRef<IdentificationRef, IdentificationProps>
       {/* PAN Card upload */}
       <div className="space-y-2">
         <Label className="text-sm font-medium text-gray-700">
-          PAN Card <span className="text-red-500">*</span>
+          PAN Card
         </Label>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>

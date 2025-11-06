@@ -28,6 +28,7 @@ interface Job {
   id: string;
   jobId: string;
   companyName: string;
+  brandName?: string;
   companyLogoUrl?: string;
   title: string;
   workType?: string;
@@ -476,6 +477,7 @@ const JobsClient = () => {
                     <JobCard
                       key={job.id}
                       company={job.companyName}
+                      brandName={job.brandName}
                       logo={job.companyLogoUrl}
                       title={job.title || "Job Title Not Available"}
                       employmentType={job.employmentType || "Full Time"}

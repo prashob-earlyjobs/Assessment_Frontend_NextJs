@@ -476,7 +476,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ onFormSubmit, isCompact =
           aadharNumber: formData.identification.aadharNumber,
           panFront: "https://media.istockphoto.com/id/517188688/photo/mountain-landscape.jpg" ,
           panBack: "https://media.istockphoto.com/id/517188688/photo/mountain-landscape.jpg" ,
-          panNumber: formData.identification.panNumber,
+          panNumber: formData.identification.panNumber.toUpperCase(),
           emergencyNumber: formData.identification.emergencyContact,
           photo: "https://media.istockphoto.com/id/517188688/photo/mountain-landscape.jpg" 
         },
