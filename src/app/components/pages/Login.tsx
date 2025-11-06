@@ -70,6 +70,9 @@ function Login() {
       } else if (response.success && response.user.role === 'creator') {
         router.push('/creator');
         setUserCredentials(response.user);
+      } else if (response.success && response.user.role === 'creator') {
+        router.push('/creator');
+        setUserCredentials(response.user);
       } else if (response.success && response.user.role !== 'super_admin' && response.user.role !== 'franchise_admin') {
         const redirectPath = localStorage.getItem("redirectAfterLogin") || '/dashboard';
         console.log("Non-admin user authenticated, redirecting to:", redirectPath);
