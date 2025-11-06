@@ -149,10 +149,9 @@ const Header = () => {
                       />
                       <AvatarFallback>
                         {userCredentials?.name
-                          ?.split(" ")
-                          .map((n) => n[0])
-                          .join("")
-                          .toUpperCase()}
+                          ?.replace(/\s+/g, "")       // remove all spaces
+                          ?.slice(0, 2)               // take first 2 letters
+                          ?.toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
                   </Button>
@@ -167,10 +166,9 @@ const Header = () => {
                         />
                         <AvatarFallback>
                           {userCredentials?.name
-                            ?.split(" ")
-                            .map((n) => n[0])
-                            .join("")
-                            .toUpperCase()}
+                            ?.replace(/\s+/g, "")       // remove all spaces
+                            ?.slice(0, 2)               // take first 2 letters
+                            ?.toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
                       <div>
