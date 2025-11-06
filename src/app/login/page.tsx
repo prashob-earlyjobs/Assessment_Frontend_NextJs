@@ -67,12 +67,6 @@ function LoginContent() {
       setSignupData((prev) => ({ ...prev, referrerId: ref }));
     }
 
-    // Capture ref query param as referrerId
-    const ref = searchParams?.get?.('ref') || "";
-    if (ref) {
-      setSignupData((prev) => ({ ...prev, referrerId: ref }));
-    }
-
     const checkUserLoggedIn = async () => {
       const response = await isUserLoggedIn();
       if (response.success && (response.user.role === 'super_admin' || response.user.role === 'franchise_admin')) {
