@@ -29,7 +29,7 @@ function LoginContent() {
     experienceLevel: "experienced",
     currentCity: "",
     referrerId: "",
-    role: ""
+    role: "candidate"
   });
   const [signupErrors, setSignupErrors] = useState({
     name: "",
