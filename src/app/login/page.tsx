@@ -38,7 +38,7 @@ function LoginContent() {
     experienceLevel: "",
     referrerId: "",
     currentCity: "",
-    role: ""
+    role: "candidate"
   });
   const [otp, setOtp] = useState("");
   const [otpInputs, setOtpInputs] = useState(["", "", "", "", "", ""]);

@@ -27,7 +27,7 @@ export default function Login() {
     mobile: "",
     password: "",
     confirmPassword: "",
-    role: ""
+    role: "candidate"
   });
   const [otp, setOtp] = useState("");
   const [isOtpDialogOpen, setIsOtpDialogOpen] = useState(false);
