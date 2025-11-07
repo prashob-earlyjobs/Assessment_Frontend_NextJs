@@ -231,7 +231,7 @@ const Header = () => {
                 Login
               </Button>
               <Button
-                onClick={() => router.push("/signup")}
+                onClick={() => router.push("/login?mode=signup")}
                 className="bg-earlyjobs-orange hover:bg-earlyjobs-orange/90"
               >
                 Sign Up
