@@ -27,7 +27,8 @@ function SignupContent() {
     mobile: "",
     referrerId: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
+    role: ""
   });
   
   const [otp, setOtp] = useState("");
@@ -182,6 +183,7 @@ function SignupContent() {
         mobile: signupData.mobile,
         password: signupData.password,
         referrerId: signupData.referrerId,
+        role: signupData.role || "" ,
       });
       if (!signupResponse.success) {
         toast.error(signupResponse.data.message);
