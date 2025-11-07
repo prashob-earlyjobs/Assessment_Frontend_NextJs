@@ -48,8 +48,8 @@ export const isUserLoggedIn = async () => {
 };
 
 export const sendOtptoMobile = async (
-  { phoneNumber, email, franchiseId = "" },
-  tochangePassword = false
+  { phoneNumber, email, franchiseId = "", toLogin = false },
+  tochangePassword = false,
 ) => {
   try {
     const response = await axiosInstance.post("/auth/send-otp", {
@@ -57,6 +57,7 @@ export const sendOtptoMobile = async (
       email,
       franchiseId,
       tochangePassword,
+      toLogin,
     });
 
     return {
@@ -67,16 +68,19 @@ export const sendOtptoMobile = async (
     return {
       success: false,
       message: error.response?.data?.message || "Error sending OTP",
+      statusCode: error.response?.status,
+      data: error.response?.data,
     };
   }
 };
 
-export const verifyOtpMobile = async ({ phoneNumber, email, otp }) => {
+export const verifyOtpMobile = async ({ phoneNumber, email, otp, toLogin = false }) => {
   try {
     const response = await axiosInstance.post("/auth/verify-otp", {
       phoneNumber,
       email,
       otp,
+      toLogin,
     });
 
     return response.data;
@@ -91,21 +95,27 @@ export const userSignup = async ({
   mobile,
   password,
   referrerId,
-
+  experienceLevel,
+  currentCity
 }: {
   email: string;
-  password: string;
+  password?: string;
   name: string;
   mobile: string;
-  referrerId?: string; // optional referral id captured from `ref`
-
+  referrerId?: string;
+  experienceLevel?: string;
+  currentCity?: string;
 }) => {
   try {
-    const payload: any = { email, password, name, mobile };
-    if (referrerId) payload.referrerId = referrerId;
-
-
-    const response = await axiosInstance.post("/auth/register", payload);
+    const response = await axiosInstance.post("/auth/register", {
+      email,
+      password: password || "",
+      name,
+      mobile,
+      experienceLevel,
+      currentCity,
+      referrerId
+    });
     const data = response.data;
     const accessToken = data.data.accessToken; // Corrected destructuring
 

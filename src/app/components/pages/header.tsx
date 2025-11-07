@@ -181,9 +181,8 @@ const Header = () => {
                   <AvatarImage src={userCredentials.avatar} />
                   <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
                     {userCredentials?.name
-                      ?.split(" ")
-                      .map((n) => n[0])
-                      .join("")
+                      ?.replace(/\s+/g, "")       // remove all spaces
+                      ?.slice(0, 2)               // take first 2 letters
                       ?.toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
