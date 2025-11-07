@@ -108,6 +108,10 @@ const Footer = () => {
                         <GraduationCap className="w-5 h-5 mr-2 inline-block" />
                         College Tie-Ups
                     </Link>
+                    <Link href="/join-creator-programme" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
+                        <Users className="w-5 h-5 mr-2 inline-block" />
+                        Join Creator Programme
+                    </Link>
                 </div>
             </div>
             <div className="w-full  mt-2 px-4 pb-10">
