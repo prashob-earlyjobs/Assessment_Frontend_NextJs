@@ -67,6 +67,12 @@ function LoginContent() {
       setSignupData((prev) => ({ ...prev, referrerId: ref }));
     }
 
+    // If ref is present in URL, skip login check and stay on login/signup page
+    if (ref) {
+      console.log("Ref parameter detected, staying on login/signup page regardless of auth status");
+      return;
+    }
+
     const checkUserLoggedIn = async () => {
       const response = await isUserLoggedIn();
       if (response.success && (response.user.role === 'super_admin' || response.user.role === 'franchise_admin')) {
@@ -90,9 +96,12 @@ function LoginContent() {
         localStorage.removeItem("redirectAfterLogin"); // Clear stored path
         router.push(redirectPath);
       } else {
-        if (!pathname.includes('signup')) {
+        // Don't redirect if already on login/signup page - preserve query parameters
+        if (!pathname.startsWith('/login') && !pathname.startsWith('/signup')) {
           console.log("User not authenticated, staying on login/signup page");
-          router.push('/login');
+          const currentMode = searchParams?.get('mode');
+          const loginUrl = currentMode ? `/login?mode=${currentMode}` : '/login';
+          router.push(loginUrl);
         }
       }
     };
@@ -100,7 +109,7 @@ function LoginContent() {
     if (pathname.startsWith('/login') || pathname.startsWith('/signup')) {
       checkUserLoggedIn();
     }
-  }, [router, pathname, setUserCredentials]);
+  }, [router, pathname, setUserCredentials, searchParams]);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -195,7 +204,7 @@ function LoginContent() {
             phoneNumber = phoneNumber.slice(0, 10);
             setSignupData(prev => ({ ...prev, mobile: phoneNumber }));
           }
-          setDefaultTab('signup');
+          updateTab('signup');
           toast.info("User not found. Please sign up to create an account.");
           setIsLoginLoading(false);
           return;
@@ -228,7 +237,7 @@ function LoginContent() {
           phoneNumber = phoneNumber.slice(0, 10);
           setSignupData(prev => ({ ...prev, mobile: phoneNumber }));
         }
-        setDefaultTab('signup');
+        updateTab('signup');
         toast.info("User not found. Please sign up to create an account.");
         setIsLoginLoading(false);
         return;
@@ -684,7 +693,7 @@ function LoginContent() {
       setForgotPasswordData({ email: "", mobile: "", newPassword: "", confirmPassword: "" });
       setForgotOtp("");
       toast.success("Password reset successfully!");
-      setDefaultTab('login');
+      updateTab('login');
     } catch (error) {
       toast.error("Error resetting password");
     }
@@ -698,15 +707,44 @@ function LoginContent() {
     router.push(redirectPath);
   };
 
-  const [defaultTab, setDefaultTab] = useState('login');
+  // Initialize defaultTab based on query parameter or pathname
+  const getInitialTab = (): 'login' | 'signup' => {
+    if (searchParams) {
+      const mode = searchParams.get('mode');
+      if (mode === 'signup') return 'signup';
+      if (mode === 'login') return 'login'; 
+    }
+    return pathname.includes('signup') ? 'signup' : 'login';
+  };
+
+  const [defaultTab, setDefaultTab] = useState<'login' | 'signup'>(getInitialTab);
+
+  // Helper function to update tab and URL query parameter
+  const updateTab = (tab: 'login' | 'signup') => {
+    setDefaultTab(tab);
+    const params = new URLSearchParams(searchParams?.toString() || '');
+    params.set('mode', tab);
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
 
   useEffect(() => {
-    if (pathname.includes('signup')) {
-      setDefaultTab('signup');
+    // Check query parameter first, then fallback to pathname
+    const mode = searchParams?.get('mode');
+    
+    if (mode === 'signup' || mode === 'login') {
+      // Query parameter exists, respect it - always sync with URL
+      const targetTab = mode as 'login' | 'signup';
+      setDefaultTab(targetTab);
     } else {
-      setDefaultTab('login');
+      // No mode query parameter, determine from pathname and update URL
+      const targetMode = pathname.includes('signup') ? 'signup' : 'login';
+      setDefaultTab(targetMode);
+      // Update URL to include query parameter if not present
+      const params = new URLSearchParams(searchParams?.toString() || '');
+      params.set('mode', targetMode);
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     }
-  }, [pathname]);
+  }, [pathname, searchParams, router]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-purple-50 flex items-center justify-center p-4">
@@ -736,12 +774,12 @@ function LoginContent() {
             />
           </div>
           <h1 className="text-3xl font-bold text-gray-900">Welcome to EarlyJobs</h1>
-          <p className="text-gray-600 mt-2">Your career journey starts here</p>
+          <p className="text-gray-600 mt-2">Your career journey starts here.</p>
         </div>
 
         <Card className="shadow-2xl border-0 rounded-3xl overflow-hidden">
           <Tabs value={defaultTab} onValueChange={(value) => {
-            setDefaultTab(value);
+            updateTab(value as 'login' | 'signup');
             // Clear signup form fields when manually switching to login
             if (value === 'login') {
               setSignupData(prev => ({ ...prev, email: '', mobile: '' }));
@@ -787,7 +825,7 @@ function LoginContent() {
                         Don't have an account?{" "}
                         <button
                           type="button"
-                          onClick={() => setDefaultTab('signup')}
+                          onClick={() => updateTab('signup')}
                           className="text-orange-600 hover:text-orange-700 font-medium underline"
                         >
                           Sign Up
@@ -876,7 +914,7 @@ function LoginContent() {
                         Don't have an account?{" "}
                         <button
                           type="button"
-                          onClick={() => setDefaultTab('signup')}
+                          onClick={() => updateTab('signup')}
                           className="text-orange-600 hover:text-orange-700 font-medium underline"
                         >
                           Sign Up
@@ -1087,7 +1125,7 @@ function LoginContent() {
                       <button
                         type="button"
                         onClick={() => {
-                          setDefaultTab('login');
+                          updateTab('login');
                           setSignupData(prev => ({ ...prev, email: '', mobile: '' }));
                         }}
                         className="text-orange-600 hover:text-orange-700 font-medium underline"
@@ -1177,7 +1215,7 @@ function LoginContent() {
                         <button
                           type="button"
                           onClick={() => {
-                            setDefaultTab('login');
+                            updateTab('login');
                             setSignupData(prev => ({ ...prev, email: '', mobile: '' }));
                           }}
                           className="text-orange-600 hover:text-orange-700 font-medium underline"
