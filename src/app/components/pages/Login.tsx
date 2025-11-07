@@ -27,14 +27,16 @@ function Login() {
     email: "",
     mobile: "",
     experienceLevel: "experienced",
-    currentCity: ""
+    currentCity: "",
+    role: ""
   });
   const [signupErrors, setSignupErrors] = useState({
     name: "",
     email: "",
     mobile: "",
     experienceLevel: "",
-    currentCity: ""
+    currentCity: "",
+    role: ""
   });
   const [otp, setOtp] = useState("");
   const [otpInputs, setOtpInputs] = useState(["", "", "", "", "", ""]);
@@ -63,12 +65,6 @@ function Login() {
       const response = await isUserLoggedIn();
       if (response.success && (response.user.role === 'super_admin' || response.user.role === 'franchise_admin')) {
         console.log("Admin user detected, redirecting to /admin");
-        setUserCredentials(response.user);
-      } else if (response.success && response.user.role === 'creator') {
-        router.push('/creator');
-        setUserCredentials(response.user);
-      } else if (response.success && response.user.role === 'creator') {
-        router.push('/creator');
         setUserCredentials(response.user);
       } else if (response.success && response.user.role === 'creator') {
         router.push('/creator');
@@ -234,7 +230,8 @@ function Login() {
       email: "",
       mobile: "",
       experienceLevel: "",
-      currentCity: ""
+      currentCity: "",
+      role: ""
     };
 
     let hasErrors = false;
