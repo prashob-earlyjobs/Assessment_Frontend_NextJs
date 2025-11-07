@@ -28,7 +28,8 @@ function LoginContent() {
     mobile: "",
     experienceLevel: "experienced",
     currentCity: "",
-    referrerId: ""
+    referrerId: "",
+    role: "candidate"
   });
   const [signupErrors, setSignupErrors] = useState({
     name: "",
@@ -36,7 +37,8 @@ function LoginContent() {
     mobile: "",
     experienceLevel: "",
     referrerId: "",
-    currentCity: ""
+    currentCity: "",
+    role: "candidate"
   });
   const [otp, setOtp] = useState("");
   const [otpInputs, setOtpInputs] = useState(["", "", "", "", "", ""]);
@@ -304,7 +306,7 @@ function LoginContent() {
       hasErrors = true;
     }
 
-    setSignupErrors({ ...errors, referrerId: "" });
+    setSignupErrors({ ...errors, referrerId: "", role: "" });
 
     if (hasErrors) {
       toast.error("Please fill in all required fields correctly");

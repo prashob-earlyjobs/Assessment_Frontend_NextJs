@@ -258,6 +258,7 @@ export default function JoinCreatorProgrammePage() {
         email: formData.email,
         mobile: formData.phone,
         password: tempPassword,
+        role: 'creator',
 
       });
 

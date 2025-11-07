@@ -96,7 +96,8 @@ export const userSignup = async ({
   password,
   referrerId,
   experienceLevel,
-  currentCity
+  currentCity,
+  role,
 }: {
   email: string;
   password?: string;
@@ -105,6 +106,7 @@ export const userSignup = async ({
   referrerId?: string;
   experienceLevel?: string;
   currentCity?: string;
+  role: string;
 }) => {
   try {
     const response = await axiosInstance.post("/auth/register", {
@@ -114,7 +116,8 @@ export const userSignup = async ({
       mobile,
       experienceLevel,
       currentCity,
-      referrerId
+      referrerId,
+      role,
     });
     const data = response.data;
     const accessToken = data.data.accessToken; // Corrected destructuring
