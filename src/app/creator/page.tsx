@@ -64,7 +64,7 @@ export default function CreatorDashboardPage() {
   const coupon15 = `${baseCoupon}15`;
   const [selectedDiscount, setSelectedDiscount] = useState<5 | 10 | 15>(5);
   const currentCoupon = selectedDiscount === 5 ? coupon5 : selectedDiscount === 10 ? coupon10 : coupon15;
-  const inviteLink = `https://earlyjobs.ai/signup?ref=${userCredentials?.userId}`;
+  const inviteLink = `https://earlyjobs.ai/login?mode=signup&ref=${userCredentials?.userId}`;
 
   useEffect(() => {
     // Load bank details from userCredentials if available
