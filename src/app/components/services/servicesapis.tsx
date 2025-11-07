@@ -470,7 +470,9 @@ export const getTransactions = async (userId: string) => {
 
 /**
  * Create invoice in Zoho Books after successful payment
- * @param invoiceData - Invoice data including customer details, items, and payment info
+ * Supports both simple format (recommended) and full Zoho Books format
+ * 
+ * @param invoiceData - Invoice data in simple format
  * @returns Promise with invoice creation response
  */
 export const createZohoBooksInvoice = async (invoiceData: {
@@ -478,62 +480,93 @@ export const createZohoBooksInvoice = async (invoiceData: {
   customerEmail: string;
   customerPhone?: string;
   customerAddress?: {
-    address?: string;
+    street?: string;
     city?: string;
     state?: string;
     country?: string;
-    zip?: string;
+    zipCode?: string;
   };
-  items: Array<{
+  lineItems: Array<{
     name: string;
     description?: string;
     rate: number;
     quantity: number;
-    tax?: number;
+    unit?: string;
   }>;
-  transactionId: string;
-  paymentId: string;
-  amount: number;
-  currency?: string;
+  invoiceDate?: string; // Format: "YYYY-MM-DD", defaults to today
+  dueDate?: string; // Format: "YYYY-MM-DD"
+  paymentTerms?: number; // Number of days, e.g., 30
   notes?: string;
-  terms?: string;
+  referenceNumber?: string;
+  currencyCode?: string; // Defaults to "INR"
 }) => {
   try {
-    const response = await axiosInstance.post("/zoho-books/create-invoice", {
-      customer_name: invoiceData.customerName,
-      customer_email: invoiceData.customerEmail,
-      customer_phone: invoiceData.customerPhone,
-      customer_address: invoiceData.customerAddress,
-      line_items: invoiceData.items.map((item) => ({
+    // Prepare request body in simple format
+    const requestBody = {
+      customerName: invoiceData.customerName,
+      customerEmail: invoiceData.customerEmail,
+      customerPhone: invoiceData.customerPhone,
+      customerAddress: invoiceData.customerAddress ? {
+        street: invoiceData.customerAddress.street || "",
+        city: invoiceData.customerAddress.city || "",
+        state: invoiceData.customerAddress.state || "",
+        country: invoiceData.customerAddress.country || "India",
+        zipCode: invoiceData.customerAddress.zipCode || "",
+      } : undefined,
+      lineItems: invoiceData.lineItems.map((item) => ({
         name: item.name,
         description: item.description || "",
         rate: item.rate,
         quantity: item.quantity,
-        tax_id: item.tax || null,
+        unit: item.unit || "nos",
       })),
-      transaction_id: invoiceData.transactionId,
-      payment_id: invoiceData.paymentId,
-      total: invoiceData.amount,
-      currency_code: invoiceData.currency || "INR",
+      invoiceDate: invoiceData.invoiceDate || new Date().toISOString().split('T')[0],
+      dueDate: invoiceData.dueDate,
+      paymentTerms: invoiceData.paymentTerms,
       notes: invoiceData.notes || "",
-      terms: invoiceData.terms || "",
-    });
-
-    return {
-      success: true,
-      data: response.data,
-      invoiceId: response.data?.data?.invoice_id || response.data?.invoice_id,
-      invoiceNumber: response.data?.data?.invoice_number || response.data?.invoice_number,
-      invoiceUrl: response.data?.data?.invoice_url || response.data?.invoice_url,
+      referenceNumber: invoiceData.referenceNumber,
+      currencyCode: invoiceData.currencyCode || "INR",
     };
+
+    const response = await axiosInstance.post("/zoho/create-invoice", requestBody);
+
+    // Handle successful response
+    if (response.data?.success) {
+      return {
+        success: true,
+        message: response.data.message || "Invoice created successfully in Zoho Books",
+        data: {
+          invoiceId: response.data.data?.invoiceId,
+          invoiceNumber: response.data.data?.invoiceNumber,
+          invoiceUrl: response.data.data?.invoiceUrl,
+          invoicePdfUrl: response.data.data?.invoicePdfUrl,
+          total: response.data.data?.total,
+          balance: response.data.data?.balance,
+          status: response.data.data?.status,
+          date: response.data.data?.date,
+          dueDate: response.data.data?.dueDate,
+          customerId: response.data.data?.customerId,
+          customerName: response.data.data?.customerName,
+          invoice: response.data.data?.invoice,
+        },
+      };
+    } else {
+      return {
+        success: false,
+        message: response.data?.message || "Failed to create invoice in Zoho Books",
+        error: response.data?.error,
+        details: response.data?.details,
+      };
+    }
   } catch (error: any) {
     console.error("Zoho Books invoice creation error:", error);
     // Don't show toast error as this is a background operation
     // The payment is already successful, invoice generation failure shouldn't block the user
     return {
       success: false,
-      error: error?.response?.data?.message || error?.message || "Failed to create invoice in Zoho Books",
-      data: error?.response?.data,
+      message: error?.response?.data?.message || "Failed to create invoice in Zoho Books",
+      error: error?.response?.data?.error || error?.message,
+      details: error?.response?.data?.details || error?.response?.data,
     };
   }
 };

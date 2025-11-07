@@ -242,41 +242,52 @@ const Assessment = () => {
       // Generate invoice in Zoho Books if payment amount is greater than 0
       if (finalAssessmentFee > 0 && paymentId && paymentId !== `FREE-${Date.now()}`) {
         try {
+          // Calculate due date (30 days from today)
+          const invoiceDate = new Date();
+          const dueDate = new Date();
+          dueDate.setDate(dueDate.getDate() + 30);
+
           const invoiceData = {
             customerName: userCredentials.name || "Customer",
             customerEmail: userCredentials.email || "",
             customerPhone: userCredentials.mobile || "",
             customerAddress: userCredentials.profile?.address ? {
-              address: userCredentials.profile.address.street || "",
+              street: userCredentials.profile.address.street || "",
               city: userCredentials.profile.address.city || "",
               state: userCredentials.profile.address.state || "",
               country: userCredentials.profile.address.country || "India",
-              zip: userCredentials.profile.address.zipCode || "",
+              zipCode: userCredentials.profile.address.zipCode || "",
             } : undefined,
-            items: [
+            lineItems: [
               {
                 name: assessmentData.title || "Assessment Fee",
                 description: `Assessment: ${assessmentData.title || "Assessment"}`,
                 rate: finalAssessmentFee,
                 quantity: 1,
-                tax: 18, // 18% GST - adjust as needed
+                unit: "nos",
               },
             ],
-            transactionId: details.transactionId,
-            paymentId: paymentId,
-            amount: finalAssessmentFee,
-            currency: "INR",
-            notes: offerApplied ? `Discount applied: ${offerCode}` : "",
-            terms: "Payment received via Razorpay",
+            invoiceDate: invoiceDate.toISOString().split('T')[0],
+            dueDate: dueDate.toISOString().split('T')[0],
+            paymentTerms: 30,
+            notes: offerApplied 
+              ? `Payment for ${assessmentData.title || "Assessment"}. Discount applied: ${offerCode}` 
+              : `Payment for ${assessmentData.title || "Assessment"}`,
+            referenceNumber: `TXN-${paymentId.substring(0, 8)}`,
+            currencyCode: "INR",
           };
 
           const invoiceResult = await createZohoBooksInvoice(invoiceData);
           
           if (invoiceResult.success) {
-            console.log("Invoice created successfully:", invoiceResult.invoiceNumber);
-            // Optionally store invoice ID in transaction details
+            console.log("Invoice created successfully:", {
+              invoiceNumber: invoiceResult.data?.invoiceNumber,
+              invoiceId: invoiceResult.data?.invoiceId,
+              invoiceUrl: invoiceResult.data?.invoiceUrl,
+            });
+            // Optionally store invoice ID in transaction details or show success message
           } else {
-            console.error("Failed to create invoice:", invoiceResult.error);
+            console.error("Failed to create invoice:", invoiceResult.message || invoiceResult.error);
             // Don't show error to user as payment is already successful
           }
         } catch (invoiceError) {
