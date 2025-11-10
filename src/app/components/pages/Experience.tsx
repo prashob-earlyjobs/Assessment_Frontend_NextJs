@@ -28,7 +28,7 @@ const Experience = () => {
         <div className="relative flex items-center gap-2 sm:gap-3 px-6 sm:px-10 py-6 sm:py-8 tablet:px-3 tablet:py-3">
           <GraduationCap className="absolute top-2 sm:top-3 right-2 sm:right-3 w-4 sm:w-6 h-4 sm:h-6 lg:w-8 lg:h-8 text-orange-500 tablet:w-4 tablet:h-4" />
           <span className="absolute top-3 sm:top-5 left-3 text-base sm:text-xl font-semibold text-gray-800 tablet:text-xs tablet:top-2 tablet:left-2">
-            100+<br />
+            1200+<br />
             <span className="border-l-4 border-orange-500 pl-2 sm:pl-3 text-sm sm:text-lg font-bold text-gray-600 tablet:text-[0.65rem] tablet:pl-1">Internships</span>
           </span>
         </div>
@@ -38,7 +38,7 @@ const Experience = () => {
         <div className="relative flex items-center gap-2 sm:gap-3 px-6 sm:px-10 py-6 sm:py-8 tablet:px-3 tablet:py-3">
           <Users className="absolute top-0 sm:top-0 right-2 sm:right-3 w-4 sm:w-6 h-4 sm:h-6 lg:w-8 lg:h-8 text-purple-500 tablet:w-4 tablet:h-4" />
           <span className="absolute top-2 sm:top-2 left-2 text-base sm:text-xl font-semibold text-gray-800 tablet:text-xs tablet:top-1 tablet:left-1">
-            1700+<br />
+            2000+<br />
             <p className="border-l-4 border-purple-500 pl-2 sm:pl-3 text-sm sm:text-lg font-bold text-gray-600 tablet:text-[0.65rem] tablet:pl-1">Candidates Placed</p>
           </span>
         </div>
@@ -48,7 +48,7 @@ const Experience = () => {
         <div className="relative flex items-center gap-2 sm:gap-3 px-6 sm:px-10 py-6 sm:py-8 tablet:px-3 tablet:py-3">
           <UserCheck className="absolute top-0 sm:top-0 left-2 sm:left-3 w-4 sm:w-6 h-4 sm:h-6 lg:w-8 lg:h-8 text-blue-500 tablet:w-4 tablet:h-4" />
           <span className="absolute top-0 sm:top-0 right-2 text-base sm:text-xl font-semibold text-gray-800 text-right tablet:text-xs tablet:right-1">
-            275+<br />
+            300+<br />
             <span className="border-r-4 border-blue-500 pr-2 sm:pr-3 text-sm sm:text-lg font-bold text-gray-600 tablet:text-[0.65rem] tablet:pr-1">Freelancers</span>
           </span>
         </div>

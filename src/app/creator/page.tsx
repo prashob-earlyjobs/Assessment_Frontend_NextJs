@@ -9,10 +9,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs"
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
 import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../components/ui/dialog";
 import Header from "../components/pages/header";
 import Footer from "../components/pages/footer";
-import { getReferredUsers, getReferredTransactions } from "../components/services/servicesapis";
-import { Copy } from "lucide-react";
+import { getReferredUsers, getReferredTransactions, updateBankDetails } from "../components/services/servicesapis";
+import { Copy, CreditCard, Save } from "lucide-react";
 import { toast } from "sonner";
 
 interface CreatorStatsResponse {
@@ -34,7 +37,7 @@ interface CreatorAssessmentItem {
 
 export default function CreatorDashboardPage() {
   const router = useRouter();
-  const { userCredentials } = useUser();
+  const { userCredentials, setUserCredentials } = useUser();
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
     totalAssessmentsTaken: 0,
@@ -44,13 +47,40 @@ export default function CreatorDashboardPage() {
   const [error, setError] = useState<string | null>(null);
   const [candidates, setCandidates] = useState<any[]>([]);
   const [transactions, setTransactions] = useState<any[]>([]);
-  const baseCoupon = `EJ${(userCredentials?.userId || '').slice(-6).toUpperCase()}`;
-  const coupon5 = `${baseCoupon}5`;
+  const [isBankDialogOpen, setIsBankDialogOpen] = useState(false);
+  const [isSavingBankDetails, setIsSavingBankDetails] = useState(false);
+  const [bankDetails, setBankDetails] = useState({
+    accountHolderName: "",
+    accountNumber: "",
+    ifscCode: "",
+    bankName: "",
+    branchName: "",
+    accountType: "Savings",
+    panCard: "",
+  });
+  const baseCoupon = userCredentials?.userId || '';
+  const coupon5 = `${baseCoupon}05`;
   const coupon10 = `${baseCoupon}10`;
   const coupon15 = `${baseCoupon}15`;
   const [selectedDiscount, setSelectedDiscount] = useState<5 | 10 | 15>(5);
   const currentCoupon = selectedDiscount === 5 ? coupon5 : selectedDiscount === 10 ? coupon10 : coupon15;
-  const inviteLink = `https://earlyjobs.ai/signup?ref=${userCredentials?.userId}`;
+  const inviteLink = `https://earlyjobs.ai/login?mode=signup&ref=${userCredentials?.userId}`;
+
+  useEffect(() => {
+    // Load bank details from userCredentials if available
+    const bankDetailsData = userCredentials?.bankAccountDetails;
+    if (bankDetailsData) {
+      setBankDetails({
+        accountHolderName: bankDetailsData.accountHolderName || "",
+        accountNumber: bankDetailsData.accountNumber || "",
+        ifscCode: bankDetailsData.ifscCode || "",
+        bankName: bankDetailsData.bankName || "",
+        branchName: bankDetailsData.branchName || "",
+        accountType: bankDetailsData.accountType || "Savings",
+        panCard: bankDetailsData.panCard || "",
+      });
+    }
+  }, [userCredentials]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -145,52 +175,314 @@ export default function CreatorDashboardPage() {
     return `/browse-interviewed-candidates/${nameSlug}-${assessmentSlug}/${candidateId}`;
   };
 
+  const handleBankDetailsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setBankDetails((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const validateBankDetails = () => {
+    if (!bankDetails.accountHolderName.trim()) {
+      toast.error("Please enter account holder name");
+      return false;
+    }
+    if (!bankDetails.accountNumber.trim()) {
+      toast.error("Please enter account number");
+      return false;
+    }
+    if (bankDetails.accountNumber.length < 9 || bankDetails.accountNumber.length > 18) {
+      toast.error("Account number must be between 9 and 18 digits");
+      return false;
+    }
+    if (!bankDetails.ifscCode.trim()) {
+      toast.error("Please enter IFSC code");
+      return false;
+    }
+    if (!/^[A-Z]{4}0[A-Z0-9]{6}$/.test(bankDetails.ifscCode.toUpperCase())) {
+      toast.error("Please enter a valid IFSC code (e.g., SBIN0001234)");
+      return false;
+    }
+    if (!bankDetails.bankName.trim()) {
+      toast.error("Please enter bank name");
+      return false;
+    }
+    if (!bankDetails.panCard.trim()) {
+      toast.error("Please enter PAN card number");
+      return false;
+    }
+    if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(bankDetails.panCard.toUpperCase())) {
+      toast.error("Please enter a valid PAN card number (e.g., ABCDE1234F)");
+      return false;
+    }
+    return true;
+  };
+
+  const handleSaveBankDetails = async () => {
+    if (!validateBankDetails()) {
+      return;
+    }
+
+    setIsSavingBankDetails(true);
+    try {
+      const response = await updateBankDetails({
+        accountHolderName: bankDetails.accountHolderName.trim(),
+        accountNumber: bankDetails.accountNumber.trim(),
+        ifscCode: bankDetails.ifscCode.trim().toUpperCase(),
+        bankName: bankDetails.bankName.trim(),
+        branchName: bankDetails.branchName.trim(),
+        accountType: bankDetails.accountType,
+        panCard: bankDetails.panCard.trim().toUpperCase(),
+      });
+
+      if (!response.success) {
+        toast.error(response.message || "Failed to update bank details");
+        return;
+      }
+
+      // Update user credentials if API returns updated user data
+      if (response.data?.user) {
+        setUserCredentials(response.data.user);
+      } else {
+        // Refresh user data from API
+        const { isUserLoggedIn } = await import("../components/services/servicesapis");
+        const loggedIn = await isUserLoggedIn();
+        if (loggedIn.success && loggedIn.data?.user) {
+          setUserCredentials(loggedIn.data.user);
+        }
+      }
+
+      toast.success("Bank details updated successfully!");
+      setIsBankDialogOpen(false);
+    } catch (error: any) {
+      toast.error(error.message || "Failed to update bank details. Please try again.");
+    } finally {
+      setIsSavingBankDetails(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-purple-50">
       <Header />
       <main className="max-w-7xl mx-auto px-6 py-8">
         <div className="mb-8 flex items-start justify-between gap-4">
-          <div>
+          <div className="flex-1">
             <h2 className="text-3xl font-bold text-gray-900 mb-2">
               Hi {(userCredentials?.name?.split?.(" ")[0]) || "Creator"} 👋, your dashboard
             </h2>
             <p className="text-lg text-gray-600">Overview of your assessments and earnings.</p>
           </div>
-          {/* <div className="flex items-center gap-2">
-            <div className="hidden sm:flex items-center gap-2 mr-2 px-3 py-1.5 rounded-full bg-orange-50 border border-orange-200 text-orange-700 text-sm">
-              <span className="font-medium">Coupon:</span>
-              <span className="font-semibold">{currentCoupon}</span>
-              <button
-                onClick={() => handleCopy(currentCoupon)}
-                className="ml-1 text-orange-700 hover:text-orange-900"
-                title="Copy coupon code"
-              >
-                <Copy className="h-3.5 w-3.5" />
-              </button>
-              <span className="mx-1 text-orange-300">|</span>
-              <div className="flex items-center gap-1">
-                <button
-                  className={`px-2 py-0.5 rounded-full text-xs ${selectedDiscount === 5 ? 'bg-orange-600 text-white' : 'hover:bg-orange-100'}`}
-                  onClick={() => setSelectedDiscount(5)}
-                  title="Select 5%"
-                >5%</button>
-                <button
-                  className={`px-2 py-0.5 rounded-full text-xs ${selectedDiscount === 10 ? 'bg-orange-600 text-white' : 'hover:bg-orange-100'}`}
-                  onClick={() => setSelectedDiscount(10)}
-                  title="Select 10%"
-                >10%</button>
-                <button
-                  className={`px-2 py-0.5 rounded-full text-xs ${selectedDiscount === 15 ? 'bg-orange-600 text-white' : 'hover:bg-orange-100'}`}
-                  onClick={() => setSelectedDiscount(15)}
-                  title="Select 15%"
-                >15%</button>
-              </div>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-lg border border-gray-200">
+              <span className="text-xs text-gray-500 font-medium">Coupon Code:</span>
+              {[
+                { code: coupon5, label: "5% off" },
+                { code: coupon10, label: "10% off" },
+                { code: coupon15, label: "15% off" },
+              ].map((coupon, index) => (
+                <div key={coupon.code} className="flex items-center gap-2">
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(coupon.code);
+                      toast.success(`Copied ${coupon.code}!`);
+                    }}
+                    className="text-xs text-gray-600 hover:text-gray-900 hover:underline"
+                  >
+                    {coupon.label}
+                  </button>
+                  {index < 2 && <span className="text-gray-300">|</span>}
+                </div>
+              ))}
             </div>
-          
-          </div> */}
+            <Dialog open={isBankDialogOpen} onOpenChange={setIsBankDialogOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" className="flex items-center gap-2">
+                <CreditCard className="h-4 w-4" />
+                {bankDetails.accountNumber ? "Bank Details" : "Add Bank Details"}
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-hidden flex flex-col">
+              <DialogHeader className="flex-shrink-0">
+                <DialogTitle>Bank Account Details</DialogTitle>
+                <DialogDescription>
+                  {bankDetails.accountNumber ? "View and update your bank account information" : "Enter your bank account information to receive payments"}
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4 py-4 overflow-y-auto flex-1 min-h-0">
+                {bankDetails.accountNumber && (
+                  <div className="p-4 bg-gray-50 rounded-lg border space-y-2 text-sm mb-4">
+                    <h4 className="font-semibold text-gray-900 mb-3">Current Bank Details</h4>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Account Holder:</span>
+                      <span className="font-medium text-gray-900">{bankDetails.accountHolderName}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Account:</span>
+                      <span className="font-medium text-gray-900">
+                        ****{bankDetails.accountNumber.slice(-4)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">IFSC:</span>
+                      <span className="font-medium text-gray-900">{bankDetails.ifscCode}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Bank:</span>
+                      <span className="font-medium text-gray-900">{bankDetails.bankName}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">PAN:</span>
+                      <span className="font-medium text-gray-900">
+                        {bankDetails.panCard ? `${bankDetails.panCard.slice(0, 2)}****${bankDetails.panCard.slice(-2)}` : "Not provided"}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Account Type:</span>
+                      <span className="font-medium text-gray-900">{bankDetails.accountType}</span>
+                    </div>
+                  </div>
+                )}
+                
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="accountHolderName">Account Holder Name *</Label>
+                    <Input
+                      id="accountHolderName"
+                      name="accountHolderName"
+                      type="text"
+                      placeholder="Enter account holder name"
+                      value={bankDetails.accountHolderName}
+                      onChange={handleBankDetailsChange}
+                      className="w-full"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="accountNumber">Account Number *</Label>
+                    <Input
+                      id="accountNumber"
+                      name="accountNumber"
+                      type="text"
+                      placeholder="Enter account number"
+                      value={bankDetails.accountNumber}
+                      onChange={handleBankDetailsChange}
+                      maxLength={18}
+                      className="w-full"
+                    />
+                    <p className="text-xs text-gray-500">9-18 digits</p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="ifscCode">IFSC Code *</Label>
+                    <Input
+                      id="ifscCode"
+                      name="ifscCode"
+                      type="text"
+                      placeholder="e.g., SBIN0001234"
+                      value={bankDetails.ifscCode}
+                      onChange={(e) => {
+                        const value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 11);
+                        setBankDetails((prev) => ({ ...prev, ifscCode: value }));
+                      }}
+                      maxLength={11}
+                      className="w-full uppercase"
+                    />
+                    <p className="text-xs text-gray-500">Format: ABCD0XXXXXX</p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="bankName">Bank Name *</Label>
+                    <Input
+                      id="bankName"
+                      name="bankName"
+                      type="text"
+                      placeholder="Enter bank name"
+                      value={bankDetails.bankName}
+                      onChange={handleBankDetailsChange}
+                      className="w-full"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="branchName">Branch Name</Label>
+                    <Input
+                      id="branchName"
+                      name="branchName"
+                      type="text"
+                      placeholder="Enter branch name (optional)"
+                      value={bankDetails.branchName}
+                      onChange={handleBankDetailsChange}
+                      className="w-full"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="accountType">Account Type *</Label>
+                    <Select
+                      value={bankDetails.accountType}
+                      onValueChange={(value) =>
+                        setBankDetails((prev) => ({ ...prev, accountType: value }))
+                      }
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select account type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Savings">Savings</SelectItem>
+                        <SelectItem value="Current">Current</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="panCard">PAN Card Number *</Label>
+                    <Input
+                      id="panCard"
+                      name="panCard"
+                      type="text"
+                      placeholder="e.g., ABCDE1234F"
+                      value={bankDetails.panCard}
+                      onChange={(e) => {
+                        const value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 10);
+                        setBankDetails((prev) => ({ ...prev, panCard: value }));
+                      }}
+                      maxLength={10}
+                      className="w-full uppercase"
+                    />
+                    <p className="text-xs text-gray-500">Format: ABCDE1234F (5 letters, 4 digits, 1 letter)</p>
+                  </div>
+                </div>
+              </div>
+              <div className="flex gap-3 pt-4 border-t flex-shrink-0 mt-4">
+                <Button
+                  onClick={handleSaveBankDetails}
+                  disabled={isSavingBankDetails}
+                  className="flex-1 bg-orange-600 hover:bg-orange-700"
+                >
+                  {isSavingBankDetails ? (
+                    <>
+                      <span className="animate-spin mr-2">⏳</span>
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="h-4 w-4 mr-2" />
+                      {bankDetails.accountNumber ? "Update Details" : "Save Details"}
+                    </>
+                  )}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setIsBankDialogOpen(false)}
+                  disabled={isSavingBankDetails}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+          </div>
         </div>
 
-        <Card className="border-0  mb-8">
+        <Card className="border-0 mb-8">
           <CardHeader>
             <CardTitle>Invite Students</CardTitle>
             <CardDescription>

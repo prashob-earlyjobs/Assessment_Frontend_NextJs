@@ -28,6 +28,7 @@ import {
   getAssessmentLink,
   storeAssessmentDetailsApi,
   matchAssessmentsDetails,
+  createZohoBooksInvoice,
 } from "../../components/services/servicesapis";
 import { useRazorpay, RazorpayOrderOptions } from "react-razorpay";
 import { useUser } from "../../context";
@@ -235,7 +236,54 @@ const Assessment = () => {
       isPremium: assessmentData.isPremium || false,
     };
     try {
+      // Save transaction first
       await addCandidateTransaction(userCredentials._id, id, details);
+
+      // Generate invoice in Zoho Books if payment amount is greater than 0
+      if (finalAssessmentFee > 0 && paymentId && paymentId !== `FREE-${Date.now()}`) {
+        try {
+          const invoiceData = {
+            customerName: userCredentials.name || "Customer",
+            customerEmail: userCredentials.email || "",
+            customerPhone: userCredentials.mobile || "",
+            customerAddress: userCredentials.profile?.address ? {
+              address: userCredentials.profile.address.street || "",
+              city: userCredentials.profile.address.city || "",
+              state: userCredentials.profile.address.state || "",
+              country: userCredentials.profile.address.country || "India",
+              zip: userCredentials.profile.address.zipCode || "",
+            } : undefined,
+            items: [
+              {
+                name: assessmentData.title || "Assessment Fee",
+                description: `Assessment: ${assessmentData.title || "Assessment"}`,
+                rate: finalAssessmentFee,
+                quantity: 1,
+                tax: 18, // 18% GST - adjust as needed
+              },
+            ],
+            transactionId: details.transactionId,
+            paymentId: paymentId,
+            amount: finalAssessmentFee,
+            currency: "INR",
+            notes: offerApplied ? `Discount applied: ${offerCode}` : "",
+            terms: "Payment received via Razorpay",
+          };
+
+          const invoiceResult = await createZohoBooksInvoice(invoiceData);
+          
+          if (invoiceResult.success) {
+            console.log("Invoice created successfully:", invoiceResult.invoiceNumber);
+            // Optionally store invoice ID in transaction details
+          } else {
+            console.error("Failed to create invoice:", invoiceResult.error);
+            // Don't show error to user as payment is already successful
+          }
+        } catch (invoiceError) {
+          console.error("Error creating Zoho Books invoice:", invoiceError);
+          // Don't block the flow if invoice creation fails
+        }
+      }
     } catch (error) {
       toast.error("Failed to record transaction. Please contact support.");
     }

@@ -48,8 +48,8 @@ export const isUserLoggedIn = async () => {
 };
 
 export const sendOtptoMobile = async (
-  { phoneNumber, email, franchiseId = "" },
-  tochangePassword = false
+  { phoneNumber, email, franchiseId = "", toLogin = false },
+  tochangePassword = false,
 ) => {
   try {
     const response = await axiosInstance.post("/auth/send-otp", {
@@ -57,6 +57,7 @@ export const sendOtptoMobile = async (
       email,
       franchiseId,
       tochangePassword,
+      toLogin,
     });
 
     return {
@@ -67,16 +68,19 @@ export const sendOtptoMobile = async (
     return {
       success: false,
       message: error.response?.data?.message || "Error sending OTP",
+      statusCode: error.response?.status,
+      data: error.response?.data,
     };
   }
 };
 
-export const verifyOtpMobile = async ({ phoneNumber, email, otp }) => {
+export const verifyOtpMobile = async ({ phoneNumber, email, otp, toLogin = false }) => {
   try {
     const response = await axiosInstance.post("/auth/verify-otp", {
       phoneNumber,
       email,
       otp,
+      toLogin,
     });
 
     return response.data;
@@ -91,21 +95,30 @@ export const userSignup = async ({
   mobile,
   password,
   referrerId,
-
+  experienceLevel,
+  currentCity,
+  role,
 }: {
   email: string;
-  password: string;
+  password?: string;
   name: string;
   mobile: string;
-  referrerId?: string; // optional referral id captured from `ref`
-
+  referrerId?: string;
+  experienceLevel?: string;
+  currentCity?: string;
+  role: string;
 }) => {
   try {
-    const payload: any = { email, password, name, mobile };
-    if (referrerId) payload.referrerId = referrerId;
-
-
-    const response = await axiosInstance.post("/auth/register", payload);
+    const response = await axiosInstance.post("/auth/register", {
+      email,
+      password: password || "",
+      name,
+      mobile,
+      experienceLevel,
+      currentCity,
+      referrerId,
+      role,
+    });
     const data = response.data;
     const accessToken = data.data.accessToken; // Corrected destructuring
 
@@ -208,6 +221,19 @@ export const updateProfile = async (profileData) => {
   } catch (error) {
     toast.error(`${error?.response?.data?.message}.`);
 
+    return error;
+  }
+};
+
+export const updateBankDetails = async (bankDetailsData) => {
+  try {
+    const response = await axiosInstance.put(
+      "/auth/update-bank-details",
+      bankDetailsData
+    );
+    return response.data;
+  } catch (error) {
+    toast.error(`${error?.response?.data?.message || "Failed to update bank details"}.`);
     return error;
   }
 };
@@ -444,6 +470,76 @@ export const getTransactions = async (userId: string) => {
     return error;
   }
 };
+
+/**
+ * Create invoice in Zoho Books after successful payment
+ * @param invoiceData - Invoice data including customer details, items, and payment info
+ * @returns Promise with invoice creation response
+ */
+export const createZohoBooksInvoice = async (invoiceData: {
+  customerName: string;
+  customerEmail: string;
+  customerPhone?: string;
+  customerAddress?: {
+    address?: string;
+    city?: string;
+    state?: string;
+    country?: string;
+    zip?: string;
+  };
+  items: Array<{
+    name: string;
+    description?: string;
+    rate: number;
+    quantity: number;
+    tax?: number;
+  }>;
+  transactionId: string;
+  paymentId: string;
+  amount: number;
+  currency?: string;
+  notes?: string;
+  terms?: string;
+}) => {
+  try {
+    const response = await axiosInstance.post("/zoho-books/create-invoice", {
+      customer_name: invoiceData.customerName,
+      customer_email: invoiceData.customerEmail,
+      customer_phone: invoiceData.customerPhone,
+      customer_address: invoiceData.customerAddress,
+      line_items: invoiceData.items.map((item) => ({
+        name: item.name,
+        description: item.description || "",
+        rate: item.rate,
+        quantity: item.quantity,
+        tax_id: item.tax || null,
+      })),
+      transaction_id: invoiceData.transactionId,
+      payment_id: invoiceData.paymentId,
+      total: invoiceData.amount,
+      currency_code: invoiceData.currency || "INR",
+      notes: invoiceData.notes || "",
+      terms: invoiceData.terms || "",
+    });
+
+    return {
+      success: true,
+      data: response.data,
+      invoiceId: response.data?.data?.invoice_id || response.data?.invoice_id,
+      invoiceNumber: response.data?.data?.invoice_number || response.data?.invoice_number,
+      invoiceUrl: response.data?.data?.invoice_url || response.data?.invoice_url,
+    };
+  } catch (error: any) {
+    console.error("Zoho Books invoice creation error:", error);
+    // Don't show toast error as this is a background operation
+    // The payment is already successful, invoice generation failure shouldn't block the user
+    return {
+      success: false,
+      error: error?.response?.data?.message || error?.message || "Failed to create invoice in Zoho Books",
+      data: error?.response?.data,
+    };
+  }
+};
 export const getTransactionsForSprAdmin = async (page = 1, limit = 10) => {
   try {
     const response = await axiosInstance.get(`/admin/getTransactions`, {
@@ -575,6 +671,65 @@ export const addOffer = async (offerData) => {
   } catch (error) {
     toast.error(`${error?.response?.data?.message || "Failed to add offer"}.`);
     throw error;
+  }
+};
+
+export const createCreatorCoupons = async (referrerId: string) => {
+  try {
+    const coupons = [
+      {
+        code: `${referrerId}05`,
+        discountType: "percentage",
+        discountValue: 5,
+        maxUsage: 5,
+        expiresAt: "2025-12-31T23:59:59.000Z",
+        isActive: true,
+        minOrderValue: 0,
+      },
+      {
+        code: `${referrerId}10`,
+        discountType: "percentage",
+        discountValue: 10,
+        maxUsage: 5,
+        expiresAt: "2025-12-31T23:59:59.000Z",
+        isActive: true,
+        minOrderValue: 0,
+      },
+      {
+        code: `${referrerId}15`,
+        discountType: "percentage",
+        discountValue: 15,
+        maxUsage: 5,
+        expiresAt: "2025-12-31T23:59:59.000Z",
+        isActive: true,
+        minOrderValue: 0,
+      },
+    ];
+
+    // Create coupons directly using axiosInstance to avoid multiple toast notifications
+    const results = await Promise.all(
+      coupons.map(async (coupon) => {
+        try {
+          const response = await axiosInstance.post("/offers", coupon);
+          return response.data;
+        } catch (error) {
+          console.error(`Error creating coupon ${coupon.code}:`, error);
+          throw error;
+        }
+      })
+    );
+
+    return {
+      success: true,
+      data: results,
+    };
+  } catch (error) {
+    console.error("Error creating creator coupons:", error);
+    return {
+      success: false,
+      message: error?.response?.data?.message || "Failed to create creator coupons",
+      error,
+    };
   }
 };
 

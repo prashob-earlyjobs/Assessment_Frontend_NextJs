@@ -709,10 +709,16 @@ const Onboarding = () => {
                       alt="Profile"
                     />
                     <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white text-xl">
-                      {userCredentials.name.charAt(0)?.toUpperCase() || "U"}
+                      {userCredentials?.name?.charAt(0)?.toUpperCase() || "U"}
                     </AvatarFallback>
                   </Avatar>
-                  <div className="space-y-2">
+                  <div className="flex-1 space-y-2">
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-900">
+                        {userCredentials?.name || "Candidate"}
+                      </h3>
+                      <p className="text-sm text-gray-500">{userCredentials?.email || ""}</p>
+                    </div>
                     <Button
                       variant="outline"
                       className="rounded-2xl border-gray-300 hover:bg-orange-100 focus:bg-orange-200"

@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 
 export interface UserCredentials {
-  role: 'candidate' | 'recruiter' | 'franchise' | 'super_admin' | 'franchise_admin';
+  role: 'candidate' | 'recruiter' | 'franchise' | 'super_admin' | 'franchise_admin' | 'creator';
   authProvider: string;
   avatar: string;
   createdAt: string;
@@ -41,6 +41,15 @@ export interface UserCredentials {
   updatedAt: string;
   franchiserId: string | null;
   referrerId: string | null;
+  bankAccountDetails?: {
+    accountHolderName: string;
+    accountNumber: string;
+    ifscCode: string;
+    bankName: string;
+    branchName: string;
+    accountType: string;
+    panCard: string;
+  };
   _id: string;
 }
 
