@@ -55,6 +55,8 @@ interface JobDetailsData {
   isExternal?: boolean;
 }
 interface ICreateApplicantRequestBody {
+  tpoId?: string;
+  source?: string;
   fullName: string;
   phone: string;
   email: string;
@@ -68,6 +70,7 @@ interface ICreateApplicantRequestBody {
   totalExperienceYears: number;
   totalExperienceMonths: number;
   skills: string[];
+  workMode?: string[];
   jobId: string;
   isExternalJob: boolean;
   certificateId: string;
@@ -87,6 +90,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
+  const WORK_MODE_OPTIONS = ["remote", "hybrid", "on-site"] as const;
   const [applicationForm, setApplicationForm] = useState({
     fullName: '',
     fatherName: '',
@@ -102,7 +106,8 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
     skills: [] as string[],
     newSkill: '',
     spokenLanguages: [] as string[],
-    showLanguageDropdown: false
+    showLanguageDropdown: false,
+    workMode: [] as string[],
   });
   const [certificateNumber, setCertificateNumber] = useState(`EJ-CERT-${new Date().getFullYear()}-`);
   const [certificateVerified, setCertificateVerified] = useState(false);
@@ -320,6 +325,15 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
     }));
   };
 
+  const handleWorkModeToggle = (mode: string, checked: boolean) => {
+    setApplicationForm(prev => ({
+      ...prev,
+      workMode: checked
+        ? Array.from(new Set([...prev.workMode, mode]))
+        : prev.workMode.filter(selectedMode => selectedMode !== mode),
+    }));
+  };
+
   const handleSubmitApplication = async () => {
   // Form validation
   if (!applicationForm.fullName.trim()) {
@@ -434,8 +448,11 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
       totalExperienceYears,
       totalExperienceMonths,
       skills: applicationForm.skills,
+      workMode: applicationForm.workMode,
       isExternalJob: jobData?.isExternal || false,
       certificateId: jobData?.isExternal ? certificateData?._id : undefined,
+      tpoId: searchParams.get("tpoId") || undefined,
+      source: searchParams.get("source") || undefined,
     };
 
 
@@ -491,6 +508,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
           newSkill: '',
           spokenLanguages: [],
           showLanguageDropdown: false,
+          workMode: [],
         });
       }
     } else {
@@ -1036,6 +1054,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                     onChange={(e) => setApplicationForm(prev => ({ ...prev, phone: e.target.value }))}
                     required
                     className="border-gray-200/50 focus:border-gray-300/70"
+                    maxLength={10}
                   />
                 </div>
 
@@ -1138,14 +1157,55 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                     <div className="flex-1">
                       <Input
                         type="number"
+                        min="0"
+                        inputMode="numeric"
                         placeholder="Ex: 5"
                         value={applicationForm.experienceMonths}
-                        onChange={(e) => setApplicationForm(prev => ({ ...prev, experienceMonths: e.target.value }))}
-                        required
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/\D/g, ''); // only digits
+                          setApplicationForm(prev => ({ ...prev, experienceMonths: value }));
+                        }}
+                        onWheel={(e) => e.currentTarget.blur()} // disable scroll increment/decrement
                         className="border-gray-200/50 focus:border-gray-300/70"
+                        style={{
+                          appearance: 'textfield',    // Safari/Chrome
+                          MozAppearance: 'textfield', // Firefox
+                          WebkitAppearance: 'none',   // Chrome/Edge
+                        }}
                       />
                       <span className="text-sm text-gray-500">Months</span>
                     </div>
+                  </div>
+                </div>
+
+                {/* Work Mode */}
+                <div className="col-span-1 sm:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Preferred Work Mode
+                  </label>
+                  <div className="flex flex-wrap gap-4">
+                    {WORK_MODE_OPTIONS.map((mode) => {
+                      const label =
+                        mode === "on-site"
+                          ? "On-site"
+                          : mode.charAt(0).toUpperCase() + mode.slice(1);
+                      return (
+                        <label
+                          key={mode}
+                          htmlFor={`work-mode-${mode}`}
+                          className="flex items-center gap-2 text-sm text-gray-700"
+                        >
+                          <Checkbox
+                            id={`work-mode-${mode}`}
+                            checked={applicationForm.workMode.includes(mode)}
+                            onCheckedChange={(checked) =>
+                              handleWorkModeToggle(mode, Boolean(checked))
+                            }
+                          />
+                          {label}
+                        </label>
+                      );
+                    })}
                   </div>
                 </div>
               </div>

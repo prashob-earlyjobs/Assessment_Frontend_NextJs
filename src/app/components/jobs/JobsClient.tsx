@@ -1,13 +1,6 @@
 "use client";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import {
-  useState,
-  useEffect,
-  useLayoutEffect,
-  useCallback,
-  useRef,
-  useMemo,
-} from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import Header from "../layout/Header";
 import FilterSidebar from "./FilterSidebar";
 import JobCard from "./JobCard";
@@ -81,6 +74,7 @@ interface JobDetailsData {
 const JobsClient = () => {
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   
   const [searchInput, setSearchInput] = useState(() => {
@@ -106,7 +100,7 @@ const JobsClient = () => {
   const [workType, setWorkType] = useState<string[]>([]);
   const [salaryRange, setSalaryRange] = useState<string[]>([]);
   const [experienceRange, setExperienceRange] = useState<string[]>([]);
-  const searchParams = useSearchParams();
+  const [tpoId, setTpoId] = useState<string | null>(() => searchParams.get("tpoId"));
 
   // Sidebar visibility states for mobile/tablet
   const [isFilterSidebarOpen, setIsFilterSidebarOpen] = useState(false);
@@ -131,6 +125,7 @@ const JobsClient = () => {
     workType,
     salaryRange,
     experienceRange,
+    tpoId,
   });
 
   // Update refs when state changes
@@ -146,8 +141,9 @@ const JobsClient = () => {
       workType,
       salaryRange,
       experienceRange,
+      tpoId,
     };
-  }, [companyName, location, title, searchInput, currentPage, sortBy, employmentType, workType, salaryRange, experienceRange]);
+  }, [companyName, location, title, searchInput, currentPage, sortBy, employmentType, workType, salaryRange, experienceRange, tpoId]);
 
   console.log("Jobs component mounted, backendUrl:", backendUrl);
 
@@ -158,7 +154,7 @@ const JobsClient = () => {
       setLoading(true);
       console.log("Fetching jobs...");
 
-      const { companyName, location, title, searchInput, currentPage, employmentType, workType, salaryRange, experienceRange } = filtersRef.current;
+      const { companyName, location, title, searchInput, currentPage, employmentType, workType, salaryRange, experienceRange, tpoId } = filtersRef.current;
 
       const params = new URLSearchParams();
       if (companyName) params.append("company", companyName);
@@ -187,12 +183,15 @@ const JobsClient = () => {
       if (experienceRange.length > 0) {
         params.append("experience", experienceRange.join(","));
       }
+      if (tpoId) {
+        params.append("tpoId", tpoId);
+      }
       params.append("page", currentPage.toString());
       params.append("pageSize", pageSize.toString());
       params.append("status", "published");
 
-      const url = `${backendUrl}/public/jobs?${params.toString()}`;
-      console.log("API URL:", url);
+      // const url = `${backendUrl}/public/jobs?${params.toString()}`;
+       const url =(tpoId && typeof tpoId === 'string') ? `${backendUrl}/public/jobs/tpo?${params.toString()}` : `${backendUrl}/public/jobs?${params.toString()}`;
 
       const response = await fetch(url);
       console.log("Response received:", response);
@@ -268,6 +267,7 @@ const JobsClient = () => {
   
   useEffect(() => {
     const keywordFromUrl = searchParams.get("search") || ""; // read 'search' param
+    const tpoIdFromUrl = searchParams.get("tpoId");
     const normalizedSearchKeyword = keywordFromUrl
     .replace(/dot/g, ".")      // "dot" → "."
     .replace(/-/g, " ");
@@ -275,6 +275,7 @@ const JobsClient = () => {
     if (normalizedSearchKeyword) {
       setSearchInput(normalizedSearchKeyword);
     }
+    setTpoId(tpoIdFromUrl);
   }, [searchParams]);
 
 
@@ -292,13 +293,22 @@ const JobsClient = () => {
     router.replace(`?${params.toString()}`); // replace to avoid adding history entries
   }, [searchInput]);
   // Call fetchJobs on component mount
-  useLayoutEffect(() => {
+  const initialFetchRef = useRef(false);
+  useEffect(() => {
+    if (initialFetchRef.current) return;
+    initialFetchRef.current = true;
     console.log("=== Component mounted, calling fetchJobs... ===");
     fetchJobs();
   }, [fetchJobs]);
 
   // Debounced search effect
+  const skipFirstFiltersRef = useRef(true);
   useEffect(() => {
+    if (skipFirstFiltersRef.current) {
+      skipFirstFiltersRef.current = false;
+      return;
+    }
+
     const timer = setTimeout(() => {
       if (currentPage === 1) {
         fetchJobs();
@@ -312,7 +322,12 @@ const JobsClient = () => {
 
   
   // Fetch when page changes
+  const skipFirstPageRef = useRef(true);
   useEffect(() => {
+    if (skipFirstPageRef.current) {
+      skipFirstPageRef.current = false;
+      return;
+    }
     fetchJobs();
   }, [currentPage, fetchJobs]);
 
@@ -323,14 +338,17 @@ const JobsClient = () => {
   };
 
   const handleJobClick = async (jobId: string) => {
+    console.log("handleJobClick called with jobId:", jobId);
     const job = jobsData.find((j) => j.jobId === jobId);
     const jobTitle = job?.title?.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "") || "job";
 
-    if (job) {
-      router.push(`/jobs/${jobTitle}/${jobId}`);
-    } else {
-      router.push(`/jobs/job/${jobId}`);
+    if (tpoId) {
+      router.push(job ? `/jobs/${jobTitle}/${jobId}?tpoId=${tpoId}&source=campus-drive` : `/jobs/job/${jobId}?tpoId=${tpoId}&source=campus-drive`);
     }
+    else {
+      router.push(job ? `/jobs/${jobTitle}/${jobId}` : `/jobs/job/${jobId}`);
+    }
+
   };
 
   // Toggle sidebar visibility
