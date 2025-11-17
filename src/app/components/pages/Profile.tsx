@@ -63,6 +63,88 @@ const Profile = () => {
 
   const [newSkill, setNewSkill] = useState("");
   const [newLanguage, setNewLanguage] = useState("");
+
+  // Helper function to format date for HTML date input (YYYY-MM-DD)
+  const formatDateForInput = (date: string | null | undefined): string => {
+    if (!date) return "";
+    try {
+      // If date is already in YYYY-MM-DD format, return as is
+      if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+        return date;
+      }
+      // Handle ISO date strings (e.g., "2024-01-15T00:00:00.000Z" or "2024-01-15T00:00:00")
+      // Extract just the date part if it's an ISO string
+      if (date.includes('T')) {
+        const datePart = date.split('T')[0];
+        if (/^\d{4}-\d{2}-\d{2}$/.test(datePart)) {
+          return datePart;
+        }
+      }
+      // Parse the date and format it
+      const dateObj = new Date(date);
+      if (isNaN(dateObj.getTime())) {
+        return "";
+      }
+      const year = dateObj.getFullYear();
+      const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+      const day = String(dateObj.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    } catch (error) {
+      console.error("Error formatting date:", error, "Date value:", date);
+      return "";
+    }
+  };
+
+  // Helper function to format work experience dates
+  const formatWorkExperienceDates = (workExp: Array<any>) => {
+    if (!Array.isArray(workExp)) return workExp;
+    return workExp.map((exp) => ({
+      ...exp,
+      id: exp._id,
+      startDate: formatDateForInput(exp.startDate),
+      endDate: formatDateForInput(exp.endDate),
+    }));
+  };
+
+  // Helper function to sort work experience by start date (most recent first)
+  // Currently working experiences are placed at the top
+  const sortWorkExperience = (workExp: Array<{
+    id: string;
+    company: string;
+    jobTitle: string;
+    startDate: string;
+    endDate: string;
+    currentlyWorking: boolean;
+    description: string;
+    location: string;
+  }>) => {
+    if (!Array.isArray(workExp) || workExp.length === 0) return workExp;
+    
+    return [...workExp].sort((a, b) => {
+      // First, prioritize currently working experiences
+      if (a.currentlyWorking && !b.currentlyWorking) return -1;
+      if (!a.currentlyWorking && b.currentlyWorking) return 1;
+      
+      // If both have start dates, sort by start date (most recent first)
+      if (a.startDate && b.startDate) {
+        const dateA = new Date(a.startDate).getTime();
+        const dateB = new Date(b.startDate).getTime();
+        // Check for invalid dates
+        if (isNaN(dateA) && isNaN(dateB)) return 0;
+        if (isNaN(dateA)) return 1; // Put invalid dates at the end
+        if (isNaN(dateB)) return -1;
+        return dateB - dateA; // Most recent first
+      }
+      
+      // If only one has a start date, prioritize it
+      if (a.startDate && !b.startDate) return -1;
+      if (!a.startDate && b.startDate) return 1;
+      
+      // If neither has a start date, maintain original order
+      return 0;
+    });
+  };
+
   const [profileData, setProfileData] = useState({
     name: "",
     email: "",
@@ -149,13 +231,17 @@ const Profile = () => {
                     fieldOfStudy: "",
                   },
                 ],
-              workExperience: Array.isArray(response.user.profile.professionalInformation?.workExperience)
-                ? response.user.profile.professionalInformation.workExperience
-                : Array.isArray(response.user.profile.experience)
-                ? response.user.profile.experience
-                : Array.isArray(response.user.profile.workExperience)
-                ? response.user.profile.workExperience
-                : [],
+              workExperience: sortWorkExperience(
+                formatWorkExperienceDates(
+                  Array.isArray(response.user.profile.professionalInformation?.workExperience)
+                    ? response.user.profile.professionalInformation.workExperience
+                    : Array.isArray(response.user.profile.experience)
+                    ? response.user.profile.experience
+                    : Array.isArray(response.user.profile.workExperience)
+                    ? response.user.profile.workExperience
+                    : []
+                )
+              ),
             },
             languages: Array.isArray(response.user.profile.languages)
               ? response.user.profile.languages.map((lang: any) => {
@@ -185,7 +271,7 @@ const Profile = () => {
   // Scroll spy effect to track active section
   useEffect(() => {
     let scrollHandler: (() => void) | null = null;
-    
+    console.log("profileData", profileData);
     const timeoutId = setTimeout(() => {
       scrollHandler = () => {
         if (isManualScrollRef.current) return;
@@ -368,8 +454,8 @@ const Profile = () => {
   ) => {
     const file = event.target.files?.[0];
     if (file) {
-      if (file.size > 10 * 1024 * 1024) {
-        toast.error("Resume size should be less than 10MB");
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Resume size should be less than 5MB");
         return;
       }
       try {
@@ -539,36 +625,65 @@ const Profile = () => {
       description: "",
       location: "",
     };
-    setProfileData((prev) => ({
-      ...prev,
-      profile: {
-        ...prev.profile,
-        professionalInformation: {
-          ...prev.profile.professionalInformation,
-          workExperience: Array.isArray(prev.profile.professionalInformation.workExperience)
-            ? [...prev.profile.professionalInformation.workExperience, newWorkExp]
-            : [newWorkExp],
+    setProfileData((prev) => {
+      const currentWorkExp = Array.isArray(prev.profile.professionalInformation.workExperience)
+        ? prev.profile.professionalInformation.workExperience
+        : [];
+      const updatedWorkExp = [...currentWorkExp, newWorkExp];
+      return {
+        ...prev,
+        profile: {
+          ...prev.profile,
+          professionalInformation: {
+            ...prev.profile.professionalInformation,
+            workExperience: sortWorkExperience(updatedWorkExp),
+          },
         },
-      },
-    }));
+      };
+    });
     toast.success("New work experience entry added!");
   };
 
   const updateWorkExperience = (id: string, field: string, value: string | boolean) => {
-    setProfileData((prev) => ({
-      ...prev,
-      profile: {
-        ...prev.profile,
-        professionalInformation: {
-          ...prev.profile.professionalInformation,
-          workExperience: Array.isArray(prev.profile.professionalInformation.workExperience)
-            ? prev.profile.professionalInformation.workExperience.map((exp) =>
-                exp.id === id ? { ...exp, [field]: value } : exp
-              )
-            : [],
+    setProfileData((prev) => {
+      const workExp = Array.isArray(prev.profile.professionalInformation.workExperience)
+        ? prev.profile.professionalInformation.workExperience
+        : [];
+      
+      // If "currentlyWorking" is being set to true, uncheck all other entries
+      if (field === "currentlyWorking" && value === true) {
+        const updatedWorkExp = workExp.map((exp) =>
+          exp.id === id 
+            ? { ...exp, [field]: value } 
+            : { ...exp, currentlyWorking: false }
+        );
+        return {
+          ...prev,
+          profile: {
+            ...prev.profile,
+            professionalInformation: {
+              ...prev.profile.professionalInformation,
+              workExperience: sortWorkExperience(updatedWorkExp),
+            },
+          },
+        };
+      }
+      
+      // For other fields, update normally
+      const updatedWorkExp = workExp.map((exp) =>
+        exp.id === id ? { ...exp, [field]: value } : exp
+      );
+      return {
+        ...prev,
+        profile: {
+          ...prev.profile,
+          professionalInformation: {
+            ...prev.profile.professionalInformation,
+            workExperience: sortWorkExperience(updatedWorkExp),
+          },
         },
-      },
-    }));
+      };
+    });
   };
 
   const removeWorkExperience = (id: string) => {
@@ -644,12 +759,161 @@ const Profile = () => {
     try {
       const payload = { ...profileData,email:profileData.email,mobile:profileData.mobile };
       
-      // Remove id from workExperience objects before sending to backend
+      // Validate education entries: check if any entry has empty fields
+      if (payload.profile?.professionalInformation?.education) {
+        // Helper function to check if a field has a value
+        const hasValue = (field: any) => {
+          if (field === null || field === undefined) return false;
+          const strValue = typeof field === 'string' ? field.trim() : String(field).trim();
+          return strValue !== '';
+        };
+        
+        // Check each education entry for incomplete fields
+        for (const edu of payload.profile.professionalInformation.education) {
+          const hasDegree = hasValue(edu.degree);
+          const hasInstitution = hasValue(edu.institution);
+          const hasYear = hasValue(edu.year);
+          const hasPercentage = hasValue(edu.percentage);
+          const hasFieldOfStudy = hasValue(edu.fieldOfStudy);
+          
+          // Check if any field is filled (not completely empty)
+          const hasAnyField = hasDegree || hasInstitution || hasYear || hasPercentage || hasFieldOfStudy;
+          
+          // If any field is filled but not all fields are filled, show error
+          if (hasAnyField && (!hasDegree || !hasInstitution || !hasYear || !hasPercentage || !hasFieldOfStudy)) {
+            toast.error("Please fill all fields in Education section or leave all fields empty");
+            return;
+          }
+        }
+        
+        // Filter education entries: only include fully filled entries, exclude completely empty ones
+        payload.profile.professionalInformation.education = payload.profile.professionalInformation.education
+          .map((edu: any) => {
+            const { id, ...eduWithoutId } = edu;
+            return eduWithoutId;
+          })
+          .filter((edu: any) => {
+            // Only include if all fields are filled (exclude completely empty entries)
+            return hasValue(edu.degree) && 
+                   hasValue(edu.institution) && 
+                   hasValue(edu.year) && 
+                   hasValue(edu.percentage) && 
+                   hasValue(edu.fieldOfStudy);
+          });
+        
+        // If no valid education entries remain, set to empty array
+        if (payload.profile.professionalInformation.education.length === 0) {
+          payload.profile.professionalInformation.education = [];
+        }
+      }
+      
+      // Validate work experience entries: check if any entry has empty required fields
       if (payload.profile?.professionalInformation?.workExperience) {
-        payload.profile.professionalInformation.workExperience = payload.profile.professionalInformation.workExperience.map((exp: any) => {
-          const { id, ...expWithoutId } = exp;
-          return expWithoutId;
-        });
+        // Helper function to check if a field has a value
+        const hasValue = (field: any) => {
+          if (field === null || field === undefined) return false;
+          const strValue = typeof field === 'string' ? field.trim() : String(field).trim();
+          return strValue !== '';
+        };
+        
+        // Check that only one entry has "Currently Working" checked
+        const currentlyWorkingEntries = payload.profile.professionalInformation.workExperience.filter(
+          (exp: any) => exp.currentlyWorking === true
+        );
+        if (currentlyWorkingEntries.length > 1) {
+          toast.error("Only one work experience entry can be marked as 'Currently Working Here'");
+          return;
+        }
+        
+        // Check each work experience entry for incomplete required fields and date validations
+        for (let i = 0; i < payload.profile.professionalInformation.workExperience.length; i++) {
+          const exp = payload.profile.professionalInformation.workExperience[i];
+          const hasCompany = hasValue(exp.company);
+          const hasJobTitle = hasValue(exp.jobTitle);
+          const hasStartDate = hasValue(exp.startDate);
+          const hasEndDate = hasValue(exp.endDate);
+          const hasLocation = hasValue(exp.location);
+          const currentlyWorking = exp.currentlyWorking === true;
+          
+          // Check if any required field is filled (not completely empty)
+          const hasAnyRequiredField = hasCompany || hasJobTitle || hasStartDate || hasEndDate || hasLocation;
+          
+          // Required fields: company, jobTitle, startDate, location, and endDate (unless currentlyWorking)
+          const allRequiredFieldsFilled = hasCompany && 
+                                         hasJobTitle && 
+                                         hasStartDate && 
+                                         hasLocation && 
+                                         (currentlyWorking || hasEndDate);
+          
+          // If any required field is filled but not all required fields are filled, show error
+          if (hasAnyRequiredField && !allRequiredFieldsFilled) {
+            toast.error("Please fill all required fields in Work Experience section or leave all fields empty");
+            return;
+          }
+          
+          // Date validations (only if entry has required fields filled)
+          if (allRequiredFieldsFilled) {
+            // Validate start date and end date relationship
+            if (hasStartDate && hasEndDate && !currentlyWorking) {
+              const startDate = new Date(exp.startDate);
+              const endDate = new Date(exp.endDate);
+              
+              // Check if start date is after end date
+              if (startDate > endDate) {
+                toast.error(`Work Experience ${i + 1}: Start date must be before end date`);
+                return;
+              }
+              
+              // Check if end date is in the future
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+              if (endDate > today) {
+                toast.error(`Work Experience ${i + 1}: End date cannot be in the future`);
+                return;
+              }
+            }
+            
+            // Validate start date is not in the future (unless currently working)
+            if (hasStartDate) {
+              const startDate = new Date(exp.startDate);
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+              
+              // Allow start date to be today or in the future only if currently working
+              if (startDate > today && !currentlyWorking) {
+                toast.error(`Work Experience ${i + 1}: Start date cannot be in the future unless marked as currently working`);
+                return;
+              }
+            }
+          }
+        }
+        
+        // Filter work experience entries: only include fully filled entries, exclude completely empty ones
+        payload.profile.professionalInformation.workExperience = payload.profile.professionalInformation.workExperience
+          .map((exp: any) => {
+            const { id, ...expWithoutId } = exp;
+            return expWithoutId;
+          })
+          .filter((exp: any) => {
+            // Only include if all required fields are filled (description is optional)
+            const hasCompany = hasValue(exp.company);
+            const hasJobTitle = hasValue(exp.jobTitle);
+            const hasStartDate = hasValue(exp.startDate);
+            const hasEndDate = hasValue(exp.endDate);
+            const hasLocation = hasValue(exp.location);
+            const currentlyWorking = exp.currentlyWorking === true;
+            
+            return hasCompany && 
+                   hasJobTitle && 
+                   hasStartDate && 
+                   hasLocation && 
+                   (currentlyWorking || hasEndDate);
+          });
+        
+        // If no valid work experience entries remain, set to empty array
+        if (payload.profile.professionalInformation.workExperience.length === 0) {
+          payload.profile.professionalInformation.workExperience = [];
+        }
       }
       
       // Remove id from language objects before sending to backend
@@ -688,13 +952,17 @@ const Profile = () => {
                   fieldOfStudy: "",
                 },
               ],
-            workExperience: Array.isArray(response.data.user.profile.professionalInformation?.workExperience)
-              ? response.data.user.profile.professionalInformation.workExperience
-              : Array.isArray(response.data.user.profile.workExperience)
-              ? response.data.user.profile.workExperience
-              : Array.isArray(response.data.user.profile.experience)
-              ? response.data.user.profile.experience
-              : profileData.profile.professionalInformation.workExperience || [],
+            workExperience: sortWorkExperience(
+              formatWorkExperienceDates(
+                Array.isArray(response.data.user.profile.professionalInformation?.workExperience)
+                  ? response.data.user.profile.professionalInformation.workExperience
+                  : Array.isArray(response.data.user.profile.workExperience)
+                  ? response.data.user.profile.workExperience
+                  : Array.isArray(response.data.user.profile.experience)
+                  ? response.data.user.profile.experience
+                  : profileData.profile.professionalInformation.workExperience || []
+              )
+            ),
           },
         },
       };
@@ -887,7 +1155,7 @@ const Profile = () => {
                   className="hidden"
                 />
                 <p className="text-xs text-gray-500 mt-2">
-                  Supported formats: PDF, DOC, DOCX (Max: 10MB)
+                  Supported formats: PDF, DOC, DOCX (Max: 5MB)
                 </p>
               </div>
 
@@ -961,10 +1229,9 @@ const Profile = () => {
                 <Label htmlFor="bio">Bio</Label>
                 <Textarea
                   id="bio"
-                  readOnly
                   value={profileData.profile.bio}
                   onChange={(e) => handleInputChange("profile.bio", e.target.value)}
-                    className="rounded-lg min-h-[100px] cursor-not-allowed bg-gray-100 border-gray-300 focus:border-orange-500 focus:outline-none focus:ring-0 shadow-none w-full"
+                  className="rounded-lg min-h-[100px] border-gray-300 focus:border-orange-500 focus:outline-none focus:ring-0 shadow-none w-full"
                   placeholder="Tell us about yourself..."
                 />
               </div>
@@ -975,15 +1242,26 @@ const Profile = () => {
                   <Input
                     id="experience"
                     type="number"
+                    min="0"
                     value={
                       profileData.profile.professionalInformation?.experience || ""
                     }
-                    onChange={(e) =>
-                      handleInputChange(
-                        "profile.professionalInformation.experience",
-                        e.target.value
-                      )
-                    }
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      // Prevent negative values
+                      if (value === "" || (parseFloat(value) >= 0 && !isNaN(parseFloat(value)))) {
+                        handleInputChange(
+                          "profile.professionalInformation.experience",
+                          value
+                        );
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      // Prevent negative sign, minus key, and arrow down at minimum
+                      if (e.key === "-" || e.key === "e" || e.key === "E" || e.key === "+") {
+                        e.preventDefault();
+                      }
+                    }}
                     className="rounded-lg border-gray-300 focus:border-orange-500 w-full"
                   />
                 </div>
@@ -992,15 +1270,26 @@ const Profile = () => {
                   <Input
                     id="expectedSalary"
                     type="number"
+                    min="0"
                     value={
                       profileData.profile.professionalInformation?.expectedSalaryAnnual || ""
                     }
-                    onChange={(e) =>
-                      handleInputChange(
-                        "profile.professionalInformation.expectedSalaryAnnual",
-                        e.target.value
-                      )
-                    }
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      // Prevent negative values
+                      if (value === "" || (parseFloat(value) >= 0 && !isNaN(parseFloat(value)))) {
+                        handleInputChange(
+                          "profile.professionalInformation.expectedSalaryAnnual",
+                          value
+                        );
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      // Prevent negative sign, minus key, and arrow down at minimum
+                      if (e.key === "-" || e.key === "e" || e.key === "E" || e.key === "+") {
+                        e.preventDefault();
+                      }
+                    }}
                     className="rounded-lg border-gray-300 focus:border-orange-500 w-full"
                     placeholder="80000"
                   />
@@ -1268,7 +1557,7 @@ const Profile = () => {
             <CardContent className="space-y-6 overflow-x-hidden px-4 sm:p-6 pt-0">
               {Array.isArray(profileData.profile.professionalInformation?.workExperience) &&
                 profileData.profile.professionalInformation.workExperience.length > 0 &&
-                profileData.profile.professionalInformation.workExperience?.map((exp) => (
+                sortWorkExperience(profileData.profile.professionalInformation.workExperience)?.map((exp) => (
                   <div
                     key={exp.id}
                     className="p-4 border rounded-2xl relative bg-white shadow-md transition-all duration-200 border-gray-300 hover:shadow-lg w-full max-w-full overflow-x-hidden"
@@ -1319,10 +1608,11 @@ const Profile = () => {
                         <Label>Start Date</Label>
                         <Input
                           type="date"
-                          value={exp.startDate || ""}
+                          value={formatDateForInput(exp.startDate)}
                           onChange={(e) =>
                             updateWorkExperience(exp.id, "startDate", e.target.value)
                           }
+                          max={exp.currentlyWorking ? undefined : new Date().toISOString().split('T')[0]}
                           className="rounded-lg border-gray-300 focus:border-orange-500 w-full"
                         />
                       </div>
@@ -1330,10 +1620,12 @@ const Profile = () => {
                         <Label>End Date</Label>
                         <Input
                           type="date"
-                          value={exp.endDate || ""}
+                          value={formatDateForInput(exp.endDate)}
                           onChange={(e) =>
                             updateWorkExperience(exp.id, "endDate", e.target.value)
                           }
+                          min={formatDateForInput(exp.startDate) || undefined}
+                          max={new Date().toISOString().split('T')[0]}
                           className="rounded-lg border-gray-300 focus:border-orange-500 w-full"
                           disabled={exp.currentlyWorking}
                         />
