@@ -236,63 +236,81 @@ const Assessment = () => {
       isPremium: assessmentData.isPremium || false,
     };
     try {
-      // Save transaction first
       await addCandidateTransaction(userCredentials._id, id, details);
 
-      // Generate invoice in Zoho Books if payment amount is greater than 0
-      if (finalAssessmentFee > 0 && paymentId && paymentId !== `FREE-${Date.now()}`) {
+      if (finalAssessmentFee > 0 && paymentId) {
         try {
-          // Calculate due date (30 days from today)
           const invoiceDate = new Date();
           const dueDate = new Date();
           dueDate.setDate(dueDate.getDate() + 30);
 
-          const invoiceData = {
+          const discountValue = offerApplied ? Number(discountAmount || 0) : 0;
+          const grossBasePrice = Number(assessmentData.pricing?.basePrice) || 0;
+          const invoiceGrossTotal = Number(finalAssessmentFee || 0) + discountValue;
+
+          const baseAmount = grossBasePrice > 0 ? grossBasePrice : invoiceGrossTotal;
+
+          const invoiceLineItems = [
+            {
+              name: assessmentData.title || "Assessment Fee",
+              description: `Assessment: ${assessmentData.title || "Assessment"}`,
+              rate: baseAmount,
+              quantity: 1,
+              unit: "nos",
+            },
+          ];
+
+          if (discountValue > 0) {
+            invoiceLineItems.push({
+              name: "Discount",
+              description: `Offer ${offerCode}`,
+              rate: -discountValue,
+              quantity: 1,
+              unit: "nos",
+            });
+          }
+
+          const invoicePayload = {
             customerName: userCredentials.name || "Customer",
             customerEmail: userCredentials.email || "",
             customerPhone: userCredentials.mobile || "",
-            customerAddress: userCredentials.profile?.address ? {
-              street: userCredentials.profile.address.street || "",
-              city: userCredentials.profile.address.city || "",
-              state: userCredentials.profile.address.state || "",
-              country: userCredentials.profile.address.country || "India",
-              zipCode: userCredentials.profile.address.zipCode || "",
-            } : undefined,
-            lineItems: [
+            customerAddress: userCredentials.profile?.address
+              ? {
+                  street: userCredentials.profile.address.street || "",
+                  city: userCredentials.profile.address.city || "",
+                  state: userCredentials.profile.address.state || "",
+                  country: userCredentials.profile.address.country || "India",
+                  zipCode: userCredentials.profile.address.zipCode || "",
+                }
+              : undefined,
+            lineItems: invoiceLineItems,
+            invoiceDate: invoiceDate.toISOString().split("T")[0],
+            dueDate: dueDate.toISOString().split("T")[0],
+            paymentTerms: 30,
+            notes: offerApplied
+              ? `Payment for ${assessmentData.title || "Assessment"}. Discount applied: ${offerCode}`
+              : `Payment for ${assessmentData.title || "Assessment"}`,
+            referenceNumber: paymentId,
+            currencyCode: "INR",
+            paymentOptions: [
               {
-                name: assessmentData.title || "Assessment Fee",
-                description: `Assessment: ${assessmentData.title || "Assessment"}`,
-                rate: finalAssessmentFee,
-                quantity: 1,
-                unit: "nos",
+                method: "Razorpay",
+                reference: paymentId,
               },
             ],
-            invoiceDate: invoiceDate.toISOString().split('T')[0],
-            dueDate: dueDate.toISOString().split('T')[0],
-            paymentTerms: 30,
-            notes: offerApplied 
-              ? `Payment for ${assessmentData.title || "Assessment"}. Discount applied: ${offerCode}` 
-              : `Payment for ${assessmentData.title || "Assessment"}`,
-            referenceNumber: `TXN-${paymentId.substring(0, 8)}`,
-            currencyCode: "INR",
+            discountAmount: discountValue || undefined,
+            is_pre_gst: true,
+            totalPrice: baseAmount,
+            discountedPrice: Number(finalAssessmentFee || 0),
           };
 
-          const invoiceResult = await createZohoBooksInvoice(invoiceData);
-          
-          if (invoiceResult.success) {
-            console.log("Invoice created successfully:", {
-              invoiceNumber: invoiceResult.data?.invoiceNumber,
-              invoiceId: invoiceResult.data?.invoiceId,
-              invoiceUrl: invoiceResult.data?.invoiceUrl,
-            });
-            // Optionally store invoice ID in transaction details or show success message
-          } else {
-            console.error("Failed to create invoice:", invoiceResult.message || invoiceResult.error);
-            // Don't show error to user as payment is already successful
+          const invoiceResult = await createZohoBooksInvoice(invoicePayload);
+
+          if (!invoiceResult?.success) {
+            console.error("Zoho invoice creation failed:", invoiceResult);
           }
         } catch (invoiceError) {
-          console.error("Error creating Zoho Books invoice:", invoiceError);
-          // Don't block the flow if invoice creation fails
+          console.error("Zoho invoice creation error:", invoiceError);
         }
       }
     } catch (error) {

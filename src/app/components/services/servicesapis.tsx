@@ -502,10 +502,18 @@ export const createZohoBooksInvoice = async (invoiceData: {
   notes?: string;
   referenceNumber?: string;
   currencyCode?: string; // Defaults to "INR"
+  discountAmount?: number;
+  paymentOptions?: Array<{
+    method: string;
+    reference?: string;
+  }>;
+  is_pre_gst?: boolean;
+  totalPrice?: number;
+  discountedPrice?: number;
 }) => {
   try {
     // Prepare request body in simple format
-    const requestBody = {
+    const requestBody: Record<string, any> = {
       customerName: invoiceData.customerName,
       customerEmail: invoiceData.customerEmail,
       customerPhone: invoiceData.customerPhone,
@@ -530,6 +538,26 @@ export const createZohoBooksInvoice = async (invoiceData: {
       referenceNumber: invoiceData.referenceNumber,
       currencyCode: invoiceData.currencyCode || "INR",
     };
+
+    if (typeof invoiceData.discountAmount === "number") {
+      requestBody.discountAmount = invoiceData.discountAmount;
+    }
+
+    if (invoiceData.paymentOptions?.length) {
+      requestBody.paymentOptions = invoiceData.paymentOptions;
+    }
+
+    if (typeof invoiceData.is_pre_gst === "boolean") {
+      requestBody.is_pre_gst = invoiceData.is_pre_gst;
+    }
+
+    if (typeof invoiceData.totalPrice === "number") {
+      requestBody.totalPrice = invoiceData.totalPrice;
+    }
+
+    if (typeof invoiceData.discountedPrice === "number") {
+      requestBody.discountedPrice = invoiceData.discountedPrice;
+    }
 
     const response = await axiosInstance.post("/zoho/create-invoice", requestBody);
 
