@@ -156,6 +156,21 @@ const Footer = () => {
       >
         Coimbatore
       </p>
+
+      <p
+        onClick={()=>router.push("/franchise/ananthapur")}
+        className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
+      >
+        Ananthapur
+      </p>
+
+      <p
+        onClick={()=>router.push("/franchise/bangalore-urban")}
+        className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
+      >
+        Bangalore Urban
+      </p>
+
     </div>
   </div>
 
@@ -167,7 +182,6 @@ const Footer = () => {
         "Ghaziabad",
         "Chengalpattu",
         "Lucknow",
-        "Bangalore Urban",
         "Faridabad",
         "Bijapur",
         "Sonipat",
