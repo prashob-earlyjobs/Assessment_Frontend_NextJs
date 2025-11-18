@@ -1069,3 +1069,62 @@ export const verifyCertificate = async (certificateNumber) => {
     throw error;
   }
 };
+
+export const submitEnquiry = async (enquiryData: {
+  name: string;
+  mobile: string;
+  email: string;
+  expectations: string[];
+  remarks?: string;
+  source?: string;
+}) => {
+  try {
+    const response = await axiosInstance.post("/enquiries/submit", enquiryData);
+    return response.data;
+  } catch (error: any) {
+    toast.error(`${error?.response?.data?.message || "Failed to submit enquiry"}.`);
+    throw error;
+  }
+};
+
+export const getEnquiries = async (params?: {
+  page?: number;
+  limit?: number;
+  status?: 'pending' | 'contacted' | 'resolved' | 'closed';
+  search?: string;
+}) => {
+  try {
+    const response = await axiosInstance.get("/enquiries/list", {
+      params: params || {}
+    });
+    return response.data;
+  } catch (error: any) {
+    toast.error(`${error?.response?.data?.message || "Failed to fetch enquiries"}.`);
+    throw error;
+  }
+};
+
+export const getEnquiryById = async (enquiryId: string) => {
+  try {
+    const response = await axiosInstance.get(`/enquiries/${enquiryId}`);
+    return response.data;
+  } catch (error: any) {
+    toast.error(`${error?.response?.data?.message || "Failed to fetch enquiry"}.`);
+    throw error;
+  }
+};
+
+export const updateEnquiryStatus = async (
+  enquiryId: string,
+  status: 'pending' | 'contacted' | 'resolved' | 'closed'
+) => {
+  try {
+    const response = await axiosInstance.patch(`/enquiries/${enquiryId}/status`, {
+      status
+    });
+    return response.data;
+  } catch (error: any) {
+    toast.error(`${error?.response?.data?.message || "Failed to update enquiry status"}.`);
+    throw error;
+  }
+};
