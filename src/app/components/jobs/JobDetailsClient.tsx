@@ -340,6 +340,11 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
     toast.error("Full Name is required");
     return;
   }
+  if(!applicationForm.workMode?.length) {
+    toast.error("At least one work mode is required");
+    return;
+  }
+  
   if (!applicationForm.fatherName.trim()) {
     toast.error("Father Name is required");
     return;
