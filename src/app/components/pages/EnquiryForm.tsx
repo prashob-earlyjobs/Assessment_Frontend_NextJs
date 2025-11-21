@@ -332,13 +332,18 @@ const EnquiryForm: React.FC = () => {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-orange-600 hover:bg-orange-700 text-white font-semibold py-6 text-lg"
+                  className="w-full bg-orange-600 hover:bg-orange-700 text-white font-semibold py-8 text-lg disabled:opacity-70 disabled:cursor-not-allowed relative min-h-[64px]"
                 >
                   {isSubmitting ? (
-                    <>
-                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                      Submitting...
-                    </>
+                    <div className="flex flex-col items-center justify-center gap-4">
+                      <div className="relative">
+                        <div className="w-10 h-10 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <Loader2 className="w-5 h-5 text-white animate-spin" />
+                        </div>
+                      </div>
+                      <span className="text-base font-medium">Processing your enquiry...</span>
+                    </div>
                   ) : (
                     'Submit Enquiry'
                   )}

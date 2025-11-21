@@ -497,8 +497,8 @@ const JobsClient = () => {
                       workType={job.workType}
                       min_salary={job.minSalary ? String(job.minSalary) : undefined}
                       max_salary={job.maxSalary ? String(job.maxSalary) : undefined}
-                      min_experience={job.minExperience ? String(job.minExperience) : undefined}
-                      max_experience={job.maxExperience ? String(job.maxExperience) : undefined}
+                      min_experience={job.minExperience != null ? String(job.minExperience) : undefined}
+                      max_experience={job.maxExperience != null ? String(job.maxExperience) : undefined}
                       salary_mode="yearly"
                       location={job.location || "Location Not Specified"}
                       postedTime={job.createdAt || "Not Disclosed"}

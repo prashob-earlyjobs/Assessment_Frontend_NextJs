@@ -78,13 +78,13 @@ const JobCard = ({
 
   // Experience display logic
   const experienceDisplay =
-    min_experience && max_experience
-      ? `${min_experience} - ${max_experience} Yrs`
-      : min_experience
-      ? `${min_experience} Yrs`
-      : max_experience
-      ? `${max_experience} Yrs`
-      : null;
+  min_experience != null && max_experience != null
+    ? `${min_experience} - ${max_experience} Yrs`
+    : min_experience != null
+    ? `${min_experience} Yrs`
+    : max_experience != null
+    ? `${max_experience} Yrs`
+    : null;
 
   // Salary display logic
   const parseNumber = (value?: string | number): number | null => {
