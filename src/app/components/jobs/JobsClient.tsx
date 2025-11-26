@@ -96,6 +96,7 @@ const JobsClient = () => {
   const [companyName, setCompanyName] = useState("");
   const [location, setLocation] = useState("");
   const [title, setTitle] = useState("");
+  const [category, setCategory] = useState<string[]>(["All Categories"]);
   const [employmentType, setEmploymentType] = useState<string[]>([]);
   const [workType, setWorkType] = useState<string[]>([]);
   const [salaryRange, setSalaryRange] = useState<string[]>([]);
@@ -121,6 +122,7 @@ const JobsClient = () => {
     searchInput,
     currentPage,
     sortBy,
+    category,
     employmentType,
     workType,
     salaryRange,
@@ -137,13 +139,14 @@ const JobsClient = () => {
       searchInput,
       currentPage,
       sortBy,
+      category,
       employmentType,
       workType,
       salaryRange,
       experienceRange,
       tpoId,
     };
-  }, [companyName, location, title, searchInput, currentPage, sortBy, employmentType, workType, salaryRange, experienceRange, tpoId]);
+  }, [companyName, location, title, searchInput, currentPage, sortBy, category, employmentType, workType, salaryRange, experienceRange, tpoId]);
 
   console.log("Jobs component mounted, backendUrl:", backendUrl);
 
@@ -154,13 +157,16 @@ const JobsClient = () => {
       setLoading(true);
       console.log("Fetching jobs...");
 
-      const { companyName, location, title, searchInput, currentPage, employmentType, workType, salaryRange, experienceRange, tpoId } = filtersRef.current;
+      const { companyName, location, title, searchInput, currentPage, category, employmentType, workType, salaryRange, experienceRange, tpoId } = filtersRef.current;
 
       const params = new URLSearchParams();
       if (companyName) params.append("company", companyName);
       if (location) params.append("location", location);
       if (title) params.append("title", title);
       if (searchInput) params.append("search", searchInput);
+      if (category.length > 0) {
+        params.append("category", category.join(","));
+      }
       if (employmentType.length > 0) {
         const normalizedEmploymentTypes = employmentType.map(type =>
           type === "full-time" ? "full-time" :
@@ -318,7 +324,7 @@ const JobsClient = () => {
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [companyName, location, title, searchInput, employmentType, workType, salaryRange, experienceRange, fetchJobs]);
+  }, [companyName, location, title, searchInput, category, employmentType, workType, salaryRange, experienceRange, fetchJobs]);
 
   
   // Fetch when page changes
@@ -338,7 +344,6 @@ const JobsClient = () => {
   };
 
   const handleJobClick = async (jobId: string) => {
-    console.log("handleJobClick called with jobId:", jobId);
     const job = jobsData.find((j) => j.jobId === jobId);
     const jobTitle = job?.title?.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "") || "job";
 
@@ -397,6 +402,8 @@ const JobsClient = () => {
               setTitle={setTitle}
               searchInput={searchInput}
               setSearchInput={setSearchInput}
+              category={category}
+              setCategory={setCategory}
               employmentType={employmentType}
               setEmploymentType={setEmploymentType}
               workType={workType}
