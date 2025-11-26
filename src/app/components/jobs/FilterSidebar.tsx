@@ -25,6 +25,8 @@ interface FilterSidebarProps {
   setSalaryRange: (value: string[]) => void;
   experienceRange: string[];
   setExperienceRange: (value: string[]) => void;
+  category: string[];
+  setCategory: (value: string[]) => void;
 }
 
 const FilterSidebar = ({
@@ -44,9 +46,12 @@ const FilterSidebar = ({
   setSalaryRange,
   experienceRange,
   setExperienceRange,
+  category,
+  setCategory,
 }: FilterSidebarProps) => {
   const [filterSections, setFilterSections] = useState<FilterSection[]>([
     { title: "Location", isOpen: true },
+    { title: "Categories", isOpen: true },
     { title: "Employment Type", isOpen: true },
     { title: "Work Type", isOpen: true },
     { title: "Salary Range", isOpen: true },
@@ -54,13 +59,16 @@ const FilterSidebar = ({
   ]);
 
   // State for selected filters
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(category);
   const [selectedEmploymentTypes, setSelectedEmploymentTypes] = useState<string[]>(employmentType);
   const [selectedWorkTypes, setSelectedWorkTypes] = useState<string[]>(workType);
   const [selectedSalaryRanges, setSelectedSalaryRanges] = useState<string[]>(salaryRange);
   const [selectedExperienceRanges, setSelectedExperienceRanges] = useState<string[]>(experienceRange);
+  const [isCategoriesExpanded, setIsCategoriesExpanded] = useState(false);
 
   // Calculate total selected filters
   const totalSelectedFilters =
+    selectedCategories.length +
     selectedEmploymentTypes.length +
     selectedWorkTypes.length +
     selectedSalaryRanges.length +
@@ -100,7 +108,38 @@ const FilterSidebar = ({
     { id: "5+", label: "5+ years" },
   ];
 
+  const categories = [
+    "All Categories",
+    "Aviation",
+    "Banking",
+    "Insurance",
+    "Oil And Gas",
+    "Retail",
+    "Education",
+    "Consumer Goods",
+    "Manufacturing",
+    "Information Technology",
+    "Health Care",
+    "BPO",
+    "ITES",
+    "Entertainment",
+    "Finance",
+    "Textile",
+    "Media and news",
+    "Food processing",
+    "Hospitality",
+    "Construction",
+    "Law",
+    "Advertising",
+    "E-commerce",
+    "Other",
+  ];
+
   // Sync local state with parent state
+  useEffect(() => {
+    setSelectedCategories(category);
+  }, [category]);
+
   useEffect(() => {
     setSelectedEmploymentTypes(employmentType);
   }, [employmentType]);
@@ -153,6 +192,15 @@ const FilterSidebar = ({
     setExperienceRange(updatedRanges);
   };
 
+  // Handle category selection
+  const handleCategoryChange = (categoryName: string, checked: boolean) => {
+    const updatedCategories = checked
+      ? [...selectedCategories, categoryName]
+      : selectedCategories.filter((name) => name !== categoryName);
+    setSelectedCategories(updatedCategories);
+    setCategory(updatedCategories);
+  };
+
   return (
     <div className="space-y-4">
       {/* Filter Header */}
@@ -167,6 +215,12 @@ const FilterSidebar = ({
           {totalSelectedFilters > 0 ? (
             <div className="space-y-1">
               {location && <div> <MapPin className="w-4 h-4 text-gray-400 inline" /> {location}</div>}
+              {selectedCategories.length > 0 && (
+                <div>
+                  Categories:{" "}
+                  {selectedCategories.join(", ")}
+                </div>
+              )}
               {selectedEmploymentTypes.length > 0 && (
                 <div>
                   Employment Type:{" "}
@@ -244,14 +298,14 @@ const FilterSidebar = ({
             <hr className="my-4 border-gray-200" />
           </div>
 
-          {/* Employment Type */}
+          {/* Categories */}
           <div>
             <Button
               variant="ghost"
               className="w-full justify-between p-0 h-auto font-medium"
               onClick={() => toggleSection(1)}
             >
-              Employment Type
+              Categories
               <ChevronDown
                 className={`w-4 h-4 transition-transform ${
                   filterSections[1].isOpen ? "rotate-180" : ""
@@ -260,6 +314,49 @@ const FilterSidebar = ({
             </Button>
 
             {filterSections[1].isOpen && (
+              <div className="mt-2 space-y-2">
+                {(isCategoriesExpanded ? categories : categories.slice(0, 5)).map((cat) => (
+                  <div key={cat} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={`category-${cat}`}
+                      checked={selectedCategories.includes(cat)}
+                      onCheckedChange={(checked) => handleCategoryChange(cat, checked as boolean)}
+                    />
+                    <label htmlFor={`category-${cat}`} className="text-sm text-gray-700 cursor-pointer">
+                      {cat}
+                    </label>
+                  </div>
+                ))}
+                {categories.length > 5 && (
+                  <Button
+                    variant="ghost"
+                    className="w-full text-sm text-orange-600 hover:text-orange-700 p-0 h-auto"
+                    onClick={() => setIsCategoriesExpanded(!isCategoriesExpanded)}
+                  >
+                    {isCategoriesExpanded ? "Show Less" : `Show All (${categories.length - 5} more)`}
+                  </Button>
+                )}
+              </div>
+            )}
+            <hr className="my-4 border-gray-200" />
+          </div>
+
+          {/* Employment Type */}
+          <div>
+            <Button
+              variant="ghost"
+              className="w-full justify-between p-0 h-auto font-medium"
+              onClick={() => toggleSection(2)}
+            >
+              Employment Type
+              <ChevronDown
+                className={`w-4 h-4 transition-transform ${
+                  filterSections[2].isOpen ? "rotate-180" : ""
+                }`}
+              />
+            </Button>
+
+            {filterSections[2].isOpen && (
               <div className="mt-2 space-y-2">
                 {employmentTypes.map((type) => (
                   <div key={type.id} className="flex items-center space-x-2">
@@ -283,17 +380,17 @@ const FilterSidebar = ({
             <Button
               variant="ghost"
               className="w-full justify-between p-0 h-auto font-medium"
-              onClick={() => toggleSection(2)}
+              onClick={() => toggleSection(3)}
             >
               Work Type
               <ChevronDown
                 className={`w-4 h-4 transition-transform ${
-                  filterSections[2].isOpen ? "rotate-180" : ""
+                  filterSections[3].isOpen ? "rotate-180" : ""
                 }`}
               />
             </Button>
 
-            {filterSections[2].isOpen && (
+            {filterSections[3].isOpen && (
               <div className="mt-2 space-y-2">
                 {workTypes.map((type) => (
                   <div key={type.id} className="flex items-center space-x-2">
@@ -317,17 +414,17 @@ const FilterSidebar = ({
             <Button
               variant="ghost"
               className="w-full justify-between p-0 h-auto font-medium"
-              onClick={() => toggleSection(3)}
+              onClick={() => toggleSection(4)}
             >
               Salary Range
               <ChevronDown
                 className={`w-4 h-4 transition-transform ${
-                  filterSections[3].isOpen ? "rotate-180" : ""
+                  filterSections[4].isOpen ? "rotate-180" : ""
                 }`}
               />
             </Button>
 
-            {filterSections[3].isOpen && (
+            {filterSections[4].isOpen && (
               <div className="mt-2 space-y-2">
                 {salaryRanges.map((range) => (
                   <div key={range.id} className="flex items-center space-x-2">
@@ -351,17 +448,17 @@ const FilterSidebar = ({
             <Button
               variant="ghost"
               className="w-full justify-between p-0 h-auto font-medium"
-              onClick={() => toggleSection(4)}
+              onClick={() => toggleSection(5)}
             >
               Experience
               <ChevronDown
                 className={`w-4 h-4 transition-transform ${
-                  filterSections[4].isOpen ? "rotate-180" : ""
+                  filterSections[5].isOpen ? "rotate-180" : ""
                 }`}
               />
             </Button>
 
-            {filterSections[4].isOpen && (
+            {filterSections[5].isOpen && (
               <div className="mt-2 space-y-2">
                 {experienceRanges.map((exp) => (
                   <div key={exp.id} className="flex items-center space-x-2">
