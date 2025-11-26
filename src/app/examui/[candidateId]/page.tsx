@@ -297,25 +297,25 @@ export default function AssessmentExam() {
                 </div>
                 <h2 
                   className="text-lg sm:text-xl md:text-2xl font-bold text-white leading-relaxed whitespace-pre-line"
-                >
-                  {questions[currentIndex] || 'Question not loaded'}
-                </h2>
+>
+  {questions[currentIndex] || 'Question not loaded'}
+</h2>
               </div>
               
               <div className="relative">
                <textarea
-                  value={answers[currentIndex] || ''}
-                  onChange={handleAnswerChange}
+  value={answers[currentIndex] || ''}
+  onChange={handleAnswerChange}
                   className="w-full h-48 sm:h-64 md:h-80 bg-black/30 border border-white/20 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-sm sm:text-base text-white placeholder-gray-400 resize-none focus:outline-none focus:border-orange-400 focus:shadow-lg focus:shadow-orange-500/25 transition-all duration-300 backdrop-blur-sm"
-                  placeholder="Begin your response here..."
-                  disabled={submitLoading}
-                  // 🔒 prevent pasting
-                  onPaste={(e) => e.preventDefault()}
-                  // 🔒 prevent dropping text
-                  onDrop={(e) => e.preventDefault()}
-                  // 🔒 prevent drag from inserting
-                  onDragOver={(e) => e.preventDefault()}
-                />
+  placeholder="Begin your response here..."
+  disabled={submitLoading}
+  // 🔒 prevent pasting
+  onPaste={(e) => e.preventDefault()}
+  // 🔒 prevent dropping text
+  onDrop={(e) => e.preventDefault()}
+  // 🔒 prevent drag from inserting
+  onDragOver={(e) => e.preventDefault()}
+/>
 
                 <div className="absolute bottom-3 sm:bottom-4 right-3 sm:right-4 text-xs text-gray-400">
                   {answers[currentIndex]?.length || 0} characters
