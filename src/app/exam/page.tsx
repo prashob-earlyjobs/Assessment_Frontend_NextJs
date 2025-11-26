@@ -17,7 +17,7 @@ import {
   GraduationCap,
 } from "lucide-react";
 import { useState, useEffect } from "react";
-import { motion, Variants, easeOut } from "framer-motion";
+ import { motion, Variants, easeOut } from "framer-motion";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 
 
@@ -468,9 +468,9 @@ const itemVariants: Variants = {
                   >
                     <PlayCircle className="w-5 h-5 sm:w-6 sm:h-6" />
                     <span className="text-xs sm:text-sm md:text-base">
-                      {scanComplete
-                        ? "Initialize Assessment"
-                        : "Preparing System..."}
+                    {scanComplete
+                      ? "Initialize Assessment"
+                      : "Preparing System..."}
                     </span>
                   </motion.button>
                 </motion.div>

@@ -116,7 +116,7 @@ const UsersPage: React.FC = () => {
       .catch((err: any) => {
         const msg = err?.response?.data?.message || err?.message || 'Failed to add user';
         toast.error(msg);
-      });
+    });
   };
 
   return (
