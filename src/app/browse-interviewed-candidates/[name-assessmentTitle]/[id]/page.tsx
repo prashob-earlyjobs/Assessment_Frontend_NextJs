@@ -15,6 +15,7 @@ const CandidateProfile = () => {
   const [error, setError] = useState(null);
   const [assessmentResults, setAssessmentResults] = useState([]);
   const [recording, setRecording] = useState([]);
+  const [certificates, setCertificates] = useState([]); // State for certificates from database
   const [activeTab, setActiveTab] = useState("overview");
   const [isInterestDialogOpen, setIsInterestDialogOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -223,6 +224,79 @@ const CandidateProfile = () => {
     }
   }, [selectedCandidate]);
 
+  // Fetch certificates from Certificate collection
+  useEffect(() => {
+    const fetchCertificates = async () => {
+      if (!selectedCandidate) return;
+
+      console.log("selectedCandidate", selectedCandidate);
+
+      try {
+        // Check if certificates array exists in selectedCandidate
+        if (!selectedCandidate.certificates || !Array.isArray(selectedCandidate.certificates) || selectedCandidate.certificates.length === 0) {
+          console.log("No certificates array found in selectedCandidate");
+          setCertificates([]);
+          return;
+        }
+
+        // Fetch each certificate by ID
+        const certificatesData = [];
+        
+        for (const certificateId of selectedCandidate.certificates) {
+          if (!certificateId) continue;
+
+          try {
+            // Fetch certificate by ID
+            const certificateUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/certificates/${certificateId}`;
+            const certificateResponse = await fetch(certificateUrl, {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+
+            if (certificateResponse.ok) {
+              const certificateData = await certificateResponse.json();
+              
+              // Handle different response formats
+              const certificate = certificateData.data || certificateData;
+              
+              if (certificate && certificate.certificatelink) {
+                // Find matching assessment by interviewId
+                const matchingAssessment = selectedCandidate.assessmentsPaid?.find(
+                  (assessment) => assessment.interviewId === certificate.interviewid
+                );
+
+                certificatesData.push({
+                  interviewId: certificate.interviewid,
+                  assessmentId: matchingAssessment?.assessmentId || certificate.assessmentid,
+                  assessmentTitle: matchingAssessment 
+                    ? (assessmentTitles[matchingAssessment.assessmentId] || "Unknown Assessment")
+                    : "Unknown Assessment",
+                  certificateLink: certificate.certificatelink,
+                  certificateId: certificate.certificateno || certificate._id || certificateId,
+                });
+              }
+            } else {
+              console.warn(`Failed to fetch certificate ${certificateId}:`, certificateResponse.status);
+            }
+          } catch (err) {
+            console.warn(`Error fetching certificate ${certificateId}:`, err.message);
+          }
+        }
+
+        setCertificates(certificatesData);
+      } catch (err) {
+        console.error("Error fetching certificates:", err);
+        setCertificates([]);
+      }
+    };
+
+    if (selectedCandidate && Object.keys(assessmentTitles).length > 0) {
+      fetchCertificates();
+    }
+  }, [selectedCandidate, assessmentTitles]);
+
   const getInitials = (name) => {
     return name
       .split(" ")
@@ -352,7 +426,7 @@ const CandidateProfile = () => {
                 {/* Tabs Navigation */}
                 <div className="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden mb-6">
                   <div className="flex border-b border-gray-200 bg-gray-50">
-                    {["overview", "recording", "certificates"].map((tab) => (
+                    {["overview", "recording" /*, "certificates" */].map((tab) => (
                       <button
                         key={tab}
                         onClick={() => setActiveTab(tab)}
@@ -575,60 +649,78 @@ const CandidateProfile = () => {
                           </p>
                         </div>
                       ))}
+                    {/* Certificate tab commented out
                     {activeTab === "certificates" && (
                       <div>
-                        {selectedCandidate.assessmentsPaid?.length > 0 ? (
-                          <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-6 border border-orange-100">
-                            <div className="mb-4">
-                              <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-                                <span className="w-2 h-2 rounded-full bg-orange-500"></span>
-                                Certificate:{" "}
-                                {assessmentTitles[
-                                  selectedCandidate.assessmentsPaid[0]
-                                    .assessmentId
-                                ] || "Assessment"}
-                              </h3>
-                            </div>
-                            <div className="bg-white rounded-xl overflow-hidden shadow-lg border-2 border-gray-200">
-                              <div className="w-full h-[500px] sm:h-[600px]">
-                                <iframe
-                                  src={`https://earlyjobs-assessment-1.s3.ap-south-1.amazonaws.com/${
-                                    selectedCandidate.assessmentsPaid[0]
-                                      .interviewId
-                                  }/EJ-CERT-2025-${selectedCandidate.assessmentsPaid[0].interviewId.slice(
-                                    0,
-                                    8
-                                  )}.pdf`}
-                                  title={`Certificate for ${
-                                    assessmentTitles[
-                                      selectedCandidate.assessmentsPaid[0]
-                                        .assessmentId
-                                    ] || "Unknown Assessment"
-                                  }`}
-                                  className="w-full h-full border-0"
-                                >
-                                  <div className="p-8 text-center">
-                                    <p className="text-gray-600 mb-4">
-                                      Your browser does not support PDFs.
+                        {certificates.length > 0 ? (
+                          <div className="space-y-6">
+                            {certificates.map((certificate, index) => (
+                              <div
+                                key={index}
+                                className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-6 border border-orange-100"
+                              >
+                                <div className="mb-4">
+                                  <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                                    <span className="w-2 h-2 rounded-full bg-orange-500"></span>
+                                    Certificate: {certificate.assessmentTitle}
+                                  </h3>
+                                  {certificate.certificateId && (
+                                    <p className="text-sm text-gray-600 mt-1">
+                                      Certificate ID: {certificate.certificateId}
                                     </p>
-                                    <a
-                                      href={`https://earlyjobs-assessment-1.s3.ap-south-1.amazonaws.com/${
-                                        selectedCandidate.assessmentsPaid[0]
-                                          .interviewId
-                                      }/EJ-CERT-2025-${selectedCandidate.assessmentsPaid[0].interviewId.slice(
-                                        0,
-                                        8
-                                      )}.pdf`}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="inline-flex items-center px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition"
+                                  )}
+                                </div>
+                                <div className="bg-white rounded-xl overflow-hidden shadow-lg border-2 border-gray-200">
+                                  <div className="w-full h-[500px] sm:h-[600px]">
+                                    <iframe
+                                      src={certificate.certificateLink}
+                                      title={`Certificate for ${certificate.assessmentTitle}`}
+                                      className="w-full h-full border-0"
+                                      onError={(e) => {
+                                        console.error("Error loading certificate:", e);
+                                        toast.error("Failed to load certificate. Please try downloading it.");
+                                      }}
                                     >
-                                      Download PDF
-                                    </a>
+                                      <div className="p-8 text-center">
+                                        <p className="text-gray-600 mb-4">
+                                          Your browser does not support PDFs.
+                                        </p>
+                                        <a
+                                          href={certificate.certificateLink}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="inline-flex items-center px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition"
+                                        >
+                                          Download PDF
+                                        </a>
+                                      </div>
+                                    </iframe>
                                   </div>
-                                </iframe>
+                                </div>
+                                <div className="mt-4 flex justify-end">
+                                  <a
+                                    href={certificate.certificateLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition text-sm font-medium"
+                                  >
+                                    Open in New Tab
+                                  </a>
+                                </div>
                               </div>
+                            ))}
+                          </div>
+                        ) : selectedCandidate?.assessmentsPaid?.length > 0 ? (
+                          <div className="text-center py-12">
+                            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-orange-100 mb-4">
+                              <span className="text-3xl">⏳</span>
                             </div>
+                            <p className="text-lg font-semibold text-gray-900 mb-2">
+                              Certificates Loading
+                            </p>
+                            <p className="text-gray-600">
+                              Please wait while we fetch the certificates...
+                            </p>
                           </div>
                         ) : (
                           <div className="text-center py-12">
@@ -646,6 +738,7 @@ const CandidateProfile = () => {
                         )}
                       </div>
                     )}
+                    */}
                   </div>
                 </div>
               </>
