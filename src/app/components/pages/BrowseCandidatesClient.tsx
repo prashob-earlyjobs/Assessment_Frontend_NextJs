@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronLeft, ChevronRight } from "lucide-react";
 import Footer from "./footer";
 import Navbar from "./navbar";
 
@@ -14,13 +14,17 @@ export default function BrowseCandidatesClient() {
   const [candidates, setCandidates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(12);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalCandidates, setTotalCandidates] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
     const fetchCandidates = async () => {
       try {
         setLoading(true);
-        const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/browseCandidates/candidates`;
+        const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/browseCandidates/candidates?page=${currentPage}&limit=${itemsPerPage}`;
         const response = await fetch(url, {
           method: "GET",
           headers: {
@@ -93,6 +97,17 @@ export default function BrowseCandidatesClient() {
             }
           }
           setCandidates(filteredCandidates);
+
+          // Set pagination info from API response
+          const apiTotal = data.total || data.totalCount || data.totalCandidates || filteredCandidates.length;
+          if (apiTotal !== undefined) {
+            setTotalCandidates(apiTotal);
+            setTotalPages(Math.ceil(apiTotal / itemsPerPage));
+          } else {
+            // Fallback: use filtered candidates length
+            setTotalCandidates(filteredCandidates.length);
+            setTotalPages(Math.ceil(filteredCandidates.length / itemsPerPage));
+          }
         } else {
           throw new Error(data.message || "Error fetching candidates");
         }
@@ -105,7 +120,12 @@ export default function BrowseCandidatesClient() {
     };
 
     fetchCandidates();
-  }, []);
+  }, [currentPage, itemsPerPage]);
+
+  // Reset to page 1 when search term changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
 
   const scrollToSection = (sectionId) => {
     const section = document.getElementById(sectionId);
@@ -189,6 +209,26 @@ export default function BrowseCandidatesClient() {
       )
     );
   }, [candidates, searchTerm]);
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Calculate display values
+  const displayTotal = useMemo(() => {
+    if (searchTerm.trim()) {
+      return filteredCandidates.length;
+    }
+    return totalCandidates;
+  }, [searchTerm, filteredCandidates.length, totalCandidates]);
+
+  const actualTotalPages = useMemo(() => {
+    if (searchTerm.trim()) {
+      return 1;
+    }
+    return totalPages;
+  }, [searchTerm, totalPages]);
 
   return (
     <>
@@ -419,6 +459,99 @@ export default function BrowseCandidatesClient() {
                   <p className="text-lg text-gray-600">No candidates match your search criteria.</p>
                 </div>
               )}
+            </div>
+          )}
+
+          {/* Pagination Controls */}
+          {!searchTerm.trim() && actualTotalPages > 1 && (
+            <div className="flex items-center justify-center gap-2 mt-8 mb-4 flex-wrap">
+              {/* First Page Button */}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handlePageChange(1)}
+                disabled={currentPage === 1 || loading}
+                className="flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed min-w-[80px] sm:min-w-0"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                <ChevronLeft className="w-4 h-4 hidden sm:inline" />
+                <span className="hidden sm:inline">First</span>
+              </Button>
+              {/* Previous Button */}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1 || loading}
+                className="flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed min-w-[80px] sm:min-w-0"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                <span className="hidden sm:inline">Previous</span>
+              </Button>
+
+              {/* Page Number Buttons */}
+              <div className="flex items-center gap-1">
+                {Array.from({ length: Math.min(5, actualTotalPages) }, (_, i) => {
+                  let pageNum;
+                  if (actualTotalPages <= 5) {
+                    pageNum = i + 1;
+                  } else if (currentPage <= 3) {
+                    pageNum = i + 1;
+                  } else if (currentPage >= actualTotalPages - 2) {
+                    pageNum = actualTotalPages - 4 + i;
+                  } else {
+                    pageNum = currentPage - 2 + i;
+                  }
+
+                  return (
+                    <Button
+                      key={pageNum}
+                      variant={currentPage === pageNum ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => handlePageChange(pageNum)}
+                      disabled={loading}
+                      className={`min-w-[40px] ${
+                        currentPage === pageNum
+                          ? "bg-orange-600 hover:bg-orange-700 text-white"
+                          : ""
+                      }`}
+                    >
+                      {pageNum}
+                    </Button>
+                  );
+                })}
+              </div>
+
+              {/* Next Button */}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === actualTotalPages || loading}
+                className="flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed min-w-[80px] sm:min-w-0"
+              >
+                <span className="hidden sm:inline">Next</span>
+                <ChevronRight className="w-4 h-4" />
+              </Button>
+              {/* Last Page Button */}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handlePageChange(actualTotalPages)}
+                disabled={currentPage === actualTotalPages || loading}
+                className="flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed min-w-[80px] sm:min-w-0"
+              >
+                <span className="hidden sm:inline">Last</span>
+                <ChevronRight className="w-4 h-4" />
+                <ChevronRight className="w-4 h-4 hidden sm:inline" />
+              </Button>
+            </div>
+          )}
+
+          {/* Page Info */}
+          {!searchTerm.trim() && displayTotal > 0 && (
+            <div className="text-center text-sm text-gray-600 mt-4 mb-8">
+              Showing {((currentPage - 1) * itemsPerPage) + 1} - {Math.min(currentPage * itemsPerPage, displayTotal)} of {displayTotal} candidates
             </div>
           )}
         </div>
