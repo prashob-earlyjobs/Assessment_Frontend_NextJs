@@ -239,6 +239,7 @@ const Results = () => {
       // Error toast is handled by the service function
     }
   };
+  
 const formatTime = (seconds) => {
   const mins = Math.floor(seconds / 60);
   const secs = Math.floor(seconds % 60);

@@ -1,13 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "../../../components/ui/button";
 import { useRouter, useParams } from "next/navigation";
 import { toast } from "sonner";
-import { X } from "lucide-react";
+import { X, Loader2 } from "lucide-react";
 import InterestedCandidateForm from "../../../components/InterestedCandidateForm";
 import Footer from "../../../components/pages/footer";
 import Navbar from "../../../components/pages/navbar";
+import html2pdf from "html2pdf.js";
+import {
+  getResultForCandidateAssessment,
+  createCertificate,
+  uploadPhoto,
+  updateCertificateLink,
+} from "../../../components/services/servicesapis";
 
 const CandidateProfile = () => {
   const [selectedCandidate, setSelectedCandidate] = useState(null);
@@ -22,8 +29,49 @@ const CandidateProfile = () => {
   const assessmentsPerPage = 3;
   const router = useRouter();
   const { id } = useParams();
+  const [isGeneratingCertificates, setIsGeneratingCertificates] = useState(false);
+  const [generatingCertificateId, setGeneratingCertificateId] = useState(null);
+  const hasCheckedCertificatesRef = useRef(false); // Track if we've already checked certificates
+  const certificatesCheckInProgressRef = useRef(false); // Prevent concurrent checks
 
   const [assessmentTitles, setAssessmentTitles] = useState({}); // State for assessment titles
+
+  // Utility to wait for images to load
+  const waitForImages = (element: HTMLElement | null): Promise<void> => {
+    if (!element) return Promise.resolve();
+    return new Promise((resolve) => {
+      const images = element.getElementsByTagName("img");
+      let loadedCount = 0;
+      const totalImages = images.length;
+
+      if (totalImages === 0) {
+        resolve();
+        return;
+      }
+
+      const onImageLoad = () => {
+        loadedCount++;
+        if (loadedCount === totalImages) {
+          resolve();
+        }
+      };
+
+      Array.from(images).forEach((img) => {
+        if (img.complete) {
+          loadedCount++;
+          if (loadedCount === totalImages) {
+            resolve();
+          }
+        } else {
+          img.addEventListener("load", onImageLoad);
+          img.addEventListener("error", () => {
+            console.error(`Failed to load image: ${img.src}`);
+            onImageLoad(); // Continue to avoid hanging
+          });
+        }
+      });
+    });
+  };
 
   useEffect(() => {
     const fetchCandidate = async () => {
@@ -138,17 +186,24 @@ const CandidateProfile = () => {
               const resultText = await resultResponse.text();
               const resultData = resultText ? JSON.parse(resultText) : {};
               if (resultData.success && resultData.data?.report?.reportSkills) {
+                const report = resultData.data.report;
                 const overallScore =
-                  resultData.data.report.reportSkills.reduce(
+                  report.reportSkills.reduce(
                     (sum, skill) => sum + (skill.score || 0),
                     0
-                  ) / resultData.data.report.reportSkills.length || "N/A";
+                  ) / report.reportSkills.length || "N/A";
                 results.push({
                   interviewId,
                   assessmentId: assessment.assessmentId,
                   assessmentTitle,
                   overallScore,
-                  skills: resultData.data.report.reportSkills.map((skill) => ({
+                  reportScore: report.score || null,
+                  communicationScore: report.communicationScore || null,
+                  proctoringScore: resultData.data.proctoringEventsData?.proctoringEvents?.proctoringScore || null,
+                  status: resultData.data.status === 2 ? "Completed" : "In Progress",
+                  interviewSummary: report.overallSummary?.interviewSummary || [],
+                  communicationSummary: report.overallSummary?.communicationSummary || [],
+                  skills: report.reportSkills.map((skill) => ({
                     assessmentTitle: skill.skill || assessmentTitle,
                     score: skill.score != null ? skill.score : "N/A",
                     status:
@@ -227,65 +282,93 @@ const CandidateProfile = () => {
   // Fetch certificates from Certificate collection
   useEffect(() => {
     const fetchCertificates = async () => {
-      if (!selectedCandidate) return;
-
-      console.log("selectedCandidate", selectedCandidate);
+      if (!selectedCandidate || !selectedCandidate._id) return;
 
       try {
-        // Check if certificates array exists in selectedCandidate
-        if (!selectedCandidate.certificates || !Array.isArray(selectedCandidate.certificates) || selectedCandidate.certificates.length === 0) {
-          console.log("No certificates array found in selectedCandidate");
-          setCertificates([]);
-          return;
+        const userId = selectedCandidate._id;
+        const certificatesData = [];
+
+        // First, try to fetch from /certificates/user/:userId endpoint
+        try {
+          const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+          const certificatesResponse = await fetch(
+            `${backendUrl}/certificates/user/${userId}`,
+            {
+              method: "GET",
+              headers: { "Content-Type": "application/json" },
+            }
+          );
+
+          if (certificatesResponse.ok) {
+            const certificatesDataFromApi = await certificatesResponse.json();
+            if (certificatesDataFromApi.success && certificatesDataFromApi.data?.certificates) {
+              const userCertificates = certificatesDataFromApi.data.certificates;
+              
+              // Map certificates to display format
+              for (const cert of userCertificates) {
+                if (cert.certificateLink) {
+                  // Find matching assessment by interviewId
+                  const matchingAssessment = selectedCandidate.assessmentsPaid?.find(
+                    (assessment) => assessment.interviewId === cert.interviewId
+                  );
+
+                  certificatesData.push({
+                    interviewId: cert.interviewId,
+                    assessmentId: matchingAssessment?.assessmentId || cert.assessment?.shortId,
+                    assessmentTitle: matchingAssessment 
+                      ? (assessmentTitles[matchingAssessment.assessmentId] || cert.assessment?.title || "Unknown Assessment")
+                      : (cert.assessment?.title || "Unknown Assessment"),
+                    certificateLink: cert.certificateLink,
+                    certificateId: cert.certificateNumber || cert._id,
+                  });
+                }
+              }
+            }
+          }
+        } catch (err) {
+          console.warn("Error fetching certificates from user endpoint:", err);
         }
 
-        // Fetch each certificate by ID
-        const certificatesData = [];
-        
-        for (const certificateId of selectedCandidate.certificates) {
-          if (!certificateId) continue;
+        // Fallback: Also check selectedCandidate.certificates array if it exists
+        if (certificatesData.length === 0 && selectedCandidate.certificates && Array.isArray(selectedCandidate.certificates) && selectedCandidate.certificates.length > 0) {
+          for (const certificateId of selectedCandidate.certificates) {
+            if (!certificateId) continue;
 
-          try {
-            // Fetch certificate by ID
-            const certificateUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/certificates/${certificateId}`;
-            const certificateResponse = await fetch(certificateUrl, {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            });
+            try {
+              const certificateUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/certificates/${certificateId}`;
+              const certificateResponse = await fetch(certificateUrl, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+              });
 
-            if (certificateResponse.ok) {
-              const certificateData = await certificateResponse.json();
-              
-              // Handle different response formats
-              const certificate = certificateData.data || certificateData;
-              
-              if (certificate && certificate.certificatelink) {
-                // Find matching assessment by interviewId
-                const matchingAssessment = selectedCandidate.assessmentsPaid?.find(
-                  (assessment) => assessment.interviewId === certificate.interviewid
-                );
+              if (certificateResponse.ok) {
+                const certificateData = await certificateResponse.json();
+                const certificate = certificateData.data || certificateData;
+                
+                if (certificate && certificate.certificatelink) {
+                  const matchingAssessment = selectedCandidate.assessmentsPaid?.find(
+                    (assessment) => assessment.interviewId === certificate.interviewid
+                  );
 
-                certificatesData.push({
-                  interviewId: certificate.interviewid,
-                  assessmentId: matchingAssessment?.assessmentId || certificate.assessmentid,
-                  assessmentTitle: matchingAssessment 
-                    ? (assessmentTitles[matchingAssessment.assessmentId] || "Unknown Assessment")
-                    : "Unknown Assessment",
-                  certificateLink: certificate.certificatelink,
-                  certificateId: certificate.certificateno || certificate._id || certificateId,
-                });
+                  certificatesData.push({
+                    interviewId: certificate.interviewid,
+                    assessmentId: matchingAssessment?.assessmentId || certificate.assessmentid,
+                    assessmentTitle: matchingAssessment 
+                      ? (assessmentTitles[matchingAssessment.assessmentId] || "Unknown Assessment")
+                      : "Unknown Assessment",
+                    certificateLink: certificate.certificatelink,
+                    certificateId: certificate.certificateno || certificate._id || certificateId,
+                  });
+                }
               }
-            } else {
-              console.warn(`Failed to fetch certificate ${certificateId}:`, certificateResponse.status);
+            } catch (err) {
+              console.warn(`Error fetching certificate ${certificateId}:`, err.message);
             }
-          } catch (err) {
-            console.warn(`Error fetching certificate ${certificateId}:`, err.message);
           }
         }
 
         setCertificates(certificatesData);
+        console.log(`Fetched ${certificatesData.length} certificates`);
       } catch (err) {
         console.error("Error fetching certificates:", err);
         setCertificates([]);
@@ -296,6 +379,385 @@ const CandidateProfile = () => {
       fetchCertificates();
     }
   }, [selectedCandidate, assessmentTitles]);
+
+  // Reset check flag when tab changes away from certificates
+  useEffect(() => {
+    if (activeTab !== "certificates") {
+      hasCheckedCertificatesRef.current = false;
+      certificatesCheckInProgressRef.current = false;
+    }
+  }, [activeTab]);
+
+  // Auto-generate certificates when certificates tab is clicked
+  useEffect(() => {
+    const generateMissingCertificates = async () => {
+      if (
+        activeTab !== "certificates" ||
+        !selectedCandidate ||
+        !selectedCandidate.assessmentsPaid ||
+        selectedCandidate.assessmentsPaid.length === 0 ||
+        isGeneratingCertificates ||
+        certificatesCheckInProgressRef.current ||
+        hasCheckedCertificatesRef.current
+      ) {
+        return;
+      }
+
+      // Mark that we're checking to prevent concurrent calls
+      certificatesCheckInProgressRef.current = true;
+
+      try {
+        setIsGeneratingCertificates(true);
+
+        // Get userId from candidate
+        const userId = selectedCandidate._id;
+        if (!userId) {
+          toast.error("User ID not found");
+          setIsGeneratingCertificates(false);
+          return;
+        }
+
+        // Fetch all certificates for this user from backend
+        let userCertificates = [];
+        try {
+          const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+          const certificatesResponse = await fetch(
+            `${backendUrl}/certificates/user/${userId}`,
+            {
+              method: "GET",
+              headers: { "Content-Type": "application/json" },
+            }
+          );
+
+          if (certificatesResponse.ok) {
+            const certificatesData = await certificatesResponse.json();
+            if (certificatesData.success && certificatesData.data?.certificates) {
+              userCertificates = certificatesData.data.certificates;
+              console.log(`Found ${userCertificates.length} existing certificates for user`);
+            }
+          } else {
+            console.log("No certificates found or error fetching certificates");
+          }
+        } catch (err) {
+          console.warn("Error fetching user certificates:", err);
+          // Continue with generation even if fetch fails
+        }
+
+        // Check which assessments need certificates
+        const assessmentsNeedingCertificates = [];
+
+        for (const assessment of selectedCandidate.assessmentsPaid) {
+          const interviewId = assessment.interviewId;
+          if (!interviewId) continue;
+
+          // Check if certificate already exists for this interview
+          const hasCertificateLocally = certificates.some(
+            (cert) => cert.interviewId === interviewId
+          );
+
+          // Check if certificate exists in backend data
+          const hasCertificateInBackend = userCertificates.some(
+            (cert) => cert.interviewId === interviewId
+          );
+
+          if (!hasCertificateLocally && !hasCertificateInBackend) {
+            // Certificate doesn't exist, add to list for generation
+            assessmentsNeedingCertificates.push(assessment);
+          }
+        }
+
+        // Generate certificates for assessments that need them
+        for (const assessment of assessmentsNeedingCertificates) {
+          const interviewId = assessment.interviewId;
+          if (!interviewId) continue;
+
+          try {
+            setGeneratingCertificateId(interviewId);
+            toast.info(`Generating certificate for ${assessmentTitles[assessment.assessmentId] || "assessment"}...`);
+
+            // Fetch assessment results
+            const resultResponse = await getResultForCandidateAssessment(interviewId);
+            if (!resultResponse.success || !resultResponse.data?.report) {
+              console.warn(`No results found for interview ${interviewId}`);
+              continue;
+            }
+
+            const report = resultResponse.data.report;
+            const proctoringScore = resultResponse.data?.proctoringEventsData?.proctoringEvents?.proctoringScore || 0;
+            const skillsVerified = report.reportSkills
+              ?.filter((skill) => skill.score > 4)
+              .map((skill) => skill.skill) || [];
+
+            const certificateId = `EJ-CERT-${new Date().getFullYear()}-${interviewId.slice(0, 8)}`;
+            const assessmentTitle = assessmentTitles[assessment.assessmentId] || "Unknown Assessment";
+
+            // Get absolute URLs for images
+            const logoUrl = window.location.origin + "/images/logo.png";
+            const qrCodeUrl = window.location.origin + "/images/qrcode_earlyjobs.png";
+            const signatureUrl = window.location.origin + "/images/signature.png";
+
+            // Create certificate HTML element matching the Certificate component structure
+            const certificateHTML = `
+              <div id="certificate-temp-${interviewId}" style="width: 11in; height: 8.5in; overflow: hidden; background-color: #FFFFFF; position: relative;">
+                <div style="width: 100%; height: 100%; overflow: hidden; background-color: #FFFFFF; border: 8px solid #F97316; position: relative; padding: 16px; box-sizing: border-box;">
+                    <!-- Border Decorations -->
+                    <div style="position: absolute; top: 8px; left: 8px; width: 32px; height: 32px; border-left: 4px solid #F97316; border-top: 4px solid #F97316;"></div>
+                    <div style="position: absolute; top: 8px; right: 8px; width: 32px; height: 32px; border-right: 4px solid #F97316; border-top: 4px solid #F97316;"></div>
+                    <div style="position: absolute; bottom: 8px; left: 8px; width: 32px; height: 32px; border-left: 4px solid #F97316; border-bottom: 4px solid #F97316;"></div>
+                    <div style="position: absolute; bottom: 8px; right: 8px; width: 32px; height: 32px; border-right: 4px solid #F97316; border-bottom: 4px solid #F97316;"></div>
+
+                    <!-- Header -->
+                    <div style="text-align: center; margin-bottom: 16px;">
+                      <img src="${logoUrl}" alt="EarlyJobs Logo" style="height: 64px; width: auto; margin: 0 auto 12px; display: block;" onerror="this.style.display='none';" />
+                      <h1 style="font-size: 2.25rem; font-weight: bold; color: #1F2937; margin-bottom: 16px;">CERTIFICATE OF ACHIEVEMENT</h1>
+                      <div style="width: 128px; height: 4px; margin: 0 auto 16px; background: linear-gradient(to right, #F97316, #9333EA);"></div>
+                    </div>
+
+                    <!-- Main Content -->
+                    <div style="text-align: center; margin-bottom: 24px;">
+                      <p style="font-size: 1.125rem; color: #4B5563; margin-bottom: 8px;">This is to certify that</p>
+                      <h2 style="font-size: 1.875rem; font-weight: bold; color: #1F2937; border-bottom: 2px solid #D1D5DB; padding-bottom: 8px; display: inline-block; margin-bottom: 8px;">${selectedCandidate.name}</h2>
+                      <p style="font-size: 1.125rem; color: #4B5563; margin-bottom: 8px;">has successfully completed the</p>
+                      <h3 style="font-size: 1.5rem; font-weight: 600; color: #F97316; margin-bottom: 8px;">${assessmentTitle}</h3>
+                      <p style="font-size: 1.125rem; color: #4B5563; margin-bottom: 8px;">with a score of</p>
+                      <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 24px;">
+                        <span style="padding: 8px 12px; border-radius: 9999px; background: #FFFFFF; color: #15803D; border: 1px solid #16A34A; font-size: 0.875rem; font-weight: 600;">Overall Score: ${(report.score || 0).toFixed(1)}/10</span>
+                        <span style="padding: 8px 12px; border-radius: 9999px; background: #FFFFFF; color: #15803D; border: 1px solid #16A34A; font-size: 0.875rem; font-weight: 600;">Communication: ${(report.communicationScore || 0).toFixed(1)}/10</span>
+                        <span style="padding: 8px 12px; border-radius: 9999px; background: #FFFFFF; color: #15803D; border: 1px solid #16A34A; font-size: 0.875rem; font-weight: 600;">Proctoring: ${proctoringScore.toFixed(1)}/10</span>
+                      </div>
+                    </div>
+
+                    <!-- Skills Verified -->
+                    ${skillsVerified.length > 0 ? `
+                    <div style="margin-bottom: 32px;">
+                      <h4 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 16px; text-align: center; color: #374151;">Skills Verified</h4>
+                      <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; max-width: 9in; margin: 0 auto;">
+                        ${skillsVerified.map(skill => `<span style="padding: 4px 12px; border-radius: 4px; background: #EDE9FE; color: #9333EA; font-size: 0.875rem;">${skill}</span>`).join('')}
+                      </div>
+                    </div>
+                    ` : ''}
+
+                    <!-- Footer -->
+                    <div style="position: absolute; bottom: 24px; left: 0; right: 0; display: flex; justify-content: space-between; padding: 0 48px;">
+                      <div style="text-align: center;">
+                        <div style="width: 192px; border-bottom: 2px solid #9CA3AF; margin: 0 auto 8px;"></div>
+                        <p style="font-size: 0.875rem; color: #4B5563;">Authorized Signature</p>
+                        <p style="font-size: 0.75rem; color: #6B7280;">EarlyJobs Certification Authority</p>
+                      </div>
+                      <div style="text-align: right; color: #4B5563;">
+                        <p style="font-size: 0.875rem; margin-bottom: 4px;">Date: ${new Date().toLocaleDateString()}</p>
+                        <p style="font-size: 0.875rem;">Certificate ID: ${certificateId}</p>
+                      </div>
+                    </div>
+
+                    <!-- QR Code -->
+                    <div style="position: absolute; top: 32px; right: 32px; width: 64px; height: 64px; z-index: 10;">
+                      <img src="${qrCodeUrl}" alt="QR Code" style="border: 1px solid #D1D5DB; border-radius: 4px; width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none';" />
+                    </div>
+                    <!-- Signature -->
+                    <div style="position: absolute; bottom: 72px; left: 72px; z-index: 10;">
+                      <img src="${signatureUrl}" alt="Signature" style="max-width: 11rem; display: block;" onerror="this.style.display='none';" />
+                    </div>
+                </div>
+              </div>
+            `;
+
+            // Create temporary element container
+            const tempDiv = document.createElement("div");
+            tempDiv.id = `certificate-wrapper-${interviewId}`;
+            tempDiv.style.position = "fixed";
+            tempDiv.style.top = "0";
+            tempDiv.style.left = "0";
+            tempDiv.style.width = "11in";
+            tempDiv.style.height = "8.5in";
+            tempDiv.style.zIndex = "-9999";
+            tempDiv.style.pointerEvents = "none";
+            tempDiv.style.overflow = "hidden";
+            tempDiv.innerHTML = certificateHTML;
+            document.body.appendChild(tempDiv);
+
+            const certificateElement = document.getElementById(`certificate-temp-${interviewId}`);
+            if (!certificateElement) {
+              if (tempDiv.parentNode) {
+                document.body.removeChild(tempDiv);
+              }
+              throw new Error("Failed to create certificate element");
+            }
+
+            try {
+              // Ensure element is properly styled for html2canvas
+              if (certificateElement instanceof HTMLElement) {
+                certificateElement.style.position = "relative";
+                certificateElement.style.visibility = "visible";
+                certificateElement.style.opacity = "1";
+                certificateElement.style.display = "block";
+                certificateElement.style.width = "11in";
+                certificateElement.style.height = "8.5in";
+              }
+
+              // Wait for DOM to render
+              await new Promise((resolve) => setTimeout(resolve, 500));
+              
+              // Wait for images to load
+              await waitForImages(certificateElement);
+              
+              // Additional wait to ensure all content is rendered
+              await new Promise((resolve) => setTimeout(resolve, 1000));
+              
+              // Verify element has content before generating PDF
+              const hasContent = certificateElement.textContent && certificateElement.textContent.trim().length > 0;
+              const imageCount = certificateElement.getElementsByTagName("img").length;
+              const loadedImages = Array.from(certificateElement.getElementsByTagName("img")).filter(img => img.complete && img.naturalHeight !== 0).length;
+              
+              if (!hasContent) {
+                throw new Error("Certificate element appears to be empty");
+              }
+              
+              console.log("Certificate element ready for PDF generation", {
+                hasContent,
+                textLength: certificateElement.textContent?.length || 0,
+                totalImages: imageCount,
+                loadedImages: loadedImages,
+                elementWidth: certificateElement.offsetWidth,
+                elementHeight: certificateElement.offsetHeight,
+                computedStyle: window.getComputedStyle(certificateElement).display
+              });
+              
+              // Double check that images are loaded
+              if (imageCount > 0 && loadedImages < imageCount) {
+                console.warn(`Only ${loadedImages}/${imageCount} images loaded, waiting more...`);
+                await new Promise((resolve) => setTimeout(resolve, 2000));
+              }
+
+              // Generate PDF
+              const opt = {
+                margin: [0, 0, 0, 0],
+                filename: `${certificateId}.pdf`,
+                image: { type: "jpeg", quality: 0.98 },
+                html2canvas: {
+                  scale: 2,
+                  useCORS: true,
+                  allowTaint: false,
+                  logging: true,
+                  windowWidth: 1584,
+                  windowHeight: 1224,
+                  backgroundColor: "#FFFFFF",
+                },
+                jsPDF: {
+                  unit: "in",
+                  format: [11, 8.5],
+                  orientation: "landscape",
+                },
+              };
+
+              console.log("Starting PDF generation with options:", opt);
+              console.log("Certificate element details:", {
+                offsetWidth: certificateElement.offsetWidth,
+                offsetHeight: certificateElement.offsetHeight,
+                scrollWidth: certificateElement.scrollWidth,
+                scrollHeight: certificateElement.scrollHeight,
+                innerHTML: certificateElement.innerHTML.substring(0, 200) + "..."
+              });
+              const blob = await html2pdf().set(opt).from(certificateElement).output("blob");
+              console.log("PDF generated, size:", blob.size);
+              if (blob.size === 0) {
+                throw new Error("Generated PDF is empty");
+              }
+              if (blob.size < 1000) {
+                console.warn("PDF size is very small, might be blank:", blob.size);
+              }
+
+              // Clean up temporary element
+              if (tempDiv.parentNode) {
+                document.body.removeChild(tempDiv);
+              }
+
+              // Upload PDF
+              const file = new File([blob], `${certificateId}.pdf`, { type: "application/pdf" });
+              const uploadResponse = await uploadPhoto(file, interviewId);
+              const uploadedUrl = typeof uploadResponse === "string" ? uploadResponse : uploadResponse?.fileUrl;
+
+              if (!uploadedUrl) {
+                throw new Error("No URL returned from upload");
+              }
+
+              // Get userId
+              const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+              const candidateDetailsResponse = await fetch(
+                `${backendUrl}/candidate/id-by-interview/${interviewId}`,
+                { method: "GET", headers: { "Content-Type": "application/json" } }
+              );
+              const candidateData = await candidateDetailsResponse.json();
+              const userId = candidateData.userId;
+
+              // Create certificate record
+              const certificatePayload = {
+                userid: userId,
+                interviewid: interviewId,
+                certificateno: certificateId,
+                assessmentid: assessment.assessmentId,
+                certificatelink: uploadedUrl,
+              };
+
+              const certificateResponse = await createCertificate(certificatePayload);
+              const certificateDbId = certificateResponse.data.certificate._id;
+
+              // Update certificate link in candidate
+              await updateCertificateLink({
+                userId: userId,
+                interviewId: interviewId,
+                certificateId: certificateDbId,
+              });
+
+              toast.success(`Certificate generated for ${assessmentTitle}!`);
+            } catch (pdfError) {
+              console.error("PDF generation error:", pdfError);
+              // Clean up on error
+              if (tempDiv.parentNode) {
+                document.body.removeChild(tempDiv);
+              }
+              throw pdfError;
+            }
+          } catch (err) {
+            console.error(`Error generating certificate for ${interviewId}:`, err);
+            toast.error(`Failed to generate certificate: ${err.message || "Unknown error"}`);
+          } finally {
+            setGeneratingCertificateId(null);
+          }
+        }
+
+        // Mark as checked after completion
+        hasCheckedCertificatesRef.current = true;
+
+        // Refresh certificates after generation
+        if (assessmentsNeedingCertificates.length > 0) {
+          // Refetch candidate data to get updated certificates array
+          const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/browseCandidates/candidates`;
+          const response = await fetch(url, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+          });
+          if (response.ok) {
+            const data = await response.json();
+            if (data.success) {
+              const updatedCandidate = data.data.find((c) => c._id === id);
+              if (updatedCandidate) {
+                setSelectedCandidate(updatedCandidate);
+              }
+            }
+          }
+        }
+      } catch (err) {
+        console.error("Error in certificate generation:", err);
+        toast.error("Failed to generate certificates");
+      } finally {
+        setIsGeneratingCertificates(false);
+        certificatesCheckInProgressRef.current = false;
+      }
+    };
+
+    generateMissingCertificates();
+  }, [activeTab, selectedCandidate?._id, assessmentTitles, id]); // Removed certificates and isGeneratingCertificates from dependencies
 
   const getInitials = (name) => {
     return name
@@ -319,6 +781,14 @@ const CandidateProfile = () => {
     if (numericScore < 2) return "bg-red-500";
     if (numericScore <= 6) return "bg-yellow-500";
     return "bg-green-500";
+  };
+
+  const getScoreTextColor = (score) => {
+    if (score === "N/A" || score === null || score === undefined) return "text-gray-600";
+    const numericScore = Number(score);
+    if (numericScore < 2) return "text-red-600";
+    if (numericScore <= 6) return "text-yellow-600";
+    return "text-green-600";
   };
 
   // Pagination logic
@@ -426,10 +896,24 @@ const CandidateProfile = () => {
                 {/* Tabs Navigation */}
                 <div className="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden mb-6">
                   <div className="flex border-b border-gray-200 bg-gray-50">
-                    {["overview", "recording" /*, "certificates" */].map((tab) => (
+                    {["overview", "recording" , "certificates" ].map((tab) => (
                       <button
                         key={tab}
-                        onClick={() => setActiveTab(tab)}
+                        onClick={() => {
+                          if (tab === "certificates") {
+                            // Open all certificates in new windows
+                            if (certificates.length > 0) {
+                              certificates.forEach((certificate) => {
+                                window.open(certificate.certificateLink, '_blank', 'noopener,noreferrer');
+                              });
+                            } else {
+                              // If no certificates yet, still set the tab to trigger generation
+                              setActiveTab(tab);
+                            }
+                          } else {
+                            setActiveTab(tab);
+                          }
+                        }}
                         className={`flex-1 px-4 py-4 sm:px-6 font-semibold text-sm sm:text-base transition-all ${
                           activeTab === tab
                             ? "text-orange-600 bg-white border-b-2 border-orange-600"
@@ -448,28 +932,87 @@ const CandidateProfile = () => {
                         </p>
                       ) : currentAssessments.length > 0 ? (
                         <div className="space-y-8">
-                          {/* Assessment Scores Overview */}
-                          <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-6 border border-orange-100">
-                            <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                              <span className="w-2 h-2 rounded-full bg-orange-500"></span>
-                              Assessment Scores Overview
-                            </h3>
-                            <div className="flex flex-wrap gap-3">
-                              {currentAssessments.map((result) => (
-                                <div
-                                  key={result.interviewId}
-                                  className={`text-sm font-semibold text-white px-5 py-2.5 rounded-xl shadow-md ${getScoreBackgroundColor(
-                                    result.overallScore
-                                  )}`}
-                                >
-                                  {result.assessmentTitle}:{" "}
-                                  {result.overallScore === "N/A"
-                                    ? "N/A"
-                                    : `${result.overallScore.toFixed(1)}/10`}
+                          {/* Assessment Summary Cards */}
+                          {currentAssessments.map((result) => (
+                            <div key={result.interviewId} className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-6 border border-orange-100 mb-6">
+                              <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-orange-500"></span>
+                                {result.assessmentTitle} - Summary
+                              </h3>
+                              
+                              {/* Scores Section */}
+                              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                                {result.reportScore != null && (
+                                  <div className="bg-white rounded-xl p-4 border border-orange-200">
+                                    <p className="text-xs text-gray-600 mb-1">Overall Score</p>
+                                    <p className={`text-2xl font-bold ${getScoreTextColor(result.reportScore)}`}>
+                                      {result.reportScore.toFixed(1)}/10
+                                    </p>
+                                  </div>
+                                )}
+                                {result.communicationScore != null && (
+                                  <div className="bg-white rounded-xl p-4 border border-orange-200">
+                                    <p className="text-xs text-gray-600 mb-1">Communication</p>
+                                    <p className={`text-2xl font-bold ${getScoreTextColor(result.communicationScore)}`}>
+                                      {result.communicationScore.toFixed(1)}/10
+                                    </p>
+                                  </div>
+                                )}
+                                {result.proctoringScore != null && (
+                                  <div className="bg-white rounded-xl p-4 border border-orange-200">
+                                    <p className="text-xs text-gray-600 mb-1">Proctoring</p>
+                                    <p className={`text-2xl font-bold ${getScoreTextColor(result.proctoringScore)}`}>
+                                      {result.proctoringScore.toFixed(1)}/10
+                                    </p>
+                                  </div>
+                                )}
+                                <div className="bg-white rounded-xl p-4 border border-orange-200">
+                                  <p className="text-xs text-gray-600 mb-1">Status</p>
+                                  <p className={`text-lg font-semibold ${result.status === "Completed" ? "text-green-600" : "text-yellow-600"}`}>
+                                    {result.status}
+                                  </p>
                                 </div>
-                              ))}
+                              </div>
+
+                              {/* Interview Summary */}
+                              {result.interviewSummary && result.interviewSummary.length > 0 && (
+                                <div className="bg-white rounded-xl p-5 border border-gray-200 mb-4">
+                                  <h4 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+                                    <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+                                    Interview Summary
+                                  </h4>
+                                  <ul className="space-y-2">
+                                    {result.interviewSummary.map((summary, idx) => (
+                                      <li 
+                                        key={idx} 
+                                        className="text-sm text-gray-700 leading-relaxed"
+                                        dangerouslySetInnerHTML={{ __html: summary }}
+                                      />
+                                    ))}
+                                  </ul>
+                                </div>
+                              )}
+
+                              {/* Communication Summary */}
+                              {result.communicationSummary && result.communicationSummary.length > 0 && (
+                                <div className="bg-white rounded-xl p-5 border border-gray-200 mb-4">
+                                  <h4 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+                                    <span className="w-2 h-2 rounded-full bg-purple-500"></span>
+                                    Communication Summary
+                                  </h4>
+                                  <ul className="space-y-2">
+                                    {result.communicationSummary.map((summary, idx) => (
+                                      <li 
+                                        key={idx} 
+                                        className="text-sm text-gray-700 leading-relaxed"
+                                        dangerouslySetInnerHTML={{ __html: summary }}
+                                      />
+                                    ))}
+                                  </ul>
+                                </div>
+                              )}
                             </div>
-                          </div>
+                          ))}
 
                           {/* Skills Breakdown */}
                           {currentAssessments.map((result, index) => (
@@ -649,15 +1192,26 @@ const CandidateProfile = () => {
                           </p>
                         </div>
                       ))}
-                    {/* Certificate tab commented out
                     {activeTab === "certificates" && (
                       <div>
-                        {certificates.length > 0 ? (
+                        {isGeneratingCertificates ? (
+                          <div className="text-center py-12">
+                            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-orange-100 mb-4">
+                              <Loader2 className="w-8 h-8 text-orange-600 animate-spin" />
+                            </div>
+                            <p className="text-lg font-semibold text-gray-900 mb-2">
+                              Generating Certificates
+                            </p>
+                            <p className="text-gray-600">
+                              Please wait while we generate your certificates...
+                            </p>
+                          </div>
+                        ) : certificates.length > 0 ? (
                           <div className="space-y-6">
                             {certificates.map((certificate, index) => (
                               <div
                                 key={index}
-                                className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-6 border border-orange-100"
+                                className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-6 border border-orange-100 hover:shadow-lg transition-shadow"
                               >
                                 <div className="mb-4">
                                   <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
@@ -670,42 +1224,53 @@ const CandidateProfile = () => {
                                     </p>
                                   )}
                                 </div>
-                                <div className="bg-white rounded-xl overflow-hidden shadow-lg border-2 border-gray-200">
-                                  <div className="w-full h-[500px] sm:h-[600px]">
-                                    <iframe
-                                      src={certificate.certificateLink}
-                                      title={`Certificate for ${certificate.assessmentTitle}`}
-                                      className="w-full h-full border-0"
-                                      onError={(e) => {
-                                        console.error("Error loading certificate:", e);
-                                        toast.error("Failed to load certificate. Please try downloading it.");
-                                      }}
-                                    >
-                                      <div className="p-8 text-center">
-                                        <p className="text-gray-600 mb-4">
-                                          Your browser does not support PDFs.
-                                        </p>
-                                        <a
-                                          href={certificate.certificateLink}
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                          className="inline-flex items-center px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition"
+                                <div className="bg-white rounded-xl overflow-hidden shadow-lg border-2 border-gray-200 p-8 text-center">
+                                  <div className="flex flex-col items-center justify-center h-[400px] sm:h-[500px]">
+                                    <div className="mb-6">
+                                      <div className="w-24 h-24 mx-auto mb-4 bg-orange-100 rounded-full flex items-center justify-center">
+                                        <svg
+                                          className="w-12 h-12 text-orange-600"
+                                          fill="none"
+                                          stroke="currentColor"
+                                          viewBox="0 0 24 24"
                                         >
-                                          Download PDF
-                                        </a>
+                                          <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                          />
+                                        </svg>
                                       </div>
-                                    </iframe>
+                                      <h4 className="text-xl font-semibold text-gray-900 mb-2">
+                                        Certificate Available
+                                      </h4>
+                                      <p className="text-gray-600 mb-6">
+                                        Click the button below to view your certificate in a new window
+                                      </p>
+                                    </div>
+                                    <button
+                                      onClick={() => {
+                                        window.open(certificate.certificateLink, '_blank', 'noopener,noreferrer');
+                                      }}
+                                      className="inline-flex items-center px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition text-base font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                                    >
+                                      <svg
+                                        className="w-5 h-5 mr-2"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth={2}
+                                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                        />
+                                      </svg>
+                                      Open Certificate in New Window
+                                    </button>
                                   </div>
-                                </div>
-                                <div className="mt-4 flex justify-end">
-                                  <a
-                                    href={certificate.certificateLink}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition text-sm font-medium"
-                                  >
-                                    Open in New Tab
-                                  </a>
                                 </div>
                               </div>
                             ))}
@@ -738,7 +1303,6 @@ const CandidateProfile = () => {
                         )}
                       </div>
                     )}
-                    */}
                   </div>
                 </div>
               </>
