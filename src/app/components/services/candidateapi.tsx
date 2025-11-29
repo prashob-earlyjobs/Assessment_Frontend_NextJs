@@ -214,6 +214,9 @@ export const createTalentPoolcandidatePublic = async (
       preferredJobCategories: Array.isArray(data.preferredJobCategories) && data.preferredJobCategories.length > 0 ? data.preferredJobCategories : ["General"],
       preferredEmploymentTypes: Array.isArray(data.preferredEmploymentTypes) && data.preferredEmploymentTypes.length > 0 ? data.preferredEmploymentTypes : ["Full-time"],
       preferredWorkTypes: Array.isArray(data.preferredWorkTypes) && data.preferredWorkTypes.length > 0 ? data.preferredWorkTypes : ["on-site"],
+      howSoonReady: data.howSoonReady && data.howSoonReady.trim() ? data.howSoonReady : "More than 3 months",
+      ...(data.preferredJobLocations && Array.isArray(data.preferredJobLocations) && data.preferredJobLocations.length > 0 && { preferredJobLocations: data.preferredJobLocations }),
+      ...(data.expectedSalary && data.expectedSalary > 0 && { expectedSalary: data.expectedSalary }),
       resumeUrl: data.resume
     };
 
