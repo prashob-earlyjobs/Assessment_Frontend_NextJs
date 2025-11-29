@@ -90,6 +90,9 @@ export interface ICreateTallentPoolFormData {
   preferredJobCategories: string[];
   preferredEmploymentTypes: string[];
   preferredWorkTypes: ('remote' | 'hybrid' | 'on-site')[];
+  howSoonReady?: string;
+  preferredJobLocations?: string[];
+  expectedSalary?: number;
   resume?: string;
 }
 
