@@ -12,7 +12,7 @@ import { Checkbox } from "../../../components/ui/checkbox";
 import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/card";
 import { Popover, PopoverContent, PopoverTrigger } from "../../../components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "../../../components/ui/command";
-import { Plus, X, UploadCloud, ArrowRight, ArrowLeft, ArrowLeftCircle, User, Briefcase, CheckCircle, MapPin, Phone, Mail, Calendar, FileText, Languages, Award, Target, Building, Clock, Loader2, Search, ChevronDown, Check, Eye } from 'lucide-react';
+import { Plus, X, UploadCloud, ArrowRight, ArrowLeft, ArrowLeftCircle, User, Briefcase, CheckCircle, MapPin, Phone, Mail, Calendar, FileText, Languages, Award, Target, Building, Clock, Loader2, Search, ChevronDown, Check, Eye, DollarSign, Zap } from 'lucide-react';
 import { createApplication, createTalentPoolcandidatePublic, ILocationDetails } from "../../../components/services/candidateapi";
 //import { useNavigate } from "react-router-dom";
 import { useParams } from "next/navigation";
@@ -64,6 +64,9 @@ interface CandidateFormData {
   preferredJobCategories: string[];
   preferredEmploymentTypes: string[];
   preferredWorkTypes: ('remote' | 'hybrid' | 'on-site')[];
+  howSoonReady?: string;
+  preferredJobLocations: string[];
+  expectedSalary?: number;
 }
 
 interface AddCandidateFormProps {
@@ -90,6 +93,9 @@ export interface ICreateTallentPoolFormData {
   preferredJobCategories: string[];
   preferredEmploymentTypes: string[];
   preferredWorkTypes: ('remote' | 'hybrid' | 'on-site')[];
+  howSoonReady?: string;
+  preferredJobLocations?: string[];
+  expectedSalary?: number;
   resume?: string;
 }
 
@@ -122,11 +128,15 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
     preferredJobCategories: [],
     preferredEmploymentTypes: [],
     preferredWorkTypes: [],
+    howSoonReady: "",
+    preferredJobLocations: [],
+    expectedSalary: undefined,
   });
 
   const [currentSkill, setCurrentSkill] = useState("");
   const [currentJobCategory, setCurrentJobCategory] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("");
+  const [currentJobLocation, setCurrentJobLocation] = useState("");
   const [resumeFileName, setResumeFileName] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -148,6 +158,8 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
   // Searchable dropdown states
   const [openCategoryDropdown, setOpenCategoryDropdown] = useState(false);
   const [openEmploymentTypeDropdown, setOpenEmploymentTypeDropdown] = useState(false);
+  const [openJobLocationDropdown, setOpenJobLocationDropdown] = useState(false);
+  const [openSkillsDropdown, setOpenSkillsDropdown] = useState(false);
 
   // Qualification options with modern names
   const qualificationOptions = [
@@ -245,6 +257,127 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
     'Internship'
   ];
 
+  const howSoonReadyOptions = [
+    'Immediately',
+    'Within 1 week',
+    'Within 2 weeks',
+    'Within 1 month',
+    'Within 2 months',
+    'Within 3 months',
+    'More than 3 months'
+  ];
+
+  const commonJobLocations = [
+    'Bangalore',
+    'Mumbai',
+    'Delhi',
+    'Hyderabad',
+    'Chennai',
+    'Pune',
+    'Kolkata',
+    'Ahmedabad',
+    'Jaipur',
+    'Surat',
+    'Lucknow',
+    'Kanpur',
+    'Nagpur',
+    'Indore',
+    'Thane',
+    'Bhopal',
+    'Visakhapatnam',
+    'Patna',
+    'Vadodara',
+    'Ghaziabad',
+    'Ludhiana',
+    'Agra',
+    'Nashik',
+    'Faridabad',
+    'Meerut',
+    'Rajkot',
+    'Varanasi',
+    'Srinagar',
+    'Amritsar',
+    'Noida',
+    'Gurgaon',
+    'Remote'
+  ];
+
+  const commonSkills = [
+    'JavaScript',
+    'TypeScript',
+    'React',
+    'Vue.js',
+    'Angular',
+    'Node.js',
+    'Python',
+    'Java',
+    'C++',
+    'C#',
+    '.NET',
+    'PHP',
+    'Ruby',
+    'Go',
+    'Swift',
+    'Kotlin',
+    'HTML',
+    'CSS',
+    'SASS',
+    'Tailwind CSS',
+    'Bootstrap',
+    'SQL',
+    'MySQL',
+    'PostgreSQL',
+    'MongoDB',
+    'Redis',
+    'AWS',
+    'Azure',
+    'Google Cloud',
+    'Docker',
+    'Kubernetes',
+    'Git',
+    'GitHub',
+    'GitLab',
+    'CI/CD',
+    'Jenkins',
+    'Agile',
+    'Scrum',
+    'Project Management',
+    'Digital Marketing',
+    'SEO',
+    'SEM',
+    'Social Media Marketing',
+    'Content Marketing',
+    'Email Marketing',
+    'Google Analytics',
+    'Data Analysis',
+    'Machine Learning',
+    'Artificial Intelligence',
+    'Data Science',
+    'Excel',
+    'Power BI',
+    'Tableau',
+    'Salesforce',
+    'Customer Service',
+    'Business Development',
+    'Sales',
+    'HR',
+    'Recruitment',
+    'Accounting',
+    'Finance',
+    'Graphic Design',
+    'UI/UX Design',
+    'Photoshop',
+    'Illustrator',
+    'Figma',
+    'Adobe XD',
+    'Video Editing',
+    'Content Writing',
+    'Technical Writing',
+    'Communication',
+    'Leadership',
+    'Team Management'
+  ];
+
   const addToArray = (
     fieldName: keyof CandidateFormData,
     item: string,
@@ -316,6 +449,28 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
         delete newErrors.preferredEmploymentTypes;
         return newErrors;
       });
+    }
+  };
+
+  const handleJobLocationSelect = (location: string) => {
+    if (!formData.preferredJobLocations.includes(location)) {
+      setFormData((prev) => ({
+        ...prev,
+        preferredJobLocations: [...prev.preferredJobLocations, location]
+      }));
+      if (showErrors && errors.preferredJobLocations) {
+        setErrors((prev) => {
+          const newErrors = { ...prev };
+          delete newErrors.preferredJobLocations;
+          return newErrors;
+        });
+      }
+    } else {
+      // Allow removing by clicking again
+      setFormData((prev) => ({
+        ...prev,
+        preferredJobLocations: prev.preferredJobLocations.filter(l => l !== location)
+      }));
     }
   };
 
@@ -490,6 +645,9 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
           preferredJobCategories: formData.preferredJobCategories.length > 0 ? formData.preferredJobCategories : ["General"],
           preferredEmploymentTypes: formData.preferredEmploymentTypes.length > 0 ? formData.preferredEmploymentTypes : ["Full-time"],
           preferredWorkTypes: formData.preferredWorkTypes.length > 0 ? formData.preferredWorkTypes : ["on-site"],
+          ...(formData.howSoonReady && formData.howSoonReady.trim() && { howSoonReady: formData.howSoonReady }),
+          ...(formData.preferredJobLocations && formData.preferredJobLocations.length > 0 && { preferredJobLocations: formData.preferredJobLocations }),
+          ...(formData.expectedSalary && formData.expectedSalary > 0 && { expectedSalary: formData.expectedSalary }),
           resume: uploadedURL || undefined,
         };
 
@@ -520,13 +678,13 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
         setIsSubmitting(false);
       }
     },
-    [formData, onSubmit, refreshCandidates, resumeFile]
+    [formData, onSubmit, refreshCandidates, resumeFile, uploadedURL, id]
   );
 
   const getInputClassName = (fieldName: string, baseClassName: string = "") => {
     const hasError = showErrors && errors[fieldName];
-    const errorClasses = hasError ? "border-red-500 focus:border-red-500 focus:ring-red-500 bg-red-50" : "";
-    const placeholderClasses = "placeholder:text-gray-400 placeholder:opacity-60";
+    const errorClasses = hasError ? "border-red-500 focus:border-red-500 focus:ring-red-500 bg-red-50/50" : "";
+    const placeholderClasses = "placeholder:text-slate-400 placeholder:opacity-70";
     return `${baseClassName} ${errorClasses} ${placeholderClasses}`.trim();
   };
   const handlePreviewResume = () => {
@@ -543,52 +701,51 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-orange-50/30 to-slate-100">
         <Navbar />
-      <div className="w-full px-6 py-8">
-        <div className="mb-8 flex items-center justify-between">
-          <div></div>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-8">
-          <Card className="shadow-2xl rounded-3xl border-0 bg-white/80 backdrop-blur-sm overflow-hidden w-full">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <Card className="shadow-xl rounded-2xl border border-slate-200/80 bg-white w-full" style={{ overflow: 'visible' }}>
             <CardHeader
-              className="bg-gradient-to-r from-orange-50 via-amber-50 to-yellow-50 border-b border-orange-100"
-              style={{ display: 'flex', flexDirection: 'row', gap: '40px', justifyContent:"center" , alignItems:"center" }}
+              className="bg-gradient-to-r from-orange-50 via-amber-50 to-orange-50 border-b border-slate-200/50 px-8 py-10"
             >
-              <div>
-                <img
-                  src='/images/logo.png'
-                  alt="TalentHub Logo"
-                  className="h-10 md:h-12 lg:h-16"
-                />
-              </div>
-
-              <div className="flex flex-col justify-start mt-3">
-                <CardTitle className="text-2xl font-bold text-gray-900">
-                  Professional, Personal & Contact Information
-                </CardTitle>
-                <p className="text-gray-600 font-medium mt-2">
-                  Please provide your basic information and contact details
-                </p>
+              <div className="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8">
+                <div className="flex-shrink-0">
+                  <img
+                    src='/images/logo.png'
+                    alt="TalentHub Logo"
+                    className="h-12 md:h-14 lg:h-16 w-auto"
+                  />
+                </div>
+                <div className="flex flex-col items-center md:items-start text-center md:text-left">
+                  <CardTitle className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">
+                    Talent Pool Registration
+                  </CardTitle>
+                  <p className="text-slate-600 text-sm md:text-base font-medium">
+                    Complete your profile to join our talent pool and unlock career opportunities
+                  </p>
+                </div>
               </div>
             </CardHeader>
 
-            <CardContent className="p-8 space-y-8">
+            <CardContent className="p-8 lg:p-10 space-y-10">
               {/* Resume Upload Section */}
               <div className="space-y-6">
-                <div className="flex items-center gap-3 pb-4 border-b border-gray-100">
-                  <div className="w-8 h-8 bg-orange-100 rounded-xl flex items-center justify-center">
-                    <FileText className="h-4 w-4 text-orange-600" />
+                <div className="flex items-center gap-3 pb-3 border-b-2 border-slate-200">
+                  <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-amber-600 rounded-lg flex items-center justify-center shadow-sm">
+                    <FileText className="h-5 w-5 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900">Resume Upload</h3>
+                  <div>
+                    <h3 className="text-xl font-semibold text-slate-900">Resume Upload</h3>
+                    <p className="text-sm text-slate-500 mt-0.5">Upload your resume to auto-fill form fields (Optional)</p>
+                  </div>
                 </div>
                 <div className="space-y-4">
-                  <Label className="text-sm font-bold text-gray-700 flex items-center gap-2">
-                    <UploadCloud className="h-4 w-4 text-gray-500" />
+                  <Label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                    <UploadCloud className="h-4 w-4 text-slate-500" />
                     Resume File
                   </Label>
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
                     <Input
                       type="file"
                       ref={fileInputRef}
@@ -600,9 +757,9 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                       type="button"
                       variant="outline"
                       onClick={() => fileInputRef.current?.click()}
-                      className="flex items-center gap-3 h-12 px-6 rounded-xl border-2 border-dashed border-orange-300 hover:border-orange-400 hover:bg-orange-50 transition-all duration-200 w-full sm:w-auto font-medium"
+                      className="flex items-center gap-3 h-12 px-6 rounded-lg border-2 border-dashed border-slate-300 hover:border-orange-500 hover:bg-orange-50/50 transition-all duration-200 w-full sm:w-auto font-medium text-slate-700 hover:text-orange-700"
                     >
-                      <UploadCloud className="h-5 w-5 text-orange-500" />
+                      <UploadCloud className="h-5 w-5 text-orange-600" />
                       <span className="truncate">
                         {resumeFileName ? resumeFileName : "Choose Resume File (Optional)"}
                       </span>
@@ -614,7 +771,7 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                           variant="ghost"
                           size="sm"
                           onClick={clearResume}
-                          className="text-red-500 hover:text-red-700 hover:bg-red-50 rounded-xl"
+                          className="text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg h-12 px-4"
                           disabled={resloading}
                         >
                           <X className="h-4 w-4" />
@@ -624,7 +781,7 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                           variant="outline"
                           size="sm"
                           onClick={handlePreviewResume}
-                          className="flex items-center gap-2 text-orange-600 border-orange-300 hover:bg-orange-50 rounded-xl font-medium"
+                          className="flex items-center gap-2 text-orange-600 border-orange-300 hover:bg-orange-50 rounded-lg font-medium h-12 px-4"
                           disabled={resloading || !uploadedURL}
                         >
                           <Eye className="h-4 w-4" />
@@ -634,15 +791,15 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                     )}
                   </div>
                   {resumeFileName && !resloading && uploadedURL && (
-                    <div className="flex items-center gap-2 p-4 bg-green-50 border border-green-200 rounded-xl">
-                      <CheckCircle className="h-5 w-5 text-green-600" />
-                      <span className="text-sm font-medium text-green-800">{resumeFileName} uploaded successfully</span>
+                    <div className="flex items-center gap-2 p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
+                      <CheckCircle className="h-5 w-5 text-emerald-600 flex-shrink-0" />
+                      <span className="text-sm font-medium text-emerald-800">{resumeFileName} uploaded successfully</span>
                     </div>
                   )}
                   {resloading && (
-                    <div className="flex items-center gap-2 p-4 bg-blue-50 border border-blue-200 rounded-xl">
-                      <Loader2 className="h-5 w-5 text-blue-600 animate-spin" />
-                      <span className="text-sm font-medium text-blue-800">Uploading resume...</span>
+                    <div className="flex items-center gap-2 p-4 bg-orange-50 border border-orange-200 rounded-lg">
+                      <Loader2 className="h-5 w-5 text-orange-600 animate-spin flex-shrink-0" />
+                      <span className="text-sm font-medium text-orange-800">Uploading resume...</span>
                     </div>
                   )}
                 </div>
@@ -650,91 +807,94 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
 
               {/* Basic Information Section */}
               <div className="space-y-6">
-                <div className="flex items-center gap-3 pb-4 border-b border-gray-100">
-                  <div className="w-8 h-8 bg-orange-100 rounded-xl flex items-center justify-center">
-                    <User className="h-4 w-4 text-orange-600" />
+                <div className="flex items-center gap-3 pb-3 border-b-2 border-slate-200">
+                  <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-amber-600 rounded-lg flex items-center justify-center shadow-sm">
+                    <User className="h-5 w-5 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900">Basic Information</h3>
+                  <div>
+                    <h3 className="text-xl font-semibold text-slate-900">Basic Information</h3>
+                    <p className="text-sm text-slate-500 mt-0.5">Your personal and contact details</p>
+                  </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <Label htmlFor="name" className="text-sm font-bold text-gray-700 flex items-center gap-2">
-                      <User className="h-4 w-4 text-gray-500" />
-                      Full Name *
+                  <div className="space-y-2">
+                    <Label htmlFor="name" className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                      <User className="h-4 w-4 text-slate-500" />
+                      Full Name <span className="text-red-500">*</span>
                     </Label>
                     <Input
                       id="name"
                       value={formData.name}
                       onChange={(e) => handleInputChange("name", e.target.value)}
-                      placeholder="Enter candidate's full name"
-                      className={getInputClassName("name", "h-12 rounded-xl border-gray-200 focus:border-orange-400 focus:ring-orange-400 bg-white/50 font-medium")}
+                      placeholder="Enter your full name"
+                      className={getInputClassName("name", "h-11 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900")}
                       required
                     />
                     {showErrors && errors.name && (
-                      <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                        <X className="h-4 w-4" />
+                      <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
+                        <X className="h-3 w-3" />
                         {errors.name}
                       </p>
                     )}
                   </div>
-                  <div className="space-y-3">
-                    <Label htmlFor="fatherName" className="text-sm font-bold text-gray-700 flex items-center gap-2">
-                      <User className="h-4 w-4 text-gray-500" />
-                      Father's Name *
+                  <div className="space-y-2">
+                    <Label htmlFor="fatherName" className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                      <User className="h-4 w-4 text-slate-500" />
+                      Father's Name <span className="text-red-500">*</span>
                     </Label>
                     <Input
                       id="fatherName"
                       value={formData.fatherName}
                       onChange={(e) => handleInputChange("fatherName", e.target.value)}
                       placeholder="Enter father's name"
-                      className={getInputClassName("fatherName", "h-12 rounded-xl border-gray-200 focus:border-orange-400 focus:ring-orange-400 bg-white/50 font-medium")}
+                      className={getInputClassName("fatherName", "h-11 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900")}
                     />
                     {showErrors && errors.fatherName && (
-                      <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                        <X className="h-4 w-4" />
+                      <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
+                        <X className="h-3 w-3" />
                         {errors.fatherName}
                       </p>
                     )}
                   </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <Label htmlFor="email" className="text-sm font-bold text-gray-700 flex items-center gap-2">
-                      <Mail className="h-4 w-4 text-gray-500" />
-                      Email Address *
+                  <div className="space-y-2">
+                    <Label htmlFor="email" className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                      <Mail className="h-4 w-4 text-slate-500" />
+                      Email Address <span className="text-red-500">*</span>
                     </Label>
                     <Input
                       id="email"
                       type="email"
                       value={formData.email}
                       onChange={(e) => handleInputChange("email", e.target.value)}
-                      placeholder="candidate@example.com"
-                      className={getInputClassName("email", "h-12 rounded-xl border-gray-200 focus:border-orange-400 focus:ring-orange-400 bg-white/50 font-medium")}
+                      placeholder="your.email@example.com"
+                      className={getInputClassName("email", "h-11 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900")}
                       required
                     />
                     {showErrors && errors.email && (
-                      <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                        <X className="h-4 w-4" />
+                      <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
+                        <X className="h-3 w-3" />
                         {errors.email}
                       </p>
                     )}
                   </div>
-                  <div className="space-y-3">
-                    <Label htmlFor="phone" className="text-sm font-bold text-gray-700 flex items-center gap-2">
-                      <Phone className="h-4 w-4 text-gray-500" />
-                      Phone Number *
+                  <div className="space-y-2">
+                    <Label htmlFor="phone" className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                      <Phone className="h-4 w-4 text-slate-500" />
+                      Phone Number <span className="text-red-500">*</span>
                     </Label>
                     <Input
                       id="phone"
                       value={formData.phone}
                       onChange={(e) => handleInputChange("phone", e.target.value)}
-                      placeholder="XXXXXXXXXXX"
-                      className={getInputClassName("phone", "h-12 rounded-xl border-gray-200 focus:border-orange-400 focus:ring-orange-400 bg-white/50 font-medium")}
+                      placeholder="10-digit mobile number"
+                      className={getInputClassName("phone", "h-11 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900")}
                       required
                     />
                     {showErrors && errors.phone && (
-                      <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                        <X className="h-4 w-4" />
+                      <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
+                        <X className="h-3 w-3" />
                         {errors.phone}
                       </p>
                     )}
@@ -744,65 +904,68 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
 
               {/* Personal Details Section */}
               <div className="space-y-6">
-                <div className="flex items-center gap-3 pb-4 border-b border-gray-100">
-                  <div className="w-8 h-8 bg-orange-100 rounded-xl flex items-center justify-center">
-                    <Calendar className="h-4 w-4 text-orange-600" />
+                <div className="flex items-center gap-3 pb-3 border-b-2 border-slate-200">
+                  <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-amber-600 rounded-lg flex items-center justify-center shadow-sm">
+                    <Calendar className="h-5 w-5 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900">Personal Details</h3>
+                  <div>
+                    <h3 className="text-xl font-semibold text-slate-900">Personal Details</h3>
+                    <p className="text-sm text-slate-500 mt-0.5">Additional personal information</p>
+                  </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="space-y-3">
-                    <Label htmlFor="dateOfBirth" className="text-sm font-bold text-gray-700 flex items-center gap-2">
-                      <Calendar className="h-4 w-4 text-gray-500" />
-                      Date of Birth *
+                  <div className="space-y-2">
+                    <Label htmlFor="dateOfBirth" className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                      <Calendar className="h-4 w-4 text-slate-500" />
+                      Date of Birth <span className="text-red-500">*</span>
                     </Label>
                     <Input
                       id="dateOfBirth"
                       type="date"
                       value={formData.dateOfBirth}
                       onChange={(e) => handleInputChange("dateOfBirth", e.target.value)}
-                      className={getInputClassName("dateOfBirth", "h-12 rounded-xl border-gray-200 focus:border-orange-400 focus:ring-orange-400 bg-white/50 font-medium")}
+                      className={getInputClassName("dateOfBirth", "h-11 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900")}
                       max="2009-08-20"
                       defaultValue="2009-08-20"
                     />
                     {showErrors && errors.dateOfBirth && (
-                      <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                        <X className="h-4 w-4" />
+                      <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
+                        <X className="h-3 w-3" />
                         {errors.dateOfBirth}
                       </p>
                     )}
                   </div>
-                  <div className="space-y-3">
-                    <Label htmlFor="gender" className="text-sm font-bold text-gray-700">Gender *</Label>
+                  <div className="space-y-2">
+                    <Label htmlFor="gender" className="text-sm font-semibold text-slate-700">Gender <span className="text-red-500">*</span></Label>
                     <Select
                       value={formData.gender}
                       onValueChange={(value) => handleInputChange("gender", value as "Male" | "Female" | "Other")}
                     >
-                      <SelectTrigger className="h-12 rounded-xl border-gray-200 focus:border-orange-400 focus:ring-orange-400 bg-white/50 font-medium">
+                      <SelectTrigger className="h-11 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900">
                         <SelectValue placeholder="Select gender" />
                       </SelectTrigger>
-                      <SelectContent className="rounded-xl">
+                      <SelectContent className="rounded-lg">
                         <SelectItem value="Male">Male</SelectItem>
                         <SelectItem value="Female">Female</SelectItem>
                         <SelectItem value="Other">Other</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
-                  <div className="space-y-3">
-                    <Label htmlFor="aadharNumber" className="text-sm font-bold text-gray-700 flex items-center gap-2">
-                      <FileText className="h-4 w-4 text-gray-500" />
-                      Aadhar Number (Optional)
+                  <div className="space-y-2">
+                    <Label htmlFor="aadharNumber" className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                      <FileText className="h-4 w-4 text-slate-500" />
+                      Aadhar Number <span className="text-slate-400 text-xs">(Optional)</span>
                     </Label>
                     <Input
                       id="aadharNumber"
                       value={formData.aadharNumber}
                       onChange={(e) => handleInputChange("aadharNumber", e.target.value)}
-                      placeholder="Enter Aadhar number (optional)"
-                      className={getInputClassName("aadharNumber", "h-12 rounded-xl border-gray-200 focus:border-orange-400 focus:ring-orange-400 bg-white/50 font-medium")}
+                      placeholder="12-digit Aadhar number"
+                      className={getInputClassName("aadharNumber", "h-11 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900")}
                     />
                     {showErrors && errors.aadharNumber && (
-                      <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                        <X className="h-4 w-4" />
+                      <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
+                        <X className="h-3 w-3" />
                         {errors.aadharNumber}
                       </p>
                     )}
@@ -812,85 +975,88 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
 
               {/* Location Details Section */}
               <div className="space-y-6">
-                <div className="flex items-center gap-3 pb-4 border-b border-gray-100">
-                  <div className="w-8 h-8 bg-orange-100 rounded-xl flex items-center justify-center">
-                    <MapPin className="h-4 w-4 text-orange-600" />
+                <div className="flex items-center gap-3 pb-3 border-b-2 border-slate-200">
+                  <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-amber-600 rounded-lg flex items-center justify-center shadow-sm">
+                    <MapPin className="h-5 w-5 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900">Location Details</h3>
+                  <div>
+                    <h3 className="text-xl font-semibold text-slate-900">Location Details</h3>
+                    <p className="text-sm text-slate-500 mt-0.5">Your current address information</p>
+                  </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <Label htmlFor="street" className="text-sm font-bold text-gray-700">Street Address</Label>
+                  <div className="space-y-2">
+                    <Label htmlFor="street" className="text-sm font-semibold text-slate-700">Street Address</Label>
                     <Input
                       id="street"
                       value={formData.currentLocationDetails.street}
                       onChange={(e) => handleInputChange("currentLocationDetails.street", e.target.value)}
                       placeholder="Enter street address"
-                      className={getInputClassName("currentLocationDetails.street", "h-12 rounded-xl border-gray-200 focus:border-orange-400 focus:ring-orange-400 bg-white/50 font-medium")}
+                      className={getInputClassName("currentLocationDetails.street", "h-11 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900")}
                     />
                     {showErrors && errors["currentLocationDetails.street"] && (
-                      <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                        <X className="h-4 w-4" />
+                      <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
+                        <X className="h-3 w-3" />
                         {errors["currentLocationDetails.street"]}
                       </p>
                     )}
                   </div>
-                  <div className="space-y-3">
-                    <Label htmlFor="area" className="text-sm font-bold text-gray-700">Area/Locality</Label>
+                  <div className="space-y-2">
+                    <Label htmlFor="area" className="text-sm font-semibold text-slate-700">Area/Locality</Label>
                     <Input
                       id="area"
                       value={formData.currentLocationDetails.area}
                       onChange={(e) => handleInputChange("currentLocationDetails.area", e.target.value)}
                       placeholder="Enter area or locality"
-                      className={getInputClassName("currentLocationDetails.area", "h-12 rounded-xl border-gray-200 focus:border-orange-400 focus:ring-orange-400 bg-white/50 font-medium")}
+                      className={getInputClassName("currentLocationDetails.area", "h-11 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900")}
                     />
                     {showErrors && errors["currentLocationDetails.area"] && (
-                      <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                        <X className="h-4 w-4" />
+                      <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
+                        <X className="h-3 w-3" />
                         {errors["currentLocationDetails.area"]}
                       </p>
                     )}
                   </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <Label htmlFor="city" className="text-sm font-bold text-gray-700 flex items-center gap-2">
-                      <MapPin className="h-4 w-4 text-gray-500" />
-                      City *
+                  <div className="space-y-2">
+                    <Label htmlFor="city" className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                      <MapPin className="h-4 w-4 text-slate-500" />
+                      City <span className="text-red-500">*</span>
                     </Label>
                     <Input
                       id="city"
                       value={formData.currentLocationDetails.city}
                       onChange={(e) => handleInputChange("currentLocationDetails.city", e.target.value)}
                       placeholder="Enter city name"
-                      className={getInputClassName("city", "h-12 rounded-xl border-gray-200 focus:border-orange-400 focus:ring-orange-400 bg-white/50 font-medium")}
+                      className={getInputClassName("city", "h-11 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900")}
                       required
                     />
                     {showErrors && errors.city && (
-                      <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                        <X className="h-4 w-4" />
+                      <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
+                        <X className="h-3 w-3" />
                         {errors.city}
                       </p>
                     )}
                   </div>
-                  <div className="space-y-3">
-                    <Label htmlFor="pincode" className="text-sm font-bold text-gray-700">Pincode</Label>
+                  <div className="space-y-2">
+                    <Label htmlFor="pincode" className="text-sm font-semibold text-slate-700">Pincode</Label>
                     <Input
                       id="pincode"
                       value={formData.currentLocationDetails.pincode}
                       onChange={(e) => handleInputChange("currentLocationDetails.pincode", e.target.value)}
                       placeholder="Enter pincode"
-                      className={getInputClassName("currentLocationDetails.pincode", "h-12 rounded-xl border-gray-200 focus:border-orange-400 focus:ring-orange-400 bg-white/50 font-medium")}
+                      className={getInputClassName("currentLocationDetails.pincode", "h-11 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900")}
                     />
                     {showErrors && errors["currentLocationDetails.pincode"] && (
-                      <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                        <X className="h-4 w-4" />
+                      <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
+                        <X className="h-3 w-3" />
                         {errors["currentLocationDetails.pincode"]}
                       </p>
                     )}
                   </div>
                 </div>
-                <div className="space-y-3">
+                {/* <div className="space-y-3">
                   <Label htmlFor="fullAddress" className="text-sm font-bold text-gray-700">Complete Address</Label>
                   <Textarea
                     id="fullAddress"
@@ -906,19 +1072,22 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                       {errors["currentLocationDetails.fullAddress"]}
                     </p>
                   )}
-                </div>
+                </div> */}
               </div>
 
               {/* Languages Section */}
               <div className="space-y-6">
-                <div className="flex items-center gap-3 pb-4 border-b border-gray-100">
-                  <div className="w-8 h-8 bg-orange-100 rounded-xl flex items-center justify-center">
-                    <Languages className="h-4 w-4 text-orange-600" />
+                <div className="flex items-center gap-3 pb-3 border-b-2 border-slate-200">
+                  <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-amber-600 rounded-lg flex items-center justify-center shadow-sm">
+                    <Languages className="h-5 w-5 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900">Spoken Languages</h3>
+                  <div>
+                    <h3 className="text-xl font-semibold text-slate-900">Spoken Languages</h3>
+                    <p className="text-sm text-slate-500 mt-0.5">Languages you can communicate in</p>
+                  </div>
                 </div>
                 <div className="space-y-4">
-                  <Label className="text-sm font-bold text-gray-700">Select Languages *</Label>
+                  <Label className="text-sm font-semibold text-slate-700">Select Languages <span className="text-red-500">*</span></Label>
                   <Select
                     value={selectedLanguage}
                     onValueChange={(value) => {
@@ -938,10 +1107,10 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                       }
                     }}
                   >
-                    <SelectTrigger className={getInputClassName("spokenLanguages", "h-12 rounded-xl border-gray-200 focus:border-orange-400 focus:ring-orange-400 bg-white/50 font-medium")}>
+                    <SelectTrigger className={getInputClassName("spokenLanguages", "h-11 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900")}>
                       <SelectValue placeholder="Select a language to add" />
                     </SelectTrigger>
-                    <SelectContent className="rounded-xl">
+                    <SelectContent className="rounded-lg">
                       {commonLanguages
                         .filter(lang => !formData.spokenLanguages.includes(lang))
                         .map((lang) => (
@@ -952,17 +1121,17 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                     </SelectContent>
                   </Select>
                   {showErrors && errors.spokenLanguages && (
-                    <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                      <X className="h-4 w-4" />
+                    <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
+                      <X className="h-3 w-3" />
                       {errors.spokenLanguages}
                     </p>
                   )}
-                  <div className="flex flex-wrap gap-3 mt-4">
+                  <div className="flex flex-wrap gap-2 mt-4">
                     {formData.spokenLanguages.map((language, index) => (
-                      <Badge key={index} variant="secondary" className="gap-2 py-2 px-4 bg-orange-50 text-orange-700 border border-orange-200 rounded-xl font-medium">
+                      <Badge key={index} variant="secondary" className="gap-2 py-1.5 px-3 bg-orange-50 text-orange-700 border border-orange-200 rounded-md font-medium text-sm">
                         {language}
                         <X
-                          className="h-3 w-3 cursor-pointer hover:text-red-500 transition-colors"
+                          className="h-3.5 w-3.5 cursor-pointer hover:text-red-600 transition-colors"
                           onClick={() => removeFromArray("spokenLanguages", index)}
                         />
                       </Badge>
@@ -972,29 +1141,32 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
               </div>
             </CardContent>
 
-            <CardContent className="p-8 space-y-8">
+            <CardContent className="p-8 lg:p-10 space-y-10" style={{ overflow: 'visible' }}>
               {/* Professional Information Section */}
               <div className="space-y-6">
-                <div className="flex items-center gap-3 pb-4 border-b border-gray-100">
-                  <div className="w-8 h-8 bg-orange-100 rounded-xl flex items-center justify-center">
-                    <Award className="h-4 w-4 text-orange-600" />
+                <div className="flex items-center gap-3 pb-3 border-b-2 border-slate-200">
+                  <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-amber-600 rounded-lg flex items-center justify-center shadow-sm">
+                    <Award className="h-5 w-5 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900">Educational Background</h3>
+                  <div>
+                    <h3 className="text-xl font-semibold text-slate-900">Educational Background</h3>
+                    <p className="text-sm text-slate-500 mt-0.5">Your academic qualifications and experience</p>
+                  </div>
                 </div>
                 <div className="space-y-6">
-                  <div className="space-y-3">
-                    <Label htmlFor="highestQualification" className="text-sm font-bold text-gray-700 flex items-center gap-2">
-                      <Award className="h-4 w-4 text-gray-500" />
-                      Educational Qualification *
+                  <div className="space-y-2">
+                    <Label htmlFor="highestQualification" className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                      <Award className="h-4 w-4 text-slate-500" />
+                      Educational Qualification <span className="text-red-500">*</span>
                     </Label>
                     <Select
                       value={formData.highestQualification}
                       onValueChange={(value) => handleInputChange("highestQualification", value)}
                     >
-                      <SelectTrigger className={getInputClassName("highestQualification", "h-12 rounded-xl border-gray-200 focus:border-orange-400 focus:ring-orange-400 bg-white/50 font-medium")}>
+                      <SelectTrigger className={getInputClassName("highestQualification", "h-11 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900")}>
                         <SelectValue placeholder="Select your highest qualification" />
                       </SelectTrigger>
-                      <SelectContent className="rounded-xl max-h-60">
+                      <SelectContent className="rounded-lg max-h-60">
                         {qualificationOptions.map((option) => (
                           <SelectItem key={option.value} value={option.value}>
                             <div className="flex flex-col">
@@ -1005,17 +1177,17 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                       </SelectContent>
                     </Select>
                     {showErrors && errors.highestQualification && (
-                      <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                        <X className="h-4 w-4" />
+                      <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
+                        <X className="h-3 w-3" />
                         {errors.highestQualification}
                       </p>
                     )}
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div className="space-y-3">
-                      <Label htmlFor="experienceYears" className="text-sm font-bold text-gray-700 flex items-center gap-2">
-                        <Clock className="h-4 w-4 text-gray-500" />
-                        Work Experience (Years) *
+                    <div className="space-y-2">
+                      <Label htmlFor="experienceYears" className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                        <Clock className="h-4 w-4 text-slate-500" />
+                        Work Experience (Years) <span className="text-red-500">*</span>
                       </Label>
                       <Input
                         id="experienceYears"
@@ -1041,20 +1213,20 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                             }
                           }
                         }}
-                        className={getInputClassName("totalExperienceYears", "h-12 rounded-xl border-gray-200 focus:border-orange-400 focus:ring-orange-400 bg-white/50 font-medium")}
+                        className={getInputClassName("totalExperienceYears", "h-11 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900")}
                         required
                       />
                       {showErrors && errors.totalExperienceYears && (
-                        <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                          <X className="h-4 w-4" />
+                        <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
+                          <X className="h-3 w-3" />
                           {errors.totalExperienceYears}
                         </p>
                       )}
                     </div>
-                    <div className="space-y-3">
-                      <Label htmlFor="experienceMonths" className="text-sm font-bold text-gray-700 flex items-center gap-2">
-                        <Clock className="h-4 w-4 text-gray-500" />
-                        Additional Months *
+                    <div className="space-y-2">
+                      <Label htmlFor="experienceMonths" className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                        <Clock className="h-4 w-4 text-slate-500" />
+                        Additional Months <span className="text-red-500">*</span>
                       </Label>
                       <Input
                         id="experienceMonths"
@@ -1081,11 +1253,11 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                             }
                           }
                         }}
-                        className={getInputClassName("totalExperienceMonths", "h-12 rounded-xl border-gray-200 focus:border-orange-400 focus:ring-orange-400 bg-white/50 font-medium")}
+                        className={getInputClassName("totalExperienceMonths", "h-11 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900")}
                       />
                       {showErrors && errors.totalExperienceMonths && (
-                        <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                          <X className="h-4 w-4" />
+                        <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
+                          <X className="h-3 w-3" />
                           {errors.totalExperienceMonths}
                         </p>
                       )}
@@ -1096,43 +1268,122 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
 
               {/* Skills Section */}
               <div className="space-y-6">
-                <div className="flex items-center gap-3 pb-4 border-b border-gray-100">
-                  <div className="w-8 h-8 bg-orange-100 rounded-xl flex items-center justify-center">
-                    <Target className="h-4 w-4 text-orange-600" />
+                <div className="flex items-center gap-3 pb-3 border-b-2 border-slate-200">
+                  <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-amber-600 rounded-lg flex items-center justify-center shadow-sm">
+                    <Target className="h-5 w-5 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900">Skills & Expertise</h3>
+                  <div>
+                    <h3 className="text-xl font-semibold text-slate-900">Skills & Expertise</h3>
+                    <p className="text-sm text-slate-500 mt-0.5">Your technical and professional capabilities</p>
+                  </div>
                 </div>
                 <div className="space-y-4">
-                  <Label className="text-sm font-bold text-gray-700">Technical & Professional Skills</Label>
+                  <Label className="text-sm font-semibold text-slate-700">Technical & Professional Skills</Label>
                   <div className="flex flex-col sm:flex-row gap-3">
-                    <Input
-                      value={currentSkill}
-                      onChange={(e) => setCurrentSkill(e.target.value)}
-                      placeholder="Add a skill (e.g., React, Python, Digital Marketing, Project Management)"
-                      className={getInputClassName("skills", "h-12 flex-1 rounded-xl border-gray-200 focus:border-orange-400 focus:ring-orange-400 bg-white/50 font-medium")}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                          e.preventDefault();
+                    <div className="flex-1 relative" style={{ zIndex: openSkillsDropdown ? 50 : 'auto' }}>
+                      <Input
+                        value={currentSkill}
+                        onChange={(e) => {
+                          setCurrentSkill(e.target.value);
+                          setOpenSkillsDropdown(true);
+                        }}
+                        onFocus={() => setOpenSkillsDropdown(true)}
+                        onBlur={(e) => {
+                          // Delay closing to allow click events on dropdown items
+                          setTimeout(() => setOpenSkillsDropdown(false), 200);
+                        }}
+                        placeholder="Type or select a skill (e.g., React, Python, Digital Marketing, Project Management)"
+                        className={getInputClassName("skills", "h-11 flex-1 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900 pr-10")}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            if (currentSkill.trim() && !formData.skills.includes(currentSkill.trim())) {
+                              addToArray("skills", currentSkill, setCurrentSkill);
+                              setOpenSkillsDropdown(false);
+                            }
+                          }
+                        }}
+                      />
+                      <button
+                        type="button"
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400 hover:text-slate-600 focus:outline-none z-10"
+                        onClick={() => setOpenSkillsDropdown(!openSkillsDropdown)}
+                      >
+                        <ChevronDown className="h-4 w-4" />
+                      </button>
+                      
+                      {/* Skills Dropdown */}
+                      {openSkillsDropdown && (
+                        <div className="absolute z-[100] w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-xl max-h-60 overflow-auto">
+                          {/* Show custom skill option if typed value doesn't match any existing skill */}
+                          {currentSkill.trim() && 
+                           !commonSkills.some(skill => 
+                             skill.toLowerCase() === currentSkill.trim().toLowerCase()
+                           ) && 
+                           !formData.skills.some(skill => 
+                             skill.toLowerCase() === currentSkill.trim().toLowerCase()
+                           ) && (
+                            <div
+                              onClick={() => {
+                                if (!formData.skills.includes(currentSkill.trim())) {
+                                  addToArray("skills", currentSkill, setCurrentSkill);
+                                  setOpenSkillsDropdown(false);
+                                }
+                              }}
+                              className="cursor-pointer bg-orange-50 hover:bg-orange-100 px-4 py-2 flex items-center gap-2"
+                            >
+                              <Plus className="h-4 w-4 text-orange-600" />
+                              <span className="font-medium">Add "{currentSkill.trim()}"</span>
+                            </div>
+                          )}
+                          
+                          {/* Show filtered skills from common list */}
+                          {commonSkills
+                            .filter(skill => 
+                              !currentSkill.trim() || 
+                              skill.toLowerCase().includes(currentSkill.toLowerCase())
+                            )
+                            .map((skill) => (
+                              <div
+                                key={skill}
+                                onClick={() => {
+                                  if (!formData.skills.includes(skill)) {
+                                    addToArray("skills", skill, setCurrentSkill);
+                                    setOpenSkillsDropdown(false);
+                                  }
+                                }}
+                                className="cursor-pointer px-4 py-2 hover:bg-slate-50 flex items-center justify-between"
+                              >
+                                <span>{skill}</span>
+                                {formData.skills.includes(skill) && (
+                                  <Check className="h-4 w-4 text-orange-600" />
+                                )}
+                              </div>
+                            ))}
+                        </div>
+                      )}
+                    </div>
+                    {currentSkill.trim() && !formData.skills.includes(currentSkill.trim()) && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
                           addToArray("skills", currentSkill, setCurrentSkill);
-                        }
-                      }}
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => addToArray("skills", currentSkill, setCurrentSkill)}
-                      className="h-12 px-6 rounded-xl border-orange-300 text-orange-600 hover:bg-orange-50 font-medium"
-                    >
-                      <Plus className="h-4 w-4 mr-2" />
-                      Add Skill
-                    </Button>
+                          setOpenSkillsDropdown(false);
+                        }}
+                        className="h-11 px-6 rounded-lg border-orange-300 text-orange-700 hover:bg-orange-50 font-medium"
+                      >
+                        <Plus className="h-4 w-4 mr-2" />
+                        Add Skill
+                      </Button>
+                    )}
                   </div>
-                  <div className="flex flex-wrap gap-3 mt-4">
+                  <div className="flex flex-wrap gap-2 mt-4">
                     {formData.skills.map((skill, index) => (
-                      <Badge key={index} variant="secondary" className="gap-2 py-2 px-4 bg-orange-50 text-orange-700 border border-orange-200 rounded-xl font-medium">
+                      <Badge key={index} variant="secondary" className="gap-2 py-1.5 px-3 bg-orange-50 text-orange-700 border border-orange-200 rounded-md font-medium text-sm">
                         {skill}
                         <X
-                          className="h-3 w-3 cursor-pointer hover:text-red-500 transition-colors"
+                          className="h-3.5 w-3.5 cursor-pointer hover:text-red-600 transition-colors"
                           onClick={() => removeFromArray("skills", index)}
                         />
                       </Badge>
@@ -1141,26 +1392,30 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                 </div>
               </div>
 
-              {/* Job Categories Section */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-6">
-                  <div className="flex items-center gap-3 pb-4 border-b border-gray-100">
-                    <div className="w-8 h-8 bg-orange-100 rounded-xl flex items-center justify-center">
-                      <Target className="h-4 w-4 text-orange-600" />
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900">Employment Preferences</h3>
+              {/* Employment Preferences Section */}
+              <div className="space-y-6">
+                <div className="flex items-center gap-3 pb-3 border-b-2 border-slate-200">
+                  <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-amber-600 rounded-lg flex items-center justify-center shadow-sm">
+                    <Target className="h-5 w-5 text-white" />
                   </div>
-                  <div className="space-y-4">
-                    <Label className="text-sm font-bold text-gray-700">Preferred Industries & Job Categories</Label>
+                  <div>
+                    <h3 className="text-xl font-semibold text-slate-900">Employment Preferences</h3>
+                    <p className="text-sm text-slate-500 mt-0.5">Your job preferences and requirements</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label className="text-sm font-semibold text-slate-700">Preferred Industries & Job Categories</Label>
                     <Popover open={openCategoryDropdown} onOpenChange={setOpenCategoryDropdown}>
                       <PopoverTrigger asChild>
                         <Button
                           variant="outline"
                           role="combobox"
                           aria-expanded={openCategoryDropdown}
-                          className="h-12 w-full justify-between rounded-xl border-gray-200 focus:border-orange-400 focus:ring-orange-400 bg-white/50 font-medium hover:bg-white/80"
+                          className="h-11 w-full justify-between rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal hover:bg-slate-50 text-slate-700"
                         >
-                          <span className="text-gray-500">Select job categories...</span>
+                          <span className="text-slate-500">Select job categories...</span>
                           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </PopoverTrigger>
@@ -1190,149 +1445,343 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                         </Command>
                       </PopoverContent>
                     </Popover>
-                    <div className="flex flex-wrap gap-3 mt-4">
+                    <div className="flex flex-wrap gap-2 mt-4">
                       {formData.preferredJobCategories.map((category, index) => (
-                        <Badge key={index} variant="secondary" className="gap-2 py-2 px-4 bg-orange-50 text-orange-700 border border-orange-200 rounded-xl font-medium">
+                        <Badge key={index} variant="secondary" className="gap-2 py-1.5 px-3 bg-orange-50 text-orange-700 border border-orange-200 rounded-md font-medium text-sm">
                           {category}
                           <X
-                            className="h-3 w-3 cursor-pointer hover:text-red-500 transition-colors"
+                            className="h-3.5 w-3.5 cursor-pointer hover:text-red-600 transition-colors"
                             onClick={() => removeFromArray("preferredJobCategories", index)}
                           />
                         </Badge>
                       ))}
                     </div>
                   </div>
-                </div>
-                <div className="space-y-6 mr-3">
-                  <div className="space-y-8">
-                    <div className="space-y-4">
-                      <Label className="text-sm font-bold text-gray-700">Preferred Employment Types *</Label>
-                      <Popover open={openEmploymentTypeDropdown} onOpenChange={setOpenEmploymentTypeDropdown}>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            role="combobox"
-                            aria-expanded={openEmploymentTypeDropdown}
-                            className="h-12 w-full justify-between rounded-xl border-gray-200 focus:border-orange-400 focus:ring-orange-400 bg-white/50 font-medium hover:bg-white/80"
-                          >
-                            <span className="text-gray-500">
-                              {formData.preferredEmploymentTypes.length > 0
-                                ? `${formData.preferredEmploymentTypes.length} employment type(s) selected`
-                                : "Select employment types..."}
-                            </span>
-                            <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-full p-0" align="start">
-                          <Command>
-                            <CommandInput placeholder="Search employment types..." className="h-9" />
-                            <CommandEmpty>No employment types found.</CommandEmpty>
-                            <CommandGroup>
-                              <CommandList>
-                                {employmentTypeOptions.map((type) => (
-                                  <CommandItem
-                                    key={type}
-                                    value={type}
-                                    onSelect={() => handleEmploymentTypeSelect(type)}
-                                    className="cursor-pointer"
-                                  >
-                                    <div className="flex items-center justify-between w-full">
-                                      <span>{type}</span>
-                                      {formData.preferredEmploymentTypes.includes(type) && (
-                                        <Check className="h-4 w-4 text-orange-600" />
-                                      )}
-                                    </div>
-                                  </CommandItem>
-                                ))}
-                              </CommandList>
-                            </CommandGroup>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
-                      <div className="flex flex-wrap gap-3 mt-4">
-                        {formData.preferredEmploymentTypes.map((type, index) => (
-                          <Badge key={index} variant="secondary" className="gap-2 py-2 px-4 bg-orange-50 text-orange-700 border border-orange-200 rounded-xl font-medium">
-                            {type}
-                            <X
-                              className="h-3 w-3 cursor-pointer hover:text-red-500 transition-colors"
-                              onClick={() => removeFromArray("preferredEmploymentTypes", index)}
-                            />
-                          </Badge>
-                        ))}
-                      </div>
-                      {showErrors && errors.preferredEmploymentTypes && (
-                        <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                          <X className="h-4 w-4" />
-                          {errors.preferredEmploymentTypes}
-                        </p>
-                      )}
+
+                  <div className="space-y-2">
+                    <Label className="text-sm font-semibold text-slate-700">Preferred Employment Types <span className="text-red-500">*</span></Label>
+                    <Popover open={openEmploymentTypeDropdown} onOpenChange={setOpenEmploymentTypeDropdown}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          aria-expanded={openEmploymentTypeDropdown}
+                          className="h-11 w-full justify-between rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal hover:bg-slate-50 text-slate-700"
+                        >
+                          <span className="text-slate-500">
+                            {formData.preferredEmploymentTypes.length > 0
+                              ? `${formData.preferredEmploymentTypes.length} employment type(s) selected`
+                              : "Select employment types..."}
+                          </span>
+                          <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-full p-0" align="start">
+                        <Command>
+                          <CommandInput placeholder="Search employment types..." className="h-9" />
+                          <CommandEmpty>No employment types found.</CommandEmpty>
+                          <CommandGroup>
+                            <CommandList>
+                              {employmentTypeOptions.map((type) => (
+                                <CommandItem
+                                  key={type}
+                                  value={type}
+                                  onSelect={() => handleEmploymentTypeSelect(type)}
+                                  className="cursor-pointer"
+                                >
+                                  <div className="flex items-center justify-between w-full">
+                                    <span>{type}</span>
+                                    {formData.preferredEmploymentTypes.includes(type) && (
+                                      <Check className="h-4 w-4 text-orange-600" />
+                                    )}
+                                  </div>
+                                </CommandItem>
+                              ))}
+                            </CommandList>
+                          </CommandGroup>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                    <div className="flex flex-wrap gap-2 mt-4">
+                      {formData.preferredEmploymentTypes.map((type, index) => (
+                        <Badge key={index} variant="secondary" className="gap-2 py-1.5 px-3 bg-orange-50 text-orange-700 border border-orange-200 rounded-md font-medium text-sm">
+                          {type}
+                          <X
+                            className="h-3.5 w-3.5 cursor-pointer hover:text-red-600 transition-colors"
+                            onClick={() => removeFromArray("preferredEmploymentTypes", index)}
+                          />
+                        </Badge>
+                      ))}
                     </div>
-                    <div className="space-y-4">
-                      <Label className="text-sm font-bold text-gray-700">Preferred Work Types *</Label>
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        {(['remote', 'hybrid', 'on-site'] as const).map((type) => (
-                          <div key={type} className="flex items-center space-x-3 p-4 border-2 border-gray-200 rounded-xl hover:bg-orange-50 hover:border-orange-300 transition-all duration-200 cursor-pointer">
-                            <Checkbox
-                              id={type}
-                              checked={formData.preferredWorkTypes.includes(type)}
-                              onCheckedChange={(checked) => {
-                                if (checked) {
-                                  setFormData((prev) => ({
-                                    ...prev,
-                                    preferredWorkTypes: [...prev.preferredWorkTypes, type],
-                                  }));
-                                } else {
-                                  setFormData((prev) => ({
-                                    ...prev,
-                                    preferredWorkTypes: prev.preferredWorkTypes.filter((t) => t !== type),
-                                  }));
-                                }
-                                if (checked && showErrors && errors.preferredWorkTypes) {
-                                  setErrors((prev) => {
-                                    const newErrors = { ...prev };
-                                    delete newErrors.preferredWorkTypes;
-                                    return newErrors;
-                                  });
-                                }
-                              }}
-                              className="w-6 h-6 rounded border border-gray-300 data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500 flex-shrink-0"
-                              style={{ minHeight: '24px', minWidth: '24px' }}
-                            />
-                            <Label htmlFor={type} className="text-sm font-medium cursor-pointer capitalize flex-1">
-                              {type.replace("-", " ")}
-                            </Label>
-                          </div>
-                        ))}
-                      </div>
-                      {showErrors && errors.preferredWorkTypes && (
-                        <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                          <X className="h-4 w-4" />
-                          {errors.preferredWorkTypes}
-                        </p>
-                      )}
-                    </div>
+                    {showErrors && errors.preferredEmploymentTypes && (
+                      <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
+                        <X className="h-3 w-3" />
+                        {errors.preferredEmploymentTypes}
+                      </p>
+                    )}
                   </div>
                 </div>
+
+                <div className="space-y-2">
+                  <Label className="text-sm font-semibold text-slate-700">Preferred Work Types <span className="text-red-500">*</span></Label>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    {(['remote', 'hybrid', 'on-site'] as const).map((type) => (
+                      <div key={type} className="flex items-center space-x-3 p-3 border-2 border-slate-200 rounded-lg hover:bg-orange-50 hover:border-orange-300 transition-all duration-200 cursor-pointer">
+                        <Checkbox
+                          id={type}
+                          checked={formData.preferredWorkTypes.includes(type)}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              setFormData((prev) => ({
+                                ...prev,
+                                preferredWorkTypes: [...prev.preferredWorkTypes, type],
+                              }));
+                            } else {
+                              setFormData((prev) => ({
+                                ...prev,
+                                preferredWorkTypes: prev.preferredWorkTypes.filter((t) => t !== type),
+                              }));
+                            }
+                            if (checked && showErrors && errors.preferredWorkTypes) {
+                              setErrors((prev) => {
+                                const newErrors = { ...prev };
+                                delete newErrors.preferredWorkTypes;
+                                return newErrors;
+                              });
+                            }
+                          }}
+                          className="w-5 h-5 rounded border border-slate-300 data-[state=checked]:bg-orange-600 data-[state=checked]:border-orange-600 flex-shrink-0"
+                          style={{ minHeight: '20px', minWidth: '20px' }}
+                        />
+                        <Label htmlFor={type} className="text-sm font-medium cursor-pointer capitalize flex-1 text-slate-700">
+                          {type.replace("-", " ")}
+                        </Label>
+                      </div>
+                    ))}
+                  </div>
+                  {showErrors && errors.preferredWorkTypes && (
+                    <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
+                      <X className="h-3 w-3" />
+                      {errors.preferredWorkTypes}
+                    </p>
+                  )}
+                </div>
+
+                {/* Additional Preferences Section */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+                  <div className="space-y-2">
+                    <Label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                      <Zap className="h-4 w-4 text-slate-500" />
+                      How Soon Are You Ready to Start? <span className="text-slate-400 text-xs">(Optional)</span>
+                    </Label>
+                    <Select
+                      value={formData.howSoonReady || ""}
+                      onValueChange={(value) => handleInputChange("howSoonReady", value)}
+                    >
+                      <SelectTrigger className={getInputClassName("howSoonReady", "h-11 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900")}>
+                        <SelectValue placeholder="Select availability" />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-lg">
+                        {howSoonReadyOptions.map((option) => (
+                          <SelectItem key={option} value={option}>
+                            {option}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {showErrors && errors.howSoonReady && (
+                      <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
+                        <X className="h-3 w-3" />
+                        {errors.howSoonReady}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                      <DollarSign className="h-4 w-4 text-slate-500" />
+                      Expected Salary (₹/month) <span className="text-slate-400 text-xs">(Optional)</span>
+                    </Label>
+                    <Input
+                      id="expectedSalary"
+                      type="number"
+                      min="0"
+                      value={formData.expectedSalary || ""}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (value === "") {
+                          handleInputChange("expectedSalary", undefined);
+                        } else {
+                          const parsed = Number.parseInt(value, 10);
+                          if (!Number.isNaN(parsed) && parsed >= 0) {
+                            handleInputChange("expectedSalary", parsed);
+                          }
+                        }
+                      }}
+                      placeholder="Enter expected salary (e.g., 50000)"
+                      className={getInputClassName("expectedSalary", "h-11 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900")}
+                    />
+                    {showErrors && errors.expectedSalary && (
+                      <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
+                        <X className="h-3 w-3" />
+                        {errors.expectedSalary}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Preferred Job Locations Section */}
+                <div className="space-y-2 pt-4">
+                  <Label className="text-sm font-semibold text-slate-700">Select Preferred Job Locations <span className="text-slate-400 text-xs">(Optional)</span></Label>
+                  <div className="flex gap-3">
+                    <div className="flex-1 relative" style={{ zIndex: openJobLocationDropdown ? 50 : 'auto' }}>
+                      <Input
+                        value={currentJobLocation}
+                        onChange={(e) => {
+                          setCurrentJobLocation(e.target.value);
+                          setOpenJobLocationDropdown(true);
+                        }}
+                        onFocus={() => setOpenJobLocationDropdown(true)}
+                        onBlur={(e) => {
+                          // Delay closing to allow click events on dropdown items
+                          setTimeout(() => setOpenJobLocationDropdown(false), 200);
+                        }}
+                        placeholder="Type or select location (e.g., Bangalore, Mumbai, Remote)"
+                        className={getInputClassName("preferredJobLocations", "h-11 w-full rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900 pr-10")}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            if (currentJobLocation.trim() && !formData.preferredJobLocations.includes(currentJobLocation.trim())) {
+                              addToArray("preferredJobLocations", currentJobLocation, setCurrentJobLocation);
+                              setOpenJobLocationDropdown(false);
+                            }
+                          }
+                        }}
+                      />
+                      <button
+                        type="button"
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400 hover:text-slate-600 focus:outline-none z-10"
+                        onClick={() => setOpenJobLocationDropdown(!openJobLocationDropdown)}
+                      >
+                        <ChevronDown className="h-4 w-4" />
+                      </button>
+                      
+                      {/* Custom Dropdown */}
+                      {openJobLocationDropdown && (
+                        <div className="absolute z-[100] w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-xl max-h-60 overflow-auto">
+                          {/* Show custom location option if typed value doesn't match any existing location */}
+                          {currentJobLocation.trim() && 
+                           !commonJobLocations.some(loc => 
+                             loc.toLowerCase() === currentJobLocation.trim().toLowerCase()
+                           ) && 
+                           !formData.preferredJobLocations.some(loc => 
+                             loc.toLowerCase() === currentJobLocation.trim().toLowerCase()
+                           ) && (
+                            <div
+                              onClick={() => {
+                                if (!formData.preferredJobLocations.includes(currentJobLocation.trim())) {
+                                  addToArray("preferredJobLocations", currentJobLocation, setCurrentJobLocation);
+                                  setOpenJobLocationDropdown(false);
+                                }
+                              }}
+                              className="cursor-pointer bg-orange-50 hover:bg-orange-100 px-4 py-2 flex items-center gap-2"
+                            >
+                              <Plus className="h-4 w-4 text-orange-600" />
+                              <span className="font-medium">Add "{currentJobLocation.trim()}"</span>
+                            </div>
+                          )}
+                          
+                          {/* Show filtered locations from common list */}
+                          {commonJobLocations
+                            .filter(loc => 
+                              !currentJobLocation.trim() || 
+                              loc.toLowerCase().includes(currentJobLocation.toLowerCase())
+                            )
+                            .map((location) => (
+                              <div
+                                key={location}
+                                onClick={() => {
+                                  handleJobLocationSelect(location);
+                                  setCurrentJobLocation("");
+                                  setOpenJobLocationDropdown(false);
+                                }}
+                                className="cursor-pointer px-4 py-2 hover:bg-slate-50 flex items-center justify-between"
+                              >
+                                <span>{location}</span>
+                                {formData.preferredJobLocations.includes(location) && (
+                                  <Check className="h-4 w-4 text-orange-600" />
+                                )}
+                              </div>
+                            ))}
+                          
+                          {/* Show empty state if no matches */}
+                          {currentJobLocation.trim() && 
+                           commonJobLocations.filter(loc => 
+                             loc.toLowerCase().includes(currentJobLocation.toLowerCase())
+                           ).length === 0 &&
+                           commonJobLocations.some(loc => 
+                             loc.toLowerCase() === currentJobLocation.trim().toLowerCase()
+                           ) && (
+                            <div className="px-4 py-2 text-sm text-slate-500">
+                              No matching locations. Use the 'Add' button or press Enter to add this location.
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                    {currentJobLocation.trim() && !formData.preferredJobLocations.includes(currentJobLocation.trim()) && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                          addToArray("preferredJobLocations", currentJobLocation, setCurrentJobLocation);
+                          setOpenJobLocationDropdown(false);
+                        }}
+                        className="h-11 px-6 rounded-lg border-orange-300 text-orange-700 hover:bg-orange-50 font-medium"
+                      >
+                        <Plus className="h-4 w-4 mr-2" />
+                        Add
+                      </Button>
+                    )}
+                  </div>
+                  <div className="flex flex-wrap gap-2 mt-4">
+                    {formData.preferredJobLocations.map((location, index) => (
+                      <Badge key={index} variant="secondary" className="gap-2 py-1.5 px-3 bg-orange-50 text-orange-700 border border-orange-200 rounded-md font-medium text-sm">
+                        {location}
+                        <X
+                          className="h-3.5 w-3.5 cursor-pointer hover:text-red-600 transition-colors"
+                          onClick={() => removeFromArray("preferredJobLocations", index)}
+                        />
+                      </Badge>
+                    ))}
+                  </div>
+                  {showErrors && errors.preferredJobLocations && (
+                    <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
+                      <X className="h-3 w-3" />
+                      {errors.preferredJobLocations}
+                    </p>
+                  )}
+                </div>
               </div>
-              </CardContent>
+            </CardContent>
             </Card>
 
             {/* Submit Button */}
-            <div className="flex justify-center items-center mt-12 pt-8 border-t-2 border-gray-200">
+            <div className="flex justify-center items-center mt-12 pt-8 border-t-2 border-slate-200">
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="gap-2 px-4 py-2 h-auto rounded-lg font-semibold text-base shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700"
+                className="gap-2 px-8 py-6 h-auto rounded-lg font-semibold text-base shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white min-w-[200px]"
               >
                 {isSubmitting ? (
                   <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <Loader2 className="h-5 w-5 animate-spin" />
                     Creating Profile...
                   </>
                 ) : (
                   <>
-                    Submit
-                    <Plus className="h-4 w-4" />
+                    Submit Application
+                    <ArrowRight className="h-5 w-5" />
                   </>
                 )}
               </Button>
@@ -1345,24 +1794,24 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center"
+                  className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
                   style={{margin: '0'}}
                   onClick={() => setShowSuccessPopup(false)}
                 >
                   <motion.div
-                    initial={{ y: 50, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    exit={{ y: 50, opacity: 0 }}
+                    initial={{ y: 50, opacity: 0, scale: 0.95 }}
+                    animate={{ y: 0, opacity: 1, scale: 1 }}
+                    exit={{ y: 50, opacity: 0, scale: 0.95 }}
                     transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                    className="bg-white rounded-2xl p-8 shadow-2xl max-w-md mx-4 text-center"
+                    className="bg-white rounded-2xl p-8 shadow-2xl max-w-md w-full text-center border border-slate-200"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <CheckCircle className="h-8 w-8 text-white" />
+                    <div className="w-20 h-20 bg-gradient-to-br from-emerald-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                      <CheckCircle className="h-10 w-10 text-white" />
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">Profile Created Successfully!</h3>
-                    <p className="text-gray-600 mb-4">{successMessage}</p>
-                    <div className="flex justify-center gap-4">
+                    <h3 className="text-2xl font-bold text-slate-900 mb-3">Profile Created Successfully!</h3>
+                    <p className="text-slate-600 mb-6 leading-relaxed">{successMessage}</p>
+                    <div className="flex justify-center">
                       <Button
                         variant="outline"
                         onClick={() => {
@@ -1392,10 +1841,16 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                             preferredJobCategories: [],
                             preferredEmploymentTypes: [],
                             preferredWorkTypes: [],
+                            howSoonReady: "",
+                            preferredJobLocations: [],
+                            expectedSalary: undefined,
                           });
+                          setCurrentJobLocation("");
+                          setExperienceYearsInput("");
+                          setExperienceMonthsInput("");
                           clearResume();
                         }}
-                        className="rounded-xl border-orange-300 text-orange-600 hover:bg-orange-50"
+                        className="rounded-lg border-orange-300 text-orange-700 hover:bg-orange-50 font-medium px-6"
                       >
                         Add Another Candidate
                       </Button>
@@ -1407,20 +1862,20 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
 
             {/* Loading Overlay */}
             {isSubmitting && (
-              <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-                <div className="bg-white rounded-2xl p-8 shadow-2xl max-w-md mx-4 text-center">
-                  <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-amber-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Loader2 className="h-8 w-8 text-white animate-spin" />
+              <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                <div className="bg-white rounded-2xl p-8 shadow-2xl max-w-md w-full text-center border border-slate-200">
+                  <div className="w-20 h-20 bg-gradient-to-r from-orange-600 to-amber-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                    <Loader2 className="h-10 w-10 text-white animate-spin" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Creating Profile...</h3>
-                  <p className="text-gray-600 mb-4">
-                    We're processing your candidate information and setting up their profile.
+                  <h3 className="text-2xl font-bold text-slate-900 mb-3">Creating Profile...</h3>
+                  <p className="text-slate-600 mb-6 leading-relaxed">
+                    We're processing your information and setting up your profile.
                   </p>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div className="bg-gradient-to-r from-orange-500 to-amber-500 h-2 rounded-full animate-pulse" style={{ width: '75%' }}></div>
+                  <div className="w-full bg-slate-200 rounded-full h-2.5 overflow-hidden">
+                    <div className="bg-gradient-to-r from-orange-600 to-amber-600 h-2.5 rounded-full animate-pulse transition-all duration-500" style={{ width: '75%' }}></div>
                   </div>
-                  <p className="text-sm text-gray-500 mt-3">
-                    You'll be redirected to view candidates shortly...
+                  <p className="text-sm text-slate-500 mt-4">
+                    Please wait while we save your information...
                   </p>
                 </div>
               </div>
