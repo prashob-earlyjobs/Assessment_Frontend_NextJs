@@ -28,7 +28,7 @@ const Index = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8 animate-in fade-in slide-in-from-left duration-700">
               <h1 className="max-w-2xl text-5xl md:text-6xl lg:text-7xl font-bold leading-tight text-foreground text-[var(--earlyjobs-text)]/80">
-                Become an <span className="text-[var(--earlyjobs-orange)]">Early</span><span className="text-primary">Jobs</span>
+                Become an <span className="text-[var(--earlyjobs-orange)]">EarlyJobs</span>
                 <span className="block text-primary">
                   Certified Career Counsellor
                 </span>
@@ -53,7 +53,7 @@ const Index = () => {
             <div className="relative animate-in fade-in slide-in-from-right duration-700 delay-200">
               <div className="relative rounded-2xl overflow-hidden shadow-strong">
                 <img 
-                  src="/images/freelanceCareerhero.jpg" 
+                  src="/images/freelanceCareerhero.png" 
                   alt="Career counsellors mentoring students" 
                   className="w-full h-auto object-cover"
                 />
@@ -143,7 +143,7 @@ const Index = () => {
       <section className="py-20 md:py-32 bg-card">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 text-foreground">
-            Your role as an EarlyJobs Career Counsellor
+            Your role as an <span className="text-[var(--earlyjobs-orange)]">EarlyJobs</span> Career Counsellor
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {[
@@ -190,11 +190,11 @@ const Index = () => {
             ))}
           </div>
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <Card className="p-6 bg-[var(--earlyjobs-text)]/2 border-primary shadow-medium">
+            <Card className="p-6 bg-[var(--earlyjobs-text)]/2  shadow-medium">
               <p className="text-lg font-semibold text-foreground">For experienced counsellors:</p>
               <p className="text-muted-foreground mt-2">Add AI-driven outcomes to existing college relationships.</p>
             </Card>
-            <Card className="p-6 bg-[var(--earlyjobs-orange)]/10 border-accent shadow-medium">
+            <Card className="p-6 bg-[var(--earlyjobs-orange)]/10 shadow-medium">
               <p className="text-lg font-semibold text-foreground">For new counsellors:</p>
               <p className="text-muted-foreground mt-2">Start confidently with structured guidance.</p>
             </Card>
