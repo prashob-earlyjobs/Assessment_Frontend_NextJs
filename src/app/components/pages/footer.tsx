@@ -1,5 +1,5 @@
 "use client"
-import { MapPin, Building, GraduationCap, Lightbulb, Users, Tag, FileText, BarChart2, Rocket } from "lucide-react";
+import { MapPin, Building, GraduationCap, Lightbulb, Users, Tag, FileText, BarChart2, Rocket, UserCog } from "lucide-react";
 import { toast } from "sonner";
 import React from 'react';
 import { FaFacebook, FaLinkedin } from "react-icons/fa";
@@ -111,6 +111,10 @@ const Footer = () => {
                     <Link href="/join-creator-programme" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
                         <Users className="w-5 h-5 mr-2 inline-block" />
                         Join Creator Programme
+                    </Link>
+                    <Link href="/freelance-career-counsellor" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
+                        <UserCog className="w-5 h-5 mr-2 inline-block" />
+                        Freelance Career Counsellor
                     </Link>
                 </div>
             </div>
