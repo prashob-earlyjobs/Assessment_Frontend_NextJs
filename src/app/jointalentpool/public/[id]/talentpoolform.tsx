@@ -12,7 +12,7 @@ import { Checkbox } from "../../../components/ui/checkbox";
 import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/card";
 import { Popover, PopoverContent, PopoverTrigger } from "../../../components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "../../../components/ui/command";
-import { Plus, X, UploadCloud, ArrowRight, ArrowLeft, ArrowLeftCircle, User, Briefcase, CheckCircle, MapPin, Phone, Mail, Calendar, FileText, Languages, Award, Target, Building, Clock, Loader2, Search, ChevronDown, Check, Eye, DollarSign, Zap } from 'lucide-react';
+import { Plus, X, UploadCloud, ArrowRight, ArrowLeft, ArrowLeftCircle, User, Briefcase, CheckCircle,XCircle, MapPin, Phone, Mail, Calendar, FileText, Languages, Award, Target, Building, Clock, Loader2, Search, ChevronDown, Check, Eye, DollarSign, Zap } from 'lucide-react';
 import { createApplication, createTalentPoolcandidatePublic, ILocationDetails } from "../../../components/services/candidateapi";
 //import { useNavigate } from "react-router-dom";
 import { useParams } from "next/navigation";
@@ -21,6 +21,7 @@ import Footer from "@/app/components/pages/footer";
 import { motion, AnimatePresence } from "framer-motion";
 import { generateGeminiContentFromResume} from "../../../components/services/usersapi";
 import { uploadFile } from "../../../components/services/companiesapi";
+import axios from "axios";
 
 // Job interface for API response
 interface Job {
@@ -102,7 +103,7 @@ export interface ICreateTallentPoolFormData {
 export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: AddCandidateFormProps) {
   //const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  console.log('Extracted ID:', id);
+  
   const apiClient = createApplication;
   const formTopRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState<CandidateFormData>({
@@ -144,6 +145,8 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
   const [showErrors, setShowErrors] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [showErrorPopup, setShowErrorPopup] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [uploadedURL, setUploadedURL] = useState<string | null>(null);
   // Local input states to allow clearing and typing freely
   const [experienceYearsInput, setExperienceYearsInput] = useState<string>("");
@@ -160,17 +163,55 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
   const [openEmploymentTypeDropdown, setOpenEmploymentTypeDropdown] = useState(false);
   const [openJobLocationDropdown, setOpenJobLocationDropdown] = useState(false);
   const [openSkillsDropdown, setOpenSkillsDropdown] = useState(false);
+  const [openLanguageDropdown, setOpenLanguageDropdown] = useState(false);
+  const [openCityDropdown, setOpenCityDropdown] = useState(false);
+  
+  // Location states
+  const [selectedCountry, setSelectedCountry] = useState<string>("");
+  const [cities, setCities] = useState<string[]>([]);
+  const [loadingCities, setLoadingCities] = useState(false);
+  const [citySearch, setCitySearch] = useState("");
+  const [cityHighlightedIndex, setCityHighlightedIndex] = useState(-1);
 
   // Qualification options with modern names
   const qualificationOptions = [
-    { value: "10th", label: "Secondary Education (10th Grade)" },
-    { value: "12th", label: "Higher Secondary Education (12th Grade)" },
-    { value: "ITI", label: "Industrial Training Institute (ITI)" },
-    { value: "Diploma", label: "Diploma" },
-    { value: "Graduation (10 + 2 + 3)", label: "Bachelor's Degree (3 Years)" },
-    { value: "Graduation (10 + 2 + 4)", label: "Bachelor's Degree (4 Years)" },
-    { value: "Post Graduation", label: "Master's Degree" },
-    { value: "PhD", label: "Doctorate (PhD)" },
+     // School Levels
+  { value: "10th", label: "Secondary Education (10th Grade)" },
+  { value: "12th", label: "Higher Secondary Education (12th Grade)" },
+
+  // Vocational
+  { value: "ITI", label: "Industrial Training Institute (ITI)" },
+  { value: "Diploma", label: "Diploma (Polytechnic)" },
+  { value: "Vocational Course", label: "Vocational Training Program" },
+
+  // Undergraduate
+  { value: "Graduation (10 + 2 + 3)", label: "Bachelor's Degree (3 Years)" },
+  { value: "Graduation (10 + 2 + 4)", label: "Bachelor's Degree (4 Years)" },
+
+  // General PG (Simplified)
+  { value: "Post Graduation", label: "Post Graduation (Any Master's Degree)" },
+  { value: "Post Diploma", label: "Post Graduate Diploma (PG Diploma)" },
+  { value: "Professional PG", label: "Professional Post Graduation (MBA, MCA, etc.)" },
+
+  // Research Degrees
+  { value: "MPhil", label: "Master of Philosophy (MPhil)" },
+  { value: "PhD", label: "Doctorate (PhD)" },
+  { value: "Post Doctorate", label: "Post Doctoral Research" },
+
+  // Professional Certifications
+  { value: "CA", label: "Chartered Accountant (CA)" },
+  { value: "CMA", label: "Cost Management Accountant (CMA)" },
+  { value: "CS", label: "Company Secretary (CS)" },
+  { value: "LLB", label: "Bachelor of Law (LLB)" },
+  { value: "LLM", label: "Master of Law (LLM)" },
+  { value: "MBBS", label: "Bachelor of Medicine (MBBS)" },
+  { value: "MD", label: "Doctor of Medicine (MD)" },
+  { value: "BDS", label: "Bachelor of Dental Surgery (BDS)" },
+
+  // Other
+  { value: "Associate Degree", label: "Associate Degree (2 Year Program)" },
+  { value: "No Formal Education", label: "No Formal Education" },
+  { value: "Other", label: "Other Qualification" }
   ];
 
   const handleInputChange = (field: string, value: any) => {
@@ -204,24 +245,7 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
     }
   };
 
-  const commonLanguages = [
-    "English",
-    "Hindi",
-    "Bengali",
-    "Telugu",
-    "Marathi",
-    "Tamil",
-    "Gujarati",
-    "Kannada",
-    "Malayalam",
-    "Odia",
-    "Punjabi",
-    "Assamese",
-    "Maithili",
-    "Urdu",
-    "Nepali",
-    "Konkani",
-  ];
+
 
   const categoryOptions = [
     'Aviation',
@@ -414,6 +438,49 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
     });
   };
 
+  // Function to fetch cities for a country
+  const fetchCities = async (country: string) => {
+    if (!country.trim()) {
+      setCities([]);
+      return;
+    }
+
+    setLoadingCities(true);
+    try {
+      const response = await axios.post('https://countriesnow.space/api/v0.1/countries/cities', {
+        country: country
+      });
+      
+      if (response.data && response.data.data && Array.isArray(response.data.data)) {
+        setCities(response.data.data);
+      } else {
+        setCities([]);
+      }
+    } catch (error) {
+      console.error('Error fetching cities:', error);
+      setCities([]);
+    } finally {
+      setLoadingCities(false);
+    }
+  };
+
+  // Set default country to India on mount
+  useEffect(() => {
+    if (!selectedCountry) {
+      setSelectedCountry("India");
+    }
+  }, []);
+
+  // Fetch cities when country changes
+  useEffect(() => {
+    if (selectedCountry) {
+      fetchCities(selectedCountry);
+    } else {
+      setCities([]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCountry]);
+
   const handleCategorySelect = (category: string) => {
     if (!formData.preferredJobCategories.includes(category)) {
       setFormData((prev) => ({
@@ -506,6 +573,9 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
   fetchResume()
     
   },[resumeFile,resumeFileName])
+
+
+  const commonLanguages = ["Abkhazian","Achinese","Acoli","Adangme","Adyghe","Afar","Afrihili","Afrikaans","Aghem","Ainu","Akan","Akkadian","Akoose","Alabama","Albanian","Aleut","Algerian Arabic","American English","American Sign Language","Amharic","Ancient Egyptian","Ancient Greek","Angika","Ao Naga","Arabic","Aragonese","Aramaic","Araona","Arapaho","Arawak","Armenian","Aromanian","Arpitan","Assamese","Asturian","Asu","Atsam","Australian English","Austrian German","Avaric","Avestan","Awadhi","Aymara","Azerbaijani","Badaga","Bafia","Bafut","Bakhtiari","Balinese","Baluchi","Bambara","Bamun","Banjar","Basaa","Bashkir","Basque","Batak Toba","Bavarian","Beja","Belarusian","Bemba","Bena","Bengali","Betawi","Bhojpuri","Bikol","Bini","Bishnupriya","Bislama","Blin","Blissymbols","Bodo","Bosnian","Brahui","Braj","Brazilian Portuguese","Breton","British English","Buginese","Bulgarian","Bulu","Buriat","Burmese","Caddo","Cajun French","Canadian English","Canadian French","Cantonese","Capiznon","Carib","Catalan","Cayuga","Cebuano","Central Atlas Tamazight","Central Dusun","Central Kurdish","Central Yupik","Chadian Arabic","Chagatai","Chamorro","Chechen","Cherokee","Cheyenne","Chibcha","Chiga","Chimborazo Highland Quichua","Chinese","Chinook Jargon","Chipewyan","Choctaw","Church Slavic","Chuukese","Chuvash","Classical Newari","Classical Syriac","Colognian","Comorian","Congo Swahili","Coptic","Cornish","Corsican","Cree","Creek","Crimean Turkish","Croatian","Czech","Dakota","Danish","Dargwa","Dazaga","Delaware","Dinka","Divehi","Dogri","Dogrib","Duala","Dutch","Dyula","Dzongkha","Eastern Frisian","Efik","Egyptian Arabic","Ekajuk","Elamite","Embu","Emilian","English","Erzya","Esperanto","Estonian","European Portuguese","European Spanish","Ewe","Ewondo","Extremaduran","Fang","Fanti","Faroese","Fiji Hindi","Fijian","Filipino","Finnish","Flemish","Fon","Frafra","French","Friulian","Fulah","Ga","Gagauz","Galician","Gan Chinese","Ganda","Gayo","Gbaya","Geez","Georgian","German","Gheg Albanian","Ghomala","Gilaki","Gilbertese","Goan Konkani","Gondi","Gorontalo","Gothic","Grebo","Greek","Guarani","Gujarati","Gusii","Gwichʼin","Haida","Haitian","Hakka Chinese","Hausa","Hawaiian","Hebrew","Herero","Hiligaynon","Hindi","Hiri Motu","Hittite","Hmong","Hungarian","Hupa","Iban","Ibibio","Icelandic","Ido","Igbo","Iloko","Inari Sami","Indonesian","Ingrian","Ingush","Interlingua","Interlingue","Inuktitut","Inupiaq","Irish","Italian","Jamaican Creole English","Japanese","Javanese","Jju","Jola-Fonyi","Judeo-Arabic","Judeo-Persian","Jutish","Kabardian","Kabuverdianu","Kabyle","Kachin","Kaingang","Kako","Kalaallisut","Kalenjin","Kalmyk","Kamba","Kanembu","Kannada","Kanuri","Kara-Kalpak","Karachay-Balkar","Karelian","Kashmiri","Kashubian","Kawi","Kazakh","Kenyang","Khasi","Khmer","Khotanese","Khowar","Kikuyu","Kimbundu","Kinaray-a","Kinyarwanda","Kirmanjki","Klingon","Kom","Komi","Komi-Permyak","Kongo","Konkani","Korean","Koro","Kosraean","Kotava","Koyra Chiini","Koyraboro Senni","Kpelle","Krio","Kuanyama","Kumyk","Kurdish","Kurukh","Kutenai","Kwasio","Kyrgyz","Kʼicheʼ","Ladino","Lahnda","Lakota","Lamba","Langi","Lao","Latgalian","Latin","Latin American Spanish","Latvian","Laz","Lezghian","Ligurian","Limburgish","Lingala","Lingua Franca Nova","Literary Chinese","Lithuanian","Livonian","Lojban","Lombard","Low German","Lower Silesian","Lower Sorbian","Lozi","Luba-Katanga","Luba-Lulua","Luiseno","Lule Sami","Lunda","Luo","Luxembourgish","Luyia","Maba","Macedonian","Machame","Madurese","Mafa","Magahi","Main-Franconian","Maithili","Makasar","Makhuwa-Meetto","Makonde","Malagasy","Malay","Malayalam","Maltese","Manchu","Mandar","Mandingo","Manipuri","Manx","Maori","Mapuche","Marathi","Mari","Marshallese","Marwari","Masai","Mazanderani","Medumba","Mende","Mentawai","Meru","Metaʼ","Mexican Spanish","Micmac","Middle Dutch","Middle English","Middle French","Middle High German","Middle Irish","Min Nan Chinese","Minangkabau","Mingrelian","Mirandese","Mizo","Modern Standard Arabic","Mohawk","Moksha","Moldavian","Mongo","Mongolian","Morisyen","Moroccan Arabic","Mossi","Multiple Languages","Mundang","Muslim Tat","Myene","Nama","Nauru","Navajo","Ndonga","Neapolitan","Nepali","Newari","Ngambay","Ngiemboon","Ngomba","Nheengatu","Nias","Niuean","No linguistic content","Nogai","North Ndebele","Northern Frisian","Northern Sami","Northern Sotho","Norwegian","Norwegian Bokmål","Norwegian Nynorsk","Novial","Nuer","Nyamwezi","Nyanja","Nyankole","Nyasa Tonga","Nyoro","Nzima","NʼKo","Occitan","Ojibwa","Old English","Old French","Old High German","Old Irish","Old Norse","Old Persian","Old Provençal","Oriya","Oromo","Osage","Ossetic","Ottoman Turkish","Pahlavi","Palatine German","Palauan","Pali","Pampanga","Pangasinan","Papiamento","Pashto","Pennsylvania German","Persian","Phoenician","Picard","Piedmontese","Plautdietsch","Pohnpeian","Polish","Pontic","Portuguese","Prussian","Punjabi","Quechua","Rajasthani","Rapanui","Rarotongan","Riffian","Romagnol","Romanian","Romansh","Romany","Rombo","Root","Rotuman","Roviana","Rundi","Russian","Rusyn","Rwa","Saho","Sakha","Samaritan Aramaic","Samburu","Samoan","Samogitian","Sandawe","Sango","Sangu","Sanskrit","Santali","Sardinian","Sasak","Sassarese Sardinian","Saterland Frisian","Saurashtra","Scots","Scottish Gaelic","Selayar","Selkup","Sena","Seneca","Serbian","Serbo-Croatian","Serer","Seri","Shambala","Shan","Shona","Sichuan Yi","Sicilian","Sidamo","Siksika","Silesian","Simplified Chinese","Sindhi","Sinhala","Skolt Sami","Slave","Slovak","Slovenian","Soga","Sogdien","Somali","Soninke","South Azerbaijani","South Ndebele","Southern Altai","Southern Sami","Southern Sotho","Spanish","Sranan Tongo","Standard Moroccan Tamazight","Sukuma","Sumerian","Sundanese","Susu","Swahili","Swati","Swedish","Swiss French","Swiss German","Swiss High German","Syriac","Tachelhit","Tagalog","Tahitian","Taita","Tajik","Talysh","Tamashek","Tamil","Taroko","Tasawaq","Tatar","Telugu","Tereno","Teso","Tetum","Thai","Tibetan","Tigre","Tigrinya","Timne","Tiv","Tlingit","Tok Pisin","Tokelau","Tongan","Tornedalen Finnish","Traditional Chinese","Tsakhur","Tsakonian","Tsimshian","Tsonga","Tswana","Tulu","Tumbuka","Tunisian Arabic","Turkish","Turkmen","Turoyo","Tuvalu","Tuvinian","Twi","Tyap","Udmurt","Ugaritic","Ukrainian","Umbundu","Unknown Language","Upper Sorbian","Urdu","Uyghur","Uzbek","Vai","Venda","Venetian","Veps","Vietnamese","Volapük","Võro","Votic","Vunjo","Walloon","Walser","Waray","Warlpiri","Washo","Wayuu","Welsh","West Flemish","Western Frisian","Western Mari","Wolaytta","Wolof","Wu Chinese","Xhosa","Xiang Chinese","Yangben","Yao","Yapese","Yemba","Yiddish","Yoruba","Zapotec","Zarma","Zaza","Zeelandic","Zenaga","Zhuang","Zoroastrian Dari","Zulu","Zuni"];
 
   const handleResumeUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -609,6 +679,64 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
     return { isValid, errors: combinedErrors };
   };
 
+  // Extract submission logic to a reusable function
+  const submitFormData = useCallback(async () => {
+    setIsSubmitting(true);
+
+    try {
+      const normalizedData: ICreateTallentPoolFormData = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        fatherName: formData.fatherName,
+        dateOfBirth: formData.dateOfBirth,
+        gender: formData.gender,
+        ...(formData.aadharNumber && formData.aadharNumber.trim() && { aadharNumber: formData.aadharNumber }),
+        highestQualification: formData.highestQualification,
+        currentLocationDetails: formData.currentLocationDetails,
+        totalExperienceYears: formData.totalExperienceYears,
+        totalExperienceMonths: formData.totalExperienceMonths,
+        skills: formData.skills.length > 0 ? formData.skills : ["General"],
+        spokenLanguages: formData.spokenLanguages.length > 0 ? formData.spokenLanguages : ["English"],
+        preferredJobCategories: formData.preferredJobCategories.length > 0 ? formData.preferredJobCategories : ["General"],
+        preferredEmploymentTypes: formData.preferredEmploymentTypes.length > 0 ? formData.preferredEmploymentTypes : ["Full-time"],
+        preferredWorkTypes: formData.preferredWorkTypes.length > 0 ? formData.preferredWorkTypes : ["on-site"],
+        ...(formData.howSoonReady && formData.howSoonReady.trim() && { howSoonReady: formData.howSoonReady }),
+        ...(formData.preferredJobLocations && formData.preferredJobLocations.length > 0 && { preferredJobLocations: formData.preferredJobLocations }),
+        ...(formData.expectedSalary && formData.expectedSalary > 0 && { expectedSalary: formData.expectedSalary }),
+        resume: uploadedURL || undefined,
+      };
+
+      const response = await createTalentPoolcandidatePublic(id, normalizedData, resumeFile || undefined);
+      console.log(response,"<====response");
+      if(response.status === "success"){
+        setSuccessMessage("Your profile has been successfully created! Thank you for registering.");
+        setShowSuccessPopup(true);
+      }
+      else{
+        toast.error(response.message);
+      }
+
+      if (onSubmit) {
+        onSubmit(formData);
+      }
+
+      if (refreshCandidates) {
+        refreshCandidates();
+      }
+    } catch (error: any) {
+      console.error(":", error.response?.data?.message,error.response?.status);
+      if (error.response?.data?.message) {
+        if (error.response?.data?.message === "Candidate already exists with the same email or phone number" && error.response?.status === 409) {
+          setShowErrorPopup(true);
+          setErrorMessage("This email or phone number is already registered. Please use a different email or phone number.");
+        }
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [formData, onSubmit, refreshCandidates, resumeFile, uploadedURL, id]);
+
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
@@ -625,60 +753,9 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
         return;
       }
 
-      setIsSubmitting(true);
-
-      try {
-        const normalizedData: ICreateTallentPoolFormData = {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          fatherName: formData.fatherName,
-          dateOfBirth: formData.dateOfBirth,
-          gender: formData.gender,
-          ...(formData.aadharNumber && formData.aadharNumber.trim() && { aadharNumber: formData.aadharNumber }),
-          highestQualification: formData.highestQualification,
-          currentLocationDetails: formData.currentLocationDetails,
-          totalExperienceYears: formData.totalExperienceYears,
-          totalExperienceMonths: formData.totalExperienceMonths,
-          skills: formData.skills.length > 0 ? formData.skills : ["General"],
-          spokenLanguages: formData.spokenLanguages.length > 0 ? formData.spokenLanguages : ["English"],
-          preferredJobCategories: formData.preferredJobCategories.length > 0 ? formData.preferredJobCategories : ["General"],
-          preferredEmploymentTypes: formData.preferredEmploymentTypes.length > 0 ? formData.preferredEmploymentTypes : ["Full-time"],
-          preferredWorkTypes: formData.preferredWorkTypes.length > 0 ? formData.preferredWorkTypes : ["on-site"],
-          ...(formData.howSoonReady && formData.howSoonReady.trim() && { howSoonReady: formData.howSoonReady }),
-          ...(formData.preferredJobLocations && formData.preferredJobLocations.length > 0 && { preferredJobLocations: formData.preferredJobLocations }),
-          ...(formData.expectedSalary && formData.expectedSalary > 0 && { expectedSalary: formData.expectedSalary }),
-          resume: uploadedURL || undefined,
-        };
-
-        const response = await createTalentPoolcandidatePublic(id, normalizedData, resumeFile || undefined);
-        setSuccessMessage("Your profile has been successfully created! Thank you for registering.");
-        setShowSuccessPopup(true);
-
-        if (onSubmit) {
-          onSubmit(formData);
-        }
-
-        if (refreshCandidates) {
-          refreshCandidates();
-        }
-      } catch (error: any) {
-        console.error("Error creating application:", error.message);
-        if (error.response?.data?.message) {
-          if (error.response.data.message.includes("duplicate") || error.response.data.message.includes("already exists")) {
-            if (error.response.data.message.toLowerCase().includes("email")) {
-              toast.error("This email is already registered. Please use a different email.");
-            }
-            if (error.response.data.message.toLowerCase().includes("phone") || error.response.data.message.toLowerCase().includes("mobile")) {
-              toast.error("This mobile number is already registered. Please use a different number.");
-            }
-          }
-        }
-      } finally {
-        setIsSubmitting(false);
-      }
+      await submitFormData();
     },
-    [formData, onSubmit, refreshCandidates, resumeFile, uploadedURL, id]
+    [submitFormData]
   );
 
   const getInputClassName = (fieldName: string, baseClassName: string = "") => {
@@ -1020,24 +1097,39 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label htmlFor="city" className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                    <Label htmlFor="country" className="text-sm font-semibold text-slate-700 flex items-center gap-2">
                       <MapPin className="h-4 w-4 text-slate-500" />
-                      City <span className="text-red-500">*</span>
+                      Country <span className="text-red-500">*</span>
                     </Label>
-                    <Input
-                      id="city"
-                      value={formData.currentLocationDetails.city}
-                      onChange={(e) => handleInputChange("currentLocationDetails.city", e.target.value)}
-                      placeholder="Enter city name"
-                      className={getInputClassName("city", "h-11 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900")}
-                      required
-                    />
-                    {showErrors && errors.city && (
-                      <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
-                        <X className="h-3 w-3" />
-                        {errors.city}
-                      </p>
-                    )}
+                    <Select
+                      value={selectedCountry}
+                      onValueChange={(value) => {
+                        setSelectedCountry(value);
+                        handleInputChange("currentLocationDetails.city", ""); // Clear city when country changes
+                        setCitySearch("");
+                      }}
+                    >
+                      <SelectTrigger className={getInputClassName("country", "h-11 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900")}>
+                        <SelectValue placeholder="Select country" />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-lg max-h-60">
+                        <SelectItem value="India">India</SelectItem>
+                        <SelectItem value="United States">United States</SelectItem>
+                        <SelectItem value="United Kingdom">United Kingdom</SelectItem>
+                        <SelectItem value="Canada">Canada</SelectItem>
+                        <SelectItem value="Australia">Australia</SelectItem>
+                        <SelectItem value="Germany">Germany</SelectItem>
+                        <SelectItem value="France">France</SelectItem>
+                        <SelectItem value="Japan">Japan</SelectItem>
+                        <SelectItem value="China">China</SelectItem>
+                        <SelectItem value="Singapore">Singapore</SelectItem>
+                        <SelectItem value="United Arab Emirates">United Arab Emirates</SelectItem>
+                        <SelectItem value="Saudi Arabia">Saudi Arabia</SelectItem>
+                        <SelectItem value="South Africa">South Africa</SelectItem>
+                        <SelectItem value="Brazil">Brazil</SelectItem>
+                        <SelectItem value="Mexico">Mexico</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="pincode" className="text-sm font-semibold text-slate-700">Pincode</Label>
@@ -1055,6 +1147,219 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                       </p>
                     )}
                   </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="city" className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-slate-500" />
+                    City <span className="text-red-500">*</span>
+                  </Label>
+                  <div className="relative" style={{ zIndex: openCityDropdown ? 50 : 'auto' }}>
+                    <Input
+                      id="city"
+                      name="nope"
+                      autoComplete="new-password"
+                      autoCorrect="off"
+                      spellCheck="false"
+                      value={citySearch}
+                      onChange={(e) => {
+                        const newValue = e.target.value;
+                        setCitySearch(newValue);
+                        setOpenCityDropdown(true);
+                        setCityHighlightedIndex(-1);
+                        // Always update city value to allow deletion
+                        handleInputChange("currentLocationDetails.city", newValue);
+                      }}
+                      onFocus={() => {
+                        if (selectedCountry) {
+                          setOpenCityDropdown(true);
+                          setCityHighlightedIndex(-1);
+                          // When focusing, if there's a selected city and no search text, populate search with it
+                          if (formData.currentLocationDetails.city && citySearch === "") {
+                            setCitySearch(formData.currentLocationDetails.city);
+                          }
+                        }
+                      }}
+                      onBlur={(e) => {
+                        // Delay closing to allow click events on dropdown items
+                        setTimeout(() => {
+                          setOpenCityDropdown(false);
+                          setCityHighlightedIndex(-1);
+                          // citySearch and city value are already synced in onChange, so no need to update here
+                          // If citySearch is empty, the city value is already empty from onChange
+                        }, 200);
+                      }}
+                      placeholder={selectedCountry ? "Type to search and select city or enter manually" : "Please select a country first"}
+                      disabled={!selectedCountry}
+                      className={getInputClassName("city", "h-11 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900 pr-10")}
+                      onKeyDown={(e) => {
+                        const filteredCities = cities
+                          .filter(city => 
+                            !citySearch.trim() || 
+                            city.toLowerCase().includes(citySearch.toLowerCase())
+                          )
+                          .slice(0, 100);
+
+                        if (e.key === "ArrowDown") {
+                          e.preventDefault();
+                          setOpenCityDropdown(true);
+                          setCityHighlightedIndex(prev => 
+                            prev < filteredCities.length - 1 ? prev + 1 : prev
+                          );
+                        } else if (e.key === "ArrowUp") {
+                          e.preventDefault();
+                          setOpenCityDropdown(true);
+                          setCityHighlightedIndex(prev => prev > 0 ? prev - 1 : -1);
+                        } else if (e.key === "Enter") {
+                          e.preventDefault();
+                          if (cityHighlightedIndex >= 0 && cityHighlightedIndex < filteredCities.length) {
+                            const selectedCity = filteredCities[cityHighlightedIndex];
+                            handleInputChange("currentLocationDetails.city", selectedCity);
+                            setCitySearch(selectedCity);
+                            setOpenCityDropdown(false);
+                            setCityHighlightedIndex(-1);
+                            if (showErrors && errors.city) {
+                              setErrors((prev) => {
+                                const newErrors = { ...prev };
+                                delete newErrors.city;
+                                return newErrors;
+                              });
+                            }
+                          } else {
+                            // If no item is highlighted, use the typed value (manual entry)
+                            if (citySearch.trim()) {
+                              const manualCity = citySearch.trim();
+                              handleInputChange("currentLocationDetails.city", manualCity);
+                              setCitySearch(manualCity);
+                              setOpenCityDropdown(false);
+                              setCityHighlightedIndex(-1);
+                              if (showErrors && errors.city) {
+                                setErrors((prev) => {
+                                  const newErrors = { ...prev };
+                                  delete newErrors.city;
+                                  return newErrors;
+                                });
+                              }
+                            }
+                          }
+                        } else if (e.key === "Escape") {
+                          setOpenCityDropdown(false);
+                          setCityHighlightedIndex(-1);
+                        }
+                      }}
+                    />
+                    {selectedCountry && (
+                      <button
+                        type="button"
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400 hover:text-slate-600 focus:outline-none z-10"
+                        onClick={() => {
+                          setOpenCityDropdown(!openCityDropdown);
+                          setCityHighlightedIndex(-1);
+                        }}
+                      >
+                        <ChevronDown className="h-4 w-4" />
+                      </button>
+                    )}
+                    
+                    {/* City Dropdown */}
+                    {openCityDropdown && selectedCountry && (() => {
+                      const filteredCities = cities
+                        .filter(city => 
+                          !citySearch.trim() || 
+                          city.toLowerCase().includes(citySearch.toLowerCase())
+                        )
+                        .slice(0, 100);
+
+                      return (
+                        <div className="absolute z-[100] w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-xl max-h-60 overflow-auto">
+                          {loadingCities ? (
+                            <div className="px-4 py-2 text-sm text-slate-500 flex items-center gap-2">
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                              Loading cities...
+                            </div>
+                          ) : (
+                            <>
+                              {/* Show custom city option if typed value doesn't match any existing city */}
+                              {citySearch.trim() && 
+                               !cities.some(city => 
+                                 city.toLowerCase() === citySearch.trim().toLowerCase()
+                               ) && (
+                                <div
+                                  onClick={() => {
+                                    const customCity = citySearch.trim();
+                                    handleInputChange("currentLocationDetails.city", customCity);
+                                    setCitySearch(customCity);
+                                    setOpenCityDropdown(false);
+                                    setCityHighlightedIndex(-1);
+                                    if (showErrors && errors.city) {
+                                      setErrors((prev) => {
+                                        const newErrors = { ...prev };
+                                        delete newErrors.city;
+                                        return newErrors;
+                                      });
+                                    }
+                                  }}
+                                  className="cursor-pointer bg-orange-50 hover:bg-orange-100 px-4 py-2 flex items-center gap-2"
+                                >
+                                  <Plus className="h-4 w-4 text-orange-600" />
+                                  <span className="font-medium">Use "{citySearch.trim()}"</span>
+                                </div>
+                              )}
+                              
+                              {/* Show filtered cities from API */}
+                              {filteredCities.length > 0 ? (
+                                filteredCities.map((city, index) => (
+                                  <div
+                                    key={city}
+                                    ref={(el) => {
+                                      if (el && index === cityHighlightedIndex) {
+                                        el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                                      }
+                                    }}
+                                    onClick={() => {
+                                      handleInputChange("currentLocationDetails.city", city);
+                                      setCitySearch(city);
+                                      setOpenCityDropdown(false);
+                                      setCityHighlightedIndex(-1);
+                                      if (showErrors && errors.city) {
+                                        setErrors((prev) => {
+                                          const newErrors = { ...prev };
+                                          delete newErrors.city;
+                                          return newErrors;
+                                        });
+                                      }
+                                    }}
+                                    onMouseEnter={() => setCityHighlightedIndex(index)}
+                                    className={`cursor-pointer px-4 py-2 flex items-center justify-between ${
+                                      index === cityHighlightedIndex 
+                                        ? 'bg-orange-100 text-orange-900' 
+                                        : 'hover:bg-slate-50'
+                                    }`}
+                                  >
+                                    <span>{city}</span>
+                                    {formData.currentLocationDetails.city === city && (
+                                      <Check className="h-4 w-4 text-orange-600" />
+                                    )}
+                                  </div>
+                                ))
+                              ) : (
+                                <div className="px-4 py-2 text-sm text-slate-500">
+                                  {citySearch.trim() 
+                                    ? "No matching cities found. You can enter the city manually." 
+                                    : "No cities found. Try typing to search."}
+                                </div>
+                              )}
+                            </>
+                          )}
+                        </div>
+                      );
+                    })()}
+                  </div>
+                  {showErrors && errors.city && (
+                    <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
+                      <X className="h-3 w-3" />
+                      {errors.city}
+                    </p>
+                  )}
                 </div>
                 {/* <div className="space-y-3">
                   <Label htmlFor="fullAddress" className="text-sm font-bold text-gray-700">Complete Address</Label>
@@ -1088,38 +1393,135 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                 </div>
                 <div className="space-y-4">
                   <Label className="text-sm font-semibold text-slate-700">Select Languages <span className="text-red-500">*</span></Label>
-                  <Select
-                    value={selectedLanguage}
-                    onValueChange={(value) => {
-                      if (value && !formData.spokenLanguages.includes(value)) {
-                        setFormData((prev) => ({
-                          ...prev,
-                          spokenLanguages: [...prev.spokenLanguages, value],
-                        }));
-                        setSelectedLanguage("");
-                        if (showErrors && errors.spokenLanguages) {
-                          setErrors((prev) => {
-                            const newErrors = { ...prev };
-                            delete newErrors.spokenLanguages;
-                            return newErrors;
-                          });
-                        }
-                      }
-                    }}
-                  >
-                    <SelectTrigger className={getInputClassName("spokenLanguages", "h-11 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900")}>
-                      <SelectValue placeholder="Select a language to add" />
-                    </SelectTrigger>
-                    <SelectContent className="rounded-lg">
-                      {commonLanguages
-                        .filter(lang => !formData.spokenLanguages.includes(lang))
-                        .map((lang) => (
-                          <SelectItem key={lang} value={lang}>
-                            {lang}
-                          </SelectItem>
-                        ))}
-                    </SelectContent>
-                  </Select>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <div className="flex-1 relative" style={{ zIndex: openLanguageDropdown ? 50 : 'auto' }}>
+                      <Input
+                        value={selectedLanguage}
+                        onChange={(e) => {
+                          setSelectedLanguage(e.target.value);
+                          setOpenLanguageDropdown(true);
+                        }}
+                        onFocus={() => setOpenLanguageDropdown(true)}
+                        onBlur={(e) => {
+                          // Delay closing to allow click events on dropdown items
+                          setTimeout(() => setOpenLanguageDropdown(false), 200);
+                        }}
+                        placeholder="Type or select a language (e.g., English, Hindi, Spanish)"
+                        className={getInputClassName("spokenLanguages", "h-11 flex-1 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900 pr-10")}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            if (selectedLanguage.trim() && !formData.spokenLanguages.includes(selectedLanguage.trim())) {
+                              addToArray("spokenLanguages", selectedLanguage, setSelectedLanguage);
+                              setOpenLanguageDropdown(false);
+                              if (showErrors && errors.spokenLanguages) {
+                                setErrors((prev) => {
+                                  const newErrors = { ...prev };
+                                  delete newErrors.spokenLanguages;
+                                  return newErrors;
+                                });
+                              }
+                            }
+                          }
+                        }}
+                      />
+                      <button
+                        type="button"
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400 hover:text-slate-600 focus:outline-none z-10"
+                        onClick={() => setOpenLanguageDropdown(!openLanguageDropdown)}
+                      >
+                        <ChevronDown className="h-4 w-4" />
+                      </button>
+                      
+                      {/* Languages Dropdown */}
+                      {openLanguageDropdown && (
+                        <div className="absolute z-[100] w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-xl max-h-60 overflow-auto">
+                          {/* Show custom language option if typed value doesn't match any existing language */}
+                          {selectedLanguage.trim() && 
+                           !commonLanguages.some(lang => 
+                             lang.toLowerCase() === selectedLanguage.trim().toLowerCase()
+                           ) && 
+                           !formData.spokenLanguages.some(lang => 
+                             lang.toLowerCase() === selectedLanguage.trim().toLowerCase()
+                           ) && (
+                            <div
+                              onClick={() => {
+                                if (!formData.spokenLanguages.includes(selectedLanguage.trim())) {
+                                  addToArray("spokenLanguages", selectedLanguage, setSelectedLanguage);
+                                  setOpenLanguageDropdown(false);
+                                  if (showErrors && errors.spokenLanguages) {
+                                    setErrors((prev) => {
+                                      const newErrors = { ...prev };
+                                      delete newErrors.spokenLanguages;
+                                      return newErrors;
+                                    });
+                                  }
+                                }
+                              }}
+                              className="cursor-pointer bg-orange-50 hover:bg-orange-100 px-4 py-2 flex items-center gap-2"
+                            >
+                              <Plus className="h-4 w-4 text-orange-600" />
+                              <span className="font-medium">Add "{selectedLanguage.trim()}"</span>
+                            </div>
+                          )}
+                          
+                          {/* Show filtered languages from common list - limit to 50 for performance */}
+                          {commonLanguages
+                            .filter(lang => 
+                              !formData.spokenLanguages.includes(lang) &&
+                              (!selectedLanguage.trim() || 
+                              lang.toLowerCase().includes(selectedLanguage.toLowerCase()))
+                            )
+                            .slice(0, 50)
+                            .map((lang) => (
+                              <div
+                                key={lang}
+                                onClick={() => {
+                                  if (!formData.spokenLanguages.includes(lang)) {
+                                    addToArray("spokenLanguages", lang, setSelectedLanguage);
+                                    setOpenLanguageDropdown(false);
+                                    if (showErrors && errors.spokenLanguages) {
+                                      setErrors((prev) => {
+                                        const newErrors = { ...prev };
+                                        delete newErrors.spokenLanguages;
+                                        return newErrors;
+                                      });
+                                    }
+                                  }
+                                }}
+                                className="cursor-pointer px-4 py-2 hover:bg-slate-50 flex items-center justify-between"
+                              >
+                                <span>{lang}</span>
+                                {formData.spokenLanguages.includes(lang) && (
+                                  <Check className="h-4 w-4 text-orange-600" />
+                                )}
+                              </div>
+                            ))}
+                        </div>
+                      )}
+                    </div>
+                    {selectedLanguage.trim() && !formData.spokenLanguages.includes(selectedLanguage.trim()) && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                          addToArray("spokenLanguages", selectedLanguage, setSelectedLanguage);
+                          setOpenLanguageDropdown(false);
+                          if (showErrors && errors.spokenLanguages) {
+                            setErrors((prev) => {
+                              const newErrors = { ...prev };
+                              delete newErrors.spokenLanguages;
+                              return newErrors;
+                            });
+                          }
+                        }}
+                        className="h-11 px-6 rounded-lg border-orange-300 text-orange-700 hover:bg-orange-50 font-medium"
+                      >
+                        <Plus className="h-4 w-4 mr-2" />
+                        Add Language
+                      </Button>
+                    )}
+                  </div>
                   {showErrors && errors.spokenLanguages && (
                     <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
                       <X className="h-3 w-3" />
@@ -1848,11 +2250,64 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                           setCurrentJobLocation("");
                           setExperienceYearsInput("");
                           setExperienceMonthsInput("");
+                          setSelectedCountry("India");
+                          setCitySearch("");
+                          setCities([]);
                           clearResume();
                         }}
                         className="rounded-lg border-orange-300 text-orange-700 hover:bg-orange-50 font-medium px-6"
                       >
                         Add Another Candidate
+                      </Button>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+
+              {/*error popup */}
+            <AnimatePresence>
+              {showErrorPopup && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+                  style={{margin: '0'}}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setShowErrorPopup(false);
+                    setIsSubmitting(false);
+                  }}
+                >
+                  <motion.div
+                    initial={{ y: 50, opacity: 0, scale: 0.95 }}
+                    animate={{ y: 0, opacity: 1, scale: 1 }}
+                    exit={{ y: 50, opacity: 0, scale: 0.95 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                    className="bg-white rounded-2xl p-8 shadow-2xl max-w-md w-full text-center border border-slate-200"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <div className="w-20 h-20 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                      <XCircle className="h-10 w-10 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-slate-900 mb-3">Error</h3>
+                    <p className="text-slate-600 mb-6 leading-relaxed">{errorMessage}</p>
+                    <div className="flex justify-center">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setShowErrorPopup(false);
+                          setIsSubmitting(false);
+                        }}
+                        className="rounded-lg border-orange-300 text-orange-700 hover:bg-orange-50 font-medium px-6"
+                      >
+                        close
                       </Button>
                     </div>
                   </motion.div>
