@@ -12,7 +12,7 @@ import { Checkbox } from "../../../components/ui/checkbox";
 import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/card";
 import { Popover, PopoverContent, PopoverTrigger } from "../../../components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "../../../components/ui/command";
-import { Plus, X, UploadCloud, ArrowRight, ArrowLeft, ArrowLeftCircle, User, Briefcase, CheckCircle, MapPin, Phone, Mail, Calendar, FileText, Languages, Award, Target, Building, Clock, Loader2, Search, ChevronDown, Check, Eye, DollarSign, Zap } from 'lucide-react';
+import { Plus, X, UploadCloud, ArrowRight, ArrowLeft, ArrowLeftCircle, User, Briefcase, CheckCircle,XCircle, MapPin, Phone, Mail, Calendar, FileText, Languages, Award, Target, Building, Clock, Loader2, Search, ChevronDown, Check, Eye, DollarSign, Zap } from 'lucide-react';
 import { createApplication, createTalentPoolcandidatePublic, ILocationDetails } from "../../../components/services/candidateapi";
 //import { useNavigate } from "react-router-dom";
 import { useParams } from "next/navigation";
@@ -103,7 +103,7 @@ export interface ICreateTallentPoolFormData {
 export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: AddCandidateFormProps) {
   //const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  console.log('Extracted ID:', id);
+  
   const apiClient = createApplication;
   const formTopRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState<CandidateFormData>({
@@ -145,6 +145,8 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
   const [showErrors, setShowErrors] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [showErrorPopup, setShowErrorPopup] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [uploadedURL, setUploadedURL] = useState<string | null>(null);
   // Local input states to allow clearing and typing freely
   const [experienceYearsInput, setExperienceYearsInput] = useState<string>("");
@@ -169,6 +171,7 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
   const [cities, setCities] = useState<string[]>([]);
   const [loadingCities, setLoadingCities] = useState(false);
   const [citySearch, setCitySearch] = useState("");
+  const [cityHighlightedIndex, setCityHighlightedIndex] = useState(-1);
 
   // Qualification options with modern names
   const qualificationOptions = [
@@ -676,6 +679,64 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
     return { isValid, errors: combinedErrors };
   };
 
+  // Extract submission logic to a reusable function
+  const submitFormData = useCallback(async () => {
+    setIsSubmitting(true);
+
+    try {
+      const normalizedData: ICreateTallentPoolFormData = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        fatherName: formData.fatherName,
+        dateOfBirth: formData.dateOfBirth,
+        gender: formData.gender,
+        ...(formData.aadharNumber && formData.aadharNumber.trim() && { aadharNumber: formData.aadharNumber }),
+        highestQualification: formData.highestQualification,
+        currentLocationDetails: formData.currentLocationDetails,
+        totalExperienceYears: formData.totalExperienceYears,
+        totalExperienceMonths: formData.totalExperienceMonths,
+        skills: formData.skills.length > 0 ? formData.skills : ["General"],
+        spokenLanguages: formData.spokenLanguages.length > 0 ? formData.spokenLanguages : ["English"],
+        preferredJobCategories: formData.preferredJobCategories.length > 0 ? formData.preferredJobCategories : ["General"],
+        preferredEmploymentTypes: formData.preferredEmploymentTypes.length > 0 ? formData.preferredEmploymentTypes : ["Full-time"],
+        preferredWorkTypes: formData.preferredWorkTypes.length > 0 ? formData.preferredWorkTypes : ["on-site"],
+        ...(formData.howSoonReady && formData.howSoonReady.trim() && { howSoonReady: formData.howSoonReady }),
+        ...(formData.preferredJobLocations && formData.preferredJobLocations.length > 0 && { preferredJobLocations: formData.preferredJobLocations }),
+        ...(formData.expectedSalary && formData.expectedSalary > 0 && { expectedSalary: formData.expectedSalary }),
+        resume: uploadedURL || undefined,
+      };
+
+      const response = await createTalentPoolcandidatePublic(id, normalizedData, resumeFile || undefined);
+      console.log(response,"<====response");
+      if(response.status === "success"){
+        setSuccessMessage("Your profile has been successfully created! Thank you for registering.");
+        setShowSuccessPopup(true);
+      }
+      else{
+        toast.error(response.message);
+      }
+
+      if (onSubmit) {
+        onSubmit(formData);
+      }
+
+      if (refreshCandidates) {
+        refreshCandidates();
+      }
+    } catch (error: any) {
+      console.error(":", error.response?.data?.message,error.response?.status);
+      if (error.response?.data?.message) {
+        if (error.response?.data?.message === "Candidate already exists with the same email or phone number" && error.response?.status === 409) {
+          setShowErrorPopup(true);
+          setErrorMessage("This email or phone number is already registered. Please use a different email or phone number.");
+        }
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [formData, onSubmit, refreshCandidates, resumeFile, uploadedURL, id]);
+
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
@@ -692,66 +753,9 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
         return;
       }
 
-      setIsSubmitting(true);
-
-      try {
-        const normalizedData: ICreateTallentPoolFormData = {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          fatherName: formData.fatherName,
-          dateOfBirth: formData.dateOfBirth,
-          gender: formData.gender,
-          ...(formData.aadharNumber && formData.aadharNumber.trim() && { aadharNumber: formData.aadharNumber }),
-          highestQualification: formData.highestQualification,
-          currentLocationDetails: formData.currentLocationDetails,
-          totalExperienceYears: formData.totalExperienceYears,
-          totalExperienceMonths: formData.totalExperienceMonths,
-          skills: formData.skills.length > 0 ? formData.skills : ["General"],
-          spokenLanguages: formData.spokenLanguages.length > 0 ? formData.spokenLanguages : ["English"],
-          preferredJobCategories: formData.preferredJobCategories.length > 0 ? formData.preferredJobCategories : ["General"],
-          preferredEmploymentTypes: formData.preferredEmploymentTypes.length > 0 ? formData.preferredEmploymentTypes : ["Full-time"],
-          preferredWorkTypes: formData.preferredWorkTypes.length > 0 ? formData.preferredWorkTypes : ["on-site"],
-          ...(formData.howSoonReady && formData.howSoonReady.trim() && { howSoonReady: formData.howSoonReady }),
-          ...(formData.preferredJobLocations && formData.preferredJobLocations.length > 0 && { preferredJobLocations: formData.preferredJobLocations }),
-          ...(formData.expectedSalary && formData.expectedSalary > 0 && { expectedSalary: formData.expectedSalary }),
-          resume: uploadedURL || undefined,
-        };
-
-        const response = await createTalentPoolcandidatePublic(id, normalizedData, resumeFile || undefined);
-        console.log(response,"<====response");
-        if(response.status === "success"){
-        setSuccessMessage("Your profile has been successfully created! Thank you for registering.");
-        setShowSuccessPopup(true);
-        }
-        else{
-          toast.error(response.message);
-        }
-
-        if (onSubmit) {
-          onSubmit(formData);
-        }
-
-        if (refreshCandidates) {
-          refreshCandidates();
-        }
-      } catch (error: any) {
-        console.error("Error creating application:", error);
-        if (error.response?.data?.message) {
-          if (error.response.data.message.includes("duplicate") || error.response.data.message.includes("already exists")) {
-            if (error.response.data.message.toLowerCase().includes("email")) {
-              toast.error("This email is already registered. Please use a different email.");
-            }
-            if (error.response.data.message.toLowerCase().includes("phone") || error.response.data.message.toLowerCase().includes("mobile")) {
-              toast.error("This mobile number is already registered. Please use a different number.");
-            }
-          }
-        }
-      } finally {
-        setIsSubmitting(false);
-      }
+      await submitFormData();
     },
-    [formData, onSubmit, refreshCandidates, resumeFile, uploadedURL, id]
+    [submitFormData]
   );
 
   const getInputClassName = (fieldName: string, baseClassName: string = "") => {
@@ -1152,43 +1156,63 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                   <div className="relative" style={{ zIndex: openCityDropdown ? 50 : 'auto' }}>
                     <Input
                       id="city"
-                      value={citySearch || formData.currentLocationDetails.city}
+                      value={citySearch}
                       onChange={(e) => {
-                        setCitySearch(e.target.value);
+                        const newValue = e.target.value;
+                        setCitySearch(newValue);
                         setOpenCityDropdown(true);
-                        // If user starts typing, clear the selected value to allow new search
-                        if (formData.currentLocationDetails.city && !cities.some(city => city.toLowerCase().includes(e.target.value.toLowerCase()))) {
-                          handleInputChange("currentLocationDetails.city", "");
-                        }
+                        setCityHighlightedIndex(-1);
+                        // Always update city value to allow deletion
+                        handleInputChange("currentLocationDetails.city", newValue);
                       }}
                       onFocus={() => {
                         if (selectedCountry) {
                           setOpenCityDropdown(true);
+                          setCityHighlightedIndex(-1);
+                          // When focusing, if there's a selected city and no search text, populate search with it
+                          if (formData.currentLocationDetails.city && citySearch === "") {
+                            setCitySearch(formData.currentLocationDetails.city);
+                          }
                         }
                       }}
                       onBlur={(e) => {
                         // Delay closing to allow click events on dropdown items
                         setTimeout(() => {
                           setOpenCityDropdown(false);
-                          // If no selection was made and search doesn't match, restore previous value
-                          if (citySearch && !cities.some(city => city.toLowerCase() === citySearch.trim().toLowerCase())) {
-                            setCitySearch(formData.currentLocationDetails.city || "");
-                          }
+                          setCityHighlightedIndex(-1);
+                          // citySearch and city value are already synced in onChange, so no need to update here
+                          // If citySearch is empty, the city value is already empty from onChange
                         }, 200);
                       }}
-                      placeholder={selectedCountry ? "Type to search and select city" : "Please select a country first"}
+                      placeholder={selectedCountry ? "Type to search and select city or enter manually" : "Please select a country first"}
                       disabled={!selectedCountry}
                       className={getInputClassName("city", "h-11 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900 pr-10")}
                       onKeyDown={(e) => {
-                        if (e.key === "Enter") {
+                        const filteredCities = cities
+                          .filter(city => 
+                            !citySearch.trim() || 
+                            city.toLowerCase().includes(citySearch.toLowerCase())
+                          )
+                          .slice(0, 100);
+
+                        if (e.key === "ArrowDown") {
                           e.preventDefault();
-                          const matchingCity = cities.find(
-                            city => city.toLowerCase() === citySearch.trim().toLowerCase()
+                          setOpenCityDropdown(true);
+                          setCityHighlightedIndex(prev => 
+                            prev < filteredCities.length - 1 ? prev + 1 : prev
                           );
-                          if (matchingCity) {
-                            handleInputChange("currentLocationDetails.city", matchingCity);
-                            setCitySearch("");
+                        } else if (e.key === "ArrowUp") {
+                          e.preventDefault();
+                          setOpenCityDropdown(true);
+                          setCityHighlightedIndex(prev => prev > 0 ? prev - 1 : -1);
+                        } else if (e.key === "Enter") {
+                          e.preventDefault();
+                          if (cityHighlightedIndex >= 0 && cityHighlightedIndex < filteredCities.length) {
+                            const selectedCity = filteredCities[cityHighlightedIndex];
+                            handleInputChange("currentLocationDetails.city", selectedCity);
+                            setCitySearch(selectedCity);
                             setOpenCityDropdown(false);
+                            setCityHighlightedIndex(-1);
                             if (showErrors && errors.city) {
                               setErrors((prev) => {
                                 const newErrors = { ...prev };
@@ -1196,9 +1220,26 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                                 return newErrors;
                               });
                             }
+                          } else {
+                            // If no item is highlighted, use the typed value (manual entry)
+                            if (citySearch.trim()) {
+                              const manualCity = citySearch.trim();
+                              handleInputChange("currentLocationDetails.city", manualCity);
+                              setCitySearch(manualCity);
+                              setOpenCityDropdown(false);
+                              setCityHighlightedIndex(-1);
+                              if (showErrors && errors.city) {
+                                setErrors((prev) => {
+                                  const newErrors = { ...prev };
+                                  delete newErrors.city;
+                                  return newErrors;
+                                });
+                              }
+                            }
                           }
                         } else if (e.key === "Escape") {
                           setOpenCityDropdown(false);
+                          setCityHighlightedIndex(-1);
                         }
                       }}
                     />
@@ -1206,57 +1247,108 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                       <button
                         type="button"
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400 hover:text-slate-600 focus:outline-none z-10"
-                        onClick={() => setOpenCityDropdown(!openCityDropdown)}
+                        onClick={() => {
+                          setOpenCityDropdown(!openCityDropdown);
+                          setCityHighlightedIndex(-1);
+                        }}
                       >
                         <ChevronDown className="h-4 w-4" />
                       </button>
                     )}
                     
                     {/* City Dropdown */}
-                    {openCityDropdown && selectedCountry && (
-                      <div className="absolute z-[100] w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-xl max-h-60 overflow-auto">
-                        {loadingCities ? (
-                          <div className="px-4 py-2 text-sm text-slate-500 flex items-center gap-2">
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                            Loading cities...
-                          </div>
-                        ) : cities.length > 0 ? (
-                          cities
-                            .filter(city => 
-                              !citySearch.trim() || 
-                              city.toLowerCase().includes(citySearch.toLowerCase())
-                            )
-                            .slice(0, 100)
-                            .map((city) => (
-                              <div
-                                key={city}
-                                onClick={() => {
-                                  handleInputChange("currentLocationDetails.city", city);
-                                  setCitySearch("");
-                                  setOpenCityDropdown(false);
-                                  if (showErrors && errors.city) {
-                                    setErrors((prev) => {
-                                      const newErrors = { ...prev };
-                                      delete newErrors.city;
-                                      return newErrors;
-                                    });
-                                  }
-                                }}
-                                className="cursor-pointer px-4 py-2 hover:bg-slate-50 flex items-center justify-between"
-                              >
-                                <span>{city}</span>
-                                {formData.currentLocationDetails.city === city && (
-                                  <Check className="h-4 w-4 text-orange-600" />
-                                )}
-                              </div>
-                            ))
-                        ) : (
-                          <div className="px-4 py-2 text-sm text-slate-500">
-                            {selectedCountry ? "No cities found. Try typing to search." : "Please select a country first"}
-                          </div>
-                        )}
-                      </div>
-                    )}
+                    {openCityDropdown && selectedCountry && (() => {
+                      const filteredCities = cities
+                        .filter(city => 
+                          !citySearch.trim() || 
+                          city.toLowerCase().includes(citySearch.toLowerCase())
+                        )
+                        .slice(0, 100);
+
+                      return (
+                        <div className="absolute z-[100] w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-xl max-h-60 overflow-auto">
+                          {loadingCities ? (
+                            <div className="px-4 py-2 text-sm text-slate-500 flex items-center gap-2">
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                              Loading cities...
+                            </div>
+                          ) : (
+                            <>
+                              {/* Show custom city option if typed value doesn't match any existing city */}
+                              {citySearch.trim() && 
+                               !cities.some(city => 
+                                 city.toLowerCase() === citySearch.trim().toLowerCase()
+                               ) && (
+                                <div
+                                  onClick={() => {
+                                    const customCity = citySearch.trim();
+                                    handleInputChange("currentLocationDetails.city", customCity);
+                                    setCitySearch(customCity);
+                                    setOpenCityDropdown(false);
+                                    setCityHighlightedIndex(-1);
+                                    if (showErrors && errors.city) {
+                                      setErrors((prev) => {
+                                        const newErrors = { ...prev };
+                                        delete newErrors.city;
+                                        return newErrors;
+                                      });
+                                    }
+                                  }}
+                                  className="cursor-pointer bg-orange-50 hover:bg-orange-100 px-4 py-2 flex items-center gap-2"
+                                >
+                                  <Plus className="h-4 w-4 text-orange-600" />
+                                  <span className="font-medium">Use "{citySearch.trim()}"</span>
+                                </div>
+                              )}
+                              
+                              {/* Show filtered cities from API */}
+                              {filteredCities.length > 0 ? (
+                                filteredCities.map((city, index) => (
+                                  <div
+                                    key={city}
+                                    ref={(el) => {
+                                      if (el && index === cityHighlightedIndex) {
+                                        el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                                      }
+                                    }}
+                                    onClick={() => {
+                                      handleInputChange("currentLocationDetails.city", city);
+                                      setCitySearch(city);
+                                      setOpenCityDropdown(false);
+                                      setCityHighlightedIndex(-1);
+                                      if (showErrors && errors.city) {
+                                        setErrors((prev) => {
+                                          const newErrors = { ...prev };
+                                          delete newErrors.city;
+                                          return newErrors;
+                                        });
+                                      }
+                                    }}
+                                    onMouseEnter={() => setCityHighlightedIndex(index)}
+                                    className={`cursor-pointer px-4 py-2 flex items-center justify-between ${
+                                      index === cityHighlightedIndex 
+                                        ? 'bg-orange-100 text-orange-900' 
+                                        : 'hover:bg-slate-50'
+                                    }`}
+                                  >
+                                    <span>{city}</span>
+                                    {formData.currentLocationDetails.city === city && (
+                                      <Check className="h-4 w-4 text-orange-600" />
+                                    )}
+                                  </div>
+                                ))
+                              ) : (
+                                <div className="px-4 py-2 text-sm text-slate-500">
+                                  {citySearch.trim() 
+                                    ? "No matching cities found. You can enter the city manually." 
+                                    : "No cities found. Try typing to search."}
+                                </div>
+                              )}
+                            </>
+                          )}
+                        </div>
+                      );
+                    })()}
                   </div>
                   {showErrors && errors.city && (
                     <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
@@ -2162,6 +2254,56 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                         className="rounded-lg border-orange-300 text-orange-700 hover:bg-orange-50 font-medium px-6"
                       >
                         Add Another Candidate
+                      </Button>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+
+              {/*error popup */}
+            <AnimatePresence>
+              {showErrorPopup && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+                  style={{margin: '0'}}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setShowErrorPopup(false);
+                    setIsSubmitting(false);
+                  }}
+                >
+                  <motion.div
+                    initial={{ y: 50, opacity: 0, scale: 0.95 }}
+                    animate={{ y: 0, opacity: 1, scale: 1 }}
+                    exit={{ y: 50, opacity: 0, scale: 0.95 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                    className="bg-white rounded-2xl p-8 shadow-2xl max-w-md w-full text-center border border-slate-200"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <div className="w-20 h-20 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                      <XCircle className="h-10 w-10 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-slate-900 mb-3">Error</h3>
+                    <p className="text-slate-600 mb-6 leading-relaxed">{errorMessage}</p>
+                    <div className="flex justify-center">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setShowErrorPopup(false);
+                          setIsSubmitting(false);
+                        }}
+                        className="rounded-lg border-orange-300 text-orange-700 hover:bg-orange-50 font-medium px-6"
+                      >
+                        close
                       </Button>
                     </div>
                   </motion.div>
