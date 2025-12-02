@@ -169,10 +169,10 @@ const Footer = () => {
       </p>
 
       <p
-        onClick={()=>router.push("/franchise/bangalore-urban")}
+        onClick={()=>router.push("/franchise/bangalore")}
         className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
       >
-        Bangalore Urban
+        Bangalore
       </p>
 
     </div>
