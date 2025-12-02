@@ -1156,6 +1156,10 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                   <div className="relative" style={{ zIndex: openCityDropdown ? 50 : 'auto' }}>
                     <Input
                       id="city"
+                      name="nope"
+                      autoComplete="new-password"
+                      autoCorrect="off"
+                      spellCheck="false"
                       value={citySearch}
                       onChange={(e) => {
                         const newValue = e.target.value;
