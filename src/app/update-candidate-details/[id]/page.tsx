@@ -1,6 +1,6 @@
 "use client";
 import axios from 'axios';
-import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect, use } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { getInitialDataAPI, submitAdditionalDetailsAPI } from '../../components/services/candidateapi';
 
@@ -148,9 +148,10 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
   );
 };
 
-const ContactFormPage = ({ params }: { params: { id: string } }) => {
+const ContactFormPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const searchParams = useSearchParams();
-  const id = params.id;
+  const resolvedParams = use(params);
+  const id = resolvedParams.id;
 
   const [formData, setFormData] = useState({
     name: '',
