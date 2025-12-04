@@ -50,6 +50,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "copy-to-clipboard": "^3.3.3",
+    "country-state-city": "^3.2.1",
     "culori": "^4.0.2",
     "date-fns": "^4.1.0",
     "embla-carousel-react": "^8.6.0",
