@@ -376,3 +376,30 @@ export const submitAdditionalDetailsAPI = async (id: string | string[] | undefin
     throw error;
   }
 };
+
+export const sendOTPAPI = async (id: string | string[] | undefined) => {
+  try {
+    const idParam = Array.isArray(id) ? id[0] : id;
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL_2_0}/public/candidate/${idParam}/send-otp`;
+    console.log('Sending OTP - URL:', url);
+    const response = await axios.post(url);
+    return response.data;
+  } catch (error: any) {
+    console.error('Failed to send OTP:', error.response?.data?.message || error.message);
+    console.error('Full error response:', error.response?.data);
+    throw error;
+  }
+};
+
+export const getCitiesByStateAPI = async (state: string) => {
+  try {
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL_2_0}/public/cities?state=${encodeURIComponent(state)}`;
+    console.log('Fetching cities - URL:', url);
+    const response = await axios.get(url);
+    return response.data;
+  } catch (error: any) {
+    console.error('Failed to get cities:', error.response?.data?.message || error.message);
+    console.error('Full error response:', error.response?.data);
+    throw error;
+  }
+};
