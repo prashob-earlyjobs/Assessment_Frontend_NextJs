@@ -28,6 +28,7 @@ export interface ICreateApplicationFormData {
   gender: 'Male' | 'Female' | 'Other';
   aadharNumber?: string;
   highestQualification: string;
+  collegeName?: string; // Optional field
   currentLocationDetails: ILocationDetails;
   spokenLanguages: string[];
   totalExperienceYears: number;
@@ -117,6 +118,7 @@ export const createApplication = async (
       gender: data.gender,
       ...(data.aadharNumber && data.aadharNumber.trim() && { aadharNumber: data.aadharNumber }),
       highestQualification: data.highestQualification,
+      ...(data.collegeName !== undefined && data.collegeName.trim() !== "" && { collegeName: data.collegeName.trim() }),
       currentLocationDetails: data.currentLocationDetails,
       totalExperienceYears: data.totalExperienceYears,
       totalExperienceMonths: data.totalExperienceMonths,
@@ -129,6 +131,7 @@ export const createApplication = async (
     };
 
     console.log('Normalized data to send:', normalizedData);
+    console.log('College Name in API payload:', normalizedData.collegeName, 'From input data:', data.collegeName);
 
     // Send as JSON instead of FormData
     const response = await axiosInstance.post(apiUrl, normalizedData, {
@@ -254,6 +257,7 @@ export const createTalentPoolcandidatePublic = async (
       gender: data.gender,
       ...(data.aadharNumber && data.aadharNumber.trim() && { aadharNumber: data.aadharNumber }),
       highestQualification: data.highestQualification,
+      ...(data.collegeName !== undefined && data.collegeName.trim() !== "" && { collegeName: data.collegeName.trim() }),
       currentLocationDetails: data.currentLocationDetails,
       totalExperienceYears: data.totalExperienceYears,
       totalExperienceMonths: data.totalExperienceMonths,
@@ -270,6 +274,7 @@ export const createTalentPoolcandidatePublic = async (
     };
 
     console.log('Normalized data to send:', normalizedData);
+    console.log('College Name in API payload:', normalizedData.collegeName, 'From input data:', data.collegeName);
 
     // Send as JSON using fetch
     const response = await fetch(apiEndpoint, {
@@ -349,6 +354,7 @@ export const createTalentPoolCandidateInternal = async (
       gender: data.gender,
       ...(data.aadharNumber && data.aadharNumber.trim() && { aadharNumber: data.aadharNumber }),
       highestQualification: data.highestQualification,
+      ...(data.collegeName !== undefined && data.collegeName.trim() !== "" && { collegeName: data.collegeName.trim() }),
       currentLocationDetails: data.currentLocationDetails,
       totalExperienceYears: data.totalExperienceYears,
       totalExperienceMonths: data.totalExperienceMonths,
@@ -362,6 +368,7 @@ export const createTalentPoolCandidateInternal = async (
       };
 
     console.log('Normalized data to send:', normalizedData);
+    console.log('College Name in API payload:', normalizedData.collegeName, 'From input data:', data.collegeName);
 
     // Send as JSON instead of FormData
     const response = await axiosInstance.post('/talentPoolCandidates/createTalentPoolCandidateInternal', normalizedData, {
