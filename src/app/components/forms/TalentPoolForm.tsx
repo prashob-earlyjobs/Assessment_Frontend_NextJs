@@ -1079,7 +1079,7 @@ export default function PublicTalentPoolForm({
                   </div>
                   <div className="flex flex-col items-center md:items-start text-center md:text-left">
                     <CardTitle className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">
-                      {title} public component need to remove in prod
+                      {title}
                     </CardTitle>
                     <p className="text-slate-600 text-sm md:text-base font-medium">
                       {subtitle}
