@@ -1,40 +1,56 @@
-import PublicTalentPoolForm from "./talentpoolform";
-import { Metadata } from "next";
+"use client";
+import PublicTalentPoolForm from "@/app/components/forms/TalentPoolForm";
+import { createTalentPoolcandidatePublic } from "@/app/components/services/candidateapi";
+import { generateGeminiContentFromResume } from "@/app/components/services/usersapi";
+import { uploadFile } from "@/app/components/services/companiesapi";
+import axios from "axios";
 
-export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: "Join Our Talent Pool | EarlyJobs",
-    description:
-      "Join EarlyJobs Talent Pool to accelerate your career with AI-powered job matching, verified profiles, and optional skill assessments. Connect with top employers in just 30 days.",
-    keywords:
-      "talent pool, AI job placement, EarlyJobs, job matching, skill assessments, verified profiles, career acceleration, hiring",
-    openGraph: {
-      title: "Join Our Talent Pool | EarlyJobs",
-      description:
-        "Join EarlyJobs Talent Pool and land jobs faster with AI-powered matching. Optional skill assessments, verified profiles, and a 30-day placement guarantee.",
-      type: "website",
-      url: `${process.env.NEXT_PUBLIC_BASE_URL}/talent-pool`,
-      images: [
-        {
-          url: `/images/og-talent.jpg`,
-          width: 1200,
-          height: 627,
-          alt: "EarlyJobs Talent Pool",
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: "Join Our Talent Pool | EarlyJobs",
-      description:
-        "Join EarlyJobs Talent Pool and land jobs faster with AI-powered matching. Optional skill assessments, verified profiles, and a 30-day placement guarantee.",
-      images: ["/images/og-image.jpg"],
-    },
-    robots: "index, follow",
-    viewport: "width=device-width, initial-scale=1.0",
+export default function Page() {
+  // Wrapper function for form submission
+  const handleSubmitForm = async (
+    id: string | undefined,
+    data: any,
+    resumeFile?: File
+  ) => {
+    return await createTalentPoolcandidatePublic(id, data, resumeFile);
   };
-}
 
-export default function Page() {    
-  return <PublicTalentPoolForm />;
+  // Wrapper function for resume upload
+  const handleUploadResume = async (file: File, fileName: string) => {
+    const response = await uploadFile(file);
+    return { fileUrl: response.fileUrl };
+  };
+
+  // Wrapper function for generating resume content
+  const handleGenerateResumeContent = async (file: File) => {
+    return await generateGeminiContentFromResume(file);
+  };
+
+  // Wrapper function for fetching cities
+  const handleFetchCities = async (country: string): Promise<string[]> => {
+    try {
+      const response = await axios.post('https://countriesnow.space/api/v0.1/countries/cities', {
+        country: country
+      });
+      
+      if (response.data && response.data.data && Array.isArray(response.data.data)) {
+        return response.data.data;
+      }
+      return [];
+    } catch (error) {
+      console.error('Error fetching cities:', error);
+      return [];
+    }
+  };
+
+  return (
+    <PublicTalentPoolForm
+      title="Talent Pool Registration"
+      subtitle="Complete your profile to join our talent pool and unlock career opportunities."
+      onSubmitForm={handleSubmitForm}
+      uploadResumeFile={handleUploadResume}
+      generateResumeContent={handleGenerateResumeContent}
+      fetchCitiesByCountry={handleFetchCities}
+    />
+  );
 }
