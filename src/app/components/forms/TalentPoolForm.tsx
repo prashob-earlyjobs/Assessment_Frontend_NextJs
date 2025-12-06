@@ -51,6 +51,7 @@ interface CandidateFormData {
   gender: 'Male' | 'Female' | 'Other';
   aadharNumber?: string; // Made optional
   highestQualification: string;
+  collegeName?: string; // Optional field
   currentLocationDetails: {
     street: string;
     area: string;
@@ -107,6 +108,7 @@ export interface ICreateTallentPoolFormData {
   gender: 'Male' | 'Female' | 'Other';
   aadharNumber?: string;
   highestQualification: string;
+  collegeName?: string; // Optional field
   currentLocationDetails: ILocationDetails;
   spokenLanguages: string[];
   totalExperienceYears: number;
@@ -154,6 +156,7 @@ export default function PublicTalentPoolForm({
     gender: "Male",
     aadharNumber: "",
     highestQualification: "",
+    collegeName: "",
     currentLocationDetails: {
       street: "",
       area: "",
@@ -255,7 +258,7 @@ export default function PublicTalentPoolForm({
   { value: "Other", label: "Other Qualification" }
   ];
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = useCallback((field: string, value: any) => {
     setFormData((prev) => {
       const newFormData = { ...prev } as any;
       if (field.includes(".")) {
@@ -267,24 +270,23 @@ export default function PublicTalentPoolForm({
       return newFormData as CandidateFormData;
     });
 
-    if (showErrors) {
-      setErrors((prev) => {
-        const newErrors = { ...prev };
-        if (errors[field]) {
-          delete newErrors[field];
-        }
-        if (field.includes(".")) {
-          const [parent, child] = field.split(".");
-          delete newErrors[child];
-          delete newErrors[`${parent}.${child}`];
-        }
-        if (field === "currentLocationDetails.city") {
-          delete newErrors["city"];
-        }
-        return newErrors;
-      });
-    }
-  };
+    setErrors((prev) => {
+      if (!showErrors) return prev;
+      const newErrors = { ...prev };
+      if (prev[field]) {
+        delete newErrors[field];
+      }
+      if (field.includes(".")) {
+        const [parent, child] = field.split(".");
+        delete newErrors[child];
+        delete newErrors[`${parent}.${child}`];
+      }
+      if (field === "currentLocationDetails.city") {
+        delete newErrors["city"];
+      }
+      return newErrors;
+    });
+  }, [showErrors]);
 
 
 
@@ -738,20 +740,12 @@ export default function PublicTalentPoolForm({
   };
 
   const validatePhone = (phone: string): boolean => {
-    const cleanPhone = phone.replace(/[\s-]/g, '');
-    const phoneRegex = /^(\+91|91)?[0-9]{10}$/;
+    // Only accept exactly 10 digits
+    const cleanPhone = phone.replace(/\D/g, '');
     if (cleanPhone.length === 10) {
       return /^[1-9]\d{9}$/.test(cleanPhone);
     }
-    if (cleanPhone.startsWith('+91') && cleanPhone.length === 13) {
-      const phoneNumber = cleanPhone.substring(3);
-      return /^[2-9]\d{9}$/.test(phoneNumber);
-    }
-    if (cleanPhone.startsWith('91') && cleanPhone.length === 12) {
-      const phoneNumber = cleanPhone.substring(2);
-      return /^[2-9]\d{9}$/.test(phoneNumber);
-    }
-    return phoneRegex.test(cleanPhone);
+    return false;
   };
 
   const validateEmail = (email: string): boolean => {
@@ -831,6 +825,7 @@ export default function PublicTalentPoolForm({
         gender: formData.gender,
         ...(formData.aadharNumber && formData.aadharNumber.trim() && { aadharNumber: formData.aadharNumber }),
         highestQualification: formData.highestQualification,
+        ...(formData.collegeName !== undefined && formData.collegeName.trim() !== "" && { collegeName: formData.collegeName.trim() }),
         currentLocationDetails: formData.currentLocationDetails,
         totalExperienceYears: formData.totalExperienceYears,
         totalExperienceMonths: formData.totalExperienceMonths,
@@ -854,6 +849,7 @@ export default function PublicTalentPoolForm({
       }
 
       console.log("Calling onSubmitForm prop with:", { id, normalizedData, hasResumeFile: !!resumeFile, hasOTP: !!otp });
+      console.log("College Name in payload:", normalizedData.collegeName, "Form data collegeName:", formData.collegeName);
       const response = await onSubmitForm(id, normalizedData, resumeFile || undefined);
     
       if(response.status === "success"){
@@ -984,12 +980,19 @@ export default function PublicTalentPoolForm({
     }
   }, [sendOTP, id, formData.phone]);
 
-  const getInputClassName = (fieldName: string, baseClassName: string = "") => {
+  const getInputClassName = useCallback((fieldName: string, baseClassName: string = "") => {
     const hasError = showErrors && errors[fieldName];
     const errorClasses = hasError ? "border-red-500 focus:border-red-500 focus:ring-red-500 bg-red-50/50" : "";
     const placeholderClasses = "placeholder:text-slate-400 placeholder:opacity-70";
     return `${baseClassName} ${errorClasses} ${placeholderClasses}`.trim();
-  };
+  }, [showErrors, errors]);
+
+  // Memoized phone input handler to avoid creating new function on every render
+  const handlePhoneChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    // Only allow digits and limit to 10 digits
+    const value = e.target.value.replace(/\D/g, '').slice(0, 10);
+    handleInputChange("phone", value);
+  }, [handleInputChange]);
   const handlePreviewResume = () => {
     if (uploadedURL) {
       try {
@@ -1243,9 +1246,11 @@ export default function PublicTalentPoolForm({
                     </Label>
                     <Input
                       id="phone"
+                      type="tel"
                       value={formData.phone}
-                      onChange={(e) => handleInputChange("phone", e.target.value)}
+                      onChange={handlePhoneChange}
                       placeholder="10-digit mobile number"
+                      maxLength={10}
                       className={getInputClassName("phone", "h-11 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900")}
                       required
                     />
@@ -1850,6 +1855,25 @@ export default function PublicTalentPoolForm({
                       <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
                         <X className="h-3 w-3" />
                         {errors.highestQualification}
+                      </p>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="collegeName" className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                      <Building className="h-4 w-4 text-slate-500" />
+                      College Name
+                    </Label>
+                    <Input
+                      id="collegeName"
+                      value={formData.collegeName || ""}
+                      onChange={(e) => handleInputChange("collegeName", e.target.value)}
+                      placeholder="Enter your college/university name"
+                      className={getInputClassName("collegeName", "h-11 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900")}
+                    />
+                    {showErrors && errors.collegeName && (
+                      <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
+                        <X className="h-3 w-3" />
+                        {errors.collegeName}
                       </p>
                     )}
                   </div>
