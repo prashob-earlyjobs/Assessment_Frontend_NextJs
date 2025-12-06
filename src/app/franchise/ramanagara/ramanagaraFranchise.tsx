@@ -853,13 +853,13 @@ const RamanagaraFranchise = () => {
                 <div className="flex flex-col items-center">
                   <Phone className="w-8 h-8 text-orange-600 mb-2" />
                   <p className="font-semibold text-orange-700">Call Us</p>
-                  <p className="text-orange-800">+91 9663495577</p>
+                  <p className="text-orange-800">+91 9663415577</p>
                 </div>
 
                 <div className="flex flex-col items-center">
                   <Mail className="w-8 h-8 text-orange-600 mb-2" />
                   <p className="font-semibold text-orange-700">Email Us</p>
-                  <p className="text-orange-800">ramanagara@earlyjobs.in</p>
+                  <p className="text-orange-800">ramanagara@earlyjobs.ai</p>
                 </div>
 
                 <div className="flex flex-col items-center">

@@ -855,7 +855,7 @@ const AnantapurFranchise = () => {
                   <div className="flex flex-col items-center">
                     <Mail className="w-8 h-8 text-orange-600 mb-2" />
                     <p className="font-semibold text-orange-700">Email Us</p>
-                    <p className="text-orange-800">anantapur@earlyjobs.in</p>
+                    <p className="text-orange-800">anantapur@earlyjobs.ai</p>
                   </div>
 
                   <div className="flex flex-col items-center">

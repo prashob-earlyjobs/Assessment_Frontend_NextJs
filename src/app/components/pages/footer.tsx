@@ -175,6 +175,13 @@ const Footer = () => {
         Bangalore
       </p>
 
+        <p
+        onClick={()=>router.push("/franchise/ramanagara")}
+        className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
+      >
+        Ramanagara
+      </p>
+
     </div>
   </div>
 
@@ -189,9 +196,9 @@ const Footer = () => {
         "Faridabad",
         "Bijapur",
         "Sonipat",
-        "Ramanagara",
+        // "Ramanagara",
         "Gulbarga",
-        "Ananthapur",
+        // "Ananthapur",
         "Mangalore",
       ].map((city) => (
         <p
