@@ -1,18 +1,23 @@
 "use client";
 import PublicTalentPoolForm from "@/app/components/forms/TalentPoolForm";
-import { createTalentPoolcandidatePublic, sendOTPAPI, sendOTPAPIForJointTalentPool } from "../../../components/services/candidateapi";
-import { generateGeminiContentFromResume } from "../../../components/services/usersapi";
-import { uploadFile } from "../../../components/services/companiesapi";
+import { createTalentPoolcandidatePublic, getInitialDataAPI, updateCandidateDetailsPublic, sendOTPAPI } from "@/app/components/services/candidateapi";
+import { generateGeminiContentFromResume } from "@/app/components/services/usersapi";
+import { uploadFile } from "@/app/components/services/companiesapi";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 
 export default function Page() {
+
+  const [candidateDetails, setCandidateDetails] = useState<any>({});
+  const { candidateId } = useParams<{ candidateId: string }>();
   // Wrapper function for form submission
   const handleSubmitForm = async (
     id: string | undefined,
     data: any,
     resumeFile?: File
   ) => {
-    return await createTalentPoolcandidatePublic(id, data, resumeFile);
+    return await updateCandidateDetailsPublic(id, data, resumeFile);
   };
 
   // Wrapper function for resume upload
@@ -44,25 +49,34 @@ export default function Page() {
   };
 
   // Wrapper function for sending OTP
-  const handleSendOTP = async (id: string | undefined, phone: string) => {
-    try {
-      await sendOTPAPIForJointTalentPool(id, phone);
-      console.log('OTP sent successfully');
-    } catch (error) {
-      console.error('Failed to send OTP:', error);  
-      throw error; // Re-throw to let OTPModal handle it
-    }
+  const handleSendOTP = async (id: string | undefined, phone?: string) => {
+    // sendOTPAPI doesn't require phone, so we ignore it
+    return await sendOTPAPI(id);
   };
+
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      const response = await getInitialDataAPI(candidateId || undefined);
+      if(response && response.status ==="success"){
+        setCandidateDetails(response.data);
+      }
+    };
+    fetchInitialData();
+  }, [candidateId]);
+
 
   return (
     <PublicTalentPoolForm
-      title="Talent Pool Registration"
-      subtitle="Complete your profile to join our talent pool and unlock career opportunities"
+      title="Candidate Details"
+      subtitle="Edit Candidate Details"
+      modalMessage="Candidate details updated successfully"
       onSubmitForm={handleSubmitForm}
       uploadResumeFile={handleUploadResume}
       generateResumeContent={handleGenerateResumeContent}
       fetchCitiesByCountry={handleFetchCities}
       sendOTP={handleSendOTP}
+      initialData={candidateDetails || undefined}
     />
   );
 }
+

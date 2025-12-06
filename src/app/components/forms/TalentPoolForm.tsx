@@ -2,24 +2,26 @@
 import type React from "react";
 import { toast } from "react-hot-toast";
 import { useState, useCallback, useRef, useEffect } from "react";
-import { Button } from "../../../components/ui/button";
-import { Input } from "../../../components/ui/input";
-import { Label } from "../../../components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../components/ui/select";
-import { Textarea } from "../../../components/ui/textarea";
-import { Badge } from "../../../components/ui/badge";
-import { Checkbox } from "../../../components/ui/checkbox";
-import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/card";
-import { Popover, PopoverContent, PopoverTrigger } from "../../../components/ui/popover";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "../../../components/ui/command";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { Textarea } from "../ui/textarea";
+import { Badge } from "../ui/badge";
+import { Checkbox } from "../ui/checkbox";
+import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "../ui/command";
 import { Plus, X, UploadCloud, ArrowRight, ArrowLeft, ArrowLeftCircle, User, Briefcase, CheckCircle,XCircle, MapPin, Phone, Mail, Calendar, FileText, Languages, Award, Target, Building, Clock, Loader2, Search, ChevronDown, Check, Eye, DollarSign, Zap } from 'lucide-react';
-import { ILocationDetails } from "../../../components/services/candidateapi";
+import { ILocationDetails } from "../services/candidateapi";
 //import { useNavigate } from "react-router-dom";
 import { useParams } from "next/navigation";
 import Navbar from "@/app/components/pages/navbar";
 import Footer from "@/app/components/pages/footer";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
+import OTPModal from "../ui/OTPModal";
+import { Country, State, City } from 'country-state-city';
 
 // Job interface for API response
 interface Job {
@@ -69,11 +71,18 @@ interface CandidateFormData {
 }
 
 interface AddCandidateFormProps {
+  // Optional display props
+  title?: string;
+  subtitle?: string;
+  modalMessage?: string;
+  isLoading?: boolean;
+  
   // Required API functions
   onSubmitForm: (id: string | undefined, data: ICreateTallentPoolFormData, resumeFile?: File) => Promise<any>;
   uploadResumeFile: (file: File, fileName: string) => Promise<{ fileUrl: string }>;
   generateResumeContent: (file: File) => Promise<{ data: any }>;
   fetchCitiesByCountry?: (country: string) => Promise<string[]>;
+  sendOTP?: (id: string | undefined, phone?: string) => Promise<any>; // Optional OTP sending function
   
   // Optional callbacks
   onSubmit?: (data: CandidateFormData) => void;
@@ -82,6 +91,7 @@ interface AddCandidateFormProps {
   
   // Optional props
   id?: string; // If not provided, will use useParams
+  initialData?: any; // Initial form data to populate
   showNavbar?: boolean; // Default true
   showFooter?: boolean; // Default true
   NavbarComponent?: React.ComponentType;
@@ -109,15 +119,22 @@ export interface ICreateTallentPoolFormData {
   preferredJobLocations?: string[];
   expectedSalary?: number;
   resume?: string;
+  otp?: string; // OTP for verification
 }
 
 export default function PublicTalentPoolForm({ 
+  title = "Talent Pool Registration",
+  subtitle = "Complete your profile to join our talent pool and unlock career opportunities",
   onSubmitForm,
   uploadResumeFile,
   generateResumeContent,
   fetchCitiesByCountry,
+  sendOTP,
   onSubmit,
   refreshCandidates,
+  initialData,
+  modalMessage,
+  isLoading = false,
   id: propId,
   showNavbar = true,
   showFooter = true,
@@ -170,6 +187,8 @@ export default function PublicTalentPoolForm({
   const [showErrorPopup, setShowErrorPopup] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [uploadedURL, setUploadedURL] = useState<string | null>(null);
+  const [showOTPModal, setShowOTPModal] = useState(false);
+  const [isFormLoading, setIsFormLoading] = useState(true); // Internal loading state for shimmer
   // Local input states to allow clearing and typing freely
   const [experienceYearsInput, setExperienceYearsInput] = useState<string>("");
   const [experienceMonthsInput, setExperienceMonthsInput] = useState<string>("");
@@ -469,17 +488,29 @@ export default function PublicTalentPoolForm({
 
     setLoadingCities(true);
     try {
-      if (fetchCitiesByCountry) {
-        const citiesList = await fetchCitiesByCountry(country);
-        setCities(citiesList);
+      // Use country-state-city library to get cities
+      const countryData = Country.getAllCountries().find(
+        c => c.name === country || c.isoCode === country
+      );
+      
+      if (countryData) {
+        // Get all cities for the country
+        const citiesList = City.getCitiesOfCountry(countryData.isoCode);
+        if (citiesList && citiesList.length > 0) {
+          // Extract city names and remove duplicates
+          const cityNames = citiesList
+            .map(city => city.name)
+            .filter((name, index, self) => self.indexOf(name) === index) // Remove duplicates
+            .sort(); // Sort alphabetically
+          setCities(cityNames);
+        } else {
+          setCities([]);
+        }
       } else {
-        // Fallback to default API if not provided
-        const response = await axios.post('https://countriesnow.space/api/v0.1/countries/cities', {
-          country: country
-        });
-        
-        if (response.data && response.data.data && Array.isArray(response.data.data)) {
-          setCities(response.data.data);
+        // Fallback to fetchCitiesByCountry prop if country not found in library
+        if (fetchCitiesByCountry) {
+          const citiesList = await fetchCitiesByCountry(country);
+          setCities(citiesList);
         } else {
           setCities([]);
         }
@@ -492,7 +523,87 @@ export default function PublicTalentPoolForm({
     }
   };
 
-  // Set default country to India on mount
+  // Helper function to format date for HTML date input (YYYY-MM-DD)
+  const formatDateForInput = (date: string | Date | undefined): string => {
+    if (!date) return "";
+    try {
+      const dateObj = typeof date === 'string' ? new Date(date) : date;
+      if (isNaN(dateObj.getTime())) return "";
+      const year = dateObj.getFullYear();
+      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const day = String(dateObj.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    } catch (error) {
+      console.error("Error formatting date:", error);
+      return "";
+    }
+  };
+
+  // Populate form with initialData if provided
+  // Set loading state to false after component mounts and initial data is loaded
+  useEffect(() => {
+    // Show shimmer for a brief moment on mount, then hide it
+    const timer = setTimeout(() => {
+      setIsFormLoading(false);
+    }, 300); // Small delay to show shimmer effect
+    
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (initialData && Object.keys(initialData).length > 0) {
+      console.log("initialData: ", initialData);
+      
+      // Format dateOfBirth if it exists
+      const formattedDateOfBirth = initialData.dateOfBirth 
+        ? formatDateForInput(initialData.dateOfBirth) 
+        : "";
+      
+      setFormData((prev) => ({
+        ...prev,
+        ...initialData,
+        dateOfBirth: formattedDateOfBirth || prev.dateOfBirth,
+        currentLocationDetails: initialData.currentLocationDetails || prev.currentLocationDetails,
+      }));
+      
+      // Set country if it exists in initialData, otherwise default to India
+      if (initialData.country) {
+        setSelectedCountry(initialData.country);
+      } else if (initialData.currentLocationDetails?.country) {
+        setSelectedCountry(initialData.currentLocationDetails.country);
+      } else {
+        // No country in initialData, set India as default
+        setSelectedCountry("India");
+      }
+      
+      if (initialData.currentLocationDetails?.city) {
+        setCitySearch(initialData.currentLocationDetails.city);
+      }
+      if (initialData.resume) {
+        setUploadedURL(initialData.resume);
+      }
+      
+      // Set Work Experience and Additional Months input fields
+      if (initialData.totalExperienceYears !== undefined && initialData.totalExperienceYears !== null) {
+        setExperienceYearsInput(String(initialData.totalExperienceYears));
+      }
+      if (initialData.totalExperienceMonths !== undefined && initialData.totalExperienceMonths !== null) {
+        setExperienceMonthsInput(String(initialData.totalExperienceMonths));
+      }
+      
+      // Hide loading after initial data is set
+      setIsFormLoading(false);
+    } else {
+      // No initialData, set India as default
+      if (!selectedCountry) {
+        setSelectedCountry("India");
+      }
+      // Hide loading even if no initial data
+      setIsFormLoading(false);
+    }
+  }, [initialData]);
+
+  // Set default country to India on mount if not already set
   useEffect(() => {
     if (!selectedCountry) {
       setSelectedCountry("India");
@@ -707,7 +818,7 @@ export default function PublicTalentPoolForm({
   };
 
   // Extract submission logic to a reusable function
-  const submitFormData = useCallback(async () => {
+  const submitFormData = useCallback(async (otp?: string) => {
     setIsSubmitting(true);
 
     try {
@@ -732,15 +843,38 @@ export default function PublicTalentPoolForm({
         ...(formData.preferredJobLocations && formData.preferredJobLocations.length > 0 && { preferredJobLocations: formData.preferredJobLocations }),
         ...(formData.expectedSalary && formData.expectedSalary > 0 && { expectedSalary: formData.expectedSalary }),
         resume: uploadedURL || undefined,
+        ...(otp && { otp }), // Include OTP if provided
       };
 
+      // Ensure we're using the prop function, not any hardcoded function
+      if (!onSubmitForm) {
+        console.error("onSubmitForm prop is not provided!");
+        toast.error("Form submission handler is not configured. Please contact support.");
+        return;
+      }
+
+      console.log("Calling onSubmitForm prop with:", { id, normalizedData, hasResumeFile: !!resumeFile, hasOTP: !!otp });
       const response = await onSubmitForm(id, normalizedData, resumeFile || undefined);
     
       if(response.status === "success"){
-        setSuccessMessage("Your profile has been successfully created! Thank you for registering.");
+        setShowOTPModal(false);
+        setSuccessMessage(modalMessage || "Your action has been successfully completed!");
         setShowSuccessPopup(true);
       }
       else{
+        // If OTP modal is open and response indicates failure, throw error so OTPModal can display it
+        if (showOTPModal && otp) {
+          const errorMessage = response.message || 'Invalid OTP. Please try again.';
+          throw { 
+            response: { 
+              status: 400, 
+              data: { 
+                message: errorMessage,
+                error: { message: errorMessage }
+              } 
+            } 
+          };
+        }
         toast.error(response.message);
       }
 
@@ -752,17 +886,53 @@ export default function PublicTalentPoolForm({
         refreshCandidates();
       }
     } catch (error: any) {
-      console.error(":", error.response?.data?.message,error.response?.status);
-      if (error.response?.data?.message) {
+      console.error("Form submission error:", error.response?.data?.message, error.response?.status);
+      
+      // Handle OTP-related errors - re-throw if OTP modal is open so it can display the error
+      if (showOTPModal && otp) {
+        const errorMessage = error.response?.data?.message || error.response?.data?.error?.message || error.message || '';
+        const lowerErrorMessage = errorMessage.toLowerCase();
+        const isOTPError = error.response?.status === 400 || 
+                         error.response?.status === 422 ||
+                         lowerErrorMessage.includes('otp') ||
+                         lowerErrorMessage.includes('invalid otp') ||
+                         lowerErrorMessage.includes('otp expired') ||
+                         lowerErrorMessage.includes('otp is invalid') ||
+                         lowerErrorMessage.includes('otp has expired');
+        
+        if (isOTPError) {
+          // Re-throw OTP errors so OTPModal can catch and display them
+          throw error;
+        }
+      }
+      
+      // Handle OTP-related errors (when modal is not open or not OTP submission)
+      if (error.response?.status === 400 && error.response?.data?.message?.includes('OTP')) {
+        if (error.response.data.message === 'Invalid OTP') {
+          toast.error('Invalid OTP. Please try again.');
+        } else if (error.response.data.message === 'OTP expired') {
+          toast.error('OTP expired. Please try again.');
+        } else {
+          toast.error('Failed to submit form. Please try again.');
+        }
+      } else if (error.response?.data?.message) {
         if (error.response?.data?.message === "Candidate already exists with the same email or phone number" && error.response?.status === 409) {
+          // Close OTP modal if it's open
+          if (showOTPModal) {
+            setShowOTPModal(false);
+          }
           setShowErrorPopup(true);
           setErrorMessage("This email or phone number is already registered. Please use a different email or phone number.");
+        } else {
+          toast.error(error.response?.data?.message || 'Failed to submit form. Please try again.');
         }
+      } else {
+        toast.error('Failed to submit form. Please try again.');
       }
     } finally {
       setIsSubmitting(false);
     }
-  }, [formData, onSubmit, refreshCandidates, resumeFile, uploadedURL, id, onSubmitForm]);
+  }, [formData, onSubmit, refreshCandidates, resumeFile, uploadedURL, id, onSubmitForm, modalMessage, showOTPModal]);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
@@ -780,10 +950,39 @@ export default function PublicTalentPoolForm({
         return;
       }
 
-      await submitFormData();
+      // If sendOTP is provided, show OTP modal instead of submitting directly
+      if (sendOTP) {
+        setShowOTPModal(true);
+      } else {
+        // If no OTP function, submit directly
+        await submitFormData();
+      }
+    },
+    [submitFormData, sendOTP]
+  );
+
+  // Handle OTP submission
+  const handleOTPSubmit = useCallback(
+    async (otp: string) => {
+      await submitFormData(otp);
     },
     [submitFormData]
   );
+
+  // Handle sending OTP
+  const handleSendOTP = useCallback(async () => {
+    if (!sendOTP) {
+      toast.error('OTP sending function is not configured.');
+      return;
+    }
+    try {
+      // Pass phone number if available, otherwise just pass id
+      await sendOTP(id, formData.phone || undefined);
+    } catch (error: any) {
+      console.error('Failed to send OTP:', error);
+      throw error; // Re-throw to let OTPModal handle the error
+    }
+  }, [sendOTP, id, formData.phone]);
 
   const getInputClassName = (fieldName: string, baseClassName: string = "") => {
     const hasError = showErrors && errors[fieldName];
@@ -804,35 +1003,89 @@ export default function PublicTalentPoolForm({
     }
   };
 
+  // Shimmer skeleton component
+  const ShimmerSkeleton = () => (
+    <div className="space-y-6">
+      {/* Form Sections Shimmer */}
+      {[1, 2, 3, 4, 5].map((section) => (
+        <div key={section} className="space-y-4">
+          {/* Section Header */}
+          <div className="flex items-center gap-3 pb-3 border-b-2 border-slate-200">
+            <div className="w-10 h-10 bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200 rounded-lg animate-pulse bg-[length:200%_100%]"></div>
+            <div className="flex-1 space-y-2">
+              <div className="h-5 bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200 rounded w-1/3 animate-pulse bg-[length:200%_100%]"></div>
+              <div className="h-4 bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200 rounded w-1/2 animate-pulse bg-[length:200%_100%]"></div>
+            </div>
+          </div>
+          
+          {/* Input Fields Shimmer */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {[1, 2].map((field) => (
+              <div key={field} className="space-y-2">
+                <div className="h-4 bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200 rounded w-1/3 animate-pulse bg-[length:200%_100%]"></div>
+                <div className="h-11 bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200 rounded-lg animate-pulse bg-[length:200%_100%]"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+      
+      {/* Submit Button Shimmer */}
+      <div className="flex justify-center pt-8">
+        <div className="h-12 bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200 rounded-lg w-48 animate-pulse bg-[length:200%_100%]"></div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-orange-50/30 to-slate-100">
         {showNavbar && <NavbarComponent />}
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
-        <form onSubmit={handleSubmit} className="space-y-6">
+        {(isLoading || isFormLoading) ? (
           <Card className="shadow-xl rounded-2xl border border-slate-200/80 bg-white w-full" style={{ overflow: 'visible' }}>
             <CardHeader
               className="bg-gradient-to-r from-orange-50 via-amber-50 to-orange-50 border-b border-slate-200/50 px-8 py-10"
             >
               <div className="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8">
                 <div className="flex-shrink-0">
-                  <img
-                    src='/images/logo.png'
-                    alt="TalentHub Logo"
-                    className="h-12 md:h-14 lg:h-16 w-auto"
-                  />
+                  <div className="h-12 md:h-14 lg:h-16 w-32 bg-slate-200 rounded animate-pulse"></div>
                 </div>
-                <div className="flex flex-col items-center md:items-start text-center md:text-left">
-                  <CardTitle className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">
-                    Talent Pool Registration
-                  </CardTitle>
-                  <p className="text-slate-600 text-sm md:text-base font-medium">
-                    Complete your profile to join our talent pool and unlock career opportunities
-                  </p>
+                <div className="flex flex-col items-center md:items-start text-center md:text-left space-y-2">
+                  <div className="h-8 bg-slate-200 rounded w-64 animate-pulse"></div>
+                  <div className="h-5 bg-slate-200 rounded w-80 animate-pulse"></div>
                 </div>
               </div>
             </CardHeader>
+            <CardContent className="p-8 lg:p-10">
+              <ShimmerSkeleton />
+            </CardContent>
+          </Card>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <Card className="shadow-xl rounded-2xl border border-slate-200/80 bg-white w-full" style={{ overflow: 'visible' }}>
+              <CardHeader
+                className="bg-gradient-to-r from-orange-50 via-amber-50 to-orange-50 border-b border-slate-200/50 px-8 py-10"
+              >
+                <div className="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8">
+                  <div className="flex-shrink-0">
+                    <img
+                      src='/images/logo.png'
+                      alt="TalentHub Logo"
+                      className="h-12 md:h-14 lg:h-16 w-auto"
+                    />
+                  </div>
+                  <div className="flex flex-col items-center md:items-start text-center md:text-left">
+                    <CardTitle className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">
+                      {title} public component need to remove in prod
+                    </CardTitle>
+                    <p className="text-slate-600 text-sm md:text-base font-medium">
+                      {subtitle}
+                    </p>
+                  </div>
+                </div>
+              </CardHeader>
 
-            <CardContent className="p-8 lg:p-10 space-y-10">
+              <CardContent className="p-8 lg:p-10 space-y-10">
               {/* Resume Upload Section */}
               <div className="space-y-6">
                 <div className="flex items-center gap-3 pb-3 border-b-2 border-slate-200">
@@ -1030,7 +1283,6 @@ export default function PublicTalentPoolForm({
                       onChange={(e) => handleInputChange("dateOfBirth", e.target.value)}
                       className={getInputClassName("dateOfBirth", "h-11 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900")}
                       max="2009-08-20"
-                      defaultValue="2009-08-20"
                     />
                     {showErrors && errors.dateOfBirth && (
                       <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
@@ -1140,21 +1392,10 @@ export default function PublicTalentPoolForm({
                         <SelectValue placeholder="Select country" />
                       </SelectTrigger>
                       <SelectContent className="rounded-lg max-h-60">
-                        <SelectItem value="India">India</SelectItem>
-                        <SelectItem value="United States">United States</SelectItem>
-                        <SelectItem value="United Kingdom">United Kingdom</SelectItem>
-                        <SelectItem value="Canada">Canada</SelectItem>
-                        <SelectItem value="Australia">Australia</SelectItem>
-                        <SelectItem value="Germany">Germany</SelectItem>
-                        <SelectItem value="France">France</SelectItem>
-                        <SelectItem value="Japan">Japan</SelectItem>
-                        <SelectItem value="China">China</SelectItem>
-                        <SelectItem value="Singapore">Singapore</SelectItem>
-                        <SelectItem value="United Arab Emirates">United Arab Emirates</SelectItem>
-                        <SelectItem value="Saudi Arabia">Saudi Arabia</SelectItem>
-                        <SelectItem value="South Africa">South Africa</SelectItem>
-                        <SelectItem value="Brazil">Brazil</SelectItem>
-                        <SelectItem value="Mexico">Mexico</SelectItem>
+                        {Country.getAllCountries().map((country) => (
+                          <SelectItem key={country.isoCode} value={country.name}>{country.name}</SelectItem>
+                        ))}
+                     
                       </SelectContent>
                     </Select>
                   </div>
@@ -2238,10 +2479,10 @@ export default function PublicTalentPoolForm({
                     <div className="w-20 h-20 bg-gradient-to-br from-emerald-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
                       <CheckCircle className="h-10 w-10 text-white" />
                     </div>
-                    <h3 className="text-2xl font-bold text-slate-900 mb-3">Profile Created Successfully!</h3>
+                    <h3 className="text-2xl font-bold text-slate-900 mb-3">{modalMessage || "Action Completed Successfully!"}</h3>
                     <p className="text-slate-600 mb-6 leading-relaxed">{successMessage}</p>
                     <div className="flex justify-center">
-                      <Button
+                      {false && <Button
                         variant="outline"
                         onClick={() => {
                           setShowSuccessPopup(false);
@@ -2285,7 +2526,8 @@ export default function PublicTalentPoolForm({
                         className="rounded-lg border-orange-300 text-orange-700 hover:bg-orange-50 font-medium px-6"
                       >
                         Add Another Candidate
-                      </Button>
+                      </Button>}
+                      
                     </div>
                   </motion.div>
                 </motion.div>
@@ -2300,7 +2542,7 @@ export default function PublicTalentPoolForm({
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+                  className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4"
                   style={{margin: '0'}}
                   onClick={(e) => {
                     e.preventDefault();
@@ -2363,8 +2605,27 @@ export default function PublicTalentPoolForm({
               </div>
             )}
           </form>
+        )}
         </div>
         {showFooter && <FooterComponent />}
+        
+        {/* OTP Modal */}
+        {sendOTP && (
+          <OTPModal
+            isOpen={showOTPModal}
+            onClose={() => !isSubmitting && setShowOTPModal(false)}
+            onSubmit={handleOTPSubmit}
+            onSendOTP={handleSendOTP}
+            isSubmitting={isSubmitting}
+            showToast={(message, type) => {
+              if (type === 'error') {
+                toast.error(message);
+              } else {
+                toast.success(message);
+              }
+            }}
+          />
+        )}
       </div>
   );
 }

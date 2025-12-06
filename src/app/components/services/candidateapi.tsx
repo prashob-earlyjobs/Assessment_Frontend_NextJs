@@ -1,7 +1,7 @@
 import axiosInstance from "./apiinterseptor"; // Assuming same interceptor setup
 import { toast } from "react-toastify";
 import axios, { AxiosResponse } from 'axios';
-import { ICreateTallentPoolFormData } from "@/app/talentpoolform/public/[id]/talentpoolform";
+import { ICreateTallentPoolFormData } from "@/app/components/forms/TalentPoolForm";
 import { ParamValue } from "next/dist/server/request/params";
 
 // Interface for location details
@@ -163,6 +163,54 @@ export const createApplication = async (
   }
 };
 
+export const updateCandidateDetails = async (
+  id: string | ParamValue ,
+  data: ICreateTallentPoolFormData
+): Promise<ICreateApplicationResponse> => {
+  try {
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_2_0
+    if (!backendUrl) {
+      throw new Error('Backend URL is not configured in environment variables');
+    }
+    const apiEndpoint = `${backendUrl}/talentPoolCandidates/${id}/updateCandidateDetails`;
+    const response = await axiosInstance.put(apiEndpoint, data);
+    return response.data;
+  } catch (error: any) {
+    console.log('Failed to update candidate details:', error.response?.data?.message || error.message);
+    throw error;
+  }
+};
+
+
+// Update candidate details for public candidate link send as reminder
+export const updateCandidateDetailsPublic = async (
+  id: string | ParamValue ,
+  data: ICreateTallentPoolFormData,
+  resumeFile?: File
+): Promise<ICreateApplicationResponse> => {
+  try {
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_2_0
+    if (!backendUrl) {
+      throw new Error('Backend URL is not configured in environment variables');
+    }
+    const apiEndpoint = `${backendUrl}/public/update-candidate/${id}`;
+    const response = await axiosInstance.patch(apiEndpoint, data, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    });
+    if (resumeFile) {
+      const response = await axiosInstance.post(`${apiEndpoint}/uploadResume`, {
+        resume: resumeFile
+      });
+    }
+    return response.data;
+  } catch (error: any) {
+    console.error('Failed to update candidate details:', error.response?.data?.message || error.message);
+    console.error('Full error response:', error.response?.data);
+    throw error;
+  }
+};
 
 export const createTalentPoolcandidatePublic = async (
   id: string | ParamValue ,
@@ -217,7 +265,8 @@ export const createTalentPoolcandidatePublic = async (
       howSoonReady: data.howSoonReady && data.howSoonReady.trim() ? data.howSoonReady : "More than 3 months",
       ...(data.preferredJobLocations && Array.isArray(data.preferredJobLocations) && data.preferredJobLocations.length > 0 && { preferredJobLocations: data.preferredJobLocations }),
       ...(data.expectedSalary && data.expectedSalary > 0 && { expectedSalary: data.expectedSalary }),
-      resumeUrl: data.resume
+      resumeUrl: data.resume,
+      ...(data.otp && data.otp.trim() && { otp: data.otp }) // Include OTP if provided
     };
 
     console.log('Normalized data to send:', normalizedData);
@@ -382,7 +431,27 @@ export const sendOTPAPI = async (id: string | string[] | undefined) => {
     const idParam = Array.isArray(id) ? id[0] : id;
     const url = `${process.env.NEXT_PUBLIC_BACKEND_URL_2_0}/public/candidate/${idParam}/send-otp`;
     console.log('Sending OTP - URL:', url);
-    const response = await axios.post(url);
+    const response = await axios.post(url)
+    return response.data;
+  } catch (error: any) {
+    console.error('Failed to send OTP:', error.response?.data?.message || error.message);
+    console.error('Full error response:', error.response?.data);
+    throw error;
+  }
+};
+
+export const sendOTPAPIForJointTalentPool = async (id: string | string[] | undefined, phone: string) => {
+  try {
+    const idParam = Array.isArray(id) ? id[0] : id;
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL_2_0}/public/candidate/join-talent-pool/send-otp`;
+    console.log('Sending OTP - URL:', url, 'Phone:', phone);
+    const response = await axios.post(url, {
+      phone: phone
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
     return response.data;
   } catch (error: any) {
     console.error('Failed to send OTP:', error.response?.data?.message || error.message);
