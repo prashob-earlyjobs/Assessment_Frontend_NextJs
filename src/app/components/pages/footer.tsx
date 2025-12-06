@@ -200,11 +200,17 @@ const Footer = () => {
         "Gulbarga",
         // "Ananthapur",
         "Mangalore",
+        "Visakhapatnam",
+        "Bhopal",
+        "Patna", 
+        "Udupi",
+        "Gulbarga"
+
       ].map((city) => (
         <p
           key={city}
           
-          onClick={()=>router.push(`/franchise/${city.toLowerCase()}`)}
+          onClick={()=>router.push(`/`)}
           className="text-gray-400  text-lg hover:text-amber-500 transition-all duration-300 cursor-not-allowed"
         >
           {city}
