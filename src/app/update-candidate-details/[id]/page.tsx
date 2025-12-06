@@ -6,6 +6,7 @@ import { getInitialDataAPI, submitAdditionalDetailsAPI, sendOTPAPI } from '../..
 import Footer from '@/app/components/pages/footer';
 import Header from '@/app/components/pages/header';
 import { State, City } from 'country-state-city';
+import OTPModal from '@/app/components/ui/OTPModal';
 
 interface CustomDropdownProps {
   options: string[];
@@ -296,10 +297,6 @@ const ContactFormPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const [toast, setToast] = useState<{ message: string; type: 'error' | 'success' } | null>(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showOTPModal, setShowOTPModal] = useState(false);
-  const [otp, setOtp] = useState(['', '', '', '']);
-  const [otpTimer, setOtpTimer] = useState(60);
-  const [isResendingOTP, setIsResendingOTP] = useState(false);
-  const otpInputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [currentCities, setCurrentCities] = useState<string[]>([]);
   const [permanentCities, setPermanentCities] = useState<string[]>([]);
   const [loadingCurrentCities, setLoadingCurrentCities] = useState(false);
@@ -366,7 +363,7 @@ const ContactFormPage = ({ params }: { params: Promise<{ id: string }> }) => {
                 setCurrentCities(cities.map(city => city.name));
               }
             } catch (error: any) {
-              console.error('Failed to fetch current cities:', error);
+              console.log('Failed to fetch current cities:', error);
             } finally {
               setLoadingCurrentCities(false);
             }
@@ -383,7 +380,7 @@ const ContactFormPage = ({ params }: { params: Promise<{ id: string }> }) => {
                 setPermanentCities(cities.map(city => city.name));
               }
             } catch (error: any) {
-              console.error('Failed to fetch permanent cities:', error);
+              console.log('Failed to fetch permanent cities:', error);
             } finally {
               setLoadingPermanentCities(false);
             }
@@ -392,7 +389,7 @@ const ContactFormPage = ({ params }: { params: Promise<{ id: string }> }) => {
           setHasError(true);
         }
       } catch (error) {
-        console.error('Error fetching initial data:', error);
+        console.log('Error fetching initial data:', error);
         setHasError(true);
       } finally {
         setIsLoading(false);
@@ -539,7 +536,7 @@ const ContactFormPage = ({ params }: { params: Promise<{ id: string }> }) => {
           }
         }
       } catch (error: any) {
-        console.error('Failed to fetch cities:', error);
+        console.log('Failed to fetch cities:', error);
         setCurrentCities([]);
         if (sameAsCurrentAddress) {
           setPermanentCities([]);
@@ -562,7 +559,6 @@ const ContactFormPage = ({ params }: { params: Promise<{ id: string }> }) => {
           setPermanentCities([]);
         }
       } catch (error: any) {
-        console.error('Failed to fetch cities:', error);
         setPermanentCities([]);
       } finally {
         setLoadingPermanentCities(false);
@@ -669,180 +665,51 @@ const ContactFormPage = ({ params }: { params: Promise<{ id: string }> }) => {
     setTimeout(() => setToast(null), 5000);
   };
 
-  // Timer effect for OTP resend
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (showOTPModal && otpTimer > 0) {
-      interval = setInterval(() => {
-        setOtpTimer((prev) => prev - 1);
-      }, 1000);
-    }
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [showOTPModal, otpTimer]);
-
-  // Reset timer and send OTP when modal opens
-  useEffect(() => {
-    if (showOTPModal) {
-      setOtpTimer(60);
-      setOtp(['', '', '', '']);
-      
-      // Send OTP API call
-      const sendOTP = async () => {
-        try {
-          await sendOTPAPI(id || undefined);
-          console.log('OTP sent successfully');
-        } catch (error) {
-          console.error('Failed to send OTP:', error);
-          showToast('Failed to send OTP. Please try again.', 'error');
-        }
-      };
-      
-      sendOTP();
-      
-      // Focus first input when modal opens - use longer timeout to ensure modal is rendered
-      setTimeout(() => {
-        otpInputRefs.current[0]?.focus();
-      }, 200);
-    }
-  }, [showOTPModal, id]);
-
-  const handleOTPChange = (index: number, value: string) => {
-    // Only allow numbers
-    if (value && !/^\d$/.test(value)) return;
-
-    const newOtp = [...otp];
-    newOtp[index] = value;
-    setOtp(newOtp);
-
-    // Auto-focus next input when a digit is entered
-    if (value && index < 3) {
-      setTimeout(() => {
-        otpInputRefs.current[index + 1]?.focus();
-      }, 0);
-    }
-  };
-
-  const handleOTPKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
-    // Handle Enter key to submit
-    if (e.key === 'Enter') {
-    e.preventDefault();
-      const otpValue = otp.join('');
-      if (otpValue.length === 4 && !isSubmitting) {
-        handleOTPSubmit();
-      }
-      return;
-    }
-    
-    // Handle backspace
-    if (e.key === 'Backspace') {
-      if (otp[index]) {
-        // If current field has value, clear it
-        const newOtp = [...otp];
-        newOtp[index] = '';
-        setOtp(newOtp);
-      } else if (index > 0) {
-        // If current field is empty, move to previous and clear it
-        const newOtp = [...otp];
-        newOtp[index - 1] = '';
-        setOtp(newOtp);
-        setTimeout(() => {
-          otpInputRefs.current[index - 1]?.focus();
-        }, 0);
-      }
-    }
-    
-    // Handle arrow keys for navigation
-    if (e.key === 'ArrowLeft' && index > 0) {
-      e.preventDefault();
-      otpInputRefs.current[index - 1]?.focus();
-    }
-    if (e.key === 'ArrowRight' && index < 3) {
-      e.preventDefault();
-      otpInputRefs.current[index + 1]?.focus();
-    }
-  };
-
-  const handleOTPPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const pastedData = e.clipboardData.getData('text').trim();
-    const digits = pastedData.replace(/\D/g, '').slice(0, 4).split('');
-    
-    if (digits.length > 0) {
-      const newOtp = ['', '', '', ''];
-      digits.forEach((digit, idx) => {
-        if (idx < 4) {
-          newOtp[idx] = digit;
-        }
-      });
-      setOtp(newOtp);
-      
-      // Focus the next empty input or the last input
-      const nextIndex = Math.min(digits.length, 3);
-      setTimeout(() => {
-        otpInputRefs.current[nextIndex]?.focus();
-      }, 0);
-    }
-  };
-
-  const handleResendOTP = async () => {
-    if (otpTimer > 0) return;
-    
-    setIsResendingOTP(true);
-    try {
-      // Call API to resend OTP
-      await sendOTPAPI(id || undefined);
-      setOtpTimer(60);
-      setOtp(['', '', '', '']);
-      setTimeout(() => {
-        otpInputRefs.current[0]?.focus();
-      }, 0);
-      showToast('OTP resent successfully', 'success');
-    } catch (error) {
-      console.error('Failed to resend OTP:', error);
-      showToast('Failed to resend OTP. Please try again.', 'error');
-    } finally {
-      setIsResendingOTP(false);
-    }
-  };
-
-  const handleOTPSubmit = async () => {
-    const otpValue = otp.join('');
-    if (otpValue.length !== 4) {
-      showToast('Please enter a valid 4-digit OTP', 'error');
-      return;
-    }
-
+  // Handle OTP submission
+  const handleOTPSubmit = async (otp: string) => {
     setIsSubmitting(true);
 
     try {
-      // Prepare form data with OTP
+      // Prepare form data with OTP explicitly included
       const submissionData = {
         ...formData,
-        otp: otpValue,
+        otp: otp, // OTP is included in the main API call
       };
 
-      console.log('Form submitted with OTP:', submissionData);
+ 
       const response = await submitAdditionalDetailsAPI(id || undefined, submissionData);
-      console.log('Response:', response);
+
       
       // Close OTP modal and show success
       setShowOTPModal(false);
       showToast('Form submitted successfully!', 'success');
-    } catch (error) {
+      return response;
+    } catch (error: any) {
       console.log('Form submission error:', error.response);
-      if(error.response.status === 400 && error.response.data.message.includes('OTP')) {
-      if (error.response.data.message === 'Invalid OTP') {
-        showToast('Invalid OTP. Please try again.', 'error');
-      }else if(error.response.data.message === "OTP expired") {
-        showToast('OTP expired. Please try again.', 'error');
-      }else {
+      if(error.response?.status === 400 && error.response?.data?.message?.includes('OTP')) {
+        if (error.response.data.message === 'Invalid OTP') {
+          showToast('Invalid OTP. Please try again.', 'error');
+        } else if(error.response.data.message === "OTP expired") {
+          showToast('OTP expired. Please try again.', 'error');
+        } else {
+          showToast('Failed to submit form. Please try again.', 'error');
+        }
+      } else {
         showToast('Failed to submit form. Please try again.', 'error');
       }
-      }
+      throw error; // Re-throw to let OTPModal handle it
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  // Handle sending OTP
+  const handleSendOTP = async () => {
+    try {
+      await sendOTPAPI(id || undefined);
+      console.log('OTP sent successfully');
+    } catch (error) {
+      throw error; // Re-throw to let OTPModal handle it
     }
   };
 
@@ -888,102 +755,16 @@ const ContactFormPage = ({ params }: { params: Promise<{ id: string }> }) => {
         }
       `}} />
      
-      {showOTPModal && (
-        <div className="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="otp-modal-title" role="dialog" aria-modal="true">
-          {/* Backdrop */}
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={() => !isSubmitting && setShowOTPModal(false)}></div>
-          
-          {/* Modal Content */}
-          <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div className="relative inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full">
-              <div className="bg-white px-6 pt-6 pb-4">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-semibold text-gray-900" id="otp-modal-title">
-                    Enter OTP
-                  </h3>
-                  <button
-                    type="button"
-                    onClick={() => !isSubmitting && setShowOTPModal(false)}
-                    className="text-gray-400 hover:text-gray-600 transition-colors"
-                    disabled={isSubmitting}
-                  >
-                    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                </div>
-                <p className="text-sm text-gray-600 mb-6">
-                  Please enter the 4-digit OTP sent to your mobile number and email address.
-                </p>
-                
-                <div className="flex justify-center gap-3 mb-6">
-                  {[0, 1, 2, 3].map((index) => (
-                    <input
-                      key={index}
-                      ref={(el) => {
-                        if (el) otpInputRefs.current[index] = el;
-                      }}
-                      type="text"
-                      inputMode="numeric"
-                      pattern="[0-9]*"
-                      maxLength={1}
-                      value={otp[index]}
-                      onChange={(e) => handleOTPChange(index, e.target.value)}
-                      onKeyDown={(e) => handleOTPKeyDown(index, e)}
-                      onPaste={handleOTPPaste}
-                      disabled={isSubmitting}
-                      autoComplete="off"
-                      className="w-14 h-14 text-center text-2xl font-semibold border-2 border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-colors disabled:bg-gray-100 disabled:cursor-not-allowed"
-                    />
-                  ))}
-                </div>
-
-                <div className="flex items-center justify-between mb-6">
-                  <button
-                    type="button"
-                    onClick={handleResendOTP}
-                    disabled={otpTimer > 0 || isResendingOTP || isSubmitting}
-                    className={`text-sm font-medium transition-colors ${
-                      otpTimer > 0 || isResendingOTP || isSubmitting
-                        ? 'text-gray-400 cursor-not-allowed'
-                        : 'text-orange-600 hover:text-orange-700'
-                    }`}
-                  >
-                    {isResendingOTP ? 'Resending...' : 'Resend OTP'}
-                  </button>
-                  <div className="text-sm text-gray-600">
-                    {otpTimer > 0 ? (
-                      <span>Resend in <span className="font-semibold text-orange-600">{otpTimer}s</span></span>
-                    ) : (
-                      <span className="text-gray-400">OTP can be resent</span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="flex gap-3">
-                  <button
-                    type="button"
-                    onClick={() => !isSubmitting && setShowOTPModal(false)}
-                    disabled={isSubmitting}
-                    className="flex-1 px-4 py-2.5 border border-gray-300 rounded-md text-gray-700 font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleOTPSubmit}
-                    disabled={isSubmitting || otp.join('').length !== 4}
-                    className="flex-1 px-4 py-2.5 bg-orange-500 text-white font-medium rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {isSubmitting ? 'Submitting...' : 'Submit'}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* OTP Modal */}
+      <OTPModal
+        isOpen={showOTPModal}
+        onClose={() => !isSubmitting && setShowOTPModal(false)}
+        onSubmit={handleOTPSubmit}
+        onSendOTP={handleSendOTP}
+        isSubmitting={isSubmitting}
+        showToast={showToast}
+      />
+      
       {showSuccessModal && (
         <div className="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">

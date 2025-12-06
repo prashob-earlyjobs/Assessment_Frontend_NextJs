@@ -8,7 +8,6 @@ import { toast } from "sonner";
 import { X } from "lucide-react";
 
 const InterestedCandidateForm = ({ isOpen, onClose, candidateName }) => {
-  const [step, setStep] = useState(1); // Track form step
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -68,16 +67,70 @@ const InterestedCandidateForm = ({ isOpen, onClose, candidateName }) => {
   // Handle form submission with OTP validation in backend
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate required fields
+    if (!formData.name || !formData.email || !formData.companyName) {
+      toast.error("Please fill all required fields.");
+      return;
+    }
+    
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+    
+    const mobile = formData.mobile;
+    if (mobile.length !== 13 || !/^\+91\d{10}$/.test(mobile)) {
+      toast.error("Please enter a valid 10-digit mobile number");
+      return;
+    }
+    
+    if (!mobileOtpSent || !formData.mobileOtp) {
+      toast.error("Please send and enter the mobile OTP.");
+      return;
+    }
+    
     setIsSubmitting(true);
     try {
-      const mobile = formData.mobile;
-      if (mobile.length !== 13 || !/^\+91\d{10}$/.test(mobile)) {
-        throw new Error("Please enter a valid 10-digit mobile number");
+      // Format date from YYYY-MM-DD to dd/mm/yyyy
+      const formatDate = (dateString) => {
+        if (!dateString) return "";
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+      };
+
+      // Capitalize interview mode
+      const capitalizeMode = (mode) => {
+        if (!mode) return "Online";
+        return mode.charAt(0).toUpperCase() + mode.slice(1);
+      };
+
+      // Prepare the request body according to API format
+      const requestBody: any = {
+        name: formData.name,
+        email: formData.email,
+        companyName: formData.companyName,
+        mobile: formData.mobile,
+        mobileOtp: formData.mobileOtp,
+        interviewScheduleDate: formatDate(formData.interviewDate),
+        interviewMode: capitalizeMode(formData.interviewMode),
+        candidateName: candidateName,
+      };
+
+      // Only include companyAddress if interview mode is Offline or Hybrid
+      if (formData.interviewMode === "offline" || formData.interviewMode === "hybrid") {
+        if (formData.companyAddress) {
+          requestBody.companyAddress = formData.companyAddress;
+        }
       }
+
       const response = await fetch(`${backendUrl}/submit-interest`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, candidateName }),
+        body: JSON.stringify(requestBody),
       });
 
       const data = await response.json();
@@ -97,20 +150,6 @@ const InterestedCandidateForm = ({ isOpen, onClose, candidateName }) => {
     }
   };
 
-  // Handle Next button to move to Step 2
-  const handleNext = (e) => {
-    e.preventDefault();
-    if (!formData.name || !formData.email || !formData.companyName) {
-      toast.error("Please fill all required fields in Step 1.");
-      return;
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      toast.error("Please enter a valid email address.");
-      return;
-    }
-    setStep(2);
-  };
-
   // Reset form when dialog closes
   useEffect(() => {
     if (!isOpen) {
@@ -125,7 +164,6 @@ const InterestedCandidateForm = ({ isOpen, onClose, candidateName }) => {
         mobileOtp: "",
       });
       setMobileOtpSent(false);
-      setStep(1);
     }
   }, [isOpen]);
 
@@ -141,145 +179,124 @@ const InterestedCandidateForm = ({ isOpen, onClose, candidateName }) => {
           </button>
         </div>
 
-        {step === 1 && (
-          <form onSubmit={handleNext} className="space-y-4">
-            <div>
-              <Label htmlFor="name">Your Name</Label>
-              <Input
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                placeholder="Enter your name"
-              />
-            </div>
-            <div>
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                placeholder="Enter your email"
-              />
-            </div>
-            <div>
-              <Label htmlFor="companyName">Company Name</Label>
-              <Input
-                id="companyName"
-                name="companyName"
-                value={formData.companyName}
-                onChange={handleChange}
-                required
-                placeholder="Enter company name"
-              />
-            </div>
-            <Button
-              type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md"
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <Label htmlFor="name">Your Name</Label>
+            <Input
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              placeholder="Enter your name"
+            />
+          </div>
+          <div>
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              placeholder="Enter your email"
+            />
+          </div>
+          <div>
+            <Label htmlFor="companyName">Company Name</Label>
+            <Input
+              id="companyName"
+              name="companyName"
+              value={formData.companyName}
+              onChange={handleChange}
+              required
+              placeholder="Enter company name"
+            />
+          </div>
+          <div>
+            <Label htmlFor="interviewDate">Interview Schedule Date</Label>
+            <Input
+              id="interviewDate"
+              name="interviewDate"
+              type="date"
+              value={formData.interviewDate}
+              onChange={handleChange}
+              required
+              min={new Date().toISOString().split("T")[0]} // Prevent past dates
+            />
+          </div>
+          <div>
+            <Label htmlFor="interviewMode">Interview Mode</Label>
+            <select
+              id="interviewMode"
+              name="interviewMode"
+              value={formData.interviewMode}
+              onChange={handleChange}
+              className="w-full border rounded-md p-2"
             >
-              Next
-            </Button>
-          </form>
-        )}
-
-        {step === 2 && (
-          <form onSubmit={handleSubmit} className="space-y-4">
+              <option value="online">Online</option>
+              <option value="offline">Offline</option>
+              <option value="hybrid">Hybrid</option>
+            </select>
+          </div>
+          {(formData.interviewMode === "offline" || formData.interviewMode === "hybrid") && (
             <div>
-              <Label htmlFor="interviewDate">Interview Schedule Date</Label>
+              <Label htmlFor="companyAddress">Company Address</Label>
               <Input
-                id="interviewDate"
-                name="interviewDate"
-                type="date"
-                value={formData.interviewDate}
+                id="companyAddress"
+                name="companyAddress"
+                value={formData.companyAddress}
                 onChange={handleChange}
                 required
-                min={new Date().toISOString().split("T")[0]} // Prevent past dates
+                placeholder="Enter company address"
               />
             </div>
-            <div>
-              <Label htmlFor="interviewMode">Interview Mode</Label>
-              <select
-                id="interviewMode"
-                name="interviewMode"
-                value={formData.interviewMode}
-                onChange={handleChange}
-                className="w-full border rounded-md p-2"
-              >
-                <option value="online">Online</option>
-                <option value="offline">Offline</option>
-              </select>
-            </div>
-            {formData.interviewMode === "offline" && (
-              <div>
-                <Label htmlFor="companyAddress">Company Address</Label>
-                <Input
-                  id="companyAddress"
-                  name="companyAddress"
-                  value={formData.companyAddress}
-                  onChange={handleChange}
-                  required
-                  placeholder="Enter company address"
-                />
-              </div>
-            )}
-            <div>
-              <Label htmlFor="mobile">Mobile Number</Label>
-              <div className="flex space-x-2">
-                <Input
-                  id="mobile"
-                  name="mobile"
-                  type="tel"
-                  value={formData.mobile}
-                  onChange={handleChange}
-                  required
-                  placeholder="+91 Enter mobile number"
-                  disabled={mobileOtpSent}
-                />
-                <Button
-                  type="button"
-                  onClick={sendOtp}
-                  disabled={isSubmitting || mobileOtpSent || formData.mobile.length <= 3}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
-                >
-                  {mobileOtpSent ? "Resend OTP" : "Send OTP"}
-                </Button>
-              </div>
-            </div>
-            {mobileOtpSent && (
-              <div>
-                <Label htmlFor="mobileOtp">Mobile OTP</Label>
-                <Input
-                  id="mobileOtp"
-                  name="mobileOtp"
-                  value={formData.mobileOtp}
-                  onChange={handleChange}
-                  required
-                  placeholder="Enter mobile OTP"
-                />
-              </div>
-            )}
+          )}
+          <div>
+            <Label htmlFor="mobile">Mobile Number</Label>
             <div className="flex space-x-2">
+              <Input
+                id="mobile"
+                name="mobile"
+                type="tel"
+                value={formData.mobile}
+                onChange={handleChange}
+                required
+                placeholder="+91 Enter mobile number"
+                disabled={mobileOtpSent}
+              />
               <Button
                 type="button"
-                onClick={() => setStep(1)}
-                className="w-full bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-md"
+                onClick={sendOtp}
+                disabled={isSubmitting || mobileOtpSent || formData.mobile.length <= 3}
+                className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-md"
               >
-                Back
-              </Button>
-              <Button
-                type="submit"
-                disabled={isSubmitting || !mobileOtpSent || !formData.mobileOtp}
-                className="w-full bg-orange-600 hover:bg-orange-700 text-white py-2 rounded-md"
-              >
-                {isSubmitting ? "Submitting..." : "Submit Interest"}
+                {mobileOtpSent ? "Resend OTP" : "Send OTP"}
               </Button>
             </div>
-          </form>
-        )}
+          </div>
+          {mobileOtpSent && (
+            <div>
+              <Label htmlFor="mobileOtp">Mobile OTP</Label>
+              <Input
+                id="mobileOtp"
+                name="mobileOtp"
+                value={formData.mobileOtp}
+                onChange={handleChange}
+                required
+                placeholder="Enter mobile OTP"
+              />
+            </div>
+          )}
+          <Button
+            type="submit"
+            disabled={isSubmitting || !mobileOtpSent || !formData.mobileOtp}
+            className="w-full bg-orange-600 hover:bg-orange-700 text-white py-2 rounded-md"
+          >
+            {isSubmitting ? "Submitting..." : "Submit Interest"}
+          </Button>
+        </form>
       </div>
     </div>
   );
