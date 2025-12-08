@@ -1,6 +1,6 @@
 "use client";
 import PublicTalentPoolForm from "@/app/components/forms/TalentPoolForm";
-import { createTalentPoolcandidatePublic } from "@/app/components/services/candidateapi";
+import { createTalentPoolcandidatePublic, getJobCategoriesAPI, IJobCategory } from "@/app/components/services/candidateapi";
 import { generateGeminiContentFromResume } from "@/app/components/services/usersapi";
 import { uploadFile } from "@/app/components/services/companiesapi";
 import axios from "axios";
@@ -43,6 +43,11 @@ export default function Page() {
     }
   };
 
+  // Wrapper function for fetching job categories
+  const handleFetchJobCategories = async (): Promise<IJobCategory[]> => {
+    return await getJobCategoriesAPI();
+  };
+
   return (
     <PublicTalentPoolForm
       title="Talent Pool Registration"
@@ -51,6 +56,7 @@ export default function Page() {
       uploadResumeFile={handleUploadResume}
       generateResumeContent={handleGenerateResumeContent}
       fetchCitiesByCountry={handleFetchCities}
+      fetchJobCategories={handleFetchJobCategories}
     />
   );
 }
