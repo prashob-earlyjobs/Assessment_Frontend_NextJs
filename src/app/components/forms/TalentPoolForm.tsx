@@ -13,7 +13,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "../ui/command";
 import { Plus, X, UploadCloud, ArrowRight, ArrowLeft, ArrowLeftCircle, User, Briefcase, CheckCircle,XCircle, MapPin, Phone, Mail, Calendar, FileText, Languages, Award, Target, Building, Clock, Loader2, Search, ChevronDown, Check, Eye, DollarSign, Zap } from 'lucide-react';
-import { ILocationDetails } from "../services/candidateapi";
+import { ILocationDetails, IJobCategory } from "../services/candidateapi";
 //import { useNavigate } from "react-router-dom";
 import { useParams } from "next/navigation";
 import Navbar from "@/app/components/pages/navbar";
@@ -83,6 +83,7 @@ interface AddCandidateFormProps {
   uploadResumeFile: (file: File, fileName: string) => Promise<{ fileUrl: string }>;
   generateResumeContent: (file: File) => Promise<{ data: any }>;
   fetchCitiesByCountry?: (country: string) => Promise<string[]>;
+  fetchJobCategories?: () => Promise<IJobCategory[]>; // Optional function to fetch job categories from API
   sendOTP?: (id: string | undefined, phone?: string) => Promise<any>; // Optional OTP sending function
   
   // Optional callbacks
@@ -131,6 +132,7 @@ export default function PublicTalentPoolForm({
   uploadResumeFile,
   generateResumeContent,
   fetchCitiesByCountry,
+  fetchJobCategories,
   sendOTP,
   onSubmit,
   refreshCandidates,
@@ -201,6 +203,34 @@ export default function PublicTalentPoolForm({
   const [loadingJobs, setLoadingJobs] = useState(false);
   const [jobsError, setJobsError] = useState<string | null>(null);
   const [jobSearchTerm, setJobSearchTerm] = useState("");
+
+  // Job categories state - can be objects from API or strings as fallback
+  const [categoryOptions, setCategoryOptions] = useState<(IJobCategory | string)[]>([
+    'Aviation',
+    'Banking',
+    'Insurance',
+    'Oil And Gas',
+    'Retail',
+    'Education',
+    'Consumer Goods',
+    'Manufacturing',
+    'Information Technology',
+    'Health Care',
+    'BPO',
+    'ITES',
+    'Entertainment',
+    'Finance',
+    'Textile',
+    'Media and news',
+    'Food processing',
+    'Hospitality',
+    'Construction',
+    'Law',
+    'Advertising',
+    'E-commerce',
+    'Other'
+  ]);
+  const [loadingCategories, setLoadingCategories] = useState(false);
 
   // Searchable dropdown states
   const [openCategoryDropdown, setOpenCategoryDropdown] = useState(false);
@@ -290,31 +320,46 @@ export default function PublicTalentPoolForm({
 
 
 
-  const categoryOptions = [
-    'Aviation',
-    'Banking',
-    'Insurance',
-    'Oil And Gas',
-    'Retail',
-    'Education',
-    'Consumer Goods',
-    'Manufacturing',
-    'Information Technology',
-    'Health Care',
-    'BPO',
-    'ITES',
-    'Entertainment',
-    'Finance',
-    'Textile',
-    'Media and news',
-    'Food processing',
-    'Hospitality',
-    'Construction',
-    'Law',
-    'Advertising',
-    'E-commerce',
-    'Other'
-  ];
+  // Fetch job categories from API on mount
+  useEffect(() => {
+    const fetchCategories = async () => {
+      if (fetchJobCategories) {
+        setLoadingCategories(true);
+        try {
+          const categories = await fetchJobCategories();
+          if (categories && categories.length > 0) {
+            setCategoryOptions(categories);
+            console.log('Job categories fetched from API:', categories);
+          }
+        } catch (error) {
+          console.error('Failed to fetch job categories from API, using default categories:', error);
+          // Keep default categories on error
+        } finally {
+          setLoadingCategories(false);
+        }
+      }
+    };
+    
+    fetchCategories();
+  }, [fetchJobCategories]);
+
+  // Helper function to get category value (string) from category (object or string)
+  const getCategoryValue = (category: IJobCategory | string): string => {
+    return typeof category === 'string' ? category : category.value || category.label;
+  };
+
+  // Helper function to get category label for display
+  const getCategoryLabel = (category: IJobCategory | string): string => {
+    return typeof category === 'string' ? category : category.label || category.value;
+  };
+
+  // Helper function to get category key for React keys
+  const getCategoryKey = (category: IJobCategory | string, index: number): string => {
+    if (typeof category === 'string') {
+      return `category-${category}-${index}`;
+    }
+    return category._id || `category-${category.value}-${index}`;
+  };
 
   const employmentTypeOptions = [
     'Full-time',
@@ -622,11 +667,15 @@ export default function PublicTalentPoolForm({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCountry]);
 
-  const handleCategorySelect = (category: string) => {
-    if (!formData.preferredJobCategories.includes(category)) {
+  const handleCategorySelect = (categoryValue: string) => {
+    // Find the category object if it exists, otherwise use the value directly
+    const category = categoryOptions.find(cat => getCategoryValue(cat) === categoryValue);
+    const valueToStore = category ? getCategoryValue(category) : categoryValue;
+    
+    if (!formData.preferredJobCategories.includes(valueToStore)) {
       setFormData((prev) => ({
         ...prev,
-        preferredJobCategories: [...prev.preferredJobCategories, category]
+        preferredJobCategories: [...prev.preferredJobCategories, valueToStore]
       }));
       if (showErrors && errors.preferredJobCategories) {
         setErrors((prev) => {
@@ -2119,21 +2168,26 @@ export default function PublicTalentPoolForm({
                           <CommandEmpty>No categories found.</CommandEmpty>
                           <CommandGroup>
                             <CommandList>
-                              {categoryOptions.map((category) => (
-                                <CommandItem
-                                  key={category}
-                                  value={category}
-                                  onSelect={() => handleCategorySelect(category)}
-                                  className="cursor-pointer"
-                                >
-                                  <div className="flex items-center justify-between w-full">
-                                    <span>{category}</span>
-                                    {formData.preferredJobCategories.includes(category) && (
-                                      <Check className="h-4 w-4 text-orange-600" />
-                                    )}
-                                  </div>
-                                </CommandItem>
-                              ))}
+                              {categoryOptions.map((category, index) => {
+                                const categoryValue = getCategoryValue(category);
+                                const categoryLabel = getCategoryLabel(category);
+                                const categoryKey = getCategoryKey(category, index);
+                                return (
+                                  <CommandItem
+                                    key={categoryKey}
+                                    value={categoryValue}
+                                    onSelect={() => handleCategorySelect(categoryValue)}
+                                    className="cursor-pointer"
+                                  >
+                                    <div className="flex items-center justify-between w-full">
+                                      <span>{categoryLabel}</span>
+                                      {formData.preferredJobCategories.includes(categoryValue) && (
+                                        <Check className="h-4 w-4 text-orange-600" />
+                                      )}
+                                    </div>
+                                  </CommandItem>
+                                );
+                              })}
                             </CommandList>
                           </CommandGroup>
                         </Command>
