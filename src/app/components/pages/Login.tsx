@@ -28,7 +28,7 @@ function Login() {
     mobile: "",
     experienceLevel: "experienced",
     currentCity: "",
-    role: ""
+    role: "candidate"
   });
   const [signupErrors, setSignupErrors] = useState({
     name: "",

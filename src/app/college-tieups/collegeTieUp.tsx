@@ -1,7 +1,7 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import Header from '../components/pages/header';
-import Footer from '../components/pages/footer';
+import React, { useState, useEffect } from "react";
+import Header from "../components/pages/header";
+import Footer from "../components/pages/footer";
 
 interface College {
   id: string;
@@ -75,7 +75,7 @@ const CollegeTieUp: React.FC = () => {
         updated_at: "2023-09-01T09:00:00Z",
       },
       {
-        id:"5",
+        id: "5",
         name: "AVN Institute of Engineering & Technology | AVNIET",
         logo_url: "/images/7.png",
         location: "Visakhapatnam, Andhra Pradesh",
@@ -86,7 +86,7 @@ const CollegeTieUp: React.FC = () => {
         updated_at: "2023-09-01T09:00:00Z",
       },
       {
-        id:"6",
+        id: "6",
         name: "Yenepoya University",
         logo_url: "/images/8.png",
         location: "Mangaluru, Karnataka",
@@ -97,7 +97,7 @@ const CollegeTieUp: React.FC = () => {
         updated_at: "2023-09-01T09:00:00Z",
       },
       {
-        id:"7",
+        id: "7",
         name: "PCTE Ludhiana",
         logo_url: "/images/9.png",
         location: "Ludhiana, Punjab",
@@ -108,10 +108,10 @@ const CollegeTieUp: React.FC = () => {
         updated_at: "2023-09-01T09:00:00Z",
       },
       {
-        id:"8",
+        id: "8",
         name: "SkillSpeed Technologies",
         logo_url: "/images/1.png",
-        location:  "Bengaluru, Karnataka",
+        location: "Bengaluru, Karnataka",
         spoc_name: "Ravi Singh",
         spoc_email: "ravi.singh@cuchd.in",
         spoc_phone: "+91-9876543210",
@@ -119,10 +119,10 @@ const CollegeTieUp: React.FC = () => {
         updated_at: "2025-12-02T07:00:00Z",
       },
       {
-        id:"9",
+        id: "9",
         name: "ziion technology",
         logo_url: "/images/2.png",
-        location:  "Mohali, Punjab",
+        location: "Mohali, Punjab",
         spoc_name: "Ravi Singh",
         spoc_email: "ravi.singh@cuchd.in",
         spoc_phone: "+91-9876543210",
@@ -130,18 +130,39 @@ const CollegeTieUp: React.FC = () => {
         updated_at: "2025-12-02T07:00:00Z",
       },
       {
-        id:"10",
+        id: "10",
         name: "Rksd college of management",
         logo_url: "/images/10.png",
-        location:  "Haryana, India",
+        location: "Haryana, India",
         spoc_name: "Ravi Singh",
         spoc_email: "ravi.singh@cuchd.in",
         spoc_phone: "+91-9876543210",
         created_at: "2025-12-02T07:00:00Z",
         updated_at: "2025-12-02T07:00:00Z",
-      }
+      },
       // Colleges from JSON data
-      
+      {
+        id: "11",
+        name: "GRV Business Management Academy",
+        logo_url: "/images/grv - Edited.png",
+        location: "Bengaluru, India",
+        spoc_name: "Ravi Singh",
+        spoc_email: "ravi.singh@cuchd.in",
+        spoc_phone: "+91-9876543210",
+        created_at: "2025-12-02T07:00:00Z",
+        updated_at: "2025-12-02T07:00:00Z",
+      },
+      {
+        id: "12",
+        name: "Ebenezer Group Of Institutions",
+        logo_url: "/images/ebenezer.png",
+        location: "Bengaluru, India",
+        spoc_name: "Ravi Singh",
+        spoc_email: "ravi.singh@cuchd.in",
+        spoc_phone: "+91-9876543210",
+        created_at: "2025-12-02T07:00:00Z",
+        updated_at: "2025-12-02T07:00:00Z",
+      },
     ];
 
     setColleges(mockColleges);
@@ -157,22 +178,40 @@ const CollegeTieUp: React.FC = () => {
     <>
       <Header />
       <div className="container mx-auto px-8 py-8 min-h-screen">
-        <h2 className="text-4xl font-bold text-orange-500 text-center mb-4 lg:mt-8">Our College Tie-Ups</h2>
-        <p className="text-center text-gray-600 mb-8 lg:mb-16">EarlyJobs AI collaborates with India's top colleges to empower future talent.</p>
+        <h2 className="text-4xl font-bold text-orange-500 text-center mb-4 lg:mt-8">
+          Our College Tie-Ups
+        </h2>
+        <p className="text-center text-gray-600 mb-8 lg:mb-16">
+          EarlyJobs AI collaborates with India's top colleges to empower future
+          talent.
+        </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {colleges.map((college) => (
-            <div key={college.id} className="college-card bg-gray-100 p-4 rounded-lg shadow-md text-center hover:scale-102 transition-transform duration-300 border-t-3 border-orange-500 hover:border-blue-80 max-h-55 min-h-55">
+            <div
+              key={college.id}
+              className="college-card bg-gray-100 p-4 rounded-lg shadow-md text-center hover:scale-102 transition-transform duration-300 border-t-3 border-orange-500 hover:border-blue-80 max-h-55 min-h-55"
+            >
               {college.logo_url ? (
-                <img src={college.logo_url} alt={`${college.name} logo`} className="mx-auto w-25 mb-3 object-contain scale-180" onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = placeholderImage;
-                }} />
+                <img
+                  src={college.logo_url}
+                  alt={`${college.name} logo`}
+                  className="mx-auto w-25 mb-3 object-contain scale-180"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = placeholderImage;
+                  }}
+                />
               ) : (
-                <img src={placeholderImage} alt="Placeholder logo" className="mx-auto h-20 mb-4 object-contain" />
+                <img
+                  src={placeholderImage}
+                  alt="Placeholder logo"
+                  className="mx-auto h-20 mb-4 object-contain"
+                />
               )}
-              <h3 className="text-lg font-semibold text-gray-800">{college.name}</h3>
+              <h3 className="text-lg font-semibold text-gray-800">
+                {college.name}
+              </h3>
               <p className="text-sm text-gray-600">{college.location}</p>
-              
             </div>
           ))}
         </div>
