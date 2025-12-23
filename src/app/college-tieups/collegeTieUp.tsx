@@ -163,6 +163,17 @@ const CollegeTieUp: React.FC = () => {
         created_at: "2025-12-02T07:00:00Z",
         updated_at: "2025-12-02T07:00:00Z",
       },
+      {
+        id: "13",
+        name: "IIM Sambalpur",
+        logo_url: "/images/iimsambalpur.png",
+        location: "Sambalpur, Odisha, India",
+        spoc_name: "Ravi Singh",
+        spoc_email: "ravi.singh@cuchd.in",
+        spoc_phone: "+91-9876543210",
+        created_at: "2025-12-02T07:00:00Z",
+        updated_at: "2025-12-02T07:00:00Z",
+      },
     ];
 
     setColleges(mockColleges);
