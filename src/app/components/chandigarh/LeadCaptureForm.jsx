@@ -152,12 +152,12 @@ const LeadCaptureSection = () => {
                   <Mail className="contact-icon" />
                   <span>Chandigarh@earlyjobs.in</span>
                 </div>
-                <div className="contact-item">
+                {/* <div className="contact-item">
                   <MapPin className="contact-icon" />
                   <span> Cabin 411, SCO 107/08/09, Sector 34A, Chandigarh.
 
 </span>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
