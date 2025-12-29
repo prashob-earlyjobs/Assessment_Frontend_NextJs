@@ -865,7 +865,7 @@ const ContactFormPage = ({ params }: { params: Promise<{ id: string }> }) => {
           <div className="hidden lg:block lg:col-span-1">
             <div className="sticky top-28">
               <p className="text-lg text-gray-700 leading-relaxed italic">
-                &ldquo;Join us as a Business Development Executive at Phonepe. Drive new client acquisition, identify growth opportunities, manage outreach campaigns and build lasting relationships. Use proactive outreach, lead generation, and negotiation skills to grow revenue. Ideal for an ambitious go-getter ready to make an impact.&rdquo;
+                &ldquo;Join {searchParams.get('companyName') || 'us'} and contribute to impactful initiatives by identifying opportunities, collaborating with teams, and delivering results. Ideal for motivated professionals eager to grow and make an impact.&rdquo;
               </p>
             </div>
           </div>
