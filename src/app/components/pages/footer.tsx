@@ -1,5 +1,5 @@
 "use client"
-import { MapPin, Building, GraduationCap, Lightbulb, Users, Tag, FileText, BarChart2, Rocket, UserCog } from "lucide-react";
+import { MapPin, Building, GraduationCap, Lightbulb, Users, Tag, FileText, BarChart2, Rocket, UserCog, Briefcase, Database } from "lucide-react";
 import { toast } from "sonner";
 import React from 'react';
 import { FaFacebook, FaLinkedin } from "react-icons/fa";
@@ -16,8 +16,8 @@ const Footer = () => {
     return (
         <>
         <footer className="w-full flex flex-col items-center py-8 bg-[#0A0F10] text-white md:py-10 lg:py-10 px-3">
-            <div className="grid grid-cols-1 gap-5 px-4 w-full sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
-                <div className="flex flex-col">
+            <div className="grid grid-cols-1 gap-5 px-4 w-full sm:grid-cols-2 lg:grid-cols-5 lg:px-8 mx-auto flex justify-center">
+                {/* <div className="flex flex-col">
                     <Link href="/" className="mb-5">
                         <img src="/images/logo.png" alt="earlyjobs" className="w-[130px] h-[90px]" />
                     </Link>
@@ -59,51 +59,35 @@ const Footer = () => {
                             <img src="/images/app-store-logo.svg" alt="app-store" className="w-[120px] select-none" />
                         </a>
                     </div>
-                </div>
+                </div> */}
                 <div className="flex flex-col">
-                    <h3 className="pt-8 text-white text-base font-semibold uppercase leading-5 lg:pt-12">Company</h3>
+                    <h3 className="pt-8 text-white text-base font-semibold uppercase leading-5 lg:pt-12">About</h3>
                     <Link href="/about-us" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">About Us</Link>
+                    <Link href="/story" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Our Story</Link>
                     <Link href="/team" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Team</Link>
                     <Link href="/blogs" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Blogs</Link>
-                    <Link href="/franchise" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Franchise With Us</Link>
                     <a href="tel:+918217527926" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 cursor-pointer lg:mt-6" id="contact-link">Contact Us</a>
-                    <Link href="/story" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Our Story</Link>
-                    <Link href="/jobs" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Job Openings</Link>
                 </div>
                 <div className="flex flex-col">
-                    <h3 className="pt-8 text-white text-base font-semibold uppercase leading-5 lg:pt-12">Our Services</h3>
-                    <Link href="/it-recruitment" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">IT Recruitment</Link>
-                    <Link href="/finance-and-accounting-recruitment" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Finance & Accounting Recruitment</Link>
-                    <Link href="/sales-marketing-services" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Sales & Marketing Recruitment</Link>
-                    <Link href="/top-executive-recruitment-firm" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Top Executive Recruitment</Link>
-                    <Link href="/hr-executive-recruitment-services" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">HR & Executive Recruitment</Link>
-                    <Link href="/recruitment-process-outsourcing" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Recruitment Process Outsourcing</Link>
-                    <Link href="/value-staffing-service" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Value Staffing Services</Link>
-                   </div>
-                <div className="flex flex-col">
-                    <h3 className="pt-8 text-white text-base font-semibold uppercase leading-5 lg:pt-12">Tools & Tie-Ups</h3>
-                    <Link href="/airesume" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
-                        <FileText className="w-5 h-5 mr-2 inline-block" />
-                        AI Resume Builder
-                    </Link>
-                    <Link href="/assessments" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
-                        <BarChart2 className="w-5 h-5 mr-2 inline-block" />
-                        Assessments
-                    </Link>
-                    <button
-                        type="button"
-                        className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline text-left lg:mt-6 bg-transparent p-0"
-                        onClick={() => toast.info("We're working on Auto-Apply! This feature will be updated soon.")}
-                        style={{ outline: "none", border: "none" }}
-                    >
-                        <Rocket className="w-5 h-5 mr-2 inline-block" />
-                        Auto-Apply
-                    </button>
-                    
+                    <h3 className="pt-8 text-white text-base font-semibold uppercase leading-5 lg:pt-12">Tie-Ups</h3>
                     <Link href="/clientele" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
                         <Building className="w-5 h-5 mr-2 inline-block" />
-                        Company Tie-Ups
+                        Creator Programme
                     </Link>
+                    <Link href="/clientele" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
+                        <Building className="w-5 h-5 mr-2 inline-block" />
+                        Recruter Programme
+                    </Link>
+
+                    <Link href="/clientele" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
+                        <Building className="w-5 h-5 mr-2 inline-block" />
+                        Career Counsellor Programme
+                    </Link>
+
+                    
+                </div>
+                <div className="flex flex-col">
+                    <h3 className="pt-8 text-white text-base font-semibold uppercase leading-5 lg:pt-12">College</h3>
                     <Link href="/college-tieups" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
                         <GraduationCap className="w-5 h-5 mr-2 inline-block" />
                         College Tie-Ups
@@ -112,10 +96,44 @@ const Footer = () => {
                         <Users className="w-5 h-5 mr-2 inline-block" />
                         Join Creator Programme
                     </Link>
-                    <Link href="/freelance-career-counsellor" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
-                        <UserCog className="w-5 h-5 mr-2 inline-block" />
-                        Freelance Career Counsellor
+                </div>
+                <div className="flex flex-col">
+                    <h3 className="pt-8 text-white text-base font-semibold uppercase leading-5 lg:pt-12">Companies</h3>
+                    <Link href="/clientele" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
+                        <Building className="w-5 h-5 mr-2 inline-block" />
+                        Company Tie-Ups
                     </Link>
+                    <Link href="/it-recruitment" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">IT Recruitment</Link>
+                    <Link href="/finance-and-accounting-recruitment" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Finance & Accounting Recruitment</Link>
+                    <Link href="/sales-marketing-services" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Sales & Marketing Recruitment</Link>
+                    <Link href="/top-executive-recruitment-firm" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Top Executive Recruitment</Link>
+                    <Link href="/hr-executive-recruitment-services" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">HR & Executive Recruitment</Link>
+                    <Link href="/recruitment-process-outsourcing" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Recruitment Process Outsourcing</Link>
+                    <Link href="/value-staffing-service" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Value Staffing Services</Link>
+                </div>
+                <div className="flex flex-col">
+                    <h3 className="pt-8 text-white text-base font-semibold uppercase leading-5 lg:pt-12">Job Seekers</h3>
+                    <Link href="/jobs" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
+                        <Briefcase className="w-5 h-5 mr-2 inline-block" />
+                        Job Openings
+                    </Link>
+                    <Link href="" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
+                        <Database className="w-5 h-5 mr-2 inline-block" />
+                        Talent Pool
+                    </Link>
+                    <Link href="/assessments" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
+                        <BarChart2 className="w-5 h-5 mr-2 inline-block" />
+                        Assessments
+                    </Link>
+                    <Link href="/airesume" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
+                        <FileText className="w-5 h-5 mr-2 inline-block" />
+                        AI Resume Builder
+                    </Link>
+                    <Link href="" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
+                        <GraduationCap className="w-5 h-5 mr-2 inline-block" />
+                        Internships
+                    </Link>
+
                 </div>
             </div>
             <div className="w-full  mt-2 px-4 pb-10">
