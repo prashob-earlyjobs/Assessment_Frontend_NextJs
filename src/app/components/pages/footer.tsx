@@ -55,7 +55,7 @@ const Footer = () => {
                         <a href="https://play.google.com/store/apps/details?id=com.victaman.earlyjobs" rel="noreferrer" target="_blank" className="mr-5">
                             <img src="/images/google-play-badge-logo.svg" alt="google-play" className="w-[120px] select-none" />
                         </a>
-                        <a href="https://apps.apple.com/in/app/earlyjobs/id6590626019" rel="noreferrer" target="_blank">
+                        <a href="https://apps.apple.com/in/app/earlyjobs-ai/id6754554572" rel="noreferrer" target="_blank">
                             <img src="/images/app-store-logo.svg" alt="app-store" className="w-[120px] select-none" />
                         </a>
                     </div>

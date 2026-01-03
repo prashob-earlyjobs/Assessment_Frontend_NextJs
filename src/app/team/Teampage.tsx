@@ -73,7 +73,7 @@ const TeamPage: React.FC = () => {
         const tabs = [
             
             'Core team',
-            'Franchise team',
+            // 'Franchise team',
             'Advisor team',
             'Freelance recruiters'
         ];
