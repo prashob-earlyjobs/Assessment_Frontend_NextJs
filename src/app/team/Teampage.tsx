@@ -32,6 +32,7 @@ const TeamPage: React.FC = () => {
     const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
     const [apiStatus, setApiStatus] = useState<keyof typeof apiStatusConstants>('initial');
     const [selectedCategory, setSelectedCategory] = useState<string>('Core team');
+    const [expandedBiographies, setExpandedBiographies] = useState<Set<string>>(new Set());
 
     useEffect(() => {
         fetchMemberCards();
@@ -73,7 +74,7 @@ const TeamPage: React.FC = () => {
         const tabs = [
             
             'Core team',
-            'Franchise team',
+            // 'Franchise team',
             'Advisor team',
             'Freelance recruiters'
         ];
@@ -202,11 +203,37 @@ const TeamPage: React.FC = () => {
                                             </a>
                                         )}
                                     </div>
-                                    {member.biography && (
-                                        <div className="text-xs sm:text-sm text-gray-700 leading-relaxed">
-                                            <p className="text-gray-700 leading-relaxed break-words">{member.biography}</p>
-                                        </div>
-                                    )}
+                                    {member.biography && (() => {
+                                        const biographyLength = member.biography.length;
+                                        const maxLength = 200; // Character limit before truncation
+                                        const isLong = biographyLength > maxLength;
+                                        const isExpanded = expandedBiographies.has(member.id);
+                                        const displayText = isLong && !isExpanded 
+                                            ? member.biography.substring(0, maxLength) + '...'
+                                            : member.biography;
+
+                                        return (
+                                            <div className="text-xs sm:text-sm text-gray-700 leading-relaxed">
+                                                <p className="text-gray-700 leading-relaxed break-words">{displayText}</p>
+                                                {isLong && (
+                                                    <button
+                                                        onClick={() => {
+                                                            const newExpanded = new Set(expandedBiographies);
+                                                            if (isExpanded) {
+                                                                newExpanded.delete(member.id);
+                                                            } else {
+                                                                newExpanded.add(member.id);
+                                                            }
+                                                            setExpandedBiographies(newExpanded);
+                                                        }}
+                                                        className="text-[#EB6A4D] hover:text-[#d35a3f] font-medium mt-2 text-xs sm:text-sm transition-colors"
+                                                    >
+                                                        {isExpanded ? 'Read less' : 'Read more'}
+                                                    </button>
+                                                )}
+                                            </div>
+                                        );
+                                    })()}
                                 </div>
                             </div>
                         ))
