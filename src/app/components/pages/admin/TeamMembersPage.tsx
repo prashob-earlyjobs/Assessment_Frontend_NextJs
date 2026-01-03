@@ -16,6 +16,8 @@ interface TeamMember {
   position: number;
   category: string;
   joined_date?: string;
+  description: string;
+  type?: string;
 }
 
 // Define the TeamMemberWithId interface for client-side use (includes _id from MongoDB)
@@ -42,12 +44,14 @@ const TeamMemberModal: React.FC<{
     position: 0,
     category: '',
     joined_date: '',
+    description: '',
+    type: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-  // Update formData when initialData changes (for editing)
+  // Update formData when initialData changes (for editing) or reset when modal opens for new member
   useEffect(() => {
     if (initialData) {
       setFormData({
@@ -60,16 +64,46 @@ const TeamMemberModal: React.FC<{
         position: initialData.position || 0,
         category: initialData.category || '',
         joined_date: initialData.joined_date || '',
+        description: initialData.description || '',
+        type: initialData.type || '',
       });
       setPreviewUrl(initialData.image_url || null);
+    } else if (isOpen) {
+      // Reset form when opening modal for new member
+      setFormData({
+        name: '',
+        image_url: '',
+        designation: '',
+        experience_in_years: 0,
+        certified_by: '',
+        linkedIn_url: '',
+        position: 0,
+        category: '',
+        joined_date: '',
+        description: '',
+        type: '',
+      });
+      setPreviewUrl(null);
+      setError(null);
     }
-  }, [initialData]);
+  }, [initialData, isOpen]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
+    setFormData((prev) => {
+      const updated = {
+        ...prev,
+        [name]: name === 'experience_in_years' || name === 'position' ? Number(value) : value,
+      };
+      return updated;
+    });
+  };
+
+  const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === 'experience_in_years' || name === 'position' ? Number(value) : value,
+      type: value,
     }));
   };
 
@@ -100,8 +134,36 @@ const TeamMemberModal: React.FC<{
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
+    
+    // Validate required fields
+    if (!formData.description || formData.description.trim() === '') {
+      setError('Description is required.');
+      setIsSubmitting(false);
+      return;
+    }
+    
+    // Validate description length
+    const descriptionLength = formData.description.trim().length;
+    if (descriptionLength < 50) {
+      setError('Description must be at least 50 characters long.');
+      setIsSubmitting(false);
+      return;
+    }
+    
+    if (descriptionLength > 258) {
+      setError('Description must not exceed 258 characters.');
+      setIsSubmitting(false);
+      return;
+    }
+    
     try {
-      await onSubmit(formData);
+      // Ensure type is included in the submitted data
+      const submitData = {
+        ...formData,
+        type: formData.type || '',
+      };
+      console.log(submitData,'submitData');
+      await onSubmit(submitData);
       onClose();
     } catch (err) {
       setError('Failed to submit. Please try again.');
@@ -220,6 +282,43 @@ const TeamMemberModal: React.FC<{
             />
           </div>
           <div>
+            <label className="block text-sm font-medium text-gray-700">Member Type</label>
+            <select
+              name="type"
+              value={formData.type ?? ''}
+              onChange={handleTypeChange}
+              className="p-2 border rounded w-full"
+            >
+              <option value="">Select member type</option>
+              <option value="core">Core</option>
+              <option value="franchise">Franchise</option>
+              <option value="advisor">Advisor</option>
+              <option value="freelance">Freelance</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Description <span className="text-red-500">*</span>
+              <span className="text-xs text-gray-500 font-normal ml-2">(50-258 characters)</span>
+            </label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              placeholder="Enter team member description/biography"
+              className="p-2 border rounded w-full min-h-[100px] resize-y"
+              minLength={50}
+              maxLength={258}
+              required
+            />
+            <div className="text-xs text-gray-500 mt-1">
+              {formData.description.length}/258 characters
+              {formData.description.length > 0 && formData.description.length < 50 && (
+                <span className="text-red-500 ml-2">Minimum 50 characters required</span>
+              )}
+            </div>
+          </div>
+          <div>
             <label className="block text-sm font-medium text-gray-700">Joined Date</label>
             <input
               type="date"
@@ -286,11 +385,22 @@ const TeamMemberCard: React.FC<{
             <div className="flex items-center mb-2">
               <p className="text-sm text-gray-600"><strong>Category:</strong> {member.category}</p>
             </div>
+            {member.type && (
+              <div className="flex items-center mb-2">
+                <p className="text-sm text-gray-600"><strong>Type:</strong> <span className="capitalize">{member.type}</span></p>
+              </div>
+            )}
             <p className="text-sm text-gray-600 mb-2"><strong>Designation:</strong> {member.designation}</p>
             <div className="space-y-1 text-sm text-gray-500">
               <p><strong>Experience:</strong> {member.experience_in_years} years</p>
               <p><strong>Certified By:</strong> {member.certified_by}</p>
             </div>
+            {member.description && (
+              <div className="mt-3">
+                <p className="text-sm font-medium text-gray-700 mb-1"><strong>Description:</strong></p>
+                <p className="text-sm text-gray-600 leading-relaxed">{member.description}</p>
+              </div>
+            )}
             {member.linkedIn_url && (
               <a href={member.linkedIn_url} target="_blank" rel="noopener noreferrer" className="text-blue-500 text-sm mt-2 block">
                 LinkedIn Profile
@@ -387,10 +497,15 @@ const TeamMemberPage: React.FC<{ adminEmail: string }> = ({ adminEmail }) => {
   const addTeamMember = async (member: TeamMember) => {
     try {
       const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+      // Ensure type field is included in the add payload
+      const payload = {
+        ...member,
+        type: member.type || '',
+      };
       const response = await fetch(`${backendUrl}/team/team-members`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(member),
+        body: JSON.stringify(payload),
       });
       if (!response.ok) throw new Error('Failed to add team member');
       const newMember: TeamMemberWithId = await response.json();
@@ -401,9 +516,11 @@ const TeamMemberPage: React.FC<{ adminEmail: string }> = ({ adminEmail }) => {
   };
 
   const updateTeamMember = async (updatedMember: TeamMember) => {
+    console.log(updatedMember,'updatedMember');
     if (!editingMember?._id) return;
     try {
       const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+      // Send the complete member data including type
       const response = await fetch(`${backendUrl}/team/team-members/${editingMember._id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },

@@ -375,7 +375,7 @@ Sonipat- 131001 (Haryana)`,
         </section>
 
         {/* Testimonials Section */}
-        <section className="py-16 sm:py-20 bg-gray-100">
+        {/* <section className="py-16 sm:py-20 bg-gray-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12 sm:mb-16">
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-6">
@@ -409,7 +409,7 @@ Sonipat- 131001 (Haryana)`,
               ))}
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* Lead Capture Form */}
         <section id="contact" className="py-16 sm:py-20 bg-orange-500/10">

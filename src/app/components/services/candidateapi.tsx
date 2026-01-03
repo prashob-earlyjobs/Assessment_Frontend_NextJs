@@ -479,3 +479,44 @@ export const getCitiesByStateAPI = async (state: string) => {
     throw error;
   }
 };
+
+// Interface for category object from API
+export interface IJobCategory {
+  _id: string;
+  label: string;
+  value: string;
+}
+
+export const getJobCategoriesAPI = async (): Promise<IJobCategory[]> => {
+  try {
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_2_0;
+    if (!backendUrl) {
+      throw new Error('Backend URL is not configured in environment variables');
+    }
+    const url = `${backendUrl}/jobs/categories`;
+    console.log('Fetching job categories - URL:', url);
+    const response = await axios.get(url);
+    
+    // Handle different response structures
+    let categories: IJobCategory[] = [];
+    
+    if (response.data && Array.isArray(response.data)) {
+      categories = response.data;
+    } else if (response.data?.data && Array.isArray(response.data.data)) {
+      categories = response.data.data;
+    } else if (response.data?.categories && Array.isArray(response.data.categories)) {
+      categories = response.data.categories;
+    } else {
+      console.warn('Unexpected response structure for job categories:', response.data);
+      return [];
+    }
+    
+    // Validate that categories have the expected structure
+    return categories.filter(cat => cat && (cat._id || cat.value) && (cat.label || cat.value));
+  } catch (error: any) {
+    console.error('Failed to get job categories:', error.response?.data?.message || error.message);
+    console.error('Full error response:', error.response?.data);
+    // Return empty array on error instead of throwing, so form can still work
+    return [];
+  }
+};

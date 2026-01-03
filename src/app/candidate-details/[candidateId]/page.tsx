@@ -1,6 +1,6 @@
 "use client";
 import PublicTalentPoolForm from "@/app/components/forms/TalentPoolForm";
-import { createTalentPoolcandidatePublic, getInitialDataAPI, updateCandidateDetailsPublic, sendOTPAPI } from "@/app/components/services/candidateapi";
+import { createTalentPoolcandidatePublic, getInitialDataAPI, updateCandidateDetailsPublic, sendOTPAPI, getJobCategoriesAPI, IJobCategory } from "@/app/components/services/candidateapi";
 import { generateGeminiContentFromResume } from "@/app/components/services/usersapi";
 import { uploadFile } from "@/app/components/services/companiesapi";
 import axios from "axios";
@@ -54,6 +54,11 @@ export default function Page() {
     return await sendOTPAPI(id);
   };
 
+  // Wrapper function for fetching job categories
+  const handleFetchJobCategories = async (): Promise<IJobCategory[]> => {
+    return await getJobCategoriesAPI();
+  };
+
   useEffect(() => {
     const fetchInitialData = async () => {
       const response = await getInitialDataAPI(candidateId || undefined);
@@ -74,6 +79,7 @@ export default function Page() {
       uploadResumeFile={handleUploadResume}
       generateResumeContent={handleGenerateResumeContent}
       fetchCitiesByCountry={handleFetchCities}
+      fetchJobCategories={handleFetchJobCategories}
       sendOTP={handleSendOTP}
       initialData={candidateDetails || undefined}
     />

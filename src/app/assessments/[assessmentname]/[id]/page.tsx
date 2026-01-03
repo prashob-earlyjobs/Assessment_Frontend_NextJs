@@ -37,10 +37,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const description = `Evaluate your skills in '${properTitle}'. Test your knowledge, improve your expertise, and stand out in your career.`;
     
     return {
-      title: `${properTitle} Aseessment | EarlyJobs`,
+      title: `${properTitle} Assessment | EarlyJobs`,
       description,
       openGraph: {
-        title: `${properTitle} Aseessment | EarlyJobs`,
+        title: `${properTitle} Assessment | EarlyJobs`,
         description: `Evaluate your skills in '${properTitle}'. Test your knowledge, improve your expertise, and stand out in your career.`,
         url: `https://earlyjobs.ai/assessments/${assessmentname}/${id}`,
         siteName: "EarlyJobs",
