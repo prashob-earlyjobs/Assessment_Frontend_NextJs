@@ -174,6 +174,17 @@ const CollegeTieUp: React.FC = () => {
         created_at: "2025-12-02T07:00:00Z",
         updated_at: "2025-12-02T07:00:00Z",
       },
+      {
+        id: "14",
+        name: "Narsee Monjee Institute of Management Studies",
+        logo_url: "/images/nmims.png",
+        location: "Hyderabad, Telangana, India",
+        spoc_name: "john doe",
+        spoc_email: "hohn@gmaiul.com",
+        spoc_phone: "+91-9899xxxxxx",
+        created_at: "2025-12-02T07:00:00Z",
+        updated_at: "2025-12-02T07:00:00Z",
+      },
     ];
 
     setColleges(mockColleges);

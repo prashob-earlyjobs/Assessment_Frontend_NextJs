@@ -31,6 +31,7 @@ import {
   Download,
   ChevronRight,
   FileText,
+  Brain,
   GraduationCap,
   Code
 } from "lucide-react";
@@ -318,6 +319,30 @@ const Dashboard = () => {
                     className="w-full rounded-2xl bg-white text-purple-600 hover:bg-gray-50"
                   >
                     View Reports
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="rounded-3xl border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-blue-500 to-blue-600 text-white">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center justify-between">
+                    <Brain className="h-8 w-8" />
+                    <Badge variant="secondary" className="bg-white/20 text-white border-0">
+                      New
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <CardTitle className="text-xl mb-2">Interview Assessments</CardTitle>
+                  <CardDescription className="text-blue-100 mb-4">
+                    Practice with real interview scenarios and get AI-powered feedback to improve your skills.
+                  </CardDescription>
+                  <Button
+                    onClick={() => navigate.push('/interviews')}
+                    variant="secondary"
+                    className="w-full rounded-2xl bg-white text-blue-600 hover:bg-gray-50"
+                  >
+                    View Interviews
                   </Button>
                 </CardContent>
               </Card>

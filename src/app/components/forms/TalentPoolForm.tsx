@@ -20,9 +20,14 @@ import Navbar from "@/app/components/pages/navbar";
 import Footer from "@/app/components/pages/footer";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
+import CreatableSelect from 'react-select/creatable'
 import OTPModal from "../ui/OTPModal";
 import { Country, State, City } from 'country-state-city';
+import languageList from "language-list";
 
+
+const languages = languageList();
+const allLanguages = languages.getData();
 // Job interface for API response
 interface Job {
   _id: string;
@@ -197,7 +202,7 @@ export default function PublicTalentPoolForm({
   // Local input states to allow clearing and typing freely
   const [experienceYearsInput, setExperienceYearsInput] = useState<string>("");
   const [experienceMonthsInput, setExperienceMonthsInput] = useState<string>("");
-
+  const [languageOptions, setLanguageOptions] = useState([]);
   // Jobs state
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loadingJobs, setLoadingJobs] = useState(false);
@@ -320,13 +325,18 @@ export default function PublicTalentPoolForm({
 
 
 
-  // Fetch job categories from API on mount
+  // Fetch job categories from API on mount - use ref to prevent re-runs if function reference changes
+  const fetchJobCategoriesRef = useRef(fetchJobCategories);
+  useEffect(() => {
+    fetchJobCategoriesRef.current = fetchJobCategories;
+  }, [fetchJobCategories]);
+
   useEffect(() => {
     const fetchCategories = async () => {
-      if (fetchJobCategories) {
+      if (fetchJobCategoriesRef.current) {
         setLoadingCategories(true);
         try {
-          const categories = await fetchJobCategories();
+          const categories = await fetchJobCategoriesRef.current();
           if (categories && categories.length > 0) {
             setCategoryOptions(categories);
             console.log('Job categories fetched from API:', categories);
@@ -341,7 +351,8 @@ export default function PublicTalentPoolForm({
     };
     
     fetchCategories();
-  }, [fetchJobCategories]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run once on mount
 
   // Helper function to get category value (string) from category (object or string)
   const getCategoryValue = (category: IJobCategory | string): string => {
@@ -526,8 +537,8 @@ export default function PublicTalentPoolForm({
     });
   };
 
-  // Function to fetch cities for a country
-  const fetchCities = async (country: string) => {
+  // Function to fetch cities for a country - memoized to prevent unnecessary re-renders
+  const fetchCities = useCallback(async (country: string) => {
     if (!country.trim()) {
       setCities([]);
       return;
@@ -568,7 +579,7 @@ export default function PublicTalentPoolForm({
     } finally {
       setLoadingCities(false);
     }
-  };
+  }, [fetchCitiesByCountry]);
 
   // Helper function to format date for HTML date input (YYYY-MM-DD)
   const formatDateForInput = (date: string | Date | undefined): string => {
@@ -586,6 +597,10 @@ export default function PublicTalentPoolForm({
     }
   };
 
+  // Track if initialData has been processed to prevent re-runs on object reference changes
+  const initialDataProcessedRef = useRef(false);
+  const initialDataStringRef = useRef<string>("");
+
   // Populate form with initialData if provided
   // Set loading state to false after component mounts and initial data is loaded
   useEffect(() => {
@@ -598,6 +613,14 @@ export default function PublicTalentPoolForm({
   }, []);
 
   useEffect(() => {
+    // Create a stable string representation of initialData for comparison
+    const currentInitialDataString = initialData ? JSON.stringify(initialData) : "";
+    
+    // Only process if initialData has actually changed (not just reference)
+    if (currentInitialDataString === initialDataStringRef.current && initialDataProcessedRef.current) {
+      return; // Skip if already processed with same data
+    }
+
     if (initialData && Object.keys(initialData).length > 0) {
       console.log("initialData: ", initialData);
       
@@ -638,24 +661,25 @@ export default function PublicTalentPoolForm({
         setExperienceMonthsInput(String(initialData.totalExperienceMonths));
       }
       
+      // Mark as processed and store the string representation
+      initialDataStringRef.current = currentInitialDataString;
+      initialDataProcessedRef.current = true;
+      
       // Hide loading after initial data is set
       setIsFormLoading(false);
     } else {
-      // No initialData, set India as default
+      // No initialData, set India as default only if not already set
       if (!selectedCountry) {
         setSelectedCountry("India");
       }
+      // Mark as processed even if no initial data
+      initialDataStringRef.current = currentInitialDataString;
+      initialDataProcessedRef.current = true;
       // Hide loading even if no initial data
       setIsFormLoading(false);
     }
-  }, [initialData]);
-
-  // Set default country to India on mount if not already set
-  useEffect(() => {
-    if (!selectedCountry) {
-      setSelectedCountry("India");
-    }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialData]); // Keep initialData in deps but use ref to prevent unnecessary processing
 
   // Fetch cities when country changes
   useEffect(() => {
@@ -664,8 +688,7 @@ export default function PublicTalentPoolForm({
     } else {
       setCities([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCountry]);
+  }, [selectedCountry, fetchCities]);
 
   const handleCategorySelect = (categoryValue: string) => {
     // Find the category object if it exists, otherwise use the value directly
@@ -733,17 +756,32 @@ export default function PublicTalentPoolForm({
 
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [resloading, setResloading] = useState<boolean>(false);
+  const processedResumeRef = useRef<{ file: File | null; fileName: string | null }>({ file: null, fileName: null });
+  
   useEffect(() => {
-    const fetchResume=async ()=>{
+    // Skip if this exact file and filename combination was already processed
+    if (
+      processedResumeRef.current.file === resumeFile &&
+      processedResumeRef.current.fileName === resumeFileName
+    ) {
+      return;
+    }
+
+    // Skip if no file
+    if (!resumeFile) {
+      return;
+    }
+
+    const fetchResume = async () => {
       setResloading(true);
 
-      try{
-        if (resumeFile && resumeFileName){
+      try {
+        if (resumeFile && resumeFileName) {
           const response = await uploadResumeFile(resumeFile, resumeFileName);
           console.log(response);
           setUploadedURL(response.fileUrl);
         }
-        if(resumeFile){
+        if (resumeFile) {
           const response = await generateResumeContent(resumeFile);
           console.log(response);
           setFormData((prev) => ({
@@ -751,20 +789,27 @@ export default function PublicTalentPoolForm({
             ...response.data,
           }));
         }
-      }
-      catch(e){
+        
+        // Mark as processed
+        processedResumeRef.current = { file: resumeFile, fileName: resumeFileName };
+      } catch (e) {
         console.log(e);
-      }
-      finally{
+      } finally {
         setResloading(false);
       }
     };
-  fetchResume()
     
-  },[resumeFile,resumeFileName])
+    fetchResume();
+  }, [resumeFile, resumeFileName, uploadResumeFile, generateResumeContent]);
 
 
-  const commonLanguages = ["Abkhazian","Achinese","Acoli","Adangme","Adyghe","Afar","Afrihili","Afrikaans","Aghem","Ainu","Akan","Akkadian","Akoose","Alabama","Albanian","Aleut","Algerian Arabic","American English","American Sign Language","Amharic","Ancient Egyptian","Ancient Greek","Angika","Ao Naga","Arabic","Aragonese","Aramaic","Araona","Arapaho","Arawak","Armenian","Aromanian","Arpitan","Assamese","Asturian","Asu","Atsam","Australian English","Austrian German","Avaric","Avestan","Awadhi","Aymara","Azerbaijani","Badaga","Bafia","Bafut","Bakhtiari","Balinese","Baluchi","Bambara","Bamun","Banjar","Basaa","Bashkir","Basque","Batak Toba","Bavarian","Beja","Belarusian","Bemba","Bena","Bengali","Betawi","Bhojpuri","Bikol","Bini","Bishnupriya","Bislama","Blin","Blissymbols","Bodo","Bosnian","Brahui","Braj","Brazilian Portuguese","Breton","British English","Buginese","Bulgarian","Bulu","Buriat","Burmese","Caddo","Cajun French","Canadian English","Canadian French","Cantonese","Capiznon","Carib","Catalan","Cayuga","Cebuano","Central Atlas Tamazight","Central Dusun","Central Kurdish","Central Yupik","Chadian Arabic","Chagatai","Chamorro","Chechen","Cherokee","Cheyenne","Chibcha","Chiga","Chimborazo Highland Quichua","Chinese","Chinook Jargon","Chipewyan","Choctaw","Church Slavic","Chuukese","Chuvash","Classical Newari","Classical Syriac","Colognian","Comorian","Congo Swahili","Coptic","Cornish","Corsican","Cree","Creek","Crimean Turkish","Croatian","Czech","Dakota","Danish","Dargwa","Dazaga","Delaware","Dinka","Divehi","Dogri","Dogrib","Duala","Dutch","Dyula","Dzongkha","Eastern Frisian","Efik","Egyptian Arabic","Ekajuk","Elamite","Embu","Emilian","English","Erzya","Esperanto","Estonian","European Portuguese","European Spanish","Ewe","Ewondo","Extremaduran","Fang","Fanti","Faroese","Fiji Hindi","Fijian","Filipino","Finnish","Flemish","Fon","Frafra","French","Friulian","Fulah","Ga","Gagauz","Galician","Gan Chinese","Ganda","Gayo","Gbaya","Geez","Georgian","German","Gheg Albanian","Ghomala","Gilaki","Gilbertese","Goan Konkani","Gondi","Gorontalo","Gothic","Grebo","Greek","Guarani","Gujarati","Gusii","Gwichʼin","Haida","Haitian","Hakka Chinese","Hausa","Hawaiian","Hebrew","Herero","Hiligaynon","Hindi","Hiri Motu","Hittite","Hmong","Hungarian","Hupa","Iban","Ibibio","Icelandic","Ido","Igbo","Iloko","Inari Sami","Indonesian","Ingrian","Ingush","Interlingua","Interlingue","Inuktitut","Inupiaq","Irish","Italian","Jamaican Creole English","Japanese","Javanese","Jju","Jola-Fonyi","Judeo-Arabic","Judeo-Persian","Jutish","Kabardian","Kabuverdianu","Kabyle","Kachin","Kaingang","Kako","Kalaallisut","Kalenjin","Kalmyk","Kamba","Kanembu","Kannada","Kanuri","Kara-Kalpak","Karachay-Balkar","Karelian","Kashmiri","Kashubian","Kawi","Kazakh","Kenyang","Khasi","Khmer","Khotanese","Khowar","Kikuyu","Kimbundu","Kinaray-a","Kinyarwanda","Kirmanjki","Klingon","Kom","Komi","Komi-Permyak","Kongo","Konkani","Korean","Koro","Kosraean","Kotava","Koyra Chiini","Koyraboro Senni","Kpelle","Krio","Kuanyama","Kumyk","Kurdish","Kurukh","Kutenai","Kwasio","Kyrgyz","Kʼicheʼ","Ladino","Lahnda","Lakota","Lamba","Langi","Lao","Latgalian","Latin","Latin American Spanish","Latvian","Laz","Lezghian","Ligurian","Limburgish","Lingala","Lingua Franca Nova","Literary Chinese","Lithuanian","Livonian","Lojban","Lombard","Low German","Lower Silesian","Lower Sorbian","Lozi","Luba-Katanga","Luba-Lulua","Luiseno","Lule Sami","Lunda","Luo","Luxembourgish","Luyia","Maba","Macedonian","Machame","Madurese","Mafa","Magahi","Main-Franconian","Maithili","Makasar","Makhuwa-Meetto","Makonde","Malagasy","Malay","Malayalam","Maltese","Manchu","Mandar","Mandingo","Manipuri","Manx","Maori","Mapuche","Marathi","Mari","Marshallese","Marwari","Masai","Mazanderani","Medumba","Mende","Mentawai","Meru","Metaʼ","Mexican Spanish","Micmac","Middle Dutch","Middle English","Middle French","Middle High German","Middle Irish","Min Nan Chinese","Minangkabau","Mingrelian","Mirandese","Mizo","Modern Standard Arabic","Mohawk","Moksha","Moldavian","Mongo","Mongolian","Morisyen","Moroccan Arabic","Mossi","Multiple Languages","Mundang","Muslim Tat","Myene","Nama","Nauru","Navajo","Ndonga","Neapolitan","Nepali","Newari","Ngambay","Ngiemboon","Ngomba","Nheengatu","Nias","Niuean","No linguistic content","Nogai","North Ndebele","Northern Frisian","Northern Sami","Northern Sotho","Norwegian","Norwegian Bokmål","Norwegian Nynorsk","Novial","Nuer","Nyamwezi","Nyanja","Nyankole","Nyasa Tonga","Nyoro","Nzima","NʼKo","Occitan","Ojibwa","Old English","Old French","Old High German","Old Irish","Old Norse","Old Persian","Old Provençal","Oriya","Oromo","Osage","Ossetic","Ottoman Turkish","Pahlavi","Palatine German","Palauan","Pali","Pampanga","Pangasinan","Papiamento","Pashto","Pennsylvania German","Persian","Phoenician","Picard","Piedmontese","Plautdietsch","Pohnpeian","Polish","Pontic","Portuguese","Prussian","Punjabi","Quechua","Rajasthani","Rapanui","Rarotongan","Riffian","Romagnol","Romanian","Romansh","Romany","Rombo","Root","Rotuman","Roviana","Rundi","Russian","Rusyn","Rwa","Saho","Sakha","Samaritan Aramaic","Samburu","Samoan","Samogitian","Sandawe","Sango","Sangu","Sanskrit","Santali","Sardinian","Sasak","Sassarese Sardinian","Saterland Frisian","Saurashtra","Scots","Scottish Gaelic","Selayar","Selkup","Sena","Seneca","Serbian","Serbo-Croatian","Serer","Seri","Shambala","Shan","Shona","Sichuan Yi","Sicilian","Sidamo","Siksika","Silesian","Simplified Chinese","Sindhi","Sinhala","Skolt Sami","Slave","Slovak","Slovenian","Soga","Sogdien","Somali","Soninke","South Azerbaijani","South Ndebele","Southern Altai","Southern Sami","Southern Sotho","Spanish","Sranan Tongo","Standard Moroccan Tamazight","Sukuma","Sumerian","Sundanese","Susu","Swahili","Swati","Swedish","Swiss French","Swiss German","Swiss High German","Syriac","Tachelhit","Tagalog","Tahitian","Taita","Tajik","Talysh","Tamashek","Tamil","Taroko","Tasawaq","Tatar","Telugu","Tereno","Teso","Tetum","Thai","Tibetan","Tigre","Tigrinya","Timne","Tiv","Tlingit","Tok Pisin","Tokelau","Tongan","Tornedalen Finnish","Traditional Chinese","Tsakhur","Tsakonian","Tsimshian","Tsonga","Tswana","Tulu","Tumbuka","Tunisian Arabic","Turkish","Turkmen","Turoyo","Tuvalu","Tuvinian","Twi","Tyap","Udmurt","Ugaritic","Ukrainian","Umbundu","Unknown Language","Upper Sorbian","Urdu","Uyghur","Uzbek","Vai","Venda","Venetian","Veps","Vietnamese","Volapük","Võro","Votic","Vunjo","Walloon","Walser","Waray","Warlpiri","Washo","Wayuu","Welsh","West Flemish","Western Frisian","Western Mari","Wolaytta","Wolof","Wu Chinese","Xhosa","Xiang Chinese","Yangben","Yao","Yapese","Yemba","Yiddish","Yoruba","Zapotec","Zarma","Zaza","Zeelandic","Zenaga","Zhuang","Zoroastrian Dari","Zulu","Zuni"];
+ 
+  
+  useEffect(() => {
+    const commonLanguages = allLanguages.map(({ language }) => language);
+    setLanguageOptions(commonLanguages.map((language) => ({ value: language, label: language })));
+  }, []);
+
 
   const handleResumeUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -1716,133 +1761,75 @@ export default function PublicTalentPoolForm({
                 <div className="space-y-4">
                   <Label className="text-sm font-semibold text-slate-700">Select Languages <span className="text-red-500">*</span></Label>
                   <div className="flex flex-col sm:flex-row gap-3">
-                    <div className="flex-1 relative" style={{ zIndex: openLanguageDropdown ? 50 : 'auto' }}>
-                      <Input
-                        value={selectedLanguage}
-                        onChange={(e) => {
-                          setSelectedLanguage(e.target.value);
-                          setOpenLanguageDropdown(true);
-                        }}
-                        onFocus={() => setOpenLanguageDropdown(true)}
-                        onBlur={(e) => {
-                          // Delay closing to allow click events on dropdown items
-                          setTimeout(() => setOpenLanguageDropdown(false), 200);
-                        }}
-                        placeholder="Type or select a language (e.g., English, Hindi, Spanish)"
-                        className={getInputClassName("spokenLanguages", "h-11 flex-1 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900 pr-10")}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") {
-                            e.preventDefault();
-                            if (selectedLanguage.trim() && !formData.spokenLanguages.includes(selectedLanguage.trim())) {
-                              addToArray("spokenLanguages", selectedLanguage, setSelectedLanguage);
-                              setOpenLanguageDropdown(false);
-                              if (showErrors && errors.spokenLanguages) {
-                                setErrors((prev) => {
-                                  const newErrors = { ...prev };
-                                  delete newErrors.spokenLanguages;
-                                  return newErrors;
-                                });
-                              }
-                            }
-                          }
-                        }}
-                      />
-                      <button
-                        type="button"
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400 hover:text-slate-600 focus:outline-none z-10"
-                        onClick={() => setOpenLanguageDropdown(!openLanguageDropdown)}
-                      >
-                        <ChevronDown className="h-4 w-4" />
-                      </button>
-                      
-                      {/* Languages Dropdown */}
-                      {openLanguageDropdown && (
-                        <div className="absolute z-[100] w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-xl max-h-60 overflow-auto">
-                          {/* Show custom language option if typed value doesn't match any existing language */}
-                          {selectedLanguage.trim() && 
-                           !commonLanguages.some(lang => 
-                             lang.toLowerCase() === selectedLanguage.trim().toLowerCase()
-                           ) && 
-                           !formData.spokenLanguages.some(lang => 
-                             lang.toLowerCase() === selectedLanguage.trim().toLowerCase()
-                           ) && (
-                            <div
-                              onClick={() => {
-                                if (!formData.spokenLanguages.includes(selectedLanguage.trim())) {
-                                  addToArray("spokenLanguages", selectedLanguage, setSelectedLanguage);
-                                  setOpenLanguageDropdown(false);
-                                  if (showErrors && errors.spokenLanguages) {
-                                    setErrors((prev) => {
-                                      const newErrors = { ...prev };
-                                      delete newErrors.spokenLanguages;
-                                      return newErrors;
-                                    });
-                                  }
-                                }
-                              }}
-                              className="cursor-pointer bg-orange-50 hover:bg-orange-100 px-4 py-2 flex items-center gap-2"
-                            >
-                              <Plus className="h-4 w-4 text-orange-600" />
-                              <span className="font-medium">Add "{selectedLanguage.trim()}"</span>
-                            </div>
-                          )}
-                          
-                          {/* Show filtered languages from common list - limit to 50 for performance */}
-                          {commonLanguages
-                            .filter(lang => 
-                              !formData.spokenLanguages.includes(lang) &&
-                              (!selectedLanguage.trim() || 
-                              lang.toLowerCase().includes(selectedLanguage.toLowerCase()))
-                            )
-                            .slice(0, 50)
-                            .map((lang) => (
-                              <div
-                                key={lang}
-                                onClick={() => {
-                                  if (!formData.spokenLanguages.includes(lang)) {
-                                    addToArray("spokenLanguages", lang, setSelectedLanguage);
-                                    setOpenLanguageDropdown(false);
-                                    if (showErrors && errors.spokenLanguages) {
-                                      setErrors((prev) => {
-                                        const newErrors = { ...prev };
-                                        delete newErrors.spokenLanguages;
-                                        return newErrors;
-                                      });
-                                    }
-                                  }
-                                }}
-                                className="cursor-pointer px-4 py-2 hover:bg-slate-50 flex items-center justify-between"
-                              >
-                                <span>{lang}</span>
-                                {formData.spokenLanguages.includes(lang) && (
-                                  <Check className="h-4 w-4 text-orange-600" />
-                                )}
-                              </div>
-                            ))}
-                        </div>
-                      )}
-                    </div>
-                    {selectedLanguage.trim() && !formData.spokenLanguages.includes(selectedLanguage.trim()) && (
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => {
-                          addToArray("spokenLanguages", selectedLanguage, setSelectedLanguage);
-                          setOpenLanguageDropdown(false);
-                          if (showErrors && errors.spokenLanguages) {
-                            setErrors((prev) => {
-                              const newErrors = { ...prev };
-                              delete newErrors.spokenLanguages;
-                              return newErrors;
-                            });
-                          }
-                        }}
-                        className="h-11 px-6 rounded-lg border-orange-300 text-orange-700 hover:bg-orange-50 font-medium"
-                      >
-                        <Plus className="h-4 w-4 mr-2" />
-                        Add Language
-                      </Button>
-                    )}
+
+
+                        <CreatableSelect
+                          options={languageOptions}
+
+                          styles={{
+                            control: (base, state) => ({
+                              ...base,
+                              borderColor: state.isFocused ? "#F97316" : "#D1D5DB",
+                              boxShadow: state.isFocused
+                                ? "0 0 0 2px rgba(249, 115, 22, 0.4)"
+                                : "none",
+                              "&:hover": {
+                                borderColor: state.isFocused ? "#F97316" : "#FB923C",
+                              },
+                              borderWidth: "1px",
+                              borderRadius: "0.5rem",
+                              minHeight: "42px",
+                            }),
+
+                            option: (base, state) => ({
+                              ...base,
+                              backgroundColor: state.isSelected
+                                ? "#F97316"        // orange-500
+                                : state.isFocused
+                                  ? "#FED7AA"        // orange-200 (hover)
+                                  : "white",
+
+                              color: state.isSelected ? "white" : "#1F2937",
+                              "&:active": {
+                                backgroundColor: "#FB923C", // orange-400
+                              },
+                            }),
+
+                            multiValue: (base) => ({
+                              ...base,
+                              backgroundColor: "#FFEAD6", // chip background (orange-100)
+                            }),
+
+                            multiValueLabel: (base) => ({
+                              ...base,
+                              color: "#F97316", // orange-500 text
+                            }),
+
+                            multiValueRemove: (base) => ({
+                              ...base,
+                              color: "#F97316",
+                              "&:hover": {
+                                backgroundColor: "#F97316",
+                                color: "white",
+                              },
+                            }),
+                          }}
+
+                          isSearchable
+                          isMulti
+                          placeholder="Select a language to add"
+                          className="w-full"
+                          onChange={(selectedOptions) => {
+                            setFormData({ ...formData, spokenLanguages: selectedOptions.map((option) => option.value) });
+                          }}
+                          onCreateOption={(inputValue) => {
+                            const newOption = { value: inputValue, label: inputValue };
+                            setLanguageOptions((prev) => [...prev, newOption]);
+                            setFormData({ ...formData, spokenLanguages: [...formData.spokenLanguages, inputValue] });
+                          }}
+                        />
+
+
                   </div>
                   {showErrors && errors.spokenLanguages && (
                     <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
