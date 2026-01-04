@@ -32,7 +32,7 @@ type TeamMember = {
 const TeamPage: React.FC = () => {
     const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
     const [apiStatus, setApiStatus] = useState<keyof typeof apiStatusConstants>('initial');
-    const [selectedCategory, setSelectedCategory] = useState<string>('Core Team');
+    const [selectedCategory, setSelectedCategory] = useState<string>('Management');
 
     useEffect(() => {
         fetchMemberCards();
@@ -73,16 +73,15 @@ const TeamPage: React.FC = () => {
     const getTabOptions = () => {
         // Fixed tabs as per requirements
         const tabs = [
-              'Management',
+            'Management',
             'Core Team',
-          
             'Advisory Board',
             'Recruiter Board'
         ];
         
         // Ensure selectedCategory is valid, reset to 'All' if not
         if (!tabs.includes(selectedCategory)) {
-            setSelectedCategory('Core Team');
+            setSelectedCategory('Management');
         }
         
         return tabs;
@@ -90,10 +89,14 @@ const TeamPage: React.FC = () => {
 
     const getFilteredMembers = () => {
         console.log(selectedCategory);
-        if (selectedCategory === 'Core Team') {
-            return teamMembers.filter(member => member.type === 'core');
-        }else if (selectedCategory === 'Management') {
+        // if (selectedCategory === 'Core Team') {
+        //     return teamMembers.filter(member => member.type === 'core');
+
+        if (selectedCategory === 'Management') {
             return teamMembers.filter(member => member.type === 'franchise');
+        }else if (selectedCategory === 'Core Team') {
+            return teamMembers.filter(member => member.type === 'core');
+
         }else if (selectedCategory === 'Advisory Board') {
             return teamMembers.filter(member => member.type === 'advisor');
         }else if (selectedCategory === 'Recruiter Board') {
