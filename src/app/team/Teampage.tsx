@@ -26,12 +26,13 @@ type TeamMember = {
     certifiedBy: string;
     biography?: string;
     type?: string;
+    location?: string;
 };
 
 const TeamPage: React.FC = () => {
     const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
     const [apiStatus, setApiStatus] = useState<keyof typeof apiStatusConstants>('initial');
-    const [selectedCategory, setSelectedCategory] = useState<string>('Core team');
+    const [selectedCategory, setSelectedCategory] = useState<string>('Core Team');
 
     useEffect(() => {
         fetchMemberCards();
@@ -54,7 +55,8 @@ const TeamPage: React.FC = () => {
                     experience: member.experience_in_years,
                     certifiedBy: member.certified_by,
                     biography: member.biography || member.description || '',
-                    type: member.type
+                    type: member.type,
+                    location: member.location || member.city || ''
                 }));
                 setTeamMembers(formattedData);
                 setApiStatus('success');
@@ -71,16 +73,16 @@ const TeamPage: React.FC = () => {
     const getTabOptions = () => {
         // Fixed tabs as per requirements
         const tabs = [
-            
-            'Core team',
-            // 'Franchise team',
-            'Advisor team',
-            'Freelance recruiters'
+              'Management',
+            'Core Team',
+          
+            'Advisory Board',
+            'Recruiter Board'
         ];
         
         // Ensure selectedCategory is valid, reset to 'All' if not
         if (!tabs.includes(selectedCategory)) {
-            setSelectedCategory('Core team');
+            setSelectedCategory('Core Team');
         }
         
         return tabs;
@@ -88,13 +90,13 @@ const TeamPage: React.FC = () => {
 
     const getFilteredMembers = () => {
         console.log(selectedCategory);
-        if (selectedCategory === 'Core team') {
+        if (selectedCategory === 'Core Team') {
             return teamMembers.filter(member => member.type === 'core');
-        }else if (selectedCategory === 'Franchise team') {
+        }else if (selectedCategory === 'Management') {
             return teamMembers.filter(member => member.type === 'franchise');
-        }else if (selectedCategory === 'Advisor team') {
+        }else if (selectedCategory === 'Advisory Board') {
             return teamMembers.filter(member => member.type === 'advisor');
-        }else if (selectedCategory === 'Freelance recruiters') {
+        }else if (selectedCategory === 'Recruiter Board') {
             return teamMembers.filter(member => member.type === 'freelance');
         }
        
@@ -186,9 +188,14 @@ const TeamPage: React.FC = () => {
                                             <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 mb-1 leading-tight break-words">
                                                 {member.name}
                                             </h3>
-                                            <p className="text-sm sm:text-base md:text-lg font-normal text-gray-600 mb-2 sm:mb-3 break-words">
+                                            <p className="text-sm sm:text-base md:text-lg font-normal text-gray-600 mb-1 break-words">
                                                 {member.designation}
                                             </p>
+                                            {member.location && (selectedCategory === 'Core Team' || selectedCategory === 'Advisory Board') && (
+                                                <p className="text-xs sm:text-sm text-gray-500 mb-2 sm:mb-3 break-words">
+                                                    {member.location} 
+                                                </p>
+                                            )}
                                         </div>
                                         {member.linkedInUrl && (
                                             <a
