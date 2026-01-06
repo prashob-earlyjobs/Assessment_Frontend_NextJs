@@ -308,7 +308,7 @@ const TeamMemberModal: React.FC<{
               placeholder="Enter team member description/biography"
               className="p-2 border rounded w-full min-h-[100px] resize-y"
               minLength={50}
-              maxLength={258}
+              maxLength={600}
               required
             />
             <div className="text-xs text-gray-500 mt-1">

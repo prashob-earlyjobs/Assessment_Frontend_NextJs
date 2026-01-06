@@ -1,10 +1,10 @@
+import PublicCompanyOnboard from "./jobPosting";
 import { Metadata } from "next";
-import FreeJobPostingPage from "./freeJobPostingPage";
+import { Suspense } from "react";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.earlyjobs.ai';
   return {
-    title: "Free Job Posting | Post Jobs for Free | EarlyJobs",
+    title: "Free Job Posting | EarlyJobs",
     description:
       "Post jobs for free on EarlyJobs and reach thousands of verified candidates instantly. Simplify your hiring with AI-powered matching and fast applicant screening.",
     keywords:
@@ -12,9 +12,9 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: "Free Job Posting | EarlyJobs",
       description:
-        "Post jobs for free on EarlyJobs and hire smarter with AI-powered matching and verified candidates. Start hiring today.",
+        "Post jobs for free on EarlyJobs and hire smarter with AI-powered matching and verified candidates. Start hiring today .",
       type: "website",
-      url: `${baseUrl}/freejobposting`,
+      url: `${process.env.NEXT_PUBLIC_BASE_URL}/freejobposting`,
       images: [
         {
           url: `/images/og-free-job.png`,
@@ -31,12 +31,15 @@ export async function generateMetadata(): Promise<Metadata> {
         "Hire faster with EarlyJobs. Post jobs for free and connect with verified candidates instantly.",
       images: ["/images/og-free-job.png"],
     },
-    alternates: {
-      canonical: `${baseUrl}/freejobposting`,
-    },
+    robots: "index, follow",
+    viewport: "width=device-width, initial-scale=1.0",
   };
 }
 
 export default function Page() {
-  return <FreeJobPostingPage />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PublicCompanyOnboard />
+    </Suspense>
+  );
 }

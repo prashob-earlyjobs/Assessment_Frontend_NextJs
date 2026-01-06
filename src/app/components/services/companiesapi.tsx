@@ -12,42 +12,149 @@ interface FileUploadResponse {
 
 
 export const createCompanyOnboarding = async (onboardingData: any) => {
+  // Extract _silentSave flag before sending to API (it's only for internal use)
+  const isSilentSave = onboardingData._silentSave || false;
+  const { _silentSave, ...dataToSend } = onboardingData;
+  
   try {
     const backendUrl =  process.env.NEXT_PUBLIC_BACKEND_URL_2_0;
+    
+    console.log("API Call - createCompanyOnboarding:", {
+      url: `${backendUrl}/publicCom/company/onboard`,
+      method: 'POST',
+      data: dataToSend,
+      silentSave: isSilentSave,
+    });
+    
     const response = await fetch(`${backendUrl}/publicCom/company/onboard`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(onboardingData),
+      body: JSON.stringify(dataToSend),
     });
 
     // Parse the response body
     const data = await response.json();
 
+    console.log("API Response - createCompanyOnboarding:", {
+      status: response.status,
+      ok: response.ok,
+      data: data,
+    });
+
     if (!response.ok) {
-      // Handle specific error status codes
-      if (response.status === 409) {
-        toast.error("TPO onboarding already exists");
-      } else if (response.status === 400) {
-        toast.error("Invalid onboarding data provided");
-      } else if (response.status === 404) {
-        toast.error("TPO not found");
-      } else {
-        toast.error(`Failed to create TPO onboarding: ${data.message || 'Unknown error'}`);
+      // Log full error details for debugging
+      console.error("❌ API Error Response:", {
+        status: response.status,
+        statusText: response.statusText,
+        data: data,
+        message: data.message,
+        errors: data.errors,
+      });
+      
+      // Handle specific error status codes (only show toast if not silent save)
+      if (!isSilentSave) {
+        if (response.status === 409) {
+          toast.error("User onboarding already exists");
+        } else if (response.status === 400) {
+          // Show more detailed error message if available
+          const errorMsg = data.message || data.error || "Invalid onboarding data provided";
+          toast.error(errorMsg);
+        } else if (response.status === 404) {
+          toast.error("User not found");
+        } else {
+          toast.error(`Failed to create TPO onboarding: ${data.message || 'Unknown error'}`);
+        }
+      }
+      throw new Error(data.message || data.error || 'Request failed');
+    }
+
+    console.log("✅ TPO onboarding created successfully:", data);
+    // Only show success toast if not a silent save
+    if (!isSilentSave) {
+      toast.success("TPO onboarding completed successfully");
+    }
+    return data;
+  } catch (error: any) {
+    console.error("❌ Failed to create TPO onboarding:", {
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status,
+    });
+    // Only show error toast if not silent save
+    if (!isSilentSave) {
+      toast.error(`Failed to create TPO onboarding: ${error.message}`);
+    }
+    throw error;
+  }
+};
+export const updateCompanyOnboarding = async (id: string, onboardingData: any) => {
+  // Extract _silentSave flag before sending to API (it's only for internal use)
+  const isSilentSave = onboardingData._silentSave || false;
+  const { _silentSave, ...dataToSend } = onboardingData;
+  
+  try {
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_2_0;
+    
+    console.log("API Call - updateCompanyOnboarding:", {
+      url: `${backendUrl}/publicCom/company/onboard/${id}`,
+      method: 'PUT',
+      data: dataToSend,
+      silentSave: isSilentSave,
+    });
+    
+    const response = await fetch(`${backendUrl}/publicCom/company/onboard/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dataToSend),
+    });
+
+    // Parse the response body
+    const data = await response.json();
+
+    console.log("API Response - updateCompanyOnboarding:", {
+      status: response.status,
+      ok: response.ok,
+      data: data,
+    });
+
+    if (!response.ok) {
+      // Handle specific error status codes (only show toast if not silent save)
+      if (!isSilentSave) {
+        if (response.status === 404) {
+          toast.error("Company onboarding not found");
+        } else if (response.status === 400) {
+          toast.error("Invalid onboarding data provided");
+        } else {
+          toast.error(`Failed to update company onboarding: ${data.message || 'Unknown error'}`);
+        }
       }
       throw new Error(data.message || 'Request failed');
     }
 
-    console.log("TPO onboarding created:", data);
-    toast.success("TPO onboarding completed successfully");
+    console.log("✅ Company onboarding updated successfully:", data);
+    // Only show success toast if not a silent save
+    if (!isSilentSave) {
+      toast.success("Company onboarding updated successfully");
+    }
     return data;
   } catch (error: any) {
-    console.error("Failed to create TPO onboarding:", error.message);
-    toast.error(`Failed to create TPO onboarding: ${error.message}`);
+    console.error("❌ Failed to update company onboarding:", {
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status,
+    });
+    // Only show error toast if not silent save
+    if (!isSilentSave) {
+      toast.error(`Failed to update company onboarding: ${error.message}`);
+    }
     throw error;
   }
 };
+
 export const uploadFile = async (
   file: File, 
   folderPath?: string
