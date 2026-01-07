@@ -44,7 +44,7 @@ interface InterviewCard {
   subCategory: string;
   description: string;
   difficulty?: "HARD" | "MEDIUM" | "EASY";
-  status?: "created" | "COMPLETED" | "completed";
+  status?: "created" | "COMPLETED" | "completed" | "in_progress" | "IN_PROGRESS";
   duration?: string;
   completedAt?: string;
   icon: React.ReactNode;
@@ -425,7 +425,7 @@ const InterviewsPage = () => {
                           <span>Show Report</span>
                           <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
                         </Button>
-                      ) : interview.status === "created" ? (
+                      ) : ["session_created","invitation_sent"].includes(interview.status) ? (
                         <Button
                           onClick={() => handleStart(interview.id)}
                           className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-5 py-2.5 h-auto font-semibold rounded-xl transition-all duration-300 shadow-md hover:shadow-xl group-hover:scale-105"
@@ -513,7 +513,7 @@ const InterviewsPage = () => {
 
               {/* Action Button */}
               <div className="pt-4 border-t border-gray-200">
-                {selectedInterview.status === "created" ? (
+                {["session_created","invitation_sent"].includes(selectedInterview.status) ? (
                   <Button
                     onClick={() => {
                       setIsDialogOpen(false);
@@ -539,7 +539,20 @@ const InterviewsPage = () => {
                       <ArrowRight className="h-4 w-4" />
                     </span>
                   </Button>
-                ) : null}
+                ) : (selectedInterview.status === "in_progress" || selectedInterview.status === "IN_PROGRESS") ? (
+                  <Button
+                    onClick={() => {
+                      setIsDialogOpen(false);
+                      navigate.push(`/interviews/${selectedInterview.id}/report`);
+                    }}
+                    className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white"
+                  >
+                    <span className="flex items-center gap-2 justify-center">
+                      View Report
+                      <ArrowRight className="h-4 w-4" />
+                    </span>
+                  </Button>
+                ): null}
               </div>
             </div>
           )}
