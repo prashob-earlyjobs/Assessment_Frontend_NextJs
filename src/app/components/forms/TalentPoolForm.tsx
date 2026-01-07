@@ -24,6 +24,7 @@ import CreatableSelect from 'react-select/creatable'
 import OTPModal from "../ui/OTPModal";
 import { Country, State, City } from 'country-state-city';
 import languageList from "language-list";
+import { useRouter, useSearchParams } from "next/navigation";
 
 
 const languages = languageList();
@@ -154,10 +155,16 @@ export default function PublicTalentPoolForm({
   const params = useParams<{ id?: string; candidateId?: string }>();
   const id = propId || params.id || params.candidateId;
   const formTopRef = useRef<HTMLDivElement>(null);
+
+  const searchParams = useSearchParams();
+
+  const userEmail = searchParams.get("userEmail");
+  const userPhone = searchParams.get("userPhone");
+
   const [formData, setFormData] = useState<CandidateFormData>({
     name: "",
-    email: "",
-    phone: "",
+    email: (userEmail as string) || "",
+    phone: (userPhone as string) || "",
     fatherName: "",
     dateOfBirth: "",
     gender: "Male",
@@ -1321,6 +1328,7 @@ export default function PublicTalentPoolForm({
                       id="email"
                       type="email"
                       value={formData.email}
+                      disabled={!!userEmail}
                       onChange={(e) => handleInputChange("email", e.target.value)}
                       placeholder="your.email@example.com"
                       className={getInputClassName("email", "h-11 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900")}
@@ -1343,6 +1351,7 @@ export default function PublicTalentPoolForm({
                       type="tel"
                       value={formData.phone}
                       onChange={handlePhoneChange}
+                      disabled={!!userPhone}
                       placeholder="10-digit mobile number"
                       maxLength={10}
                       className={getInputClassName("phone", "h-11 rounded-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500 bg-white font-normal text-slate-900")}
