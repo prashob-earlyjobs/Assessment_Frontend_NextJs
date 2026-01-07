@@ -35,6 +35,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/app/components/ui/dialog";
+import ReactMarkdown from "react-markdown";
+
 
 interface InterviewCard {
   sessionId: string;
@@ -397,7 +399,7 @@ const InterviewsPage = () => {
 
                     {/* Description */}
                     <p className="text-sm text-gray-700 leading-relaxed mb-6 min-h-[3.5rem] max-h-[4.5rem] line-clamp-3 overflow-hidden text-ellipsis group-hover:text-gray-800 transition-colors duration-300">
-                      {interview.description}
+                      <ReactMarkdown>{interview.description}</ReactMarkdown>
                     </p>
 
                     {/* Bottom Section: Time/Status and Action */}
