@@ -24,7 +24,6 @@ import { toast } from "sonner";
 import {
   getInterviewReport,
   getRecording,
-  getTranscript,
   getUserInterviews,
 } from "@/app/components/services/servicesapis";
 import { useUser } from "@/app/context";
@@ -56,7 +55,6 @@ const InterviewReportPage = () => {
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [transcript, setTranscript] = useState<any[]>([]);
   const [videoLoading, setVideoLoading] = useState(false);
-  const [transcriptLoading, setTranscriptLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
   const [overallScore, setOverallScore] = useState<number | null>(null);
 
@@ -137,6 +135,13 @@ const InterviewReportPage = () => {
           },
           recommendations: Array.isArray(recommendations) ? recommendations : [],
         });
+
+        // Extract transcript from response
+        const transcriptData = response.data?.transcript || 
+          response.data?.transcripts || 
+          reportData?.transcript || 
+          [];
+        setTranscript(Array.isArray(transcriptData) ? transcriptData : []);
       } catch (error: any) {
         console.error("Error fetching report:", error);
         setError(error.message || "Failed to fetch interview report");
@@ -171,25 +176,6 @@ const InterviewReportPage = () => {
     }
   };
 
-  const handleFetchTranscript = async () => {
-    if (!sessionId) return;
-
-    try {
-      setTranscriptLoading(true);
-      const response = await getTranscript(sessionId);
-      
-      if (response.success && response.data) {
-        setTranscript(Array.isArray(response.data) ? response.data : []);
-      } else {
-        throw new Error("Transcript not available");
-      }
-    } catch (error: any) {
-      console.error("Error fetching transcript:", error);
-      toast.error("Failed to load transcript");
-    } finally {
-      setTranscriptLoading(false);
-    }
-  };
 
   if (loading) {
     return (
@@ -259,7 +245,7 @@ const InterviewReportPage = () => {
           </div>
 
           {/* Candidate Info and Overall Score Section */}
-          <Card className="rounded-2xl border-0 shadow-lg mb-8 bg-gradient-to-br from-white to-orange-50/30">
+          <Card className="rounded-2xl border-0 shadow-lg mb-8 bg-gradient-to-br from-white to-orange-50/30 text-gray-900">
             <CardContent className="p-6">
               <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                 {/* Candidate Basic Info */}
@@ -316,17 +302,33 @@ const InterviewReportPage = () => {
 
           {/* Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="overview" className="text-base">Overview</TabsTrigger>
-              <TabsTrigger value="recording" className="text-base">Recording</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-3 mb-6 h-auto">
+              <TabsTrigger 
+                value="overview" 
+                className="text-sm sm:text-base py-2 sm:py-3 text-gray-700 data-[state=active]:text-gray-900 data-[state=active]:bg-white"
+              >
+                Overview
+              </TabsTrigger>
+              <TabsTrigger 
+                value="recording" 
+                className="text-sm sm:text-base py-2 sm:py-3 text-gray-700 data-[state=active]:text-gray-900 data-[state=active]:bg-white"
+              >
+                Recording
+              </TabsTrigger>
+              <TabsTrigger 
+                value="transcript" 
+                className="text-sm sm:text-base py-2 sm:py-3 text-gray-700 data-[state=active]:text-gray-900 data-[state=active]:bg-white"
+              >
+                Transcript
+              </TabsTrigger>
             </TabsList>
 
             {/* Overview Tab */}
-            <TabsContent value="overview" className="space-y-6">
+            <TabsContent value="overview" className="space-y-6 text-gray-900">
               {/* Technical Feedback */}
-              <Card className="rounded-2xl border-0 shadow-lg">
+              <Card className="rounded-2xl border-0 shadow-lg text-gray-900">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2 text-gray-900">
                     <MessageSquare className="h-5 w-5 text-orange-600" />
                     Technical Feedback
                   </CardTitle>
@@ -381,9 +383,9 @@ const InterviewReportPage = () => {
               </Card>
 
               {/* Communication Feedback */}
-              <Card className="rounded-2xl border-0 shadow-lg">
+              <Card className="rounded-2xl border-0 shadow-lg text-gray-900">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2 text-gray-900">
                     <MessageSquare className="h-5 w-5 text-purple-600" />
                     Communication Feedback
                   </CardTitle>
@@ -439,9 +441,9 @@ const InterviewReportPage = () => {
 
               {/* Recommendations */}
               {report.recommendations.length > 0 && (
-                <Card className="rounded-2xl border-0 shadow-lg">
+                <Card className="rounded-2xl border-0 shadow-lg text-gray-900">
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
+                    <CardTitle className="flex items-center gap-2 text-gray-900">
                       <Lightbulb className="h-5 w-5 text-yellow-600" />
                       Recommendations
                     </CardTitle>
@@ -464,10 +466,10 @@ const InterviewReportPage = () => {
             </TabsContent>
 
             {/* Recording Tab */}
-            <TabsContent value="recording" className="space-y-6">
-              <Card className="rounded-2xl border-0 shadow-lg">
+            <TabsContent value="recording" className="space-y-6 text-gray-900">
+              <Card className="rounded-2xl border-0 shadow-lg text-gray-900">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2 text-gray-900">
                     <Video className="h-5 w-5 text-orange-600" />
                     Interview Recording
                   </CardTitle>
@@ -530,58 +532,62 @@ const InterviewReportPage = () => {
                 </CardContent>
               </Card>
 
-              <Card className="rounded-2xl border-0 shadow-lg">
+            </TabsContent>
+
+            {/* Transcript Tab */}
+            <TabsContent value="transcript" className="space-y-6 text-gray-900">
+              <Card className="rounded-2xl border-0 shadow-lg text-gray-900">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2 text-gray-900">
                     <MessageSquare className="h-5 w-5 text-purple-600" />
-                    Transcript
+                    Interview Transcript
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   {transcript.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-12">
                       <MessageSquare className="h-16 w-16 text-gray-400 mb-4" />
-                      <p className="text-gray-600 mb-4">Transcript not loaded</p>
-                      <Button
-                        onClick={handleFetchTranscript}
-                        disabled={transcriptLoading}
-                        className="bg-purple-500 hover:bg-purple-600 text-white"
-                      >
-                        {transcriptLoading ? (
-                          <>
-                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                            Loading...
-                          </>
-                        ) : (
-                          <>
-                            <MessageSquare className="h-4 w-4 mr-2" />
-                            Load Transcript
-                          </>
-                        )}
-                      </Button>
+                      <p className="text-gray-600">Transcript not available for this interview</p>
                     </div>
                   ) : (
-                    <div className="space-y-3 max-h-96 overflow-y-auto">
-                      {transcript.map((line, index) => (
-                        <div
-                          key={index}
-                          className={`p-3 rounded-lg ${
-                            line.speaker === 0 || line.speaker === "AI" || line.speaker === "bot"
-                              ? "bg-blue-50 border border-blue-200"
-                              : "bg-green-50 border border-green-200"
-                          }`}
-                        >
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="text-xs font-semibold text-gray-600">
-                              {line.speaker === 0 || line.speaker === "AI" || line.speaker === "bot"
-                                ? "AI Interviewer"
-                                : "You"}
-                            </span>
-                            {line.timestamp && (
-                              <span className="text-xs text-gray-500">{line.timestamp}</span>
-                            )}
-                          </div>
-                          <p className="text-sm text-gray-800 whitespace-pre-wrap">{line.text || line.content}</p>
+                    <div className="space-y-4 max-h-[600px] overflow-y-auto">
+                      {transcript.map((item, index) => (
+                        <div key={index} className="space-y-3">
+                          {/* Question (Interviewer) */}
+                          {item.question && (
+                            <div className="p-4 rounded-lg bg-blue-50 border border-blue-200">
+                              <div className="flex items-center justify-between mb-2">
+                                <span className="text-xs font-semibold text-blue-700 flex items-center gap-2">
+                                  <MessageSquare className="h-3 w-3" />
+                                  AI Interviewer
+                                </span>
+                                {item.timestamp && (
+                                  <span className="text-xs text-gray-500">
+                                    {new Date(item.timestamp).toLocaleTimeString()}
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-sm text-gray-800 whitespace-pre-wrap">{item.question}</p>
+                            </div>
+                          )}
+                          
+                          {/* Answer (Candidate) */}
+                          {item.answer && (
+                            <div className="p-4 rounded-lg bg-green-50 border border-green-200 ml-4">
+                              <div className="flex items-center justify-between mb-2">
+                                <span className="text-xs font-semibold text-green-700 flex items-center gap-2">
+                                  <User className="h-3 w-3" />
+                                  You
+                                </span>
+                                {item.timestamp && (
+                                  <span className="text-xs text-gray-500">
+                                    {new Date(item.timestamp).toLocaleTimeString()}
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-sm text-gray-800 whitespace-pre-wrap">{item.answer}</p>
+                            </div>
+                          )}
                         </div>
                       ))}
                     </div>
