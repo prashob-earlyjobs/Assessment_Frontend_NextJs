@@ -15,7 +15,6 @@ import {
   Loader2,
   AlertCircle,
   Play,
-  Download,
   User,
   Mail,
   Trophy,
@@ -142,6 +141,15 @@ const InterviewReportPage = () => {
           reportData?.transcript || 
           [];
         setTranscript(Array.isArray(transcriptData) ? transcriptData : []);
+
+        // Extract video recording URL from response
+        const recordingUrl = response.data?.finalRecording || 
+          response.data?.recordingUrl || 
+          response.data?.recording ||
+          null;
+        if (recordingUrl) {
+          setVideoUrl(recordingUrl);
+        }
       } catch (error: any) {
         console.error("Error fetching report:", error);
         setError(error.message || "Failed to fetch interview report");
@@ -478,24 +486,7 @@ const InterviewReportPage = () => {
                   {!videoUrl ? (
                     <div className="flex flex-col items-center justify-center py-12">
                       <Video className="h-16 w-16 text-gray-400 mb-4" />
-                      <p className="text-gray-600 mb-4">Recording not loaded</p>
-                      <Button
-                        onClick={handleFetchRecording}
-                        disabled={videoLoading}
-                        className="bg-orange-500 hover:bg-orange-600 text-white"
-                      >
-                        {videoLoading ? (
-                          <>
-                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                            Loading...
-                          </>
-                        ) : (
-                          <>
-                            <Play className="h-4 w-4 mr-2" />
-                            Load Recording
-                          </>
-                        )}
-                      </Button>
+                      <p className="text-gray-600 mb-4">Recording not available for this interview</p>
                     </div>
                   ) : (
                     <div className="space-y-4">
@@ -511,21 +502,6 @@ const InterviewReportPage = () => {
                         >
                           Your browser does not support the video tag.
                         </video>
-                      </div>
-                      <div className="flex gap-2">
-                        <Button
-                          variant="outline"
-                          onClick={() => {
-                            const link = document.createElement("a");
-                            link.href = videoUrl;
-                            link.download = `interview-recording-${interviewId}.mp4`;
-                            link.click();
-                          }}
-                          className="flex items-center gap-2"
-                        >
-                          <Download className="h-4 w-4" />
-                          Download
-                        </Button>
                       </div>
                     </div>
                   )}
