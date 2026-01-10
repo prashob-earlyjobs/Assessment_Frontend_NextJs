@@ -37,14 +37,22 @@ import {
   FileText,
   Globe,
   Building2,
+  Loader2,
+  Brain,
+  ArrowRight,
+  ListTodo,
+  Circle,
+  CheckCircle,
 } from "lucide-react";
 import { toast } from "sonner";
+import CreatableSelect from 'react-select/creatable';
 import {
   isUserLoggedIn,
   updateProfile,
   uploadPhoto,
   uploadResume,
 } from "../../components/services/servicesapis";
+import { getStaticSkills, getStaticRoles } from "../services/staticApis";
 
 const Profile = () => {
   const navigate = useRouter();
@@ -63,7 +71,14 @@ const Profile = () => {
 
   const [newSkill, setNewSkill] = useState("");
   const [newLanguage, setNewLanguage] = useState("");
+  const [skillOptions, setSkillOptions] = useState<Array<{value: string, label: string}>>([]);
+  const [roleOptions, setRoleOptions] = useState<Array<{value: string, label: string}>>([]);
+  const [isSaving, setIsSaving] = useState(false);
+  const [hasAssessmentAvailable, setHasAssessmentAvailable] = useState(false);
+  const [assessmentSessionId, setAssessmentSessionId] = useState<string | null>(null);
 
+
+  
   // Helper function to format date for HTML date input (YYYY-MM-DD)
   const formatDateForInput = (date: string | null | undefined): string => {
     if (!date) return "";
@@ -261,12 +276,84 @@ const Profile = () => {
           },
         };
         setProfileData((prev) => ({ ...prev, ...userData }));
+        
+        // Check if assessment is available from user data
+        console.log("Checking for assessment:", response.user);
+        if (response.user?.assessment && response.user.assessment.hasAssessment && response.user.assessment.status == "created") {
+          setHasAssessmentAvailable(true);
+          setAssessmentSessionId(response.user.assessment.sessionId);
+        }
       } catch (error) {
         toast.error("Failed to fetch user data. Please try again later.");
       }
     };
     fetchUserData();
   }, [navigate]);
+
+  
+  useEffect(() => {
+    const fetchSkills = async () => {
+      try {
+        const response = await getStaticSkills();
+        if (response.data && Array.isArray(response.data)) {
+          // Handle skills that may come as objects with label/value or as strings
+          const formattedSkills = response.data.map((skill: any) => {
+            if (typeof skill === 'string') {
+              return { value: skill, label: skill };
+            } else if (skill && typeof skill === 'object' && skill.value && skill.label) {
+              // Already in the correct format
+              return { value: skill.value, label: skill.label };
+            } else if (skill && typeof skill === 'object' && (skill.value || skill.label)) {
+              // Handle cases where only one property exists
+              const value = skill.value || skill.label || String(skill);
+              const label = skill.label || skill.value || String(skill);
+              return { value, label };
+            } else {
+              // Fallback for any other format
+              const skillStr = String(skill);
+              return { value: skillStr, label: skillStr };
+            }
+          });
+          setSkillOptions(formattedSkills);
+        }
+      } catch (error) {
+        console.error("Failed to fetch skills:", error);
+      }
+    };  
+    fetchSkills();
+  }, []);
+
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const response = await getStaticRoles();
+        if (response.data && Array.isArray(response.data)) {
+          // Handle roles that may come as objects with label/value or as strings
+          const formattedRoles = response.data.map((role: any) => {
+            if (typeof role === 'string') {
+              return { value: role, label: role };
+            } else if (role && typeof role === 'object' && role.value && role.label) {
+              // Already in the correct format
+              return { value: role.value, label: role.label };
+            } else if (role && typeof role === 'object' && (role.value || role.label)) {
+              // Handle cases where only one property exists
+              const value = role.value || role.label || String(role);
+              const label = role.label || role.value || String(role);
+              return { value, label };
+            } else {
+              // Fallback for any other format
+              const roleStr = String(role);
+              return { value: roleStr, label: roleStr };
+            }
+          });
+          setRoleOptions(formattedRoles);
+        }
+      } catch (error) {
+        console.error("Failed to fetch roles:", error);
+      }
+    };  
+    fetchRoles();
+  }, []);
 
   // Scroll spy effect to track active section
   useEffect(() => {
@@ -385,6 +472,7 @@ const Profile = () => {
     "Dogri",
     "Sanskrit",
   ];
+
 
   const handleInputChange = (field: string, value: string) => {
     if (field.startsWith("profile.address.")) {
@@ -728,6 +816,10 @@ const Profile = () => {
     if (profileData.profile?.address?.zipCode?.trim()) completedFields++;
     if (profileData.profile?.address?.country?.trim()) completedFields++;
 
+    // Expected Role (1 field)
+    totalFields += 1;
+    if (profileData.profile?.preferredJobRole?.trim()) completedFields++;
+
     // Skills (1 field - at least one skill)
     totalFields += 1;
     if (profileData.profile?.skills?.length > 0) completedFields++;
@@ -756,7 +848,26 @@ const Profile = () => {
   };
 
   const handleSave = async () => {
+    if (isSaving) return; // Prevent multiple submissions
+    
     try {
+      setIsSaving(true);
+      
+      // Validate required fields
+      if (!profileData.profile.preferredJobRole || !profileData.profile.preferredJobRole.trim()) {
+        toast.error("Expected Role is required. Please select or enter your expected role.");
+        scrollToSection("skills");
+        setIsSaving(false);
+        return;
+      }
+
+      if (!Array.isArray(profileData.profile.skills) || profileData.profile.skills.length === 0) {
+        toast.error("Skills are required. Please add at least one skill.");
+        scrollToSection("skills");
+        setIsSaving(false);
+        return;
+      }
+
       const payload = { ...profileData,email:profileData.email,mobile:profileData.mobile };
       
       // Validate education entries: check if any entry has empty fields
@@ -925,7 +1036,7 @@ const Profile = () => {
       }
       console.log(payload,"payload");
       const response = await updateProfile(payload);
-
+      console.log("Updated user data:", response);
       if (!response.success) {
         throw new Error(response.message || "Failed to update profile");
       }
@@ -968,9 +1079,36 @@ const Profile = () => {
       };
 
       setProfileData(updatedUserData);
+      
       toast.success("Profile updated successfully!");
+      console.log(response,"response.data<<",response.success && response.data.assessmentCreated && response.data.sessionID);
+
+      // Check if assessment is available
+      console.log("Save response data:", response.data);
+      if(response.success && response.data?.sessionID) {
+        setHasAssessmentAvailable(true);
+        setAssessmentSessionId(response.data.sessionID);
+        console.log("Assessment sessionID set:", response.data.sessionID);
+        
+        if(response.data.assessmentCreated) {
+          // Navigate to success page for newly created assessment
+          navigate.push(`/profile-success?sessionId=${response.data.sessionID}`);
+        }
+      } else if(response.success && response.data?.assessmentCreated) {
+        // Assessment was created but no sessionID yet
+        setHasAssessmentAvailable(true);
+        console.log("Assessment created but no sessionID");
+      } else if(response.success && response.data?.sessionId) {
+        // Try alternative property name
+        setHasAssessmentAvailable(true);
+        setAssessmentSessionId(response.data.sessionId);
+        console.log("Assessment sessionId set (alt):", response.data.sessionId);
+      }
+      
     } catch (error) {
       toast.error("Failed to update profile. Please try again later.");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -1030,6 +1168,34 @@ const Profile = () => {
                       </button>
                     );
                   })}
+                </nav>
+              </div>
+              
+              {/* Interviews Quick Links */}
+              <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-4 mt-4">
+                <h3 className="text-base font-semibold text-gray-900 mb-4">Interviews</h3>
+                <nav className="space-y-1">
+                  <button
+                    onClick={() => navigate.push("/interviews")}
+                    className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg transition-all duration-200 text-left text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                  >
+                    <ListTodo className="w-4 h-4 flex-shrink-0 text-gray-500" />
+                    <span className="text-sm">All Interviews</span>
+                  </button>
+                  <button
+                    onClick={() => navigate.push("/interviews?filter=created")}
+                    className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg transition-all duration-200 text-left text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                  >
+                    <Circle className="w-4 h-4 flex-shrink-0 text-gray-500" />
+                    <span className="text-sm">Pending</span>
+                  </button>
+                  <button
+                    onClick={() => navigate.push("/interviews?filter=completed")}
+                    className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg transition-all duration-200 text-left text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                  >
+                    <CheckCircle className="w-4 h-4 flex-shrink-0 text-gray-500" />
+                    <span className="text-sm">Completed</span>
+                  </button>
                 </nav>
               </div>
             </div>
@@ -1159,13 +1325,54 @@ const Profile = () => {
                 </p>
               </div>
 
+              {/* AI Assessment Section */}
+              {(hasAssessmentAvailable ) && (
+                <div className="p-4 border border-dashed border-orange-300 rounded-2xl w-full max-w-full overflow-x-hidden bg-gradient-to-r from-orange-50 to-white">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div className="flex items-center space-x-3">
+                      <div className="p-2 bg-orange-100 rounded-lg">
+                        <Brain className="h-8 w-8 text-orange-600" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-gray-900">AI Assessment Available</h3>
+                        <p className="text-sm text-gray-600">
+                          {assessmentSessionId 
+                            ? "A personalized AI assessment has been generated based on your profile. Take it now to showcase your skills!"
+                            : "Complete your profile and save to generate a personalized AI assessment based on your skills and role."}
+                        </p>
+                      </div>
+                    </div>
+                    <Button
+                      onClick={() => {
+                        if (assessmentSessionId && process.env.NEXT_PUBLIC_AI_ASSESSMENT_URL) {
+                          window.open(`${process.env.NEXT_PUBLIC_AI_ASSESSMENT_URL}interview?sessionId=${assessmentSessionId}`, '_blank');
+                        } else {
+                          navigate.push("/assessments");
+                        }
+                      }}
+                      className="rounded-2xl bg-orange-500 hover:bg-orange-600 text-white w-full sm:w-auto flex items-center gap-2"
+                      disabled={!assessmentSessionId}
+                    >
+                      {assessmentSessionId ? (
+                        <>
+                          Start Assessment
+                          <ArrowRight className="h-4 w-4" />
+                        </>
+                      ) : (
+                        "View Assessments"
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              )}
+
                  
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Full Name</Label>
                   <Input
                     id="name"
-                    value={profileData.name}
+                    value={profileData.name || ""}
                     onChange={(e) => handleInputChange("name", e.target.value)}
                     className="rounded-lg border-gray-300 focus:border-orange-500 focus:outline-none focus:ring-0 shadow-none w-full"
                   />
@@ -1176,7 +1383,7 @@ const Profile = () => {
                     id="email"
                     readOnly
                     type="email"
-                    value={profileData.email}
+                    value={profileData.email || ""}
                     onChange={(e) => handleInputChange("email", e.target.value)}
                     className="rounded-lg cursor-not-allowed bg-gray-100 border-gray-300 w-full"
                   />
@@ -1185,7 +1392,7 @@ const Profile = () => {
                   <Label htmlFor="mobile">Phone Number</Label>
                   <Input
                     id="mobile"
-                    value={profileData.mobile}
+                    value={profileData.mobile || ""}
                     readOnly
                     onChange={(e) => handleInputChange("mobile", e.target.value)}
                     className="rounded-lg cursor-not-allowed bg-gray-100 border-gray-300 w-full"
@@ -1197,7 +1404,7 @@ const Profile = () => {
                     id="dateOfBirth"
                     type="date"
                     readOnly
-                    value={profileData.profile.dateOfBirth}
+                    value={profileData.profile.dateOfBirth || ""}
                     onChange={(e) =>
                       handleInputChange("profile.dateOfBirth", e.target.value)
                     }
@@ -1207,7 +1414,7 @@ const Profile = () => {
                 <div className="space-y-2">
                   <Label htmlFor="gender">Gender</Label>
                   <Select
-                    value={profileData.profile.gender}
+                    value={profileData.profile.gender || ""}
                     onValueChange={(value) =>
                       handleInputChange("profile.gender", value)
                     }
@@ -1229,7 +1436,7 @@ const Profile = () => {
                 <Label htmlFor="bio">Bio</Label>
                 <Textarea
                   id="bio"
-                  value={profileData.profile.bio}
+                  value={profileData.profile.bio || ""}
                   onChange={(e) => handleInputChange("profile.bio", e.target.value)}
                   className="rounded-lg min-h-[100px] border-gray-300 focus:border-orange-500 focus:outline-none focus:ring-0 shadow-none w-full"
                   placeholder="Tell us about yourself..."
@@ -1334,7 +1541,7 @@ const Profile = () => {
                   <Label htmlFor="street">Street Address</Label>
                   <Input
                     id="street"
-                    value={profileData.profile.address?.street}
+                    value={profileData.profile.address?.street || ""}
                     onChange={(e) =>
                       handleInputChange("profile.address.street", e.target.value)
                     }
@@ -1345,7 +1552,7 @@ const Profile = () => {
                   <Label htmlFor="city">City</Label>
                   <Input
                     id="city"
-                    value={profileData.profile.address?.city}
+                    value={profileData.profile.address?.city || ""}
                     onChange={(e) =>
                       handleInputChange("profile.address.city", e.target.value)
                     }
@@ -1356,7 +1563,7 @@ const Profile = () => {
                   <Label htmlFor="state">State</Label>
                   <Input
                     id="state"
-                    value={profileData.profile.address?.state}
+                    value={profileData.profile.address?.state || ""}
                     onChange={(e) =>
                       handleInputChange("profile.address.state", e.target.value)
                     }
@@ -1367,7 +1574,7 @@ const Profile = () => {
                   <Label htmlFor="zipCode">ZIP Code</Label>
                   <Input
                     id="zipCode"
-                    value={profileData.profile.address?.zipCode}
+                    value={profileData.profile.address?.zipCode || ""}
                     onChange={(e) =>
                       handleInputChange("profile.address.zipCode", e.target.value)
                     }
@@ -1378,7 +1585,7 @@ const Profile = () => {
                   <Label htmlFor="country">Country</Label>
                   <Input
                     id="country"
-                    value={profileData.profile.address?.country}
+                    value={profileData.profile.address?.country || ""}
                     onChange={(e) =>
                       handleInputChange("profile.address.country", e.target.value)
                     }
@@ -1396,37 +1603,280 @@ const Profile = () => {
                 <span>Skills</span>
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4 overflow-x-hidden px-4 sm:p-6">
-              <div className="flex flex-wrap gap-2">
-                {profileData.profile.skills?.map((skill, index) => (
-                  <Badge
-                    key={index}
-                    variant="secondary"
-                    className="rounded-full px-3 py-1 bg-orange-100 text-orange-800"
-                  >
-                    {skill}
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => removeSkill(skill)}
-                      className="ml-2 h-4 w-4 p-0 hover:bg-transparent"
-                    >
-                      <X className="h-3 w-3" />
-                    </Button>
-                  </Badge>
-                ))}
+            <CardContent className="space-y-4 overflow-x-hidden px-4 sm:p-6 pt-0">
+              <div className="space-y-2">
+                <Label htmlFor="expectedRole">Expected Role <span className="text-red-500">*</span></Label>
+                <div className="relative" style={{ zIndex: 30 }}>
+                  <CreatableSelect
+                    value={profileData.profile.preferredJobRole ? { 
+                      value: profileData.profile.preferredJobRole, 
+                      label: profileData.profile.preferredJobRole 
+                    } : null}
+                    onChange={(selectedOption) => {
+                      const value = selectedOption ? selectedOption.value : "";
+                      handleInputChange("profile.preferredJobRole", value);
+                    }}
+                    onCreateOption={(inputValue) => {
+                      handleInputChange("profile.preferredJobRole", inputValue);
+                    }}
+                    onInputChange={(inputValue, { action }) => {
+                      if (action === 'input-change' && inputValue) {
+                        // Fetch roles with search query
+                        const fetchRolesWithSearch = async () => {
+                          try {
+                            const response = await getStaticRoles(inputValue);
+                            if (response.data && Array.isArray(response.data)) {
+                              const formattedRoles = response.data.map((role: any) => {
+                                if (typeof role === 'string') {
+                                  return { value: role, label: role };
+                                } else if (role && typeof role === 'object' && role.value && role.label) {
+                                  return { value: role.value, label: role.label };
+                                } else if (role && typeof role === 'object' && (role.value || role.label)) {
+                                  const value = role.value || role.label || String(role);
+                                  const label = role.label || role.value || String(role);
+                                  return { value, label };
+                                } else {
+                                  const roleStr = String(role);
+                                  return { value: roleStr, label: roleStr };
+                                }
+                              });
+                              setRoleOptions(formattedRoles);
+                            }
+                          } catch (error) {
+                            console.error("Failed to fetch roles with search:", error);
+                          }
+                        };
+                        fetchRolesWithSearch();
+                      }
+                    }}
+                    options={roleOptions}
+                    placeholder="Select or type your expected role"
+                    isClearable
+                    isSearchable
+                    className="react-select-container"
+                    classNamePrefix="react-select"
+                    menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
+                    menuPosition="fixed"
+                    styles={{
+                      control: (base, state) => ({
+                        ...base,
+                        borderColor: state.isFocused ? "#F97316" : "#D1D5DB",
+                        boxShadow: state.isFocused
+                          ? "0 0 0 2px rgba(249, 115, 22, 0.4)"
+                          : "none",
+                        "&:hover": {
+                          borderColor: state.isFocused ? "#F97316" : "#FB923C",
+                        },
+                        borderWidth: "1px",
+                        borderRadius: "0.5rem",
+                        minHeight: "42px",
+                        backgroundColor: "white",
+                      }),
+                      option: (base, state) => ({
+                        ...base,
+                        backgroundColor: state.isSelected
+                          ? "#F97316"
+                          : state.isFocused
+                            ? "#FED7AA"
+                            : "white",
+                        color: state.isSelected ? "white" : "#1F2937",
+                        cursor: "pointer",
+                        "&:active": {
+                          backgroundColor: "#F97316",
+                          color: "white",
+                        },
+                      }),
+                      placeholder: (base) => ({
+                        ...base,
+                        color: "#9CA3AF",
+                      }),
+                      menuPortal: (base) => ({
+                        ...base,
+                        zIndex: 40,
+                      }),
+                      menu: (base) => ({
+                        ...base,
+                        zIndex: 40,
+                        borderRadius: "0.5rem",
+                        boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+                      }),
+                      input: (base) => ({
+                        ...base,
+                        color: "#1F2937",
+                      }),
+                      singleValue: (base) => ({
+                        ...base,
+                        color: "#1F2937",
+                      }),
+                    }}
+                  />
+                </div>
               </div>
-              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-                <Input
-                  value={newSkill}
-                  onChange={(e) => setNewSkill(e.target.value)}
-                  placeholder="Add a skill"
-                  className="rounded-lg border-gray-300 focus:border-orange-500 flex-1"
-                  onKeyPress={(e) => e.key === "Enter" && addSkill()}
-                />
-                <Button onClick={addSkill} className="rounded-2xl w-full sm:w-auto">
-                  <Plus className="h-4 w-4" />
-                </Button>
+              <div className="space-y-2">
+                <Label htmlFor="skills">Skills <span className="text-red-500">*</span></Label>
+                <div className="relative" style={{ zIndex: 30 }}>
+                  <CreatableSelect
+                    value={(() => {
+                      const skills = profileData.profile?.skills;
+                      if (!Array.isArray(skills) || skills.length === 0) {
+                        return [];
+                      }
+                      return skills
+                        .filter((skill: any) => skill != null && typeof skill === 'string')
+                        .map((skill: string) => ({
+                          value: String(skill),
+                          label: String(skill)
+                        }));
+                    })()}
+                    onChange={(selectedOptions) => {
+                      if (Array.isArray(selectedOptions)) {
+                        const skillsArray = selectedOptions.map((option: any) => option.value);
+                        setProfileData((prev) => ({
+                          ...prev,
+                          profile: {
+                            ...prev.profile,
+                            skills: skillsArray,
+                          },
+                        }));
+                      } else {
+                        setProfileData((prev) => ({
+                          ...prev,
+                          profile: {
+                            ...prev.profile,
+                            skills: [],
+                          },
+                        }));
+                      }
+                    }}
+                    onCreateOption={(inputValue) => {
+                      const trimmedValue = inputValue.trim();
+                      const currentSkills = Array.isArray(profileData.profile.skills) 
+                        ? profileData.profile.skills 
+                        : [];
+                      if (trimmedValue && !currentSkills.includes(trimmedValue)) {
+                        setProfileData((prev) => ({
+                          ...prev,
+                          profile: {
+                            ...prev.profile,
+                            skills: [...currentSkills, trimmedValue],
+                          },
+                        }));
+                        // Add the new skill to options
+                        setSkillOptions((prev) => [
+                          ...prev,
+                          { value: trimmedValue, label: trimmedValue }
+                        ]);
+                        toast.success("Skill added successfully!");
+                      }
+                    }}
+                    onInputChange={(inputValue, { action }) => {
+                      if (action === 'input-change' && inputValue) {
+                        // Fetch skills with search query
+                        const fetchSkillsWithSearch = async () => {
+                          try {
+                            const response = await getStaticSkills(inputValue);
+                            if (response.data && Array.isArray(response.data)) {
+                              const formattedSkills = response.data.map((skill: any) => {
+                                if (typeof skill === 'string') {
+                                  return { value: skill, label: skill };
+                                } else if (skill && typeof skill === 'object' && skill.value && skill.label) {
+                                  return { value: skill.value, label: skill.label };
+                                } else if (skill && typeof skill === 'object' && (skill.value || skill.label)) {
+                                  const value = skill.value || skill.label || String(skill);
+                                  const label = skill.label || skill.value || String(skill);
+                                  return { value, label };
+                                } else {
+                                  const skillStr = String(skill);
+                                  return { value: skillStr, label: skillStr };
+                                }
+                              });
+                              setSkillOptions(formattedSkills);
+                            }
+                          } catch (error) {
+                            console.error("Failed to fetch skills with search:", error);
+                          }
+                        };
+                        fetchSkillsWithSearch();
+                      }
+                    }}
+                    options={skillOptions}
+                    placeholder="Select or type skills to add"
+                    isClearable
+                    isSearchable
+                    isMulti
+                    className="react-select-container"
+                    classNamePrefix="react-select"
+                    menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
+                    menuPosition="fixed"
+                    styles={{
+                      control: (base, state) => ({
+                        ...base,
+                        borderColor: state.isFocused ? "#F97316" : "#D1D5DB",
+                        boxShadow: state.isFocused
+                          ? "0 0 0 2px rgba(249, 115, 22, 0.4)"
+                          : "none",
+                        "&:hover": {
+                          borderColor: state.isFocused ? "#F97316" : "#FB923C",
+                        },
+                        borderWidth: "1px",
+                        borderRadius: "0.5rem",
+                        minHeight: "42px",
+                        backgroundColor: "white",
+                      }),
+                      option: (base, state) => ({
+                        ...base,
+                        backgroundColor: state.isSelected
+                          ? "#F97316"
+                          : state.isFocused
+                            ? "#FED7AA"
+                            : "white",
+                        color: state.isSelected ? "white" : "#1F2937",
+                        cursor: "pointer",
+                        "&:active": {
+                          backgroundColor: "#F97316",
+                          color: "white",
+                        },
+                      }),
+                      placeholder: (base) => ({
+                        ...base,
+                        color: "#9CA3AF",
+                      }),
+                      multiValue: (base) => ({
+                        ...base,
+                        backgroundColor: "#FFEAD6",
+                        borderRadius: "0.5rem",
+                      }),
+                      multiValueLabel: (base) => ({
+                        ...base,
+                        color: "#F97316",
+                        fontWeight: "500",
+                      }),
+                      multiValueRemove: (base) => ({
+                        ...base,
+                        color: "#F97316",
+                        borderRadius: "0 0.5rem 0.5rem 0",
+                        "&:hover": {
+                          backgroundColor: "#F97316",
+                          color: "white",
+                        },
+                      }),
+                      menuPortal: (base) => ({
+                        ...base,
+                        zIndex: 30,
+                      }),
+                      menu: (base) => ({
+                        ...base,
+                        zIndex: 30,
+                        borderRadius: "0.5rem",
+                        boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+                      }),
+                      input: (base) => ({
+                        ...base,
+                        color: "#1F2937",
+                      }),
+                    }}
+                  />
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -1818,10 +2268,20 @@ const Profile = () => {
           <div className="flex justify-center">
             <Button
               onClick={handleSave}
-              className="rounded-2xl px-8 py-3 text-lg bg-orange-600 text-white hover:bg-orange-700"
+              disabled={isSaving}
+              className="rounded-2xl px-8 py-3 text-lg bg-orange-600 text-white hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <Save className="h-5 w-5 mr-2" />
-              Save Profile
+              {isSaving ? (
+                <>
+                  <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Save className="h-5 w-5 mr-2" />
+                  Save Profile
+                </>
+              )}
             </Button>
           </div>
             </div>

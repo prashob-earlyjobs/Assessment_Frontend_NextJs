@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Button } from "../app/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "../app/components/ui/toggle-group";
-import { Briefcase, ClipboardCheck, FileText, LogOut, LogIn, Menu, X } from "lucide-react";
+import { Briefcase, ClipboardCheck, FileText, LogOut, LogIn, Menu, X, Video } from "lucide-react";
 import Footer from "./components/pages/footer";
 import { useRouter, usePathname } from "next/navigation";
 import ApplyJobs from "./components/pages/ApplyJob";
@@ -26,7 +26,7 @@ import { userLogout } from "../app/components/services/servicesapis";
 const Index = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const activeSection = pathname === "/" ? "apply" : pathname.slice(1) || "apply";
+  const activeSection = pathname === "/" ? "apply" : pathname === "/interviews" ? "interviews" : pathname === "/skill-assessments" ? "assessments" : pathname.slice(1) || "apply";
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -55,7 +55,7 @@ const Index = () => {
 
   const handleToggleChange = (value: string) => {
     if (value) {
-      const route = value === "assessments" ? "/skill-assessments" : value === "apply" ? "/" : `/${value}`;
+      const route = value === "assessments" ? "/skill-assessments" : value === "apply" ? "/" : value === "interviews" ? "/interviews" : `/${value}`;
       router.push(route);
     }
   };
@@ -132,6 +132,14 @@ const Index = () => {
             >
               <FileText className="h-4 w-4" />
               Resume
+            </ToggleGroupItem>
+            <ToggleGroupItem
+              value="interviews"
+              className="flex items-center gap-2 px-4 py-2.5 lg:px-6 lg:py-3 rounded-full data-[state=on]:bg-gradient-to-r data-[state=on]:from-orange-500 data-[state=on]:to-orange-600 data-[state=on]:text-white data-[state=on]:shadow-md text-gray-700 hover:text-orange-600 transition-all duration-300 font-medium"
+              aria-label="Interviews"
+            >
+              <Video className="h-4 w-4" />
+              Interviews
             </ToggleGroupItem>
           </ToggleGroup>
         </div>
@@ -320,6 +328,14 @@ const Index = () => {
           >
             <FileText className="h-4 w-4" />
             Resume
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            value="interviews"
+            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-full data-[state=on]:bg-gradient-to-r data-[state=on]:from-orange-500 data-[state=on]:to-orange-600 data-[state=on]:text-white data-[state=on]:shadow-md text-gray-700 transition-all duration-300 font-medium text-sm"
+            aria-label="Interviews"
+          >
+            <Video className="h-4 w-4" />
+            Interviews
           </ToggleGroupItem>
         </ToggleGroup>
       </div>

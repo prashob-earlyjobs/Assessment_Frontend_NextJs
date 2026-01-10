@@ -976,6 +976,18 @@ export const getPaidAssessments = async (userId) => {
   }
 };
 
+export const getUserInterviews = async (userId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/interviews/getUserInterviews/${userId}`
+    );
+    return response.data;
+  } catch (error) {
+    toast.error(`${error?.response?.data?.message}.`);
+    throw error;
+  }
+};
+
 export const getAssessmentsVelox = async () => {
   try {
     const response = await axiosInstance.get(`/admin/getAssessmentsVelox`);
@@ -1015,6 +1027,18 @@ export const getTranscript = async (interviewId: string) => {
     return response.data;
   } catch (error) {
     toast.error(`${error?.response?.data?.message}.`);
+  }
+};
+
+export const getInterviewReport = async (sessionId: string) => {
+  try {
+    const response = await axiosInstance.get(
+      `/interviews/getInterviewReport/${sessionId}`
+    );
+    return response.data;
+  } catch (error) {
+    toast.error(`${error?.response?.data?.message}.`);
+    throw error;
   }
 };
 

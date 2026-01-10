@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Button } from "../app/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "../app/components/ui/toggle-group";
-import { Briefcase, ClipboardCheck, FileText } from "lucide-react";
+import { Briefcase, ClipboardCheck, FileText, Video } from "lucide-react";
 import ApplyJobs from "./components/pages/ApplyJob";
 import Footer from "./components/pages/footer";
 import { useRouter, usePathname } from "next/navigation";
@@ -11,7 +11,7 @@ import Navbar from "./components/pages/navbar";
 const ApplyPage = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const activeSection = pathname === "/" ? "apply" : pathname.slice(1) || "apply";
+  const activeSection = pathname === "/" ? "apply" : pathname === "/interviews" ? "interviews" : pathname === "/skill-assessments" ? "assessments" : pathname.slice(1) || "apply";
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
 
   const handleScroll = useCallback(() => {
@@ -35,7 +35,7 @@ const ApplyPage = () => {
 
   const handleToggleChange = (value: string) => {
   if (value) {
-  const route = value === "assessments" ? "/skill-assessments" : value === "apply" ? "/" : `/${value}`;
+  const route = value === "assessments" ? "/skill-assessments" : value === "apply" ? "/" : value === "interviews" ? "/interviews" : `/${value}`;
   router.push(route);
 }
   };
@@ -110,6 +110,14 @@ const ApplyPage = () => {
               <FileText className="h-4 w-4" />
               Resume
             </ToggleGroupItem>
+            <ToggleGroupItem
+              value="interviews"
+              className="flex items-center gap-2 px-6 py-3 rounded-xl data-[state=on]:bg-orange-500 data-[state=on]:text-white data-[state=on]:shadow-lg text-gray-600 hover:text-orange-600 transition-all duration-300"
+              aria-label="Interviews"
+            >
+              <Video className="h-4 w-4" />
+              Interviews
+            </ToggleGroupItem>
           </ToggleGroup>
         </div>
 
@@ -154,6 +162,14 @@ const ApplyPage = () => {
             >
               <FileText className="h-4 w-4" />
               Resume
+            </ToggleGroupItem>
+            <ToggleGroupItem
+              value="interviews"
+              className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl data-[state=on]:bg-orange-500 data-[state=on]:text-white text-gray-600 transition-all duration-300"
+              aria-label="Interviews"
+            >
+              <Video className="h-4 w-4" />
+              Interviews
             </ToggleGroupItem>
           </ToggleGroup>
         </div>
