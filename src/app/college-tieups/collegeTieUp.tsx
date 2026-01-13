@@ -86,14 +86,14 @@ const CollegeTieUp: React.FC = () => {
               >
                 {college.logoUrl ? (
                   <img
-                    src={college.logoUrl}
-                    alt={`${college.collegeName} logo`}
-                    className="mx-auto h-20 mb-4 object-contain"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = placeholderImage;
-                    }}
-                  />
+                  src={college.logoUrl}
+                  alt={`${college.collegeName} logo`}
+                  className="mx-auto h-30 w-30 scale-120"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = placeholderImage;
+                  }}
+                />
                 ) : (
                   <img
                     src={placeholderImage}
