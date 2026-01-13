@@ -14,6 +14,7 @@ import {
   Tag,
   ChevronLeft,
   ChevronRight,
+  GraduationCap,
 } from 'lucide-react';
 import { useAdmin } from '../../context/AdminContext';
 
@@ -53,6 +54,12 @@ const menuItems = [
     url: '/admin/team',
     icon: UserCircle2,
     permission: 'manage_team_members',
+  },
+  {
+    title: 'College Tieups',
+    url: '/admin/college-tieups',
+    icon: GraduationCap,
+    permission: 'manage_college_tieups',
   },
   {
     title: 'Transactions',

@@ -648,6 +648,7 @@ export default function PublicCompanyOnboard({ onBack, onSubmit, refreshCandidat
           hrContactCountryCode,
           skills: formData.skills.length > 0 ? formData.skills : ["General"],
           spokenLanguages: formData.spokenLanguages.length > 0 ? formData.spokenLanguages : ["English"],
+          isJobDetailsAdded: true,
         };
 
         // Use default logo if no logo is uploaded

@@ -42,7 +42,7 @@ import Navbar from "../components/pages/navbar";
 import Header from "../components/pages/header";
 import Footer from "../components/pages/footer";
 import { sendOtptoMobile, verifyOtpMobile } from "../components/services/servicesapis";
-import { createCompanyOnboarding } from "../components/services/companiesapi";
+import { createCompanyOnboarding, updateCompanyOnboarding } from "../components/services/companiesapi";
 
 // Default logo URL
 const DEFAULT_LOGO_URL = "https://res.cloudinary.com/dqsq020p0/image/upload/v1767614048/8015003_gdfrmc.png";
@@ -352,6 +352,22 @@ const FreeJobPostingPage = () => {
       
       // Get the record ID that was saved when form was submitted
       const recordId = (window as any).__pendingRecordId || null;
+      
+      // Update isOtpVerified to true if recordId exists
+      if (recordId) {
+        try {
+          console.log("Updating isOtpVerified to true for record:", recordId);
+          await updateCompanyOnboarding(recordId, {
+            isOtpVerified: true,
+            _silentSave: true, // Silent save to avoid showing toast
+          });
+          console.log("✅ isOtpVerified updated successfully");
+        } catch (updateError: any) {
+          console.error("❌ Error updating isOtpVerified:", updateError);
+          // Don't block the flow if update fails, but log the error
+          // The user can still proceed to the job posting page
+        }
+      }
       
       // Redirect with query parameters to pre-fill the form
       const params = new URLSearchParams({

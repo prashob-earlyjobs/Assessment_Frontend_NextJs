@@ -42,6 +42,7 @@ export const AdminProvider: React.FC<AdminProviderProps> = ({ children }) => {
         'manage_assessments',
         'manage_franchises',
         'manage_team_members',
+        'manage_college_tieups',
         'view_analytics',
         'system_settings',
         'candidate_transactions',
