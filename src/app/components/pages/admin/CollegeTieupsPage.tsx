@@ -330,8 +330,12 @@ const CollegeTieupsPage: React.FC = () => {
         // For edits without new file, send existing logo URL
         payload.logoUrl = formData.logoUrl;
       }
-
-      const response = await axiosInstance.post(url, payload);
+      let response;
+      if (selectedCollege) {
+        response = await axiosInstance.put(url, payload);
+      } else {
+        response = await axiosInstance.post(url, payload);
+      }
 
       if (response.status === 200 || response.status === 201) {
         toast.success(
