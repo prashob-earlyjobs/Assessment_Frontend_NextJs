@@ -2,14 +2,16 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { Button } from "../ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Menu, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { Menu, X, ChevronLeft, ChevronRight, Search, Filter, Star, Award, Briefcase, MapPin, TrendingUp } from "lucide-react";
 import Footer from "./footer";
 import Navbar from "./navbar";
 
 export default function BrowseCandidatesClient() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [scoreFilter, setScoreFilter] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [candidates, setCandidates] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,7 +26,18 @@ export default function BrowseCandidatesClient() {
     const fetchCandidates = async () => {
       try {
         setLoading(true);
-        const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/browseCandidates/candidates?page=${currentPage}&limit=${itemsPerPage}`;
+        // Build query parameters
+        const params = new URLSearchParams({
+          page: currentPage.toString(),
+          limit: itemsPerPage.toString(),
+        });
+        
+        // Add scoreFilter if it's selected and not "all"
+        if (scoreFilter && scoreFilter !== "all") {
+          params.append("scoreFilter", scoreFilter);
+        }
+        
+        const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/browseCandidates/candidates?${params.toString()}`;
         const response = await fetch(url, {
           method: "GET",
           headers: {
@@ -36,80 +49,34 @@ export default function BrowseCandidatesClient() {
           throw new Error(errorData.message || `Failed to fetch candidates (Status: ${response.status})`);
         }
         const data = await response.json();
-        if (data.success) {
-          const filteredCandidates = [];
-          for (const candidate of data.data) {
-            if (candidate.assessmentsPaid && candidate.assessmentsPaid.length > 0) {
-              let hasValidResults = false;
-              let firstAssessmentTitle = "unknown-assessment"; // Default fallback title
+        
+        if (data.success && data.data && data.data.length > 0) {
+          // Process candidates with assessment title from existing data
+          const processedCandidates = data.data
+            .filter((candidate) => candidate.assessmentsPaid && candidate.assessmentsPaid.length > 0)
+            .map((candidate) => {
+              // Use assessment title from candidate data if available, otherwise use default
+              const firstAssessment = candidate.assessmentsPaid[0];
+              const firstAssessmentTitle = firstAssessment?.assessmentTitle || 
+                                          firstAssessment?.title || 
+                                          "Assessment";
+              
+              return {
+                ...candidate,
+                firstAssessmentTitle,
+              };
+            });
 
-              // Fetch assessment titles for the candidate
-              try {
-                const titleUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/browseCandidates/assessments/${candidate._id}`;
-                const titleResponse = await fetch(titleUrl, {
-                  method: "GET",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                });
-                if (titleResponse.ok) {
-                  const titleData = await titleResponse.json();
-                  const titles = titleData.data.reduce((acc, assessment) => {
-                    acc[assessment._id] = assessment.title;
-                    return acc;
-                  }, {});
-                  // Get the title of the first assessment from assessmentsPaid
-                  if (candidate.assessmentsPaid[0]?.assessmentId) {
-                    firstAssessmentTitle = titles[candidate.assessmentsPaid[0].assessmentId] || "unknown-assessment";
-                  }
-                }
-              } catch (err) {
-                console.warn(`Error fetching assessment titles for candidate ${candidate._id}: ${err.message}`);
-              }
+          setCandidates(processedCandidates);
 
-              for (const assessment of candidate.assessmentsPaid) {
-                const interviewId = assessment.interviewId;
-                if (!interviewId) continue;
-
-                try {
-                  const resultUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/browseCandidates/getResultForCandidateAssessment/${interviewId}`;
-                  const resultResponse = await fetch(resultUrl, {
-                    method: "GET",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                  });
-                  if (resultResponse.ok) {
-                    const resultText = await resultResponse.text();
-                    const resultData = resultText ? JSON.parse(resultText) : {};
-                    if (resultData.success && resultData.data?.report?.reportSkills) {
-                      hasValidResults = true;
-                      break;
-                    }
-                  }
-                } catch (err) {
-                  console.warn(`Error fetching results for candidate ${candidate._id}, interview ${interviewId}: ${err.message}`);
-                }
-              }
-              if (hasValidResults) {
-                filteredCandidates.push({ ...candidate, firstAssessmentTitle });
-              }
-            }
-          }
-          setCandidates(filteredCandidates);
-
-          // Set pagination info from API response
-          const apiTotal = data.total || data.totalCount || data.totalCandidates || filteredCandidates.length;
-          if (apiTotal !== undefined) {
-            setTotalCandidates(apiTotal);
-            setTotalPages(Math.ceil(apiTotal / itemsPerPage));
-          } else {
-            // Fallback: use filtered candidates length
-            setTotalCandidates(filteredCandidates.length);
-            setTotalPages(Math.ceil(filteredCandidates.length / itemsPerPage));
-          }
+          // Set pagination from API response
+          const apiTotal = data.total || data.totalCount || data.totalCandidates || processedCandidates.length;
+          setTotalCandidates(apiTotal);
+          setTotalPages(Math.ceil(apiTotal / itemsPerPage));
         } else {
-          throw new Error(data.message || "Error fetching candidates");
+          setCandidates([]);
+          setTotalCandidates(0);
+          setTotalPages(1);
         }
       } catch (err) {
         setError(err.message);
@@ -119,13 +86,14 @@ export default function BrowseCandidatesClient() {
       }
     };
 
+ 
     fetchCandidates();
-  }, [currentPage, itemsPerPage]);
+  }, [currentPage, itemsPerPage, scoreFilter]);
 
-  // Reset to page 1 when search term changes
+  // Reset to page 1 when search term or score filter changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm]);
+  }, [searchTerm, scoreFilter]);
 
   const scrollToSection = (sectionId) => {
     const section = document.getElementById(sectionId);
@@ -163,8 +131,8 @@ export default function BrowseCandidatesClient() {
   };
 
   const getSkillsDisplay = (candidate) => {
-    if (candidate?.profile?.skills?.length > 0) {
-      return candidate.profile.skills.slice(0, 4);
+    if (candidate?.interviewSkills?.length > 0) {
+      return candidate.interviewSkills.slice(0, 4);
     }
     return ["Professional", "Reliable", "Dedicated"];
   };
@@ -192,6 +160,15 @@ export default function BrowseCandidatesClient() {
       .trim()
       .replace(/\s+/g, "-")
       .replace(/[^a-z0-9-]/g, "");
+  };
+
+  const formatName = (name) => {
+    if (!name) return "";
+    return name
+      .toLowerCase()
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
   };
 
   const handleViewProfile = (candidate) => {
@@ -292,266 +269,466 @@ export default function BrowseCandidatesClient() {
             </div>
           )}
         </div>
-      </header>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-orange-50 to-white">
-        <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8">
-            <div className="mb-6 lg:mb-0">
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">
-                Browse Candidate 
-              </h1>
-              <p className="text-lg text-gray-600 mt-2">
-                Discover talented professionals ready to join your team
-              </p>
-            </div>
-            <div className="w-full lg:w-96">
-              <input
-                type="text"
-                placeholder="Search by skills (e.g., Sales, Management, React, Data Science...)"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-3 border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent placeholder-gray-500 transition-all duration-200"
-                aria-label="Search candidates by skills"
-              />
+      </header> 
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-orange-50/30">
+        {/* Enhanced Header Section */}
+        <div className="bg-white border-b border-gray-100 shadow-sm">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+            <div className="flex flex-col space-y-6">
+              {/* Title Section */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <div className="h-12 w-1 bg-gradient-to-b from-orange-500 to-orange-600 rounded-full"></div>
+                  <div>
+                    <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900">
+                      Discover Top Talent
+                    </h1>
+                    <p className="text-base lg:text-lg text-gray-600 mt-2 font-medium">
+                      Connect with{" "}
+                      {/* <span className="text-orange-600 font-semibold">{totalCandidates}+</span>{" "} */}
+                      pre-assessed professionals ready to join your team
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Search and Filter Bar */}
+              <div className="flex flex-col lg:flex-row gap-4">
+                {/* Search Input */}
+                <div className="flex-1 relative group">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-orange-500 transition-colors" />
+                  <input
+                    type="text"
+                    placeholder="Search by skills, technologies, or expertise..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-12 pr-4 py-4 bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent focus:bg-white placeholder-gray-500 text-gray-900 font-medium transition-all duration-200 hover:border-gray-300"
+                    aria-label="Search candidates by skills"
+                  />
+                </div>
+
+                {/* Score Filter */}
+                <div className="w-full lg:w-64 relative">
+                  <Filter className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none z-10" />
+                  <Select value={scoreFilter} onValueChange={setScoreFilter}>
+                    <SelectTrigger className="w-full h-[56px] pl-12 pr-4 bg-gray-50 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent hover:border-gray-300 transition-all font-medium">
+                      <SelectValue placeholder="Filter by Score Range" />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-xl border-2 border-gray-100 shadow-xl">
+                      <SelectItem value="all" className="font-medium">
+                        <span className="flex items-center gap-2">
+                          <Star className="h-4 w-4 text-gray-400" />
+                          All Scores
+                        </span>
+                      </SelectItem>
+                      <SelectItem value="7+" className="font-medium">
+                        <span className="flex items-center gap-2">
+                          <Star className="h-4 w-4 text-orange-600" />
+                          Score: 7+
+                        </span>
+                      </SelectItem>
+
+                      <SelectItem value="4-6" className="font-medium">
+                        <span className="flex items-center gap-2">
+                          <Star className="h-4 w-4 text-orange-500" />
+                          Score: 4-6
+                        </span>
+                      </SelectItem>
+                      
+                      <SelectItem value="1-3" className="font-medium">
+                        <span className="flex items-center gap-2">
+                          <Star className="h-4 w-4 text-orange-400" />
+                          Score: 1-3
+                        </span>
+                      </SelectItem>
+                
+                      
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+           
             </div>
           </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+
           {loading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
               {[1, 2, 3, 4, 5, 6].map((i) => (
                 <div
                   key={i}
-                  className="rounded-2xl border-0 bg-white shadow-lg overflow-hidden"
+                  className="rounded-2xl bg-white border-2 border-gray-100 shadow-sm overflow-hidden"
                 >
-                  <div className="p-6 flex flex-col h-full animate-pulse">
-                    <div className="flex items-start gap-4 mb-4">
-                      <div className="flex-shrink-0">
-                        <div className="h-16 w-16 rounded-full bg-gray-200"></div>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="h-5 bg-gray-200 rounded w-3/4 mb-2"></div>
-                        <div className="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
-                        <div className="h-3 bg-gray-200 rounded w-full mb-2"></div>
-                        <div className="h-3 bg-gray-200 rounded w-5/6"></div>
-                      </div>
-                    </div>
-                    <div className="flex-1 space-y-4">
-                      <div>
-                        <div className="h-4 bg-gray-200 rounded w-20 mb-2"></div>
-                        <div className="flex flex-wrap gap-2">
-                          <div className="h-6 bg-gray-200 rounded w-16"></div>
-                          <div className="h-6 bg-gray-200 rounded w-20"></div>
-                          <div className="h-6 bg-gray-200 rounded w-14"></div>
-                          <div className="h-6 bg-gray-200 rounded w-18"></div>
+                  <div className="animate-pulse">
+                    {/* Card Header Skeleton */}
+                    <div className="p-6 pb-4 bg-gradient-to-br from-gray-50 to-white border-b border-gray-100">
+                      <div className="flex items-start gap-4">
+                        <div className="relative flex-shrink-0">
+                          <div className="h-20 w-20 rounded-2xl bg-gradient-to-br from-gray-200 to-gray-300"></div>
+                          <div className="absolute -bottom-1 -right-1 h-7 w-7 bg-gray-200 rounded-full"></div>
                         </div>
-                      </div>
-                      <div>
-                        <div className="h-4 bg-gray-200 rounded w-24 mb-2"></div>
-                        <div className="flex flex-wrap gap-2">
-                          <div className="h-7 bg-gray-200 rounded w-20"></div>
-                          <div className="h-7 bg-gray-200 rounded w-20"></div>
+                        <div className="flex-1 space-y-3">
+                          <div className="h-6 bg-gray-200 rounded-lg w-3/4"></div>
+                          <div className="h-4 bg-gray-200 rounded-lg w-1/2"></div>
+                          <div className="h-3 bg-gray-200 rounded-lg w-2/3"></div>
                         </div>
                       </div>
                     </div>
-                    <div className="h-11 bg-gray-200 rounded-lg mt-6"></div>
+
+                    {/* Card Body Skeleton */}
+                    <div className="p-6 space-y-5">
+                      {/* Bio Skeleton */}
+                      <div className="space-y-2">
+                        <div className="h-3 bg-gray-200 rounded-lg w-full"></div>
+                        <div className="h-3 bg-gray-200 rounded-lg w-5/6"></div>
+                        <div className="h-3 bg-gray-200 rounded-lg w-4/6"></div>
+                      </div>
+
+                      {/* Skills Skeleton */}
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2">
+                          <div className="h-1 w-8 bg-gray-300 rounded-full"></div>
+                          <div className="h-3 bg-gray-200 rounded w-16"></div>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          <div className="h-8 bg-gray-200 rounded-lg w-20"></div>
+                          <div className="h-8 bg-gray-200 rounded-lg w-24"></div>
+                          <div className="h-8 bg-gray-200 rounded-lg w-16"></div>
+                          <div className="h-8 bg-gray-200 rounded-lg w-20"></div>
+                        </div>
+                      </div>
+
+                      {/* Availability Skeleton
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2">
+                          <div className="h-1 w-8 bg-gray-300 rounded-full"></div>
+                          <div className="h-3 bg-gray-200 rounded w-20"></div>
+                        </div>
+                        <div className="flex gap-2">
+                          <div className="h-10 bg-gray-200 rounded-lg w-24"></div>
+                          <div className="h-10 bg-gray-200 rounded-lg w-24"></div>
+                        </div>
+                      </div> */}
+                    </div>
+
+                    {/* Card Footer Skeleton */}
+                    <div className="p-6 pt-0">
+                      <div className="h-14 bg-gradient-to-r from-gray-200 to-gray-300 rounded-xl"></div>
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
           ) : error ? (
-            <div className="text-center py-12">
-              <p className="text-lg text-red-600">Error: {error}</p>
-              <Button
-                className="mt-4 bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-lg"
-                onClick={() => window.location.reload()}
-              >
-                Retry
-              </Button>
+            <div className="flex flex-col items-center justify-center py-20">
+              <div className="relative mb-8">
+                <div className="h-32 w-32 rounded-full bg-gradient-to-br from-red-100 to-red-200 flex items-center justify-center">
+                  <X className="h-16 w-16 text-red-500" />
+                </div>
+                <div className="absolute -bottom-2 -right-2 h-12 w-12 bg-red-500 rounded-full flex items-center justify-center shadow-lg animate-pulse">
+                  <span className="text-white font-bold text-lg">!</span>
+                </div>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">Oops! Something Went Wrong</h3>
+              <p className="text-gray-600 text-center max-w-md mb-2">
+                We encountered an error while loading candidates.
+              </p>
+              <p className="text-sm text-red-600 font-medium mb-6 text-center max-w-md">
+                {error}
+              </p>
+              <div className="flex gap-4">
+                <Button
+                  className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-8 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all"
+                  onClick={() => window.location.reload()}
+                >
+                  <ChevronRight className="h-5 w-5 mr-2 rotate-180" />
+                  Try Again
+                </Button>
+                <Button
+                  variant="outline"
+                  className="border-2 border-gray-200 hover:border-orange-300 hover:bg-orange-50 px-8 py-3 rounded-xl font-bold transition-all"
+                  onClick={() => router.push("/")}
+                >
+                  Go Home
+                </Button>
+              </div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
               {filteredCandidates.length > 0 ? (
-                filteredCandidates.map((candidate) => (
+                filteredCandidates.map((candidate, candidateIndex) => (
                   <div
-                    key={candidate._id}
-                    className="group relative overflow-hidden rounded-2xl border-0 bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                    key={candidate._id || candidate.id || `candidate-${candidateIndex}-${candidate.name || 'unknown'}`}
+                    className="group relative overflow-hidden rounded-2xl bg-white border-2 border-gray-100 hover:border-orange-200 shadow-sm hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
                   >
-                    <div className="p-6 flex flex-col h-full">
-                      <div className="flex items-start gap-4 mb-4">
-                        <div className="flex-shrink-0">
-                          <div className="h-16 w-16 rounded-full bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center text-white font-semibold text-lg ring-2 ring-orange-100">
+                    {/* Card Header with Avatar and Name */}
+                    <div className="relative p-6 pb-4 bg-gradient-to-br from-gray-50 to-white border-b border-gray-100">
+                      <div className="flex items-start gap-4">
+                        {/* Avatar */}
+                        <div className="relative flex-shrink-0">
+                          <div className="h-20 w-20 rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-gray-600 font-bold text-2xl shadow-md ring-4 ring-white group-hover:ring-gray-100 transition-all border border-gray-200">
                             {candidate.avatar ? (
                               <img
                                 src={candidate.avatar}
-                                alt={candidate.name}
-                                className="h-full w-full rounded-full object-cover"
+                                alt={formatName(candidate.name)}
+                                className="h-full w-full rounded-2xl object-cover"
                               />
                             ) : (
                               getInitials(candidate.name)
                             )}
                           </div>
+                          {/* Verified Badge */}
+                          <div className="absolute -bottom-1 -right-1 h-7 w-7 bg-green-500 rounded-full flex items-center justify-center border-4 border-white shadow-md">
+                            <Award className="h-3.5 w-3.5 text-white" />
+                          </div>
                         </div>
+
+                        {/* Name and Basic Info */}
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-2">
-                            <h2 className="font-bold text-lg text-gray-900 truncate">
-                              {candidate.name}
+                          <div className="flex items-start justify-between gap-3 mb-1">
+                            <h2 className="font-bold text-xl text-gray-900 truncate group-hover:text-orange-600 transition-colors">
+                              {formatName(candidate.name)}
                             </h2>
-                            <span className="text-gray-500 text-sm font-medium">
-                              | Exp: {calculateExperience(candidate)}
+                            {/* Compact Score Badge */}
+                            <div className="flex items-center gap-1 bg-white border border-gray-200 rounded-md px-2 py-1 shadow-sm flex-shrink-0">
+                              <Star className="h-3 w-3 text-orange-500 fill-orange-500" />
+                              <span className="text-xs font-bold text-gray-900">{candidate.highestScore??0}.0</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
+                            <Briefcase className="h-4 w-4 text-orange-500" />
+                            <span className="font-medium">{calculateExperience(candidate)}</span>
+                          </div>
+                          {candidate.profile?.location && (
+                            <div className="flex items-center gap-1.5 text-sm text-gray-500">
+                              <MapPin className="h-3.5 w-3.5" />
+                              <span className="truncate">{candidate.profile.location}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Card Body */}
+                    <div className="p-6 space-y-5">
+                      {/* Bio */}
+                      <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 min-h-[60px]">
+                        {candidate.profile?.bio
+                          ? candidate.profile.bio
+                          : `${candidate.role?.charAt(0).toUpperCase() + candidate.role?.slice(1)} with experience in various projects and technologies. Ready to contribute and grow with your team.`}
+                      </p>
+
+                      {/* Skills Section */}
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2">
+                          <div className="h-1 w-8 bg-gradient-to-r from-orange-400 to-orange-600 rounded-full"></div>
+                          <h4 className="text-xs font-bold text-gray-900 uppercase tracking-wide">Skills</h4>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {getSkillsDisplay(candidate).map((interviewSkills, skillIndex) => {
+                            // Create a unique key by combining candidate ID, candidate index, skill index, and skill
+                            // Handle cases where _id might be missing or skills might be duplicated
+                            const candidateId = candidate._id || candidate.id || `candidate-${candidateIndex}`;
+                            const skillKey = `${candidateId}-c${candidateIndex}-skill-${skillIndex}-${String(interviewSkills).replace(/\s+/g, '-')}`;
+                            
+                            return (
+                              <span
+                                key={skillKey}
+                                className="inline-flex items-center gap-1 bg-gradient-to-r from-orange-50 to-orange-100 hover:from-orange-100 hover:to-orange-200 text-orange-800 border border-orange-200/50 text-xs px-3 py-1.5 rounded-lg font-semibold transition-all hover:scale-105 shadow-sm"
+                              >
+                                {interviewSkills}
+                              </span>
+                            );
+                          })}
+                          {candidate.profile?.skills?.length > 4 && (
+                            <span className="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs px-3 py-1.5 rounded-lg font-semibold transition-all">
+                              +{candidate.profile.skills.length - 4}
                             </span>
-                          </div>
-                          <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-2">
-                            {candidate.profile?.bio
-                              ? candidate.profile.bio.substring(0, 120) +
-                                (candidate.profile.bio.length > 120 ? "..." : "")
-                              : `${candidate.role?.charAt(0).toUpperCase() + candidate.role?.slice(1)} with experience in various projects and technologies.`}
-                          </p>
+                          )}
                         </div>
                       </div>
-                      <div className="flex-1 space-y-4">
-                        <div>
-                          <h4 className="text-sm font-semibold text-gray-900">Expert in</h4>
-                          <div className="flex flex-wrap gap-2 mt-2">
-                            {getSkillsDisplay(candidate).map((skill, index) => (
-                              <span
-                                key={index}
-                                className="bg-orange-100 hover:bg-orange-200 text-orange-800 border border-orange-200 text-xs px-2.5 py-1 rounded-md font-medium"
-                              >
-                                {skill}
-                              </span>
-                            ))}
-                            {candidate.profile?.skills?.length > 4 && (
-                              <span className="bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs px-2.5 py-1 rounded-md font-medium">
-                                +{candidate.profile.skills.length - 4} more
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                        <div>
-                          <h4 className="text-sm font-semibold text-gray-900">Commitment</h4>
-                          <div className="flex flex-wrap gap-2 mt-2">
-                            {getCommitmentBadges(candidate).map((commitment, index) => (
-                              <span
-                                key={index}
-                                className={
-                                  index === 0
-                                    ? "bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded-md text-sm font-medium"
-                                    : "border border-orange-200 text-orange-700 hover:bg-orange-50 px-3 py-1 rounded-md text-sm font-medium"
-                                }
-                              >
-                                {commitment}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
+
+                      {/* Commitment Badges */}
+                      {/* <div className="space-y-3"> */}
+                        {/* <div className="flex items-center gap-2">
+                          <div className="h-1 w-8 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"></div>
+                          <h4 className="text-xs font-bold text-gray-900 uppercase tracking-wide">Availability</h4>
+                        </div> */}
+                        {/* <div className="flex flex-wrap gap-2">
+                          {getCommitmentBadges(candidate).map((commitment, index) => (
+                            <span
+                              key={index}
+                              className={
+                                index === 0
+                                  ? "inline-flex items-center gap-1.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md hover:shadow-lg transition-all"
+                                  : "inline-flex items-center gap-1.5 border-2 border-orange-200 text-orange-700 hover:bg-orange-50 hover:border-orange-300 px-4 py-2 rounded-lg text-sm font-bold transition-all"
+                              }
+                            >
+                              {commitment}
+                            </span>
+                          ))}
+                        </div> */}
+                      {/* </div> */}
+                    </div>
+
+                    {/* Card Footer */}
+                    <div className="p-6 pt-0">
                       <Button
                         onClick={() => handleViewProfile(candidate)}
-                        className="w-full mt-6 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-medium py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
-                        aria-label={`View profile of ${candidate.name}`}
+                        className="w-full text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-[1.02] relative overflow-hidden hover:opacity-90"
+                        style={{ backgroundColor: '#f1674a' }}
+                        aria-label={`View profile of ${formatName(candidate.name)}`}
                       >
-                        View Profile
+                        <span className="relative z-10 flex items-center justify-center gap-2">
+                          View Full Profile
+                          <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                        </span>
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
                       </Button>
                     </div>
                   </div>
                 ))
               ) : (
-                <div className="text-center col-span-full py-12">
-                  <p className="text-lg text-gray-600">No candidates match your search criteria.</p>
+                <div className="col-span-full flex flex-col items-center justify-center py-20">
+                  <div className="relative">
+                    <div className="h-32 w-32 rounded-full bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center mb-6">
+                      <Search className="h-16 w-16 text-orange-400" />
+                    </div>
+                    <div className="absolute -bottom-2 -right-2 h-12 w-12 bg-orange-500 rounded-full flex items-center justify-center shadow-lg">
+                      <X className="h-6 w-6 text-white" />
+                    </div>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">No Candidates Found</h3>
+                  <p className="text-gray-600 text-center max-w-md">
+                    We couldn't find any candidates matching your criteria. Try adjusting your filters or search terms.
+                  </p>
+                  <Button
+                    onClick={() => {
+                      setSearchTerm("");
+                      setScoreFilter("");
+                    }}
+                    className="mt-6 bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl font-semibold"
+                  >
+                    Clear All Filters
+                  </Button>
                 </div>
               )}
             </div>
           )}
 
-          {/* Pagination Controls */}
+          {/* Enhanced Pagination Controls */}
           {!searchTerm.trim() && actualTotalPages > 1 && (
-            <div className="flex items-center justify-center gap-2 mt-8 mb-4 flex-wrap">
-              {/* First Page Button */}
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handlePageChange(1)}
-                disabled={currentPage === 1 || loading}
-                className="flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed min-w-[80px] sm:min-w-0"
-              >
-                <ChevronLeft className="w-4 h-4" />
-                <ChevronLeft className="w-4 h-4 hidden sm:inline" />
-                <span className="hidden sm:inline">First</span>
-              </Button>
-              {/* Previous Button */}
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1 || loading}
-                className="flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed min-w-[80px] sm:min-w-0"
-              >
-                <ChevronLeft className="w-4 h-4" />
-                <span className="hidden sm:inline">Previous</span>
-              </Button>
+            <div className="mt-12 mb-8">
+              <div className="bg-white border-2 border-gray-100 rounded-2xl p-6 shadow-sm">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+                  {/* Page Info */}
+                  <div className="text-sm font-medium text-gray-600">
+                    Showing{" "}
+                    <span className="text-orange-600 font-bold">
+                      {((currentPage - 1) * itemsPerPage) + 1}
+                    </span>
+                    {" "}-{" "}
+                    <span className="text-orange-600 font-bold">
+                      {Math.min(currentPage * itemsPerPage, displayTotal)}
+                    </span>
+                    {" "}of{" "}
+                    <span className="text-orange-600 font-bold">{displayTotal}</span>
+                    {" "}candidates
+                  </div>
 
-              {/* Page Number Buttons */}
-              <div className="flex items-center gap-1">
-                {Array.from({ length: Math.min(5, actualTotalPages) }, (_, i) => {
-                  let pageNum;
-                  if (actualTotalPages <= 5) {
-                    pageNum = i + 1;
-                  } else if (currentPage <= 3) {
-                    pageNum = i + 1;
-                  } else if (currentPage >= actualTotalPages - 2) {
-                    pageNum = actualTotalPages - 4 + i;
-                  } else {
-                    pageNum = currentPage - 2 + i;
-                  }
-
-                  return (
+                  {/* Pagination Buttons */}
+                  <div className="flex items-center gap-2">
+                    {/* First Page Button */}
                     <Button
-                      key={pageNum}
-                      variant={currentPage === pageNum ? "default" : "outline"}
+                      variant="outline"
                       size="sm"
-                      onClick={() => handlePageChange(pageNum)}
-                      disabled={loading}
-                      className={`min-w-[40px] ${
-                        currentPage === pageNum
-                          ? "bg-orange-600 hover:bg-orange-700 text-white"
-                          : ""
-                      }`}
+                      onClick={() => handlePageChange(1)}
+                      disabled={currentPage === 1 || loading}
+                      className="h-10 px-3 border-2 border-gray-200 hover:border-orange-300 hover:bg-orange-50 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg font-semibold transition-all"
                     >
-                      {pageNum}
+                      <ChevronLeft className="w-4 h-4" />
+                      <ChevronLeft className="w-4 h-4 -ml-2" />
                     </Button>
-                  );
-                })}
+
+                    {/* Previous Button */}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1 || loading}
+                      className="h-10 px-4 border-2 border-gray-200 hover:border-orange-300 hover:bg-orange-50 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg font-semibold transition-all"
+                    >
+                      <ChevronLeft className="w-4 h-4 mr-1" />
+                      <span className="hidden sm:inline">Previous</span>
+                    </Button>
+
+                    {/* Page Number Buttons */}
+                    <div className="hidden sm:flex items-center gap-2">
+                      {Array.from({ length: Math.min(5, actualTotalPages) }, (_, i) => {
+                        let pageNum;
+                        if (actualTotalPages <= 5) {
+                          pageNum = i + 1;
+                        } else if (currentPage <= 3) {
+                          pageNum = i + 1;
+                        } else if (currentPage >= actualTotalPages - 2) {
+                          pageNum = actualTotalPages - 4 + i;
+                        } else {
+                          pageNum = currentPage - 2 + i;
+                        }
+
+                        return (
+                          <Button
+                            key={pageNum}
+                            size="sm"
+                            onClick={() => handlePageChange(pageNum)}
+                            disabled={loading}
+                            className={`h-10 min-w-[40px] rounded-lg font-bold transition-all ${
+                              currentPage === pageNum
+                                ? "bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg border-0"
+                                : "bg-white border-2 border-gray-200 hover:border-orange-300 hover:bg-orange-50 text-gray-700"
+                            }`}
+                          >
+                            {pageNum}
+                          </Button>
+                        );
+                      })}
+                    </div>
+
+                    {/* Current Page Indicator (Mobile) */}
+                    <div className="sm:hidden px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg font-bold">
+                      {currentPage} / {actualTotalPages}
+                    </div>
+
+                    {/* Next Button */}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === actualTotalPages || loading}
+                      className="h-10 px-4 border-2 border-gray-200 hover:border-orange-300 hover:bg-orange-50 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg font-semibold transition-all"
+                    >
+                      <span className="hidden sm:inline">Next</span>
+                      <ChevronRight className="w-4 h-4 ml-1" />
+                    </Button>
+
+                    {/* Last Page Button */}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handlePageChange(actualTotalPages)}
+                      disabled={currentPage === actualTotalPages || loading}
+                      className="h-10 px-3 border-2 border-gray-200 hover:border-orange-300 hover:bg-orange-50 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg font-semibold transition-all"
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                      <ChevronRight className="w-4 h-4 -ml-2" />
+                    </Button>
+                  </div>
+                </div>
               </div>
-
-              {/* Next Button */}
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === actualTotalPages || loading}
-                className="flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed min-w-[80px] sm:min-w-0"
-              >
-                <span className="hidden sm:inline">Next</span>
-                <ChevronRight className="w-4 h-4" />
-              </Button>
-              {/* Last Page Button */}
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handlePageChange(actualTotalPages)}
-                disabled={currentPage === actualTotalPages || loading}
-                className="flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed min-w-[80px] sm:min-w-0"
-              >
-                <span className="hidden sm:inline">Last</span>
-                <ChevronRight className="w-4 h-4" />
-                <ChevronRight className="w-4 h-4 hidden sm:inline" />
-              </Button>
-            </div>
-          )}
-
-          {/* Page Info */}
-          {!searchTerm.trim() && displayTotal > 0 && (
-            <div className="text-center text-sm text-gray-600 mt-4 mb-8">
-              Showing {((currentPage - 1) * itemsPerPage) + 1} - {Math.min(currentPage * itemsPerPage, displayTotal)} of {displayTotal} candidates
             </div>
           )}
         </div>
