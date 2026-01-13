@@ -648,13 +648,19 @@ export default function PublicCompanyOnboard({ onBack, onSubmit, refreshCandidat
           hrContactCountryCode,
           skills: formData.skills.length > 0 ? formData.skills : ["General"],
           spokenLanguages: formData.spokenLanguages.length > 0 ? formData.spokenLanguages : ["English"],
-          isJobDetailsAdded: true,
         };
 
         // Use default logo if no logo is uploaded
         if (!normalizedData.logoUrl || normalizedData.logoUrl.trim() === "") {
           normalizedData.logoUrl = DEFAULT_LOGO_URL;
         }
+
+        // Explicitly set isJobDetailsAdded to true after all other properties are set
+        normalizedData.isJobDetailsAdded = true;
+
+        // Log to verify isJobDetailsAdded is set
+        console.log("✅ isJobDetailsAdded value:", normalizedData.isJobDetailsAdded);
+        console.log("📦 Full normalizedData being sent:", normalizedData);
 
         // If recordId exists, update the existing record; otherwise create a new one
         let response;
@@ -664,6 +670,7 @@ export default function PublicCompanyOnboard({ onBack, onSubmit, refreshCandidat
           setSuccessMessage("Your job posting has been successfully updated! Thank you for posting.");
         } else {
           console.log("Creating new record");
+          console.log("✅ isJobDetailsAdded value:", normalizedData.isJobDetailsAdded);
           response = await createCompanyOnboarding(normalizedData);
           setSuccessMessage("Your job posting has been successfully created! Thank you for posting.");
         }

@@ -435,7 +435,7 @@ const FreeJobPostingPage = () => {
     },
     {
       question: "In which cities can I hire via EarlyJobs?",
-      answer: "EarlyJobs operates across 900+ cities in India, covering major metros, tier 2, and tier 3 cities. Our franchise network ensures local support and access to regional talent pools."
+      answer: "EarlyJobs operates across 300+ cities in India, covering major metros, tier 2, and tier 3 cities. Our franchise network ensures local support and access to regional talent pools."
     },
     {
       question: "I want to hire more than 10 candidates, do you have any bulk-hiring plans?",
@@ -449,7 +449,7 @@ const FreeJobPostingPage = () => {
       <Header />
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
         {/* Hero Section with Enhanced Design */}
-        <section className="relative py-16 sm:py-20 lg:py-28 overflow-hidden">
+        <section className="relative py-8 sm:py-12 lg:py-16 overflow-hidden">
           {/* Animated Background Elements */}
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-40 -right-40 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl"></div>
@@ -462,7 +462,7 @@ const FreeJobPostingPage = () => {
               <div className="text-center lg:text-left space-y-8">
                 <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-700 px-4 py-2 rounded-full text-sm font-medium">
                   <Sparkles className="w-4 h-4" />
-                  <span>Trusted by 7+ Lakh Employers</span>
+                  <span>Trusted by 200+ Employers</span>
                 </div>
 
                 <div className="space-y-6">
@@ -482,21 +482,21 @@ const FreeJobPostingPage = () => {
                 <div className="grid grid-cols-3 gap-4 pt-4">
                   <div className="text-center lg:text-left">
                     <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
-                      6Cr+
+                      4M+
                     </div>
                     <div className="text-sm text-gray-600 mt-1">Qualified Candidates</div>
                   </div>
                   <div className="text-center lg:text-left">
                     <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-blue-500 to-blue-600 bg-clip-text text-transparent">
-                      900+
+                      300+
                     </div>
                     <div className="text-sm text-gray-600 mt-1">Cities Covered</div>
                   </div>
                   <div className="text-center lg:text-left">
                     <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-green-500 to-green-600 bg-clip-text text-transparent">
-                      79%
+                      80%
                     </div>
-                    <div className="text-sm text-gray-600 mt-1">Hired in 24hrs</div>
+                    <div className="text-sm text-gray-600 mt-1">Hired in 48hrs</div>
                   </div>
                 </div>
 
@@ -875,7 +875,7 @@ const FreeJobPostingPage = () => {
         </section>
 
         {/* Stats Section */}
-        <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+        {/* <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
@@ -928,7 +928,7 @@ const FreeJobPostingPage = () => {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* FAQ Section with Modern Design */}
         <section className="py-20 bg-white">

@@ -213,9 +213,9 @@ const Footer = () => {
         "Udupi",
         "Gulbarga"
 
-      ].map((city) => (
+      ].map((city, index) => (
         <p
-          key={city}
+          key={`city-${index}-${city}`}
           
           onClick={()=>router.push(`/`)}
           className="text-gray-400  text-lg hover:text-amber-500 transition-all duration-300 cursor-not-allowed"
