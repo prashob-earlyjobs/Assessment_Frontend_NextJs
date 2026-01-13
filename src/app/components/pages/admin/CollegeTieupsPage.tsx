@@ -316,25 +316,42 @@ const CollegeTieupsPage: React.FC = () => {
         ? `${backendUrl}/admin/college-tieups/${selectedCollege._id}`
         : `${backendUrl}/admin/college-tieups`;
 
-      // Create JSON payload with base64 logo
-      const payload: any = {
-        collegeName: formData.collegeName,
-        location: formData.location,
-        order: formData.order,
-      };
+      // Create FormData to send base64 logo (avoids 413 Payload Too Large error)
+      const submitFormData = new FormData();
+      submitFormData.append('collegeName', formData.collegeName);
+      submitFormData.append('location', formData.location);
+      submitFormData.append('order', formData.order.toString());
 
-      // If there's a new cropped base64, include it. Otherwise, if editing, keep existing logo URL
+      // Only append logo if there's a new cropped image
+      // If no new image, don't send logo field - server will keep existing logo
       if (croppedBase64) {
-        payload.logoUrl = croppedBase64;
-      } else if (selectedCollege && formData.logoUrl) {
-        // For edits without new file, send existing logo URL
-        payload.logoUrl = formData.logoUrl;
+        // Convert base64 to blob
+        const byteCharacters = atob(croppedBase64.split(',')[1]);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: 'image/png' });
+        const file = new File([blob], 'college-logo.png', { type: 'image/png' });
+        submitFormData.append('logo', file);
       }
+      // Note: If editing without new logo, we don't append logo field
+      // This tells the server to keep the existing logo
+
       let response;
       if (selectedCollege) {
-        response = await axiosInstance.put(url, payload);
+        response = await axiosInstance.put(url, submitFormData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
       } else {
-        response = await axiosInstance.post(url, payload);
+        response = await axiosInstance.post(url, submitFormData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
       }
 
       if (response.status === 200 || response.status === 201) {
