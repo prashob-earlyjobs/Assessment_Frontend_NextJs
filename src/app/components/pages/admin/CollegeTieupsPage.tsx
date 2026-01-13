@@ -331,15 +331,9 @@ const CollegeTieupsPage: React.FC = () => {
         payload.logoUrl = formData.logoUrl;
       }
 
-      const response = await fetch(url, {
-        method: selectedCollege ? 'PUT' : 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
+      const response = await axiosInstance.post(url, payload);
 
-      if (response.ok) {
+      if (response.status === 200 || response.status === 201) {
         toast.success(
           selectedCollege
             ? 'College updated successfully'
@@ -362,7 +356,7 @@ const CollegeTieupsPage: React.FC = () => {
         setCroppedBase64(null);
         fetchColleges();
       } else {
-        const error = await response.json();
+        const error = response.data.message;
         toast.error(error.message || 'Failed to save college');
       }
     } catch (error) {
@@ -378,20 +372,16 @@ const CollegeTieupsPage: React.FC = () => {
 
     try {
       const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-      const response = await fetch(
-        `${backendUrl}/admin/college-tieups/${deleteCollegeId}`,
-        {
-          method: 'DELETE',
-        }
-      );
+      const response = await axiosInstance.delete(
+        `${backendUrl}/admin/college-tieups/${deleteCollegeId}`);
 
-      if (response.ok) {
+      if (response.status === 200) {
         toast.success('College deleted successfully');
         setIsDeleteDialogOpen(false);
         setDeleteCollegeId(null);
         fetchColleges();
       } else {
-        const error = await response.json();
+        const error = response.data.message;
         toast.error(error.message || 'Failed to delete college');
       }
     } catch (error) {
