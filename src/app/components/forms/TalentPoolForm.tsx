@@ -152,6 +152,7 @@ export default function PublicTalentPoolForm({
   FooterComponent = Footer
 }: AddCandidateFormProps) {
   //const navigate = useNavigate();
+  const router = useRouter();
   const params = useParams<{ id?: string; candidateId?: string }>();
   const id = propId || params.id || params.candidateId;
   const formTopRef = useRef<HTMLDivElement>(null);
@@ -203,6 +204,7 @@ export default function PublicTalentPoolForm({
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [showErrorPopup, setShowErrorPopup] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [countdown, setCountdown] = useState(5);
   const [uploadedURL, setUploadedURL] = useState<string | null>(null);
   const [showOTPModal, setShowOTPModal] = useState(false);
   const [isFormLoading, setIsFormLoading] = useState(true); // Internal loading state for shimmer
@@ -696,6 +698,36 @@ export default function PublicTalentPoolForm({
       setCities([]);
     }
   }, [selectedCountry, fetchCities]);
+
+  // Countdown and auto-redirect effect
+  useEffect(() => {
+    if (showSuccessPopup) {
+      // Reset countdown when popup opens
+      setCountdown(5);
+      
+      // Countdown timer
+      const countdownInterval = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(countdownInterval);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      // Auto-redirect after 5 seconds
+      const redirectTimeout = setTimeout(() => {
+        router.push("/login?mode=login");
+      }, 5000);
+
+      // Cleanup
+      return () => {
+        clearInterval(countdownInterval);
+        clearTimeout(redirectTimeout);
+      };
+    }
+  }, [showSuccessPopup, router]);
 
   const handleCategorySelect = (categoryValue: string) => {
     // Find the category object if it exists, otherwise use the value directly
@@ -2555,7 +2587,20 @@ export default function PublicTalentPoolForm({
                     </div>
                     <h3 className="text-2xl font-bold text-slate-900 mb-3">{modalMessage || "Action Completed Successfully!"}</h3>
                     <p className="text-slate-600 mb-6 leading-relaxed">{successMessage}</p>
-                    <div className="flex justify-center">
+                    <div className="mb-6">
+                      <p className="text-sm text-slate-500 mb-4">
+                        Redirecting in <span className="font-bold text-orange-600 text-lg">{countdown}</span> {countdown === 1 ? 'second' : 'seconds'}...
+                      </p>
+                    </div>
+                    <div className="flex justify-center gap-3">
+                      <Button
+                        onClick={() => {
+                          router.push("/login?mode=login");
+                        }}
+                        className="rounded-lg bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white font-medium px-6"
+                      >
+                        Go to Home
+                      </Button>
                       {false && <Button
                         variant="outline"
                         onClick={() => {
