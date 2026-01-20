@@ -464,7 +464,12 @@ export default function PublicCompanyOnboard({ onBack, onSubmit, refreshCandidat
       newErrors.companyName = "Company name must be at least 2 characters";
     }
     
-    // Website field is optional - no validation required
+    // Website field is required
+    if (!formData.website.trim()) {
+      newErrors.website = "Website is required";
+    } else if (!validateWebsite(formData.website)) {
+      newErrors.website = "Please enter a valid website URL";
+    }
     
     if (!formData.hrName.trim()) {
       newErrors.hrName = "HR name is required";
@@ -877,15 +882,16 @@ export default function PublicCompanyOnboard({ onBack, onSubmit, refreshCandidat
                   <div className="space-y-2">
                     <Label htmlFor="website" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                       <Globe className="h-4 w-4 text-orange-500" />
-                      Website
+                      Website <span className="text-red-500">*</span>
                     </Label>
                     <Input
                       id="website"
                       type="url"
                       value={formData.website}
                       onChange={(e) => handleInputChange("website", e.target.value)}
-                      placeholder="e.g., https://www.earlyjobs.ai (optional)"
+                      placeholder="e.g., https://www.earlyjobs.ai"
                       className={getInputClassName("website", "h-12 rounded-lg border-2 border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 bg-white transition-all")}
+                      required
                     />
                     {showErrors && errors.website && (
                       <p className="text-red-500 text-xs mt-1 flex items-center gap-1 font-medium">
