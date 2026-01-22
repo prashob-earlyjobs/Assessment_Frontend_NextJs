@@ -68,6 +68,7 @@ const FreeJobPostingPage = () => {
     companyName: "",
     email: "",
     mobile: "",
+    location: "",
   });
 
   const [countryCode, setCountryCode] = useState("+91");
@@ -202,68 +203,18 @@ const FreeJobPostingPage = () => {
         return false;
       }
     }
+    if (!formData.location.trim()) {
+      toast.error("Please enter your location");
+      return false;
+    }
+    if (formData.location.trim().length < 2) {
+      toast.error("Location must be at least 2 characters long");
+      return false;
+    }
 
     setIsSubmitting(true);
     try {
-      // First, save the landing page data to MongoDB with valid placeholder values
-      const onboardingData: any = {
-        companyName: formData.companyName.trim(),
-        brandName: formData.companyName.trim(), // Use company name as brand name
-        website: "", // Will be filled later
-        hrName: formData.name.trim(),
-        hrEmail: formData.email.trim(),
-        hrContact: formData.mobile.replace(/\D/g, ""),
-        jobTitle: "", // Will be filled later
-        jobCategory: "Other", // Valid default value
-        shiftTimings: "Day Shift", // Valid default value
-        employmentType: "Full-time", // Valid default value
-        workType: "on-site", // Valid default value
-        jobDescription: "", // Will be filled later
-        streetAddress: "", // Will be filled later
-        area: "", // Will be filled later
-        city: "", // Will be filled later
-        pincode: "", // Will be filled later
-        locationLink: "", // Empty location link
-        minSalary: 0, // Default value
-        maxSalary: 0, // Default value
-        skills: [], // Empty array, will be filled later
-        spokenLanguages: [], // Empty array, will be filled later
-        noOfOpenings: 1, // Minimum required value (backend validation requires at least 1)
-        hiringNeed: "Future", // Valid default value
-        minQualification: "10th", // Valid default value
-        totalExperience: 0, // Default value
-        logoUrl: DEFAULT_LOGO_URL, // Default logo
-        _silentSave: true, // Flag for silent save
-      };
-      
-      console.log("Saving landing page data to database...", {
-        companyName: onboardingData.companyName,
-        hrName: onboardingData.hrName,
-        hrEmail: onboardingData.hrEmail,
-        hrContact: onboardingData.hrContact,
-      });
-      
-      // Save to database - if this fails, don't proceed with OTP
-      let recordId: string | null = null;
-      try {
-        const saveResponse = await createCompanyOnboarding(onboardingData);
-        console.log("✅ Landing page data saved to database:", saveResponse);
-        // Extract ID from response (could be in data._id, data.id, or data.data._id depending on backend)
-        recordId = saveResponse?.data?._id || saveResponse?._id || saveResponse?.data?.id || saveResponse?.id || null;
-        if (recordId) {
-          console.log("Record ID saved:", recordId);
-        }
-      } catch (saveError: any) {
-        console.error("❌ Error saving landing page data:", saveError);
-        const message = getBackendErrorMessage(
-          saveError,
-          "Failed to save your details. Please try again."
-        );
-        toast.error(message);
-        return false; // Stop here, don't send OTP
-      }
-
-      // Send OTP only if data was saved successfully
+      // First, send OTP
       const phoneNumber = formData.mobile.replace(/\D/g, "");
       const response = await sendOtptoMobile({
         phoneNumber,
@@ -280,12 +231,6 @@ const FreeJobPostingPage = () => {
       setOtpSent(true);
       setIsOtpTimerActive(true);
       setOtpTimer(60);
-      
-      // Store record ID in state for later use
-      if (recordId) {
-        // Store in a ref or state to use in verifyOtp
-        (window as any).__pendingRecordId = recordId;
-      }
       
       toast.success("OTP sent to your mobile number!");
       setTimeout(() => {
@@ -350,23 +295,64 @@ const FreeJobPostingPage = () => {
 
       toast.success("Mobile number verified successfully!");
       
-      // Get the record ID that was saved when form was submitted
-      const recordId = (window as any).__pendingRecordId || null;
+      // After OTP verification is successful, save the landing page data to MongoDB
+      const onboardingData: any = {
+        companyName: formData.companyName.trim(),
+        brandName: formData.companyName.trim(), // Use company name as brand name
+        website: "", // Will be filled later
+        hrName: formData.name.trim(),
+        hrEmail: formData.email.trim(),
+        hrContact: formData.mobile.replace(/\D/g, ""),
+        jobTitle: "", // Will be filled later
+        jobCategory: "Other", // Valid default value
+        shiftTimings: "Day Shift", // Valid default value
+        employmentType: "Full-time", // Valid default value
+        workType: "on-site", // Valid default value
+        jobDescription: "", // Will be filled later
+        streetAddress: "", // Will be filled later
+        area: "", // Will be filled later
+        city: formData.location.trim(), // Location from form
+        pincode: "", // Will be filled later
+        locationLink: "", // Empty location link
+        minSalary: 0, // Default value
+        maxSalary: 0, // Default value
+        skills: [], // Empty array, will be filled later
+        spokenLanguages: [], // Empty array, will be filled later
+        noOfOpenings: 1, // Minimum required value (backend validation requires at least 1)
+        hiringNeed: "Future", // Valid default value
+        minQualification: "10th", // Valid default value
+        totalExperience: 0, // Default value
+        logoUrl: DEFAULT_LOGO_URL, // Default logo
+        isOtpVerified: true, // Mark as OTP verified
+        _silentSave: true, // Flag for silent save
+      };
       
-      // Update isOtpVerified to true if recordId exists
-      if (recordId) {
-        try {
-          console.log("Updating isOtpVerified to true for record:", recordId);
-          await updateCompanyOnboarding(recordId, {
-            isOtpVerified: true,
-            _silentSave: true, // Silent save to avoid showing toast
-          });
-          console.log("✅ isOtpVerified updated successfully");
-        } catch (updateError: any) {
-          console.error("❌ Error updating isOtpVerified:", updateError);
-          // Don't block the flow if update fails, but log the error
-          // The user can still proceed to the job posting page
+      console.log("Saving landing page data to database after OTP verification...", {
+        companyName: onboardingData.companyName,
+        hrName: onboardingData.hrName,
+        hrEmail: onboardingData.hrEmail,
+        hrContact: onboardingData.hrContact,
+      });
+      
+      // Save to database after OTP verification is successful
+      let recordId: string | null = null;
+      try {
+        const saveResponse = await createCompanyOnboarding(onboardingData);
+        console.log("✅ Landing page data saved to database:", saveResponse);
+        // Extract ID from response (could be in data._id, data.id, or data.data._id depending on backend)
+        recordId = saveResponse?.data?._id || saveResponse?._id || saveResponse?.data?.id || saveResponse?.id || null;
+        if (recordId) {
+          console.log("Record ID saved:", recordId);
         }
+      } catch (saveError: any) {
+        console.error("❌ Error saving landing page data:", saveError);
+        const message = getBackendErrorMessage(
+          saveError,
+          "Failed to save your details. Please try again."
+        );
+        toast.error(message);
+        // Don't block the flow if save fails, but log the error
+        // The user can still proceed to the job posting page
       }
       
       // Redirect with query parameters to pre-fill the form
@@ -375,16 +361,12 @@ const FreeJobPostingPage = () => {
         companyName: formData.companyName.trim(),
         email: formData.email.trim(),
         mobile: formData.mobile.replace(/\D/g, ""), // Store only digits
+        location: formData.location.trim(),
       });
       
       // Add record ID if available
       if (recordId) {
         params.append('recordId', recordId);
-      }
-      
-      // Clear the stored record ID
-      if ((window as any).__pendingRecordId) {
-        delete (window as any).__pendingRecordId;
       }
       
       setTimeout(() => {
@@ -590,6 +572,28 @@ const FreeJobPostingPage = () => {
                         />
                       </div>
 
+
+                       {/* Location Field */}
+                       <div className="space-y-2">
+                        <Label htmlFor="location" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                          <MapPin className="w-4 h-4 text-orange-500" />
+                          Location
+                        </Label>
+                        <Input
+                          id="location"
+                          name="location"
+                          type="text"
+                          value={formData.location}
+                          onChange={handleInputChange}
+                          placeholder="Enter your city or location"
+                          minLength={2}
+                          maxLength={100}
+                          disabled={otpSent || isSubmitting}
+                          className="h-12 text-base border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 rounded-xl transition-all"
+                        />
+                      </div>
+
+
                       {/* Mobile Number Field */}
                       <div className="space-y-2">
                         <Label htmlFor="mobile" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
@@ -636,6 +640,7 @@ const FreeJobPostingPage = () => {
                         </p>
                       </div>
 
+                     
                       {/* OTP Section */}
                       {otpSent && (
                         <div className="space-y-4 p-6 bg-gradient-to-br from-orange-50 to-orange-100/50 rounded-2xl border border-orange-200">
@@ -702,7 +707,7 @@ const FreeJobPostingPage = () => {
                       {!otpSent && (
                         <Button
                           type="submit"
-                          disabled={isSubmitting || !formData.name.trim() || !formData.companyName.trim() || !formData.email.trim() || !formData.mobile.trim()}
+                          disabled={isSubmitting || !formData.name.trim() || !formData.companyName.trim() || !formData.email.trim() || !formData.mobile.trim() || !formData.location.trim()}
                           className="w-full h-14 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold text-lg rounded-xl shadow-xl shadow-orange-500/30 transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                         >
                           {isSubmitting ? (

@@ -4,31 +4,31 @@ import { Metadata } from "next";
 export async function generateMetadata(): Promise<Metadata> {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.earlyjobs.ai';
   return {
-    title: 'Company tie-ups | Clientele | EarlyJobs',
-    description: 'Partner with EarlyJobs to provide your students with exclusive access to internships and job opportunities. Enhance their career prospects with our AI-powered recruitment platform.',
-    keywords: ['EarlyJobs', 'company tie-ups', 'internships', 'job opportunities', 'AI recruitment', 'student careers'],
+    title: 'Our Clients & Hiring Partners | EarlyJobs',
+    description: 'Explore companies that trust EarlyJobs for hiring quality talent. From startups to enterprises, our clients hire faster and smarter.',
+    keywords: ['EarlyJobs clients', 'hiring partners', 'companies', 'recruiters', 'talent acquisition', 'verified employers'],
     openGraph: {
-      title: 'Company tie-ups | EarlyJobs',
-      description: 'Partner with EarlyJobs to provide your students with exclusive access to internships and job opportunities. Enhance their career prospects with our AI-powered recruitment platform.',
-      url: `${baseUrl}/company-tieups`,
+      title: 'Our Clients & Hiring Partners | EarlyJobs',
+      description: 'Explore companies that trust EarlyJobs for hiring quality talent. From startups to enterprises, our clients hire faster and smarter.',
+      url: `${baseUrl}/clientele`,
       type: 'website',
       images: [
         {
-          url: `/assets/og-image.png`,
+          url: `/assets/clientele.jpg`,
           width: 1200,
           height: 630,
-          alt: 'Company tie-ups | Clientele | EarlyJobs',
+          alt: 'Our Clients & Hiring Partners | EarlyJobs',
         },
       ],
     },
     twitter: {
       card: 'summary_large_image',
-      title: 'Company tie-ups | EarlyJobs',
-      description: 'Partner with EarlyJobs to provide your students with exclusive access to internships and job opportunities. Enhance their career prospects with our AI-powered recruitment platform.',
-      images: [`/assets/og-image.png`],
+      title: 'Our Clients & Hiring Partners | EarlyJobs',
+      description: 'Explore companies that trust EarlyJobs for hiring quality talent. From startups to enterprises, our clients hire faster and smarter.',
+      images: [`/assets/clientele.jpg`],
     },
     alternates: {
-      canonical: `${baseUrl}/company-tieups`,
+      canonical: `${baseUrl}/clientele`,
     },
   };
 }

@@ -4,30 +4,34 @@ import HomeContent from '../components/pages/HomeContent';
 
 // SEO Metadata
 export async function generateMetadata(): Promise<Metadata> {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.earlyjobs.ai';
   return {
-    title: 'EarlyJobs.ai - Transform College Placements with AI-Powered Solutions',
-    description: 'Empower your college placements with EarlyJobs.ai. Connect students with top recruiters using AI-powered assessments and a verified talent pool at zero cost.',
-    keywords: ['college placements', 'AI-powered recruitment', 'EarlyJobs.ai', 'student job opportunities', 'verified recruiters', 'ATS-friendly resumes'],
+    title: 'College Partnerships for Placements | EarlyJobs',
+    description: 'Partner with EarlyJobs to improve student placements and career readiness. We help colleges connect students with verified employers across industries.',
+    keywords: ['college partnerships', 'student placements', 'career readiness', 'EarlyJobs', 'college recruitment', 'student job opportunities'],
     openGraph: {
-      title: 'EarlyJobs.ai - Transform College Placements',
-      description: 'Join 150+ colleges using EarlyJobs.ai to connect students with top employers through AI-driven assessments and a verified recruiter network.',
-      url: 'https://www.earlyjobs.ai',
+      title: 'College Partnerships for Placements | EarlyJobs',
+      description: 'Partner with EarlyJobs to improve student placements and career readiness. We help colleges connect students with verified employers across industries.',
+      url: `${baseUrl}/college-partnerships`,
       type: 'website',
       images: [
         {
-          url: '/assets/og-image.png', 
+          url: '/assets/college.jpg', 
           width: 1200,
           height: 630,
-          alt: 'EarlyJobs.ai - College Placement Platform',
+          alt: 'College Partnerships | EarlyJobs',
         },
       ],
     },
     twitter: {
       card: 'summary_large_image',
-      title: 'EarlyJobs.ai - Transform College Placements',
-      description: 'AI-powered platform connecting colleges with top recruiters for faster student placements.',
-        images: ['/assets/og-image.png'], // Replace with actual Twitter image path
-      },
+      title: 'College Partnerships for Placements | EarlyJobs',
+      description: 'Partner with EarlyJobs to improve student placements and career readiness. We help colleges connect students with verified employers across industries.',
+      images: ['/assets/college.jpg'],
+    },
+    alternates: {
+      canonical: `${baseUrl}/college-partnerships`,
+    },
   };
 }
 
