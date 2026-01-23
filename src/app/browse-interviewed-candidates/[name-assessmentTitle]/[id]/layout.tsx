@@ -2,17 +2,21 @@ import type { Metadata } from "next";
 
 type Props = {
   params: Promise<{
-    name: string;
+    'name-assessmentTitle': string;
     id: string;
   }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { name, id } = await params;
+  const resolvedParams = await params;
+  const nameAssessmentTitle = resolvedParams['name-assessmentTitle'];
+  const id = resolvedParams.id;
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.earlyjobs.ai';
   
   // Extract role from the name slug (format: name-role)
-  const nameParts = name.split('-');
+  // The slug format is typically: firstname-lastname-role-title
+  // We'll try to extract the last meaningful part as the role
+  const nameParts = nameAssessmentTitle ? nameAssessmentTitle.split('-') : [];
   const role = nameParts.length > 1 ? nameParts[nameParts.length - 1] : 'Developer';
   const roleFormatted = role.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
   
@@ -23,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `Interviewed ${roleFormatted} Profile | EarlyJobs Talent Pool`,
       description: `Browse pre interviewed ${roleFormatted.toLowerCase()} profiles on EarlyJobs. Hire verified talent with proven skills and interview readiness.`,
-      url: `${baseUrl}/browse-interviewed-candidates/${name}/${id}`,
+      url: `${baseUrl}/browse-interviewed-candidates/${nameAssessmentTitle}/${id}`,
       type: 'website',
       images: [
         {
@@ -41,7 +45,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: ['/images/pre_interviewd_talent.jpg'],
     },
     alternates: {
-      canonical: `${baseUrl}/browse-interviewed-candidates/${name}/${id}`,
+      canonical: `${baseUrl}/browse-interviewed-candidates/${nameAssessmentTitle}/${id}`,
     },
   };
 }
