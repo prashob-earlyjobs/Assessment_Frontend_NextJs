@@ -7,7 +7,7 @@ import { Badge } from "../ui/badge";
 import { Input } from "../ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Checkbox } from "../ui/checkbox";
-import { X, Bookmark,Globe, Share2, Briefcase, IndianRupee, User, Clock, MapPin, Plus, Trash2, ChevronDown, Copy, Linkedin, Facebook, Instagram, Loader2, ArrowLeft } from "lucide-react";
+import { X, Bookmark,Globe, Share2, Briefcase, IndianRupee, User, Clock, MapPin, Plus, Trash2, ChevronDown, Copy, Linkedin, Facebook, Instagram, Loader2, ArrowLeft, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { FaLinkedin, FaInstagram } from "react-icons/fa";
 import { useRouter ,useSearchParams, usePathname} from "next/navigation";
@@ -87,6 +87,8 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
   const [error, setError] = useState<string | null>(null);
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [showShareDropdown, setShowShareDropdown] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [successPopupData, setSuccessPopupData] = useState({ email: '', phone: '', sessionId: '', interviewLink: '' });
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -494,6 +496,14 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
       if (data.error) {
         toast.error(data.error);
       } else {
+        // Store email and phone before clearing form
+        const submittedEmail = applicationForm.email;
+        const submittedPhone = applicationForm.phone;
+        
+        // Extract interview session data from response if available
+        const sessionId = data.data?.sessionId || data.sessionId || '';
+        const interviewLink = data.data?.interviewLink || data.interviewLink || '';
+        
         toast.success("Application submitted successfully!");
         setShowApplyModal(false);
         clearCertificateData(); // Clear certificate data
@@ -515,6 +525,14 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
           showLanguageDropdown: false,
           workMode: [],
         });
+        // Show success popup with stored data
+        setSuccessPopupData({ 
+          email: submittedEmail, 
+          phone: submittedPhone,
+          sessionId: sessionId,
+          interviewLink: interviewLink
+        });
+        setShowSuccessPopup(true);
       }
     } else {
       // Handle error response - ensure we always pass a string
@@ -1315,6 +1333,85 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
               >
                 Submit
               </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Success Popup */}
+      {showSuccessPopup && (
+        <div className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200 animate-in fade-in-0 zoom-in-95 duration-200">
+            {/* Popup Header */}
+            <div className="flex justify-end items-center p-4">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowSuccessPopup(false)}
+                className="h-8 w-8 p-0"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+
+            {/* Popup Body */}
+            <div className="px-6 pb-6 text-center">
+              <div className="flex justify-center mb-4">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                  <CheckCircle2 className="w-10 h-10 text-green-600" />
+                </div>
+              </div>
+              
+              <h2 className="text-2xl font-bold text-earlyjobs-text mb-3">
+                Application Successful!
+              </h2>
+              
+              <p className="text-gray-700 mb-2">
+                Your application has been submitted successfully.
+              </p>
+              
+              <p className="text-gray-600 text-sm mb-6">
+                An AI interview link has been sent to your mobile number ({successPopupData.phone || 'your registered number'}) and email ({successPopupData.email || 'your registered email'}).
+              </p>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-3 justify-center items-stretch sm:items-center">
+                <a
+                  href={
+                    (() => {
+                      const baseUrl = process.env.NEXT_PUBLIC_AI_ASSESSMENT_URL || "";
+                      const separator = baseUrl.endsWith("/") ? "" : "/";
+                      const interviewUrlFromSession =
+                        successPopupData.sessionId && baseUrl
+                          ? `${baseUrl}${separator}interview?sessionId=${successPopupData.sessionId}`
+                          : "";
+                      return interviewUrlFromSession || successPopupData.interviewLink || "#";
+                    })()
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => {
+                    const baseUrl = process.env.NEXT_PUBLIC_AI_ASSESSMENT_URL || "";
+                    const hasLink = Boolean(successPopupData.sessionId && baseUrl) || Boolean(successPopupData.interviewLink);
+                    if (!hasLink) {
+                      e.preventDefault();
+                      toast.info("Interview link will be sent to your email and mobile number");
+                      return;
+                    }
+                    setShowSuccessPopup(false);
+                  }}
+                  className="w-full sm:w-auto inline-flex items-center justify-center rounded-md h-10 px-6 py-2 bg-orange-600 hover:bg-orange-700 text-white font-medium transition-colors shadow-sm"
+                >
+                  Start Interview
+                </a>
+                <Button
+                  variant="outline"
+                  onClick={() => setShowSuccessPopup(false)}
+                  className="w-full sm:w-auto border-gray-300 text-gray-800 hover:bg-gray-100 px-6 py-2"
+                >
+                  Close
+                </Button>
+              </div>
             </div>
           </div>
         </div>
