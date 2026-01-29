@@ -115,6 +115,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
   const [certificateVerified, setCertificateVerified] = useState(false);
   const [verifyingCertificate, setVerifyingCertificate] = useState(false);
   const [certificateData, setCertificateData] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Fetch job details
   useEffect(() => {
@@ -439,6 +440,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
   // Capitalize gender
   const capitalizedGender = applicationForm.gender.charAt(0).toUpperCase() + applicationForm.gender.slice(1);
 
+  setIsSubmitting(true);
   try {
     const candidateDetails: ICreateApplicantRequestBody = {
       jobId: jobData!.job_id, 
@@ -549,6 +551,8 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                         typeof error === 'string' ? error : 
                         "Failed to submit application";
     toast.error(errorMessage);
+  } finally {
+    setIsSubmitting(false);
   }
 };
 
@@ -1323,6 +1327,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
               <Button
                 onClick={() => setShowApplyModal(false)}
                 className="w-full sm:w-auto"
+                disabled={isSubmitting}
               >
                 Back
               </Button>
@@ -1330,8 +1335,16 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                 variant="outline"
                 className="bg-earlyjobs-navy hover:bg-earlyjobs-navy/90 w-full sm:w-auto"
                 onClick={handleSubmitApplication}
+                disabled={isSubmitting}
               >
-                Submit
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Submitting...
+                  </>
+                ) : (
+                  "Submit"
+                )}
               </Button>
             </div>
           </div>
