@@ -7,7 +7,7 @@ import { Badge } from "../ui/badge";
 import { Input } from "../ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Checkbox } from "../ui/checkbox";
-import { X, Bookmark,Globe, Share2, Briefcase, IndianRupee, User, Clock, MapPin, Plus, Trash2, ChevronDown, Copy, Linkedin, Facebook, Instagram, Loader2, ArrowLeft } from "lucide-react";
+import { X, Bookmark,Globe, Share2, Briefcase, IndianRupee, User, Clock, MapPin, Plus, Trash2, ChevronDown, Copy, Linkedin, Facebook, Instagram, Loader2, ArrowLeft, Users } from "lucide-react";
 import { toast } from "sonner";
 import { FaLinkedin, FaInstagram } from "react-icons/fa";
 import { useRouter ,useSearchParams, usePathname} from "next/navigation";
@@ -741,6 +741,11 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4 text-gray-400 flex-shrink-0" />
                   <span className="truncate">Posted {jobData.created_at ? formatRelativeTime(jobData.created_at) : 'Recently'}</span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <Users className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                  <span className="truncate">{jobData?.no_of_openings || 0} {jobData?.no_of_openings === 1 ? "opening" : "openings"}</span>
                 </div>
               </div>
               
