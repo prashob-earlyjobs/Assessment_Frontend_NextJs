@@ -749,7 +749,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                 </div>
               </div>
               
-              {/* Location */}
+              {/* Locations */}
               <div className="mb-6">
                 <h3 className="font-medium mb-2">Location</h3>
                 <div className="flex items-center gap-3">
