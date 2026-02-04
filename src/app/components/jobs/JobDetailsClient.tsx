@@ -590,85 +590,85 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
       }
     } else {
       // No resume file - send as JSON
-      const candidateDetails: ICreateApplicantRequestBody = {
-        jobId: jobData!.job_id, 
-        fullName: applicationForm.fullName,
-        email: applicationForm.email,
-        fatherName: applicationForm.fatherName,
-        phone: applicationForm.phone,
-        dateOfBirth: applicationForm.dateOfBirth,
-        gender: capitalizedGender as 'Male' | 'Female' | 'Other',
+    const candidateDetails: ICreateApplicantRequestBody = {
+      jobId: jobData!.job_id, 
+      fullName: applicationForm.fullName,
+      email: applicationForm.email,
+      fatherName: applicationForm.fatherName,
+      phone: applicationForm.phone,
+      dateOfBirth: applicationForm.dateOfBirth,
+      gender: capitalizedGender as 'Male' | 'Female' | 'Other',
         aadharNumber: applicationForm.aadharNumber || undefined,
-        highestQualification: applicationForm.highestQualification,
-        currentLocationDetails: applicationForm.currentLocation,
-        spokenLanguages: applicationForm.spokenLanguages,
-        totalExperienceYears,
-        totalExperienceMonths,
-        skills: applicationForm.skills,
-        workMode: applicationForm.workMode,
-        isExternalJob: jobData?.isExternal || false,
-        certificateId: jobData?.isExternal ? certificateData?._id : undefined,
-        tpoId: searchParams.get("tpoId") || undefined,
-        source: searchParams.get("source") || undefined,
-      };
+      highestQualification: applicationForm.highestQualification,
+      currentLocationDetails: applicationForm.currentLocation,
+      spokenLanguages: applicationForm.spokenLanguages,
+      totalExperienceYears,
+      totalExperienceMonths,
+      skills: applicationForm.skills,
+      workMode: applicationForm.workMode,
+      isExternalJob: jobData?.isExternal || false,
+      certificateId: jobData?.isExternal ? certificateData?._id : undefined,
+      tpoId: searchParams.get("tpoId") || undefined,
+      source: searchParams.get("source") || undefined,
+    };
 
       const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(candidateDetails),
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(candidateDetails),
       });
+    
+    const data = await response.json();
 
-      const data = await response.json();
-
-      if (response.ok) {
-        if (data.error) {
-          toast.error(data.error);
-        } else {
-          const submittedEmail = applicationForm.email;
-          const submittedPhone = applicationForm.phone;
-          const sessionId = data.data?.sessionId || data.sessionId || '';
-          const interviewLink = data.data?.interviewLink || data.interviewLink || '';
-          
-          toast.success("Application submitted successfully!");
-          setShowApplyModal(false);
+    if (response.ok) {
+      if (data.error) {
+        toast.error(data.error);
+      } else {
+        const submittedEmail = applicationForm.email;
+        const submittedPhone = applicationForm.phone;
+        const sessionId = data.data?.sessionId || data.sessionId || '';
+        const interviewLink = data.data?.interviewLink || data.interviewLink || '';
+        
+        toast.success("Application submitted successfully!");
+        setShowApplyModal(false);
           clearCertificateData();
           setResumeFile(null);
           setResumeFileName('');
-          setApplicationForm({
-            fullName: '',
-            fatherName: '',
-            email: '',
-            phone: '',
-            dateOfBirth: '',
-            gender: '',
-            aadharNumber: '',
-            highestQualification: '',
-            currentLocation: '',
-            experienceYears: '',
-            experienceMonths: '',
-            skills: [],
-            newSkill: '',
-            spokenLanguages: [],
-            showLanguageDropdown: false,
-            workMode: [],
-          });
-          setSuccessPopupData({ 
-            email: submittedEmail, 
-            phone: submittedPhone,
-            sessionId: sessionId,
-            interviewLink: interviewLink
-          });
-          setShowSuccessPopup(true);
-        }
-      } else {
-        const errorMessage = typeof data.error === 'string' ? data.error : 
-                            data.error?.message || 
-                            data.message || 
-                            "Failed to submit application";
-        toast.error(errorMessage);
-        console.error("❌ Application submission failed:", data);
+        setApplicationForm({
+          fullName: '',
+          fatherName: '',
+          email: '',
+          phone: '',
+          dateOfBirth: '',
+          gender: '',
+          aadharNumber: '',
+          highestQualification: '',
+          currentLocation: '',
+          experienceYears: '',
+          experienceMonths: '',
+          skills: [],
+          newSkill: '',
+          spokenLanguages: [],
+          showLanguageDropdown: false,
+          workMode: [],
+        });
+        setSuccessPopupData({ 
+          email: submittedEmail, 
+          phone: submittedPhone,
+          sessionId: sessionId,
+          interviewLink: interviewLink
+        });
+        setShowSuccessPopup(true);
+      }
+    } else {
+      const errorMessage = typeof data.error === 'string' ? data.error : 
+                          data.error?.message || 
+                          data.message || 
+                          "Failed to submit application";
+      toast.error(errorMessage);
+      console.error("❌ Application submission failed:", data);
       }
     }
   } catch (error) {

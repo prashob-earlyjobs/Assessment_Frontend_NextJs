@@ -810,6 +810,32 @@ const CandidateProfile = () => {
   const displayPhone = candidateDetails?.phone || "";
   const report = selectedCandidate?.report || {};
   const recommendations = Array.isArray(report?.recommendations) ? report.recommendations : [];
+  
+  // Extract assessment role and candidate skills from API
+  const assessmentRole = 
+    selectedCandidate?.assessment?.role ||
+    selectedCandidate?.role ||
+    selectedCandidate?.assessmentRole ||
+    candidateDetails?.role ||
+    "";
+
+  const skills = selectedCandidate?.skills || [];  
+  
+  // Extract skills from report - could be in reportSkills array or skills array
+  const candidateSkills = 
+    (report?.reportSkills && Array.isArray(report.reportSkills) 
+      ? report.reportSkills.map((skill: any) => skill.skill || skill.name || skill).filter(Boolean)
+      : []) ||
+    (report?.skills && Array.isArray(report.skills) 
+      ? report.skills.map((skill: any) => typeof skill === 'string' ? skill : skill.skill || skill.name).filter(Boolean)
+      : []) ||
+    (selectedCandidate?.skills && Array.isArray(selectedCandidate.skills)
+      ? selectedCandidate.skills.map((skill: any) => typeof skill === 'string' ? skill : skill.skill || skill.name).filter(Boolean)
+      : []) ||
+    (candidateDetails?.skills && Array.isArray(candidateDetails.skills)
+      ? candidateDetails.skills.map((skill: any) => typeof skill === 'string' ? skill : skill.skill || skill.name).filter(Boolean)
+      : []) ||
+    [];
 
   const normalizePoints = (value: any): string[] => {
     if (!value) return [];
@@ -913,6 +939,28 @@ const CandidateProfile = () => {
                             <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
                               <span className="font-semibold text-gray-800">Phone:</span> {displayPhone}
                             </p>
+                          )}
+                          {assessmentRole && (
+                            <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
+                              <span className="font-semibold text-gray-800">Assessment Role:</span> {assessmentRole}
+                            </p>
+                          )}
+                          {skills.length > 0 && (
+                            <div className="mt-2">
+                              <p className="text-gray-600 text-sm sm:text-base leading-relaxed mb-1">
+                                <span className="font-semibold text-gray-800">Skills:</span>
+                              </p>
+                              <div className="flex flex-wrap gap-2 mt-1">
+                                {skills.map((skill: string, index: number) => (
+                                  <span
+                                    key={index}
+                                    className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 border border-orange-200"
+                                  >
+                                    {skill}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
                           )}
                         </div>
                       </div>
