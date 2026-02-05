@@ -8,9 +8,12 @@ import { toast } from "sonner";
 import { Menu, X, ChevronLeft, ChevronRight, Search, Filter, Star, Award, Briefcase, MapPin, TrendingUp } from "lucide-react";
 import Footer from "./footer";
 import Navbar from "./navbar";
+import Cookies from "js-cookie";
+import axiosInstance from "../services/apiinterseptor";
 
 export default function BrowseCandidatesClient() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [scoreFilter, setScoreFilter] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [candidates, setCandidates] = useState([]);
@@ -21,6 +24,14 @@ export default function BrowseCandidatesClient() {
   const [totalPages, setTotalPages] = useState(1);
   const [totalCandidates, setTotalCandidates] = useState(0);
   const router = useRouter();
+
+  // Debounce search input before calling API (prevents request on every keystroke)
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm.trim());
+    }, 400);
+    return () => clearTimeout(t);
+  }, [searchTerm]);
 
   useEffect(() => {
     const fetchCandidates = async () => {
@@ -36,48 +47,61 @@ export default function BrowseCandidatesClient() {
         if (scoreFilter && scoreFilter !== "all") {
           params.append("scoreFilter", scoreFilter);
         }
-        
-        const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/browseCandidates/candidates?${params.toString()}`;
-        const response = await fetch(url, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({}));
-          throw new Error(errorData.message || `Failed to fetch candidates (Status: ${response.status})`);
-        }
-        const data = await response.json();
-        
-        if (data.success && data.data && data.data.length > 0) {
-          // Process candidates with assessment title from existing data
-          const processedCandidates = data.data
-            .filter((candidate) => candidate.assessmentsPaid && candidate.assessmentsPaid.length > 0)
-            .map((candidate) => {
-              // Use assessment title from candidate data if available, otherwise use default
-              const firstAssessment = candidate.assessmentsPaid[0];
-              const firstAssessmentTitle = firstAssessment?.assessmentTitle || 
-                                          firstAssessment?.title || 
-                                          "Assessment";
-              
-              return {
-                ...candidate,
-                firstAssessmentTitle,
-              };
-            });
 
-          setCandidates(processedCandidates);
+        // Server-side search
+        if (debouncedSearchTerm) {
+          // Note: different endpoints in this codebase use different keys; send both.
+          params.append("search", debouncedSearchTerm);
+        }
+
+   
+        
+        // const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/browseCandidates/candidates?${params.toString()}`;
+
+        // const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/interviews/getAllCandidates?${params.toString()}`;
+        const response = await axiosInstance.get(`/interviews/getAllCandidates?${params.toString()}`).catch((error) => {
+          throw new Error(error.response?.data?.message || `Failed to fetch candidates (Status: ${error.response?.status})`);
+        });
+        console.log("Response received:", response);
+      
+     
+        // Handle multiple possible response shapes safely
+        // Some APIs return `{ data: { ... } }`, others return `{ ... }` directly.
+        const responseData = response?.data?.data ?? response?.data;
+        const list =
+          responseData?.completedInterviews ||
+          responseData?.candidates ||
+          responseData?.interviews ||
+          responseData ||
+          [];
+
+        const arr = Array.isArray(list) ? list : [];
+        const processedCandidates = arr.map((candidate) => ({
+          ...candidate,
+          firstAssessmentTitle: candidate?.interviewTitle || candidate?.firstAssessmentTitle || "Assessment",
+          // Ensure we always have an id to navigate with (this page expects interview id)
+          _id: candidate?._id || candidate?.interviewId || candidate?.id,
+        }));
+
+        setCandidates(processedCandidates);
+
+        const total =
+          responseData?.total ??
+          responseData?.totalCount ??
+          responseData?.totalCandidates ??
+          processedCandidates.length;
+        setTotalCandidates(Number(total) || 0);
+        setTotalPages(Math.max(1, Math.ceil((Number(total) || 0) / itemsPerPage)));
 
           // Set pagination from API response
-          const apiTotal = data.total || data.totalCount || data.totalCandidates || processedCandidates.length;
-          setTotalCandidates(apiTotal);
-          setTotalPages(Math.ceil(apiTotal / itemsPerPage));
-        } else {
-          setCandidates([]);
-          setTotalCandidates(0);
-          setTotalPages(1);
-        }
+        //   const apiTotal = data.total || data.totalCount || data.totalCandidates || processedCandidates.length;
+        //   setTotalCandidates(apiTotal);
+        //   setTotalPages(Math.ceil(apiTotal / itemsPerPage));
+        // } else {
+        //   setCandidates([]);
+        //   setTotalCandidates(0);
+        //   setTotalPages(1);
+        // }
       } catch (err) {
         setError(err.message);
         toast.error(err.message || "Failed to load candidates. Please try again later.");
@@ -88,12 +112,12 @@ export default function BrowseCandidatesClient() {
 
  
     fetchCandidates();
-  }, [currentPage, itemsPerPage, scoreFilter]);
+  }, [currentPage, itemsPerPage, scoreFilter, debouncedSearchTerm]);
 
   // Reset to page 1 when search term or score filter changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm, scoreFilter]);
+  }, [debouncedSearchTerm, scoreFilter]);
 
   const scrollToSection = (sectionId) => {
     const section = document.getElementById(sectionId);
@@ -131,8 +155,9 @@ export default function BrowseCandidatesClient() {
   };
 
   const getSkillsDisplay = (candidate) => {
-    if (candidate?.interviewSkills?.length > 0) {
-      return candidate.interviewSkills.slice(0, 4);
+
+    if (candidate?.skills?.length > 0) {  
+      return candidate.skills.slice(0, 4).map((skill) => skill.name );
     }
     return ["Professional", "Reliable", "Dedicated"];
   };
@@ -172,20 +197,33 @@ export default function BrowseCandidatesClient() {
   };
 
   const handleViewProfile = (candidate) => {
-    const nameSlug = generateSlug(candidate.name);
-    const assessmentSlug = generateAssessmentSlug(candidate.firstAssessmentTitle);
-    console.log("Navigating to candidate profile:", `/browse-interviewed-candidates/${nameSlug}/${assessmentSlug}/${candidate._id}`);
-    router.push(`/browse-interviewed-candidates/${nameSlug}-${assessmentSlug}/${candidate._id}`);
+    const candidateId = candidate?._id || candidate?.interviewId || candidate?.id;
+    if (!candidateId) {
+      toast.error("Unable to open profile: interview id missing");
+      console.error("Missing candidate/interview id:", candidate);
+      return;
+    }
+
+    const rawName =
+      candidate?.name ||
+      candidate?.candidate?.firstName ||
+      candidate?.candidate?.lastName ||
+      "candidate";
+    const nameSlug = generateSlug(String(rawName));
+    const rawTitle =
+      candidate?.firstAssessmentTitle ||
+      candidate?.firstAssessmentRole ||
+      candidate?.interviewTitle ||
+      "assessment";
+    const assessmentSlug = generateAssessmentSlug(String(rawTitle));
+
+    const path = `/browse-interviewed-candidates/${nameSlug}-${assessmentSlug}/${candidateId}`;
+    console.log("Navigating to candidate profile:", path, { candidate });
+    router.push(path);
   };
 
-  const filteredCandidates = useMemo(() => {
-    if (!searchTerm.trim()) return candidates;
-    return candidates.filter((candidate) =>
-      candidate?.profile?.skills?.some((skill) =>
-        skill?.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    );
-  }, [candidates, searchTerm]);
+  // Results are now filtered server-side using the `search` query param
+  const filteredCandidates = useMemo(() => candidates, [candidates]);
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
@@ -194,18 +232,12 @@ export default function BrowseCandidatesClient() {
 
   // Calculate display values
   const displayTotal = useMemo(() => {
-    if (searchTerm.trim()) {
-      return filteredCandidates.length;
-    }
     return totalCandidates;
-  }, [searchTerm, filteredCandidates.length, totalCandidates]);
+  }, [totalCandidates]);
 
   const actualTotalPages = useMemo(() => {
-    if (searchTerm.trim()) {
-      return 1;
-    }
     return totalPages;
-  }, [searchTerm, totalPages]);
+  }, [totalPages]);
 
   return (
     <>
@@ -496,7 +528,7 @@ export default function BrowseCandidatesClient() {
                             {/* Compact Score Badge */}
                             <div className="flex items-center gap-1 bg-white border border-gray-200 rounded-md px-2 py-1 shadow-sm flex-shrink-0">
                               <Star className="h-3 w-3 text-orange-500 fill-orange-500" />
-                              <span className="text-xs font-bold text-gray-900">{candidate.highestScore??0}.0</span>
+                              <span className="text-xs font-bold text-gray-900">{candidate.score??0}.0</span>
                             </div>
                           </div>
                           <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
@@ -621,7 +653,7 @@ export default function BrowseCandidatesClient() {
           )}
 
           {/* Enhanced Pagination Controls */}
-          {!searchTerm.trim() && actualTotalPages > 1 && (
+          {actualTotalPages > 1 && (
             <div className="mt-12 mb-8">
               <div className="bg-white border-2 border-gray-100 rounded-2xl p-6 shadow-sm">
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-6">

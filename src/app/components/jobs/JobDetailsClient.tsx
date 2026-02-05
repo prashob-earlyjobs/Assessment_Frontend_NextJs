@@ -7,7 +7,7 @@ import { Badge } from "../ui/badge";
 import { Input } from "../ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Checkbox } from "../ui/checkbox";
-import { X, Bookmark,Globe, Share2, Briefcase, IndianRupee, User, Clock, MapPin, Plus, Trash2, ChevronDown, Copy, Linkedin, Facebook, Instagram, Loader2, ArrowLeft, Users } from "lucide-react";
+import { X, Bookmark,Globe, Share2, Briefcase, IndianRupee, User, Clock, MapPin, Plus, Trash2, ChevronDown, Copy, Linkedin, Facebook, Instagram, Loader2, ArrowLeft, CheckCircle2, FileText, Upload ,Users} from "lucide-react";
 import { toast } from "sonner";
 import { FaLinkedin, FaInstagram } from "react-icons/fa";
 import { useRouter ,useSearchParams, usePathname} from "next/navigation";
@@ -87,6 +87,8 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
   const [error, setError] = useState<string | null>(null);
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [showShareDropdown, setShowShareDropdown] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [successPopupData, setSuccessPopupData] = useState({ email: '', phone: '', sessionId: '', interviewLink: '' });
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -114,6 +116,8 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
   const [verifyingCertificate, setVerifyingCertificate] = useState(false);
   const [certificateData, setCertificateData] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [resumeFileName, setResumeFileName] = useState<string>('');
 
   // Fetch job details
   useEffect(() => {
@@ -197,6 +201,52 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
     setCertificateVerified(false);
     setCertificateData(null);
     setVerifyingCertificate(false);
+  };
+
+  // Upload resume function - adaptable endpoint
+  // Handle resume file selection
+  const handleResumeFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      setResumeFile(null);
+      setResumeFileName('');
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    ];
+
+    if (!allowedTypes.includes(file.type)) {
+      toast.error('Invalid file type. Only PDF and DOC/DOCX files are allowed.');
+      event.target.value = '';
+      return;
+    }
+
+    // Validate file size (3MB limit)
+    const maxSize = 3 * 1024 * 1024; // 3MB in bytes
+    if (file.size > maxSize) {
+      toast.error('File size exceeds 3MB limit. Please choose a smaller file.');
+      event.target.value = '';
+      return;
+    }
+
+    setResumeFile(file);
+    setResumeFileName(file.name);
+  };
+
+  // Remove resume file
+  const handleRemoveResume = () => {
+    setResumeFile(null);
+    setResumeFileName('');
+    // Reset file input
+    const fileInput = document.getElementById('resume-upload') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
   };
 
   if (loading) {
@@ -440,6 +490,106 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
 
   setIsSubmitting(true);
   try {
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL_2_0}/public/jobs/apply`;
+
+    // Create FormData if resume file is attached, otherwise use JSON
+    if (resumeFile) {
+      const formData = new FormData();
+      
+      // Append all form fields
+      formData.append('jobId', jobData!.job_id);
+      formData.append('fullName', applicationForm.fullName);
+      formData.append('email', applicationForm.email);
+      formData.append('fatherName', applicationForm.fatherName);
+      formData.append('phone', applicationForm.phone);
+      formData.append('dateOfBirth', applicationForm.dateOfBirth);
+      formData.append('gender', capitalizedGender);
+      if (applicationForm.aadharNumber) {
+        formData.append('aadharNumber', applicationForm.aadharNumber);
+      }
+      formData.append('highestQualification', applicationForm.highestQualification);
+      formData.append('currentLocationDetails', applicationForm.currentLocation);
+      formData.append('spokenLanguages', JSON.stringify(applicationForm.spokenLanguages));
+      formData.append('totalExperienceYears', totalExperienceYears.toString());
+      formData.append('totalExperienceMonths', totalExperienceMonths.toString());
+      formData.append('skills', JSON.stringify(applicationForm.skills));
+      formData.append('workMode', JSON.stringify(applicationForm.workMode));
+      formData.append('isExternalJob', (jobData?.isExternal || false).toString());
+      if (jobData?.isExternal && certificateData?._id) {
+        formData.append('certificateId', certificateData._id);
+      }
+      const tpoId = searchParams.get("tpoId");
+      if (tpoId) {
+        formData.append('tpoId', tpoId);
+      }
+      const source = searchParams.get("source");
+      if (source) {
+        formData.append('source', source);
+      }
+      
+      // Append resume file
+      formData.append('resume', resumeFile);
+
+      const response = await fetch(url, {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        if (data.error) {
+          toast.error(data.error);
+        } else {
+          // Store email and phone before clearing form
+          const submittedEmail = applicationForm.email;
+          const submittedPhone = applicationForm.phone;
+          
+          // Extract interview session data from response if available
+          const sessionId = data.data?.sessionId || data.sessionId || '';
+          const interviewLink = data.data?.interviewLink || data.interviewLink || '';
+          
+          toast.success("Application submitted successfully!");
+          setShowApplyModal(false);
+          clearCertificateData();
+          setResumeFile(null);
+          setResumeFileName('');
+          setApplicationForm({
+            fullName: '',
+            fatherName: '',
+            email: '',
+            phone: '',
+            dateOfBirth: '',
+            gender: '',
+            aadharNumber: '',
+            highestQualification: '',
+            currentLocation: '',
+            experienceYears: '',
+            experienceMonths: '',
+            skills: [],
+            newSkill: '',
+            spokenLanguages: [],
+            showLanguageDropdown: false,
+            workMode: [],
+          });
+          setSuccessPopupData({ 
+            email: submittedEmail, 
+            phone: submittedPhone,
+            sessionId: sessionId,
+            interviewLink: interviewLink
+          });
+          setShowSuccessPopup(true);
+        }
+      } else {
+        const errorMessage = typeof data.error === 'string' ? data.error : 
+                            data.error?.message || 
+                            data.message || 
+                            "Failed to submit application";
+        toast.error(errorMessage);
+        console.error("❌ Application submission failed:", data);
+      }
+    } else {
+      // No resume file - send as JSON
     const candidateDetails: ICreateApplicantRequestBody = {
       jobId: jobData!.job_id, 
       fullName: applicationForm.fullName,
@@ -448,7 +598,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
       phone: applicationForm.phone,
       dateOfBirth: applicationForm.dateOfBirth,
       gender: capitalizedGender as 'Male' | 'Female' | 'Other',
-      aadharNumber: applicationForm.aadharNumber || undefined, // Send undefined if empty
+        aadharNumber: applicationForm.aadharNumber || undefined,
       highestQualification: applicationForm.highestQualification,
       currentLocationDetails: applicationForm.currentLocation,
       spokenLanguages: applicationForm.spokenLanguages,
@@ -462,43 +612,30 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
       source: searchParams.get("source") || undefined,
     };
 
-
-    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL_2_0}/public/jobs/apply`;
-
-    const options = {
+      const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(candidateDetails),
-    };
-
-    // Debug the new fields specifically
-    // console.log("🔍 NEW FIELDS CHECK:");
-    // console.log("- isExternalJob:", candidateDetails.isExternalJob, "(type:", typeof candidateDetails.isExternalJob, ")");
-    // console.log("- certificateId:", candidateDetails.certificateId, "(type:", typeof candidateDetails.certificateId, ")");
-    // console.log("- jobData.isExternal:", jobData?.isExternal);
-    // console.log("- certificateData exists:", !!certificateData);
-    // console.log("- certificateNumber:", certificateNumber);
-    // console.log("📤 FULL PAYLOAD:", candidateDetails);
-
-    // console.log("🚀 Making API call to:", url);
-    // console.log("📦 Request body:", JSON.stringify(candidateDetails, null, 2));
-    
-    const response = await fetch(url, options);
-    // console.log("📥 Response status:", response.status);
-    // console.log("📥 Response headers:", Object.fromEntries(response.headers.entries()));
+      });
     
     const data = await response.json();
-    // console.log("📥 Response data:", data);
 
     if (response.ok) {
       if (data.error) {
         toast.error(data.error);
       } else {
+        const submittedEmail = applicationForm.email;
+        const submittedPhone = applicationForm.phone;
+        const sessionId = data.data?.sessionId || data.sessionId || '';
+        const interviewLink = data.data?.interviewLink || data.interviewLink || '';
+        
         toast.success("Application submitted successfully!");
         setShowApplyModal(false);
-        clearCertificateData(); // Clear certificate data
+          clearCertificateData();
+          setResumeFile(null);
+          setResumeFileName('');
         setApplicationForm({
           fullName: '',
           fatherName: '',
@@ -517,15 +654,22 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
           showLanguageDropdown: false,
           workMode: [],
         });
+        setSuccessPopupData({ 
+          email: submittedEmail, 
+          phone: submittedPhone,
+          sessionId: sessionId,
+          interviewLink: interviewLink
+        });
+        setShowSuccessPopup(true);
       }
     } else {
-      // Handle error response - ensure we always pass a string
       const errorMessage = typeof data.error === 'string' ? data.error : 
                           data.error?.message || 
                           data.message || 
                           "Failed to submit application";
       toast.error(errorMessage);
       console.error("❌ Application submission failed:", data);
+      }
     }
   } catch (error) {
     console.error("❌ Application submission error:", error);
@@ -603,7 +747,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
 
   return (
     <div className="min-h-screen bg-gray-50" onClick={handleClickOutsideShare}>
-      <div className="max-w-7xl mx-auto p-4 sm:p-6">
+      <div className="max-w-7xl mx-auto p-4 sm:p-6 text-gray-900">
         {/* Page Title */}
         <div className="flex items-center gap-4 mb-4 sm:mb-6">
           <Button
@@ -622,7 +766,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
         <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
           {/* Main Content */}
           <div className="flex-1">
-            <Card className="p-4 sm:p-6">
+            <Card className="p-4 sm:p-6 text-gray-900">
               {/* Job Header */}
               <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-2">
                 <div className="flex gap-3 sm:gap-4">
@@ -795,8 +939,9 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
               {jobData.description && (
                 <div className="mb-6">
                   <h3 className="font-medium mb-3">About this Job</h3>
-                  <div className="prose prose-sm max-w-none">
+                  <div className="prose prose-sm max-w-none text-gray-900">
                     <div
+                      className="text-gray-900"
                       dangerouslySetInnerHTML={{
                         __html: jobData.description.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, ""),
                       }}
@@ -834,7 +979,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
           
           {/* Right Sidebar */}
           <div className="w-full lg:w-80">
-            <div className="bg-white rounded-lg p-4 shadow-sm">
+            <div className="bg-white rounded-lg p-4 shadow-sm text-gray-900">
               
               <div className="flex space-x-3 mb-4">
                 {jobData.commission_type === "percentage" &&  <a
@@ -860,27 +1005,27 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                   Join for More Updates
                 </a> }
               </div>
-              <h3 className="font-medium text-lg mb-4">Job Summary</h3>
+              <h3 className="font-medium text-lg mb-4 text-gray-900">Job Summary</h3>
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Company:</span>
-                  <span className="font-medium">{jobData.company_name}</span>
+                  <span className="font-medium text-gray-900">{jobData.company_name}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Location:</span>
-                  <span className="font-medium">{jobData.city || 'Remote'}</span>
+                  <span className="font-medium text-gray-900">{jobData.city || 'Remote'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Type:</span>
-                  <span className="font-medium">{jobData.employment_type || 'Full-time'}</span>
+                  <span className="font-medium text-gray-900">{jobData.employment_type || 'Full-time'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Experience:</span>
-                  <span className="font-medium">{formatExperience(jobData.min_experience, jobData.max_experience)}</span>
+                  <span className="font-medium text-gray-900">{formatExperience(jobData.min_experience, jobData.max_experience)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Salary:</span>
-                  <span className="font-medium">{formatSalary(jobData.min_salary, jobData.max_salary, jobData.salary_mode)}</span>
+                  <span className="font-medium text-gray-900">{formatSalary(jobData.min_salary, jobData.max_salary, jobData.salary_mode)}</span>
                 </div>
               </div>
             </div>
@@ -959,7 +1104,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
       {/* Apply Modal */}
       {showApplyModal && (
         <div className="fixed inset-0 backdrop-blur-sm bg-white/30 flex items-center justify-center z-50 p-2 sm:p-4">
-          <div className="bg-white rounded-lg w-full max-w-2xl max-h-[95vh] sm:max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200">
+          <div className="bg-white rounded-lg w-full max-w-2xl max-h-[95vh] sm:max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200 text-gray-900">
             {/* Modal Header */}
             <div className="flex justify-between items-center p-4 sm:p-6">
               <h2 className="text-lg sm:text-xl font-semibold text-earlyjobs-text">
@@ -970,6 +1115,8 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                 size="sm"
                 onClick={() => {
                   clearCertificateData();
+                  setResumeFile(null);
+                  setResumeFileName('');
                   setShowApplyModal(false);
                 }}
                 className="h-8 w-8 p-0"
@@ -1266,6 +1413,52 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                 </div>
               </div>
 
+              {/* Resume Upload */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Resume (PDF/DOC/DOCX) <span className="text-gray-500 text-xs">(Optional, Max 3MB)</span>
+                </label>
+                {!resumeFile ? (
+                  <div className="relative">
+                    <input
+                      type="file"
+                      id="resume-upload"
+                      accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                      onChange={handleResumeFileChange}
+                      className="hidden"
+                    />
+                    <label
+                      htmlFor="resume-upload"
+                      className="flex items-center justify-center gap-2 w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-md cursor-pointer hover:border-earlyjobs-orange hover:bg-orange-50/50 transition-colors"
+                    >
+                      <Upload className="w-5 h-5 text-gray-400" />
+                      <span className="text-sm text-gray-600">Click to upload resume</span>
+                    </label>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-md bg-gray-50">
+                    <div className="flex items-center gap-3">
+                      <FileText className="w-5 h-5 text-earlyjobs-orange" />
+                      <div>
+                        <p className="text-sm font-medium text-gray-900">{resumeFileName}</p>
+                        <p className="text-xs text-gray-500">
+                          {(resumeFile.size / 1024 / 1024).toFixed(2)} MB
+                        </p>
+                      </div>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleRemoveResume}
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                    >
+                      <X className="w-4 h-4" />
+                    </Button>
+                  </div>
+                )}
+              </div>
+
               {/* Spoken Languages */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -1286,7 +1479,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                   </div>
                   
                   {applicationForm.showLanguageDropdown && (
-                    <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
+                    <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto text-gray-900">
                       {['English', 'Hindi', 'Tamil', 'Telugu', 'Kannada', 'Malayalam', 'Bengali', 'Marathi', 'Gujarati', 'Punjabi'].map((language) => (
                         <div 
                           key={language} 
@@ -1312,7 +1505,11 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
             {/* Modal Footer */}
             <div className="flex flex-col sm:flex-row justify-end gap-3 p-4 sm:p-6">
               <Button
-                onClick={() => setShowApplyModal(false)}
+                onClick={() => {
+                  setResumeFile(null);
+                  setResumeFileName('');
+                  setShowApplyModal(false);
+                }}
                 className="w-full sm:w-auto"
                 disabled={isSubmitting}
               >
@@ -1333,6 +1530,85 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                   "Submit"
                 )}
               </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Success Popup */}
+      {showSuccessPopup && (
+        <div className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200 animate-in fade-in-0 zoom-in-95 duration-200 text-gray-900">
+            {/* Popup Header */}
+            <div className="flex justify-end items-center p-4">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowSuccessPopup(false)}
+                className="h-8 w-8 p-0"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+
+            {/* Popup Body */}
+            <div className="px-6 pb-6 text-center">
+              <div className="flex justify-center mb-4">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                  <CheckCircle2 className="w-10 h-10 text-green-600" />
+                </div>
+              </div>
+              
+              <h2 className="text-2xl font-bold text-earlyjobs-text mb-3">
+                Application Successful!
+              </h2>
+              
+              <p className="text-gray-700 mb-2">
+                Your application has been submitted successfully.
+              </p>
+              
+              <p className="text-gray-600 text-sm mb-6">
+                An AI interview link has been sent to your mobile number ({successPopupData.phone || 'your registered number'}) and email ({successPopupData.email || 'your registered email'}).
+              </p>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-3 justify-center items-stretch sm:items-center">
+                <a
+                  href={
+                    (() => {
+                      const baseUrl = process.env.NEXT_PUBLIC_AI_ASSESSMENT_URL || "";
+                      const separator = baseUrl.endsWith("/") ? "" : "/";
+                      const interviewUrlFromSession =
+                        successPopupData.sessionId && baseUrl
+                          ? `${baseUrl}${separator}interview?sessionId=${successPopupData.sessionId}`
+                          : "";
+                      return interviewUrlFromSession || successPopupData.interviewLink || "#";
+                    })()
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => {
+                    const baseUrl = process.env.NEXT_PUBLIC_AI_ASSESSMENT_URL || "";
+                    const hasLink = Boolean(successPopupData.sessionId && baseUrl) || Boolean(successPopupData.interviewLink);
+                    if (!hasLink) {
+                      e.preventDefault();
+                      toast.info("Interview link will be sent to your email and mobile number");
+                      return;
+                    }
+                    setShowSuccessPopup(false);
+                  }}
+                  className="w-full sm:w-auto inline-flex items-center justify-center rounded-md h-10 px-6 py-2 bg-orange-600 hover:bg-orange-700 text-white font-medium transition-colors shadow-sm"
+                >
+                  Start Interview
+                </a>
+                <Button
+                  variant="outline"
+                  onClick={() => setShowSuccessPopup(false)}
+                  className="w-full sm:w-auto border-gray-300 text-gray-800 hover:bg-gray-100 px-6 py-2"
+                >
+                  Close
+                </Button>
+              </div>
             </div>
           </div>
         </div>
