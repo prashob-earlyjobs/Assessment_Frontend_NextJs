@@ -3,7 +3,7 @@
 import { Card } from "../ui/card";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
-import { Bookmark, Clock, Briefcase, IndianRupee, Calendar, MapPin, Globe } from "lucide-react";
+import { Bookmark, Clock, Briefcase, IndianRupee, Calendar, MapPin, Globe, Users } from "lucide-react";
 import { useState } from "react";
 
 interface JobCardProps {
@@ -13,6 +13,7 @@ interface JobCardProps {
   title: string;
   employmentType: string;
   workType?: string;
+  noOfOpenings?: number;
   min_salary?: string | number;
   max_salary?: string | number;
   salary_mode?: string;
@@ -31,6 +32,7 @@ const JobCard = ({
   title,
   employmentType,
   workType,
+  noOfOpenings,
   min_salary,
   max_salary,
   salary_mode,
@@ -118,6 +120,8 @@ const JobCard = ({
       : maxLpa != null
       ? `${formatLpa(maxLpa)} LPA`
       : null;
+
+
 
   // Format posted time
   const formatRelativeTime = (dateString: string): string => {
@@ -216,6 +220,12 @@ const JobCard = ({
               <span className="flex items-center gap-1">
                 <Calendar className="w-3 h-3" />
                 {experienceDisplay}
+              </span>
+            )}
+            {noOfOpenings && (
+              <span className="flex items-center gap-1">
+                <Users className="w-3 h-3" />
+                {noOfOpenings}
               </span>
             )}
             <span className="flex items-center gap-1">
