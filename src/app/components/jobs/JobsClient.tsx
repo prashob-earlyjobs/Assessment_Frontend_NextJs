@@ -515,6 +515,7 @@ const JobsClient = () => {
                       title={job.title || "Job Title Not Available"}
                       employmentType={job.employmentType || "Full Time"}
                       workType={job.workType}
+                      noOfOpenings={job.noOfOpenings || 0}
                       min_salary={job.minSalary ? String(job.minSalary) : undefined}
                       max_salary={job.maxSalary ? String(job.maxSalary) : undefined}
                       min_experience={job.minExperience != null ? String(job.minExperience) : undefined}
