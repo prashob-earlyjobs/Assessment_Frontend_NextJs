@@ -932,12 +932,12 @@ const CandidateProfile = () => {
                         <div className="space-y-1">
                           {displayEmail && (
                             <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
-                              <span className="font-semibold text-gray-800">Email:</span> {displayEmail}
+                              <span className="font-semibold text-gray-800">Email:</span> {displayEmail?.replace(/(.{2}).+(@.+)/, "$1****$2")}
                             </p>
                           )}
                           {displayPhone && (
                             <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
-                              <span className="font-semibold text-gray-800">Phone:</span> {displayPhone}
+                              <span className="font-semibold text-gray-800">Phone:</span> {displayPhone?.replace(/\d(?=\d{4})/g, "*")}
                             </p>
                           )}
                           {assessmentRole && (
