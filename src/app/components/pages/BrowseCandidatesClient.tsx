@@ -8,8 +8,6 @@ import { toast } from "sonner";
 import { Menu, X, ChevronLeft, ChevronRight, Search, Filter, Star, Award, Briefcase, MapPin, TrendingUp } from "lucide-react";
 import Footer from "./footer";
 import Navbar from "./navbar";
-import Cookies from "js-cookie";
-import axiosInstance from "../services/apiinterseptor";
 
 export default function BrowseCandidatesClient() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -54,20 +52,17 @@ export default function BrowseCandidatesClient() {
           params.append("search", debouncedSearchTerm);
         }
 
-   
-        
-        // const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/browseCandidates/candidates?${params.toString()}`;
+        // Use fetch (not axios) for public endpoint - avoids auth interceptor redirect to login
+        const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "";
+        const url = `${baseUrl}/browseCandidates/candidates?${params.toString()}`;
+        const res = await fetch(url);
+        if (!res.ok) {
+          throw new Error(`Failed to fetch candidates (Status: ${res.status})`);
+        }
+        const json = await res.json();
 
-        // const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/interviews/getAllCandidates?${params.toString()}`;
-        const response = await axiosInstance.get(`/interviews/getAllCandidates?${params.toString()}`).catch((error) => {
-          throw new Error(error.response?.data?.message || `Failed to fetch candidates (Status: ${error.response?.status})`);
-        });
-        console.log("Response received:", response);
-      
-     
         // Handle multiple possible response shapes safely
-        // Some APIs return `{ data: { ... } }`, others return `{ ... }` directly.
-        const responseData = response?.data?.data ?? response?.data;
+        const responseData = json?.data ?? json;
         const list =
           responseData?.completedInterviews ||
           responseData?.candidates ||
