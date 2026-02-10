@@ -1,0 +1,807 @@
+"use client";
+import { useEffect, useState, useRef, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import { Button } from "../../components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../../components/ui/card";
+import { Badge } from "../../components/ui/badge";
+import { Input } from "../../components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../components/ui/select";
+import { Avatar, AvatarFallback } from "../../components/ui/avatar";
+import {
+  ArrowLeft,
+  Search,
+  Filter,
+  Clock,
+  Users,
+  Award,
+  Play,
+  BookOpen,
+  Code,
+  Crown,
+  MessageSquare,
+  BarChart,
+  Settings,
+  Zap,
+  Sparkles,
+} from "lucide-react";
+import { getAssessmentsfromSearch, getAssessmentSuggestions } from "../../components/services/servicesapis";
+import Header from "./header";
+import { toast } from "sonner";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "../../components/ui/tooltip";
+
+const LIMIT = 10;
+
+const Assessments = () => {
+  const navigate = useRouter();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedSkill, setSelectedSkill] = useState("all");
+  const [selectedLevel, setSelectedLevel] = useState("all");
+  const [showingSuggestions, setShowingSuggestions] = useState(false);
+  const [loadingSuggestions, setLoadingSuggestions] = useState(false);
+  const [assessments, setAssessments] = useState([]);
+  const [page, setPage] = useState(1);
+  const [suggestionsPage, setSuggestionsPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  const observer = useRef<IntersectionObserver | null>(null);
+
+  const lastAssessmentRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          if (showingSuggestions) {
+            setSuggestionsPage((prev) => prev + 1);
+          } else {
+            setPage((prev) => prev + 1);
+          }
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [loading, hasMore, showingSuggestions]
+  );
+
+
+  
+  const getAssessments = async () => {
+    setLoading(true);
+    const params = {
+      page,
+      limit: LIMIT,
+      type: "",
+      difficulty: selectedLevel !== "all" ? selectedLevel : "",
+      searchQuery: searchQuery || "",
+      category: selectedSkill !== "all" ? selectedSkill : "",
+    };
+    console.log("Filter params:", params); // Debug log
+    try {
+      const response = await getAssessmentsfromSearch(params);
+      const fetched = response.data.assessments;
+      console.log("Fetched assessments:", fetched); // Debug log
+      
+      // Remove duplicates based on _id
+      setAssessments((prev) => {
+        const existingIds = new Set(prev.map(assessment => assessment._id));
+        const uniqueFetched = fetched.filter(assessment => !existingIds.has(assessment._id));
+        return [...prev, ...uniqueFetched];
+      });
+      
+      setHasMore(fetched.length === LIMIT);
+    } catch (err) {
+      console.error("Error fetching assessments:", err); // Debug log
+      toast.error("Failed to fetch assessments:");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!showingSuggestions) {
+      setAssessments([]);
+      setPage(1);
+      setHasMore(true);
+    }
+  }, [searchQuery, selectedSkill, selectedLevel]);
+
+  useEffect(() => {
+    if (!showingSuggestions) {
+      getAssessments();
+    }
+  }, [page, searchQuery, selectedSkill, selectedLevel, showingSuggestions]);
+
+  // New useEffect for suggestions pagination
+  useEffect(() => {
+    if (showingSuggestions && suggestionsPage > 1) {
+      loadMoreSuggestions();
+    }
+  }, [suggestionsPage]);
+
+  const loadMoreSuggestions = async () => {
+    if (loading) return;
+    
+    setLoading(true);
+    try {
+      const response = await getAssessmentSuggestions(suggestionsPage);
+      console.log("Loading more suggestions, page:", suggestionsPage, response);
+      const data = response.data.suggestions;
+      
+      if (response.data.success && data && data.length > 0) {
+        // Remove duplicates based on _id
+        setAssessments((prev) => {
+          const existingIds = new Set(prev.map(assessment => assessment._id));
+          const uniqueFetched = data.filter(assessment => !existingIds.has(assessment._id));
+          return [...prev, ...uniqueFetched];
+        });
+        
+        setHasMore(data.length === LIMIT);
+      } else {
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error("Error loading more suggestions:", error);
+      
+      // Handle specific error cases
+      const status = error?.response?.status;
+      const message = error?.response?.data?.message || '';
+      
+      if (status === 400 && (message.toLowerCase().includes('profile') || 
+          message.toLowerCase().includes('skills') || 
+          message.toLowerCase().includes('experience'))) {
+        // Profile issue - stop loading and switch back to regular assessments
+        toast.error("Profile incomplete. Switching to all assessments.");
+        resetToAllAssessments();
+      } else if (status === 401) {
+        // Unauthorized - switch back to regular assessments
+        toast.error("Session expired. Showing all assessments.");
+        resetToAllAssessments();
+      } else {
+        setHasMore(false);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getSuggestedAssessments = async () => {
+    setLoadingSuggestions(true);
+  
+    try {
+      const response = await getAssessmentSuggestions(1);
+      console.log("response", response);
+  
+      if (!response || response.status !== 200) {
+        // Don't throw a plain Error — preserve response
+        throw { response };
+      }
+  
+      const data = response.data?.suggestions || [];
+      console.log("data", data);
+  
+      if (data.length > 0) {
+        setAssessments(data);
+        setShowingSuggestions(true);
+        setSuggestionsPage(1);
+        setHasMore(data.length === LIMIT);
+        toast.success(`✨ Showing ${data.length} AI-recommended assessments for you!`);
+      } else {
+        toast.info("No AI suggestions available at the moment.");
+      }
+  
+    } catch (error) {
+      console.log("Error fetching suggestions:", error);
+  
+      // Properly extract status and message
+      const status = error?.response?.status;
+      const message = error?.response?.response?.data?.message || error.message || "Unknown error";
+  
+      console.log("status", status, "message", message);
+  
+      if (status === 400) {
+        if (/profile|skills|experience/i.test(message)) {
+          toast.error(message || "Please complete your profile to get personalized suggestions");
+          setTimeout(() => navigate.push('/profile'), 1000);
+        } else {
+          toast.error(message || "Bad request. Please check your profile and try again.");
+        }
+  
+      } else if (status === 401 || status === 403 || status === 404) {
+        toast.error("Please login to get personalized suggestions");
+        if (typeof window !== 'undefined') {
+          sessionStorage.setItem('redirectAfterLogin', '/assessments');
+        }
+        setTimeout(() => navigate.push('/login'), 1500);
+  
+      } else {
+        toast.error(message || "Failed to generate suggestions. Please try again.");
+      }
+  
+    } finally {
+      setLoadingSuggestions(false);
+    }
+  };
+  
+  
+  const resetToAllAssessments = async () => {
+    setShowingSuggestions(false);
+    setAssessments([]);
+    setPage(1);
+    setHasMore(true);
+    setSuggestionsPage(1);
+    
+    // Force reload of assessments
+    setLoading(true);
+    const params = {
+      page: 1,
+      limit: LIMIT,
+      type: "",
+      difficulty: selectedLevel !== "all" ? selectedLevel : "",
+      searchQuery: searchQuery || "",
+      category: selectedSkill !== "all" ? selectedSkill : "",
+    };
+    
+    try {
+      const response = await getAssessmentsfromSearch(params);
+      const fetched = response.data.assessments;
+      setAssessments(fetched);
+      setHasMore(fetched.length === LIMIT);
+    } catch (err) {
+      console.error("Error fetching assessments:", err);
+      toast.error("Failed to fetch assessments");
+    } finally {
+      setLoading(false);
+    }
+  };
+  const getLevelColor = (level: string) => {
+    switch (level) {
+      case "Beginner":
+        return "bg-green-100 text-green-700";
+      case "Intermediate":
+        return "bg-yellow-100 text-yellow-700";
+      case "Advanced":
+        return "bg-red-100 text-red-700";
+      default:
+        return "bg-gray-100 text-gray-700";
+    }
+  };
+
+  const skills = ["all"];
+  const levels = ["Beginner", "Intermediate", "Advanced"];
+
+  const categoryColour = (category: string) => {
+    return "bg-blue-100 text-blue-700";
+  };
+
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      minimumFractionDigits: 0,
+    }).format(price);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <Header />
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
+      <div className="mb-6 sm:mb-8">
+  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2">
+    <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+      {showingSuggestions ? "AI-Recommended Assessments" : "Skill Assessments"}
+    </h2>
+    <div className="flex items-center gap-2">
+      {showingSuggestions && (
+        <Button
+          onClick={resetToAllAssessments}
+          variant="outline"
+          className="rounded-2xl px-4 h-10 sm:h-12 border-gray-300 hover:bg-gray-100"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Show All
+        </Button>
+      )}
+      <Button
+        onClick={getSuggestedAssessments}
+        disabled={loadingSuggestions}
+        className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-2xl px-4 sm:px-6 h-10 sm:h-12 shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {loadingSuggestions ? (
+          <>
+            <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+            <span className="hidden sm:inline">Analyzing...</span>
+            <span className="sm:hidden">...</span>
+          </>
+        ) : (
+          <>
+            <Sparkles className="h-4 w-4 sm:h-5 sm:w-5" />
+            <span className="hidden sm:inline">Suggest for Me</span>
+            <span className="sm:hidden">Suggest</span>
+          </>
+        )}
+      </Button>
+    </div>
+  </div>
+  <p className="text-base sm:text-lg text-gray-600">
+    {showingSuggestions 
+      ? "Personalized assessments based on your profile, skills, and career goals"
+      : "Choose from our comprehensive library of assessments to showcase your abilities."
+    }
+  </p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div className="bg-white rounded-3xl shadow-lg border-0 p-4 sm:p-6 mb-6 sm:mb-8">
+          <div className="flex flex-col gap-4">
+            {/* Top Row: Search and Level Filter */}
+            <div className="flex flex-col lg:flex-row gap-4">
+              <div className="flex-1 relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 focus:border-orange-500" />
+                <Input
+                  placeholder="Search assessments..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 h-12 rounded-2xl border-gray-200 focus:border-blue-500"
+                />
+              </div>
+              <Select value={selectedLevel} onValueChange={setSelectedLevel}>
+                <SelectTrigger className="w-full sm:w-48 h-12 rounded-2xl border-gray-200 ">
+                  <SelectValue placeholder="All Levels" />
+                </SelectTrigger>
+                <SelectContent className="bg-white rounded-2xl shadow-lg border-gray-200">
+                  <SelectItem value="all" className="hover:bg-orange-100">All Levels</SelectItem>
+                  {levels.map((level) => (
+                    <SelectItem key={level} value={level} className="hover:bg-orange-100">
+                      {level}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            
+            {/* Bottom Row: Category Filter Buttons */}
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => setSelectedSkill("all")}
+                className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 ${
+                  selectedSkill === "all"
+                    ? "bg-blue-600 text-white shadow-lg"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                All Categories
+              </button>
+              {[
+                "Aptitude & Reasoning",
+                "Sales & Marketing", 
+                "Customer Support & BPO",
+                "Data Entry & Back Office",
+                "Operations & Admin",
+                "Human Resources & Recruitment",
+                "Finance & Accounts",
+                "IT & Technical Support",
+                "Retail & E-commerce",
+                "Hospitality & Front Desk",
+                "Healthcare (Non-Clinical)",
+                "Internship & Fresher Readiness",
+                "Behavioral & Soft Skills",
+                "Others"
+              ].map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setSelectedSkill(category)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 ${
+                    selectedSkill === category
+                      ? "bg-blue-600 text-white shadow-lg"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          {assessments.map((assessment, index) => {
+            const isLast = index === assessments.length - 1;
+            const Icon = getIcon(assessment.skill);
+            return (
+              <Card
+              key={assessment._id}
+              ref={isLast ? lastAssessmentRef : null}
+              className="rounded-3xl border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer w-full"
+              onClick={() =>
+                navigate.push(
+                  `/assessments/${assessment.title.toLowerCase().replace(/\s+/g, "-")}/${assessment.shortId ? assessment.shortId : assessment._id}`
+                )
+              }
+            >
+              <CardHeader className="pt-4 pb-4 relative">
+                <div className="flex items-start justify-between ">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:space-x-3 w-full justify-between gap-3 sm:gap-0">
+                    <div className="flex items-center space-x-3 w-full">
+                      <div
+                        className={`p-3 rounded-2xl flex-shrink-0 ${categoryColour(
+                          assessment.category
+                        )}`}
+                      >
+                        <Award className="h-6 w-6" />
+                      </div>
+            
+                      <div
+                        className={`flex-1 ${assessment.isPremium ? 'max-w-[200px] sm:max-w-[308px]' : 'w-full'}`}
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <CardTitle className="text-lg sm:text-xl leading-tight break-words flex-1">
+                            {assessment.title}
+                          </CardTitle>
+                          {showingSuggestions && assessment.aiInsights?.matchScore && (
+                            <Badge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white border-0 flex-shrink-0 ml-2">
+                              {assessment.aiInsights.matchScore}% Match
+                            </Badge>
+                          )}
+                        </div>
+                        <div
+                          className="flex flex-col mt-1"
+                          style={{ gap: "8px" }}
+                        >
+                          <div className="flex flex-wrap items-center gap-2">
+                            <Badge className="rounded-full text-xs px-2 py-1 flex-shrink-0">
+                              {assessment.category || "Uncategorized"}
+                            </Badge>
+                            <Badge
+                              variant="outline"
+                              className={`rounded-full text-xs px-2 py-1 ${getLevelColor(
+                                assessment.difficulty
+                              )}`}
+                            >
+                              {assessment.difficulty}
+                            </Badge>
+                            <div className="flex items-center space-x-1 text-sm text-gray-500">
+                              <Clock className="h-4 w-4" />
+                              <span>{assessment.timeLimit} min</span>
+                            </div>
+                          </div>
+                          <div
+                            className="flex w-full space-x-2 gap-[6px] flex-wrap"
+                            style={{ marginLeft: "0px" }}
+                          >
+                            {assessment?.tags?.length > 0 &&
+                              assessment.tags.map((tag) => (
+                                <Badge
+                                  key={tag}
+                                  variant="secondary"
+                                  className="rounded-full text-center text-[8px] px-2 py-1 bg-blue-100 text-blue-700 whitespace-nowrap"
+                                >
+                                  {tag}
+                                </Badge>
+                              ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {assessment.isPremium && (
+                      <div className="flex-shrink-0">
+                        <div className="relative">
+                          <Badge className="bg-gradient-to-r from-purple-500 via-pink-500 to-purple-600 text-white border-0 rounded-full px-3 py-1 text-xs font-medium shadow-lg">
+                            <Crown className="h-3 w-3 mr-1" />
+                            Premium
+                            <div className="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
+                              <div className="bubble bubble1"></div>
+                              <div className="bubble bubble2"></div>
+                              <div className="bubble bubble3"></div>
+                              <div className="bubble bubble4"></div>
+                            </div>
+                          </Badge>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="pb-[24px]">
+                {/* AI Insights Section - Only shown when showing suggestions */}
+                {showingSuggestions && assessment.aiInsights && (
+                  <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl p-4 mb-4 border border-purple-200">
+                    <div className="flex items-start gap-2 mb-3">
+                      <Sparkles className="h-5 w-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                      <div className="flex-1">
+                        <p className="text-sm font-semibold text-gray-900 mb-1">
+                          Why this assessment?
+                        </p>
+                        <p className="text-sm text-gray-700 leading-relaxed">
+                          {assessment.aiInsights.reason}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {assessment.aiInsights.careerImpact && (
+                      <div className="flex items-start gap-2 pt-3 border-t border-purple-200">
+                        <Award className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                        <div className="flex-1">
+                          <p className="text-xs font-semibold text-gray-900 mb-1">Career Impact:</p>
+                          <p className="text-xs text-gray-700 leading-relaxed">
+                            {assessment.aiInsights.careerImpact}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                    
+                    <div className="flex items-center justify-between mt-3 pt-3 border-t border-purple-200">
+                      {assessment.aiInsights.estimatedPerformance && (
+                        <p className="text-xs text-gray-600">
+                          <span className="font-medium">Expected:</span>{' '}
+                          {assessment.aiInsights.estimatedPerformance}
+                        </p>
+                      )}
+                      {assessment.aiInsights.priority && (
+                        <Badge 
+                          className={`text-xs ${
+                            assessment.aiInsights.priority === 'high' 
+                              ? 'bg-red-100 text-red-700' 
+                              : 'bg-blue-100 text-blue-700'
+                          } border-0`}
+                        >
+                          {assessment.aiInsights.priority === 'high' ? '🔥 High Priority' : '📌 Recommended'}
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
+                )}
+            
+                {/* Regular Description */}
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <CardDescription className="text-sm text-gray-600 mb-3 h-[64px] leading-snug line-clamp-3 cursor-default break-words">
+                      {assessment.description}
+                    </CardDescription>
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-xs text-sm text-gray-600 bg-white shadow-lg rounded-lg p-3  border-gray-200">
+                    {assessment.description}
+                  </TooltipContent>
+                </Tooltip>
+            
+                {/* Pricing Section */}
+                <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-4 mb-6 border border-[#2C84DB]">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center space-x-2">
+                      <Zap className="h-5 w-5 text-blue-600" />
+                      <span className="text-sm font-medium text-gray-700">
+                        {assessment.offer?.title}
+                      </span>
+                    </div>
+                    {assessment?.offer?.value > 0 && (
+                      <Badge className="bg-green-100 text-green-700 border-0 rounded-full px-2 py-1 text-xs font-medium">
+                        {assessment.offer.type === "percentage"
+                          ? `${assessment.offer.value}% OFF`
+                          : formatPrice(assessment.offer.value)}
+                      </Badge>
+                    )}
+                  </div>
+                  <div className="flex items-baseline space-x-2 mb-2">
+                    <span className="text-2xl font-bold text-gray-900">
+                      {formatPrice(assessment?.pricing?.discountedPrice)}
+                    </span>
+                    {assessment.pricing?.basePrice && (
+                      <span className="text-sm text-gray-500 line-through">
+                        {formatPrice(assessment?.pricing?.basePrice)}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 text-xs text-gray-600">
+                    <div className="flex items-center space-x-1">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span>Instant Access</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span>Detailed Reports</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                      <span>Certificate</span>
+                    </div>
+                  </div>
+                  {assessment.offer?.validUntil && (
+                    <div className="text-xs mt-2 text-gray-400">
+                      <span className="font-medium text-gray-700">
+                        Valid until:{" "}
+                      </span>
+                      {new Date(
+                        assessment.offer.validUntil
+                      ).toLocaleDateString()}
+                    </div>
+                  )}
+                </div>
+                
+                <Button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate.push(`/assessmentpayment/${assessment._id}`);
+                  }}
+                  className="w-full h-12 bg-blue-600 hover:bg-blue-700 rounded-2xl text-base shadow-lg hover:shadow-xl transition-all duration-300"
+                  style={{ maxHeight: "46px" }}
+                >
+                  <Play className="h-4 w-4 mr-2" />
+                  Start Test
+                </Button>
+              </CardContent>
+            </Card>
+            );
+          })}
+        </div>
+
+        {loading && (
+          <div className="flex flex-col items-center justify-center py-8">
+            <div className="relative">
+              <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+              <div className="absolute inset-0 w-12 h-12 border-4 border-transparent border-r-purple-600 rounded-full animate-spin animation-delay-150"></div>
+            </div>
+            <p className="mt-4 text-sm text-gray-600 font-medium">Loading more assessments...</p>
+          </div>
+        )}
+
+        {!loading && assessments.length === 0 && (
+          <div className="text-center py-16">
+            <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <BookOpen className="h-12 w-12 text-gray-400" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              No assessments found
+            </h3>
+            <p className="text-gray-600 mb-6">
+              Try adjusting your search criteria or browse all available
+              assessments.
+            </p>
+            <Button
+              onClick={() => {
+                setSearchQuery("");
+                setSelectedSkill("all");
+                setSelectedLevel("all");
+              }}
+              variant="outline"
+              className="rounded-2xl"
+            >
+              Clear Filters
+            </Button>
+          </div>
+        )}
+      </main>
+    </div>
+  );
+};
+
+function getIcon(skill: string) {
+  switch (skill) {
+    case "React":
+    case "JavaScript":
+    case "Python":
+      return Code;
+    case "Communication":
+    case "Customer Service":
+      return MessageSquare;
+    case "Project Management":
+      return Settings;
+    case "Data Analysis":
+      return BarChart;
+    default:
+      return Award;
+  }
+}
+
+export default Assessments;
+
+// Add bubble animations only on client side
+if (typeof window !== "undefined") {
+  const style = document.createElement("style");
+  style.innerHTML = `
+.animation-delay-150 {
+  animation-delay: 150ms;
+}
+
+.bubble {
+  position: absolute;
+  border: 1px solid rgba(255, 255, 255);
+  border-radius: 50%;
+  width: 5px;
+  height: 5px;
+  will-change: transform, opacity;
+}
+
+.bubble1 {
+  top: 15%;
+  left: 25%;
+  animation: moveBubble1 4s infinite ease-in-out;
+}
+
+.bubble2 {
+  top: 35%;
+  left: 65%;
+  animation: moveBubble2 3.5s infinite ease-in-out;
+}
+
+.bubble3 {
+  top: 55%;
+  left: 35%;
+  animation: moveBubble3 4.2s infinite ease-in-out;
+}
+
+.bubble4 {
+  top: 75%;
+  left: 75%;
+  animation: moveBubble4 3.8s infinite ease-in-out;
+}
+
+@keyframes moveBubble1 {
+  0% { transform: translate(0, 0); opacity: 0.4; }
+  25% { transform: translate(8px, -5px); opacity: 0.6; }
+  50% { transform: translate(-5px, 10px); opacity: 0.3; }
+  75% { transform: translate(10px, 5px); opacity: 0.5; }
+  100% { transform: translate(0, 0); opacity: 0.4; }
+}
+
+@keyframes moveBubble2 {
+  0% { transform: translate(0, 0); opacity: 0.4; }
+  25% { transform: translate(-10px, 8px); opacity: 0.5; }
+  50% { transform: translate(5px, -12px); opacity: 0.3; }
+  75% { transform: translate(12px, 3px); opacity: 0.6; }
+  100% { transform: translate(0, 0); opacity: 0.4; }
+}
+
+@keyframes moveBubble3 {
+  0% { transform: translate(0, 0); opacity: 0.4; }
+  25% { transform: translate(6px, 10px); opacity: 0.6; }
+  50% { transform: translate(-8px, -8px); opacity: 0.3; }
+  75% { transform: translate(3px, 12px); opacity: 0.5; }
+  100% { transform: translate(0, 0); opacity: 0.4; }
+}
+
+@keyframes moveBubble4 {
+  0% { transform: translate(0, 0); opacity: 0.4; }
+  25% { transform: translate(-12px, -6px); opacity: 0.5; }
+  50% { transform: translate(10px, 10px); opacity: 0.3; }
+  75% { transform: translate(-5px, -10px); opacity: 0.6; }
+  100% { transform: translate(0, 0); opacity: 0.4; }
+}
+`;
+  if (!document.getElementById("bubble-keyframes")) {
+    style.id = "bubble-keyframes";
+    document.head.appendChild(style);
+  }
+}
