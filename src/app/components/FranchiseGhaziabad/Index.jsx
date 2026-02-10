@@ -644,7 +644,6 @@ const Ghaziabad = () => {
                     Start your career journey with Ghaziabad's most trusted recruitment partner
                   </p>
                 </div>
-
                 <div className="p-8 md:p-12">
                   {error && !showPopup && (
                     <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-r-lg mb-8 flex items-center gap-3">
