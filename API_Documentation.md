@@ -7,6 +7,7 @@ https://earlyjobs.ai/api
 
 ## Authentication
 All authenticated requests require a Bearer token in the Authorization header:
+
 ```
 Authorization: Bearer <access_token>
 ```
