@@ -4,9 +4,17 @@ import { useState, useEffect } from "react";
 import { Card } from "../ui/card";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { Badge } from "../ui/badge";
 import { Checkbox } from "../ui/checkbox";
-import { Filter, Search, ChevronDown, MapPin } from "lucide-react";
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css";
+import { Search, ChevronDown, MapPin } from "lucide-react";
+import {
+  PRIMARY_COLOR,
+  PRIMARY_COLOR_DARK,
+  PRIMARY_COLOR_LIGHT,
+  BORDER_COLOR,
+  BG_WHITE,
+} from "../../../constants/theme";
 
 interface FilterSidebarProps {
   companyName: string;
@@ -49,44 +57,31 @@ const FilterSidebar = ({
   category,
   setCategory,
 }: FilterSidebarProps) => {
-  const [filterSections, setFilterSections] = useState<FilterSection[]>([
-    { title: "Location", isOpen: true },
-    { title: "Categories", isOpen: true },
-    { title: "Employment Type", isOpen: true },
-    { title: "Work Type", isOpen: true },
-    { title: "Salary Range", isOpen: true },
-    { title: "Experience", isOpen: true },
-  ]);
-
   // State for selected filters
   const [selectedCategories, setSelectedCategories] = useState<string[]>(category);
   const [selectedEmploymentTypes, setSelectedEmploymentTypes] = useState<string[]>(employmentType);
   const [selectedWorkTypes, setSelectedWorkTypes] = useState<string[]>(workType);
-  const [selectedSalaryRanges, setSelectedSalaryRanges] = useState<string[]>(salaryRange);
   const [selectedExperienceRanges, setSelectedExperienceRanges] = useState<string[]>(experienceRange);
+  const [selectedDatePosted, setSelectedDatePosted] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [isCategoriesExpanded, setIsCategoriesExpanded] = useState(false);
 
-  // Calculate total selected filters
-  const totalSelectedFilters =
-    selectedCategories.length +
-    selectedEmploymentTypes.length +
-    selectedWorkTypes.length +
-    selectedSalaryRanges.length +
-    selectedExperienceRanges.length +
-    (location ? 1 : 0);
+  // Salary slider state
+  const [salarySliderValue, setSalarySliderValue] = useState<number[]>([0, 9999]);
+  const [tempSalaryRange, setTempSalaryRange] = useState<number[]>([0, 9999]);
 
-  const toggleSection = (index: number) => {
-    setFilterSections((prev) =>
-      prev.map((section, i) => (i === index ? { ...section, isOpen: !section.isOpen } : section))
-    );
-  };
+  // Job title search state
+  const [jobTitleSearch, setJobTitleSearch] = useState(title || searchInput || "");
+
+  // Mock counts for each option (in real app, these would come from API)
+  const getCount = () => 10;
 
   const employmentTypes = [
     { id: "full-time", label: "Full Time" },
     { id: "part-time", label: "Part Time" },
-    { id: "internship", label: "Internship" },
-    { id: "contract", label: "Contract" },
     { id: "freelance", label: "Freelance" },
+    { id: "seasonal", label: "Seasonal" },
+    { id: "fixed-price", label: "Fixed-Price" },
   ];
 
   const workTypes = [
@@ -95,27 +90,33 @@ const FilterSidebar = ({
     { id: "hybrid", label: "Hybrid" },
   ];
 
-  const salaryRanges = [
-    { id: "0-3", label: "0 - 3 LPA" },
-    { id: "3-6", label: "3 - 6 LPA" },
-    { id: "6-10", label: "6 - 10 LPA" },
-    { id: "10+", label: "10+ LPA" },
+  const experienceLevels = [
+    { id: "no-experience", label: "No-experience" },
+    { id: "fresher", label: "Fresher" },
+    { id: "intermediate", label: "Intermediate" },
+    { id: "expert", label: "Expert" },
   ];
 
-  const experienceRanges = [
-    { id: "0-2", label: "0 - 2 years" },
-    { id: "2-5", label: "2 - 5 years" },
-    { id: "5+", label: "5+ years" },
+  const datePostedOptions = [
+    { id: "all", label: "All" },
+    { id: "last-hour", label: "Last Hour" },
+    { id: "last-24-hours", label: "Last 24 Hours" },
+    { id: "last-7-days", label: "Last 7 Days" },
+    { id: "last-30-days", label: "Last 30 Days" },
   ];
 
   const categories = [
     "All Categories",
+    "Commerce",
+    "Telecommunications",
+    "Hotels & Tourism",
+    "Education",
+    "Financial Services",
     "Aviation",
     "Banking",
     "Insurance",
     "Oil And Gas",
     "Retail",
-    "Education",
     "Consumer Goods",
     "Manufacturing",
     "Information Technology",
@@ -135,6 +136,16 @@ const FilterSidebar = ({
     "Other",
   ];
 
+  const tags = [
+    "engineering",
+    "design",
+    "ui/ux",
+    "marketing",
+    "management",
+    "soft",
+    "construction",
+  ];
+
   // Sync local state with parent state
   useEffect(() => {
     setSelectedCategories(category);
@@ -147,10 +158,6 @@ const FilterSidebar = ({
   useEffect(() => {
     setSelectedWorkTypes(workType);
   }, [workType]);
-
-  useEffect(() => {
-    setSelectedSalaryRanges(salaryRange);
-  }, [salaryRange]);
 
   useEffect(() => {
     setSelectedExperienceRanges(experienceRange);
@@ -174,15 +181,6 @@ const FilterSidebar = ({
     setWorkType(updatedTypes);
   };
 
-  // Handle salary range selection
-  const handleSalaryRangeChange = (salaryId: string, checked: boolean) => {
-    const updatedRanges = checked
-      ? [...selectedSalaryRanges, salaryId]
-      : selectedSalaryRanges.filter((id) => id !== salaryId);
-    setSelectedSalaryRanges(updatedRanges);
-    setSalaryRange(updatedRanges);
-  };
-
   // Handle experience selection
   const handleExperienceChange = (expId: string, checked: boolean) => {
     const updatedRanges = checked
@@ -201,289 +199,272 @@ const FilterSidebar = ({
     setCategory(updatedCategories);
   };
 
+  // Handle date posted selection
+  const handleDatePostedChange = (dateId: string, checked: boolean) => {
+    const updatedDates = checked
+      ? [...selectedDatePosted, dateId]
+      : selectedDatePosted.filter((id) => id !== dateId);
+    setSelectedDatePosted(updatedDates);
+  };
+
+  // Handle tag selection
+  const handleTagClick = (tag: string) => {
+    if (selectedTags.includes(tag)) {
+      setSelectedTags(selectedTags.filter((t) => t !== tag));
+    } else {
+      setSelectedTags([...selectedTags, tag]);
+    }
+  };
+
+  // Handle salary slider change
+  const handleSalarySliderChange = (value: number[]) => {
+    setTempSalaryRange(value);
+  };
+
+  // Apply salary range
+  const handleApplySalary = () => {
+    setSalarySliderValue(tempSalaryRange);
+    // Convert to salary range format expected by parent
+    const rangeString = `${tempSalaryRange[0]}-${tempSalaryRange[1]}`;
+    setSalaryRange([rangeString]);
+  };
+
+  // Handle job title search
+  const handleJobTitleChange = (value: string) => {
+    setJobTitleSearch(value);
+    setTitle(value);
+    setSearchInput(value);
+  };
+
   return (
-    <div className="space-y-4">
-      {/* Filter Header */}
-      <Card className="p-4">
-        <div className="flex items-center gap-2 mb-4">
-          <Filter className="w-5 h-5" />
-          <span className="font-medium">Filter By</span>
-          <Badge variant="secondary" className="ml-auto">{totalSelectedFilters}</Badge>
-        </div>
-
-        <div className="text-sm text-gray-500 mb-4">
-          {totalSelectedFilters > 0 ? (
-            <div className="space-y-1">
-              {location && <div> <MapPin className="w-4 h-4 text-gray-400 inline" /> {location}</div>}
-              {selectedCategories.length > 0 && (
+    <Card 
+      className="rounded-lg border shadow-sm p-4"
+      style={{ 
+        backgroundColor: `${PRIMARY_COLOR_LIGHT}4D`, // 30% opacity (4D in hex = ~30%)
+        borderColor: BORDER_COLOR
+      }}
+    >
+      <div className="space-y-6">
+        {/* Search by Job Title */}
                 <div>
-                  Categories:{" "}
-                  {selectedCategories.join(", ")}
-                </div>
-              )}
-              {selectedEmploymentTypes.length > 0 && (
-                <div>
-                  Employment Type:{" "}
-                  {selectedEmploymentTypes
-                    .map((id) => employmentTypes.find((t) => t.id === id)?.label)
-                    .filter(Boolean)
-                    .join(", ")}
-                </div>
-              )}
-              {selectedWorkTypes.length > 0 && (
-                <div>
-                  Work Type:{" "}
-                  {selectedWorkTypes
-                    .map((id) => workTypes.find((t) => t.id === id)?.label)
-                    .filter(Boolean)
-                    .join(", ")}
-                </div>
-              )}
-              {selectedSalaryRanges.length > 0 && (
-                <div>
-                  Salary:{" "}
-                  {selectedSalaryRanges
-                    .map((id) => salaryRanges.find((s) => s.id === id)?.label)
-                    .filter(Boolean)
-                    .join(", ")}
-                </div>
-              )}
-              {selectedExperienceRanges.length > 0 && (
-                <div>
-                  Experience:{" "}
-                  {selectedExperienceRanges
-                    .map((id) => experienceRanges.find((e) => e.id === id)?.label)
-                    .filter(Boolean)
-                    .join(", ")}
-                </div>
-              )}
+          <h3 className="text-base font-bold text-black mb-3">Search by Job Title</h3>
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Input
+              placeholder="Job title or company"
+              className="pl-10 rounded-lg"
+              style={{
+                backgroundColor: BG_WHITE,
+                borderColor: BORDER_COLOR
+              }}
+              value={jobTitleSearch}
+              onChange={(e) => handleJobTitleChange(e.target.value)}
+            />
             </div>
-          ) : (
-            "No filters selected"
-          )}
         </div>
-      </Card>
 
-      {/* Filter Sections */}
-      <Card className="p-4">
-        <div className="space-y-4">
           {/* Location */}
           <div>
-            <Button
-              variant="ghost"
-              className="w-full justify-between p-0 h-auto font-medium"
-              onClick={() => toggleSection(0)}
-            >
-              Location
-              <ChevronDown
-                className={`w-4 h-4 transition-transform ${
-                  filterSections[0].isOpen ? "rotate-180" : ""
-                }`}
-              />
-            </Button>
-
-            {filterSections[0].isOpen && (
-              <div className="mt-2">
+          <h3 className="text-base font-bold text-black mb-3">Location</h3>
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <Input
-                    placeholder="Search Location"
-                    className="pl-10"
+              placeholder="Choose city"
+              className="pl-10 pr-10 rounded-lg"
+              style={{
+                backgroundColor: BG_WHITE,
+                borderColor: BORDER_COLOR
+              }}
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
                   />
-                </div>
+            <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
               </div>
-            )}
-            <hr className="my-4 border-gray-200" />
           </div>
 
-          {/* Categories */}
+        {/* Category */}
           <div>
-            <Button
-              variant="ghost"
-              className="w-full justify-between p-0 h-auto font-medium"
-              onClick={() => toggleSection(1)}
-            >
-              Categories
-              <ChevronDown
-                className={`w-4 h-4 transition-transform ${
-                  filterSections[1].isOpen ? "rotate-180" : ""
-                }`}
-              />
-            </Button>
-
-            {filterSections[1].isOpen && (
-              <div className="mt-2 space-y-2">
+          <h3 className="text-base font-bold text-black mb-3">Category</h3>
+          <div className="space-y-2">
                 {(isCategoriesExpanded ? categories : categories.slice(0, 5)).map((cat) => (
-                  <div key={cat} className="flex items-center space-x-2">
+              <div key={cat} className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
                     <Checkbox
                       id={`category-${cat}`}
                       checked={selectedCategories.includes(cat)}
                       onCheckedChange={(checked) => handleCategoryChange(cat, checked as boolean)}
+                      className="border-[#F08504] data-[state=checked]:bg-[#F08504] data-[state=checked]:border-[#F08504] data-[state=checked]:text-white"
                     />
                     <label htmlFor={`category-${cat}`} className="text-sm text-gray-700 cursor-pointer">
                       {cat}
                     </label>
+                </div>
+                <span className="text-sm text-gray-500">{getCount()}</span>
                   </div>
                 ))}
                 {categories.length > 5 && (
                   <Button
-                    variant="ghost"
-                    className="w-full text-sm text-orange-600 hover:text-orange-700 p-0 h-auto"
+                className="w-full text-white text-sm rounded-lg mt-2"
+                style={{ backgroundColor: PRIMARY_COLOR }}
                     onClick={() => setIsCategoriesExpanded(!isCategoriesExpanded)}
                   >
-                    {isCategoriesExpanded ? "Show Less" : `Show All (${categories.length - 5} more)`}
+                {isCategoriesExpanded ? "Show Less" : "Show More"}
                   </Button>
                 )}
               </div>
-            )}
-            <hr className="my-4 border-gray-200" />
           </div>
 
-          {/* Employment Type */}
+        {/* Job Type */}
           <div>
-            <Button
-              variant="ghost"
-              className="w-full justify-between p-0 h-auto font-medium"
-              onClick={() => toggleSection(2)}
-            >
-              Employment Type
-              <ChevronDown
-                className={`w-4 h-4 transition-transform ${
-                  filterSections[2].isOpen ? "rotate-180" : ""
-                }`}
-              />
-            </Button>
-
-            {filterSections[2].isOpen && (
-              <div className="mt-2 space-y-2">
+          <h3 className="text-base font-bold text-black mb-3">Job Type</h3>
+          <div className="space-y-2">
                 {employmentTypes.map((type) => (
-                  <div key={type.id} className="flex items-center space-x-2">
+              <div key={type.id} className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
                     <Checkbox
                       id={type.id}
                       checked={selectedEmploymentTypes.includes(type.id)}
                       onCheckedChange={(checked) => handleEmploymentTypeChange(type.id, checked as boolean)}
+                      className="border-[#F08504] data-[state=checked]:bg-[#F08504] data-[state=checked]:border-[#F08504] data-[state=checked]:text-white"
                     />
                     <label htmlFor={type.id} className="text-sm text-gray-700 cursor-pointer">
                       {type.label}
                     </label>
                   </div>
-                ))}
+                <span className="text-sm text-gray-500">{getCount()}</span>
               </div>
-            )}
-            <hr className="my-4 border-gray-200" />
+            ))}
+          </div>
           </div>
 
-          {/* Work Type */}
+        {/* Experience Level */}
           <div>
-            <Button
-              variant="ghost"
-              className="w-full justify-between p-0 h-auto font-medium"
-              onClick={() => toggleSection(3)}
-            >
-              Work Type
-              <ChevronDown
-                className={`w-4 h-4 transition-transform ${
-                  filterSections[3].isOpen ? "rotate-180" : ""
-                }`}
-              />
-            </Button>
-
-            {filterSections[3].isOpen && (
-              <div className="mt-2 space-y-2">
-                {workTypes.map((type) => (
-                  <div key={type.id} className="flex items-center space-x-2">
+          <h3 className="text-base font-bold text-black mb-3">Experience Level</h3>
+          <div className="space-y-2">
+            {experienceLevels.map((level) => (
+              <div key={level.id} className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
                     <Checkbox
-                      id={type.id}
-                      checked={selectedWorkTypes.includes(type.id)}
-                      onCheckedChange={(checked) => handleWorkTypeChange(type.id, checked as boolean)}
-                    />
-                    <label htmlFor={type.id} className="text-sm text-gray-700 cursor-pointer">
-                      {type.label}
+                    id={level.id}
+                    checked={selectedExperienceRanges.includes(level.id)}
+                    onCheckedChange={(checked) => handleExperienceChange(level.id, checked as boolean)}
+                    className="border-[#F08504] data-[state=checked]:bg-[#F08504] data-[state=checked]:border-[#F08504] data-[state=checked]:text-white"
+                  />
+                  <label htmlFor={level.id} className="text-sm text-gray-700 cursor-pointer">
+                    {level.label}
                     </label>
                   </div>
-                ))}
+                <span className="text-sm text-gray-500">{getCount()}</span>
               </div>
-            )}
-            <hr className="my-4 border-gray-200" />
+            ))}
+          </div>
           </div>
 
-          {/* Salary Range */}
+        {/* Date Posted */}
           <div>
-            <Button
-              variant="ghost"
-              className="w-full justify-between p-0 h-auto font-medium"
-              onClick={() => toggleSection(4)}
-            >
-              Salary Range
-              <ChevronDown
-                className={`w-4 h-4 transition-transform ${
-                  filterSections[4].isOpen ? "rotate-180" : ""
-                }`}
-              />
-            </Button>
-
-            {filterSections[4].isOpen && (
-              <div className="mt-2 space-y-2">
-                {salaryRanges.map((range) => (
-                  <div key={range.id} className="flex items-center space-x-2">
+          <h3 className="text-base font-bold text-black mb-3">Date Posted</h3>
+          <div className="space-y-2">
+            {datePostedOptions.map((option) => (
+              <div key={option.id} className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
                     <Checkbox
-                      id={range.id}
-                      checked={selectedSalaryRanges.includes(range.id)}
-                      onCheckedChange={(checked) => handleSalaryRangeChange(range.id, checked as boolean)}
-                    />
-                    <label htmlFor={range.id} className="text-sm text-gray-700 cursor-pointer">
-                      {range.label}
+                    id={option.id}
+                    checked={selectedDatePosted.includes(option.id)}
+                    onCheckedChange={(checked) => handleDatePostedChange(option.id, checked as boolean)}
+                    className="border-[#F08504] data-[state=checked]:bg-[#F08504] data-[state=checked]:border-[#F08504] data-[state=checked]:text-white"
+                  />
+                  <label htmlFor={option.id} className="text-sm text-gray-700 cursor-pointer">
+                    {option.label}
                     </label>
                   </div>
-                ))}
+                <span className="text-sm text-gray-500">{getCount()}</span>
               </div>
-            )}
-            <hr className="my-4 border-gray-200" />
+            ))}
+          </div>
           </div>
 
-          {/* Experience */}
+        {/* Salary */}
           <div>
-            <Button
-              variant="ghost"
-              className="w-full justify-between p-0 h-auto font-medium"
-              onClick={() => toggleSection(5)}
-            >
-              Experience
-              <ChevronDown
-                className={`w-4 h-4 transition-transform ${
-                  filterSections[5].isOpen ? "rotate-180" : ""
-                }`}
+          <h3 className="text-base font-bold text-black mb-3">Salary</h3>
+          <div className="space-y-4">
+            <div className="px-1">
+              <Slider
+                range
+                min={0}
+                max={9999}
+                step={100}
+                value={tempSalaryRange}
+                onChange={(value) => handleSalarySliderChange(Array.isArray(value) ? value : [value])}
+                trackStyle={[
+                  { backgroundColor: PRIMARY_COLOR, height: 6 },
+                  { backgroundColor: PRIMARY_COLOR, height: 6 },
+                ]}
+                handleStyle={[
+                  {
+                    borderColor: PRIMARY_COLOR,
+                    borderWidth: 3,
+                    width: 20,
+                    height: 20,
+                    backgroundColor: "#fff",
+                    boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+                    marginTop: -7,
+                  },
+                  {
+                    borderColor: PRIMARY_COLOR,
+                    borderWidth: 3,
+                    width: 20,
+                    height: 20,
+                    backgroundColor: "#fff",
+                    boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+                    marginTop: -7,
+                  },
+                ]}
+                railStyle={{ backgroundColor: "#e5e7eb", height: 6 }}
+                activeDotStyle={{ borderColor: PRIMARY_COLOR, borderWidth: 2 }}
               />
-            </Button>
-
-            {filterSections[5].isOpen && (
-              <div className="mt-2 space-y-2">
-                {experienceRanges.map((exp) => (
-                  <div key={exp.id} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={exp.id}
-                      checked={selectedExperienceRanges.includes(exp.id)}
-                      onCheckedChange={(checked) => handleExperienceChange(exp.id, checked as boolean)}
-                    />
-                    <label htmlFor={exp.id} className="text-sm text-gray-700 cursor-pointer">
-                      {exp.label}
-                    </label>
-                  </div>
-                ))}
-              </div>
-            )}
+            </div>
+            <div className="flex items-center justify-between pt-2">
+              <span className="text-sm font-medium text-black">
+                Salary: ${tempSalaryRange[0].toLocaleString()} - ${tempSalaryRange[1].toLocaleString()}
+              </span>
+            <Button
+                className="text-white text-sm rounded-lg px-5 py-1.5 font-semibold hover:opacity-90 transition-opacity"
+                style={{ backgroundColor: PRIMARY_COLOR }}
+                onClick={handleApplySalary}
+              >
+                Apply
+              </Button>
+            </div>
           </div>
         </div>
-      </Card>
-    </div>
+
+        {/* Tags */}
+        <div>
+          <h3 className="text-base font-bold text-black mb-3">Tags</h3>
+          <div className="flex flex-wrap gap-2">
+            {tags.map((tag) => (
+              <button
+                key={tag}
+                onClick={() => handleTagClick(tag)}
+                className={`px-3 py-1 rounded-full text-sm transition-colors ${
+                  selectedTags.includes(tag)
+                    ? "text-white"
+                    : "text-gray-700"
+                }`}
+                style={{
+                  backgroundColor: selectedTags.includes(tag)
+                    ? PRIMARY_COLOR
+                    : PRIMARY_COLOR_LIGHT,
+                }}
+              >
+                {tag}
+              </button>
+                ))}
+              </div>
+        </div>
+      </div>
+    </Card>
   );
 };
-
-interface FilterSection {
-  title: string;
-  isOpen: boolean;
-}
 
 export default FilterSidebar;

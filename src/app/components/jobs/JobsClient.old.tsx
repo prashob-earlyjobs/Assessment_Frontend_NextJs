@@ -3,13 +3,19 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import Header from "../layout/Header";
 import FilterSidebar from "./FilterSidebar";
-import JobCard from "../v2/jobCard/jobCard";
+import JobCard from "./JobCard";
+import Sidebar from "./Sidebar";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import { Button } from "../ui/button";
 import Footer from "../pages/footer";
 import Cookies from "js-cookie";
-import NavbarV2 from "../v2/navbar/navbar.v2";
-import { EARLYJOBS_ORANGE, BORDER_COLOR, TEXT_PRIMARY, ACCENT_COLOR_LIGHT, ACCENT_COLOR_DARK, TEXT_SECONDARY, PRIMARY_COLOR_LIGHT, PRIMARY_COLOR } from "../../../constants/theme";
-import HeaderV2 from "../v2/headerBlack/header.v2";
+
 interface Job {
   id: string;
   jobId: string;
@@ -99,9 +105,7 @@ const JobsClient = () => {
 
   // Sidebar visibility states for mobile/tablet
   const [isFilterSidebarOpen, setIsFilterSidebarOpen] = useState(false);
-  
-  // State to track if header is scrolled (to show title in navbar)
-  const [showTitleInNavbar, setShowTitleInNavbar] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_2_0;
 
@@ -357,12 +361,33 @@ const JobsClient = () => {
     setIsFilterSidebarOpen(!isFilterSidebarOpen);
   };
 
-  return (
-    <div className="min-h-screen bg-white">
-      <NavbarV2 pageTitle="Jobs" showPageTitle={showTitleInNavbar} />  
-      <HeaderV2 title="Jobs" onScrollStateChange={(isScrolled) => setShowTitleInNavbar(isScrolled)} />
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
-      <div className="max-w-7xl mx-auto sm:p-6 bg-white">
+  return (
+    <div className="min-h-screen bg-red-50">
+      <Header />
+
+      <div className="max-w-7xl mx-auto p-4 sm:p-6">
+        {/* Mobile/Tablet Toggle Buttons */}
+        <div className="flex justify-between mb-4 lg:hidden">
+          <Button
+            variant="outline"
+            onClick={toggleFilterSidebar}
+            className="flex items-center gap-2 border border-gray-300"
+          >
+            {isFilterSidebarOpen ? "Hide Filters" : "Apply Filters"}
+          </Button>
+          <Button
+            variant="outline"
+            onClick={toggleSidebar}
+            className="flex items-center gap-2 border border-gray-300"
+          >
+            {isSidebarOpen ? "Hide Sidebar" : "Show Sidebar"}
+          </Button>
+        </div>
+
         <div className="flex flex-col md:flex-row gap-4 md:gap-6">
           {/* Left Sidebar - Filters */}
           <div
@@ -392,71 +417,85 @@ const JobsClient = () => {
 
           {/* Main Content */}
           <div className="flex-1 min-w-0">
+            {/* Results Header */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+              <div className="w-full sm:max-w-md">
+                <div className="relative">
+                  <svg
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 21l-4.34-4.34"
+                    />
+                    <circle cx="11" cy="11" r="8" />
+                  </svg>
+                  <input
+                    type="text"
+                    placeholder="Search jobs by title, company, or keywords..."
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        fetchJobs();
+                      }
+                    }}
+                    className="w-full pl-10 pr-24 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-earlyjobs-orange focus:border-transparent"
+                  />
+                  <button
+                    onClick={() => fetchJobs()}
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white px-3 py-1 rounded text-sm flex items-center gap-1 z-10"
+                    style={{ backgroundColor: '#ff6b35' }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e55a2b'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ff6b35'}
+                  >
+                    <svg
+                      className="w-3 h-3"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M21 21l-4.34-4.34"
+                      />
+                      <circle cx="11" cy="11" r="8" />
+                    </svg>
+                    Search
+                  </button>
+                </div>
+              </div>
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="w-full sm:w-48">
+                  <SelectValue placeholder="Sort By" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="latest">Sort By Latest Jobs</SelectItem>
+                  <SelectItem value="relevance">Sort By Relevance</SelectItem>
+                  <SelectItem value="salary">Sort By Salary</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
             {/* Job Cards */}
             <div className="space-y-4">
               {loading ? (
-                <>
-                  {[...Array(4)].map((_, index) => (
-                    <div
-                      key={index}
-                      className="rounded-lg border border-gray-200/50 bg-white p-6 shadow-sm"
-                      style={{ 
-                        animationDelay: `${index * 100}ms`,
-                      }}
-                    >
-                      {/* Posted Time Pill Skeleton */}
-                      <div className="mb-4">
-                        <div className="h-5 w-20 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded-full bg-[length:200%_100%] animate-shimmer"></div>
-                      </div>
-
-                      {/* Top Section Skeleton */}
-                      <div className="flex items-start justify-between gap-4 mb-4">
-                        <div className="flex items-start gap-4 flex-1">
-                          {/* Logo Skeleton */}
-                          <div className="w-12 h-12 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded bg-[length:200%_100%] animate-shimmer"></div>
-                          <div className="flex-1 space-y-2">
-                            {/* Title Skeleton */}
-                            <div className="h-6 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded w-3/4 bg-[length:200%_100%] animate-shimmer"></div>
-                            {/* Company Skeleton */}
-                            <div className="h-4 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded w-1/2 bg-[length:200%_100%] animate-shimmer"></div>
-                          </div>
-                        </div>
-                        {/* Bookmark Skeleton */}
-                        <div className="w-6 h-6 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded bg-[length:200%_100%] animate-shimmer"></div>
-                      </div>
-
-                      {/* Job Details Skeleton */}
-                      <div className="space-y-3">
-                        {/* Icons and Text Row */}
-                        <div className="flex flex-wrap gap-4">
-                          {[...Array(4)].map((_, i) => (
-                            <div key={i} className="flex items-center gap-1">
-                              <div className="w-3 h-3 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded bg-[length:200%_100%] animate-shimmer"></div>
-                              <div className="h-4 w-16 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded bg-[length:200%_100%] animate-shimmer"></div>
-                            </div>
-                          ))}
-                        </div>
-                        {/* Badges Skeleton */}
-                        <div className="flex gap-2">
-                          {[...Array(2)].map((_, i) => (
-                            <div key={i} className="h-6 w-16 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded-full bg-[length:200%_100%] animate-shimmer"></div>
-                          ))}
-                        </div>
-                      </div>
+                <div className="text-center py-8">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-earlyjobs-orange mx-auto"></div>
+                  <p className="mt-4 text-gray-600">Loading jobs...</p>
                 </div>
-                  ))}
-                </>
               ) : jobsData.length > 0 ? (
                 <>
-                  {jobsData.map((job, index) => (
-                    <div
+                  {jobsData.map((job) => (
+                    <JobCard
                       key={job.id}
-                      className="animate-fade-in-up"
-                      style={{
-                        animationDelay: `${index * 50}ms`,
-                      }}
-                    >
-                      <JobCard
                       company={job.companyName}
                       brandName={job.brandName}
                       logo={job.companyLogoUrl}
@@ -472,7 +511,6 @@ const JobsClient = () => {
                       postedTime={job.createdAt || "Not Disclosed"}
                       onJobClick={() => handleJobClick(job.jobId)}
                     />
-                    </div>
                   ))}
 
                   {/* Pagination Controls */}
@@ -483,11 +521,7 @@ const JobsClient = () => {
                         size="sm"
                         onClick={() => handlePageChange(currentPage - 1)}
                         disabled={currentPage === 1}
-                        className="flex items-center gap-1 border-2 font-medium"
-                        style={{
-                          borderColor: BORDER_COLOR,
-                          color: TEXT_PRIMARY,
-                        }}
+                        className="flex items-center gap-1"
                       >
                         <svg
                           className="w-4 h-4"
@@ -524,18 +558,7 @@ const JobsClient = () => {
                               variant={currentPage === pageNum ? "default" : "outline"}
                               size="sm"
                               onClick={() => handlePageChange(pageNum)}
-                              className={`w-8 h-8 p-0 font-medium ${
-                                currentPage === pageNum 
-                                  ? "text-white border-2" 
-                                  : "border-2 text-gray-700 hover:bg-gray-50"
-                              }`}
-                              style={currentPage === pageNum ? {
-                                backgroundColor: EARLYJOBS_ORANGE,
-                                borderColor: EARLYJOBS_ORANGE,
-                              } : {
-                                borderColor: BORDER_COLOR,
-                                color: TEXT_PRIMARY,
-                              }}
+                              className="w-8 h-8 p-0"
                             >
                               {pageNum}
                             </Button>
@@ -548,11 +571,7 @@ const JobsClient = () => {
                         size="sm"
                         onClick={() => handlePageChange(currentPage + 1)}
                         disabled={currentPage === totalPages}
-                        className="flex items-center gap-1 border-2 font-medium"
-                        style={{
-                          borderColor: BORDER_COLOR,
-                          color: TEXT_PRIMARY,
-                        }}
+                        className="flex items-center gap-1"
                       >
                         Next
                         <svg
@@ -579,163 +598,15 @@ const JobsClient = () => {
               )}
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Top Company Section */}
-      <div 
-        className="w-full py-12 md:py-16" 
-        style={{ 
-          backgroundColor: `rgba(240, 133, 4, 0.05)` // PRIMARY_COLOR with 5% opacity
-        }}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Header */}
-          <div className="text-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-bold mb-3" style={{ color: TEXT_PRIMARY }}>
-              Top Company
-            </h2>
-            <p className="text-base md:text-lg max-w-2xl mx-auto" style={{ color: TEXT_SECONDARY }}>
-              At eu lobortis pretium tincidunt amet lacus ut aenean aliquet. Blandit a massa elementum
-            </p>
-          </div>
-
-          {/* Company Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Company Card 1 - Instagram */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex flex-col items-center text-center">
-                {/* Logo */}
-                <div className="w-16 h-16 bg-black rounded-lg flex items-center justify-center mb-4">
-                  <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                  </svg>
-                </div>
-                
-                {/* Company Name */}
-                <h3 className="text-lg font-bold mb-3" style={{ color: TEXT_PRIMARY }}>
-                  Instagram
-                </h3>
-                
-                {/* Description */}
-                <p className="text-sm mb-4" style={{ color: TEXT_SECONDARY }}>
-                  Elit velit mauris aliquam est diam. Leo sagittis consectetur diam morbi erat
-                </p>
-                
-                {/* Open Jobs Button */}
-                <button 
-                  className="w-full py-2 px-4 rounded-lg font-medium text-sm transition-colors"
-                  style={{ 
-                    backgroundColor: PRIMARY_COLOR_LIGHT,
-                    color: PRIMARY_COLOR
-                  }}
-                >
-                  8 open jobs
-                </button>
-              </div>
-            </div>
-
-            {/* Company Card 2 - Tesla */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex flex-col items-center text-center">
-                {/* Logo */}
-                <div className="w-16 h-16 bg-black rounded-lg flex items-center justify-center mb-4">
-                  <svg className="w-10 h-10 text-white font-bold" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 5.173l-7.173 7.173H12V24h4.173V12.346h7.173L12 5.173z"/>
-                  </svg>
-                </div>
-                
-                {/* Company Name */}
-                <h3 className="text-lg font-bold mb-3" style={{ color: TEXT_PRIMARY }}>
-                  Tesla
-                </h3>
-                
-                {/* Description */}
-                <p className="text-sm mb-4" style={{ color: TEXT_SECONDARY }}>
-                  At pellentesque amet odio cras imperdiet nisl. Ac magna aliquet massa leo
-                </p>
-                
-                {/* Open Jobs Button */}
-                <button 
-                  className="w-full py-2 px-4 rounded-lg font-medium text-sm transition-colors"
-                  style={{ 
-                    backgroundColor: PRIMARY_COLOR_LIGHT,
-                    color: PRIMARY_COLOR
-                  }}
-                >
-                  18 open jobs
-                </button>
-              </div>
-            </div>
-
-            {/* Company Card 3 - McDonald's */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex flex-col items-center text-center">
-                {/* Logo */}
-                <div className="w-16 h-16 bg-black rounded-lg flex items-center justify-center mb-4">
-                  <span className="text-white text-3xl font-bold">M</span>
-                </div>
-                
-                {/* Company Name */}
-                <h3 className="text-lg font-bold mb-3" style={{ color: TEXT_PRIMARY }}>
-                  McDonald's
-                </h3>
-                
-                {/* Description */}
-                <p className="text-sm mb-4" style={{ color: TEXT_SECONDARY }}>
-                  Odio aliquet tellus tellus maecenas. Faucibus in viverra venenatis phasellus
-                </p>
-                
-                {/* Open Jobs Button */}
-                <button 
-                  className="w-full py-2 px-4 rounded-lg font-medium text-sm transition-colors"
-                  style={{ 
-                    backgroundColor: PRIMARY_COLOR_LIGHT,
-                    color: PRIMARY_COLOR
-                  }}
-                >
-                  12 open jobs
-                </button>
-              </div>
-            </div>
-
-            {/* Company Card 4 - Apple */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex flex-col items-center text-center">
-                {/* Logo */}
-                <div className="w-16 h-16 bg-black rounded-lg flex items-center justify-center mb-4">
-                  <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
-                  </svg>
-                </div>
-                
-                {/* Company Name */}
-                <h3 className="text-lg font-bold mb-3" style={{ color: TEXT_PRIMARY }}>
-                  Apple
-                </h3>
-                
-                {/* Description */}
-                <p className="text-sm mb-4" style={{ color: TEXT_SECONDARY }}>
-                  Et odio sem tellus ultrices posuere consequat. Tristique nascetur sapien
-                </p>
-                
-                {/* Open Jobs Button */}
-                <button 
-                  className="w-full py-2 px-4 rounded-lg font-medium text-sm transition-colors"
-                  style={{ 
-                    backgroundColor: PRIMARY_COLOR_LIGHT,
-                    color: PRIMARY_COLOR
-                  }}
-                >
-                  9 open jobs
-                </button>
-              </div>
-            </div>
+          {/* Right Sidebar */}
+          <div
+            className={`w-full md:w-64 space-y-6 ${isSidebarOpen ? "block" : "hidden md:block"}`}
+          >
+            <Sidebar />
           </div>
         </div>
       </div>
-
-      
       <Footer />
     </div>
   );
