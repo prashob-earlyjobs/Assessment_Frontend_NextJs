@@ -105,10 +105,7 @@ const Ghaziabad = () => {
     email: "",
     phone: "",
     role: "",
-    experience: "",
-    skills: "",
-    industry: "",
-    city: "Ghaziabad",
+    city: "",
     resume: null,
   })
   const [submitted, setSubmitted] = useState(false)
@@ -135,11 +132,8 @@ const Ghaziabad = () => {
             Email: formData.email,
             Phone: formData.phone,
             Role: formData.role,
-            Experience: formData.experience,
-            Skills: formData.skills,
-            Industry: formData.industry,
+            YourExpectations: formData.YourExpectations,
             City: formData.city,
-            Resume: formData.resume ? "Yes" : "No",
           },
         ]),
       })
@@ -190,9 +184,9 @@ const Ghaziabad = () => {
         email: "",
         phone: "",
         role: "",
-        experience: "",
-        skills: "",
+        YourExpectations: "",
         industry: "",
+        city: "Ghaziabad",
         city: "Ghaziabad",
         resume: null,
       })
@@ -338,15 +332,15 @@ const Ghaziabad = () => {
               <div className="flex flex-wrap gap-6 pt-4 justify-center text-white">
                 <div className="flex items-center gap-2">
                   <Star className="w-5 h-5 text-yellow-400 fill-current" />
-                  <span className="text-sm">2000+ Successful Placements</span>
+                  <span className="text-sm">2500+ Successful Placements</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Star className="w-5 h-5 text-yellow-400 fill-current" />
-                  <span className="text-sm">150+ Partner Companies</span>
+                  <span className="text-sm">200+ Partner Companies</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Star className="w-5 h-5 text-yellow-400 fill-current" />
-                  <span className="text-sm">20+ Local Colleges</span>
+                  <span className="text-sm">200+ Local Colleges</span>
                 </div>
               </div>
             </div>
@@ -412,11 +406,11 @@ const Ghaziabad = () => {
                     <p className="text-xs text-orange-800/80">Placements</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-2xl font-bold text-orange-700">150+</p>
-                    <p className="text-xs text-orange-800/80">Partner Cos.</p>
+                    <p className="text-2xl font-bold text-orange-700">200+</p>
+                    <p className="text-xs text-orange-800/80">Partner Companies</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-2xl font-bold text-orange-700">20+</p>
+                    <p className="text-2xl font-bold text-orange-700">200+</p>
                     <p className="text-xs text-orange-800/80">Colleges</p>
                   </div>
                 </div>
@@ -653,6 +647,26 @@ const Ghaziabad = () => {
                   )}
 
                   <form onSubmit={handleSubmit} className="space-y-8">
+                    <div className="space-y-1">
+                      <Label htmlFor="role">I am a... <span className="text-red-500">*</span></Label>
+                      <div className="relative">
+                        <select
+                          id="role"
+                          name="role"
+                          required
+                          value={formData.role}
+                          onChange={handleInputChange}
+                          className="w-full p-4 border-2 border-transparent bg-gray-50 rounded-xl text-gray-900 outline-none focus:bg-white focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 transition-all duration-300 appearance-none cursor-pointer"
+                        >
+                          <option value="">Select your role</option>
+                          <option value="student">Job Seeker</option>
+                          <option value="graduate">Employer/HR</option>
+                          <option value="college">College Representative</option>
+                        </select>
+                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                      </div>
+                    </div>
+
                     <div className="grid md:grid-cols-2 gap-6">
                       <div className="space-y-1">
                         <Label htmlFor="name">Full Name <span className="text-red-500">*</span></Label>
@@ -668,21 +682,6 @@ const Ghaziabad = () => {
                       </div>
 
                       <div className="space-y-1">
-                        <Label htmlFor="email">Email Address <span className="text-red-500">*</span></Label>
-                        <Input
-                          id="email"
-                          name="email"
-                          type="email"
-                          required
-                          value={formData.email}
-                          onChange={handleInputChange}
-                          placeholder="rahul@example.com"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div className="space-y-1">
                         <Label htmlFor="phone">Phone Number <span className="text-red-500">*</span></Label>
                         <Input
                           id="phone"
@@ -694,50 +693,20 @@ const Ghaziabad = () => {
                           placeholder="+91 98765 43210"
                         />
                       </div>
-
-                      <div className="space-y-1">
-                        <Label htmlFor="role">I am a... <span className="text-red-500">*</span></Label>
-                        <div className="relative">
-                          <select
-                            id="role"
-                            name="role"
-                            required
-                            value={formData.role}
-                            onChange={handleInputChange}
-                            className="w-full p-4 border-2 border-transparent bg-gray-50 rounded-xl text-gray-900 outline-none focus:bg-white focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 transition-all duration-300 appearance-none cursor-pointer"
-                          >
-                            <option value="">Select your role</option>
-                            <option value="student">Current Student</option>
-                            <option value="graduate">Recent Graduate</option>
-                            <option value="jobseeker">Job Seeker</option>
-                            <option value="employer">Employer/HR</option>
-                            <option value="college">College Representative</option>
-                          </select>
-                          <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
-                        </div>
-                      </div>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-6">
                       <div className="space-y-1">
-                        <Label htmlFor="experience">Experience Level</Label>
-                        <div className="relative">
-                          <select
-                            id="experience"
-                            name="experience"
-                            value={formData.experience}
-                            onChange={handleInputChange}
-                            className="w-full p-4 border-2 border-transparent bg-gray-50 rounded-xl text-gray-900 outline-none focus:bg-white focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 transition-all duration-300 appearance-none cursor-pointer"
-                          >
-                            <option value="">Select experience</option>
-                            <option value="fresher">Fresher (0 years)</option>
-                            <option value="0-1">0-1 years</option>
-                            <option value="1-3">1-3 years</option>
-                            <option value="3-5">3-5 years</option>
-                            <option value="5+">5+ years</option>
-                          </select>
-                          <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
-                        </div>
+                        <Label htmlFor="email">Email Address <span className="text-red-500">*</span></Label>
+                        <Input
+                          id="email"
+                          name="email"
+                          type="email"
+                          required
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          placeholder="rahul@example.com"
+                        />
                       </div>
 
                       <div className="space-y-1">
@@ -748,7 +717,7 @@ const Ghaziabad = () => {
                             name="city"
                             type="text"
                             value={formData.city}
-                            readOnly
+                            onChange={handleInputChange}
                             className="bg-orange-50/50 text-orange-900 font-medium"
                           />
                           <MapPin className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-orange-400" />
@@ -757,82 +726,18 @@ const Ghaziabad = () => {
                     </div>
 
                     <div className="space-y-1">
-                      <Label htmlFor="industry">Preferred Industry</Label>
-                      <div className="relative">
-                        <select
-                          id="industry"
-                          name="industry"
-                          value={formData.industry}
-                          onChange={handleInputChange}
-                          className="w-full p-4 border-2 border-transparent bg-gray-50 rounded-xl text-gray-900 outline-none focus:bg-white focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 transition-all duration-300 appearance-none cursor-pointer"
-                        >
-                          <option value="">Select preferred industry</option>
-                          <option value="it">Information Technology</option>
-                          <option value="manufacturing">Manufacturing</option>
-                          <option value="banking">Banking & Finance</option>
-                          <option value="retail">Retail & Consumer Goods</option>
-                          <option value="education">Education & Training</option>
-                          <option value="healthcare">Healthcare</option>
-                          <option value="government">Government & Public Sector</option>
-                          <option value="logistics">Logistics & Supply Chain</option>
-                          <option value="other">Other</option>
-                        </select>
-                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
-                      </div>
-                    </div>
-
-                    <div className="space-y-1">
-                      <Label htmlFor="skills">Key Skills (Optional)</Label>
+                      <Label htmlFor="YourExpectations"> Your Expectations <span className="text-red-500">*</span></Label>
                       <textarea
-                        id="skills"
-                        name="skills"
-                        value={formData.skills}
+                        id="Your Expectations"
+                        name="Your Expectations"
+                        value={formData.YourExpectations}
+                        type="text"
+                        required
                         onChange={handleInputChange}
                         rows={3}
                         className="w-full p-4 border-2 border-transparent bg-gray-50 rounded-xl text-gray-900 outline-none focus:bg-white focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 transition-all duration-300 resize-none placeholder-gray-400"
-                        placeholder="Ex. Java, Python, Sales, Accounting, Teaching..."
+                        placeholder="Tell us about your expectations..."
                       />
-                    </div>
-
-                    <div className="space-y-1">
-                      <Label>Upload Resume (Optional)</Label>
-                      <div className="border-2 border-dashed border-gray-200 hover:border-orange-400 rounded-xl p-8 text-center transition-colors bg-gray-50/50 hover:bg-orange-50/30 group cursor-pointer" onClick={() => document.getElementById("resume")?.click()}>
-                        <div className="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                          <svg
-                            className="w-6 h-6 text-orange-500"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                            />
-                          </svg>
-                        </div>
-                        <p className="font-medium text-gray-700 mb-1">
-                          Click to upload or drag and drop
-                        </p>
-                        <p className="text-sm text-gray-400 mb-4">
-                          PDF, DOC, DOCX up to 5MB
-                        </p>
-                        {formData.resume && (
-                          <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-100 text-orange-800 rounded-full text-sm font-medium">
-                            <CheckCircle className="w-4 h-4" />
-                            {formData.resume.name}
-                          </div>
-                        )}
-                        <input
-                          type="file"
-                          name="resume"
-                          id="resume"
-                          onChange={handleInputChange}
-                          accept=".pdf,.doc,.docx"
-                          className="hidden"
-                        />
-                      </div>
                     </div>
 
                     <Button
