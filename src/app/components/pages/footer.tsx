@@ -189,48 +189,126 @@ const Footer = () => {
                 Sonipat
               </p>
 
+            </div>
+          </div>
+
+          {/* Expanding in section */}
+
+
+          <div className=" pb-4 mb-6 text-center mt-10 lg:mt-0">
+            <span className=" text-2xl font-bold text-gray-300 block sm:inline">Starting Soon:</span>
+            <div className="flex flex-wrap gap-4 mt-3 justify-center">
               <p
                 onClick={() => router.push("/franchise/ghaziabad")}
                 className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
               >
                 Ghaziabad
               </p>
+              <p
+                onClick={() => router.push("/")}
+                className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
+              >
+                Chengalpattu
+              </p>
+              <p
+                onClick={() => router.push("/")}
+                className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
+              >
+                Lucknow
+              </p>
+              <p
+                onClick={() => router.push("/")}
+                className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
+              >
+                Faridabad
+              </p>
+
+              <p
+                onClick={() => router.push("/")}
+                className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
+              >
+                Bijapur
+              </p>
+              <p
+                onClick={() => router.push("/")}
+                className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
+              >
+                Gulbarga
+              </p>
+
+              <p
+                onClick={() => router.push("/")}
+                className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
+              >
+                Mangalore
+              </p>
+
+              <p
+                onClick={() => router.push("/")}
+                className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
+              >
+                Visakhapatnam
+              </p>
+
+              <p
+                onClick={() => router.push("/")}
+                className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
+              >
+                Bhopal
+              </p>
+
+              <p
+                onClick={() => router.push("/")}
+                className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
+              >
+                Patna
+              </p>
+
+              <p
+                onClick={() => router.push("/")}
+                className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
+              >
+                Udupi
+              </p>
 
             </div>
           </div>
 
-          {/* Expanding in section */}
-          <div className="text-gray-300 mt-6 text-center">
-            <span className=" text-xl font-bold block sm:inline">Starting Soon:</span>
-            <div className="flex flex-wrap gap-4 mt-3 justify-center">
-              {[
-                "Chengalpattu",
-                "Lucknow",
-                "Faridabad",
-                "Bijapur",
-                // "Sonipat",
-                // "Ramanagara",
-                "Gulbarga",
-                // "Ananthapur",
-                "Mangalore",
-                "Visakhapatnam",
-                "Bhopal",
-                "Patna",
-                "Udupi",
-                "Gulbarga"
 
-              ].map((city, index) => (
-                <p
-                  key={`city-${index}-${city}`}
+          {/* <div className="text-gray-300 mt-6 text-center">
+    <span className=" text-xl font-bold block sm:inline">Starting Soon:</span>
+    <div className="flex flex-wrap gap-4 mt-3 justify-center">
+      {[
+        "Ghaziabad",
+        "Chengalpattu",
+        "Lucknow",
+        "Faridabad",
+        "Bijapur",
+        // "Sonipat",
+        // "Ramanagara",
+        "Gulbarga",
+        // "Ananthapur",
+        "Mangalore",
+        "Visakhapatnam",
+        "Bhopal",
+        "Patna", 
+        "Udupi",
+        "Gulbarga"
 
-                  onClick={() => router.push(`/`)}
-                  className="text-gray-400  text-lg hover:text-amber-500 transition-all duration-300 cursor-not-allowed"
-                >
-                  {city}
-                </p>
-              ))}
-            </div>
-          </div>
+      ].map((city, index) => (
+        <p
+          key={`city-${index}-${city}`}
+          
+          onClick={()=>router.push(`/`)}
+          className="text-gray-400  text-lg hover:text-amber-500 transition-all duration-300 cursor-not-allowed"
+        >
+          {city}
+        </p>
+      ))}
+    </div>
+  </div> */}
+
+
         </div>
         <div className="w-full border-t border-gray-300 mt-10 px-4 py-6 ">
           <div className="flex justify-center items-center text-center">
