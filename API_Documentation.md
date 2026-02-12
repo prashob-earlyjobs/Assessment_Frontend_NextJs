@@ -3,6 +3,8 @@
 ## Base URL
 
 ```
+
+
 https://earlyjobs.ai/api
 ```
 
