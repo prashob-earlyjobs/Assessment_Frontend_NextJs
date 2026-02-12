@@ -686,9 +686,9 @@ const Ghaziabad = () => {
                                                 <Input
                                                     id="phone"
                                                     name="phone"
-                                                    type="number"
-                                                    maxLength={10}
+                                                    type="tel"
                                                     required
+                                                    maxLength={10}
                                                     value={formData.phone}
                                                     onChange={handleInputChange}
                                                     placeholder="9876543210"
@@ -711,12 +711,13 @@ const Ghaziabad = () => {
                                             </div>
 
                                             <div className="space-y-1">
-                                                <Label htmlFor="city">City</Label>
+                                                <Label htmlFor="city">City <span className="text-red-500">*</span></Label>
                                                 <div className="relative">
                                                     <Input
                                                         id="city"
                                                         name="city"
                                                         type="text"
+                                                        required
                                                         value={formData.city}
                                                         onChange={handleInputChange}
                                                         className="bg-orange-50/50 text-orange-900 font-medium"
