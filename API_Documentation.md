@@ -1,6 +1,7 @@
 # EarlyJobs Assessment Platform - API Documentation
 
 ## Base URL
+
 ```
 https://earlyjobs.ai/api
 ```
