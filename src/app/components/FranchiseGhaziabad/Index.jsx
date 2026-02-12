@@ -686,11 +686,12 @@ const Ghaziabad = () => {
                         <Input
                           id="phone"
                           name="phone"
-                          type="tel"
+                          type="number"
+                          maxLength={10}
                           required
                           value={formData.phone}
                           onChange={handleInputChange}
-                          placeholder="+91 98765 43210"
+                          placeholder="9876543210"
                         />
                       </div>
                     </div>
