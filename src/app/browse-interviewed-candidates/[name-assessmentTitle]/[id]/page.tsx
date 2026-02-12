@@ -932,12 +932,12 @@ const CandidateProfile = () => {
                         <div className="space-y-1">
                           {displayEmail && (
                             <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
-                              <span className="font-semibold text-gray-800">Email:</span> {displayEmail}
+                              <span className="font-semibold text-gray-800">Email:</span> {displayEmail?.replace(/(.{2}).+(@.+)/, "$1****$2")}
                             </p>
                           )}
                           {displayPhone && (
                             <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
-                              <span className="font-semibold text-gray-800">Phone:</span> {displayPhone}
+                              <span className="font-semibold text-gray-800">Phone:</span> {displayPhone?.replace(/\d(?=\d{4})/g, "*")}
                             </p>
                           )}
                           {assessmentRole && (
@@ -1150,12 +1150,16 @@ const CandidateProfile = () => {
                               <span className="w-2 h-2 rounded-full bg-orange-500"></span>
                               Interview Recording
                             </h3>
-                            <div className="rounded-xl overflow-hidden shadow-lg border border-gray-300">
-                              <video controls className="w-full bg-black">
-                                <source src={recordingUrl} type="video/mp4" />
-                                Your browser does not support the video tag.
-                              </video>
-                            </div>
+                              <div className="rounded-xl overflow-hidden shadow-lg border border-gray-300">
+                                <video
+                                  controls
+                                  className="w-full max-h-[70vh] bg-black object-contain"
+                                >
+                                  <source src={recordingUrl} type="video/mp4" />
+                                  Your browser does not support the video tag.
+                                </video>
+                              </div>
+
                           </div>
                         </div>
                       ) : (

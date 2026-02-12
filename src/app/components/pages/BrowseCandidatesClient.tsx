@@ -662,8 +662,6 @@ export default function BrowseCandidatesClient() {
                     <span className="text-orange-600 font-bold">
                       {Math.min(currentPage * itemsPerPage, displayTotal)}
                     </span>
-                    {" "}of{" "}
-                    <span className="text-orange-600 font-bold">{displayTotal}</span>
                     {" "}candidates
                   </div>
 
