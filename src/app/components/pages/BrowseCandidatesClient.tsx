@@ -49,23 +49,11 @@ export default function BrowseCandidatesClient() {
           throw new Error(errorData.message || `Failed to fetch candidates (Status: ${response.status})`);
         }
         const data = await response.json();
+        console.log("candidates datwa-", data.success && data.data.length > 0);
         
-        if (data.success && data.data && data.data.length > 0) {
+        if (data.success && data.data.length > 0) {
           // Process candidates with assessment title from existing data
-          const processedCandidates = data.data
-            .filter((candidate) => candidate.assessmentsPaid && candidate.assessmentsPaid.length > 0)
-            .map((candidate) => {
-              // Use assessment title from candidate data if available, otherwise use default
-              const firstAssessment = candidate.assessmentsPaid[0];
-              const firstAssessmentTitle = firstAssessment?.assessmentTitle || 
-                                          firstAssessment?.title || 
-                                          "Assessment";
-              
-              return {
-                ...candidate,
-                firstAssessmentTitle,
-              };
-            });
+          const processedCandidates = data.data;
 
           setCandidates(processedCandidates);
 
@@ -131,8 +119,9 @@ export default function BrowseCandidatesClient() {
   };
 
   const getSkillsDisplay = (candidate) => {
-    if (candidate?.interviewSkills?.length > 0) {
-      return candidate.interviewSkills.slice(0, 4);
+    console.log("candidate skills", candidate?.skills);
+    if (candidate?.skills?.length > 0) {
+      return candidate?.skills?.map((skill) => skill?.name).slice(0, 3);
     }
     return ["Professional", "Reliable", "Dedicated"];
   };
@@ -496,7 +485,7 @@ export default function BrowseCandidatesClient() {
                             {/* Compact Score Badge */}
                             <div className="flex items-center gap-1 bg-white border border-gray-200 rounded-md px-2 py-1 shadow-sm flex-shrink-0">
                               <Star className="h-3 w-3 text-orange-500 fill-orange-500" />
-                              <span className="text-xs font-bold text-gray-900">{candidate.highestScore??0}.0</span>
+                              <span className="text-xs font-bold text-gray-900">{candidate.score?candidate.score:0} have .0</span>  
                             </div>
                           </div>
                           <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
@@ -544,9 +533,10 @@ export default function BrowseCandidatesClient() {
                               </span>
                             );
                           })}
-                          {candidate.profile?.skills?.length > 4 && (
+
+                          {candidate?.skills?.length > 3 && (
                             <span className="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs px-3 py-1.5 rounded-lg font-semibold transition-all">
-                              +{candidate.profile.skills.length - 4}
+                              +{candidate?.skills?.length - 3}
                             </span>
                           )}
                         </div>
