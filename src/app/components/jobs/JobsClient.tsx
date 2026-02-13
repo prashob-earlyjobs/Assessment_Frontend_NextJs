@@ -342,12 +342,25 @@ const JobsClient = () => {
   const handleJobClick = async (jobId: string) => {
     const job = jobsData.find((j) => j.jobId === jobId);
     const jobTitle = job?.title?.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "") || "job";
+    const location = job?.location?.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "") || "location";
 
+    const experienceMin = job?.minExperience != null ? String(job.minExperience) : undefined;
+    const experienceMax = job?.maxExperience != null ? String(job.maxExperience) : undefined;
+    let experience = undefined;
+
+    if(experienceMin && experienceMax) {
+      experience = `${experienceMin}-to-${experienceMax}-years`;
+    } else if(experienceMin) {
+      experience = `${experienceMin}-years`;
+    } else if(experienceMax) {
+      experience = `${experienceMax}-years`;
+    }
+    const expPart = experience ? `-${experience}` : "";
     if (tpoId) {
-      router.push(job ? `/jobs/${jobTitle}/${jobId}?tpoId=${tpoId}&source=campus-drive` : `/jobs/job/${jobId}?tpoId=${tpoId}&source=campus-drive`);
+      router.push(job ? `/jobs/${jobTitle}-${location}${expPart}/${jobId}?tpoId=${tpoId}&source=campus-drive` : `/jobs/job/${jobTitle}-${location}${expPart}/${jobId}?tpoId=${tpoId}&source=campus-drive`);
     }
     else {
-      router.push(job ? `/jobs/${jobTitle}/${jobId}` : `/jobs/job/${jobId}`);
+      router.push(job ? `/jobs/${jobTitle}-${location}${expPart}/${jobId}` : `/jobs/job/${jobTitle}-${location}${expPart}/${jobId}`);
     }
 
   };
@@ -463,6 +476,7 @@ const JobsClient = () => {
                       title={job.title || "Job Title Not Available"}
                       employmentType={job.employmentType || "Full Time"}
                       workType={job.workType}
+                      noOfOpenings={job.noOfOpenings || 0}
                       min_salary={job.minSalary ? String(job.minSalary) : undefined}
                       max_salary={job.maxSalary ? String(job.maxSalary) : undefined}
                       min_experience={job.minExperience != null ? String(job.minExperience) : undefined}

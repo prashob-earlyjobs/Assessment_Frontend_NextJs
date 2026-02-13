@@ -15,6 +15,7 @@ import {
   uploadPhoto,
   updateCertificateLink,
 } from "../../../components/services/servicesapis";
+import axiosInstance from "@/app/components/services/apiinterseptor";
 
 const CandidateProfile = () => {
   const [selectedCandidate, setSelectedCandidate] = useState(null);
@@ -77,31 +78,26 @@ const CandidateProfile = () => {
     const fetchCandidate = async () => {
       try {
         setLoading(true);
-        const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/browseCandidates/candidates`;
-        const response = await fetch(url, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          }
+
+        const interviewId = Array.isArray(id) ? id[0] : id;
+        const response = await axiosInstance.get(`/interviews/getInterviewReport/${interviewId}`).catch((error) => {
+          throw new Error(error.response?.data?.message || `Failed to fetch candidates (Status: ${error.response?.status})`);
         });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({}));
-          throw new Error(
-            errorData.message ||
-              `Failed to fetch candidates (Status: ${response.status})`
-          );
-        }
-        const data = await response.json();
-        if (data.success) {
-          const candidate = data.data.find((c) => c._id === id);
+
+        console.log("Response received record:", response?.data?.data);
+        
+        
+        
+        const data =  response?.data?.data;
+       
+          const candidate = data;
+
           if (candidate) {
             setSelectedCandidate(candidate);
           } else {
             throw new Error("Candidate not found");
           }
-        } else {
-          throw new Error(data.message || "Error fetching candidates");
-        }
+      
       } catch (err) {
         setError(err.message);
         toast.error(err.message || "Failed to load candidate data.");
@@ -115,169 +111,169 @@ const CandidateProfile = () => {
     }
   }, [id]);
 
-  useEffect(() => {
-    const fetchCandidateData = async () => {
-      if (selectedCandidate) {
-        try {
-          setAssessmentResults([]);
-          setRecording([]);
-          setError(null);
-          setLoading(true);
+  // useEffect(() => {
+  //   const fetchCandidateData = async () => {
+  //     if (selectedCandidate) {
+  //       try {
+  //         setAssessmentResults([]);
+  //         setRecording([]);
+  //         setError(null);
+  //         setLoading(true);
 
-          // Fetch assessment titles first
-          const titleUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/browseCandidates/assessments/${selectedCandidate._id}`;
-          const titleResponse = await fetch(titleUrl, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          if (!titleResponse.ok) {
-            throw new Error(
-              `Failed to fetch assessment titles (Status: ${titleResponse.status})`
-            );
-          }
-          const titleData = await titleResponse.json();
-          const titles = titleData.data.reduce((acc, assessment) => {
-            acc[assessment._id] = assessment.title;
-            return acc;
-          }, {});
-          setAssessmentTitles(titles);
-          if (
-            !selectedCandidate.assessmentsPaid ||
-            selectedCandidate.assessmentsPaid.length === 0
-          ) {
-            throw new Error("No assessments available for this candidate");
-          }
+  //         // Fetch assessment titles first
+  //         const titleUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/browseCandidates/assessments/${selectedCandidate._id}`;
+  //         const titleResponse = await fetch(titleUrl, {
+  //           method: "GET",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //         });
+  //         if (!titleResponse.ok) {
+  //           throw new Error(
+  //             `Failed to fetch assessment titles (Status: ${titleResponse.status})`
+  //           );
+  //         }
+  //         const titleData = await titleResponse.json();
+  //         const titles = titleData.data.reduce((acc, assessment) => {
+  //           acc[assessment._id] = assessment.title;
+  //           return acc;
+  //         }, {});
+  //         setAssessmentTitles(titles);
+  //         if (
+  //           !selectedCandidate.assessmentsPaid ||
+  //           selectedCandidate.assessmentsPaid.length === 0
+  //         ) {
+  //           throw new Error("No assessments available for this candidate");
+  //         }
 
-          const results = [];
-          const recordings = [];
+  //         const results = [];
+  //         const recordings = [];
 
-          // Process assessments after titles are fetched
-          for (const assessment of selectedCandidate.assessmentsPaid) {
-            const interviewId = assessment.interviewId;
-            if (!interviewId) {
-              console.warn(`No interviewId for assessment ${assessment._id}`);
-              continue;
-            }
+  //         // Process assessments after titles are fetched
+  //         for (const assessment of selectedCandidate.assessmentsPaid) {
+  //           const interviewId = assessment.interviewId;
+  //           if (!interviewId) {
+  //             console.warn(`No interviewId for assessment ${assessment._id}`);
+  //             continue;
+  //           }
 
-            const assessmentTitle =
-              titles[assessment.assessmentId] || "Unknown Assessment";
-            console.log(
-              `Processing assessment ${assessment.assessmentId} with title: ${assessmentTitle}`
-            );
+  //           const assessmentTitle =
+  //             titles[assessment.assessmentId] || "Unknown Assessment";
+  //           console.log(
+  //             `Processing assessment ${assessment.assessmentId} with title: ${assessmentTitle}`
+  //           );
 
-            // Fetch assessment results
-            try {
-              const resultUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/browseCandidates/getResultForCandidateAssessment/${interviewId}`;
-              const resultResponse = await fetch(resultUrl, {
-                method: "GET",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              });
-              if (!resultResponse.ok) {
-                const errorData = await resultResponse.json().catch(() => ({}));
-                throw new Error(
-                  errorData.message ||
-                    `Failed to fetch assessment results for interview ${interviewId}`
-                );
-              }
-              const resultText = await resultResponse.text();
-              const resultData = resultText ? JSON.parse(resultText) : {};
-              if (resultData.success && resultData.data?.report?.reportSkills) {
-                const report = resultData.data.report;
-                const overallScore =
-                  report.reportSkills.reduce(
-                    (sum, skill) => sum + (skill.score || 0),
-                    0
-                  ) / report.reportSkills.length || "N/A";
-                results.push({
-                  interviewId,
-                  assessmentId: assessment.assessmentId,
-                  assessmentTitle,
-                  overallScore,
-                  reportScore: report.score || null,
-                  communicationScore: report.communicationScore || null,
-                  proctoringScore: resultData.data.proctoringEventsData?.proctoringEvents?.proctoringScore || null,
-                  status: resultData.data.status === 2 ? "Completed" : "In Progress",
-                  interviewSummary: report.overallSummary?.interviewSummary || [],
-                  communicationSummary: report.overallSummary?.communicationSummary || [],
-                  skills: report.reportSkills.map((skill) => ({
-                    assessmentTitle: skill.skill || assessmentTitle,
-                    score: skill.score != null ? skill.score : "N/A",
-                    status:
-                      resultData.data.status === 2
-                        ? "Completed"
-                        : "In Progress",
-                    timeConsumed:
-                      skill.timeConsumed != null ? skill.timeConsumed : "N/A",
-                    strengths: skill.summary?.strengths || [],
-                    weaknesses: skill.summary?.weakness || [],
-                  })),
-                });
-              }
-            } catch (err) {
-              console.warn(
-                `Error fetching results for interview ${interviewId}: ${err.message}`
-              );
-            }
+  //           // Fetch assessment results
+  //           try {
+  //             const resultUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/browseCandidates/getResultForCandidateAssessment/${interviewId}`;
+  //             const resultResponse = await fetch(resultUrl, {
+  //               method: "GET",
+  //               headers: {
+  //                 "Content-Type": "application/json",
+  //               },
+  //             });
+  //             if (!resultResponse.ok) {
+  //               const errorData = await resultResponse.json().catch(() => ({}));
+  //               throw new Error(
+  //                 errorData.message ||
+  //                   `Failed to fetch assessment results for interview ${interviewId}`
+  //               );
+  //             }
+  //             const resultText = await resultResponse.text();
+  //             const resultData = resultText ? JSON.parse(resultText) : {};
+  //             if (resultData.success && resultData.data?.report?.reportSkills) {
+  //               const report = resultData.data.report;
+  //               const overallScore =
+  //                 report.reportSkills.reduce(
+  //                   (sum, skill) => sum + (skill.score || 0),
+  //                   0
+  //                 ) / report.reportSkills.length || "N/A";
+  //               results.push({
+  //                 interviewId,
+  //                 assessmentId: assessment.assessmentId,
+  //                 assessmentTitle,
+  //                 overallScore,
+  //                 reportScore: report.score || null,
+  //                 communicationScore: report.communicationScore || null,
+  //                 proctoringScore: resultData.data.proctoringEventsData?.proctoringEvents?.proctoringScore || null,
+  //                 status: resultData.data.status === 2 ? "Completed" : "In Progress",
+  //                 interviewSummary: report.overallSummary?.interviewSummary || [],
+  //                 communicationSummary: report.overallSummary?.communicationSummary || [],
+  //                 skills: report.reportSkills.map((skill) => ({
+  //                   assessmentTitle: skill.skill || assessmentTitle,
+  //                   score: skill.score != null ? skill.score : "N/A",
+  //                   status:
+  //                     resultData.data.status === 2
+  //                       ? "Completed"
+  //                       : "In Progress",
+  //                   timeConsumed:
+  //                     skill.timeConsumed != null ? skill.timeConsumed : "N/A",
+  //                   strengths: skill.summary?.strengths || [],
+  //                   weaknesses: skill.summary?.weakness || [],
+  //                 })),
+  //               });
+  //             }
+  //           } catch (err) {
+  //             console.warn(
+  //               `Error fetching results for interview ${interviewId}: ${err.message}`
+  //             );
+  //           }
 
-            // Fetch recordings
-            try {
-              const recordingUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/browseCandidates/getRecording/${interviewId}`;
-              const recordingResponse = await fetch(recordingUrl, {
-                method: "GET",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              });
-              if (!recordingResponse.ok) {
-                const errorData = await recordingResponse
-                  .json()
-                  .catch(() => ({}));
-                throw new Error(
-                  errorData.message ||
-                    `Failed to fetch recording for interview ${interviewId}`
-                );
-              }
-              const recordingData = await recordingResponse.json();
-              if (recordingData.success && recordingData.data) {
-                recordings.push({
-                  interviewId,
-                  assessmentIdVelox: assessment.assessmentIdVelox,
-                  assessmentTitle,
-                  url: recordingData.data,
-                  type: "video",
-                });
-              }
-            } catch (err) {
-              console.warn(
-                `Error fetching recording for interview ${interviewId}: ${err.message}`
-              );
-            }
-          }
+  //           // Fetch recordings
+  //           try {
+  //             const recordingUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/browseCandidates/getRecording/${interviewId}`;
+  //             const recordingResponse = await fetch(recordingUrl, {
+  //               method: "GET",
+  //               headers: {
+  //                 "Content-Type": "application/json",
+  //               },
+  //             });
+  //             if (!recordingResponse.ok) {
+  //               const errorData = await recordingResponse
+  //                 .json()
+  //                 .catch(() => ({}));
+  //               throw new Error(
+  //                 errorData.message ||
+  //                   `Failed to fetch recording for interview ${interviewId}`
+  //               );
+  //             }
+  //             const recordingData = await recordingResponse.json();
+  //             if (recordingData.success && recordingData.data) {
+  //               recordings.push({
+  //                 interviewId,
+  //                 assessmentIdVelox: assessment.assessmentIdVelox,
+  //                 assessmentTitle,
+  //                 url: recordingData.data,
+  //                 type: "video",
+  //               });
+  //             }
+  //           } catch (err) {
+  //             console.warn(
+  //               `Error fetching recording for interview ${interviewId}: ${err.message}`
+  //             );
+  //           }
+  //         }
 
-          setAssessmentResults(results);
-          setRecording(recordings);
+  //         setAssessmentResults(results);
+  //         setRecording(recordings);
 
-          // if (results.length === 0 && recordings.length === 0) {
-          //   <div>Candidate Didn't finish his</div>
-          // }
-        } catch (err) {
-          setError(err.message);
-          console.error("Fetch candidate data error:", err);
-          toast.error(err.message || "Failed to load candidate data.");
-        } finally {
-          setLoading(false);
-        }
-      }
-    };
+  //         // if (results.length === 0 && recordings.length === 0) {
+  //         //   <div>Candidate Didn't finish his</div>
+  //         // }
+  //       } catch (err) {
+  //         setError(err.message);
+  //         console.error("Fetch candidate data error:", err);
+  //         toast.error(err.message || "Failed to load candidate data.");
+  //       } finally {
+  //         setLoading(false);
+  //       }
+  //     }
+  //   };
 
-    if (selectedCandidate) {
-      fetchCandidateData();
-    }
-  }, [selectedCandidate]);
+  //   if (selectedCandidate) {
+  //     fetchCandidateData();
+  //   }
+  // }, [selectedCandidate]);
 
   // Fetch certificates from Certificate collection
   useEffect(() => {
@@ -521,7 +517,7 @@ const CandidateProfile = () => {
                       <h3 style="font-size: 1.5rem; font-weight: 600; color: #F97316; margin-bottom: 8px;">${assessmentTitle}</h3>
                       <p style="font-size: 1.125rem; color: #4B5563; margin-bottom: 8px;">with a score of</p>
                       <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 24px;">
-                        <span style="padding: 8px 12px; border-radius: 9999px; background: #FFFFFF; color: #15803D; border: 1px solid #16A34A; font-size: 0.875rem; font-weight: 600;">Overall Score: ${(report.score || 0).toFixed(1)}/10</span>
+                        <span style="padding: 8px 12px; border-radius: 9999px; background: #FFFFFF; color: #15803D; border: 1px solid #16A34A; font-size: 0.875rem; font-weight: 600;">Overall Score: ${(selectedCandidate?.report?.score || 0).toFixed(1)}/10</span>
                         <span style="padding: 8px 12px; border-radius: 9999px; background: #FFFFFF; color: #15803D; border: 1px solid #16A34A; font-size: 0.875rem; font-weight: 600;">Communication: ${(report.communicationScore || 0).toFixed(1)}/10</span>
                         <span style="padding: 8px 12px; border-radius: 9999px; background: #FFFFFF; color: #15803D; border: 1px solid #16A34A; font-size: 0.875rem; font-weight: 600;">Proctoring: ${proctoringScore.toFixed(1)}/10</span>
                       </div>
@@ -760,12 +756,14 @@ const CandidateProfile = () => {
   }, [activeTab, selectedCandidate?._id, assessmentTitles, id]); // Removed certificates and isGeneratingCertificates from dependencies
 
   const getInitials = (name) => {
-    return name
+    if (!name) return "NA";
+    return String(name)
       .split(" ")
+      .filter(Boolean)
       .map((word) => word.charAt(0))
       .join("")
       .toUpperCase()
-      .slice(0, 2);
+      .slice(0, 2) || "NA";
   };
 
   const formatTime = (seconds) => {
@@ -801,6 +799,81 @@ const CandidateProfile = () => {
   const totalPages = Math.ceil(assessmentResults.length / assessmentsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  // ---- Normalize API response shape from /interviews/getInterviewReport/:id ----
+  const candidateDetails = selectedCandidate?.candidate || {};
+  const displayName =
+    [candidateDetails?.firstName, candidateDetails?.lastName].filter(Boolean).join(" ") ||
+    selectedCandidate?.name ||
+    "Candidate";
+  const displayEmail = candidateDetails?.email || "";
+  const displayPhone = candidateDetails?.phone || "";
+  const report = selectedCandidate?.report || {};
+  const recommendations = Array.isArray(report?.recommendations) ? report.recommendations : [];
+  
+  // Extract assessment role and candidate skills from API
+  const assessmentRole = 
+    selectedCandidate?.assessment?.role ||
+    selectedCandidate?.role ||
+    selectedCandidate?.assessmentRole ||
+    candidateDetails?.role ||
+    "";
+
+  const skills = selectedCandidate?.skills || [];  
+  
+  // Extract skills from report - could be in reportSkills array or skills array
+  const candidateSkills = 
+    (report?.reportSkills && Array.isArray(report.reportSkills) 
+      ? report.reportSkills.map((skill: any) => skill.skill || skill.name || skill).filter(Boolean)
+      : []) ||
+    (report?.skills && Array.isArray(report.skills) 
+      ? report.skills.map((skill: any) => typeof skill === 'string' ? skill : skill.skill || skill.name).filter(Boolean)
+      : []) ||
+    (selectedCandidate?.skills && Array.isArray(selectedCandidate.skills)
+      ? selectedCandidate.skills.map((skill: any) => typeof skill === 'string' ? skill : skill.skill || skill.name).filter(Boolean)
+      : []) ||
+    (candidateDetails?.skills && Array.isArray(candidateDetails.skills)
+      ? candidateDetails.skills.map((skill: any) => typeof skill === 'string' ? skill : skill.skill || skill.name).filter(Boolean)
+      : []) ||
+    [];
+
+  const normalizePoints = (value: any): string[] => {
+    if (!value) return [];
+    if (Array.isArray(value)) return value.filter(Boolean).map((v) => String(v));
+    if (typeof value === "string") return value.trim() ? [value.trim()] : [];
+    return [];
+  };
+
+  const extractPosNeg = (section: any): { positives: string[]; negatives: string[] } => {
+    const positives =
+      normalizePoints(section?.positives) ||
+      normalizePoints(section?.positivePoints) ||
+      normalizePoints(section?.pros) ||
+      normalizePoints(section?.strengths) ||
+      normalizePoints(section?.goodPoints) ||
+      [];
+
+    const negatives =
+      normalizePoints(section?.negatives) ||
+      normalizePoints(section?.negativePoints) ||
+      normalizePoints(section?.cons) ||
+      normalizePoints(section?.weaknesses) ||
+      normalizePoints(section?.improvements) ||
+      normalizePoints(section?.improvementPoints) ||
+      [];
+
+    return { positives, negatives };
+  };
+
+  const technical = extractPosNeg(report?.technical);
+  const communication = extractPosNeg(report?.communication);
+
+  const recordingUrl =
+    selectedCandidate?.finalRecording ||
+    selectedCandidate?.videoUrl ||
+    (Array.isArray(selectedCandidate?.sequencialVideoUrl) ? selectedCandidate.sequencialVideoUrl?.[0]?.url : null) ||
+    (Array.isArray(selectedCandidate?.sequencialVideoUrl) ? selectedCandidate.sequencialVideoUrl?.[0]?.videoUrl : null) ||
+    null;
 
   return (
     <>
@@ -844,28 +917,52 @@ const CandidateProfile = () => {
                           {selectedCandidate.avatar ? (
                             <img
                               src={selectedCandidate.avatar}
-                              alt={selectedCandidate.name}
+                              alt={displayName}
                               className="h-full w-full rounded-2xl object-cover"
                             />
                           ) : (
-                            getInitials(selectedCandidate.name)
+                            getInitials(displayName)
                           )}
                         </div>
                       </div>
                       <div className="flex-1 min-w-0">
                         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-                          {selectedCandidate.name}
+                          {displayName}
                         </h1>
-                        <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
-                          {selectedCandidate.profile?.bio
-                            ? selectedCandidate.profile.bio
-                            : `${
-                                selectedCandidate.role
-                                  ?.charAt(0)
-                                  .toUpperCase() +
-                                selectedCandidate.role?.slice(1)
-                              } with experience in various projects and technologies.`}
-                        </p>
+                        <div className="space-y-1">
+                          {displayEmail && (
+                            <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
+                              <span className="font-semibold text-gray-800">Email:</span> {displayEmail?.replace(/(.{2}).+(@.+)/, "$1****$2")}
+                            </p>
+                          )}
+                          {displayPhone && (
+                            <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
+                              <span className="font-semibold text-gray-800">Phone:</span> {displayPhone?.replace(/\d(?=\d{4})/g, "*")}
+                            </p>
+                          )}
+                          {assessmentRole && (
+                            <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
+                              <span className="font-semibold text-gray-800">Assessment Role:</span> {assessmentRole}
+                            </p>
+                          )}
+                          {skills.length > 0 && (
+                            <div className="mt-2">
+                              <p className="text-gray-600 text-sm sm:text-base leading-relaxed mb-1">
+                                <span className="font-semibold text-gray-800">Skills:</span>
+                              </p>
+                              <div className="flex flex-wrap gap-2 mt-1">
+                                {skills.map((skill: string, index: number) => (
+                                  <span
+                                    key={index}
+                                    className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 border border-orange-200"
+                                  >
+                                    {skill}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
                     <button
@@ -881,8 +978,7 @@ const CandidateProfile = () => {
 
                   <div className="border-t border-gray-100 pt-6">
                     <p className="text-gray-700 text-sm sm:text-base mb-4 leading-relaxed">
-                      Review this candidate's assessment results, interview
-                      recordings, and certificates. If your company is
+                      Review this candidate's interview report and recording. If your company is
                       interested in this candidate, express your interest below.
                     </p>
                     <Button
@@ -896,24 +992,10 @@ const CandidateProfile = () => {
                 {/* Tabs Navigation */}
                 <div className="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden mb-6">
                   <div className="flex border-b border-gray-200 bg-gray-50">
-                    {["overview", "recording" , "certificates" ].map((tab) => (
+                    {["overview", "recording"].map((tab) => (
                       <button
                         key={tab}
-                        onClick={() => {
-                          if (tab === "certificates") {
-                            // Open all certificates in new windows
-                            if (certificates.length > 0) {
-                              certificates.forEach((certificate) => {
-                                window.open(certificate.certificateLink, '_blank', 'noopener,noreferrer');
-                              });
-                            } else {
-                              // If no certificates yet, still set the tab to trigger generation
-                              setActiveTab(tab);
-                            }
-                          } else {
-                            setActiveTab(tab);
-                          }
-                        }}
+                        onClick={() => setActiveTab(tab)}
                         className={`flex-1 px-4 py-4 sm:px-6 font-semibold text-sm sm:text-base transition-all ${
                           activeTab === tab
                             ? "text-orange-600 bg-white border-b-2 border-orange-600"
@@ -930,253 +1012,155 @@ const CandidateProfile = () => {
                         <p className="text-red-600 text-base sm:text-lg">
                           Error: {error}
                         </p>
-                      ) : currentAssessments.length > 0 ? (
+                      ) : (
                         <div className="space-y-8">
-                          {/* Assessment Summary Cards */}
-                          {currentAssessments.map((result) => (
-                            <div key={result.interviewId} className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-6 border border-orange-100 mb-6">
+                          <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-6 border border-orange-100">
+                            <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                              <span className="w-2 h-2 rounded-full bg-orange-500"></span>
+                              Interview Report
+                            </h3>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                              <div className="bg-white rounded-xl p-4 border border-orange-200">
+                                <p className="text-xs text-gray-600 mb-1">Overall Score</p>
+                                <p className={`text-2xl font-bold ${getScoreTextColor(report?.score)}`}>
+                                  {report?.score ?? 0}/10
+                                </p>
+                              </div>
+
+                              <div className="bg-white rounded-xl p-4 border border-orange-200">
+                                <p className="text-xs text-gray-600 mb-1">Status</p>
+                                <p className="text-lg font-semibold text-green-600">
+                                  {candidateDetails?.status || "completed"}
+                                </p>
+                              </div>
+
+                              <div className="bg-white rounded-xl p-4 border border-orange-200">
+                                <p className="text-xs text-gray-600 mb-1">Interview ID</p>
+                                <p className="text-sm font-semibold text-gray-900 break-all">
+                                  {Array.isArray(id) ? id[0] : id}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+
+                          {recommendations.length > 0 && (
+                            <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
                               <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                                 <span className="w-2 h-2 rounded-full bg-orange-500"></span>
-                                {result.assessmentTitle} - Summary
+                                Recommendations
                               </h3>
-                              
-                              {/* Scores Section */}
-                              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                                {result.reportScore != null && (
-                                  <div className="bg-white rounded-xl p-4 border border-orange-200">
-                                    <p className="text-xs text-gray-600 mb-1">Overall Score</p>
-                                    <p className={`text-2xl font-bold ${getScoreTextColor(result.reportScore)}`}>
-                                      {result.reportScore.toFixed(1)}/10
-                                    </p>
+                              <ul className="space-y-2">
+                                {recommendations.map((rec, idx) => (
+                                  <li key={idx} className="text-sm text-gray-700 leading-relaxed pl-4 relative before:content-['•'] before:absolute before:left-0">
+                                    {String(rec)}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+
+                          {(technical.positives.length > 0 ||
+                            technical.negatives.length > 0 ||
+                            communication.positives.length > 0 ||
+                            communication.negatives.length > 0) && (
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                              <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+                                <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                  <span className="w-2 h-2 rounded-full bg-orange-500"></span>
+                                  Technical
+                                </h3>
+                                <div className="space-y-4">
+                                  <div>
+                                    <h4 className="text-sm font-bold text-green-700 mb-2">Positive Points</h4>
+                                    {technical.positives.length > 0 ? (
+                                      <ul className="space-y-2">
+                                        {technical.positives.map((p, idx) => (
+                                          <li key={idx} className="text-sm text-gray-700 leading-relaxed pl-4 relative before:content-['✓'] before:absolute before:left-0 before:text-green-600 before:font-bold">
+                                            {p}
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    ) : (
+                                      <p className="text-sm text-gray-500">No positive points available.</p>
+                                    )}
                                   </div>
-                                )}
-                                {result.communicationScore != null && (
-                                  <div className="bg-white rounded-xl p-4 border border-orange-200">
-                                    <p className="text-xs text-gray-600 mb-1">Communication</p>
-                                    <p className={`text-2xl font-bold ${getScoreTextColor(result.communicationScore)}`}>
-                                      {result.communicationScore.toFixed(1)}/10
-                                    </p>
+                                  <div>
+                                    <h4 className="text-sm font-bold text-orange-700 mb-2">Negative Points</h4>
+                                    {technical.negatives.length > 0 ? (
+                                      <ul className="space-y-2">
+                                        {technical.negatives.map((n, idx) => (
+                                          <li key={idx} className="text-sm text-gray-700 leading-relaxed pl-4 relative before:content-['→'] before:absolute before:left-0 before:text-orange-600 before:font-bold">
+                                            {n}
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    ) : (
+                                      <p className="text-sm text-gray-500">No negative points available.</p>
+                                    )}
                                   </div>
-                                )}
-                                {result.proctoringScore != null && (
-                                  <div className="bg-white rounded-xl p-4 border border-orange-200">
-                                    <p className="text-xs text-gray-600 mb-1">Proctoring</p>
-                                    <p className={`text-2xl font-bold ${getScoreTextColor(result.proctoringScore)}`}>
-                                      {result.proctoringScore.toFixed(1)}/10
-                                    </p>
-                                  </div>
-                                )}
-                                <div className="bg-white rounded-xl p-4 border border-orange-200">
-                                  <p className="text-xs text-gray-600 mb-1">Status</p>
-                                  <p className={`text-lg font-semibold ${result.status === "Completed" ? "text-green-600" : "text-yellow-600"}`}>
-                                    {result.status}
-                                  </p>
                                 </div>
                               </div>
 
-                              {/* Interview Summary */}
-                              {result.interviewSummary && result.interviewSummary.length > 0 && (
-                                <div className="bg-white rounded-xl p-5 border border-gray-200 mb-4">
-                                  <h4 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
-                                    <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                                    Interview Summary
-                                  </h4>
-                                  <ul className="space-y-2">
-                                    {result.interviewSummary.map((summary, idx) => (
-                                      <li 
-                                        key={idx} 
-                                        className="text-sm text-gray-700 leading-relaxed"
-                                        dangerouslySetInnerHTML={{ __html: summary }}
-                                      />
-                                    ))}
-                                  </ul>
+                              <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+                                <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                  <span className="w-2 h-2 rounded-full bg-orange-500"></span>
+                                  Communication
+                                </h3>
+                                <div className="space-y-4">
+                                  <div>
+                                    <h4 className="text-sm font-bold text-green-700 mb-2">Positive Points</h4>
+                                    {communication.positives.length > 0 ? (
+                                      <ul className="space-y-2">
+                                        {communication.positives.map((p, idx) => (
+                                          <li key={idx} className="text-sm text-gray-700 leading-relaxed pl-4 relative before:content-['✓'] before:absolute before:left-0 before:text-green-600 before:font-bold">
+                                            {p}
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    ) : (
+                                      <p className="text-sm text-gray-500">No positive points available.</p>
+                                    )}
+                                  </div>
+                                  <div>
+                                    <h4 className="text-sm font-bold text-orange-700 mb-2">Negative Points</h4>
+                                    {communication.negatives.length > 0 ? (
+                                      <ul className="space-y-2">
+                                        {communication.negatives.map((n, idx) => (
+                                          <li key={idx} className="text-sm text-gray-700 leading-relaxed pl-4 relative before:content-['→'] before:absolute before:left-0 before:text-orange-600 before:font-bold">
+                                            {n}
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    ) : (
+                                      <p className="text-sm text-gray-500">No negative points available.</p>
+                                    )}
+                                  </div>
                                 </div>
-                              )}
-
-                              {/* Communication Summary */}
-                              {result.communicationSummary && result.communicationSummary.length > 0 && (
-                                <div className="bg-white rounded-xl p-5 border border-gray-200 mb-4">
-                                  <h4 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
-                                    <span className="w-2 h-2 rounded-full bg-purple-500"></span>
-                                    Communication Summary
-                                  </h4>
-                                  <ul className="space-y-2">
-                                    {result.communicationSummary.map((summary, idx) => (
-                                      <li 
-                                        key={idx} 
-                                        className="text-sm text-gray-700 leading-relaxed"
-                                        dangerouslySetInnerHTML={{ __html: summary }}
-                                      />
-                                    ))}
-                                  </ul>
-                                </div>
-                              )}
-                            </div>
-                          ))}
-
-                          {/* Skills Breakdown */}
-                          {currentAssessments.map((result, index) => (
-                            <div
-                              key={index}
-                              className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm"
-                            >
-                              <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                                <span className="w-2 h-2 rounded-full bg-orange-500"></span>
-                                Skills Breakdown: {result.assessmentTitle}
-                              </h3>
-                              {result.skills.length > 0 && (
-                                <div className="space-y-6">
-                                  {result.skills.map((skill, skillIndex) => (
-                                    <div
-                                      key={skillIndex}
-                                      className="bg-gray-50 rounded-xl p-5 border border-gray-200"
-                                    >
-                                      <div className="flex items-start justify-between mb-4">
-                                        <h4 className="text-lg font-bold text-gray-900">
-                                          {skill.assessmentTitle}
-                                        </h4>
-                                        <span
-                                          className={`px-3 py-1 rounded-full text-xs font-semibold text-white ${getScoreBackgroundColor(
-                                            skill.score
-                                          )}`}
-                                        >
-                                          {skill.score === "N/A"
-                                            ? "N/A"
-                                            : `${skill.score}/10`}
-                                        </span>
-                                      </div>
-
-                                      <div className="grid grid-cols-2 gap-4 mb-4">
-                                        <div className="flex items-center gap-2 text-sm">
-                                          <span className="font-semibold text-gray-700">
-                                            Status:
-                                          </span>
-                                          <span className="px-2 py-1 bg-green-100 text-green-700 rounded-md text-xs font-medium">
-                                            {skill.status}
-                                          </span>
-                                        </div>
-                                        <div className="flex items-center gap-2 text-sm">
-                                          <span className="font-semibold text-gray-700">
-                                            Time:
-                                          </span>
-                                          <span className="text-gray-600">
-                                            {formatTime(skill.timeConsumed)}
-                                          </span>
-                                        </div>
-                                      </div>
-
-                                      {skill.strengths.length > 0 && (
-                                        <div className="mb-3">
-                                          <h5 className="text-sm font-bold text-green-700 mb-2 flex items-center gap-1">
-                                            <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                                            Strengths
-                                          </h5>
-                                          <ul className="space-y-1.5">
-                                            {skill.strengths.map(
-                                              (strength, i) => (
-                                                <li
-                                                  key={i}
-                                                  className="text-sm text-gray-700 pl-4 relative before:content-['✓'] before:absolute before:left-0 before:text-green-600 before:font-bold"
-                                                >
-                                                  {strength}
-                                                </li>
-                                              )
-                                            )}
-                                          </ul>
-                                        </div>
-                                      )}
-
-                                      {skill.weaknesses.length > 0 && (
-                                        <div>
-                                          <h5 className="text-sm font-bold text-orange-700 mb-2 flex items-center gap-1">
-                                            <span className="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
-                                            Areas for Improvement
-                                          </h5>
-                                          <ul className="space-y-1.5">
-                                            {skill.weaknesses.map(
-                                              (weakness, i) => (
-                                                <li
-                                                  key={i}
-                                                  className="text-sm text-gray-700 pl-4 relative before:content-['→'] before:absolute before:left-0 before:text-orange-600 before:font-bold"
-                                                >
-                                                  {weakness}
-                                                </li>
-                                              )
-                                            )}
-                                          </ul>
-                                        </div>
-                                      )}
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                          ))}
-                          {/* Pagination */}
-                          {totalPages > 1 && (
-                            <div className="flex justify-center gap-2 pt-4">
-                              {Array.from(
-                                { length: totalPages },
-                                (_, i) => i + 1
-                              ).map((page) => (
-                                <Button
-                                  key={page}
-                                  onClick={() => paginate(page)}
-                                  className={`min-w-[40px] h-10 rounded-lg font-semibold transition-all ${
-                                    currentPage === page
-                                      ? "bg-orange-600 hover:bg-orange-700 text-white shadow-md"
-                                      : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                                  }`}
-                                >
-                                  {page}
-                                </Button>
-                              ))}
+                              </div>
                             </div>
                           )}
                         </div>
-                      ) : (
-                        <div className="text-center py-12">
-                          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-orange-100 mb-4">
-                            <span className="text-3xl">⏳</span>
-                          </div>
-                          <p className="text-lg font-semibold text-gray-900 mb-2">
-                            Assessment In Progress
-                          </p>
-                          <p className="text-gray-600">
-                            This candidate is yet to complete their assessment.
-                            Results will be available once completed.
-                          </p>
-                        </div>
                       ))}
                     {activeTab === "recording" &&
-                      (recording.length > 0 ? (
+                      (recordingUrl ? (
                         <div className="space-y-6">
-                          {recording.map((rec, index) => (
-                            <div
-                              key={index}
-                              className="bg-gray-50 rounded-2xl p-6 border border-gray-200"
-                            >
-                              <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                                <span className="w-2 h-2 rounded-full bg-orange-500"></span>
-                                Interview Recording: {rec.assessmentTitle}
-                              </h3>
-                              {rec.type === "video" && rec.url ? (
-                                <div className="rounded-xl overflow-hidden shadow-lg border border-gray-300">
-                                  <video controls className="w-full bg-black">
-                                    <source src={rec.url} type="video/mp4" />
-                                    Your browser does not support the video tag.
-                                  </video>
-                                </div>
-                              ) : (
-                                <div className="text-center py-8 bg-white rounded-xl border border-gray-200">
-                                  <p className="text-gray-600">
-                                    Recording format not supported or
-                                    unavailable.
-                                  </p>
-                                </div>
-                              )}
-                            </div>
-                          ))}
+                          <div className="bg-gray-50 rounded-2xl p-6 border border-gray-200">
+                            <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                              <span className="w-2 h-2 rounded-full bg-orange-500"></span>
+                              Interview Recording
+                            </h3>
+                              <div className="rounded-xl overflow-hidden shadow-lg border border-gray-300">
+                                <video
+                                  controls
+                                  className="w-full max-h-[70vh] bg-black object-contain"
+                                >
+                                  <source src={recordingUrl} type="video/mp4" />
+                                  Your browser does not support the video tag.
+                                </video>
+                              </div>
+
+                          </div>
                         </div>
                       ) : (
                         <div className="text-center py-12">
@@ -1192,117 +1176,6 @@ const CandidateProfile = () => {
                           </p>
                         </div>
                       ))}
-                    {activeTab === "certificates" && (
-                      <div>
-                        {isGeneratingCertificates ? (
-                          <div className="text-center py-12">
-                            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-orange-100 mb-4">
-                              <Loader2 className="w-8 h-8 text-orange-600 animate-spin" />
-                            </div>
-                            <p className="text-lg font-semibold text-gray-900 mb-2">
-                              Generating Certificates
-                            </p>
-                            <p className="text-gray-600">
-                              Please wait while we generate your certificates...
-                            </p>
-                          </div>
-                        ) : certificates.length > 0 ? (
-                          <div className="space-y-6">
-                            {certificates.map((certificate, index) => (
-                              <div
-                                key={index}
-                                className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-6 border border-orange-100 hover:shadow-lg transition-shadow"
-                              >
-                                <div className="mb-4">
-                                  <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-                                    <span className="w-2 h-2 rounded-full bg-orange-500"></span>
-                                    Certificate: {certificate.assessmentTitle}
-                                  </h3>
-                                  {certificate.certificateId && (
-                                    <p className="text-sm text-gray-600 mt-1">
-                                      Certificate ID: {certificate.certificateId}
-                                    </p>
-                                  )}
-                                </div>
-                                <div className="bg-white rounded-xl overflow-hidden shadow-lg border-2 border-gray-200 p-8 text-center">
-                                  <div className="flex flex-col items-center justify-center h-[400px] sm:h-[500px]">
-                                    <div className="mb-6">
-                                      <div className="w-24 h-24 mx-auto mb-4 bg-orange-100 rounded-full flex items-center justify-center">
-                                        <svg
-                                          className="w-12 h-12 text-orange-600"
-                                          fill="none"
-                                          stroke="currentColor"
-                                          viewBox="0 0 24 24"
-                                        >
-                                          <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                                          />
-                                        </svg>
-                                      </div>
-                                      <h4 className="text-xl font-semibold text-gray-900 mb-2">
-                                        Certificate Available
-                                      </h4>
-                                      <p className="text-gray-600 mb-6">
-                                        Click the button below to view your certificate in a new window
-                                      </p>
-                                    </div>
-                                    <button
-                                      onClick={() => {
-                                        window.open(certificate.certificateLink, '_blank', 'noopener,noreferrer');
-                                      }}
-                                      className="inline-flex items-center px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition text-base font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-                                    >
-                                      <svg
-                                        className="w-5 h-5 mr-2"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                      >
-                                        <path
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                          strokeWidth={2}
-                                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                                        />
-                                      </svg>
-                                      Open Certificate in New Window
-                                    </button>
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        ) : selectedCandidate?.assessmentsPaid?.length > 0 ? (
-                          <div className="text-center py-12">
-                            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-orange-100 mb-4">
-                              <span className="text-3xl">⏳</span>
-                            </div>
-                            <p className="text-lg font-semibold text-gray-900 mb-2">
-                              Certificates Loading
-                            </p>
-                            <p className="text-gray-600">
-                              Please wait while we fetch the certificates...
-                            </p>
-                          </div>
-                        ) : (
-                          <div className="text-center py-12">
-                            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
-                              <span className="text-3xl">📜</span>
-                            </div>
-                            <p className="text-lg font-semibold text-gray-900 mb-2">
-                              No Certificates Available
-                            </p>
-                            <p className="text-gray-600">
-                              Certificates will appear here once assessments are
-                              completed.
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                    )}
                   </div>
                 </div>
               </>
@@ -1312,7 +1185,7 @@ const CandidateProfile = () => {
             <InterestedCandidateForm
               isOpen={isInterestDialogOpen}
               onClose={() => setIsInterestDialogOpen(false)}
-              candidateName={selectedCandidate?.name || ""}
+              candidateName={displayName}
             />
           )}
         </div>
