@@ -53,6 +53,7 @@ interface JobDetailsData {
   location_link?: string;
   related_jobs?: JobDetailsData[];
   isExternal?: boolean;
+  isActive?: boolean;
 }
 interface ICreateApplicantRequestBody {
   tpoId?: string;
@@ -829,13 +830,19 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                       </div>
                     )}
                   </div>
-                  <Button 
-                    className="bg-white hover:bg-gray-50 flex-1 sm:flex-none shadow-lg hover:shadow-xl transition-all duration-200 font-medium px-6 py-2 border-2 border-earlyjobs-orange"
-                    style={{ color: '#ff6b35' }}
-                    onClick={() => setShowApplyModal(true)}
-                  >
-                    Apply Now
-                  </Button>
+                  {jobData.isActive === false ? (
+                    <div className="flex-1 sm:flex-none px-6 py-3 rounded-lg bg-gray-100 text-gray-600 font-medium text-center">
+                      Applications Closed
+                    </div>
+                  ) : (
+                    <Button 
+                      className="bg-white hover:bg-gray-50 flex-1 sm:flex-none shadow-lg hover:shadow-xl transition-all duration-200 font-medium px-6 py-2 border-2 border-earlyjobs-orange"
+                      style={{ color: '#ff6b35' }}
+                      onClick={() => setShowApplyModal(true)}
+                    >
+                      Apply Now
+                    </Button>
+                  )}
                 </div>
               </div>
               
