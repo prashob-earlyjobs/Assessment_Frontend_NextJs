@@ -205,7 +205,7 @@ const Footer = () => {
                 Ghaziabad
               </p>
               <p
-                onClick={() => router.push("/")}
+                onClick={() => router.push("/franchise/chengalpattu")}
                 className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
               >
                 Chengalpattu
