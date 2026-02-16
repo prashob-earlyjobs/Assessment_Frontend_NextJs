@@ -395,7 +395,7 @@ const Chengalpattu = () => {
                         >
                             <div className="rounded-3xl overflow-hidden shadow-xl border border-orange-100 bg-white/80 backdrop-blur">
                                 <img
-                                    src="/images/chennai-hero.jpg"
+                                    src="/images/chengalpattu.jpg"
                                     alt="Chengalpattu city"
                                     className="w-full h-56 object-cover"
                                 />
