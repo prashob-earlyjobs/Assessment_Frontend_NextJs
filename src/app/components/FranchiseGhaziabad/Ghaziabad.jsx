@@ -402,7 +402,7 @@ const Ghaziabad = () => {
                                 />
                                 <div className="p-6 grid grid-cols-3 gap-4">
                                     <div className="text-center">
-                                        <p className="text-2xl font-bold text-orange-700">2000+</p>
+                                        <p className="text-2xl font-bold text-orange-700">2500+</p>
                                         <p className="text-xs text-orange-800/80">Placements</p>
                                     </div>
                                     <div className="text-center">

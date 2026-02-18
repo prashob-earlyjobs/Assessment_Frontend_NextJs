@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
             type: 'website',
             images: [
                 {
-                    url: `/images/ghaziabad.jpg`, // Using placeholder as requested
+                    url: `/images/lucknow.jpg`, // Using placeholder as requested
                     width: 1200,
                     height: 630,
                     alt: 'EarlyJobs Lucknow Franchise',
@@ -25,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
             card: 'summary_large_image',
             title: 'EarlyJobs Lucknow Franchise',
             description: 'Explore franchise opportunities with EarlyJobs in Lucknow, combining AI technology and human expertise for exceptional recruitment results.',
-            images: [`${baseUrl}/images/ghaziabad.jpg`],
+            images: [`${baseUrl}/images/lucknow.jpg`],
         },
         alternates: {
             canonical: `${baseUrl}/franchise/lucknow`,
