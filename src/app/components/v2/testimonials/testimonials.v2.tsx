@@ -72,7 +72,7 @@ const TestimonialsV2 = () => {
             >
               {/* Quote Icon - Bottom Right */}
               <div className="absolute bottom-4 right-4">
-                <FaQuoteRight className="text-4xl text-orange-500 opacity-20" />
+                <FaQuoteRight className="text-4xl opacity-20 text-[#ea6a4e]" />
               </div>
 
               {/* Star Rating */}

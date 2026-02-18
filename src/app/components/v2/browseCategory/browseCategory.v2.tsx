@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { IconType } from "react-icons";
-import { PRIMARY_COLOR, PRIMARY_COLOR_LIGHT } from "../../../../constants/theme";
 import {
   FiGrid,
   FiHeart,
@@ -34,6 +33,7 @@ import {
   FiRadio,
   FiHelpCircle,
   FiBriefcase,
+  FiArrowRight,
 } from "react-icons/fi";
 
 interface CategoryData {
@@ -45,7 +45,6 @@ interface CategoryData {
 interface Category {
   id: string;
   name: string;
-  jobCount?: number;
   icon: IconType;
 }
 
@@ -121,47 +120,11 @@ const BrowseCategoryV2 = () => {
     { _id: { $oid: "69313b73d025037d5ab9cfe8" }, label: "Other", value: "Other" },
   ];
 
-  // Helper function to generate sample job counts (replace with API data later)
-  const getJobCount = (categoryName: string): number => {
-    const jobCountMap: { [key: string]: number } = {
-      Manufacturing: 1254,
-      "Health Care": 1836,
-      BPO: 924,
-      Biotech: 612,
-      Insurance: 748,
-      "Oil And Gas": 856,
-      "Information Technology": 2847,
-      "Media and news": 1034,
-      "Food processing": 1245,
-      Law: 534,
-      "E-commerce": 1923,
-      Aviation: 678,
-      "Consumer Goods": 1456,
-      ITES: 1123,
-      Entertainment: 892,
-      Textile: 756,
-      Advertising: 1045,
-      "Electrical and Electronics": 1567,
-      "AI / ML": 1234,
-      Banking: 1789,
-      Retail: 2134,
-      Education: 1654,
-      Finance: 1345,
-      Hospitality: 1243,
-      Construction: 1876,
-      Aeronautical: 567,
-      "Electronics and Communication": 1345,
-      Other: 456,
-    };
-    return jobCountMap[categoryName] || 0;
-  };
-
-  // Transform category data with icons and job counts
+  // Transform category data with icons
   const categories: Category[] = categoryData.map((cat) => ({
     id: cat._id.$oid,
     name: cat.label,
     icon: getCategoryIcon(cat.label),
-    jobCount: getJobCount(cat.label),
   }));
 
   // Show first 8 categories initially, all when showAll is true
@@ -179,7 +142,7 @@ const BrowseCategoryV2 = () => {
     <div 
       className="w-full py-12" 
       style={{ 
-        backgroundColor: `rgba(240, 133, 4, 0.05)` // PRIMARY_COLOR with 5% opacity
+        backgroundColor: `rgba(234, 106, 78, 0.05)` // PRIMARY_COLOR (#ea6a4e) with 5% opacity
       }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -202,26 +165,23 @@ const BrowseCategoryV2 = () => {
               <div
                 key={category.id}
                 onClick={() => handleCategoryClick(category.id, category.name)}
-                className="bg-white rounded-lg border border-gray-200 p-3 hover:shadow-sm transition-all duration-200 cursor-pointer flex flex-col items-center justify-center gap-4 text-center aspect-square"
+                className="group bg-white rounded-xl border border-gray-200/80 p-5 hover:border-[#ea6a4e]/30 hover:shadow-md transition-all duration-200 cursor-pointer flex flex-col items-center justify-center gap-3 text-center min-h-[140px]"
               >
                 {/* Icon */}
-                <div className="flex items-center justify-center">
-                  <IconComponent className="text-3xl text-orange-500 stroke-[1.7]" />
+                <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-[#ea6a4e]/10 group-hover:bg-[#ea6a4e]/20 transition-colors duration-200">
+                  <IconComponent className="text-2xl stroke-[1.7] text-[#ea6a4e]" />
                 </div>
 
                 {/* Category Name */}
-                <div>
-                  <h3 className="text-sm font-medium text-black">
-                    {category.name}
-                  </h3>
-                </div>
+                <h3 className="text-sm font-semibold text-gray-800 group-hover:text-[#ea6a4e] transition-colors line-clamp-2">
+                  {category.name}
+                </h3>
 
-                {/* Job Count Badge */}
-                <div>
-                  <span className="inline-block bg-orange-100 text-orange-600 text-xs font-medium px-2.5 py-1 rounded-full">
-                    {category.jobCount} jobs
-                  </span>
-                </div>
+                {/* Explore CTA */}
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-gray-500 group-hover:text-[#ea6a4e] transition-colors">
+                  Explore
+                  <FiArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                </span>
               </div>
             );
           })}
@@ -232,7 +192,7 @@ const BrowseCategoryV2 = () => {
           <div className="mt-8 flex justify-end">
             <button
               onClick={handleToggleShowAll}
-              className="text-orange-500 hover:text-orange-600 font-medium text-sm transition-colors duration-200"
+              className="text-[#ea6a4e] hover:text-[#c95a42] font-medium text-sm transition-colors duration-200"
             >
               {showAll ? "Show Less" : `Show All (${categories.length})`}
             </button>

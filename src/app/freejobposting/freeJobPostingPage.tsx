@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -63,6 +64,7 @@ const getBackendErrorMessage = (error: any, fallback: string) => {
 };
 
 const FreeJobPostingPage = () => {
+  const searchParams = useSearchParams();
   const [formData, setFormData] = useState({
     name: "",
     companyName: "",
@@ -80,6 +82,15 @@ const FreeJobPostingPage = () => {
   const [isOtpTimerActive, setIsOtpTimerActive] = useState(false);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
   const otpInputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  // Prefill form from URL params (e.g. from recruiter login when user not found)
+  useEffect(() => {
+    const mobile = searchParams.get("mobile") || "";
+    if (mobile) {
+      const digitsOnly = mobile.replace(/\D/g, "").slice(0, 10);
+      setFormData((prev) => ({ ...prev, mobile: digitsOnly }));
+    }
+  }, [searchParams]);
 
   // Common country codes
   const countryCodes = [

@@ -308,8 +308,8 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
           <div className="flex items-center space-x-4 sm:space-x-6">
             <Button
               onClick={() => router.push("/browse-interviewed-candidates")}
-              className={`bg-[#F08504] hover:bg-orange-600 text-white font-medium px-4 sm:px-6 py-2 rounded-lg transition-colors duration-200 text-sm sm:text-base ${
-                isActive("/browse-interviewed-candidates") ? "ring-2 ring-orange-300" : ""
+              className={`bg-[#ea6a4e] hover:bg-[#c95a42] text-white font-medium px-4 sm:px-6 py-2 rounded-lg transition-colors duration-200 text-sm sm:text-base ${
+                isActive("/browse-interviewed-candidates") ? "ring-2 ring-[#ea6a4e]/50" : ""
               }`}
             >
               Browse Candidates
@@ -324,10 +324,10 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
                 <DropdownMenuContent align="end" sideOffset={8} className="w-64 p-2 bg-white border border-gray-200 shadow-lg mt-2">
                   <DropdownMenuItem
                     onClick={() => router.push("/login?mode=recruiter")}
-                    className="flex items-start gap-3 p-3 cursor-pointer hover:bg-orange-50 rounded-lg bg-white"
+                    className="flex items-start gap-3 p-3 cursor-pointer hover:bg-[#ea6a4e]/10 rounded-lg bg-white"
                   >
-                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#F08504]/10 flex-shrink-0">
-                      <Briefcase className="h-5 w-5 text-[#F08504]" />
+                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#ea6a4e]/10 flex-shrink-0">
+                      <Briefcase className="h-5 w-5 text-[#ea6a4e]" />
                     </div>
                     <div className="flex flex-col">
                       <span className="text-sm font-semibold text-gray-900">Login as Recruiter</span>
@@ -336,10 +336,10 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => router.push("/login?mode=candidate")}
-                    className="flex items-start gap-3 p-3 cursor-pointer hover:bg-orange-50 rounded-lg bg-white"
+                    className="flex items-start gap-3 p-3 cursor-pointer hover:bg-[#ea6a4e]/10 rounded-lg bg-white"
                   >
-                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#F08504]/10 flex-shrink-0">
-                      <Users className="h-5 w-5 text-[#F08504]" />
+                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#ea6a4e]/10 flex-shrink-0">
+                      <Users className="h-5 w-5 text-[#ea6a4e]" />
                     </div>
                     <div className="flex flex-col">
                       <span className="text-sm font-semibold text-gray-900">Login as Candidate</span>

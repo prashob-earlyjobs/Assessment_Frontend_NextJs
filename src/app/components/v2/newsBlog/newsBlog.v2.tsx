@@ -48,8 +48,8 @@ const NewsBlogV2 = () => {
             </p>
           </div>
           <button
-            onClick={() => router.push("/blog")}
-            className="mt-3 text-orange-500 hover:text-orange-600 font-medium underline underline-offset-4"
+            onClick={() => router.push("/blogs")}
+            className="mt-3 text-[#ea6a4e] hover:text-[#c95a42] font-medium underline underline-offset-4"
           >
             View all
           </button>
@@ -79,7 +79,7 @@ const NewsBlogV2 = () => {
 
               <button
                 onClick={() => router.push("/blog")}
-                className="mt-4 inline-flex items-center gap-2 text-orange-500 hover:text-orange-600 font-semibold"
+                className="mt-4 inline-flex items-center gap-2 text-[#ea6a4e] hover:text-[#c95a42] font-semibold"
               >
                 Read more <ArrowUpRight className="h-4 w-4" />
               </button>

@@ -33,21 +33,21 @@ const PromoBannerV2 = () => {
         {/* Statistics Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">   
           <div className="flex flex-col items-start">
-            <p className="text-3xl md:text-4xl font-bold text-orange-500 mb-2">12k+</p>
+            <p className="text-3xl md:text-4xl font-bold text-[#ea6a4e] mb-2">12k+</p>
             <p className="text-lg font-semibold text-gray-800 mb-3">Clients worldwide</p>
             <p className="text-sm text-gray-600 leading-relaxed">
               At eu lobortis pretium tincidunt amet lacus ut aenean aliquet. Blandit a massa elementum
             </p>
           </div>
           <div className="flex flex-col items-start">
-            <p className="text-3xl md:text-4xl font-bold text-orange-500 mb-2">20k+</p>
+            <p className="text-3xl md:text-4xl font-bold text-[#ea6a4e] mb-2">20k+</p>
             <p className="text-lg font-semibold text-gray-800 mb-3">Active resume</p>
             <p className="text-sm text-gray-600 leading-relaxed">
               At eu lobortis pretium tincidunt amet lacus ut aenean aliquet. Blandit a massa elementum
             </p>
           </div>
           <div className="flex flex-col items-start">
-            <p className="text-3xl md:text-4xl font-bold text-orange-500 mb-2">18k+</p>
+            <p className="text-3xl md:text-4xl font-bold text-[#ea6a4e] mb-2">18k+</p>
             <p className="text-lg font-semibold text-gray-800 mb-3">Companies</p>
             <p className="text-sm text-gray-600 leading-relaxed">
               At eu lobortis pretium tincidunt amet lacus ut aenean aliquet. Blandit a massa elementum
@@ -68,7 +68,7 @@ const PromoBannerV2 = () => {
               </p>
               <button
                 onClick={() => router.push("/jobs")}
-                className="inline-flex items-center justify-center rounded-lg bg-[#F08504] px-6 py-3 text-base font-semibold text-white hover:bg-orange-600 transition-colors w-fit"
+                className="inline-flex items-center justify-center rounded-lg bg-[#ea6a4e] px-6 py-3 text-base font-semibold text-white hover:bg-[#c95a42] transition-colors w-fit"
               >
                 Search Job
               </button>

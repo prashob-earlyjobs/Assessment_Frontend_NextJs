@@ -268,8 +268,10 @@ const JobsClient = () => {
 
   
   useEffect(() => {
-    const keywordFromUrl = searchParams.get("search") || ""; // read 'search' param
+    const keywordFromUrl = searchParams.get("search") || ""; // read 'search' param (hero job title)
     const tpoIdFromUrl = searchParams.get("tpoId");
+    const categoryFromUrl = searchParams.get("category");
+    const locationFromUrl = searchParams.get("location");
     const normalizedSearchKeyword = keywordFromUrl
     .replace(/dot/g, ".")      // "dot" → "."
     .replace(/-/g, " ");
@@ -278,6 +280,17 @@ const JobsClient = () => {
       setSearchInput(normalizedSearchKeyword);
     }
     setTpoId(tpoIdFromUrl);
+    // Apply category from URL (e.g. from Browse Category or hero)
+    if (categoryFromUrl) {
+      const decodedCategory = decodeURIComponent(categoryFromUrl.trim());
+      if (decodedCategory && decodedCategory !== "All Categories") {
+        setCategory([decodedCategory]);
+      }
+    }
+    // Apply location from URL (e.g. from hero search)
+    if (locationFromUrl) {
+      setLocation(decodeURIComponent(locationFromUrl.trim()));
+    }
   }, [searchParams]);
 
 
@@ -600,7 +613,7 @@ const JobsClient = () => {
       <div 
         className="w-full py-12 md:py-16" 
         style={{ 
-          backgroundColor: `rgba(240, 133, 4, 0.05)` // PRIMARY_COLOR with 5% opacity
+          backgroundColor: `rgba(234, 106, 78, 0.05)` // PRIMARY_COLOR (#ea6a4e) with 5% opacity
         }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

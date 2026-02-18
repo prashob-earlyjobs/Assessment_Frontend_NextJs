@@ -755,9 +755,9 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
             variant="ghost"
             size="sm"
             onClick={() => router.back()}
-            className="rounded-full w-10 h-10 p-0 bg-orange-50 hover:bg-orange-100"
+            className="rounded-full w-10 h-10 p-0 bg-[#ea6a4e]/10 hover:bg-[#ea6a4e]/20"
           >
-            <ArrowLeft className="h-5 w-5 text-orange-600" />
+            <ArrowLeft className="h-5 w-5 text-[#ea6a4e]" />
           </Button>
           <h1 className="text-xl sm:text-2xl font-bold text-earlyjobs-text">
             {jobData.title} Job {jobData.city ? `in ${jobData.city}` : ''} at {jobData.company_name}
@@ -836,7 +836,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                     </div>
                   ) : (
                     <Button 
-                      className="bg-white hover:bg-gray-50 flex-1 sm:flex-none shadow-lg hover:shadow-xl transition-all duration-200 font-medium px-6 py-2 border-2 border-earlyjobs-orange"
+                      className="bg-white hover:bg-gray-50 flex-1 sm:flex-none shadow-lg hover:shadow-xl transition-all duration-200 font-medium px-6 py-2 border-2 border-[#ea6a4e]"
                       style={{ color: '#ff6b35' }}
                       onClick={() => setShowApplyModal(true)}
                     >
@@ -848,19 +848,20 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
               
               {/* Disclaimer - Only show for external jobs */}
               {jobData.isExternal && (
-                <div className="mb-4 py-2 px-3 bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200 rounded-xl">
+                <div className="mb-4 py-2 px-3 bg-gradient-to-r from-[#ea6a4e]/10 to-amber-50 border border-[#ea6a4e]/30 rounded-xl">
                   <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <svg className="w-3 h-3 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="w-6 h-6 bg-[#ea6a4e]/20 rounded-full flex items-center justify-center flex-shrink-0">
+                      <svg className="w-3 h-3 text-[#ea6a4e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     </div>
+                    
                     <div>
-                      <p className="text-sm text-orange-700">
+                      <p className="text-sm text-[#c95a42]">
                         Only candidates who have completed the{" "}
                         <a 
                           href="/assessments" 
-                          className="text-orange-800 font-semibold hover:text-orange-900 cursor-pointer transition-colors"
+                          className="text-[#c95a42] font-semibold hover:text-[#ea6a4e] cursor-pointer transition-colors"
                         >
                           EarlyJobs AI Assessment
                         </a>
@@ -969,7 +970,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                         className={`text-xs bg-gray-50 border p-1 px-3 transition-colors p-2
                           ${
                             keyword.isShared
-                              ? "text-gray-600 border-gray-200 hover:text-orange-600 hover:border-orange-400 cursor-pointer"
+                              ? "text-gray-600 border-gray-200 hover:text-[#ea6a4e] hover:border-[#ea6a4e]/50 cursor-pointer"
                               : "text-gray-600 border-gray-200 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed pointer-events-none"
                           }`}
                         
@@ -1047,7 +1048,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                   Take our EarlyJobs Assessments and boost your chances of getting hired!
                 </p>
                 <Button 
-                  className="bg-white hover:bg-gray-50 font-medium px-6 py-2 border-2 border-earlyjobs-orange"
+                  className="bg-white hover:bg-gray-50 font-medium px-6 py-2 border-2 border-[#ea6a4e]"
                   style={{ color: '#ff6b35' }}
                   onClick={() => window.open('/assessments', '_blank')}
                 >
@@ -1065,7 +1066,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                   Use our AI Resume Builder to create a professional resume and increase your chances of landing your dream job!
                 </p>
                 <Button 
-                  className="bg-white hover:bg-gray-50 font-medium px-6 py-2 border-2 border-earlyjobs-orange"
+                  className="bg-white hover:bg-gray-50 font-medium px-6 py-2 border-2 border-[#ea6a4e]"
                   style={{ color: '#ff6b35' }}
                   onClick={() => window.open('/airesume', '_blank')}
                 >
@@ -1081,7 +1082,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
               <div className="space-y-3">
                 {jobData?.related_jobs?.map((job,index)=>{
                   return (
-                    <div key={index} className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:border-earlyjobs-orange hover:bg-orange-50 transition-colors cursor-pointer" onClick={() => {
+                    <div key={index} className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:border-earlyjobs-orange hover:bg-[#ea6a4e]/10 transition-colors cursor-pointer" onClick={() => {
                       const jobTitle = job?.title?.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "") || "job";
                       router.push(`/jobs/${jobTitle}/${job.job_id}`);
                     }}>
@@ -1153,7 +1154,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                       <Button
                         type="button"
                         variant="outline"
-                        className={`px-6 ${certificateVerified ? 'text-green-600 border-green-300 hover:bg-green-50' : 'text-orange-600 border-orange-300 hover:bg-orange-50'}`}
+                        className={`px-6 ${certificateVerified ? 'text-green-600 border-green-300 hover:bg-green-50' : 'text-[#ea6a4e] border-[#ea6a4e]/40 hover:bg-[#ea6a4e]/10'}`}
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
@@ -1436,7 +1437,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                     />
                     <label
                       htmlFor="resume-upload"
-                      className="flex items-center justify-center gap-2 w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-md cursor-pointer hover:border-earlyjobs-orange hover:bg-orange-50/50 transition-colors"
+                      className="flex items-center justify-center gap-2 w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-md cursor-pointer hover:border-[#ea6a4e] hover:bg-[#ea6a4e]/10 transition-colors"
                     >
                       <Upload className="w-5 h-5 text-gray-400" />
                       <span className="text-sm text-gray-600">Click to upload resume</span>
@@ -1604,7 +1605,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                     }
                     setShowSuccessPopup(false);
                   }}
-                  className="w-full sm:w-auto inline-flex items-center justify-center rounded-md h-10 px-6 py-2 bg-orange-600 hover:bg-orange-700 text-white font-medium transition-colors shadow-sm"
+                  className="w-full sm:w-auto inline-flex items-center justify-center rounded-md h-10 px-6 py-2 bg-[#ea6a4e] hover:bg-[#c95a42] text-white font-medium transition-colors shadow-sm"
                 >
                   Start Interview
                 </a>
