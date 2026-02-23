@@ -102,7 +102,7 @@ const JobCard = ({
   };
 
   const formatLpa = (value: number): string => {
-    return value >= 10 ? value.toFixed(0) : value.toFixed(1);
+    return value >= 10 ? value.toFixed(1) : value.toFixed(2);
   };
 
   const minParsed = parseNumber(min_salary);

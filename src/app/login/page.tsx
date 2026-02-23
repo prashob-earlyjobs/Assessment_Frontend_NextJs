@@ -7,8 +7,9 @@ import Image from "next/image";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
-import { Briefcase, Building, ArrowRight, Loader2, RotateCcw } from "lucide-react";
-import { PRIMARY_COLOR, PRIMARY_COLOR_DARK } from "../../constants/theme";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "../components/ui/dialog";
+import { Briefcase, Building, ArrowRight, Loader2, RotateCcw, UserX, UserPlus } from "lucide-react";
+import { PRIMARY_COLOR, PRIMARY_COLOR_DARK, PRIMARY_COLOR_LIGHT } from "../../constants/theme";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
 import { sendOtptoMobile, verifyOtpMobile, isUserLoggedIn, sendOtpToRecruiter, verifyOtpRecruiter } from "../components/services/servicesapis";
@@ -33,6 +34,8 @@ export default function Login() {
   const [formData, setFormData] = useState({
     emailOrMobile: "",
   });
+  const [userNotFoundOpen, setUserNotFoundOpen] = useState(false);
+  const [userNotFoundRedirect, setUserNotFoundRedirect] = useState("");
   const isLoggingInRef = useRef(false);
 
   // Check if user is already logged in (only on initial mount, not during login flow)
@@ -110,16 +113,15 @@ export default function Login() {
         if (otpResponse.statusCode === 404 || otpResponse.statusCode === 400 || 
             otpResponse.message?.toLowerCase().includes('not found') ||
             otpResponse.message?.toLowerCase().includes('does not exist')) {
-          toast.info("User not found. Please sign up to create an account.");
           if (isRecruiterMode) {
-            // Recruiter: redirect to free job posting with mobile prefilled
             const mobileForPrefill = (phoneNumber || formData.emailOrMobile.replace(/\D/g, '').slice(0, 10)) || '';
             const params = new URLSearchParams();
             if (mobileForPrefill) params.set('mobile', mobileForPrefill);
-            router.push(`/freejobposting${params.toString() ? `?${params.toString()}` : ''}`);
+            setUserNotFoundRedirect(`/freejobposting${params.toString() ? `?${params.toString()}` : ''}`);
           } else {
-            router.push('/signup');
+            setUserNotFoundRedirect('/signup');
           }
+          setUserNotFoundOpen(true);
           setIsLoading(false);
           return;
         }
@@ -151,16 +153,16 @@ export default function Login() {
     } catch (error: any) {
       // Check if error is 404 (user not found)
       if (error?.response?.status === 404 || error?.response?.status === 400) {
-        toast.info("User not found. Please sign up to create an account.");
         if (isRecruiterMode) {
           const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.emailOrMobile);
           const mobileForPrefill = isEmail ? '' : formData.emailOrMobile.replace(/^\+91/, '').replace(/\D/g, '').slice(0, 10);
           const params = new URLSearchParams();
           if (mobileForPrefill) params.set('mobile', mobileForPrefill);
-          router.push(`/freejobposting${params.toString() ? `?${params.toString()}` : ''}`);
+          setUserNotFoundRedirect(`/freejobposting${params.toString() ? `?${params.toString()}` : ''}`);
         } else {
-          router.push('/signup');
+          setUserNotFoundRedirect('/signup');
         }
+        setUserNotFoundOpen(true);
         setIsLoading(false);
         return;
       }
@@ -673,6 +675,55 @@ export default function Login() {
           </div>
         </div>
       </div>
+
+      {/* User not found popup */}
+      <Dialog open={userNotFoundOpen} onOpenChange={setUserNotFoundOpen}>
+        <DialogContent className="sm:max-w-[420px] rounded-2xl border-0 shadow-xl p-0 overflow-hidden">
+          <div className="pt-8 pb-2 px-8 text-center">
+            <div
+              className="mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-5"
+              style={{ backgroundColor: PRIMARY_COLOR_LIGHT }}
+            >
+              {userNotFoundRedirect.startsWith('/freejobposting') ? (
+                <Briefcase className="w-8 h-8" style={{ color: PRIMARY_COLOR }} />
+              ) : (
+                <UserX className="w-8 h-8" style={{ color: PRIMARY_COLOR }} />
+              )}
+            </div>
+            <DialogHeader className="space-y-2">
+              <DialogTitle className="text-xl font-semibold text-gray-900">
+                No Account Detected
+              </DialogTitle>
+              <DialogDescription className="text-base text-gray-600 leading-relaxed">
+                The provided credentials are not linked to any recruiter account. Please proceed with registration to access the portal.
+              </DialogDescription>
+            </DialogHeader>
+          </div>
+          <div className="px-8 pb-8 pt-4 flex flex-col-reverse sm:flex-row gap-3 sm:justify-end">
+            <Button
+              variant="outline"
+              onClick={() => setUserNotFoundOpen(false)}
+              className="rounded-xl border-gray-300 text-gray-700 hover:bg-gray-50 order-2 sm:order-1"
+            >
+              Cancel
+            </Button>
+            <Button
+              className="rounded-xl text-white font-medium hover:opacity-90 transition-opacity order-1 sm:order-2"
+              style={{ backgroundColor: PRIMARY_COLOR }}
+              onClick={() => {
+                setUserNotFoundOpen(false);
+                router.push(userNotFoundRedirect);
+              }}
+            >
+              {userNotFoundRedirect.startsWith('/freejobposting') ? (
+                <>Post a job free <ArrowRight className="w-4 h-4 ml-1.5" /></>
+              ) : (
+                <>Create account <UserPlus className="w-4 h-4 ml-1.5" /></>
+              )}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
