@@ -199,7 +199,7 @@ const HeroV2 = ({ data }: { data: any }) => {
                                     </SelectContent>
                                 </Select> */}
                             </div>
-                            
+
                             <button
                                 onClick={handleSearch}
                                 className="flex items-center justify-center gap-2 px-6 sm:px-8 h-12 sm:h-14 bg-[#F08504] hover:bg-[#F08504]/90 text-white rounded-lg sm:rounded-l-none sm:rounded-r-full transition-colors font-medium m-2 sm:m-0"
@@ -243,7 +243,7 @@ const HeroV2 = ({ data }: { data: any }) => {
                                 <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold">
                                     <CountUp start={0} end={data?.totalCandidates || 0} duration={2.7} />+
                                 </div>
-                                <p className="text-xs sm:text-sm md:text-base text-gray-400">Resumes</p>
+                                <p className="text-xs sm:text-sm md:text-base text-gray-400">Recruiters</p>
                             </div>
                         </div>
 
@@ -275,10 +275,10 @@ const HeroV2 = ({ data }: { data: any }) => {
                             <div className="overflow-hidden relative w-full">
                                 {/* Left gradient overlay */}
                                 {/* <div className="absolute left-0 top-0 bottom-0 w-24 md:w-40 lg:w-56 bg-gradient-to-r from-[#111] via-[#111]/50 to-transparent z-10 pointer-events-none" /> */}
-                                
+
                                 {/* Right gradient overlay */}
                                 {/* <div className="absolute right-0 top-0 bottom-0 w-24 md:w-40 lg:w-56 bg-gradient-to-l from-[#111] via-[#111]/50 to-transparent z-10 pointer-events-none" /> */}
-                                
+
                                 <div className="flex gap-6 md:gap-8 lg:gap-12 carousel-horizontal-top">
                                     {[...clientLogos].map((logo, idx) => (
                                         <div key={`top-client-${idx}`} className="flex-shrink-0 w-28 h-20 md:w-36 md:h-28 flex items-center justify-center">
@@ -321,10 +321,10 @@ const HeroV2 = ({ data }: { data: any }) => {
                     <div className="overflow-hidden relative h-14 md:h-18 flex items-center">
                         {/* Left gradient overlay */}
                         {/* <div className="absolute left-0 top-0 bottom-0 w-24 md:w-40 lg:w-56 bg-gradient-to-r from-[#111] via-[#111]/50 to-transparent z-10 pointer-events-none" /> */}
-                        
+
                         {/* Right gradient overlay */}
                         {/* <div className="absolute right-0 top-0 bottom-0 w-24 md:w-40 lg:w-56 bg-gradient-to-l from-[#111] via-[#111]/50 to-transparent z-10 pointer-events-none" /> */}
-                        
+
                         <div className="flex gap-6 md:gap-8 lg:gap-12 carousel-horizontal">
                             {[...clientLogos, ...clientLogos].map((logo, idx) => (
                                 <div key={`client-${idx}`} className="flex-shrink-0 w-28 h-20 md:w-36 md:h-28 flex items-center justify-center">

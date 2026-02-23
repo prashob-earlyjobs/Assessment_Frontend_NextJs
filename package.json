@@ -54,6 +54,7 @@
     "country-state-city": "^3.2.1",
     "culori": "^4.0.2",
     "date-fns": "^4.1.0",
+    "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
     "firebase": "^12.2.1",
     "formidable": "^3.5.4",
