@@ -11,7 +11,7 @@ import { Briefcase, Building, ArrowRight, Loader2, RotateCcw } from "lucide-reac
 import { PRIMARY_COLOR, PRIMARY_COLOR_DARK } from "../../constants/theme";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
-import { sendOtptoMobile, verifyOtpMobile, isUserLoggedIn } from "../components/services/servicesapis";
+import { sendOtptoMobile, verifyOtpMobile, isUserLoggedIn, sendOtpToRecruiter, verifyOtpRecruiter } from "../components/services/servicesapis";
 import axiosInstance from "../components/services/apiinterseptor";
 import { useUser } from "@/app/context";
 
@@ -20,6 +20,10 @@ export default function Login() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { userCredentials, setUserCredentials } = useUser();
+  
+  // Detect mode from URL query param (default: candidate)
+  const mode = searchParams.get("mode") || "candidate";
+  const isRecruiterMode = mode === "recruiter";
   const [isLoading, setIsLoading] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
@@ -87,12 +91,19 @@ export default function Login() {
       const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.emailOrMobile);
       const phoneNumber = isEmail ? "" : formData.emailOrMobile.replace(/^\+91/, '').replace(/\D/g, '').slice(0, 10);
       const email = isEmail ? formData.emailOrMobile : "";
+      console.log("phoneNumber", phoneNumber, "email", email);
+      console.log("isRecruiterMode", isRecruiterMode);
 
-      const otpResponse = await sendOtptoMobile({
-        phoneNumber: phoneNumber,
-        email: email,
-        toLogin: true
-      });
+
+
+      // Use different API based on mode
+      const otpResponse = isRecruiterMode
+        ? await sendOtpToRecruiter({ phoneNumber })
+        : await sendOtptoMobile({
+            phoneNumber: phoneNumber,
+            email: email,
+            toLogin: true
+          });
 
       if (!otpResponse.success) {
         // Check if the failure is due to user not found (404)
@@ -100,7 +111,15 @@ export default function Login() {
             otpResponse.message?.toLowerCase().includes('not found') ||
             otpResponse.message?.toLowerCase().includes('does not exist')) {
           toast.info("User not found. Please sign up to create an account.");
-          router.push('/signup');
+          if (isRecruiterMode) {
+            // Recruiter: redirect to free job posting with mobile prefilled
+            const mobileForPrefill = (phoneNumber || formData.emailOrMobile.replace(/\D/g, '').slice(0, 10)) || '';
+            const params = new URLSearchParams();
+            if (mobileForPrefill) params.set('mobile', mobileForPrefill);
+            router.push(`/freejobposting${params.toString() ? `?${params.toString()}` : ''}`);
+          } else {
+            router.push('/signup');
+          }
           setIsLoading(false);
           return;
         }
@@ -133,7 +152,15 @@ export default function Login() {
       // Check if error is 404 (user not found)
       if (error?.response?.status === 404 || error?.response?.status === 400) {
         toast.info("User not found. Please sign up to create an account.");
-        router.push('/signup');
+        if (isRecruiterMode) {
+          const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.emailOrMobile);
+          const mobileForPrefill = isEmail ? '' : formData.emailOrMobile.replace(/^\+91/, '').replace(/\D/g, '').slice(0, 10);
+          const params = new URLSearchParams();
+          if (mobileForPrefill) params.set('mobile', mobileForPrefill);
+          router.push(`/freejobposting${params.toString() ? `?${params.toString()}` : ''}`);
+        } else {
+          router.push('/signup');
+        }
         setIsLoading(false);
         return;
       }
@@ -197,15 +224,18 @@ export default function Login() {
       const phoneNumber = isEmail ? "" : formData.emailOrMobile.replace(/^\+91/, '').replace(/\D/g, '').slice(0, 10);
       const email = isEmail ? formData.emailOrMobile : "";
 
-      const loginResponse = await verifyOtpMobile({
-        phoneNumber: phoneNumber,
-        email: email,
-        otp: otpToVerify,
-        toLogin: true
-      });
+      // Use different API based on mode
+      const loginResponse = isRecruiterMode
+        ? await verifyOtpRecruiter({ phoneNumber, email, otp: otpToVerify })
+        : await verifyOtpMobile({
+            phoneNumber: phoneNumber,
+            email: email,
+            otp: otpToVerify,
+            toLogin: true
+          });
 
       if (!loginResponse.success) {
-        toast.error(loginResponse?.response?.data?.message || loginResponse?.data?.message || "Error verifying OTP");
+        toast.error(loginResponse?.response?.data?.message || loginResponse?.data?.message || loginResponse?.message || "Error verifying OTP");
         // Reset OTP on error
         setOtp(Array(6).fill(""));
         otpInputRefs.current[0]?.focus();
@@ -218,36 +248,62 @@ export default function Login() {
       const accessToken = loginResponse.data?.accessToken || loginResponse.data?.data?.accessToken;
       const user = loginResponse.data?.user || loginResponse.data?.data?.user;
       
-      if (accessToken) {
-        Cookies.set("accessToken", accessToken, { expires: 7 });
-        localStorage.setItem("accessToken", accessToken);
-        axiosInstance.defaults.headers.Authorization = `Bearer ${accessToken}`;
+      if (isRecruiterMode) {
+        // For recruiter: navigate to portal domain and store tokens there
+        if (accessToken) {
+          // Store token locally (portal will set its own cookie)
+          localStorage.setItem("accessToken", accessToken);
+          // Pass token in URL so portal can read and set cookie
+          const portalUrl = new URL("http://localhost:3001");
+          portalUrl.searchParams.set("token", accessToken);
+          if (user) {
+            portalUrl.searchParams.set("user", JSON.stringify(user));
+          }
+          
+          toast.success("Login successful! Redirecting to portal...");
+          
+          // Navigate to portal dashboard with token
+          window.location.href = portalUrl.toString();
+          return;
+        } else {
+          toast.error("No access token received");
+          setIsVerifying(false);
+          isLoggingInRef.current = false;
+          return;
+        }
+      } else {
+        // For candidate: existing flow
+        if (accessToken) {
+          Cookies.set("accessToken", accessToken, { expires: 7 });
+          localStorage.setItem("accessToken", accessToken);
+          axiosInstance.defaults.headers.Authorization = `Bearer ${accessToken}`;
+        }
+        
+        if (user) {
+          setUserCredentials(user);
+        }
+        
+        // Reset OTP form state
+        setOtpSent(false);
+        setOtp(Array(6).fill(""));
+        setResendTimer(0);
+        
+        toast.success("Login successful!");
+        
+        // Determine redirect path based on user role
+        let redirectPath = localStorage.getItem("redirectAfterLogin") || '/dashboard';
+        
+        if (user?.role === 'super_admin' || user?.role === 'franchise_admin') {
+          redirectPath = '/admin';
+        } else if (user?.role === 'creator') {
+          redirectPath = '/creator';
+        }
+        
+        localStorage.removeItem("redirectAfterLogin");
+        
+        // Use Next.js router for navigation - use replace to prevent back navigation to login
+        router.replace(redirectPath);
       }
-      
-      if (user) {
-        setUserCredentials(user);
-      }
-      
-      // Reset OTP form state
-      setOtpSent(false);
-      setOtp(Array(6).fill(""));
-      setResendTimer(0);
-      
-      toast.success("Login successful!");
-      
-      // Determine redirect path based on user role
-      let redirectPath = localStorage.getItem("redirectAfterLogin") || '/dashboard';
-      
-      if (user?.role === 'super_admin' || user?.role === 'franchise_admin') {
-        redirectPath = '/admin';
-      } else if (user?.role === 'creator') {
-        redirectPath = '/creator';
-      }
-      
-      localStorage.removeItem("redirectAfterLogin");
-      
-      // Use Next.js router for navigation - use replace to prevent back navigation to login
-      router.replace(redirectPath);
 
     } catch (error: any) {
       toast.error(error?.response?.data?.message || error.message || "Error verifying OTP");
@@ -270,11 +326,14 @@ export default function Login() {
       const phoneNumber = isEmail ? "" : formData.emailOrMobile.replace(/^\+91/, '').replace(/\D/g, '').slice(0, 10);
       const email = isEmail ? formData.emailOrMobile : "";
 
-      const otpResponse = await sendOtptoMobile({
-        phoneNumber: phoneNumber,
-        email: email,
-        toLogin: true
-      });
+      // Use different API based on mode
+      const otpResponse = isRecruiterMode
+        ? await sendOtpToRecruiter({ phoneNumber })
+        : await sendOtptoMobile({
+            phoneNumber: phoneNumber,
+            email: email,
+            toLogin: true
+          });
 
       if (!otpResponse.success) {
         toast.error(otpResponse.message || "Failed to resend OTP");
@@ -355,12 +414,14 @@ export default function Login() {
                 priority
               />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900">Log in</h1>
+            <h1 className="text-3xl font-bold text-gray-900">
+              {isRecruiterMode ? "Recruiter Login" : "Log in"}
+            </h1>
             <p className="text-gray-600">
               Enter your email or mobile number to receive an OTP.{" "}
-              <Link href="/signup" className="hover:underline font-medium" style={{ color: PRIMARY_COLOR }}>
+              {/* <Link href="/signup" className="hover:underline font-medium" style={{ color: PRIMARY_COLOR }}>
                 Don't have an account? Sign Up
-              </Link>
+              </Link> */}
             </p>
           </div>
 

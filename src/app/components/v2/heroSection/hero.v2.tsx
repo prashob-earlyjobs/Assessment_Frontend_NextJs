@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Button } from "../../ui/button";
 import CountUp from 'react-countup';
-
+import { City } from "country-state-city";
 import { Input } from "../../ui/input";
 import {
     Select,
@@ -14,7 +14,21 @@ import {
     SelectTrigger,
     SelectValue,
 } from "../../ui/select";
-import { Search } from "lucide-react";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "../../ui/popover";
+import {
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
+} from "../../ui/command";
+import { Search, ChevronDown } from "lucide-react";
+import { cn } from "../../../lib/utils";
 
 const clientLogos = [
     { src: "https://storage.googleapis.com/earlyjobs_datas/EJ_V2/1.png", alt: "Client 1" },
@@ -45,26 +59,37 @@ const clientLogos = [
 
 
 
+const HERO_SPECIAL_LOCATIONS = ["All Locations", "Remote"] as const;
+
 const HeroV2 = ({ data }: { data: any }) => {
     const router = useRouter();
     const [jobTitle, setJobTitle] = useState("");
     const [location, setLocation] = useState("");
     const [category, setCategory] = useState("");
     const [typedPlaceholder, setTypedPlaceholder] = useState("");
+    const [indianCities, setIndianCities] = useState<string[]>([]);
+    const [locationOpen, setLocationOpen] = useState(false);
 
-    const locations = [
-        "All Locations",
-        "Bangalore",
-        "Mumbai",
-        "Delhi",
-        "Hyderabad",
-        "Chennai",
-        "Pune",
-        "Kolkata",
-        "Ahmedabad",
-        "Jaipur",
-        "Remote",
-    ];
+    // Load Indian cities from country-state-city (client-side)
+    useEffect(() => {
+        try {
+            const citiesList = City.getCitiesOfCountry("IN");
+            if (citiesList && citiesList.length > 0) {
+                const names = citiesList
+                    .map((c: { name: string }) => c.name)
+                    .filter(Boolean);
+                const unique = Array.from(new Set(names)).sort((a, b) => a.localeCompare(b));
+                setIndianCities(unique);
+            }
+        } catch {
+            setIndianCities([]);
+        }
+    }, []);
+
+    const allLocationOptions = useMemo(
+        () => [...HERO_SPECIAL_LOCATIONS, ...indianCities],
+        [indianCities]
+    );
 
     const categories = [
         "All Categories",
@@ -173,19 +198,45 @@ const HeroV2 = ({ data }: { data: any }) => {
                                     }}
                                 />
 
-                                {/* <Select value={location} onValueChange={setLocation}>
-                                    <SelectTrigger className="w-full sm:w-auto sm:min-w-[140px] border-0 bg-transparent text-black focus:ring-0 h-12 sm:h-14 px-4 sm:px-6 rounded-lg sm:rounded-none">
-                                        <SelectValue placeholder="Select Location" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {data?.popularCities?.map((loc) => (
-                                            <SelectItem key={loc?.label} value={loc?.label}>
-                                                {loc?.label}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-
+                                <Popover open={locationOpen} onOpenChange={setLocationOpen}>
+                                    <PopoverTrigger asChild>
+                                        <button
+                                            type="button"
+                                            className={cn(
+                                                "w-full sm:w-auto sm:min-w-[180px] h-12 sm:h-14 px-4 sm:px-6 rounded-lg sm:rounded-none border-0 bg-transparent text-left text-black focus:ring-0 flex items-center justify-between gap-2"
+                                            )}
+                                        >
+                                            <span className={cn(!location && "text-gray-500")}>
+                                                {location || "Select Location"}
+                                            </span>
+                                            <ChevronDown className="h-4 w-4 shrink-0 opacity-60" />
+                                        </button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-[var(--radix-popover-trigger-width)] min-w-[200px] p-0" align="start">
+                                        <Command className="rounded-lg border-0 shadow-none">
+                                            <CommandInput placeholder="Search city..." className="h-10" />
+                                            <CommandList>
+                                                <CommandEmpty>No city found.</CommandEmpty>
+                                                <CommandGroup>
+                                                    {allLocationOptions.map((loc) => (
+                                                        <CommandItem
+                                                            key={loc}
+                                                            value={loc}
+                                                            onSelect={() => {
+                                                                setLocation(loc);
+                                                                setLocationOpen(false);
+                                                            }}
+                                                            className="cursor-pointer"
+                                                        >
+                                                            {loc}
+                                                        </CommandItem>
+                                                    ))}
+                                                </CommandGroup>
+                                            </CommandList>
+                                        </Command>
+                                    </PopoverContent>
+                                </Popover>
+{/* 
                                 <Select value={category} onValueChange={setCategory}>
                                     <SelectTrigger className="w-full sm:w-auto sm:min-w-[140px] border-0 bg-transparent text-black focus:ring-0 h-12 sm:h-14 px-4 sm:px-6 rounded-lg sm:rounded-none">
                                         <SelectValue placeholder="Select Category" />
@@ -202,7 +253,7 @@ const HeroV2 = ({ data }: { data: any }) => {
 
                             <button
                                 onClick={handleSearch}
-                                className="flex items-center justify-center gap-2 px-6 sm:px-8 h-12 sm:h-14 bg-[#F08504] hover:bg-[#F08504]/90 text-white rounded-lg sm:rounded-l-none sm:rounded-r-full transition-colors font-medium m-2 sm:m-0"
+                                className="flex items-center justify-center gap-2 px-6 sm:px-8 h-12 sm:h-14 bg-[#ea6a4e] hover:bg-[#ea6a4e]/90 text-white rounded-lg sm:rounded-l-none sm:rounded-r-full transition-colors font-medium m-2 sm:m-0"
                             >
                                 <Search className="h-5 w-5" />
                                 <span className="hidden sm:inline">Search Job</span>
@@ -212,7 +263,7 @@ const HeroV2 = ({ data }: { data: any }) => {
                     </div>
 
                     {/* Statistics Section */}
-                    <div className="mt-4 sm:mt-8 md:mt-12 lg:mt-16 flex flex-wrap justify-center gap-3 sm:gap-6 md:gap-8 lg:gap-12 xl:gap-16 pt-2 sm:mt-4">
+                    <div className="mt-4 sm:mt-8 md:mt-12 lg:mt-16 flex flex-wrap justify-center gap-3 sm:gap-6 md:gap-8 lg:gap-12 xl:gap-16 pt-2">
                         <div className="flex items-center gap-2 sm:gap-3">
                             <div className="relative w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex-shrink-0">
                                 <Image

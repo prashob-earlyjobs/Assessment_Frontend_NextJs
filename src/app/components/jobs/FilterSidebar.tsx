@@ -293,13 +293,13 @@ const FilterSidebar = ({
                       id={`category-${cat}`}
                       checked={selectedCategories.includes(cat)}
                       onCheckedChange={(checked) => handleCategoryChange(cat, checked as boolean)}
-                      className="border-[#F08504] data-[state=checked]:bg-[#F08504] data-[state=checked]:border-[#F08504] data-[state=checked]:text-white"
+                      className="border-[#ea6a4e] data-[state=checked]:bg-[#ea6a4e] data-[state=checked]:border-[#ea6a4e] data-[state=checked]:text-white"
                     />
                     <label htmlFor={`category-${cat}`} className="text-sm text-gray-700 cursor-pointer">
                       {cat}
                     </label>
                 </div>
-                <span className="text-sm text-gray-500">{getCount()}</span>
+                {/* <span className="text-sm text-gray-500">{getCount()}</span> */}
                   </div>
                 ))}
                 {categories.length > 5 && (
@@ -325,13 +325,13 @@ const FilterSidebar = ({
                       id={type.id}
                       checked={selectedEmploymentTypes.includes(type.id)}
                       onCheckedChange={(checked) => handleEmploymentTypeChange(type.id, checked as boolean)}
-                      className="border-[#F08504] data-[state=checked]:bg-[#F08504] data-[state=checked]:border-[#F08504] data-[state=checked]:text-white"
+                      className="border-[#ea6a4e] data-[state=checked]:bg-[#ea6a4e] data-[state=checked]:border-[#ea6a4e] data-[state=checked]:text-white"
                     />
                     <label htmlFor={type.id} className="text-sm text-gray-700 cursor-pointer">
                       {type.label}
                     </label>
                   </div>
-                <span className="text-sm text-gray-500">{getCount()}</span>
+                {/* <span className="text-sm text-gray-500">{getCount()}</span> */}
               </div>
             ))}
           </div>
@@ -348,13 +348,13 @@ const FilterSidebar = ({
                     id={level.id}
                     checked={selectedExperienceRanges.includes(level.id)}
                     onCheckedChange={(checked) => handleExperienceChange(level.id, checked as boolean)}
-                    className="border-[#F08504] data-[state=checked]:bg-[#F08504] data-[state=checked]:border-[#F08504] data-[state=checked]:text-white"
+                    className="border-[#ea6a4e] data-[state=checked]:bg-[#ea6a4e] data-[state=checked]:border-[#ea6a4e] data-[state=checked]:text-white"
                   />
                   <label htmlFor={level.id} className="text-sm text-gray-700 cursor-pointer">
                     {level.label}
                     </label>
                   </div>
-                <span className="text-sm text-gray-500">{getCount()}</span>
+                {/* <span className="text-sm text-gray-500">{getCount()}</span> */}
               </div>
             ))}
           </div>
@@ -371,20 +371,20 @@ const FilterSidebar = ({
                     id={option.id}
                     checked={selectedDatePosted.includes(option.id)}
                     onCheckedChange={(checked) => handleDatePostedChange(option.id, checked as boolean)}
-                    className="border-[#F08504] data-[state=checked]:bg-[#F08504] data-[state=checked]:border-[#F08504] data-[state=checked]:text-white"
+                    className="border-[#ea6a4e] data-[state=checked]:bg-[#ea6a4e] data-[state=checked]:border-[#ea6a4e] data-[state=checked]:text-white"
                   />
                   <label htmlFor={option.id} className="text-sm text-gray-700 cursor-pointer">
                     {option.label}
                     </label>
                   </div>
-                <span className="text-sm text-gray-500">{getCount()}</span>
+                {/* <span className="text-sm text-gray-500">{getCount()}</span> */}
               </div>
             ))}
           </div>
           </div>
 
         {/* Salary */}
-          <div>
+          {/* <div>
           <h3 className="text-base font-bold text-black mb-3">Salary</h3>
           <div className="space-y-4">
             <div className="px-1">
@@ -436,7 +436,7 @@ const FilterSidebar = ({
               </Button>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Tags */}
         <div>

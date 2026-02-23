@@ -3,11 +3,11 @@
  * Centralized design tokens for consistent styling across the application
  */
 
-// Primary Colors
-export const PRIMARY_COLOR = '#F08504'; // Main orange/brand color
-export const PRIMARY_COLOR_HOVER = '#F08504'; // Hover state (can be adjusted)
-export const PRIMARY_COLOR_DARK = '#C2410C'; // Darker shade for hover states
-export const PRIMARY_COLOR_LIGHT = '#FFF7ED'; // Light background tint
+// Primary Colors (brand: #ea6a4e)
+export const PRIMARY_COLOR = '#ea6a4e'; // Main brand color
+export const PRIMARY_COLOR_HOVER = '#ea6a4e'; // Hover state
+export const PRIMARY_COLOR_DARK = '#c95a42'; // Darker shade for hover states
+export const PRIMARY_COLOR_LIGHT = '#fef5f3'; // Light background tint
 
 // Secondary Colors
 export const SECONDARY_COLOR = '#1e3a8a'; // Navy blue

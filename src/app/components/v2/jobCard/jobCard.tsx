@@ -170,7 +170,7 @@ const JobCard = ({
       <div className="flex flex-col gap-4">
         {/* Posted Time Pill */}
         <div>
-          <span className="inline-block bg-green-100 text-green-700 text-xs font-medium px-2.5 py-0.5 rounded-full">
+          <span className="inline-block bg-[#ea6a4e]/10 text-[#ea6a4e] text-xs font-medium px-2.5 py-0.5 rounded-full">
             {formatRelativeTime(postedTime)}
           </span>
         </div>
@@ -210,7 +210,7 @@ const JobCard = ({
 
         {/* Bottom Box: Job Details */}
         <div className="flex flex-col gap-3">
-          <div className="flex flex-wrap gap-4 text-sm text-gray-600">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
             <span className="flex items-center gap-1">
               <Briefcase className="w-3 h-3" style={{ color: EARLYJOBS_ORANGE }} />
               {normalizeEmploymentType(employmentType)}
@@ -237,6 +237,20 @@ const JobCard = ({
               <MapPin className="w-3 h-3" style={{ color: EARLYJOBS_ORANGE }} />
               {location}
             </span>
+            <Button
+              size="sm"
+              className="text-xs font-medium shrink-0 ml-auto"
+              style={{
+                backgroundColor: EARLYJOBS_ORANGE,
+                color: "#fff",
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                onJobClick?.();
+              }}
+            >
+              Job Details
+            </Button>
           </div>
 
           {skills && skills.length > 0 && (

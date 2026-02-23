@@ -1,80 +1,26 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Briefcase, Clock, DollarSign, MapPin, Bookmark } from "lucide-react";
 import { Button } from "../../ui/button";
-
-interface Job {
-  id: string;
-  timePosted: string;
-  jobTitle: string;
-  companyName: string;
-  category: string;
-  type: string;
-  salary: string;
-  location: string;
-  logoColor: string;
-}
+import JobCard from "../jobCard/jobCard";
+import { Card } from "../../ui/card";
 
 const RecentJobsV2 = ({ data }: { data: any }) => {
   const router = useRouter();
-
-  function timeAgo(inputDate: string | Date): string {
-    const date = new Date(inputDate);
-    const now = new Date();
-
-    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-
-    if (diffInSeconds < 5) return "just now";
-
-    const intervals: { label: string; seconds: number }[] = [
-      { label: "year", seconds: 31536000 },
-      { label: "month", seconds: 2592000 },
-      { label: "day", seconds: 86400 },
-      { label: "hour", seconds: 3600 },
-      { label: "minute", seconds: 60 },
-      { label: "second", seconds: 1 }
-    ];
-
-    for (const interval of intervals) {
-      const count = Math.floor(diffInSeconds / interval.seconds);
-      if (count >= 1) {
-        return `${count} ${interval.label}${count > 1 ? "s" : ""} ago`;
-      }
-    }
-
-    return "just now";
-  }
-
-
-  type PaymentFrequency = "monthly" | "yearly" | "hourly";
-
-  function salaryRangeToLPA(
-    minSalary: number,
-    maxSalary: number,
-    paymentFrequency: PaymentFrequency
-  ): string {
-    console.log("paymentFrequency", paymentFrequency);
-    const MULTIPLIER = paymentFrequency === "monthly" ? 12 : paymentFrequency === "yearly" ? 1 : 0;
-
-    const minYearly = minSalary * MULTIPLIER;
-    const maxYearly = maxSalary * MULTIPLIER;
-
-    const toLPA = (amount: number): string => {
-      const lpa = amount / 100000;
-      return lpa % 1 === 0 ? `${lpa}` : lpa.toFixed(2);
-    };
-
-    return `${toLPA(minYearly)} – ${toLPA(maxYearly)} LPA`;
-  }
-
+  const isLoading = !data;
 
   const handleViewAll = () => {
     router.push("/jobs");
   };
 
-  const handleJobDetails = (jobId: string) => {
-    router.push(`/jobs/${jobId}`);
+  const handleJobClick = (job: any) => {
+    const jobId = job.jobId || job.id;
+    const jobTitle = (job.title || "job").toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "") || "job";
+    const location = (job.location || "location").toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "") || "location";
+    const expMin = job.minExperience != null ? String(job.minExperience) : undefined;
+    const expMax = job.maxExperience != null ? String(job.maxExperience) : undefined;
+    const expPart = expMin != null || expMax != null ? `-${expMin ?? "0"}-${expMax ?? "0"}` : "";
+    router.push(`/jobs/${jobTitle}-${location}${expPart}/${jobId}`);
   };
 
   return (
@@ -92,7 +38,7 @@ const RecentJobsV2 = ({ data }: { data: any }) => {
           </div>
           <button
             onClick={handleViewAll}
-            className="text-orange-500 hover:text-orange-600 font-medium text-base md:text-lg transition-colors duration-200 self-start md:self-auto"
+            className="text-[#ea6a4e] hover:text-[#c95a42] font-medium text-base md:text-lg transition-colors duration-200 self-start md:self-auto"
           >
             View all
           </button>
@@ -100,70 +46,57 @@ const RecentJobsV2 = ({ data }: { data: any }) => {
 
         {/* Job Listings */}
         <div className="space-y-4">
-          {data?.recentJobs && data.recentJobs.length > 0 ? (
-            data.recentJobs.map((job: any) => (
-              <div
-                key={job.id}
-                className="bg-gray-50 rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200 relative"
+          {isLoading ? (
+            /* Shimmer skeleton - same layout as JobCard */
+            [...Array(4)].map((_, i) => (
+              <Card
+                key={i}
+                className="p-6 shadow-none border border-gray-200/50 animate-pulse"
               >
-                {/* Bookmark Icon - Top Right */}
-                <button className="absolute top-5 right-5 text-gray-400 hover:text-gray-600 transition-colors duration-200">
-                  <Bookmark className="w-5 h-5" />
-                </button>
-
-                <div className="flex gap-4 pr-8">
-                  {/* Company Logo */}
-                  <div
-                    className={`${job.logoColor} w-12 h-12 rounded-full flex-shrink-0`}
-                  />
-
-                  {/* Job Info */}
-                  <div className="flex-1 min-w-0">
-                    {/* Time Posted Badge */}
-                    <div className="mb-2">
-                      <span className="inline-block bg-green-100 text-green-700 text-xs font-medium px-3 py-1 rounded-full">
-                        {timeAgo(job.createdAt)}
-                      </span>
-                    </div>
-
-                    {/* Job Title and Company */}
-                    <h3 className="text-xl font-bold text-black mb-1">
-                      {job.title}
-                    </h3>
-                    <p className="text-gray-500 text-sm mb-3">
-                      {job.companyName}
-                    </p>
-
-                    {/* Job Attributes */}
-                    <div className="flex flex-wrap items-center justify-between gap-x-5 gap-y-2 text-sm text-gray-600">
-                      <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-                        <div className="flex items-center gap-2">
-                          <Briefcase className="w-4 h-4 text-gray-400 flex-shrink-0 text-orange-400" />
-                          <span>{job.category}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Clock className="w-4 h-4 text-gray-400 flex-shrink-0 text-orange-400" />
-                          <span>{job.workType}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <DollarSign className="w-4 h-4 text-gray-400 flex-shrink-0 text-orange-400" />
-                          <span>{salaryRangeToLPA(job.minSalary, job.maxSalary, job.paymentFrequency)}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <MapPin className="w-4 h-4 text-gray-400 flex-shrink-0 text-orange-400" />
-                          <span>{job.location}</span>
-                        </div>
-                      </div>
-                      <Button
-                        onClick={() => handleJobDetails(job.id)}
-                        className="bg-[#F08504] hover:bg-orange-600 text-white rounded-lg px-6 py-2 font-medium transition-colors duration-200 flex-shrink-0"
-                      >
-                        Job Details
-                      </Button>
+                <div className="flex flex-col gap-4">
+                  <div className="h-5 w-24 rounded-full bg-gray-200" />
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded bg-gray-200 flex-shrink-0" />
+                    <div className="flex-1 space-y-2">
+                      <div className="h-5 w-3/4 bg-gray-200 rounded" />
+                      <div className="h-4 w-1/2 bg-gray-100 rounded" />
                     </div>
                   </div>
+                  <div className="flex flex-wrap gap-4">
+                    <div className="h-4 w-20 bg-gray-100 rounded" />
+                    <div className="h-4 w-16 bg-gray-100 rounded" />
+                    <div className="h-4 w-24 bg-gray-100 rounded" />
+                    <div className="h-4 w-20 bg-gray-100 rounded" />
+                    <div className="h-8 w-24 bg-gray-200 rounded ml-auto" />
+                  </div>
+                  <div className="flex gap-2">
+                    <div className="h-6 w-16 bg-gray-100 rounded-full" />
+                    <div className="h-6 w-20 bg-gray-100 rounded-full" />
+                    <div className="h-6 w-14 bg-gray-100 rounded-full" />
+                  </div>
                 </div>
-              </div>
+              </Card>
+            ))
+          ) : data?.recentJobs && data.recentJobs.length > 0 ? (
+            data.recentJobs.map((job: any) => (
+              <JobCard
+                key={job.jobId || job.id}
+                company={job.companyName || job.company_name || ""}
+                brandName={job.brandName || job.companyName}
+                logo={job.companyLogoUrl || job.company_logo_url || "/images/company_placeholder.png"}
+                title={job.title || "Job Title"}
+                employmentType={job.employmentType || job.category || "Full Time"}
+                workType={job.workType}
+                min_salary={job.minSalary != null ? String(job.minSalary) : undefined}
+                max_salary={job.maxSalary != null ? String(job.maxSalary) : undefined}
+                salary_mode={job.paymentFrequency === "monthly" ? "monthly" : "yearly"}
+                min_experience={job.minExperience != null ? String(job.minExperience) : undefined}
+                max_experience={job.maxExperience != null ? String(job.maxExperience) : undefined}
+                location={job.location || "Not specified"}
+                skills={Array.isArray(job.skills) ? job.skills : undefined}
+                postedTime={job.createdAt || job.created_at || ""}
+                onJobClick={() => handleJobClick(job)}
+              />
             ))
           ) : (
             <div className="text-center py-12 text-gray-500">
