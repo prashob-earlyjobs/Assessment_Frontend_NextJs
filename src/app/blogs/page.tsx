@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { blogService, Blog } from "../components/services/blogsapi";
 import { Button } from "../components/ui/button";
@@ -14,7 +14,7 @@ import Header from "../components/pages/header";
 import Footer from "../components/pages/footer";
 import Image from "next/image";
 
-export default function BlogsPage() {
+function BlogsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [blogs, setBlogs] = useState<Blog[]>([]);
@@ -367,5 +367,17 @@ export default function BlogsPage() {
       </div>
       <Footer />
     </>
+  );
+}
+
+export default function BlogsPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-orange-500" />
+      </div>
+    }>
+      <BlogsContent />
+    </Suspense>
   );
 }
