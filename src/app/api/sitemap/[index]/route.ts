@@ -11,10 +11,11 @@ const MAX_URLS_PER_SITEMAP = 50000
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { index: string } }
+  { params }: { params: Promise<{ index: string }> }
 ) {
   try {
-    const index = parseInt(params.index, 10)
+    const { index: indexParam } = await params
+    const index = parseInt(indexParam, 10)
     
     if (isNaN(index) || index < 1) {
       return new NextResponse('Invalid sitemap index', { status: 400 })
