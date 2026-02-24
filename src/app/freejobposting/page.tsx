@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { Suspense } from "react";
 import FreeJobPostingPage from "./freeJobPostingPage";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -38,5 +39,13 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function Page() {
-  return <FreeJobPostingPage />;
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-orange-500 border-t-transparent" />
+      </div>
+    }>
+      <FreeJobPostingPage />
+    </Suspense>
+  );
 }

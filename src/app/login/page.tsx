@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, Suspense } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -16,7 +16,7 @@ import { sendOtptoMobile, verifyOtpMobile, isUserLoggedIn, sendOtpToRecruiter, v
 import axiosInstance from "../components/services/apiinterseptor";
 import { useUser } from "@/app/context";
 
-export default function Login() {
+function LoginContent() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -725,5 +725,17 @@ export default function Login() {
         </DialogContent>
       </Dialog>
     </div>
+  );
+}
+
+export default function Login() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <Loader2 className="h-8 w-8 animate-spin text-orange-500" />
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
   );
 }
