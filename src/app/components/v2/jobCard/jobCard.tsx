@@ -14,6 +14,7 @@ interface JobCardProps {
   title: string;
   employmentType: string;
   workType?: string;
+  noOfOpenings?: number;
   min_salary?: string | number;
   max_salary?: string | number;
   salary_mode?: string;
@@ -32,6 +33,7 @@ const JobCard = ({
   title,
   employmentType,
   workType,
+  noOfOpenings,
   min_salary,
   max_salary,
   salary_mode,
