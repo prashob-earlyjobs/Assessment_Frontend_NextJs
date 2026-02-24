@@ -146,6 +146,9 @@ const axiosInstance = axios.create({
 // Define public API endpoints that don't require authentication
 const publicApiEndpoints = [
   /^\/assessment\/[^/]+$/, // Matches /assessments/:id
+  /^\/interviews\/getAllCandidates/, // Browse candidates list (public page)
+  /^\/blogs$/, // Get all blogs (public)
+  /^\/blogs\/slug\/[^/]+$/, // Get blog by slug (public)
 ];
 
 const setAuthToken = (token: string | null) => {

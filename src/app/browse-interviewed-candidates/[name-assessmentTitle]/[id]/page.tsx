@@ -16,6 +16,7 @@ import {
   updateCertificateLink,
 } from "../../../components/services/servicesapis";
 import axiosInstance from "@/app/components/services/apiinterseptor";
+import NavbarV2 from "@/app/components/v2/navbar/navbar.v2";
 
 const CandidateProfile = () => {
   const [selectedCandidate, setSelectedCandidate] = useState(null);
@@ -877,7 +878,8 @@ const CandidateProfile = () => {
 
   return (
     <>
-      <Navbar />
+      <NavbarV2 />
+      <div className="h-20" aria-hidden="true" />
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-orange-50 to-white">
         <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
           {loading ? (

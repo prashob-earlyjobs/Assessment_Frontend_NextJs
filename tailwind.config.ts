@@ -67,10 +67,10 @@ export default {
           600: "#e76f51", // Matches --saffron-600 in globals.css
         },
         earlyjobs: {
-          orange: "var(--earlyjobs-orange)",
-          navy: "var(--earlyjobs-navy)",
-          text: "var(--earlyjobs-text)",
-          "light-orange": "var(--earlyjobs-light-orange)",
+          orange: "#ff6b35",
+          navy: "#1e3a8a",
+          text: "#1f2937",
+          "light-orange": "#fff7ed",
         },
       },
       borderRadius: {
@@ -87,10 +87,26 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        shimmer: {
+          "0%": { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0" },
+        },
+        "fade-in-up": {
+          "0%": {
+            opacity: "0",
+            transform: "translateY(20px)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        shimmer: "shimmer 2s ease-in-out infinite",
+        "fade-in-up": "fade-in-up 0.5s ease-out forwards",
       },
     },
   },

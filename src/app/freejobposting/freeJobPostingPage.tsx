@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -38,7 +39,7 @@ import {
   Award,
   BarChart3
 } from "lucide-react";
-import Navbar from "../components/pages/navbar";
+import NavbarV2 from "../components/v2/navbar/navbar.v2";
 import Header from "../components/pages/header";
 import Footer from "../components/pages/footer";
 import { sendOtptoMobile, verifyOtpMobile } from "../components/services/servicesapis";
@@ -63,6 +64,7 @@ const getBackendErrorMessage = (error: any, fallback: string) => {
 };
 
 const FreeJobPostingPage = () => {
+  const searchParams = useSearchParams();
   const [formData, setFormData] = useState({
     name: "",
     companyName: "",
@@ -80,6 +82,15 @@ const FreeJobPostingPage = () => {
   const [isOtpTimerActive, setIsOtpTimerActive] = useState(false);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
   const otpInputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  // Prefill form from URL params (e.g. from recruiter login when user not found)
+  useEffect(() => {
+    const mobile = searchParams.get("mobile") || "";
+    if (mobile) {
+      const digitsOnly = mobile.replace(/\D/g, "").slice(0, 10);
+      setFormData((prev) => ({ ...prev, mobile: digitsOnly }));
+    }
+  }, [searchParams]);
 
   // Common country codes
   const countryCodes = [
@@ -427,9 +438,9 @@ const FreeJobPostingPage = () => {
 
   return (
     <>
-      <Navbar />
-      <Header />
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <NavbarV2 />
+      {/* <Header /> */}
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-8 sm:pt-14 lg:pt-16">
         {/* Hero Section with Enhanced Design */}
         <section className="relative py-8 sm:py-12 lg:py-16 overflow-hidden">
           {/* Animated Background Elements */}
