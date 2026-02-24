@@ -33,7 +33,7 @@ const RecentJobsV2 = ({ data }: { data: any }) => {
               Recent Jobs Available
             </h2>
             <p className="text-gray-500 text-sm md:text-base">
-              At eu lobortis pretium tincidunt amet lacus ut aenean aliquet...
+              Real opportunities. Verified employers. Structured hiring.
             </p>
           </div>
           <button

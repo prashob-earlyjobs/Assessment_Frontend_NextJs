@@ -201,64 +201,69 @@ const HeroV2 = ({ data }: { data: any }) => {
                                         }}
                                     />
 
-                                    <Popover open={locationOpen} onOpenChange={setLocationOpen}>
-                                        <PopoverTrigger asChild>
-                                            <button
-                                                type="button"
-                                                className={cn(
-                                                    "w-full sm:w-auto sm:min-w-[180px] h-12 sm:h-14 px-4 sm:px-6 rounded-lg sm:rounded-none border-0 bg-transparent text-left text-black focus:ring-0 flex items-center justify-between gap-2"
-                                                )}
-                                            >
-                                                <span className={cn(!location && "text-gray-500")}>
-                                                    {location || "Select Location"}
-                                                </span>
-                                                <ChevronDown className="h-4 w-4 shrink-0 opacity-60" />
-                                            </button>
-                                        </PopoverTrigger>
-                                        <PopoverContent className="w-[var(--radix-popover-trigger-width)] min-w-[200px] p-0" align="start">
-                                            <Command className="rounded-lg border-0 shadow-none">
-                                                <CommandInput placeholder="Search city..." className="h-10" />
-                                                <CommandList>
-                                                    <CommandEmpty>No city found.</CommandEmpty>
-                                                    <CommandGroup>
-                                                        {allLocationOptions.map((loc) => (
-                                                            <CommandItem
-                                                                key={loc}
-                                                                value={loc}
-                                                                onSelect={() => {
-                                                                    setLocation(loc);
-                                                                    setLocationOpen(false);
-                                                                }}
-                                                                className="cursor-pointer"
-                                                            >
-                                                                {loc}
-                                                            </CommandItem>
-                                                        ))}
-                                                    </CommandGroup>
-                                                </CommandList>
-                                            </Command>
-                                        </PopoverContent>
-                                    </Popover>
-                                </div>
-                                
-                                <button
-                                    onClick={handleSearch}
-                                    className="flex items-center justify-center gap-2.5 px-8 sm:px-10 h-12 sm:h-14 bg-[#ea6a4e] hover:bg-[#ea6a4e]/90 text-white rounded-lg sm:rounded-l-none sm:rounded-r-full transition-colors font-semibold text-base sm:text-lg m-2 sm:m-0"
-                                >
-                                    <Search className="h-5 w-5" />
-                                    <span className="hidden sm:inline">Search Job</span>
-                                    <span className="sm:hidden">Search</span>
-                                </button>
+                                <Popover open={locationOpen} onOpenChange={setLocationOpen}>
+                                    <PopoverTrigger asChild>
+                                        <button
+                                            type="button"
+                                            className={cn(
+                                                "w-full sm:w-auto sm:min-w-[180px] h-12 sm:h-14 px-4 sm:px-6 rounded-lg sm:rounded-none border-0 bg-transparent text-left text-black focus:ring-0 flex items-center justify-between gap-2"
+                                            )}
+                                        >
+                                            <span className={cn(!location && "text-gray-500")}>
+                                                {location || "Select Location"}
+                                            </span>
+                                            <ChevronDown className="h-4 w-4 shrink-0 opacity-60" />
+                                        </button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-[var(--radix-popover-trigger-width)] min-w-[200px] p-0" align="start">
+                                        <Command className="rounded-lg border-0 shadow-none">
+                                            <CommandInput placeholder="Search city..." className="h-10" />
+                                            <CommandList>
+                                                <CommandEmpty>No city found.</CommandEmpty>
+                                                <CommandGroup>
+                                                    {allLocationOptions.map((loc) => (
+                                                        <CommandItem
+                                                            key={loc}
+                                                            value={loc}
+                                                            onSelect={() => {
+                                                                setLocation(loc);
+                                                                setLocationOpen(false);
+                                                            }}
+                                                            className="cursor-pointer"
+                                                        >
+                                                            {loc}
+                                                        </CommandItem>
+                                                    ))}
+                                                </CommandGroup>
+                                            </CommandList>
+                                        </Command>
+                                    </PopoverContent>
+                                </Popover>
+{/* 
+                                <Select value={category} onValueChange={setCategory}>
+                                    <SelectTrigger className="w-full sm:w-auto sm:min-w-[140px] border-0 bg-transparent text-black focus:ring-0 h-12 sm:h-14 px-4 sm:px-6 rounded-lg sm:rounded-none">
+                                        <SelectValue placeholder="Select Category" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {data?.categories?.map((cat: any) => (
+                                            <SelectItem key={cat?.label} value={cat?.label}>
+                                                {cat?.label}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select> */}
                             </div>
-                            
-                            {/* Free Job Post - Completely Separate */}
-                            <Link
-                                href="/freejobposting"
-                                className="flex items-center justify-center gap-2.5 px-7 sm:px-9 h-12 sm:h-14 bg-white rounded-full border-2 border-[#ea6a4e] text-[#ea6a4e] hover:bg-[#ea6a4e] hover:text-white shadow-lg transition-colors font-semibold text-base sm:text-lg shrink-0"
+
+                            <button
+                                onClick={handleSearch}
+                                className="flex items-center justify-center gap-2 px-6 sm:px-8 h-12 sm:h-14 bg-[#ea6a4e] hover:bg-[#ea6a4e]/90 text-white rounded-lg sm:rounded-l-none sm:rounded-r-full transition-colors font-medium m-2 sm:m-0"
                             >
-                                Free Job Post
-                            </Link>
+                                <Search className="h-5 w-5" />
+                                <span className="hidden sm:inline">Search Job</span>
+                                <span className="sm:hidden">Search</span>
+                            </button>
                         </div>
+                    </div>
                     </div>
 
                     {/* Statistics Section */}
@@ -293,7 +298,7 @@ const HeroV2 = ({ data }: { data: any }) => {
                                 <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold">
                                     <CountUp start={0} end={data?.totalCandidates || 0} duration={2.7} />+
                                 </div>
-                                <p className="text-xs sm:text-sm md:text-base text-gray-400">Resumes</p>
+                                <p className="text-xs sm:text-sm md:text-base text-gray-400">Recruiters</p>
                             </div>
                         </div>
 
@@ -325,10 +330,10 @@ const HeroV2 = ({ data }: { data: any }) => {
                             <div className="overflow-hidden relative w-full">
                                 {/* Left gradient overlay */}
                                 {/* <div className="absolute left-0 top-0 bottom-0 w-24 md:w-40 lg:w-56 bg-gradient-to-r from-[#111] via-[#111]/50 to-transparent z-10 pointer-events-none" /> */}
-                                
+
                                 {/* Right gradient overlay */}
                                 {/* <div className="absolute right-0 top-0 bottom-0 w-24 md:w-40 lg:w-56 bg-gradient-to-l from-[#111] via-[#111]/50 to-transparent z-10 pointer-events-none" /> */}
-                                
+
                                 <div className="flex gap-6 md:gap-8 lg:gap-12 carousel-horizontal-top">
                                     {[...clientLogos].map((logo, idx) => (
                                         <div key={`top-client-${idx}`} className="flex-shrink-0 w-28 h-20 md:w-36 md:h-28 flex items-center justify-center">
@@ -371,10 +376,10 @@ const HeroV2 = ({ data }: { data: any }) => {
                     <div className="overflow-hidden relative h-14 md:h-18 flex items-center">
                         {/* Left gradient overlay */}
                         {/* <div className="absolute left-0 top-0 bottom-0 w-24 md:w-40 lg:w-56 bg-gradient-to-r from-[#111] via-[#111]/50 to-transparent z-10 pointer-events-none" /> */}
-                        
+
                         {/* Right gradient overlay */}
                         {/* <div className="absolute right-0 top-0 bottom-0 w-24 md:w-40 lg:w-56 bg-gradient-to-l from-[#111] via-[#111]/50 to-transparent z-10 pointer-events-none" /> */}
-                        
+
                         <div className="flex gap-6 md:gap-8 lg:gap-12 carousel-horizontal">
                             {[...clientLogos, ...clientLogos].map((logo, idx) => (
                                 <div key={`client-${idx}`} className="flex-shrink-0 w-28 h-20 md:w-36 md:h-28 flex items-center justify-center">

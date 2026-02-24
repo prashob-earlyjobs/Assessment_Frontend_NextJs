@@ -139,9 +139,9 @@ const BrowseCategoryV2 = () => {
   };
 
   return (
-    <div 
-      className="w-full py-12" 
-      style={{ 
+    <div
+      className="w-full py-12"
+      style={{
         backgroundColor: `rgba(234, 106, 78, 0.05)` // PRIMARY_COLOR (#ea6a4e) with 5% opacity
       }}
     >
@@ -152,8 +152,7 @@ const BrowseCategoryV2 = () => {
             Browse by Category
           </h2>
           <p className="text-gray-500 text-sm md:text-base max-w-3xl">
-            At eu lobortis pretium tincidunt amet lacus ut aenean aliquet.
-            Blandit a massa elementum id scel...
+            Opportunities Across High-Growth Industries
           </p>
         </div>
 

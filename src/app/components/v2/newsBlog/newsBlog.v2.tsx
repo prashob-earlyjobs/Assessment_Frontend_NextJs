@@ -43,8 +43,7 @@ const NewsBlogV2 = () => {
               News and Blog
             </h2>
             <p className="mt-3 text-sm md:text-base text-gray-600 max-w-2xl">
-              Metus faucibus sed turpis lectus feugiat tincidunt. Rhoncus sed
-              tristique in dolor
+              Practical advice, industry insights, and structured hiring knowledge — built for job seekers, recruiters, and employers.
             </p>
           </div>
           <button
