@@ -10,10 +10,11 @@ import { EARLYJOBS_ORANGE, EARLYJOBS_LIGHT_ORANGE, TEXT_PRIMARY, BORDER_COLOR } 
 interface JobCardProps {
   company: string;
   brandName?: string;
-  logo: string;
+  logo?: string;
   title: string;
   employmentType: string;
   workType?: string;
+  noOfOpenings?: number;
   min_salary?: string | number;
   max_salary?: string | number;
   salary_mode?: string;
@@ -79,13 +80,13 @@ const JobCard = ({
 
   // Experience display logic
   const experienceDisplay =
-  min_experience != null && max_experience != null
-    ? `${min_experience} - ${max_experience} Yrs`
-    : min_experience != null
-    ? `${min_experience} Yrs`
-    : max_experience != null
-    ? `${max_experience} Yrs`
-    : null;
+    min_experience != null && max_experience != null
+      ? `${min_experience} - ${max_experience} Yrs`
+      : min_experience != null
+        ? `${min_experience} Yrs`
+        : max_experience != null
+          ? `${max_experience} Yrs`
+          : null;
 
   // Salary display logic
   const parseNumber = (value?: string | number): number | null => {
@@ -115,10 +116,10 @@ const JobCard = ({
     minLpa != null && maxLpa != null
       ? `${formatLpa(minLpa)} - ${formatLpa(maxLpa)} LPA`
       : minLpa != null
-      ? `${formatLpa(minLpa)} LPA`
-      : maxLpa != null
-      ? `${formatLpa(maxLpa)} LPA`
-      : null;
+        ? `${formatLpa(minLpa)} LPA`
+        : maxLpa != null
+          ? `${formatLpa(maxLpa)} LPA`
+          : null;
 
   // Format posted time
   const formatRelativeTime = (dateString: string): string => {
@@ -165,7 +166,7 @@ const JobCard = ({
       style={{ borderColor: `${BORDER_COLOR}80` }}
       onClick={onJobClick}
       role="article"
-      aria-label={`Job listing for ${title} at ${brandName }`}
+      aria-label={`Job listing for ${title} at ${brandName}`}
     >
       <div className="flex flex-col gap-4">
         {/* Posted Time Pill */}
@@ -178,15 +179,15 @@ const JobCard = ({
         {/* Top Box: Logo, Title, Company, and Bookmark */}
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-4">
-    
+
             <img
               src={logo || "/images/company_placeholder.png"}
-              alt={`${brandName } logo`}
+              alt={`${brandName} logo`}
               className="w-12 h-12 rounded object-contain bg-gray-50 p-1"
               onError={(e) => (e.currentTarget.src = "/images/logo.png")}
             />
             <div className="flex-1">
-              <h3 
+              <h3
                 className="font-semibold text-lg transition-colors mb-1"
                 style={{ color: TEXT_PRIMARY }}
                 onMouseEnter={(e) => e.currentTarget.style.color = EARLYJOBS_ORANGE}
@@ -194,7 +195,7 @@ const JobCard = ({
               >
                 {title}
               </h3>
-              <p className="text-gray-600 text-sm">{brandName }</p>
+              <p className="text-gray-600 text-sm">{brandName}</p>
             </div>
           </div>
           <Button

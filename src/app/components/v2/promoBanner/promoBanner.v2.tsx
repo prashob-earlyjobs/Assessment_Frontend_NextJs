@@ -141,14 +141,19 @@ const PromoBannerV2 = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 md:space-y-16">
         {/* First Section: Good Life Begins */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-12 items-center">
-          <div className="relative w-full h-64 md:h-80 lg:h-96 rounded-2xl overflow-hidden">
-            <Image
-              src="/v2/images/Our story.png"
-              alt="Good Company"
-              fill
-              className="object-cover rounded-2xl"
-              priority={false}
-            />
+          <div>
+            <div className="relative w-full h-64 md:h-80 lg:h-96 rounded-2xl overflow-hidden">
+              <Image
+                src="/v2/images/Award.png"
+                alt="Good Company"
+                fill
+                className="object-cover rounded-2xl"
+                priority={false}
+              />
+            </div>
+            <p className="mt-4 text-center font-bold text-gray-800">
+              Empowering Recruiters, Transforming Lives.
+            </p>
           </div>
           <div className="flex flex-col justify-center items-center text-center">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-orange-500 leading-tight mb-4">

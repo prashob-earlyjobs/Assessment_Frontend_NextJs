@@ -237,16 +237,16 @@ const FilterSidebar = ({
   };
 
   return (
-    <Card 
+    <Card
       className="rounded-lg border shadow-sm p-4"
-      style={{ 
+      style={{
         backgroundColor: `${PRIMARY_COLOR_LIGHT}4D`, // 30% opacity (4D in hex = ~30%)
         borderColor: BORDER_COLOR
       }}
     >
       <div className="space-y-6">
         {/* Search by Job Title */}
-                <div>
+        <div>
           <h3 className="text-base font-bold text-black mb-3">Search by Job Title</h3>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -260,91 +260,91 @@ const FilterSidebar = ({
               value={jobTitleSearch}
               onChange={(e) => handleJobTitleChange(e.target.value)}
             />
-            </div>
+          </div>
         </div>
 
-          {/* Location */}
-          <div>
+        {/* Location */}
+        <div>
           <h3 className="text-base font-bold text-black mb-3">Location</h3>
-                <div className="relative">
+          <div className="relative">
             <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <Input
+            <Input
               placeholder="Choose city"
               className="pl-10 pr-10 rounded-lg"
               style={{
                 backgroundColor: BG_WHITE,
                 borderColor: BORDER_COLOR
               }}
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                  />
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+            />
             <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-              </div>
           </div>
+        </div>
 
         {/* Category */}
-          <div>
+        <div>
           <h3 className="text-base font-bold text-black mb-3">Category</h3>
           <div className="space-y-2">
-                {(isCategoriesExpanded ? categories : categories.slice(0, 5)).map((cat) => (
+            {(isCategoriesExpanded ? categories : categories.slice(0, 5)).map((cat) => (
               <div key={cat} className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id={`category-${cat}`}
-                      checked={selectedCategories.includes(cat)}
-                      onCheckedChange={(checked) => handleCategoryChange(cat, checked as boolean)}
-                      className="border-[#ea6a4e] data-[state=checked]:bg-[#ea6a4e] data-[state=checked]:border-[#ea6a4e] data-[state=checked]:text-white"
-                    />
-                    <label htmlFor={`category-${cat}`} className="text-sm text-gray-700 cursor-pointer">
-                      {cat}
-                    </label>
+                  <Checkbox
+                    id={`category-${cat}`}
+                    checked={selectedCategories.includes(cat)}
+                    onCheckedChange={(checked) => handleCategoryChange(cat, checked as boolean)}
+                    className="border-[#ea6a4e] data-[state=checked]:bg-[#ea6a4e] data-[state=checked]:border-[#ea6a4e] data-[state=checked]:text-white"
+                  />
+                  <label htmlFor={`category-${cat}`} className="text-sm text-gray-700 cursor-pointer">
+                    {cat}
+                  </label>
                 </div>
                 {/* <span className="text-sm text-gray-500">{getCount()}</span> */}
-                  </div>
-                ))}
-                {categories.length > 5 && (
-                  <Button
+              </div>
+            ))}
+            {categories.length > 5 && (
+              <Button
                 className="w-full text-white text-sm rounded-lg mt-2"
                 style={{ backgroundColor: PRIMARY_COLOR }}
-                    onClick={() => setIsCategoriesExpanded(!isCategoriesExpanded)}
-                  >
+                onClick={() => setIsCategoriesExpanded(!isCategoriesExpanded)}
+              >
                 {isCategoriesExpanded ? "Show Less" : "Show More"}
-                  </Button>
-                )}
-              </div>
+              </Button>
+            )}
           </div>
+        </div>
 
         {/* Job Type */}
-          <div>
+        <div>
           <h3 className="text-base font-bold text-black mb-3">Job Type</h3>
           <div className="space-y-2">
-                {employmentTypes.map((type) => (
+            {employmentTypes.map((type) => (
               <div key={type.id} className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id={type.id}
-                      checked={selectedEmploymentTypes.includes(type.id)}
-                      onCheckedChange={(checked) => handleEmploymentTypeChange(type.id, checked as boolean)}
-                      className="border-[#ea6a4e] data-[state=checked]:bg-[#ea6a4e] data-[state=checked]:border-[#ea6a4e] data-[state=checked]:text-white"
-                    />
-                    <label htmlFor={type.id} className="text-sm text-gray-700 cursor-pointer">
-                      {type.label}
-                    </label>
-                  </div>
+                  <Checkbox
+                    id={type.id}
+                    checked={selectedEmploymentTypes.includes(type.id)}
+                    onCheckedChange={(checked) => handleEmploymentTypeChange(type.id, checked as boolean)}
+                    className="border-[#ea6a4e] data-[state=checked]:bg-[#ea6a4e] data-[state=checked]:border-[#ea6a4e] data-[state=checked]:text-white"
+                  />
+                  <label htmlFor={type.id} className="text-sm text-gray-700 cursor-pointer">
+                    {type.label}
+                  </label>
+                </div>
                 {/* <span className="text-sm text-gray-500">{getCount()}</span> */}
               </div>
             ))}
           </div>
-          </div>
+        </div>
 
         {/* Experience Level */}
-          <div>
+        <div>
           <h3 className="text-base font-bold text-black mb-3">Experience Level</h3>
           <div className="space-y-2">
             {experienceLevels.map((level) => (
               <div key={level.id} className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                    <Checkbox
+                  <Checkbox
                     id={level.id}
                     checked={selectedExperienceRanges.includes(level.id)}
                     onCheckedChange={(checked) => handleExperienceChange(level.id, checked as boolean)}
@@ -352,22 +352,22 @@ const FilterSidebar = ({
                   />
                   <label htmlFor={level.id} className="text-sm text-gray-700 cursor-pointer">
                     {level.label}
-                    </label>
-                  </div>
+                  </label>
+                </div>
                 {/* <span className="text-sm text-gray-500">{getCount()}</span> */}
               </div>
             ))}
           </div>
-          </div>
+        </div>
 
         {/* Date Posted */}
-          <div>
+        <div>
           <h3 className="text-base font-bold text-black mb-3">Date Posted</h3>
           <div className="space-y-2">
             {datePostedOptions.map((option) => (
               <div key={option.id} className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                    <Checkbox
+                  <Checkbox
                     id={option.id}
                     checked={selectedDatePosted.includes(option.id)}
                     onCheckedChange={(checked) => handleDatePostedChange(option.id, checked as boolean)}
@@ -375,16 +375,16 @@ const FilterSidebar = ({
                   />
                   <label htmlFor={option.id} className="text-sm text-gray-700 cursor-pointer">
                     {option.label}
-                    </label>
-                  </div>
+                  </label>
+                </div>
                 {/* <span className="text-sm text-gray-500">{getCount()}</span> */}
               </div>
             ))}
           </div>
-          </div>
+        </div>
 
         {/* Salary */}
-          {/* <div>
+        {/* <div>
           <h3 className="text-base font-bold text-black mb-3">Salary</h3>
           <div className="space-y-4">
             <div className="px-1">
@@ -437,31 +437,6 @@ const FilterSidebar = ({
             </div>
           </div>
         </div> */}
-
-        {/* Tags */}
-        <div>
-          <h3 className="text-base font-bold text-black mb-3">Tags</h3>
-          <div className="flex flex-wrap gap-2">
-            {tags.map((tag) => (
-              <button
-                key={tag}
-                onClick={() => handleTagClick(tag)}
-                className={`px-3 py-1 rounded-full text-sm transition-colors ${
-                  selectedTags.includes(tag)
-                    ? "text-white"
-                    : "text-gray-700"
-                }`}
-                style={{
-                  backgroundColor: selectedTags.includes(tag)
-                    ? PRIMARY_COLOR
-                    : PRIMARY_COLOR_LIGHT,
-                }}
-              >
-                {tag}
-              </button>
-                ))}
-              </div>
-        </div>
       </div>
     </Card>
   );
