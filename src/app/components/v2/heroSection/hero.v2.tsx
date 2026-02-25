@@ -170,7 +170,7 @@ const HeroV2 = ({ data }: { data: any }) => {
 
             {/* Hero Section */}
             <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-1 flex flex-col justify-center py-6 sm:py-12 md:py-16 lg:py-20">
-                <div className="space-y-4 sm:space-y-8 md:space-y-10 lg:space-y-12">
+                <div className="space-y-5 sm:space-y-8 md:space-y-10 lg:space-y-12">
                     {/* Main Title */}
                     <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-center leading-tight px-2 sm:px-4">
                         Find Your Dream Job Today!
@@ -236,7 +236,7 @@ const HeroV2 = ({ data }: { data: any }) => {
                                         </Command>
                                     </PopoverContent>
                                 </Popover>
-{/* 
+                                {/* 
                                 <Select value={category} onValueChange={setCategory}>
                                     <SelectTrigger className="w-full sm:w-auto sm:min-w-[140px] border-0 bg-transparent text-black focus:ring-0 h-12 sm:h-14 px-4 sm:px-6 rounded-lg sm:rounded-none">
                                         <SelectValue placeholder="Select Category" />
