@@ -3,35 +3,55 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ArrowUpRight } from "lucide-react";
-
-type Post = {
-  id: string;
-  kind: "News" | "Blog";
-  date: string;
-  title: string;
-  imageSrc: string;
-};
+import { useEffect, useState } from "react";
+import { blogService, type Blog } from "../../services/blogsapi";
 
 const NewsBlogV2 = () => {
   const router = useRouter();
+  const [posts, setPosts] = useState<Blog[]>([]);
 
-  const posts: Post[] = [
-    {
-      id: "news-1",
-      kind: "News",
-      date: "30 March 2024",
-      title:
-        "Revitalizing Workplace Morale: Innovative Tactics For Boosting Employee Engagement In 2024",
-      imageSrc: "/v2/images/hero-bg.png",
-    },
-    {
-      id: "blog-1",
-      kind: "Blog",
-      date: "30 March 2024",
-      title: "How To Avoid The Top Six Most Common Job Interview Mistakes",
-      imageSrc: "/v2/images/hero-bg.png",
-    },
-  ];
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchLatestBlogs = async () => {
+      try {
+        const response = await blogService.getBlogs({
+          page: 1,
+          limit: 2,
+          status: "published",
+        });
+
+        if (!isMounted) return;
+        setPosts(response.data.blogs || []);
+      } catch {
+        if (!isMounted) return;
+        setPosts([]);
+      }
+    };
+
+    fetchLatestBlogs();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const formatDate = (isoDate?: string) => {
+    if (!isoDate) return "";
+    try {
+      return new Date(isoDate).toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      });
+    } catch {
+      return "";
+    }
+  };
+
+  if (!posts.length) {
+    return null;
+  }
 
   return (
     <section className="w-full bg-white py-12">
@@ -57,27 +77,29 @@ const NewsBlogV2 = () => {
         {/* Cards */}
         <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
           {posts.map((post) => (
-            <article key={post.id} className="group">
+            <article key={post._id} className="group">
               <div className="relative h-[340px] sm:h-[380px] rounded-2xl overflow-hidden">
                 <Image
-                  src={post.imageSrc}
+                  src={post.featuredImage || "/v2/images/hero-bg.png"}
                   alt={post.title}
                   fill
                   className="object-cover object-center group-hover:scale-[1.02] transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-black/20" />
                 <span className="absolute top-6 left-6 inline-flex items-center rounded-full bg-[#F08504] px-5 py-2 text-sm font-semibold text-white shadow-sm">
-                  {post.kind}
+                  Blog
                 </span>
               </div>
 
-              <p className="mt-5 text-gray-500 font-medium">{post.date}</p>
+              <p className="mt-5 text-gray-500 font-medium">
+                {formatDate(post.publishedAt || post.createdAt)}
+              </p>
               <h3 className="mt-2 text-2xl font-bold text-black leading-snug">
                 {post.title}
               </h3>
 
               <button
-                onClick={() => router.push("/blog")}
+                onClick={() => router.push(`/blogs/${post.slug}`)}
                 className="mt-4 inline-flex items-center gap-2 text-[#ea6a4e] hover:text-[#c95a42] font-semibold"
               >
                 Read more <ArrowUpRight className="h-4 w-4" />
