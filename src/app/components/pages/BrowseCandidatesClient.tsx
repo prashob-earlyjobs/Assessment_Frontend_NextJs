@@ -10,6 +10,7 @@ import Footer from "./footer";
 import Navbar from "./navbar";
 import Cookies from "js-cookie";
 import axiosInstance from "../services/apiinterseptor";
+import NavbarV2 from "../v2/navbar/navbar.v2";
 
 export default function BrowseCandidatesClient() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -241,67 +242,9 @@ export default function BrowseCandidatesClient() {
 
   return (
     <>
-      <Navbar />
-      <header className="bg-white shadow-md border-b border-orange-100 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <img
-                src="/images/logo.png"
-                onClick={() => router.push("/")}
-                alt="EarlyJobs.ai"
-                className="h-12 lg:h-14 cursor-pointer"
-              />
-            </div>
-            <nav className="hidden md:flex space-x-8 items-center"></nav>
-            <div className="md:hidden flex items-center">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="text-gray-600 hover:text-orange-600 focus:outline-none p-3"
-                aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
-              >
-                {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-              </Button>
-            </div>
-          </div>
-          {isMobileMenuOpen && (
-            <div className="md:hidden bg-white/95 backdrop-blur-sm shadow-lg z-50 px-4 py-4 border-b border-orange-100">
-              <div className="flex flex-col space-y-2">
-                <Button
-                  variant="ghost"
-                  className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
-                  onClick={() => handleMobileMenuItemClick("/browse-interviewed-candidates")}
-                >
-                  Browse Candidates
-                </Button>
-                <Button
-                  variant="ghost"
-                  className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
-                  onClick={() => handleMobileMenuItemClick("/college-partnerships")}
-                >
-                  Colleges
-                </Button>
-                <Button
-                  variant="ghost"
-                  className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
-                  onClick={() => handleMobileMenuItemClick("/recruiter")}
-                >
-                  Recruiter
-                </Button>
-                <Button
-                  variant="ghost"
-                  className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
-                  onClick={() => handleMobileMenuItemClick("/talent-pool")}
-                >
-                  Talent Pool
-                </Button>
-              </div>
-            </div>
-          )}
-        </div>
-      </header> 
+      <NavbarV2 />
+      <div className="h-20" aria-hidden="true" />
+
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-orange-50/30">
         {/* Enhanced Header Section */}
         <div className="bg-white border-b border-gray-100 shadow-sm">
