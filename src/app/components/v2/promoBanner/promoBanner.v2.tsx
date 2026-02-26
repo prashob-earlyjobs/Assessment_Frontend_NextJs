@@ -140,7 +140,7 @@ const PromoBannerV2 = () => {
     <section className="w-full bg-white py-12 md:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 md:space-y-16">
         {/* First Section: Good Life Begins */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-12 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-12 items-start">
           <div>
             <div className="relative w-full h-64 md:h-80 lg:h-96 rounded-2xl overflow-hidden">
               <Image
@@ -151,45 +151,50 @@ const PromoBannerV2 = () => {
                 priority={false}
               />
             </div>
-            <p className="mt-4 text-center font-bold text-gray-800">
-              Honored to receive the Startup Awards 2026 from Entrepreneur India.
-            </p>
+            <a
+              href="https://www.entrepreneurindia.com/startup/awards_winner.php"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 text-center font-bold text-gray-800 hover:text-orange-500 transition-colors cursor-pointer block"
+            >
+              Honored to receive the Startup Awards 2026 – HRTech of the Year from Entrepreneur India. 🏆
+            </a>
           </div>
-          <div className="flex flex-col justify-center items-center text-center">
+          <div className="flex flex-col justify-start items-center text-center pt-2 md:pt-4 lg:pt-6">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-orange-500 leading-tight mb-4">
-              Our Story</h2>
-            <h3 className="text-1xl sm:text-2xl lg:text-3xl font-bold text-gray-900 leading-tight mb-4">Earlyjobs: From Women's Empowerment to Nationalwide Hiring</h3>
-            <p className="text-base text-gray-600 leading-relaxed mb-6 line-clamp-6 text-left w-full">
-              Across India, countless women recruiters and aspiring recruiters face a silent struggle, opportunities often fade after college, marriage, or career breaks, leaving talent underutilized. EarlyJobs was born to change this. By creating India's largest freelance recruiter network, the platform offers women the flexibility to work from home, earn, and build meaningful careers on their own terms. Today, women form the backbone of EarlyJobs, proving that the right ecosystem can unlock immense potential.
+              Who We Are</h2>
+            <h3 className="text-1xl sm:text-2xl lg:text-3xl font-bold text-gray-900 leading-tight mb-4">EarlyJobs: From Women's Empowerment to Nationalwide Hiring</h3>
+            <p className="text-base text-gray-600 leading-relaxed mb-6 line-clamp-8 text-left w-full">
+              EarlyJobs is a tech-enabled recruitment ecosystem transforming how India hires. We empower women recruiters to restart and grow their careers through flexible, remote opportunities, while helping companies access high-quality talent beyond metro cities. By combining decentralized recruiter networks, AI-powered matching, and structured campus-to-corporate programs, we bridge the gap between employers and emerging talent across Tier 2 and Tier 3 India. Whether you’re a job seeker looking for the right opportunity or a company aiming to hire fast in bulk, EarlyJobs is your ultimate partner. EarlyJobs – where talent meets opportunity, fast.
             </p>
             <button
               onClick={() => router.push("/story")}
               className="text-orange-500 font-semibold hover:text-orange-600 transition-colors inline-flex items-center gap-1"
             >
-              Read more
+              Read Our Story
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-right"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
             </button>
           </div>
         </div>
 
         {/* Statistics Section */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8">
-          <div className="flex flex-col items-start">
-            <p className="text-3xl md:text-4xl font-bold text-orange-500 mb-2">2700+</p>
-            <p className="text-lg font-semibold text-gray-800 mb-3">Successful Placements</p>
-          </div>
-          <div className="flex flex-col items-start">
-            <p className="text-3xl md:text-4xl font-bold text-orange-500 mb-2">200+</p>
-            <p className="text-lg font-semibold text-gray-800 mb-3">Hiring Partners</p>
-          </div>
-          <div className="flex flex-col items-start">
-            <p className="text-3xl md:text-4xl font-bold text-orange-500 mb-2">400+</p>
-            <p className="text-lg font-semibold text-gray-800 mb-3">Freelance Recruiters </p>
-          </div>
-          <div className="flex flex-col items-start">
-            <p className="text-3xl md:text-4xl font-bold text-orange-500 mb-2">22+ Districts</p>
-            <p className="text-lg font-semibold text-gray-800 mb-3">Expanding Hiring Access Across India</p>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
+          {[
+            { label: "Interviews Conducted", value: "35000+" },
+            { label: "Successful Placements", value: "2700+" },
+            { label: "Companies", value: "200+" },
+            { label: "Freelance Recruiters", value: "400+" },
+            { label: "Colleges", value: "200+" },
+            { label: "Expanding Hiring Access", value: "22+ Districts" }
+          ].map((stat, index) => (
+            <div
+              key={index}
+              className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col items-center justify-center text-center h-full min-h-[160px]"
+            >
+              <p className="text-3xl md:text-4xl font-bold text-orange-500 mb-2">{stat.value}</p>
+              <p className="text-lg font-semibold text-gray-800">{stat.label}</p>
+            </div>
+          ))}
         </div>
 
         {/* Carousel Banner Section */}

@@ -34,6 +34,7 @@ import {
   FiHelpCircle,
   FiBriefcase,
   FiArrowRight,
+  FiCloud
 } from "react-icons/fi";
 
 interface CategoryData {
@@ -58,8 +59,9 @@ const getCategoryIcon = (categoryName: string): IconType => {
     Insurance: FiShield,
     "Oil And Gas": FiDroplet,
     "Information Technology": FiMonitor,
+    SaaS: FiCloud,
     "Media and news": FiFileText,
-    "Food processing": FiCoffee,
+    FMCG: FiCoffee,
     Law: FiAward,
     "E-commerce": FiShoppingCart,
     Aviation: FiAirplay,
@@ -70,10 +72,9 @@ const getCategoryIcon = (categoryName: string): IconType => {
     Advertising: FiBell,
     "Electrical and Electronics": FiZap,
     "AI / ML": FiCpu,
-    Banking: FiTrendingUp,
+    "Banking and Finance": FiDollarSign,
     Retail: FiShoppingBag,
     Education: FiBook,
-    Finance: FiDollarSign,
     Hospitality: FiHome,
     Construction: FiTool,
     Aeronautical: FiNavigation,
@@ -95,11 +96,11 @@ const BrowseCategoryV2 = () => {
     { _id: { $oid: "69313b73d025037d5ab9cfd7" }, label: "BPO", value: "BPO" },
     { _id: { $oid: "69313b73d025037d5ab9cfe4" }, label: "Biotech", value: "Biotech" },
     { _id: { $oid: "69313b73d025037d5ab9cfcf" }, label: "Insurance", value: "Insurance" },
-    { _id: { $oid: "69313b73d025037d5ab9cfd0" }, label: "Oil And Gas", value: "Oil And Gas" },
+    { _id: { $oid: "69313b73d025037d5ab9cfce" }, label: "Banking and Finance", value: "Banking and Finance" },
     { _id: { $oid: "69313b73d025037d5ab9cfd5" }, label: "Information Technology", value: "Information Technology" },
-    { _id: { $oid: "69313b73d025037d5ab9cfdc" }, label: "Media and news", value: "Media and news" },
-    { _id: { $oid: "69313b73d025037d5ab9cfdd" }, label: "Food processing", value: "Food processing" },
-    { _id: { $oid: "69313b73d025037d5ab9cfe0" }, label: "Law", value: "Law" },
+    { _id: { $oid: "69313b73d025037d5ab9cfdc" }, label: "SaaS", value: "Saas" },
+    { _id: { $oid: "69313b73d025037d5ab9cfdd" }, label: "FMCG", value: "FMCG" },
+    { _id: { $oid: "69313b73d025037d5ab9cfd1" }, label: "Retail", value: "Retail" },
     { _id: { $oid: "69313b73d025037d5ab9cfe2" }, label: "E-commerce", value: "E-commerce" },
     { _id: { $oid: "69313b73d025037d5ab9cfcd" }, label: "Aviation", value: "Aviation" },
     { _id: { $oid: "69313b73d025037d5ab9cfd3" }, label: "Consumer Goods", value: "Consumer Goods" },
@@ -109,14 +110,14 @@ const BrowseCategoryV2 = () => {
     { _id: { $oid: "69313b73d025037d5ab9cfe1" }, label: "Advertising", value: "Advertising" },
     { _id: { $oid: "69313b73d025037d5ab9cfe3" }, label: "Electrical and Electronics", value: "Electrical and Electronics" },
     { _id: { $oid: "69313b73d025037d5ab9cfe6" }, label: "AI / ML", value: "AI / ML" },
-    { _id: { $oid: "69313b73d025037d5ab9cfce" }, label: "Banking", value: "Banking" },
-    { _id: { $oid: "69313b73d025037d5ab9cfd1" }, label: "Retail", value: "Retail" },
+    { _id: { $oid: "69313b73d025037d5ab9cfd0" }, label: "Oil And Gas", value: "Oil And Gas" },
+    { _id: { $oid: "69313b73d025037d5ab9cfe0" }, label: "Law", value: "Law" },
     { _id: { $oid: "69313b73d025037d5ab9cfd2" }, label: "Education", value: "Education" },
-    { _id: { $oid: "69313b73d025037d5ab9cfda" }, label: "Finance", value: "Finance" },
     { _id: { $oid: "69313b73d025037d5ab9cfde" }, label: "Hospitality", value: "Hospitality" },
     { _id: { $oid: "69313b73d025037d5ab9cfdf" }, label: "Construction", value: "Construction" },
     { _id: { $oid: "69313b73d025037d5ab9cfe5" }, label: "Aeronautical", value: "Aeronautical" },
     { _id: { $oid: "69313b73d025037d5ab9cfe7" }, label: "Electronics and Communication", value: "Electronics and Communication" },
+    { _id: { $oid: "69313b73d025037d5ab9cfce" }, label: "Media and news", value: "Media and news" },
     { _id: { $oid: "69313b73d025037d5ab9cfe8" }, label: "Other", value: "Other" },
   ];
 
@@ -149,7 +150,7 @@ const BrowseCategoryV2 = () => {
         {/* Header Section */}
         <div className="mb-10">
           <h2 className="text-3xl md:text-4xl font-bold text-black mb-3">
-            Browse by Category
+            Browse by Industry
           </h2>
           <p className="text-gray-500 text-sm md:text-base max-w-3xl">
             Opportunities Across High-Growth Industries
