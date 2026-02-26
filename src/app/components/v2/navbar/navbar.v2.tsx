@@ -234,7 +234,7 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
 
   return (
     <nav ref={navRef} className={navClasses}>
-      <div className="px-4 sm:px-6 lg:px-8">
+      <div className="px-4 sm:px-6 lg:px-20 xl:px-28">
         <div className="flex items-center justify-between h-20">
           {/* Left side - Logo, Page Title (when scrolled) and Navigation Links (Desktop) */}
           <div className="hidden md:flex items-center space-x-6">
