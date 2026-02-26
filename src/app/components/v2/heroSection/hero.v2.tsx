@@ -279,7 +279,7 @@ const HeroV2 = ({ data }: { data: any }) => {
                                 <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold">
                                     <CountUp start={0} end={data?.totalVacancies ?? 0} duration={2.7} />+
                                 </div>
-                                <p className="text-xs sm:text-sm md:text-base text-gray-400">Jobs Vacancies</p>
+                                <p className="text-xs sm:text-sm md:text-base text-gray-400">Jobs Openings</p>
                             </div>
                         </div>
 

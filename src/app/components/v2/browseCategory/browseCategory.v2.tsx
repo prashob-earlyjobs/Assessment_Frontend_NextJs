@@ -102,12 +102,16 @@ const BrowseCategoryV2 = () => {
     { _id: { $oid: "69313b73d025037d5ab9cfdd" }, label: "FMCG", value: "FMCG" },
     { _id: { $oid: "69313b73d025037d5ab9cfd1" }, label: "Retail", value: "Retail" },
     { _id: { $oid: "69313b73d025037d5ab9cfe2" }, label: "E-commerce", value: "E-commerce" },
+    { _id: { $oid: "69313b73d025037d5ab9cfce" }, label: "Banking", value: "Banking" },
+
     { _id: { $oid: "69313b73d025037d5ab9cfcd" }, label: "Aviation", value: "Aviation" },
     { _id: { $oid: "69313b73d025037d5ab9cfd3" }, label: "Consumer Goods", value: "Consumer Goods" },
     { _id: { $oid: "69313b73d025037d5ab9cfd8" }, label: "ITES", value: "ITES" },
     { _id: { $oid: "69313b73d025037d5ab9cfd9" }, label: "Entertainment", value: "Entertainment" },
     { _id: { $oid: "69313b73d025037d5ab9cfdb" }, label: "Textile", value: "Textile" },
     { _id: { $oid: "69313b73d025037d5ab9cfe1" }, label: "Advertising", value: "Advertising" },
+    { _id: { $oid: "69313b73d025037d5ab9cfdd" }, label: "Food processing", value: "Food processing" },
+
     { _id: { $oid: "69313b73d025037d5ab9cfe3" }, label: "Electrical and Electronics", value: "Electrical and Electronics" },
     { _id: { $oid: "69313b73d025037d5ab9cfe6" }, label: "AI / ML", value: "AI / ML" },
     { _id: { $oid: "69313b73d025037d5ab9cfd0" }, label: "Oil And Gas", value: "Oil And Gas" },
