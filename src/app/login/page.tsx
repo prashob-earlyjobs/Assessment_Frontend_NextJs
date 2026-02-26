@@ -257,7 +257,7 @@ function LoginContent() {
           localStorage.setItem("accessToken", accessToken);
           // Pass token in URL so portal can read and set cookie
           const portalUrl = new URL(process.env.NEXT_PUBLIC_PORTAL_URL || "portal.earlyjobs.ai");
-          
+
           portalUrl.searchParams.set("token", accessToken);
           if (user) {
             portalUrl.searchParams.set("user", JSON.stringify(user));
@@ -421,7 +421,7 @@ function LoginContent() {
               {isRecruiterMode ? "Recruiter Login" : "Log in"}
             </h1>
             <p className="text-gray-600">
-              Enter your email or mobile number to receive an OTP.{" "}
+              Enter your mobile number to receive an OTP.{" "}
               {/* <Link href="/signup" className="hover:underline font-medium" style={{ color: PRIMARY_COLOR }}>
                 Don't have an account? Sign Up
               </Link> */}
@@ -431,11 +431,11 @@ function LoginContent() {
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="emailOrMobile">Email address or Mobile number</Label>
+              <Label htmlFor="emailOrMobile">Mobile number</Label>
               <Input
                 id="emailOrMobile"
                 type="text"
-                placeholder="your@email.com or 9876543210"
+                placeholder="9876543210"
                 value={formData.emailOrMobile}
                 onChange={(e) => setFormData({ ...formData, emailOrMobile: e.target.value })}
                   className="h-12 bg-white text-gray-900 border-gray-300 placeholder:text-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
