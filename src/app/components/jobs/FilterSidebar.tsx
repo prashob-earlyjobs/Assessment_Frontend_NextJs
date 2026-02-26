@@ -431,14 +431,14 @@ const FilterSidebar = ({
           </div>
         </div>
 
-        {/* Date Posted */}
-        <div>
+        {/* Date Posted }
+          <div>
           <h3 className="text-base font-bold text-black mb-3">Date Posted</h3>
           <div className="space-y-2">
             {datePostedOptions.map((option) => (
               <div key={option.id} className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                  <Checkbox
+                    <Checkbox
                     id={option.id}
                     checked={selectedDatePosted.includes(option.id)}
                     onCheckedChange={(checked) => handleDatePostedChange(option.id, checked as boolean)}
@@ -446,13 +446,13 @@ const FilterSidebar = ({
                   />
                   <label htmlFor={option.id} className="text-sm text-gray-700 cursor-pointer">
                     {option.label}
-                  </label>
-                </div>
-                {/* <span className="text-sm text-gray-500">{getCount()}</span> */}
+                    </label>
+                  </div>
+                {/* <span className="text-sm text-gray-500">{getCount()}</span> *}
               </div>
             ))}
           </div>
-        </div>
+          </div> */}
 
         {/* Salary */}
         {/* <div>

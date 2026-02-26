@@ -237,7 +237,7 @@ const HeroV2 = ({ data }: { data: any }) => {
                                         </Command>
                                     </PopoverContent>
                                 </Popover>
-{/* 
+                                {/* 
                                 <Select value={category} onValueChange={setCategory}>
                                     <SelectTrigger className="w-full sm:w-auto sm:min-w-[140px] border-0 bg-transparent text-black focus:ring-0 h-12 sm:h-14 px-4 sm:px-6 rounded-lg sm:rounded-none">
                                         <SelectValue placeholder="Select Category" />
@@ -277,7 +277,7 @@ const HeroV2 = ({ data }: { data: any }) => {
                             </div>
                             <div>
                                 <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold">
-                                    <CountUp start={0} end={data?.totalVacancies ?? data?.totalJobs ?? 0} duration={2.7} />+
+                                    <CountUp start={0} end={data?.totalVacancies ?? 0} duration={2.7} />+
                                 </div>
                                 <p className="text-xs sm:text-sm md:text-base text-gray-400">Jobs Vacancies</p>
                             </div>

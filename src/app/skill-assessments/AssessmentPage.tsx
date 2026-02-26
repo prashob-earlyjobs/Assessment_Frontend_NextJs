@@ -23,6 +23,7 @@ import {
 import { toast } from "sonner";
 import { userLogout } from "../components/services/servicesapis";
 import Head from "next/head";
+import NavbarV2 from "../components/v2/navbar/navbar.v2";
 
 const AssessmentsPage = () => {
   const router = useRouter();
@@ -105,120 +106,120 @@ const AssessmentsPage = () => {
   return (
     <>
       <div className="min-h-screen bg-white">
-        <Navbar />
-        <header className="flex items-center justify-between px-4 py-3 lg:px-12 bg-white/80 backdrop-blur-sm md:sticky md:top-0 z-40 shadow-sm">
+        <NavbarV2 />
+        {/* <header className="flex items-center justify-between px-4 py-3 lg:px-12 bg-white/80 backdrop-blur-sm md:sticky md:top-0 z-40 shadow-sm">
           <div className="flex items-center space-x-2">
             <img
               src="/images/logo.png"
               alt="EarlyJobs Logo"
               className="h-14 lg:h-16 w-auto cursor-pointer"
             />
-          </div>
+          </div>  */}
 
-          <div className="hidden md:flex items-center">
-            <ToggleGroup
-              type="single"
-              value={activeSection}
-              onValueChange={handleToggleChange}
-              className="bg-orange-50 p-1 rounded-2xl border border-orange-100 pointer-events-auto"
-              aria-label="Section navigation"
+        {/* <div className="hidden md:flex items-center">
+          <ToggleGroup
+            type="single"
+            value={activeSection}
+            onValueChange={handleToggleChange}
+            className="bg-orange-50 p-1 rounded-2xl border border-orange-100 pointer-events-auto"
+            aria-label="Section navigation"
+          >
+            <ToggleGroupItem
+              value="apply"
+              className="flex items-center gap-2 px-4 py-2 lg:px-6 lg:py-3 rounded-xl data-[state=on]:bg-orange-500 data-[state=on]:text-white data-[state=on]:shadow-lg text-gray-600 hover:text-orange-600 transition-all duration-300"
+              aria-label="Apply Jobs"
             >
-              <ToggleGroupItem
-                value="apply"
-                className="flex items-center gap-2 px-4 py-2 lg:px-6 lg:py-3 rounded-xl data-[state=on]:bg-orange-500 data-[state=on]:text-white data-[state=on]:shadow-lg text-gray-600 hover:text-orange-600 transition-all duration-300"
-                aria-label="Apply Jobs"
-              >
-                <Briefcase className="h-4 w-4" />
-                Apply Jobs
-              </ToggleGroupItem>
-              <ToggleGroupItem
-                value="assessments"
-                className="flex items-center gap-2 px-4 py-2 lg:px-6 lg:py-3 rounded-xl data-[state=on]:bg-orange-500 data-[state=on]:text-white data-[state=on]:shadow-lg text-gray-600 hover:text-orange-600 transition-all duration-300"
-                aria-label="Assessments"
-              >
-                <ClipboardCheck className="h-4 w-4" />
-                Assessments
-              </ToggleGroupItem>
-              <ToggleGroupItem
-                value="resume"
-                className="flex items-center gap-2 px-4 py-2 lg:px-6 lg:py-3 rounded-xl data-[state=on]:bg-orange-500 data-[state=on]:text-white data-[state=on]:shadow-lg text-gray-600 hover:text-orange-600 transition-all duration-300"
-                aria-label="Resume"
-              >
-                <FileText className="h-4 w-4" />
-                Resume
-              </ToggleGroupItem>
-              <ToggleGroupItem
-                value="interviews"
-                className="flex items-center gap-2 px-4 py-2 lg:px-6 lg:py-3 rounded-xl data-[state=on]:bg-orange-500 data-[state=on]:text-white data-[state=on]:shadow-lg text-gray-600 hover:text-orange-600 transition-all duration-300"
-                aria-label="Interviews"
-              >
-                <Video className="h-4 w-4" />
-                Interviews
-              </ToggleGroupItem>
-            </ToggleGroup>
-          </div>
-
-          <div className="flex items-center space-x-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden rounded-2xl p-3 hover:bg-orange-50 hover:text-orange-600 transition-colors"
-              aria-label="Toggle mobile menu"
+              <Briefcase className="h-4 w-4" />
+              Apply Jobs
+            </ToggleGroupItem>
+            <ToggleGroupItem
+              value="assessments"
+              className="flex items-center gap-2 px-4 py-2 lg:px-6 lg:py-3 rounded-xl data-[state=on]:bg-orange-500 data-[state=on]:text-white data-[state=on]:shadow-lg text-gray-600 hover:text-orange-600 transition-all duration-300"
+              aria-label="Assessments"
             >
-              {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </Button>
+              <ClipboardCheck className="h-4 w-4" />
+              Assessments
+            </ToggleGroupItem>
+            <ToggleGroupItem
+              value="resume"
+              className="flex items-center gap-2 px-4 py-2 lg:px-6 lg:py-3 rounded-xl data-[state=on]:bg-orange-500 data-[state=on]:text-white data-[state=on]:shadow-lg text-gray-600 hover:text-orange-600 transition-all duration-300"
+              aria-label="Resume"
+            >
+              <FileText className="h-4 w-4" />
+              Resume
+            </ToggleGroupItem>
+            <ToggleGroupItem
+              value="interviews"
+              className="flex items-center gap-2 px-4 py-2 lg:px-6 lg:py-3 rounded-xl data-[state=on]:bg-orange-500 data-[state=on]:text-white data-[state=on]:shadow-lg text-gray-600 hover:text-orange-600 transition-all duration-300"
+              aria-label="Interviews"
+            >
+              <Video className="h-4 w-4" />
+              Interviews
+            </ToggleGroupItem>
+          </ToggleGroup>
+        </div>
 
-            {userCredentials !== null ? (
-              <div className="hidden md:flex items-center space-x-4">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setShowLogoutDialog(true)}
-                  className="rounded-2xl p-3 hover:bg-red-50 hover:text-red-600 transition-colors"
-                >
-                  <LogOut className="h-5 w-5" />
-                </Button>
+        <div className="flex items-center space-x-4">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="md:hidden rounded-2xl p-3 hover:bg-orange-50 hover:text-orange-600 transition-colors"
+            aria-label="Toggle mobile menu"
+          >
+            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </Button>
 
-                <div
-                  className="flex items-center space-x-3 cursor-pointer"
-                  onClick={handleProfileClick}
-                >
-                  <Avatar className="h-10 w-10">
-                    <AvatarImage src={userCredentials.avatar} />
-                    <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
-                      {userCredentials?.name
-                        ?.split(" ")
-                        .map((n) => n[0])
-                        .join("")
-                        ?.toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="hidden md:block">
-                    <p className="text-sm font-medium text-gray-900">
-                      {userCredentials.name}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      {userCredentials.profile?.preferredJobRole}
-                    </p>
-                  </div>
+          {userCredentials !== null ? (
+            <div className="hidden md:flex items-center space-x-4">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowLogoutDialog(true)}
+                className="rounded-2xl p-3 hover:bg-red-50 hover:text-red-600 transition-colors"
+              >
+                <LogOut className="h-5 w-5" />
+              </Button>
+
+              <div
+                className="flex items-center space-x-3 cursor-pointer"
+                onClick={handleProfileClick}
+              >
+                <Avatar className="h-10 w-10">
+                  <AvatarImage src={userCredentials.avatar} />
+                  <AvatarFallback className="bg-gradient-to-r from-orange-500 to-purple-600 text-white">
+                    {userCredentials?.name
+                      ?.split(" ")
+                      .map((n) => n[0])
+                      .join("")
+                      ?.toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="hidden md:block">
+                  <p className="text-sm font-medium text-gray-900">
+                    {userCredentials.name}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {userCredentials.profile?.preferredJobRole}
+                  </p>
                 </div>
               </div>
-            ) : (
-              <Button
-                onClick={() => router.push("/login")}
-                className="hidden md:block bg-orange-700 hover:bg-orange-600 text-white rounded-2xl px-4 py-2 lg:px-6 lg:py-2 shadow-lg hover:shadow-xl transition-all duration-300 w-full md:w-auto"
-                aria-label="Login"
-              >
-                <LogIn className="h-5 w-5 mr-2 inline" />
-                Login
-              </Button>
-            )}
-          </div>
-        </header>
+            </div>
+          ) : (
+            <Button
+              onClick={() => router.push("/login")}
+              className="hidden md:block bg-orange-700 hover:bg-orange-600 text-white rounded-2xl px-4 py-2 lg:px-6 lg:py-2 shadow-lg hover:shadow-xl transition-all duration-300 w-full md:w-auto"
+              aria-label="Login"
+            >
+              <LogIn className="h-5 w-5 mr-2 inline" />
+              Login
+            </Button>
+          )}
+        </div>
+      </header> */}
 
         {/* Mobile Menu */}
-        {isMobileMenuOpen && (
+        {/* {isMobileMenuOpen && (
           <div className="md:hidden bg-white/95 backdrop-blur-sm shadow-lg z-50 px-4 py-4 border-b border-orange-100">
             <div className="flex flex-col space-y-2">
               {userCredentials !== null && (
@@ -260,13 +261,13 @@ const AssessmentsPage = () => {
               >
                 Colleges
               </Button>
-               <Button
-              variant="ghost"
-              className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
-              onClick={() => handleMobileMenuItemClick("/recruiter")}
-            >
-              Recruiter
-            </Button>
+              <Button
+                variant="ghost"
+                className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
+                onClick={() => handleMobileMenuItemClick("/recruiter")}
+              >
+                Recruiter
+              </Button>
               <Button
                 variant="ghost"
                 className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
@@ -300,7 +301,7 @@ const AssessmentsPage = () => {
               )}
             </div>
           </div>
-        )}
+        )} */}
 
         <div className="md:hidden sticky top-0 z-50 px-4 pt-2 bg-backgorund ">
           <ToggleGroup
@@ -345,7 +346,7 @@ const AssessmentsPage = () => {
           </ToggleGroup>
         </div>
 
-        <main>
+        <main className="pt-28">
           <div className="animate-in fade-in duration-300">
             <Assessments />
           </div>
@@ -375,7 +376,7 @@ const AssessmentsPage = () => {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
-      </div>
+      </div >
     </>
   );
 };

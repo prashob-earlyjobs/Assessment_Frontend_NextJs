@@ -19,7 +19,7 @@ import { useParams } from "next/navigation";
 import Navbar from "@/app/components/pages/navbar";
 import Footer from "@/app/components/pages/footer";
 import { motion, AnimatePresence } from "framer-motion";
-import { generateGeminiContentFromResume} from "../../../components/services/usersapi";
+import { generateGeminiContentFromResume } from "../../../components/services/usersapi";
 import { uploadFile } from "../../../components/services/companiesapi";
 
 // Job interface for API response
@@ -96,7 +96,7 @@ export interface ICreateTallentPoolFormData {
   resume?: string;
 }
 
-export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: AddCandidateFormProps) {
+export default function PublicTalentPoolForm({ onSubmit, refreshCandidates }: AddCandidateFormProps) {
   //const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   console.log('Extracted ID:', id);
@@ -325,35 +325,36 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [resloading, setResloading] = useState<boolean>(false);
   useEffect(() => {
-    const fetchResume=async ()=>{
+    const fetchResume = async () => {
       setResloading(true);
 
-      try{
-        if (resumeFile && resumeFileName){
-          
-          const response =await uploadFile(resumeFile,resumeFileName);
+      try {
+        if (resumeFile && resumeFileName) {
+
+          const response = await uploadFile(resumeFile, resumeFileName);
           console.log(response);
           setUploadedURL(response.fileUrl);
         }
-        if(resumeFile){
-                  const response =await generateGeminiContentFromResume(resumeFile);
-                  console.log(response);
-                  setFormData((prev) => ({
-                    ...prev,
-                    ...response.data,
-        
-        }))}
+        if (resumeFile) {
+          const response = await generateGeminiContentFromResume(resumeFile);
+          console.log(response);
+          setFormData((prev) => ({
+            ...prev,
+            ...response.data,
+
+          }))
+        }
       }
-      catch(e){
+      catch (e) {
         console.log(e);
       }
-      finally{
+      finally {
         setResloading(false);
       }
     };
-  fetchResume()
-    
-  },[resumeFile,resumeFileName])
+    fetchResume()
+
+  }, [resumeFile, resumeFileName])
 
   const handleResumeUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -532,7 +533,7 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
     const placeholderClasses = "placeholder:text-gray-400 placeholder:opacity-60";
     return `${baseClassName} ${errorClasses} ${placeholderClasses}`.trim();
   };
-  
+
   const handlePreviewResume = () => {
     if (uploadedURL) {
       try {
@@ -548,7 +549,7 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
 
   return (
     <div className="min-h-screen">
-        <Navbar />
+      <Navbar />
       <div className="w-full px-6 py-8">
         <div className="mb-8 flex items-center justify-between">
           <div></div>
@@ -558,7 +559,7 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
           <Card className="shadow-2xl rounded-3xl border-0 bg-white/80 backdrop-blur-sm overflow-hidden w-full">
             <CardHeader
               className="bg-gradient-to-r from-orange-50 via-amber-50 to-yellow-50 border-b border-orange-100"
-              style={{ display: 'flex', flexDirection: 'row', gap: '40px', justifyContent:"center" , alignItems:"center" }}
+              style={{ display: 'flex', flexDirection: 'row', gap: '40px', justifyContent: "center", alignItems: "center" }}
             >
               <div>
                 <img
@@ -600,7 +601,7 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                       className="hidden"
                       accept=".pdf,.doc,.docx"
                     />
-                    <Button 
+                    <Button
                       type="button"
                       variant="outline"
                       onClick={() => fileInputRef.current?.click()}
@@ -611,7 +612,7 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                         {resumeFileName ? resumeFileName : "Choose Resume File (Optional)"}
                       </span>
                     </Button>
-                   {resumeFileName && (
+                    {resumeFileName && (
                       <>
                         <Button
                           type="button"
@@ -1318,120 +1319,120 @@ export default function PublicTalentPoolForm({  onSubmit, refreshCandidates }: A
                   </div>
                 </div>
               </div>
-              </CardContent>
-            </Card>
+            </CardContent>
+          </Card>
 
-            {/* Submit Button */}
-            <div className="flex justify-center items-center mt-12 pt-8 border-t-2 border-gray-200">
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="gap-2 px-4 py-2 h-auto rounded-lg font-semibold text-base shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700"
-              >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    Creating Profile...
-                  </>
-                ) : (
-                  <>
-                    Submit
-                    <Plus className="h-4 w-4" />
-                  </>
-                )}
-              </Button>
-            </div>
-
-            {/* Success Popup */}
-            <AnimatePresence>
-              {showSuccessPopup && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center"
-                  style={{margin: '0'}}
-                  onClick={() => setShowSuccessPopup(false)}
-                >
-                  <motion.div
-                    initial={{ y: 50, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    exit={{ y: 50, opacity: 0 }}
-                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                    className="bg-white rounded-2xl p-8 shadow-2xl max-w-md mx-4 text-center"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <CheckCircle className="h-8 w-8 text-white" />
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">Profile Created Successfully!</h3>
-                    <p className="text-gray-600 mb-4">{successMessage}</p>
-                    <div className="flex justify-center gap-4">
-                      <Button
-                        variant="outline"
-                        onClick={() => {
-                          setShowSuccessPopup(false);
-                          setSuccessMessage(null);
-                          // Reset form
-                          setFormData({
-                            name: "",
-                            email: "",
-                            phone: "",
-                            fatherName: "",
-                            dateOfBirth: "",
-                            gender: "Male",
-                            aadharNumber: "",
-                            highestQualification: "",
-                            currentLocationDetails: {
-                              street: "",
-                              area: "",
-                              city: "",
-                              pincode: "",
-                              fullAddress: "",
-                            },
-                            spokenLanguages: [],
-                            totalExperienceYears: 0,
-                            totalExperienceMonths: 0,
-                            skills: [],
-                            preferredJobCategories: [],
-                            preferredEmploymentTypes: [],
-                            preferredWorkTypes: [],
-                          });
-                          clearResume();
-                        }}
-                        className="rounded-xl border-orange-300 text-orange-600 hover:bg-orange-50"
-                      >
-                        Add Another Candidate
-                      </Button>
-                    </div>
-                  </motion.div>
-                </motion.div>
+          {/* Submit Button */}
+          <div className="flex justify-center items-center mt-12 pt-8 border-t-2 border-gray-200">
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="gap-2 px-4 py-2 h-auto rounded-lg font-semibold text-base shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Creating Profile...
+                </>
+              ) : (
+                <>
+                  Submit
+                  <Plus className="h-4 w-4" />
+                </>
               )}
-            </AnimatePresence>
+            </Button>
+          </div>
 
-            {/* Loading Overlay */}
-            {isSubmitting && (
-              <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-                <div className="bg-white rounded-2xl p-8 shadow-2xl max-w-md mx-4 text-center">
-                  <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-amber-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Loader2 className="h-8 w-8 text-white animate-spin" />
+          {/* Success Popup */}
+          <AnimatePresence>
+            {showSuccessPopup && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center"
+                style={{ margin: '0' }}
+                onClick={() => setShowSuccessPopup(false)}
+              >
+                <motion.div
+                  initial={{ y: 50, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: 50, opacity: 0 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                  className="bg-white rounded-2xl p-8 shadow-2xl max-w-md mx-4 text-center"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <CheckCircle className="h-8 w-8 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Creating Profile...</h3>
-                  <p className="text-gray-600 mb-4">
-                    We're processing your candidate information and setting up their profile.
-                  </p>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div className="bg-gradient-to-r from-orange-500 to-amber-500 h-2 rounded-full animate-pulse" style={{ width: '75%' }}></div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Profile Created Successfully!</h3>
+                  <p className="text-gray-600 mb-4">{successMessage}</p>
+                  <div className="flex justify-center gap-4">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setShowSuccessPopup(false);
+                        setSuccessMessage(null);
+                        // Reset form
+                        setFormData({
+                          name: "",
+                          email: "",
+                          phone: "",
+                          fatherName: "",
+                          dateOfBirth: "",
+                          gender: "Male",
+                          aadharNumber: "",
+                          highestQualification: "",
+                          currentLocationDetails: {
+                            street: "",
+                            area: "",
+                            city: "",
+                            pincode: "",
+                            fullAddress: "",
+                          },
+                          spokenLanguages: [],
+                          totalExperienceYears: 0,
+                          totalExperienceMonths: 0,
+                          skills: [],
+                          preferredJobCategories: [],
+                          preferredEmploymentTypes: [],
+                          preferredWorkTypes: [],
+                        });
+                        clearResume();
+                      }}
+                      className="rounded-xl border-orange-300 text-orange-600 hover:bg-orange-50"
+                    >
+                      Add Another Candidate
+                    </Button>
                   </div>
-                  <p className="text-sm text-gray-500 mt-3">
-                    You'll be redirected to view candidates shortly...
-                  </p>
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
             )}
-          </form>
-        </div>
-        <Footer />
+          </AnimatePresence>
+
+          {/* Loading Overlay */}
+          {isSubmitting && (
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+              <div className="bg-white rounded-2xl p-8 shadow-2xl max-w-md mx-4 text-center">
+                <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-amber-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Loader2 className="h-8 w-8 text-white animate-spin" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Creating Profile...</h3>
+                <p className="text-gray-600 mb-4">
+                  We're processing your candidate information and setting up their profile.
+                </p>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="bg-gradient-to-r from-orange-500 to-amber-500 h-2 rounded-full animate-pulse" style={{ width: '75%' }}></div>
+                </div>
+                <p className="text-sm text-gray-500 mt-3">
+                  You'll be redirected to view candidates shortly...
+                </p>
+              </div>
+            </div>
+          )}
+        </form>
       </div>
+      <Footer />
+    </div>
   );
 }

@@ -152,7 +152,7 @@ const PromoBannerV2 = () => {
               />
             </div>
             <p className="mt-4 text-center font-bold text-gray-800">
-              Empowering Recruiters, Transforming Lives.
+              Honored to receive the Startup Awards 2026 from Entrepreneur India.
             </p>
           </div>
           <div className="flex flex-col justify-center items-center text-center">

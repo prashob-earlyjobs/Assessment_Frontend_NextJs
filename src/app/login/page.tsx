@@ -256,7 +256,8 @@ function LoginContent() {
           // Store token locally (portal will set its own cookie)
           localStorage.setItem("accessToken", accessToken);
           // Pass token in URL so portal can read and set cookie
-          const portalUrl = new URL("http://localhost:3001");
+          const portalUrl = new URL(process.env.NEXT_PUBLIC_PORTAL_URL || "portal.earlyjobs.ai");
+          
           portalUrl.searchParams.set("token", accessToken);
           if (user) {
             portalUrl.searchParams.set("user", JSON.stringify(user));
