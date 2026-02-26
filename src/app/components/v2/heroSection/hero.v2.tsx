@@ -163,7 +163,7 @@ const HeroV2 = ({ data }: { data: any }) => {
     }, [jobTitle]);
 
     return (
-        <div className="relative w-full text-white h-[100vh] flex flex-col justify-between bg-[url('/v2/images/hero-bg.png')] bg-cover bg-center overflow-hidden">
+        <div className="relative w-full text-white min-h-[100vh] pt-28 sm:pt-32 lg:pt-32 flex flex-col justify-between bg-[url('/v2/images/hero-bg.png')] bg-cover bg-center overflow-hidden">
             {/* Background overlay */}
             <div className="absolute inset-0 bg-black/60 z-0 pointer-events-none" />
 
@@ -171,7 +171,7 @@ const HeroV2 = ({ data }: { data: any }) => {
             <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-1 min-h-0 flex flex-col justify-center py-4 sm:py-8 md:py-12 lg:py-16 xl:py-20">
                     <div className="space-y-3 sm:space-y-6 md:space-y-8 lg:space-y-10 xl:space-y-12">
                     {/* Main Title */}
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-center leading-tight px-2 sm:px-4">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-bold text-center leading-tight px-2 sm:px-4">
                         Find Your Dream Job Today!
                     </h1>
 

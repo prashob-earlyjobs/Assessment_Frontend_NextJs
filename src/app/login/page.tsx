@@ -83,7 +83,7 @@ function LoginContent() {
     };
 
     if (!isValidEmailOrMobile(formData.emailOrMobile)) {
-      toast.error("Please enter a valid email or mobile number!");
+      toast.error("Please enter a valid mobile number!");
       return;
     }
 
