@@ -1,10 +1,24 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { City } from "country-state-city";
 import { Card } from "../ui/card";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Checkbox } from "../ui/checkbox";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "../ui/command";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { Search, ChevronDown, MapPin } from "lucide-react";
@@ -15,6 +29,7 @@ import {
   BORDER_COLOR,
   BG_WHITE,
 } from "../../../constants/theme";
+import { cn } from "../../lib/utils";
 
 interface FilterSidebarProps {
   companyName: string;
@@ -72,6 +87,29 @@ const FilterSidebar = ({
 
   // Job title search state
   const [jobTitleSearch, setJobTitleSearch] = useState(title || searchInput || "");
+  const [locationOpen, setLocationOpen] = useState(false);
+  const [indianCities, setIndianCities] = useState<string[]>([]);
+
+  const FILTER_SPECIAL_LOCATIONS = ["All Locations", "Remote"] as const;
+  const allLocationOptions = useMemo(
+    () => [...FILTER_SPECIAL_LOCATIONS, ...indianCities],
+    [indianCities]
+  );
+
+  useEffect(() => {
+    try {
+      const citiesList = City.getCitiesOfCountry("IN");
+      if (citiesList?.length) {
+        const names = citiesList
+          .map((c: { name: string }) => c.name)
+          .filter(Boolean);
+        const unique = Array.from(new Set(names)).sort((a, b) => a.localeCompare(b));
+        setIndianCities(unique);
+      }
+    } catch {
+      setIndianCities([]);
+    }
+  }, []);
 
   // Mock counts for each option (in real app, these would come from API)
   const getCount = () => 10;
@@ -266,20 +304,53 @@ const FilterSidebar = ({
         {/* Location */}
         <div>
           <h3 className="text-base font-bold text-black mb-3">Location</h3>
-          <div className="relative">
-            <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <Input
-              placeholder="Choose city"
-              className="pl-10 pr-10 rounded-lg"
-              style={{
-                backgroundColor: BG_WHITE,
-                borderColor: BORDER_COLOR
-              }}
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-            />
-            <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-          </div>
+          <Popover open={locationOpen} onOpenChange={setLocationOpen}>
+            <PopoverTrigger asChild>
+              <button
+                type="button"
+                className={cn(
+                  "w-full h-10 px-3 rounded-lg border flex items-center justify-between gap-2 text-left text-sm",
+                  !location && "text-gray-500"
+                )}
+                style={{
+                  backgroundColor: BG_WHITE,
+                  borderColor: BORDER_COLOR,
+                }}
+              >
+                <span className="flex items-center gap-2 truncate">
+                  <MapPin className="w-4 h-4 shrink-0 text-gray-400" />
+                  {location || "Choose city"}
+                </span>
+                <ChevronDown className="h-4 w-4 shrink-0 text-gray-400" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent
+              className="w-[var(--radix-popover-trigger-width)] min-w-[200px] p-0"
+              align="start"
+            >
+              <Command className="rounded-lg border-0 shadow-none">
+                <CommandInput placeholder="Search city..." className="h-10" />
+                <CommandList>
+                  <CommandEmpty>No city found.</CommandEmpty>
+                  <CommandGroup>
+                    {allLocationOptions.map((loc) => (
+                      <CommandItem
+                        key={loc}
+                        value={loc}
+                        onSelect={() => {
+                          setLocation(loc);
+                          setLocationOpen(false);
+                        }}
+                        className="cursor-pointer"
+                      >
+                        {loc}
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
         </div>
 
         {/* Category */}

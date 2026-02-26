@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import Footer from "./components/pages/footer";
 import NavbarV2 from "./components/v2/navbar/navbar.v2";
 import HeroV2 from "./components/v2/heroSection/hero.v2";
@@ -9,7 +9,8 @@ import BrowseCategoryV2 from "./components/v2/browseCategory/browseCategory.v2";
 import PromoBannerV2 from "./components/v2/promoBanner/promoBanner.v2";
 import TestimonialsV2 from "./components/v2/testimonials/testimonials.v2";
 import NewsBlogV2 from "./components/v2/newsBlog/newsBlog.v2";
-import axiosInstance from "./components/services/apiinterseptor";
+
+const BACKEND_URL_2_0 = process.env.NEXT_PUBLIC_BACKEND_URL_2_0 || "http://localhost:5001/api";
 
 const Index = () => {
   const [dashboard, setDashboard] = useState(false);
@@ -17,15 +18,15 @@ const Index = () => {
   useEffect(() => {
     const getDashboardData = async () => {
       try {
-        const response = await axiosInstance.get("/dashboard");
-        setDashboard(response.data.data);
-        console.log("dashboard data", response.data.data);
+        const response = await fetch(`${BACKEND_URL_2_0}/dashboard`, { cache: "no-store" });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result?.message || "Failed to fetch dashboard");
+        setDashboard(result?.data ?? null);
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
       }
     };
     getDashboardData();
-   
   }, []);
 
 

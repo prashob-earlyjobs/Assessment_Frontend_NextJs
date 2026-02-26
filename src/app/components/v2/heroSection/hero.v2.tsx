@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Image from "next/image";
 import { Button } from "../../ui/button";
 import CountUp from 'react-countup';
@@ -53,8 +54,6 @@ const clientLogos = [
     { src: "https://storage.googleapis.com/earlyjobs_datas/EJ_V2/20.png", alt: "Client 1" },
     { src: "https://storage.googleapis.com/earlyjobs_datas/EJ_V2/21.png", alt: "Client 1" },
     { src: "https://storage.googleapis.com/earlyjobs_datas/EJ_V2/22.png", alt: "Client 1" },
-
-
 ];
 
 
@@ -164,15 +163,15 @@ const HeroV2 = ({ data }: { data: any }) => {
     }, [jobTitle]);
 
     return (
-        <div className="relative w-full text-white h-[100vh] flex flex-col justify-between bg-[url('/v2/images/hero-bg.png')] bg-cover bg-center overflow-hidden">
+        <div className="relative w-full text-white min-h-[100vh] pt-28 sm:pt-32 lg:pt-32 flex flex-col justify-between bg-[url('/v2/images/hero-bg.png')] bg-cover bg-center overflow-hidden">
             {/* Background overlay */}
             <div className="absolute inset-0 bg-black/60 z-0 pointer-events-none" />
 
-            {/* Hero Section */}
-            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-1 flex flex-col justify-center py-6 sm:py-12 md:py-16 lg:py-20">
-                <div className="space-y-5 sm:space-y-8 md:space-y-10 lg:space-y-12">
+            {/* Hero Section - min-h-0 lets this shrink so footer carousel stays in view on small viewports */}
+            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-1 min-h-0 flex flex-col justify-center py-4 sm:py-8 md:py-12 lg:py-16 xl:py-20">
+                    <div className="space-y-3 sm:space-y-6 md:space-y-8 lg:space-y-10 xl:space-y-12">
                     {/* Main Title */}
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-center leading-tight px-2 sm:px-4">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-bold text-center leading-tight px-2 sm:px-4">
                         Find Your Dream Job Today!
                     </h1>
 
@@ -182,21 +181,23 @@ const HeroV2 = ({ data }: { data: any }) => {
                     </p>
 
                     {/* Search Bar */}
-                    <div className="max-w-3xl mx-auto px-2 sm:px-4">
-                        <div className="bg-white rounded-xl sm:rounded-full shadow-lg flex flex-col sm:flex-row items-stretch overflow-hidden">
-                            <div className="flex flex-col sm:flex-row gap-2 items-stretch flex-1 p-2.5 sm:p-0 sm:pl-4">
-                                <Input
-                                    type="text"
-                                    placeholder={typedPlaceholder || "Job Title or Company"}
-                                    value={jobTitle}
-                                    onChange={(e) => setJobTitle(e.target.value)}
-                                    className="flex-1 border-0 bg-transparent text-black placeholder:text-gray-500 focus-visible:ring-0 h-12 sm:h-14 px-4 sm:px-6 rounded-lg sm:rounded-none"
-                                    onKeyDown={(e) => {
-                                        if (e.key === "Enter") {
-                                            handleSearch();
-                                        }
-                                    }}
-                                />
+                    <div className="max-w-4xl mx-auto px-2 sm:px-4">
+                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 items-stretch">
+                            {/* Search Box + Search Button - Single Container */}
+                            <div className="bg-white rounded-xl sm:rounded-full shadow-lg flex flex-col sm:flex-row items-stretch overflow-hidden flex-1 min-w-0">
+                                <div className="flex flex-col sm:flex-row gap-2 items-stretch flex-1 p-2.5 sm:p-0 sm:pl-4">
+                                    <Input
+                                        type="text"
+                                        placeholder={typedPlaceholder || "Job Title or Company"}
+                                        value={jobTitle}
+                                        onChange={(e) => setJobTitle(e.target.value)}
+                                        className="flex-1 border-0 bg-transparent text-black placeholder:text-gray-500 focus-visible:ring-0 h-12 sm:h-14 px-8 sm:px-10 rounded-lg sm:rounded-none"
+                                        onKeyDown={(e) => {
+                                            if (e.key === "Enter") {
+                                                handleSearch();
+                                            }
+                                        }}
+                                    />
 
                                 <Popover open={locationOpen} onOpenChange={setLocationOpen}>
                                     <PopoverTrigger asChild>
@@ -261,9 +262,10 @@ const HeroV2 = ({ data }: { data: any }) => {
                             </button>
                         </div>
                     </div>
+                    </div>
 
                     {/* Statistics Section */}
-                    <div className="mt-4 sm:mt-8 md:mt-12 lg:mt-16 flex flex-wrap justify-center gap-3 sm:gap-6 md:gap-8 lg:gap-12 xl:gap-16 pt-2">
+                    <div className="mt-2 sm:mt-4 md:mt-8 lg:mt-12 flex flex-wrap justify-center gap-2 sm:gap-4 md:gap-6 lg:gap-10 xl:gap-16 pt-1 sm:pt-2">
                         <div className="flex items-center gap-2 sm:gap-3">
                             <div className="relative w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex-shrink-0">
                                 <Image
@@ -275,9 +277,9 @@ const HeroV2 = ({ data }: { data: any }) => {
                             </div>
                             <div>
                                 <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold">
-                                    <CountUp start={0} end={data?.totalJobs || 0} duration={2.7} />+
+                                    <CountUp start={0} end={data?.totalVacancies ?? 0} duration={2.7} />+
                                 </div>
-                                <p className="text-xs sm:text-sm md:text-base text-gray-400">Jobs</p>
+                                <p className="text-xs sm:text-sm md:text-base text-gray-400">Jobs Vacancies</p>
                             </div>
                         </div>
 
@@ -292,7 +294,7 @@ const HeroV2 = ({ data }: { data: any }) => {
                             </div>
                             <div>
                                 <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold">
-                                    <CountUp start={0} end={data?.totalCandidates || 0} duration={2.7} />+
+                                    <CountUp start={0} end={data?.totalRecruiters ?? data?.totalCandidates ?? 0} duration={2.7} />+
                                 </div>
                                 <p className="text-xs sm:text-sm md:text-base text-gray-400">Recruiters</p>
                             </div>
@@ -309,7 +311,7 @@ const HeroV2 = ({ data }: { data: any }) => {
                             </div>
                             <div>
                                 <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold">
-                                    <CountUp start={0} end={data?.totalCompanies || 0} duration={2.7} />+
+                                    <CountUp start={0} end={data?.companies ?? data?.totalCompanies ?? 0} duration={2.7} />+
                                 </div>
                                 <p className="text-xs sm:text-sm md:text-base text-gray-400">Companies</p>
                             </div>
@@ -366,19 +368,19 @@ const HeroV2 = ({ data }: { data: any }) => {
                 }} />
             </div>
 
-            {/* Footer with Horizontal Client Carousel */}
-            <div className="relative z-10 overflow-hidden">
-                <div className="max-w-7.5xl mx-auto px-1 sm:px-6 lg:px-8 relative">
-                    <div className="overflow-hidden relative h-14 md:h-18 flex items-center">
+            {/* Footer with Horizontal Client Carousel - flex-shrink-0 so it stays visible on small viewports */}
+            <div className="relative z-10 overflow-hidden flex-shrink-0 pb-3 sm:pb-4">
+                <div className="max-w-7.5xl mx-auto px-2 sm:px-4 lg:px-8 relative">
+                    <div className="overflow-hidden relative h-12 sm:h-14 md:h-16 flex items-center">
                         {/* Left gradient overlay */}
                         {/* <div className="absolute left-0 top-0 bottom-0 w-24 md:w-40 lg:w-56 bg-gradient-to-r from-[#111] via-[#111]/50 to-transparent z-10 pointer-events-none" /> */}
 
                         {/* Right gradient overlay */}
                         {/* <div className="absolute right-0 top-0 bottom-0 w-24 md:w-40 lg:w-56 bg-gradient-to-l from-[#111] via-[#111]/50 to-transparent z-10 pointer-events-none" /> */}
 
-                        <div className="flex gap-6 md:gap-8 lg:gap-12 carousel-horizontal">
+                        <div className="flex gap-4 sm:gap-6 md:gap-8 lg:gap-12 carousel-horizontal">
                             {[...clientLogos, ...clientLogos].map((logo, idx) => (
-                                <div key={`client-${idx}`} className="flex-shrink-0 w-28 h-20 md:w-36 md:h-28 flex items-center justify-center">
+                                <div key={`client-${idx}`} className="flex-shrink-0 w-20 h-14 sm:w-28 sm:h-20 md:w-36 md:h-28 flex items-center justify-center">
                                     <Image
                                         src={logo.src}
                                         alt={logo.alt}

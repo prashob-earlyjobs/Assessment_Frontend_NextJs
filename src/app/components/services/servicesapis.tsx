@@ -121,7 +121,7 @@ export const verifyOtpRecruiter = async ({ phoneNumber, email, otp }) => {
   const emailorphone = phoneNumber;
   try {
     // Use portal API endpoint
-    const portalBaseURL = process.env.NEXT_PUBLIC_PORTAL_BACKEND_URL || 'http://localhost:5001/api';
+    const portalBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL_2_0 || 'http://localhost:5001/api';
     const response = await axios.post(`${portalBaseURL}/auth/portal/login-otp`, {
       emailorphone,
 

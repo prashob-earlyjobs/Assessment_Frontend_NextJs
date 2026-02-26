@@ -1,21 +1,22 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, Suspense } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
-import { Briefcase, Building, ArrowRight, Loader2, RotateCcw } from "lucide-react";
-import { PRIMARY_COLOR, PRIMARY_COLOR_DARK } from "../../constants/theme";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "../components/ui/dialog";
+import { Briefcase, Building, ArrowRight, Loader2, RotateCcw, UserX, UserPlus } from "lucide-react";
+import { PRIMARY_COLOR, PRIMARY_COLOR_DARK, PRIMARY_COLOR_LIGHT } from "../../constants/theme";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
 import { sendOtptoMobile, verifyOtpMobile, isUserLoggedIn, sendOtpToRecruiter, verifyOtpRecruiter } from "../components/services/servicesapis";
 import axiosInstance from "../components/services/apiinterseptor";
 import { useUser } from "@/app/context";
 
-export default function Login() {
+function LoginContent() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -33,6 +34,8 @@ export default function Login() {
   const [formData, setFormData] = useState({
     emailOrMobile: "",
   });
+  const [userNotFoundOpen, setUserNotFoundOpen] = useState(false);
+  const [userNotFoundRedirect, setUserNotFoundRedirect] = useState("");
   const isLoggingInRef = useRef(false);
 
   // Check if user is already logged in (only on initial mount, not during login flow)
@@ -80,7 +83,7 @@ export default function Login() {
     };
 
     if (!isValidEmailOrMobile(formData.emailOrMobile)) {
-      toast.error("Please enter a valid email or mobile number!");
+      toast.error("Please enter a valid mobile number!");
       return;
     }
 
@@ -110,16 +113,15 @@ export default function Login() {
         if (otpResponse.statusCode === 404 || otpResponse.statusCode === 400 || 
             otpResponse.message?.toLowerCase().includes('not found') ||
             otpResponse.message?.toLowerCase().includes('does not exist')) {
-          toast.info("User not found. Please sign up to create an account.");
           if (isRecruiterMode) {
-            // Recruiter: redirect to free job posting with mobile prefilled
             const mobileForPrefill = (phoneNumber || formData.emailOrMobile.replace(/\D/g, '').slice(0, 10)) || '';
             const params = new URLSearchParams();
             if (mobileForPrefill) params.set('mobile', mobileForPrefill);
-            router.push(`/freejobposting${params.toString() ? `?${params.toString()}` : ''}`);
+            setUserNotFoundRedirect(`/freejobposting${params.toString() ? `?${params.toString()}` : ''}`);
           } else {
-            router.push('/signup');
+            setUserNotFoundRedirect('/signup');
           }
+          setUserNotFoundOpen(true);
           setIsLoading(false);
           return;
         }
@@ -151,16 +153,16 @@ export default function Login() {
     } catch (error: any) {
       // Check if error is 404 (user not found)
       if (error?.response?.status === 404 || error?.response?.status === 400) {
-        toast.info("User not found. Please sign up to create an account.");
         if (isRecruiterMode) {
           const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.emailOrMobile);
           const mobileForPrefill = isEmail ? '' : formData.emailOrMobile.replace(/^\+91/, '').replace(/\D/g, '').slice(0, 10);
           const params = new URLSearchParams();
           if (mobileForPrefill) params.set('mobile', mobileForPrefill);
-          router.push(`/freejobposting${params.toString() ? `?${params.toString()}` : ''}`);
+          setUserNotFoundRedirect(`/freejobposting${params.toString() ? `?${params.toString()}` : ''}`);
         } else {
-          router.push('/signup');
+          setUserNotFoundRedirect('/signup');
         }
+        setUserNotFoundOpen(true);
         setIsLoading(false);
         return;
       }
@@ -254,7 +256,8 @@ export default function Login() {
           // Store token locally (portal will set its own cookie)
           localStorage.setItem("accessToken", accessToken);
           // Pass token in URL so portal can read and set cookie
-          const portalUrl = new URL("http://localhost:3001");
+          const portalUrl = new URL(process.env.NEXT_PUBLIC_PORTAL_URL || "portal.earlyjobs.ai");
+
           portalUrl.searchParams.set("token", accessToken);
           if (user) {
             portalUrl.searchParams.set("user", JSON.stringify(user));
@@ -418,7 +421,7 @@ export default function Login() {
               {isRecruiterMode ? "Recruiter Login" : "Log in"}
             </h1>
             <p className="text-gray-600">
-              Enter your email or mobile number to receive an OTP.{" "}
+              Enter your mobile number to receive an OTP.{" "}
               {/* <Link href="/signup" className="hover:underline font-medium" style={{ color: PRIMARY_COLOR }}>
                 Don't have an account? Sign Up
               </Link> */}
@@ -428,11 +431,11 @@ export default function Login() {
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="emailOrMobile">Email address or Mobile number</Label>
+              <Label htmlFor="emailOrMobile">Mobile number</Label>
               <Input
                 id="emailOrMobile"
                 type="text"
-                placeholder="your@email.com or 9876543210"
+                placeholder="9876543210"
                 value={formData.emailOrMobile}
                 onChange={(e) => setFormData({ ...formData, emailOrMobile: e.target.value })}
                   className="h-12 bg-white text-gray-900 border-gray-300 placeholder:text-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
@@ -673,6 +676,67 @@ export default function Login() {
           </div>
         </div>
       </div>
+
+      {/* User not found popup */}
+      <Dialog open={userNotFoundOpen} onOpenChange={setUserNotFoundOpen}>
+        <DialogContent className="sm:max-w-[420px] rounded-2xl border-0 shadow-xl p-0 overflow-hidden">
+          <div className="pt-8 pb-2 px-8 text-center">
+            <div
+              className="mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-5"
+              style={{ backgroundColor: PRIMARY_COLOR_LIGHT }}
+            >
+              {userNotFoundRedirect.startsWith('/freejobposting') ? (
+                <Briefcase className="w-8 h-8" style={{ color: PRIMARY_COLOR }} />
+              ) : (
+                <UserX className="w-8 h-8" style={{ color: PRIMARY_COLOR }} />
+              )}
+            </div>
+            <DialogHeader className="space-y-2">
+              <DialogTitle className="text-xl font-semibold text-gray-900">
+                No Account Detected
+              </DialogTitle>
+              <DialogDescription className="text-base text-gray-600 leading-relaxed">
+                The provided credentials are not linked to any recruiter account. Please proceed with registration to access the portal.
+              </DialogDescription>
+            </DialogHeader>
+          </div>
+          <div className="px-8 pb-8 pt-4 flex flex-col-reverse sm:flex-row gap-3 sm:justify-end">
+            <Button
+              variant="outline"
+              onClick={() => setUserNotFoundOpen(false)}
+              className="rounded-xl border-gray-300 text-gray-700 hover:bg-gray-50 order-2 sm:order-1"
+            >
+              Cancel
+            </Button>
+            <Button
+              className="rounded-xl text-white font-medium hover:opacity-90 transition-opacity order-1 sm:order-2"
+              style={{ backgroundColor: PRIMARY_COLOR }}
+              onClick={() => {
+                setUserNotFoundOpen(false);
+                router.push(userNotFoundRedirect);
+              }}
+            >
+              {userNotFoundRedirect.startsWith('/freejobposting') ? (
+                <>Post a job free <ArrowRight className="w-4 h-4 ml-1.5" /></>
+              ) : (
+                <>Create account <UserPlus className="w-4 h-4 ml-1.5" /></>
+              )}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
+  );
+}
+
+export default function Login() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <Loader2 className="h-8 w-8 animate-spin text-orange-500" />
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
   );
 }
