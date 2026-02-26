@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 import NavbarV2 from "../v2/navbar/navbar.v2";
 import { EARLYJOBS_ORANGE, BORDER_COLOR, TEXT_PRIMARY, ACCENT_COLOR_LIGHT, ACCENT_COLOR_DARK, TEXT_SECONDARY, PRIMARY_COLOR_LIGHT, PRIMARY_COLOR } from "../../../constants/theme";
 import HeaderV2 from "../v2/headerBlack/header.v2";
+import { Search, Briefcase } from "lucide-react";
 interface Job {
   id: string;
   jobId: string;
@@ -104,6 +105,8 @@ const JobsClient = () => {
   const [showTitleInNavbar, setShowTitleInNavbar] = useState(false);
 
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_2_0;
+  const [suggestedJobs, setSuggestedJobs] = useState<Job[]>([]);
+  const [suggestedLoading, setSuggestedLoading] = useState(false);
 
   // Calculate pagination values
   const totalPages = Math.ceil(totalJobs / pageSize);
@@ -143,6 +146,42 @@ const JobsClient = () => {
       tpoId,
     };
   }, [companyName, location, title, searchInput, currentPage, sortBy, category, employmentType, workType, salaryRange, experienceRange, tpoId]);
+
+  // When no jobs found, fetch recent jobs from dashboard to suggest
+  useEffect(() => {
+    if (loading || rawJobsData.length > 0) {
+      setSuggestedJobs([]);
+      return;
+    }
+    let cancelled = false;
+    setSuggestedLoading(true);
+    fetch(`${backendUrl}/dashboard`, { cache: "no-store" })
+      .then((res) => res.json())
+      .then((result: { data?: { recentJobs?: Job[] } }) => {
+        if (cancelled) return;
+        const list = result?.data?.recentJobs;
+        if (Array.isArray(list) && list.length > 0) {
+          const normalized = list.slice(0, 6).map((job: Job) => ({
+            ...job,
+            employmentType: job.employmentType
+              ? job.employmentType.toLowerCase().replace(/\s+/g, "-")
+              : undefined,
+          }));
+          setSuggestedJobs(normalized);
+        } else {
+          setSuggestedJobs([]);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setSuggestedJobs([]);
+      })
+      .finally(() => {
+        if (!cancelled) setSuggestedLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [loading, rawJobsData.length, backendUrl]);
 
   console.log("Jobs component mounted, backendUrl:", backendUrl);
 
@@ -352,8 +391,8 @@ const JobsClient = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleJobClick = async (jobId: string) => {
-    const job = jobsData.find((j) => j.jobId === jobId);
+  const handleJobClick = async (jobId: string, jobOverride?: Job) => {
+    const job = jobOverride ?? jobsData.find((j) => j.jobId === jobId);
     const jobTitle = job?.title?.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "") || "job";
     const location = job?.location?.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "") || "location";
 
@@ -599,8 +638,56 @@ const JobsClient = () => {
                   )}
                 </>
               ) : (
-                <div className="text-center py-8">
-                  <p className="text-gray-600">No jobs found. Try adjusting your filters.</p>
+                <div className="py-10 px-4 sm:px-6">
+                  <div className="max-w-md mx-auto text-center rounded-xl border border-gray-200/60 bg-gray-50/80 py-6 px-5 sm:py-8 sm:px-6">
+                    <div
+                      className="mx-auto w-12 h-12 rounded-full flex items-center justify-center mb-4"
+                      style={{ backgroundColor: PRIMARY_COLOR_LIGHT }}
+                    >
+                      <Search className="w-6 h-6" style={{ color: EARLYJOBS_ORANGE }} strokeWidth={1.8} />
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-1.5">No matching jobs right now</h3>
+                    <p className="text-gray-600 text-sm leading-relaxed">
+                      We couldn’t find any jobs matching your criteria. Try broadening your search or filters—or check out some recent openings below.
+                    </p>
+                  </div>
+                  {suggestedLoading ? (
+                    <div className="mt-8 flex items-center justify-center gap-2 text-gray-500">
+                      <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+                      <span className="text-sm">Loading suggestions…</span>
+                    </div>
+                  ) : suggestedJobs.length > 0 ? (
+                    <div className="mt-10 text-left">
+                      <div className="flex items-center gap-2 mb-5">
+                        <Briefcase className="w-5 h-5 text-gray-500" />
+                        <h3 className="text-lg font-semibold text-gray-900">Suggested for you</h3>
+                      </div>
+                      <p className="text-sm text-gray-500 mb-5">Recent openings you might like</p>
+                      <div className="space-y-4">
+                        {suggestedJobs.map((job) => (
+                          <div key={job.id || job.jobId} className="animate-fade-in-up">
+                            <JobCard
+                              company={job.companyName}
+                              brandName={job.brandName}
+                              logo={job.companyLogoUrl}
+                              title={job.title || "Job Title Not Available"}
+                              employmentType={job.employmentType || "Full Time"}
+                              workType={job.workType}
+                              noOfOpenings={job.noOfOpenings || 0}
+                              min_salary={job.minSalary != null ? String(job.minSalary) : undefined}
+                              max_salary={job.maxSalary != null ? String(job.maxSalary) : undefined}
+                              min_experience={job.minExperience != null ? String(job.minExperience) : undefined}
+                              max_experience={job.maxExperience != null ? String(job.maxExperience) : undefined}
+                              salary_mode="yearly"
+                              location={job.location || "Location Not Specified"}
+                              postedTime={job.createdAt || "Not Disclosed"}
+                              onJobClick={() => handleJobClick(job.jobId, job)}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
                 </div>
               )}
             </div>
