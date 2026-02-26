@@ -58,7 +58,7 @@ const clientLogos = [
 
 
 
-const HERO_SPECIAL_LOCATIONS = ["All Locations", "Remote"] as const;
+const HERO_SPECIAL_LOCATIONS = ["Remote"] as const;
 
 const HeroV2 = ({ data }: { data: any }) => {
     const router = useRouter();

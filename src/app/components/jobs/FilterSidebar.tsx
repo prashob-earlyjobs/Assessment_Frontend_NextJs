@@ -90,7 +90,7 @@ const FilterSidebar = ({
   const [locationOpen, setLocationOpen] = useState(false);
   const [indianCities, setIndianCities] = useState<string[]>([]);
 
-  const FILTER_SPECIAL_LOCATIONS = ["All Locations", "Remote"] as const;
+  const FILTER_SPECIAL_LOCATIONS = ["Remote"] as const;
   const allLocationOptions = useMemo(
     () => [...FILTER_SPECIAL_LOCATIONS, ...indianCities],
     [indianCities]
