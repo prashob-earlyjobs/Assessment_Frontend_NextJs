@@ -16,6 +16,8 @@ import { sendOtptoMobile, verifyOtpMobile, isUserLoggedIn, sendOtpToRecruiter, v
 import axiosInstance from "../components/services/apiinterseptor";
 import { useUser } from "@/app/context";
 
+const BACKEND_URL_2_0 = process.env.NEXT_PUBLIC_BACKEND_URL_2_0 || "http://localhost:5001/api";
+
 function LoginContent() {
   const router = useRouter();
   const pathname = usePathname();
@@ -26,6 +28,13 @@ function LoginContent() {
   const mode = searchParams.get("mode") || "candidate";
   const isRecruiterMode = mode === "recruiter";
   const [isLoading, setIsLoading] = useState(false);
+  const [dashboardData, setDashboardData] = useState<{
+    candidates?: number;
+    companies?: number;
+    totalVacancies?: number;
+    jobCount?: number;
+    totalRecruiters?: number;
+  } | null>(null);
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
   const [isVerifying, setIsVerifying] = useState(false);
@@ -71,6 +80,20 @@ function LoginContent() {
       checkUserLoggedIn();
     }
   }, [router, pathname, setUserCredentials, userCredentials]);
+
+  // Fetch dashboard stats for right panel
+  useEffect(() => {
+    const fetchDashboard = async () => {
+      try {
+        const response = await fetch(`${BACKEND_URL_2_0}/dashboard`, { cache: "no-store" });
+        const result = await response.json();
+        if (response.ok && result?.data) setDashboardData(result.data);
+      } catch {
+        // keep null, use fallback numbers
+      }
+    };
+    fetchDashboard();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -647,30 +670,36 @@ function LoginContent() {
         {/* Content */}
         <div className="relative z-10 flex flex-col justify-center items-start p-12 text-white">
           <h2 className="text-4xl font-bold mb-6 leading-tight">
-            Over 1,75,324 candidates waiting for good employees.
+            Over {(dashboardData?.candidates ?? 175324).toLocaleString("en-IN")} candidates waiting for good employees.
           </h2>
 
-          {/* Statistics */}
+          {/* Statistics - from dashboard API */}
           <div className="grid grid-cols-3 gap-8 mt-8">
             <div className="flex flex-col items-start">
               <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mb-3">
                 <Briefcase className="w-6 h-6" />
               </div>
-              <div className="text-3xl font-bold">1,75,324</div>
+              <div className="text-3xl font-bold">
+                {(dashboardData?.totalVacancies ?? 175324).toLocaleString("en-IN")}
+              </div>
               <div className="text-sm mt-1" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>Live Jobs</div>
             </div>
             <div className="flex flex-col items-start">
               <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mb-3">
                 <Building className="w-6 h-6" />
               </div>
-              <div className="text-3xl font-bold">97,354</div>
+              <div className="text-3xl font-bold">
+                {(dashboardData?.companies ?? 9734).toLocaleString("en-IN")}
+              </div>
               <div className="text-sm mt-1" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>Companies</div>
             </div>
             <div className="flex flex-col items-start">
               <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mb-3">
                 <Briefcase className="w-6 h-6" />
               </div>
-              <div className="text-3xl font-bold">7,532</div>
+              <div className="text-3xl font-bold">
+                {(dashboardData?.jobCount ?? 7532).toLocaleString("en-IN")}
+              </div>
               <div className="text-sm mt-1" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>New Jobs</div>
             </div>
           </div>
