@@ -21,8 +21,8 @@ import {
 } from "../components/ui/alert-dialog";
 import { toast } from "sonner";
 import { userLogout } from "../components/services/servicesapis";
-import Navbar from "../components/pages/navbar";
 import Head from "next/head";
+import NavbarV2 from "../components/v2/navbar/navbar.v2";
 
 const ResumePage = () => {
   const router = useRouter();
@@ -104,10 +104,10 @@ const ResumePage = () => {
 
   return (
     <>
-      
+
       <div className="min-h-screen bg-white">
-        <Navbar />
-        <header className="flex items-center justify-between px-4 py-3 lg:px-12 bg-white/80 backdrop-blur-sm md:sticky md:top-0 z-40 shadow-sm">
+        <NavbarV2 />
+        {/* <header className="flex items-center justify-between px-4 py-3 lg:px-12 bg-white/80 backdrop-blur-sm md:sticky md:top-0 z-40 shadow-sm">
           <div className="flex items-center space-x-2">
             <img
               src="/images/logo.png"
@@ -216,9 +216,9 @@ const ResumePage = () => {
               </Button>
             )}
           </div>
-        </header>
+        </header> */}
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu
         {isMobileMenuOpen && (
           <div className="md:hidden bg-white/95 backdrop-blur-sm shadow-lg z-50 px-4 py-4 border-b border-orange-100">
             <div className="flex flex-col space-y-2">
@@ -261,13 +261,13 @@ const ResumePage = () => {
               >
                 Colleges
               </Button>
-               <Button
-              variant="ghost"
-              className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
-              onClick={() => handleMobileMenuItemClick("/recruiter")}
-            >
-              Recruiter
-            </Button>
+              <Button
+                variant="ghost"
+                className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
+                onClick={() => handleMobileMenuItemClick("/recruiter")}
+              >
+                Recruiter
+              </Button>
               <Button
                 variant="ghost"
                 className="w-full text-left justify-start text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-300"
@@ -301,7 +301,7 @@ const ResumePage = () => {
               )}
             </div>
           </div>
-        )}
+        )} */}
 
         <div className="md:hidden sticky top-0 z-50 px-4 pt-2 bg-background">
           <ToggleGroup
@@ -346,7 +346,7 @@ const ResumePage = () => {
           </ToggleGroup>
         </div>
 
-        <main>
+        <main className="pt-28">
           <div className="animate-in fade-in duration-300">
             <AIResume />
           </div>

@@ -3,19 +3,14 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import Header from "../layout/Header";
 import FilterSidebar from "./FilterSidebar";
-import JobCard from "./JobCard";
-import Sidebar from "./Sidebar";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import JobCard from "../v2/jobCard/jobCard";
 import { Button } from "../ui/button";
 import Footer from "../pages/footer";
 import Cookies from "js-cookie";
-
+import NavbarV2 from "../v2/navbar/navbar.v2";
+import { EARLYJOBS_ORANGE, BORDER_COLOR, TEXT_PRIMARY, ACCENT_COLOR_LIGHT, ACCENT_COLOR_DARK, TEXT_SECONDARY, PRIMARY_COLOR_LIGHT, PRIMARY_COLOR } from "../../../constants/theme";
+import HeaderV2 from "../v2/headerBlack/header.v2";
+import { Search, Briefcase } from "lucide-react";
 interface Job {
   id: string;
   jobId: string;
@@ -76,9 +71,9 @@ const JobsClient = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  
+
   const [searchInput, setSearchInput] = useState(() => {
-    const savedQuery = Cookies.get("searchQuery") ;
+    const savedQuery = Cookies.get("searchQuery");
     if (savedQuery) {
       Cookies.remove("searchQuery"); // Clear after reading
     }
@@ -105,9 +100,13 @@ const JobsClient = () => {
 
   // Sidebar visibility states for mobile/tablet
   const [isFilterSidebarOpen, setIsFilterSidebarOpen] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // State to track if header is scrolled (to show title in navbar)
+  const [showTitleInNavbar, setShowTitleInNavbar] = useState(false);
 
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_2_0;
+  const [suggestedJobs, setSuggestedJobs] = useState<Job[]>([]);
+  const [suggestedLoading, setSuggestedLoading] = useState(false);
 
   // Calculate pagination values
   const totalPages = Math.ceil(totalJobs / pageSize);
@@ -147,6 +146,42 @@ const JobsClient = () => {
       tpoId,
     };
   }, [companyName, location, title, searchInput, currentPage, sortBy, category, employmentType, workType, salaryRange, experienceRange, tpoId]);
+
+  // When no jobs found, fetch recent jobs from dashboard to suggest
+  useEffect(() => {
+    if (loading || rawJobsData.length > 0) {
+      setSuggestedJobs([]);
+      return;
+    }
+    let cancelled = false;
+    setSuggestedLoading(true);
+    fetch(`${backendUrl}/dashboard`, { cache: "no-store" })
+      .then((res) => res.json())
+      .then((result: { data?: { recentJobs?: Job[] } }) => {
+        if (cancelled) return;
+        const list = result?.data?.recentJobs;
+        if (Array.isArray(list) && list.length > 0) {
+          const normalized = list.slice(0, 6).map((job: Job) => ({
+            ...job,
+            employmentType: job.employmentType
+              ? job.employmentType.toLowerCase().replace(/\s+/g, "-")
+              : undefined,
+          }));
+          setSuggestedJobs(normalized);
+        } else {
+          setSuggestedJobs([]);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setSuggestedJobs([]);
+      })
+      .finally(() => {
+        if (!cancelled) setSuggestedLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [loading, rawJobsData.length, backendUrl]);
 
   console.log("Jobs component mounted, backendUrl:", backendUrl);
 
@@ -197,7 +232,7 @@ const JobsClient = () => {
       params.append("status", "published");
 
       // const url = `${backendUrl}/public/jobs?${params.toString()}`;
-       const url =(tpoId && typeof tpoId === 'string') ? `${backendUrl}/public/jobs/tpo?${params.toString()}` : `${backendUrl}/public/jobs?${params.toString()}`;
+      const url = (tpoId && typeof tpoId === 'string') ? `${backendUrl}/public/jobs/tpo?${params.toString()}` : `${backendUrl}/public/jobs?${params.toString()}`;
 
       const response = await fetch(url);
       console.log("Response received:", response);
@@ -270,18 +305,31 @@ const JobsClient = () => {
     return sortedJobs;
   }, [rawJobsData, sortBy, searchInput]);
 
-  
+
   useEffect(() => {
-    const keywordFromUrl = searchParams.get("search") || ""; // read 'search' param
+    const keywordFromUrl = searchParams.get("search") || ""; // read 'search' param (hero job title)
     const tpoIdFromUrl = searchParams.get("tpoId");
+    const categoryFromUrl = searchParams.get("category");
+    const locationFromUrl = searchParams.get("location");
     const normalizedSearchKeyword = keywordFromUrl
-    .replace(/dot/g, ".")      // "dot" → "."
-    .replace(/-/g, " ");
-    
+      .replace(/dot/g, ".")      // "dot" → "."
+      .replace(/-/g, " ");
+
     if (normalizedSearchKeyword) {
       setSearchInput(normalizedSearchKeyword);
     }
     setTpoId(tpoIdFromUrl);
+    // Apply category from URL (e.g. from Browse Category or hero)
+    if (categoryFromUrl) {
+      const decodedCategory = decodeURIComponent(categoryFromUrl.trim());
+      if (decodedCategory && decodedCategory !== "All Categories") {
+        setCategory([decodedCategory]);
+      }
+    }
+    // Apply location from URL (e.g. from hero search)
+    if (locationFromUrl) {
+      setLocation(decodeURIComponent(locationFromUrl.trim()));
+    }
   }, [searchParams]);
 
 
@@ -326,7 +374,7 @@ const JobsClient = () => {
     return () => clearTimeout(timer);
   }, [companyName, location, title, searchInput, category, employmentType, workType, salaryRange, experienceRange, fetchJobs]);
 
-  
+
   // Fetch when page changes
   const skipFirstPageRef = useRef(true);
   useEffect(() => {
@@ -343,8 +391,8 @@ const JobsClient = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleJobClick = async (jobId: string) => {
-    const job = jobsData.find((j) => j.jobId === jobId);
+  const handleJobClick = async (jobId: string, jobOverride?: Job) => {
+    const job = jobOverride ?? jobsData.find((j) => j.jobId === jobId);
     const jobTitle = job?.title?.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "") || "job";
     const location = job?.location?.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "") || "location";
 
@@ -352,11 +400,11 @@ const JobsClient = () => {
     const experienceMax = job?.maxExperience != null ? String(job.maxExperience) : undefined;
     let experience = undefined;
 
-    if(experienceMin && experienceMax) {
+    if (experienceMin && experienceMax) {
       experience = `${experienceMin}-to-${experienceMax}-years`;
-    } else if(experienceMin) {
+    } else if (experienceMin) {
       experience = `${experienceMin}-years`;
-    } else if(experienceMax) {
+    } else if (experienceMax) {
       experience = `${experienceMax}-years`;
     }
     const expPart = experience ? `-${experience}` : "";
@@ -374,33 +422,12 @@ const JobsClient = () => {
     setIsFilterSidebarOpen(!isFilterSidebarOpen);
   };
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
+    <div className="min-h-screen bg-white">
+      <NavbarV2 pageTitle="Jobs" showPageTitle={showTitleInNavbar} />
+      <HeaderV2 title="Jobs" onScrollStateChange={(isScrolled) => setShowTitleInNavbar(isScrolled)} />
 
-      <div className="max-w-7xl mx-auto p-4 sm:p-6">
-        {/* Mobile/Tablet Toggle Buttons */}
-        <div className="flex justify-between mb-4 lg:hidden">
-          <Button
-            variant="outline"
-            onClick={toggleFilterSidebar}
-            className="flex items-center gap-2 border border-gray-300"
-          >
-            {isFilterSidebarOpen ? "Hide Filters" : "Apply Filters"}
-          </Button>
-          <Button
-            variant="outline"
-            onClick={toggleSidebar}
-            className="flex items-center gap-2 border border-gray-300"
-          >
-            {isSidebarOpen ? "Hide Sidebar" : "Show Sidebar"}
-          </Button>
-        </div>
-
+      <div className="max-w-7xl mx-auto sm:p-6 bg-white">
         <div className="flex flex-col md:flex-row gap-4 md:gap-6">
           {/* Left Sidebar - Filters */}
           <div
@@ -430,101 +457,88 @@ const JobsClient = () => {
 
           {/* Main Content */}
           <div className="flex-1 min-w-0">
-            {/* Results Header */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-              <div className="w-full sm:max-w-md">
-                <div className="relative">
-                  <svg
-                    className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M21 21l-4.34-4.34"
-                    />
-                    <circle cx="11" cy="11" r="8" />
-                  </svg>
-                  <input
-                    type="text"
-                    placeholder="Search jobs by title, company, or keywords..."
-                    value={searchInput}
-                    onChange={(e) => setSearchInput(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        fetchJobs();
-                      }
-                    }}
-                    className="w-full pl-10 pr-24 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-earlyjobs-orange focus:border-transparent"
-                  />
-                  <button
-                    onClick={() => fetchJobs()}
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white px-3 py-1 rounded text-sm flex items-center gap-1 z-10"
-                    style={{ backgroundColor: '#ff6b35' }}
-                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e55a2b'}
-                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ff6b35'}
-                  >
-                    <svg
-                      className="w-3 h-3"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M21 21l-4.34-4.34"
-                      />
-                      <circle cx="11" cy="11" r="8" />
-                    </svg>
-                    Search
-                  </button>
-                </div>
-              </div>
-              <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-full sm:w-48">
-                  <SelectValue placeholder="Sort By" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="latest">Sort By Latest Jobs</SelectItem>
-                  <SelectItem value="relevance">Sort By Relevance</SelectItem>
-                  <SelectItem value="salary">Sort By Salary</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
             {/* Job Cards */}
             <div className="space-y-4">
               {loading ? (
-                <div className="text-center py-8">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-earlyjobs-orange mx-auto"></div>
-                  <p className="mt-4 text-gray-600">Loading jobs...</p>
-                </div>
+                <>
+                  {[...Array(4)].map((_, index) => (
+                    <div
+                      key={index}
+                      className="rounded-lg border border-gray-200/50 bg-white p-6 shadow-sm"
+                      style={{
+                        animationDelay: `${index * 100}ms`,
+                      }}
+                    >
+                      {/* Posted Time Pill Skeleton */}
+                      <div className="mb-4">
+                        <div className="h-5 w-20 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded-full bg-[length:200%_100%] animate-shimmer"></div>
+                      </div>
+
+                      {/* Top Section Skeleton */}
+                      <div className="flex items-start justify-between gap-4 mb-4">
+                        <div className="flex items-start gap-4 flex-1">
+                          {/* Logo Skeleton */}
+                          <div className="w-12 h-12 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded bg-[length:200%_100%] animate-shimmer"></div>
+                          <div className="flex-1 space-y-2">
+                            {/* Title Skeleton */}
+                            <div className="h-6 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded w-3/4 bg-[length:200%_100%] animate-shimmer"></div>
+                            {/* Company Skeleton */}
+                            <div className="h-4 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded w-1/2 bg-[length:200%_100%] animate-shimmer"></div>
+                          </div>
+                        </div>
+                        {/* Bookmark Skeleton */}
+                        <div className="w-6 h-6 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded bg-[length:200%_100%] animate-shimmer"></div>
+                      </div>
+
+                      {/* Job Details Skeleton */}
+                      <div className="space-y-3">
+                        {/* Icons and Text Row */}
+                        <div className="flex flex-wrap gap-4">
+                          {[...Array(4)].map((_, i) => (
+                            <div key={i} className="flex items-center gap-1">
+                              <div className="w-3 h-3 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded bg-[length:200%_100%] animate-shimmer"></div>
+                              <div className="h-4 w-16 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded bg-[length:200%_100%] animate-shimmer"></div>
+                            </div>
+                          ))}
+                        </div>
+                        {/* Badges Skeleton */}
+                        <div className="flex gap-2">
+                          {[...Array(2)].map((_, i) => (
+                            <div key={i} className="h-6 w-16 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded-full bg-[length:200%_100%] animate-shimmer"></div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </>
               ) : jobsData.length > 0 ? (
                 <>
-                  {jobsData.map((job) => (
-                    <JobCard
+                  {jobsData.map((job, index) => (
+                    <div
                       key={job.id}
-                      company={job.companyName}
-                      brandName={job.brandName}
-                      logo={job.companyLogoUrl}
-                      title={job.title || "Job Title Not Available"}
-                      employmentType={job.employmentType || "Full Time"}
-                      workType={job.workType}
-                      noOfOpenings={job.noOfOpenings || 0}
-                      min_salary={job.minSalary ? String(job.minSalary) : undefined}
-                      max_salary={job.maxSalary ? String(job.maxSalary) : undefined}
-                      min_experience={job.minExperience != null ? String(job.minExperience) : undefined}
-                      max_experience={job.maxExperience != null ? String(job.maxExperience) : undefined}
-                      salary_mode="yearly"
-                      location={job.location || "Location Not Specified"}
-                      postedTime={job.createdAt || "Not Disclosed"}
-                      onJobClick={() => handleJobClick(job.jobId)}
-                    />
+                      className="animate-fade-in-up"
+                      style={{
+                        animationDelay: `${index * 50}ms`,
+                      }}
+                    >
+                      <JobCard
+                        company={job.companyName}
+                        brandName={job.brandName}
+                        logo={job.companyLogoUrl}
+                        title={job.title || "Job Title Not Available"}
+                        employmentType={job.employmentType || "Full Time"}
+                        workType={job.workType}
+                        noOfOpenings={job.noOfOpenings || 0}
+                        min_salary={job.minSalary ? String(job.minSalary) : undefined}
+                        max_salary={job.maxSalary ? String(job.maxSalary) : undefined}
+                        min_experience={job.minExperience != null ? String(job.minExperience) : undefined}
+                        max_experience={job.maxExperience != null ? String(job.maxExperience) : undefined}
+                        salary_mode="yearly"
+                        location={job.location || "Location Not Specified"}
+                        postedTime={job.createdAt || "Not Disclosed"}
+                        onJobClick={() => handleJobClick(job.jobId)}
+                      />
+                    </div>
                   ))}
 
                   {/* Pagination Controls */}
@@ -535,7 +549,11 @@ const JobsClient = () => {
                         size="sm"
                         onClick={() => handlePageChange(currentPage - 1)}
                         disabled={currentPage === 1}
-                        className="flex items-center gap-1"
+                        className="flex items-center gap-1 border-2 font-medium"
+                        style={{
+                          borderColor: BORDER_COLOR,
+                          color: TEXT_PRIMARY,
+                        }}
                       >
                         <svg
                           className="w-4 h-4"
@@ -572,7 +590,17 @@ const JobsClient = () => {
                               variant={currentPage === pageNum ? "default" : "outline"}
                               size="sm"
                               onClick={() => handlePageChange(pageNum)}
-                              className="w-8 h-8 p-0"
+                              className={`w-8 h-8 p-0 font-medium ${currentPage === pageNum
+                                ? "text-white border-2"
+                                : "border-2 text-gray-700 hover:bg-gray-50"
+                                }`}
+                              style={currentPage === pageNum ? {
+                                backgroundColor: EARLYJOBS_ORANGE,
+                                borderColor: EARLYJOBS_ORANGE,
+                              } : {
+                                borderColor: BORDER_COLOR,
+                                color: TEXT_PRIMARY,
+                              }}
                             >
                               {pageNum}
                             </Button>
@@ -585,7 +613,11 @@ const JobsClient = () => {
                         size="sm"
                         onClick={() => handlePageChange(currentPage + 1)}
                         disabled={currentPage === totalPages}
-                        className="flex items-center gap-1"
+                        className="flex items-center gap-1 border-2 font-medium"
+                        style={{
+                          borderColor: BORDER_COLOR,
+                          color: TEXT_PRIMARY,
+                        }}
                       >
                         Next
                         <svg
@@ -606,18 +638,59 @@ const JobsClient = () => {
                   )}
                 </>
               ) : (
-                <div className="text-center py-8">
-                  <p className="text-gray-600">No jobs found. Try adjusting your filters.</p>
+                <div className="py-10 px-4 sm:px-6">
+                  <div className="max-w-md mx-auto text-center rounded-xl border border-gray-200/60 bg-gray-50/80 py-6 px-5 sm:py-8 sm:px-6">
+                    <div
+                      className="mx-auto w-12 h-12 rounded-full flex items-center justify-center mb-4"
+                      style={{ backgroundColor: PRIMARY_COLOR_LIGHT }}
+                    >
+                      <Search className="w-6 h-6" style={{ color: EARLYJOBS_ORANGE }} strokeWidth={1.8} />
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-1.5">No matching jobs right now</h3>
+                    <p className="text-gray-600 text-sm leading-relaxed">
+                      We couldn’t find any jobs matching your criteria. Try broadening your search or filters—or check out some recent openings below.
+                    </p>
+                  </div>
+                  {suggestedLoading ? (
+                    <div className="mt-8 flex items-center justify-center gap-2 text-gray-500">
+                      <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+                      <span className="text-sm">Loading suggestions…</span>
+                    </div>
+                  ) : suggestedJobs.length > 0 ? (
+                    <div className="mt-10 text-left">
+                      <div className="flex items-center gap-2 mb-5">
+                        <Briefcase className="w-5 h-5 text-gray-500" />
+                        <h3 className="text-lg font-semibold text-gray-900">Suggested for you</h3>
+                      </div>
+                      <p className="text-sm text-gray-500 mb-5">Recent openings you might like</p>
+                      <div className="space-y-4">
+                        {suggestedJobs.map((job) => (
+                          <div key={job.id || job.jobId} className="animate-fade-in-up">
+                            <JobCard
+                              company={job.companyName}
+                              brandName={job.brandName}
+                              logo={job.companyLogoUrl}
+                              title={job.title || "Job Title Not Available"}
+                              employmentType={job.employmentType || "Full Time"}
+                              workType={job.workType}
+                              noOfOpenings={job.noOfOpenings || 0}
+                              min_salary={job.minSalary != null ? String(job.minSalary) : undefined}
+                              max_salary={job.maxSalary != null ? String(job.maxSalary) : undefined}
+                              min_experience={job.minExperience != null ? String(job.minExperience) : undefined}
+                              max_experience={job.maxExperience != null ? String(job.maxExperience) : undefined}
+                              salary_mode="yearly"
+                              location={job.location || "Location Not Specified"}
+                              postedTime={job.createdAt || "Not Disclosed"}
+                              onJobClick={() => handleJobClick(job.jobId, job)}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
                 </div>
               )}
             </div>
-          </div>
-
-          {/* Right Sidebar */}
-          <div
-            className={`w-full md:w-64 space-y-6 ${isSidebarOpen ? "block" : "hidden md:block"}`}
-          >
-            <Sidebar />
           </div>
         </div>
       </div>

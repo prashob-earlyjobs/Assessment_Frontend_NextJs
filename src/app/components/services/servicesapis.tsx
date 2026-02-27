@@ -1,5 +1,6 @@
 import Cookies from "js-cookie";
 import axiosInstance from "./apiinterseptor";
+import axios from "axios";
 import { toast } from "sonner";
 
 export const userLogin = async ({
@@ -86,6 +87,58 @@ export const verifyOtpMobile = async ({ phoneNumber, email, otp, toLogin = false
     return response.data;
   } catch (error) {
     return error;
+  }
+};
+
+// Recruiter Portal APIs
+export const sendOtpToRecruiter = async ({ phoneNumber}) => {
+
+  const emailorphone = phoneNumber;
+  console.log("phoneNumber", emailorphone, "email");
+  try {
+    // Use portal API endpoint
+    const portalBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL_2_0 || 'http://localhost:5001/api';
+    const response = await axios.post(`${portalBaseURL}/users/send-otp`, {
+      emailorphone,
+
+    });
+
+    return {
+      success: true,
+      data: response.data,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message: error.response?.data?.message || "Error sending OTP",
+      statusCode: error.response?.status,
+      data: error.response?.data,
+    };
+  }
+};
+
+export const verifyOtpRecruiter = async ({ phoneNumber, email, otp }) => {
+  const emailorphone = phoneNumber;
+  try {
+    // Use portal API endpoint
+    const portalBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL_2_0 || 'http://localhost:5001/api';
+    const response = await axios.post(`${portalBaseURL}/auth/portal/login-otp`, {
+      emailorphone,
+
+      otp,
+    });
+
+    return {
+      success: true,
+      data: response.data,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message: error.response?.data?.message || "Error verifying OTP",
+      statusCode: error.response?.status,
+      data: error.response?.data,
+    };
   }
 };
 

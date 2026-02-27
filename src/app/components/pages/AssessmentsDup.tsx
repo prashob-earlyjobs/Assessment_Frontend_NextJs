@@ -96,7 +96,7 @@ export default function Assessments() {
             name: "Paulami",
             role: "Geography Student",
             rating: 5,
-            text: "The AI Assessment was really easy to use and quite relevant to my field — especially the GIS-related questions. The feedback helped me identify my weak areas and understand where to improve. Overall, it was a great experience, and I’d definitely recommend it to other students preparing for interviews!"
+            text: "The AI Assessment was easy and relevant, especially the GIS questions. The feedback highlighted my weak areas clearly. Great experience overall"
         },
         {
             name: "Aishwarya",
@@ -303,7 +303,7 @@ export default function Assessments() {
             </section>
 
             {/* Features Section */}
-            <FeaturesCarousel/>
+            <FeaturesCarousel />
 
             {/* Popular Courses Section */}
             <section className="py-8 sm:py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">

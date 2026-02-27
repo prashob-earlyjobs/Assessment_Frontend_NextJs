@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import Navbar from "../pages/navbar";
 import { toast } from "sonner";
 import Link from "next/link";
-
+import NavbarV2 from "../v2/navbar/navbar.v2";
 const useScrollAnimation = () => {
   const ref = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -211,8 +211,8 @@ export default function TalentPoolClient() {
           font-weight: bold;
         }
       `}</style>
-      <Navbar />
-      <nav className={`sticky top-0 w-full bg-white/80 backdrop-blur-lg border-b border-gray-100 z-50 py-3`}>
+      <NavbarV2 />
+      {/* <nav className={`sticky top-0 w-full bg-white/80 backdrop-blur-lg border-b border-gray-100 z-50 py-3`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div onClick={() => router.push("/")} className="flex items-center">
@@ -290,19 +290,19 @@ export default function TalentPoolClient() {
                 onClick={() => handleMobileMenuItemClick("/talent-pool")}
               >
                 Talent Pool
+              </Button> */}
+      {/* 
+              <Button
+                className="w-full text-left justify-start bg-orange-700 hover:bg-orange-600 text-white rounded-xl py-3 px-4 shadow-lg hover:shadow-xl transition-all duration-300"
+                onClick={() => {
+                  router.push("/jointalentpool/public/68c42a766d9630692f685496");
+
+                }}
+              >
+                <LogIn className="h-5 h-5 mr-2" />
+                Register
               </Button>
-              
-                <Button
-                  className="w-full text-left justify-start bg-orange-700 hover:bg-orange-600 text-white rounded-xl py-3 px-4 shadow-lg hover:shadow-xl transition-all duration-300"
-                  onClick={() => {
-                    router.push("/jointalentpool/public/68c42a766d9630692f685496");
-                    
-                  }}
-                >
-                  <LogIn className="h-5 h-5 mr-2" />
-                  Register
-                </Button>
-             
+
             </div>
           </div>
         )}
@@ -343,9 +343,9 @@ export default function TalentPoolClient() {
             </div>
           </div>
         )}
-      </nav>
+      </nav> */}
 
-      <section className="pt-20 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden min-h-screen bg-gradient-to-b from-white via-orange-100/90 to-orange-50/40">
+      <section className="pt-32 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden min-h-screen bg-gradient-to-b from-white via-orange-100/90 to-orange-50/40">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="animate-fade-in">
