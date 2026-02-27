@@ -206,17 +206,17 @@ const PromoBannerV2 = () => {
           ]}
           className="w-full"
         >
-          <CarouselContent className="h-[500px]">
+          <CarouselContent className="min-h-[680px] sm:min-h-[600px] md:min-h-[500px] lg:h-[550px] xl:h-[500px]">
             {banners.map((banner) => (
               <CarouselItem key={banner.id} className="h-full">
                 <div className={`relative overflow-hidden rounded-2xl ${banner.bgClass} shadow-lg h-full`}>
                   <div className="grid grid-cols-1 md:grid-cols-2 h-full min-h-[400px]">
                     {/* Left side - Text content */}
-                    <div className={`p-8 sm:p-10 md:p-12 lg:p-16 flex flex-col justify-start ${banner.textClass} ${banner.id % 2 === 0 ? "md:order-2" : "md:order-1"}`}>
-                      <h3 className="text-3xl sm:text-2xl lg:text-3xl font-bold leading-tight mb-4">
+                    <div className={`p-6 md:p-8 lg:p-12 xl:p-16 flex flex-col justify-center ${banner.textClass} ${banner.id % 2 === 0 ? "md:order-2" : "md:order-1"}`}>
+                      <h3 className="text-xl md:text-2xl lg:text-2xl xl:text-3xl font-bold leading-tight mb-3 md:mb-4">
                         {banner.title}
                       </h3>
-                      <div className={`text-sm sm:text-base mb-8 max-w-lg ${banner.subTextClass}`}>
+                      <div className={`text-[12px] md:text-[13.5px] lg:text-base mb-4 sm:mb-6 md:mb-8 max-w-lg ${banner.subTextClass}`}>
                         {Array.isArray(banner.description) ? (
                           banner.description.map((line, index) => (
                             <p key={index} className="mb-1">{line}</p>
@@ -234,7 +234,7 @@ const PromoBannerV2 = () => {
                     </div>
 
                     {/* Right side - People image */}
-                    <div className={`relative h-64 md:h-full min-h-[300px] ${banner.id % 2 === 0 ? "md:order-1" : "md:order-2"}`}>
+                    <div className={`relative h-48 sm:h-56 md:h-full min-h-[250px] md:min-h-0 ${banner.id % 2 === 0 ? "md:order-1" : "md:order-2"}`}>
                       <Image
                         src={banner.image}
                         alt="Banner Image"
