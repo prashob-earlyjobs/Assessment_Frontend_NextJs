@@ -164,7 +164,7 @@ const PromoBannerV2 = () => {
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-orange-500 leading-tight mb-4">
               Who We Are</h2>
             <h3 className="text-1xl sm:text-2xl lg:text-3xl font-bold text-gray-900 leading-tight mb-4">EarlyJobs: From Women's Empowerment to Nationalwide Hiring</h3>
-            <p className="text-base text-gray-600 leading-relaxed mb-6 line-clamp-8 text-left w-full">
+            <p className="text-base text-gray-600 leading-relaxed mb-6 text-left w-full">
               EarlyJobs is a tech-enabled recruitment ecosystem transforming how India hires. We empower women recruiters to restart and grow their careers through flexible, remote opportunities, while helping companies access high-quality talent beyond metro cities. By combining decentralized recruiter networks, AI-powered matching, and structured campus-to-corporate programs, we bridge the gap between employers and emerging talent across Tier 2 and Tier 3 India. Whether you’re a job seeker looking for the right opportunity or a company aiming to hire fast in bulk, EarlyJobs is your ultimate partner. EarlyJobs – where talent meets opportunity, fast.
             </p>
             <button
@@ -181,9 +181,9 @@ const PromoBannerV2 = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
           {[
             { label: "Interviews Conducted", value: "35000+" },
+            { label: "Total Selections", value: "8000+" },
             { label: "Successful Placements", value: "2700+" },
             { label: "Companies", value: "200+" },
-            { label: "Freelance Recruiters", value: "400+" },
             { label: "Colleges", value: "200+" },
             { label: "Expanding Hiring Access", value: "22+ Districts" }
           ].map((stat, index) => (

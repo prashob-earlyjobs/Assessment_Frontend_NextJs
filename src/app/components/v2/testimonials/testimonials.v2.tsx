@@ -133,6 +133,8 @@ const TestimonialsV2 = () => {
             plugins={[
               Autoplay({
                 delay: 4000,
+                stopOnInteraction: false,
+                stopOnMouseEnter: false,
               }),
             ]}
             className="w-full"

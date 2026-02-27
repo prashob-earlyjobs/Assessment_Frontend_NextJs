@@ -7,6 +7,7 @@ import { UserProvider } from "./context";
 import QueryProvider from "./components/client/client";
 import ScrollToTop from "./ScrolltoTop";
 import Script from "next/script";
+import LeadsPopup from "./components/v2/LeadsPopup/LeadsPopup";
 
 export const metadata = {
   title: "EarlyJobs – Fast Growing Platform for Jobs, Recruiters & Colleges",
@@ -16,13 +17,13 @@ export const metadata = {
     description: "Discover your career potential with EarlyJobs – AI-powered skill assessments, resume builder & job matching. Find your perfect role today.",
     images: [
       {
-        url: "/images/company_logo.jpg", 
+        url: "/images/company_logo.jpg",
         width: 1200,
         height: 630,
         alt: "EarlyJobs Open Graph Image",
       },
     ],
-    url: "https://www.earlyjobs.ai", 
+    url: "https://www.earlyjobs.ai",
     type: "website",
   },
 };
@@ -44,7 +45,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           }}
         />
         {/* End Google Tag Manager */}
-        
+
         {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe
@@ -55,14 +56,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           />
         </noscript>
         {/* End Google Tag Manager (noscript) */}
-        
-        <ScrollToTop/>
+
+        <ScrollToTop />
         <QueryProvider>
           <TooltipProvider>
             <Toaster />
             <Sonner />
             <AdminProvider>
               <UserProvider>
+                <LeadsPopup />
                 {children}
               </UserProvider>
             </AdminProvider>
