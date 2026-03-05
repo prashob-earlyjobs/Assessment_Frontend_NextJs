@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { Button } from "../ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { Menu, X, ChevronLeft, ChevronRight, Search, Filter, Star, Award, Briefcase, MapPin, TrendingUp } from "lucide-react";
 import Footer from "./footer";
@@ -13,6 +13,9 @@ import axiosInstance from "../services/apiinterseptor";
 import NavbarV2 from "../v2/navbar/navbar.v2";
 
 export default function BrowseCandidatesClient() {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [scoreFilter, setScoreFilter] = useState("");
@@ -20,11 +23,18 @@ export default function BrowseCandidatesClient() {
   const [candidates, setCandidates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [showLimitModal, setShowLimitModal] = useState(false);
   const [itemsPerPage] = useState(12);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCandidates, setTotalCandidates] = useState(0);
   const router = useRouter();
+  const didMountRef = useRef(false);
+
+  // Derive current page from URL so back/forward navigation always restores it
+  const currentPage = useMemo(() => {
+    const pageFromUrl = Number(searchParams.get("page") || "1");
+    return Number.isNaN(pageFromUrl) || pageFromUrl < 1 ? 1 : pageFromUrl;
+  }, [searchParams]);
 
   // Debounce search input before calling API (prevents request on every keystroke)
   useEffect(() => {
@@ -33,6 +43,22 @@ export default function BrowseCandidatesClient() {
     }, 400);
     return () => clearTimeout(t);
   }, [searchTerm]);
+
+  // When filters/search change, go back to page 1 (but don't override initial URL-based page on first mount)
+  useEffect(() => {
+    if (!didMountRef.current) {
+      didMountRef.current = true;
+      return;
+    }
+
+    // Only reset to page 1 if we're not already on page 1
+    if (currentPage !== 1) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete("page");
+      const nextUrl = params.toString() ? `${pathname}?${params.toString()}` : pathname;
+      router.push(nextUrl, { scroll: false });
+    }
+  }, [debouncedSearchTerm, scoreFilter, currentPage, pathname, router, searchParams]);
 
   useEffect(() => {
     const fetchCandidates = async () => {
@@ -114,11 +140,6 @@ export default function BrowseCandidatesClient() {
  
     fetchCandidates();
   }, [currentPage, itemsPerPage, scoreFilter, debouncedSearchTerm]);
-
-  // Reset to page 1 when search term or score filter changes
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [debouncedSearchTerm, scoreFilter]);
 
   const scrollToSection = (sectionId) => {
     const section = document.getElementById(sectionId);
@@ -227,8 +248,24 @@ export default function BrowseCandidatesClient() {
   const filteredCandidates = useMemo(() => candidates, [candidates]);
 
   const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Block access to page 3 or higher and show popup
+    if (newPage >= 3) {
+      setShowLimitModal(true);
+      return;
+    }
+
+    // Update the URL so that browser back/forward preserves the page
+    const params = new URLSearchParams(searchParams.toString());
+    if (newPage > 1) {
+      params.set("page", String(newPage));
+    } else {
+      params.delete("page");
+    }
+
+    const nextUrl = params.toString() ? `${pathname}?${params.toString()}` : pathname;
+    router.push(nextUrl, { scroll: false });
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   // Calculate display values
@@ -707,6 +744,51 @@ export default function BrowseCandidatesClient() {
         </div>
       </div>
       <Footer />
+
+      {showLimitModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white max-w-md w-full mx-4 rounded-2xl shadow-2xl border border-orange-100 p-6 sm:p-8 relative transform animate-scale-in">
+            <button
+              onClick={() => setShowLimitModal(false)}
+              className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 transition-colors"
+              aria-label="Close"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="h-10 w-10 rounded-full bg-orange-100 flex items-center justify-center">
+                <TrendingUp className="w-5 h-5 text-orange-600" />
+              </div>
+              <h2 className="text-xl font-bold text-gray-900">
+                Want to browse more candidates?
+              </h2>
+            </div>
+            <p className="text-sm sm:text-base text-gray-600 mb-6">
+              You&apos;re currently viewing a limited set of profiles. To unlock full access and
+              browse more candidates, please connect with our team.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 sm:justify-end">
+              <Button
+                variant="outline"
+                className="border-gray-200 hover:bg-gray-50"
+                onClick={() => setShowLimitModal(false)}
+              >
+                Close
+              </Button>
+              <Button
+                className="relative overflow-hidden bg-orange-500 hover:bg-orange-600 text-white font-semibold transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
+                onClick={() => {
+                  setShowLimitModal(false);
+                  router.push("/contact-us");
+                }}
+              >
+                <span className="relative z-10">Contact Us</span>
+                <span className="pointer-events-none absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
