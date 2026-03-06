@@ -838,6 +838,12 @@ const CandidateProfile = () => {
       : []) ||
     [];
 
+  const createdAt =
+    candidateDetails?.createdAt ||
+    selectedCandidate?.createdAt ||
+    selectedCandidate?.assessment?.createdAt ||
+    null;
+
   const normalizePoints = (value: any): string[] => {
     if (!value) return [];
     if (Array.isArray(value)) return value.filter(Boolean).map((v) => String(v));
@@ -932,19 +938,32 @@ const CandidateProfile = () => {
                           {displayName}
                         </h1>
                         <div className="space-y-1">
-                          {displayEmail && (
-                            <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
-                              <span className="font-semibold text-gray-800">Email:</span> {displayEmail?.replace(/(.{2}).+(@.+)/, "$1****$2")}
-                            </p>
-                          )}
-                          {displayPhone && (
-                            <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
-                              <span className="font-semibold text-gray-800">Phone:</span> {displayPhone?.replace(/\d(?=\d{4})/g, "*")}
-                            </p>
+                          {(displayEmail || displayPhone) && (
+                            <div className="flex flex-wrap items-center gap-x-6 gap-y-1 text-gray-600 text-sm sm:text-base leading-relaxed">
+                              {displayEmail && (
+                                <span>
+                                  <span className="font-semibold text-gray-800">Email:</span>{" "}
+                                  {displayEmail?.replace(/(.{2}).+(@.+)/, "$1****$2")}
+                                </span>
+                              )}
+                              {displayPhone && (
+                                <span>
+                                  <span className="font-semibold text-gray-800">Phone:</span>{" "}
+                                  {displayPhone?.replace(/\d(?=\d{4})/g, "*")}
+                                </span>
+                              )}
+                            </div>
                           )}
                           {assessmentRole && (
                             <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
-                              <span className="font-semibold text-gray-800">Assessment Role:</span> {assessmentRole}
+                              <span className="font-semibold text-gray-800">Assessment Role:</span>{" "}
+                              {assessmentRole}
+                            </p>
+                          )}
+                          {createdAt && (
+                            <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
+                              <span className="font-semibold text-gray-800">Created At:</span>{" "}
+                              {new Date(createdAt).toLocaleDateString()}
                             </p>
                           )}
                           {skills.length > 0 && (
@@ -968,9 +987,7 @@ const CandidateProfile = () => {
                       </div>
                     </div>
                     <button
-                      onClick={() =>
-                        router.push("/browse-interviewed-candidates")
-                      }
+                      onClick={() => router.back()}
                       className="flex-shrink-0 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
                       aria-label="Close"
                     >
