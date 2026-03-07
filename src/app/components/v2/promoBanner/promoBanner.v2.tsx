@@ -164,7 +164,7 @@ const PromoBannerV2 = () => {
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-orange-500 leading-tight mb-4">
               Who We Are</h2>
             <h3 className="text-1xl sm:text-2xl lg:text-3xl font-bold text-gray-900 leading-tight mb-4">EarlyJobs: From Women's Empowerment to Nationalwide Hiring</h3>
-            <p className="text-base text-gray-600 leading-relaxed mb-6 line-clamp-8 text-left w-full">
+            <p className="text-base text-gray-600 leading-relaxed mb-6 text-left w-full">
               EarlyJobs is a tech-enabled recruitment ecosystem transforming how India hires. We empower women recruiters to restart and grow their careers through flexible, remote opportunities, while helping companies access high-quality talent beyond metro cities. By combining decentralized recruiter networks, AI-powered matching, and structured campus-to-corporate programs, we bridge the gap between employers and emerging talent across Tier 2 and Tier 3 India. Whether you’re a job seeker looking for the right opportunity or a company aiming to hire fast in bulk, EarlyJobs is your ultimate partner. EarlyJobs – where talent meets opportunity, fast.
             </p>
             <button
@@ -181,9 +181,9 @@ const PromoBannerV2 = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
           {[
             { label: "Interviews Conducted", value: "35000+" },
+            { label: "Total Selections", value: "8000+" },
             { label: "Successful Placements", value: "2700+" },
             { label: "Companies", value: "200+" },
-            { label: "Freelance Recruiters", value: "400+" },
             { label: "Colleges", value: "200+" },
             { label: "Expanding Hiring Access", value: "22+ Districts" }
           ].map((stat, index) => (
@@ -206,17 +206,17 @@ const PromoBannerV2 = () => {
           ]}
           className="w-full"
         >
-          <CarouselContent className="h-[500px]">
+          <CarouselContent className="min-h-[680px] sm:min-h-[600px] md:min-h-[500px] lg:h-[550px] xl:h-[500px]">
             {banners.map((banner) => (
               <CarouselItem key={banner.id} className="h-full">
                 <div className={`relative overflow-hidden rounded-2xl ${banner.bgClass} shadow-lg h-full`}>
                   <div className="grid grid-cols-1 md:grid-cols-2 h-full min-h-[400px]">
                     {/* Left side - Text content */}
-                    <div className={`p-8 sm:p-10 md:p-12 lg:p-16 flex flex-col justify-start ${banner.textClass} ${banner.id % 2 === 0 ? "md:order-2" : "md:order-1"}`}>
-                      <h3 className="text-3xl sm:text-2xl lg:text-3xl font-bold leading-tight mb-4">
+                    <div className={`p-6 md:p-8 lg:p-12 xl:p-16 flex flex-col justify-center ${banner.textClass} ${banner.id % 2 === 0 ? "md:order-2" : "md:order-1"}`}>
+                      <h3 className="text-xl md:text-2xl lg:text-2xl xl:text-3xl font-bold leading-tight mb-3 md:mb-4">
                         {banner.title}
                       </h3>
-                      <div className={`text-sm sm:text-base mb-8 max-w-lg ${banner.subTextClass}`}>
+                      <div className={`text-[12px] md:text-[13.5px] lg:text-base mb-4 sm:mb-6 md:mb-8 max-w-lg ${banner.subTextClass}`}>
                         {Array.isArray(banner.description) ? (
                           banner.description.map((line, index) => (
                             <p key={index} className="mb-1">{line}</p>
@@ -234,7 +234,7 @@ const PromoBannerV2 = () => {
                     </div>
 
                     {/* Right side - People image */}
-                    <div className={`relative h-64 md:h-full min-h-[300px] ${banner.id % 2 === 0 ? "md:order-1" : "md:order-2"}`}>
+                    <div className={`relative h-48 sm:h-56 md:h-full min-h-[250px] md:min-h-0 ${banner.id % 2 === 0 ? "md:order-1" : "md:order-2"}`}>
                       <Image
                         src={banner.image}
                         alt="Banner Image"

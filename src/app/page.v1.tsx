@@ -74,7 +74,7 @@ const Index = () => {
       }
       toast.success("Logged out successfully!");
       setUserCredentials(null);
-      router.push("/login");
+      router.push("/");
     } catch (error) {
       toast.error("Logout failed. Please try again.");
     }
@@ -253,7 +253,7 @@ const Index = () => {
               <ClipboardCheck className="h-4 w-4 mr-3 text-orange-500" />
               Colleges
             </Button>
-             <Button
+            <Button
               variant="ghost"
               className="w-full text-left justify-start text-gray-700 hover:text-orange-600 hover:bg-orange-50 rounded-xl py-3 px-4 transition-all duration-200 font-medium"
               onClick={() => handleMobileMenuItemClick("/recruiter")}
@@ -285,7 +285,7 @@ const Index = () => {
               <Button
                 className="w-full text-left justify-start bg-orange-700 hover:bg-orange-600 text-white rounded-xl py-3 px-4 shadow-lg hover:shadow-xl transition-all duration-300"
                 onClick={() => {
-                  router.push("/login");
+                  router.push("/");
                   setIsMobileMenuOpen(false);
                 }}
               >
