@@ -142,7 +142,7 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
     if (heroElement) {
       const heroStyle = window.getComputedStyle(heroElement);
       const heroBg = heroStyle.backgroundColor;
-      
+
       // Check if hero has dark background or overlay
       if (heroBg !== 'rgba(0, 0, 0, 0)' && heroBg !== 'transparent') {
         const heroRgb = getRGB(heroBg);
@@ -190,6 +190,22 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
   };
 
   useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isMobileMenuOpen && navRef.current && !navRef.current.contains(event.target as Node)) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    if (isMobileMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMobileMenuOpen]);
+
+  useEffect(() => {
     // Guard against SSR - only run on client side
     if (typeof window === 'undefined' || typeof document === 'undefined') return;
 
@@ -229,6 +245,15 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
       observer.disconnect();
     };
   }, [pathname]);
+
+  // Close mobile hamburger menu when user scrolls (mobile only)
+  useEffect(() => {
+    const handleScrollCloseMenu = () => {
+      if (isMobileMenuOpen) setIsMobileMenuOpen(false);
+    };
+    window.addEventListener("scroll", handleScrollCloseMenu, { passive: true });
+    return () => window.removeEventListener("scroll", handleScrollCloseMenu);
+  }, [isMobileMenuOpen]);
 
   // Dynamic classes based on background contrast - Always use light background for better logo visibility
   const navClasses = "fixed top-4 left-4 right-4 z-50 mx-auto max-w-8xl bg-white/95 backdrop-blur-md supports-[backdrop-filter]:bg-white/90 border border-gray-200/50 rounded-2xl shadow-lg text-gray-900";
@@ -326,8 +351,8 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
             </div>
           </div>
 
-          {/* Mobile Logo and Hamburger Menu */}
-          <div className="md:hidden flex items-center space-x-3">
+          {/* Mobile Logo */}
+          <div className="md:hidden flex items-center pr-2">
             <button
               onClick={() => router.push("/")}
               className="flex items-center"
@@ -341,33 +366,22 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
                 priority
               />
             </button>
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 transition-colors text-gray-900 hover:text-gray-700"
-              aria-label="Toggle menu"
-            >
-              {isMobileMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </button>
           </div>
 
-          {/* Right side - Browse Candidates and Login */}
-          <div className="flex items-center space-x-4 sm:space-x-6">
+          {/* Right side - Browse Candidates, Login/User and Hamburger Menu */}
+          <div className="flex items-center space-x-1 sm:space-x-4 md:space-x-6">
             <Button
               onClick={() => router.push("/browse-interviewed-candidates")}
-              className={`bg-[#ea6a4e] hover:bg-[#c95a42] text-white font-medium px-4 sm:px-6 py-2 rounded-lg transition-colors duration-200 text-sm sm:text-base ${
-                isActive("/browse-interviewed-candidates") ? "ring-2 ring-[#ea6a4e]/50" : ""
-              }`}
+              className={`hidden md:flex bg-[#ea6a4e] hover:bg-[#c95a42] text-white font-medium px-4 sm:px-6 py-2 rounded-lg transition-colors duration-200 text-sm sm:text-base ${isActive("/browse-interviewed-candidates") ? "ring-2 ring-[#ea6a4e]/50" : ""}`}
             >
               Browse Candidates
             </Button>
+
+            {/* Login and User Dropdown - Moved here to be left of Menu */}
             {userLoggedIn !== "true" && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="text-sm sm:text-base font-medium transition-colors duration-200 text-gray-900 hover:text-gray-700">
+                  <button className="text-sm sm:text-base font-medium transition-colors duration-200 text-gray-900 hover:text-gray-700 px-2">
                     Login
                   </button>
                 </DropdownMenuTrigger>
@@ -399,67 +413,79 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
                 </DropdownMenuContent>
               </DropdownMenu>
             )}
+
             {userLoggedIn === "true" && (
               <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button
-                  className="flex items-center justify-center w-10 h-10 rounded-full transition-all duration-200 font-semibold bg-gray-200 hover:bg-gray-300 text-gray-700"
-                  aria-label="User menu"
-                >
-                
+                <DropdownMenuTrigger asChild>
+                  <button
+                    className="flex items-center justify-center w-10 h-10 rounded-full transition-all duration-200 font-semibold bg-gray-200 hover:bg-gray-300 text-gray-700 mx-1"
+                    aria-label="User menu"
+                  >
                     <span className="text-sm uppercase">
                       {userCredentials?.name?.charAt(0) || "U"}
                     </span>
-                  
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent 
-                align="end" 
-                className="w-56 bg-white border border-gray-200 shadow-lg"
-              >
-                <DropdownMenuLabel className="px-3 py-2">
-                  <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none text-gray-900">
-                      {userCredentials?.name || "User"}
-                    </p>
-                    <p className="text-xs leading-none text-gray-500">
-                      {userCredentials?.email || ""}
-                    </p>
-                  </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator className="bg-gray-200" />
-                <DropdownMenuItem
-                  onClick={() => router.push("/dashboard")}
-                  className="cursor-pointer text-gray-700 hover:bg-gray-100 focus:bg-gray-100"
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="end"
+                  className="w-56 bg-white border border-gray-200 shadow-lg"
                 >
-                  <User className="mr-2 h-4 w-4" />
-                  <span>Dashboard</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => router.push("/profile")}
-                  className="cursor-pointer text-gray-700 hover:bg-gray-100 focus:bg-gray-100"
-                >
-                  <User className="mr-2 h-4 w-4" />
-                  <span>My Profile</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => router.push("/settings")}
-                  className="cursor-pointer text-gray-700 hover:bg-gray-100 focus:bg-gray-100"
-                >
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>Settings</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-gray-200" />
-                <DropdownMenuItem
-                  onClick={handleLogout}
-                  className="cursor-pointer text-red-600 hover:bg-red-50 focus:bg-red-50 focus:text-red-600"
-                >
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Logout</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  <DropdownMenuLabel className="px-3 py-2">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none text-gray-900">
+                        {userCredentials?.name || "User"}
+                      </p>
+                      <p className="text-xs leading-none text-gray-500">
+                        {userCredentials?.email || ""}
+                      </p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator className="bg-gray-200" />
+                  <DropdownMenuItem
+                    onClick={() => router.push("/dashboard")}
+                    className="cursor-pointer text-gray-700 hover:bg-gray-100 focus:bg-gray-100"
+                  >
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Dashboard</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => router.push("/profile")}
+                    className="cursor-pointer text-gray-700 hover:bg-gray-100 focus:bg-gray-100"
+                  >
+                    <User className="mr-2 h-4 w-4" />
+                    <span>My Profile</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => router.push("/settings")}
+                    className="cursor-pointer text-gray-700 hover:bg-gray-100 focus:bg-gray-100"
+                  >
+                    <Settings className="mr-2 h-4 w-4" />
+                    <span>Settings</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator className="bg-gray-200" />
+                  <DropdownMenuItem
+                    onClick={handleLogout}
+                    className="cursor-pointer text-red-600 hover:bg-red-50 focus:bg-red-50 focus:text-red-600"
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Logout</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             )}
+
+            {/* Mobile Menu Toggle - Always at the far right end */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden p-2 transition-colors text-gray-900 hover:text-gray-700 ml-1"
+              aria-label="Toggle menu"
+            >
+              {isMobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </button>
           </div>
         </div>
 
@@ -497,11 +523,10 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
               )}
               <button
                 onClick={() => handleLinkClick("/browse-interviewed-candidates")}
-                className={`text-left px-4 py-2 text-base font-medium transition-colors duration-200 ${
-                  isActive("/browse-interviewed-candidates")
-                    ? "text-gray-900 bg-gray-100"
-                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-                }`}
+                className={`text-left px-4 py-2 text-base font-medium transition-colors duration-200 ${isActive("/browse-interviewed-candidates")
+                  ? "text-gray-900 bg-gray-100"
+                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                  }`}
               >
                 Browse Candidates
               </button>
