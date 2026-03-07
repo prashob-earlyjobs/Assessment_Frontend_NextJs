@@ -33,13 +33,14 @@ import {
   FileText,
   Brain,
   GraduationCap,
-  Code
+  Code,
 } from "lucide-react";
 import { toast } from "sonner";
 import { getAssessmentsByUserId, getUserStats, isUserLoggedIn, userLogout } from "../../components/services/servicesapis";
 import { useUser } from "../../context";
 import Header from "./header";
 import CertificateWithPDF from "../../components/Certificate";
+import { createAIBuddySession } from "../services/staticApis";
 
 
 const notifications = [
@@ -75,6 +76,10 @@ const Dashboard = () => {
     time: "",
     message: "Your profile has been successfully updated. You're all set to start taking assessments!"
   },]);
+
+  const [aiBuddyRole, setAiBuddyRole] = useState<string | null>(null);
+  const [aiBuddySubCategory, setAiBuddySubCategory] = useState<string | null>(null);
+  const [showAiBuddyDialog, setShowAiBuddyDialog] = useState(false);
 
   const handleProfileClick = () => {
     navigate.push('/profile');
@@ -149,6 +154,46 @@ const Dashboard = () => {
     userAssessments();
     getUserStatsAsync();
 
+  }, []);
+
+  useEffect(() => {
+    // Check if user just logged in from AI Interview Buddy
+    try {
+      if (typeof window === "undefined") return;
+      const raw = localStorage.getItem("aiBuddyPendingInterview");
+      if (!raw) return;
+      localStorage.removeItem("aiBuddyPendingInterview");
+      const parsed = JSON.parse(raw);
+      if (parsed?.role) {
+        setAiBuddyRole(parsed.role);
+        setAiBuddySubCategory(parsed.subCategory || null);
+        // Create a session before showing the popup
+        (async () => {
+          try {
+            const fullName = userCredentials?.name || "";
+            const parts = fullName.trim().split(" ").filter(Boolean);
+            const firstName = parts[0] || null;
+            const lastName =
+              parts.length > 1 ? parts.slice(1).join(" ") : null;
+
+            await createAIBuddySession({
+              role: parsed.role,
+              subCategory: parsed.subCategory || null,
+              firstName,
+              lastName,
+              email: userCredentials?.email || null,
+              phone: userCredentials?.mobile || null,
+            });
+          } catch (e) {
+            console.error("Failed to create AI buddy session", e);
+          } finally {
+            setShowAiBuddyDialog(true);
+          }
+        })();
+      }
+    } catch (e) {
+      console.error("Failed to read AI buddy redirect info", e);
+    }
   }, []);
 
   return (
@@ -240,6 +285,47 @@ const Dashboard = () => {
         </div>
       </header> */}
       <Header />
+
+      {/* AI Interview Buddy prompt */}
+      <Dialog open={showAiBuddyDialog} onOpenChange={setShowAiBuddyDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-semibold">
+              Continue your AI interview?
+            </DialogTitle>
+          </DialogHeader>
+          <p className="mt-2 text-sm text-gray-600">
+            You just logged in from the AI Interview Buddy.{" "}
+            {aiBuddyRole && (
+              <span className="font-medium text-gray-900">
+                {aiBuddyRole}
+              </span>
+            )}{" "}
+            is ready whenever you are.
+          </p>
+          <div className="mt-5 flex justify-end gap-3">
+            <Button
+              variant="outline"
+              onClick={() => setShowAiBuddyDialog(false)}
+            >
+              Not now
+            </Button>
+            <Button
+              onClick={() => {
+                if (aiBuddyRole) {
+                  navigate.push(
+                    `/interview-buddy/${encodeURIComponent(aiBuddyRole)}`
+                  );
+                }
+                setShowAiBuddyDialog(false);
+              }}
+              className="bg-orange-500 hover:bg-orange-600 text-white"
+            >
+              Proceed to interview
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Logout Confirmation Dialog */}
 
