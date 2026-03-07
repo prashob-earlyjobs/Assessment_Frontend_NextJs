@@ -78,14 +78,14 @@ const NewsBlogV2 = () => {
         <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
           {posts.map((post) => (
             <article key={post._id} className="group">
-              <div className="relative h-[340px] sm:h-[380px] rounded-2xl overflow-hidden">
+              <div className="relative w-full h-[340px] sm:h-[380px] rounded-2xl overflow-hidden">
                 <Image
                   src={post.featuredImage || "/v2/images/hero-bg.png"}
                   alt={post.title}
                   fill
                   className="object-cover object-center group-hover:scale-[1.02] transition-transform duration-300"
                 />
-                <div className="absolute inset-0 bg-black/20" />
+                <div className="absolute inset-0 w-full h-full bg-black/20" />
                 <span className="absolute top-6 left-6 inline-flex items-center rounded-full bg-[#F08504] px-5 py-2 text-sm font-semibold text-white shadow-sm">
                   Blog
                 </span>
