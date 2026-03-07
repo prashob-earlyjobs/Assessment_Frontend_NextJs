@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Image from "next/image";
 import { Button } from "../../ui/button";
-import { Menu, X, User, LogOut, Settings, Briefcase, Users } from "lucide-react";
+import { Menu, X, User, LogOut, Settings, Briefcase, Users, Sparkles } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -65,6 +65,7 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
     { label: "Assessments", path: "/skill-assessments" },
     { label: "Resume", path: "/resume" },
     { label: "Talent Pool", path: "/talent-pool" },
+    { label: "AI Interview", path: "/interview-buddy", highlight: true },
   ];
 
   const isActive = (path: string) => {
@@ -258,6 +259,15 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
   const navClasses = "fixed top-4 left-4 right-4 z-50 mx-auto max-w-8xl bg-white/95 backdrop-blur-md supports-[backdrop-filter]:bg-white/90 border border-gray-200/50 rounded-2xl shadow-lg text-gray-900";
 
   return (
+    <>
+    <style jsx global>{`
+      @keyframes peek {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        25% { transform: translateY(-4px) rotate(-8deg); }
+        50% { transform: translateY(-2px) rotate(4deg); }
+        75% { transform: translateY(-5px) rotate(-4deg); }
+      }
+    `}</style>
     <nav ref={navRef} className={navClasses}>
       <div className="px-4 sm:px-6 lg:px-20 xl:px-28">
         <div className="flex items-center justify-between h-20">
@@ -285,18 +295,59 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
             )}
             {showPageTitle && pageTitle && <div className="h-6 w-px bg-gray-300" />}
             <div className="flex items-center space-x-8">
-              {navLinks.map((link) => (
+            {navLinks.map((link) =>
+              link.highlight ? (
                 <button
                   key={link.path}
                   onClick={() => router.push(link.path)}
-                  className={`text-base font-medium transition-colors duration-200 hover:text-gray-900 ${isActive(link.path)
-                    ? "text-gray-900"
-                    : "text-gray-600"
-                    }`}
+                  className={`group/ai relative inline-flex items-center gap-1.5 text-sm font-semibold pl-4 pr-4 py-2 rounded-full transition-all duration-300 overflow-visible ${
+                    isActive(link.path)
+                      ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md shadow-orange-200"
+                      : "bg-gradient-to-r from-orange-50 to-amber-50 text-orange-600 hover:from-orange-100 hover:to-amber-100 hover:shadow-md hover:shadow-orange-100"
+                  }`}
+                >
+                  <span className="absolute -left-3 -top-4 transition-all duration-300 group-hover/ai:-translate-y-1 group-hover/ai:scale-110 animate-[peek_2s_ease-in-out_infinite] pointer-events-none">
+                    <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="32" cy="34" r="22" fill="#FBBF24" />
+                      <circle cx="32" cy="34" r="22" fill="url(#faceGrad)" />
+                      <ellipse cx="23" cy="30" rx="4.5" ry="5" fill="white" />
+                      <ellipse cx="41" cy="30" rx="4.5" ry="5" fill="white" />
+                      <ellipse cx="24" cy="31" rx="2.2" ry="2.5" fill="#1E293B">
+                        <animate attributeName="cx" values="24;22;24;26;24" dur="3s" repeatCount="indefinite" />
+                      </ellipse>
+                      <ellipse cx="42" cy="31" rx="2.2" ry="2.5" fill="#1E293B">
+                        <animate attributeName="cx" values="42;40;42;44;42" dur="3s" repeatCount="indefinite" />
+                      </ellipse>
+                      <ellipse cx="23" cy="29" rx="1.2" ry="0.8" fill="white" opacity="0.7" />
+                      <ellipse cx="41" cy="29" rx="1.2" ry="0.8" fill="white" opacity="0.7" />
+                      <path d="M25 40 Q32 46 39 40" stroke="#1E293B" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+                      <ellipse cx="17" cy="37" rx="3.5" ry="2.5" fill="#F97316" opacity="0.3" />
+                      <ellipse cx="47" cy="37" rx="3.5" ry="2.5" fill="#F97316" opacity="0.3" />
+                      <defs>
+                        <radialGradient id="faceGrad" cx="0.35" cy="0.3" r="0.65">
+                          <stop offset="0%" stopColor="#FDE68A" />
+                          <stop offset="100%" stopColor="#FBBF24" />
+                        </radialGradient>
+                      </defs>
+                    </svg>
+                  </span>
+                  <Sparkles className="h-3.5 w-3.5 animate-[pulse_2s_ease-in-out_infinite]" />
+                  {link.label}
+                </button>
+              ) : (
+                <button
+                  key={link.path}
+                  onClick={() => router.push(link.path)}
+                  className={`text-base font-medium transition-colors duration-200 hover:text-gray-900 ${
+                    isActive(link.path)
+                      ? "text-gray-900"
+                      : "text-gray-600"
+                  }`}
                 >
                   {link.label}
                 </button>
-              ))}
+              )
+            )}
             </div>
           </div>
 
@@ -442,18 +493,34 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
         {isMobileMenuOpen && (
           <div className="md:hidden border-t backdrop-blur-md border-gray-200/50 bg-white/95">
             <div className="flex flex-col py-4 space-y-3">
-              {navLinks.map((link) => (
-                <button
-                  key={link.path}
-                  onClick={() => handleLinkClick(link.path)}
-                  className={`text-left px-4 py-2 text-base font-medium transition-colors duration-200 ${isActive(link.path)
-                    ? "text-gray-900 bg-gray-100"
-                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+              {navLinks.map((link) =>
+                link.highlight ? (
+                  <button
+                    key={link.path}
+                    onClick={() => handleLinkClick(link.path)}
+                    className={`text-left px-4 py-2 text-base font-medium transition-colors duration-200 inline-flex items-center gap-2 ${
+                      isActive(link.path)
+                        ? "text-orange-600 bg-orange-50"
+                        : "text-orange-500 hover:text-orange-600 hover:bg-orange-50"
                     }`}
-                >
-                  {link.label}
-                </button>
-              ))}
+                  >
+                    <Sparkles className="h-4 w-4" />
+                    {link.label}
+                  </button>
+                ) : (
+                  <button
+                    key={link.path}
+                    onClick={() => handleLinkClick(link.path)}
+                    className={`text-left px-4 py-2 text-base font-medium transition-colors duration-200 ${
+                      isActive(link.path)
+                        ? "text-gray-900 bg-gray-100"
+                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                    }`}
+                  >
+                    {link.label}
+                  </button>
+                )
+              )}
               <button
                 onClick={() => handleLinkClick("/browse-interviewed-candidates")}
                 className={`text-left px-4 py-2 text-base font-medium transition-colors duration-200 ${isActive("/browse-interviewed-candidates")
@@ -468,6 +535,7 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
         )}
       </div>
     </nav>
+    </>
   );
 };
 

@@ -1,13 +1,14 @@
 "use client";
-import Dashboard from "../components/pages/Dashboard";
-import ProtectedRoute from "../components/services/protectedRoute";
 
+import ProtectedRoute from "../components/services/protectedRoute";
+import DashboardV2 from "../dashboard-v2/page";
 
 const DashboardPage = () => {
   return (
     <ProtectedRoute>
-      <Dashboard/>
+      <DashboardV2 />
     </ProtectedRoute>
   );
 };
+
 export default DashboardPage;
