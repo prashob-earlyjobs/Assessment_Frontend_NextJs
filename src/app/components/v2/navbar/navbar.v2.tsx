@@ -229,6 +229,15 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
     };
   }, [pathname]);
 
+  // Close mobile hamburger menu when user scrolls (mobile only)
+  useEffect(() => {
+    const handleScrollCloseMenu = () => {
+      if (isMobileMenuOpen) setIsMobileMenuOpen(false);
+    };
+    window.addEventListener("scroll", handleScrollCloseMenu, { passive: true });
+    return () => window.removeEventListener("scroll", handleScrollCloseMenu);
+  }, [isMobileMenuOpen]);
+
   // Dynamic classes based on background contrast - Always use light background for better logo visibility
   const navClasses = "fixed top-4 left-4 right-4 z-50 mx-auto max-w-8xl bg-white/95 backdrop-blur-md supports-[backdrop-filter]:bg-white/90 border border-gray-200/50 rounded-2xl shadow-lg text-gray-900";
 

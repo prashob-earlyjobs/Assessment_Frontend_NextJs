@@ -170,12 +170,12 @@ const JobCard = ({
       aria-label={`Job listing for ${title} at ${brandName}`}
     >
       <div className="flex flex-col gap-4">
-        {/* Posted Time Pill */}
-        <div>
+        {/* Posted Time Pill - commented out per request */}
+        {/* <div>
           <span className="inline-block bg-[#ea6a4e]/10 text-[#ea6a4e] text-xs font-medium px-2.5 py-0.5 rounded-full">
             {formatRelativeTime(postedTime)}
           </span>
-        </div>
+        </div> */}
 
         {/* Top Box: Logo, Title, Company, and Bookmark */}
         <div className="flex items-start justify-between gap-4">
