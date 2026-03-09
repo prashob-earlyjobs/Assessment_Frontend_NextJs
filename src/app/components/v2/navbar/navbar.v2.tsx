@@ -285,13 +285,6 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
                 priority
               />
             </button>
-            {/* Page Title - appears when scrolled */}
-            {showPageTitle && pageTitle && (
-              <h2 className="text-base md:text-lg font-bold transition-all duration-300 ease-in-out mr-2 text-gray-900">
-                {pageTitle}
-              </h2>
-            )}
-            {showPageTitle && pageTitle && <div className="h-6 w-px bg-gray-300" />}
             <div className="flex items-center space-x-8">
               {navLinks.map((link) =>
                 link.highlight ? (
@@ -302,7 +295,7 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
                       isActive(link.path) ? "ring-2 ring-[rgba(181,160,255,0.6)]" : ""
                     }`}
                   >
-                    <span className="hidden sm:inline-flex absolute -top-2 right-3 rounded-full bg-white px-1.5 py-0.5 text-[9px] font-semibold text-orange-600 shadow">
+                    <span className="hidden sm:inline-flex absolute -top-2 right-3 rounded-full bg-white px-1.5 py-0.5 text-[9px] font-semibold text-orange-600 shadow border border-orange-200">
                       New
                     </span>
                     <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
@@ -361,18 +354,6 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" sideOffset={8} className="w-64 p-2 bg-white border border-gray-200 shadow-lg mt-2">
                   <DropdownMenuItem
-                    onClick={() => router.push("/login?mode=recruiter")}
-                    className="flex items-start gap-3 p-3 cursor-pointer hover:bg-[#ea6a4e]/10 rounded-lg bg-white"
-                  >
-                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#ea6a4e]/10 flex-shrink-0">
-                      <Briefcase className="h-5 w-5 text-[#ea6a4e]" />
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-semibold text-gray-900">Login as Recruiter</span>
-                      <span className="text-xs text-gray-500">Post jobs and find candidates</span>
-                    </div>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
                     onClick={() => router.push("/login?mode=candidate")}
                     className="flex items-start gap-3 p-3 cursor-pointer hover:bg-[#ea6a4e]/10 rounded-lg bg-white"
                   >
@@ -382,6 +363,18 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
                     <div className="flex flex-col">
                       <span className="text-sm font-semibold text-gray-900">Login as Candidate</span>
                       <span className="text-xs text-gray-500">Find jobs and take assessments</span>
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => router.push("/login?mode=recruiter")}
+                    className="flex items-start gap-3 p-3 cursor-pointer hover:bg-[#ea6a4e]/10 rounded-lg bg-white"
+                  >
+                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#ea6a4e]/10 flex-shrink-0">
+                      <Briefcase className="h-5 w-5 text-[#ea6a4e]" />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-sm font-semibold text-gray-900">Login as Recruiter</span>
+                      <span className="text-xs text-gray-500">Post jobs and find candidates</span>
                     </div>
                   </DropdownMenuItem>
                 </DropdownMenuContent>

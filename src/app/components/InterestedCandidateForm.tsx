@@ -12,9 +12,6 @@ const InterestedCandidateForm = ({ isOpen, onClose, candidateName }) => {
     name: "",
     email: "",
     companyName: "",
-    interviewDate: "",
-    interviewMode: "online", // Default to online
-    companyAddress: "",
     mobile: "+91",
     mobileOtp: "",
   });
@@ -92,22 +89,6 @@ const InterestedCandidateForm = ({ isOpen, onClose, candidateName }) => {
     
     setIsSubmitting(true);
     try {
-      // Format date from YYYY-MM-DD to dd/mm/yyyy
-      const formatDate = (dateString) => {
-        if (!dateString) return "";
-        const date = new Date(dateString);
-        const day = String(date.getDate()).padStart(2, "0");
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const year = date.getFullYear();
-        return `${day}/${month}/${year}`;
-      };
-
-      // Capitalize interview mode
-      const capitalizeMode = (mode) => {
-        if (!mode) return "Online";
-        return mode.charAt(0).toUpperCase() + mode.slice(1);
-      };
-
       // Prepare the request body according to API format
       const requestBody: any = {
         name: formData.name,
@@ -115,17 +96,10 @@ const InterestedCandidateForm = ({ isOpen, onClose, candidateName }) => {
         companyName: formData.companyName,
         mobile: formData.mobile,
         mobileOtp: formData.mobileOtp,
-        interviewScheduleDate: formatDate(formData.interviewDate),
-        interviewMode: capitalizeMode(formData.interviewMode),
+        interviewScheduleDate: "",
+        interviewMode: "Online",
         candidateName: candidateName,
       };
-
-      // Only include companyAddress if interview mode is Offline or Hybrid
-      if (formData.interviewMode === "offline" || formData.interviewMode === "hybrid") {
-        if (formData.companyAddress) {
-          requestBody.companyAddress = formData.companyAddress;
-        }
-      }
 
       const response = await fetch(`${backendUrl}/submit-interest`, {
         method: "POST",
@@ -157,9 +131,6 @@ const InterestedCandidateForm = ({ isOpen, onClose, candidateName }) => {
         name: "",
         email: "",
         companyName: "",
-        interviewDate: "",
-        interviewMode: "online",
-        companyAddress: "",
         mobile: "+91",
         mobileOtp: "",
       });
@@ -214,45 +185,7 @@ const InterestedCandidateForm = ({ isOpen, onClose, candidateName }) => {
               placeholder="Enter company name"
             />
           </div>
-          <div>
-            <Label htmlFor="interviewDate">Interview Schedule Date</Label>
-            <Input
-              id="interviewDate"
-              name="interviewDate"
-              type="date"
-              value={formData.interviewDate}
-              onChange={handleChange}
-              required
-              min={new Date().toISOString().split("T")[0]} // Prevent past dates
-            />
-          </div>
-          <div>
-            <Label htmlFor="interviewMode">Interview Mode</Label>
-            <select
-              id="interviewMode"
-              name="interviewMode"
-              value={formData.interviewMode}
-              onChange={handleChange}
-              className="w-full border rounded-md p-2"
-            >
-              <option value="online">Online</option>
-              <option value="offline">Offline</option>
-              <option value="hybrid">Hybrid</option>
-            </select>
-          </div>
-          {(formData.interviewMode === "offline" || formData.interviewMode === "hybrid") && (
-            <div>
-              <Label htmlFor="companyAddress">Company Address</Label>
-              <Input
-                id="companyAddress"
-                name="companyAddress"
-                value={formData.companyAddress}
-                onChange={handleChange}
-                required
-                placeholder="Enter company address"
-              />
-            </div>
-          )}
+          
           <div>
             <Label htmlFor="mobile">Mobile Number</Label>
             <div className="flex space-x-2">
