@@ -7,6 +7,7 @@ import Footer from "../components/pages/footer";
 import { Button } from "../components/ui/button";
 import { Card } from "../components/ui/card";
 import { Input } from "../components/ui/input";
+import Cookies from "js-cookie";
 import {
   Briefcase,
   Users,
@@ -58,20 +59,18 @@ const DashboardV2 = () => {
                 </div>
               </div>
               <div className="flex gap-2 justify-end">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="border-gray-200 text-gray-700 hover:bg-gray-50 gap-1.5"
-                >
-                  <Filter className="w-4 h-4" />
-                  Filters
-                </Button>
+              
                 <Button
                   size="sm"
                   className="bg-orange-500 hover:bg-orange-600 text-white gap-1.5"
+                  onClick={() => {
+                    const query = searchTerm.trim();
+                    Cookies.set("searchQuery", query);
+                    router.push("/jobs");
+                  }}
                 >
-                  <PlusCircle className="w-4 h-4" />
-                  Upload resume
+                  <Search className="w-4 h-4" />
+                  Search jobs
                 </Button>
               </div>
             </div>
@@ -171,6 +170,7 @@ const DashboardV2 = () => {
                       size="sm"
                       variant="outline"
                       className="border-slate-600 text-slate-100 text-xs bg-transparent hover:bg-slate-800 px-3"
+                      onClick={() => router.push("/job-search-tips")}
                     >
                       View job search tips
                     </Button>
