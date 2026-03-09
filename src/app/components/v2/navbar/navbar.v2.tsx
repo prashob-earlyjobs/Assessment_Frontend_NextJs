@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Image from "next/image";
 import { Button } from "../../ui/button";
-import { Menu, X, User, LogOut, Settings, Briefcase, Users, Sparkles } from "lucide-react";
+import { Menu, X, User, LogOut, Settings, Briefcase, Users, Sparkles, Zap } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -60,9 +60,7 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
   };
 
   const navLinks = [
-
     { label: "Jobs", path: "/jobs" },
-    { label: "Assessments", path: "/skill-assessments" },
     { label: "Resume", path: "/resume" },
     { label: "Talent Pool", path: "/talent-pool" },
     { label: "AI Interview", path: "/interview-buddy", highlight: true },
@@ -295,59 +293,34 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
             )}
             {showPageTitle && pageTitle && <div className="h-6 w-px bg-gray-300" />}
             <div className="flex items-center space-x-8">
-            {navLinks.map((link) =>
-              link.highlight ? (
-                <button
-                  key={link.path}
-                  onClick={() => router.push(link.path)}
-                  className={`group/ai relative inline-flex items-center gap-1.5 text-sm font-semibold pl-4 pr-4 py-2 rounded-full transition-all duration-300 overflow-visible ${
-                    isActive(link.path)
-                      ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md shadow-orange-200"
-                      : "bg-gradient-to-r from-orange-50 to-amber-50 text-orange-600 hover:from-orange-100 hover:to-amber-100 hover:shadow-md hover:shadow-orange-100"
-                  }`}
-                >
-                  <span className="absolute -left-3 -top-4 transition-all duration-300 group-hover/ai:-translate-y-1 group-hover/ai:scale-110 animate-[peek_2s_ease-in-out_infinite] pointer-events-none">
-                    <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="32" cy="34" r="22" fill="#FBBF24" />
-                      <circle cx="32" cy="34" r="22" fill="url(#faceGrad)" />
-                      <ellipse cx="23" cy="30" rx="4.5" ry="5" fill="white" />
-                      <ellipse cx="41" cy="30" rx="4.5" ry="5" fill="white" />
-                      <ellipse cx="24" cy="31" rx="2.2" ry="2.5" fill="#1E293B">
-                        <animate attributeName="cx" values="24;22;24;26;24" dur="3s" repeatCount="indefinite" />
-                      </ellipse>
-                      <ellipse cx="42" cy="31" rx="2.2" ry="2.5" fill="#1E293B">
-                        <animate attributeName="cx" values="42;40;42;44;42" dur="3s" repeatCount="indefinite" />
-                      </ellipse>
-                      <ellipse cx="23" cy="29" rx="1.2" ry="0.8" fill="white" opacity="0.7" />
-                      <ellipse cx="41" cy="29" rx="1.2" ry="0.8" fill="white" opacity="0.7" />
-                      <path d="M25 40 Q32 46 39 40" stroke="#1E293B" strokeWidth="2.2" strokeLinecap="round" fill="none" />
-                      <ellipse cx="17" cy="37" rx="3.5" ry="2.5" fill="#F97316" opacity="0.3" />
-                      <ellipse cx="47" cy="37" rx="3.5" ry="2.5" fill="#F97316" opacity="0.3" />
-                      <defs>
-                        <radialGradient id="faceGrad" cx="0.35" cy="0.3" r="0.65">
-                          <stop offset="0%" stopColor="#FDE68A" />
-                          <stop offset="100%" stopColor="#FBBF24" />
-                        </radialGradient>
-                      </defs>
-                    </svg>
-                  </span>
-                  <Sparkles className="h-3.5 w-3.5 animate-[pulse_2s_ease-in-out_infinite]" />
-                  {link.label}
-                </button>
-              ) : (
-                <button
-                  key={link.path}
-                  onClick={() => router.push(link.path)}
-                  className={`text-base font-medium transition-colors duration-200 hover:text-gray-900 ${
-                    isActive(link.path)
-                      ? "text-gray-900"
-                      : "text-gray-600"
-                  }`}
-                >
-                  {link.label}
-                </button>
-              )
-            )}
+              {navLinks.map((link) =>
+                link.highlight ? (
+                  <button
+                    key={link.path}
+                    onClick={() => router.push(link.path)}
+                    className={`group relative flex items-center justify-center w-[50px] h-[50px] rounded-full bg-gradient-to-tr from-orange-500 to-amber-400 border-none font-semibold cursor-pointer overflow-hidden transition-all duration-300 shadow-[0_0_0_4px_rgba(180,160,255,0.25)] hover:w-[140px] hover:rounded-[999px] hover:from-orange-400 hover:to-amber-300 ${
+                      isActive(link.path) ? "ring-2 ring-[rgba(181,160,255,0.6)]" : ""
+                    }`}
+                  >
+                    <div className="flex items-center justify-center w-full transition-transform duration-300 group-hover:-translate-y-4 group-hover:opacity-0">
+                      <Zap className="w-4 h-4 text-white" />
+                    </div>
+                    <div className="absolute bottom-[-20px] text-white text-[0px] font-semibold transition-all duration-300 group-hover:bottom-auto group-hover:text-[13px] group-hover:opacity-100">
+                      {link.label}
+                    </div>
+                  </button>
+                ) : (
+                  <button
+                    key={link.path}
+                    onClick={() => router.push(link.path)}
+                    className={`text-base font-medium transition-colors duration-200 hover:text-gray-900 ${
+                      isActive(link.path) ? "text-gray-900" : "text-gray-600"
+                    }`}
+                  >
+                    {link.label}
+                  </button>
+                )
+              )}
             </div>
           </div>
 
