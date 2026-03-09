@@ -298,16 +298,16 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
                   <button
                     key={link.path}
                     onClick={() => router.push(link.path)}
-                    className={`group relative flex items-center justify-center w-[50px] h-[50px] rounded-full bg-gradient-to-tr from-orange-500 to-amber-400 border-none font-semibold cursor-pointer overflow-hidden transition-all duration-300 shadow-[0_0_0_4px_rgba(180,160,255,0.25)] hover:w-[140px] hover:rounded-[999px] hover:from-orange-400 hover:to-amber-300 ${
+                    className={`relative inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-orange-500 to-amber-400 px-3 py-1.5 text-xs sm:text-sm font-semibold text-white shadow-md transition-colors duration-300 hover:from-orange-400 hover:to-amber-300 mr-3 sm:mr-4 ${
                       isActive(link.path) ? "ring-2 ring-[rgba(181,160,255,0.6)]" : ""
                     }`}
                   >
-                    <div className="flex items-center justify-center w-full transition-transform duration-300 group-hover:-translate-y-4 group-hover:opacity-0">
-                      <Zap className="w-4 h-4 text-white" />
-                    </div>
-                    <div className="absolute bottom-[-20px] text-white text-[0px] font-semibold transition-all duration-300 group-hover:bottom-auto group-hover:text-[13px] group-hover:opacity-100">
-                      {link.label}
-                    </div>
+                    <span className="hidden sm:inline-flex absolute -top-2 right-3 rounded-full bg-white px-1.5 py-0.5 text-[9px] font-semibold text-orange-600 shadow">
+                      New
+                    </span>
+                    <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
+                    <span className="inline xl:hidden">AI buddy</span>
+                    <span className="hidden xl:inline">AI interview buddy</span>
                   </button>
                 ) : (
                   <button
@@ -342,12 +342,13 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
           </div>
 
           {/* Right side - Browse Candidates, Login/User and Hamburger Menu */}
-          <div className="flex items-center space-x-1 sm:space-x-4 md:space-x-6">
+          <div className="flex items-center space-x-4 sm:space-x-5 md:space-x-6">
             <Button
               onClick={() => router.push("/browse-interviewed-candidates")}
               className={`hidden md:flex bg-[#ea6a4e] hover:bg-[#c95a42] text-white font-medium px-4 sm:px-6 py-2 rounded-lg transition-colors duration-200 text-sm sm:text-base ${isActive("/browse-interviewed-candidates") ? "ring-2 ring-[#ea6a4e]/50" : ""}`}
             >
-              Browse Candidates
+              <span className="inline lg:hidden">Candidates</span>
+              <span className="hidden lg:inline">Browse Candidates</span>
             </Button>
 
             {/* Login and User Dropdown - Moved here to be left of Menu */}
