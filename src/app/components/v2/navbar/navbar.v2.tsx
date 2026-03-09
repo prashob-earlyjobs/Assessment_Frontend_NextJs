@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Image from "next/image";
 import { Button } from "../../ui/button";
-import { Menu, X, User, LogOut, Settings, Briefcase, Users } from "lucide-react";
+import { Menu, X, User, LogOut, Settings, Briefcase, Users, Sparkles, Zap } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -60,11 +60,10 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
   };
 
   const navLinks = [
-
     { label: "Jobs", path: "/jobs" },
-    { label: "Assessments", path: "/skill-assessments" },
     { label: "Resume", path: "/resume" },
     { label: "Talent Pool", path: "/talent-pool" },
+    { label: "AI Interview", path: "/interview-buddy", highlight: true },
   ];
 
   const isActive = (path: string) => {
@@ -258,6 +257,15 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
   const navClasses = "fixed top-4 left-4 right-4 z-50 mx-auto max-w-8xl bg-white/95 backdrop-blur-md supports-[backdrop-filter]:bg-white/90 border border-gray-200/50 rounded-2xl shadow-lg text-gray-900";
 
   return (
+    <>
+    <style jsx global>{`
+      @keyframes peek {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        25% { transform: translateY(-4px) rotate(-8deg); }
+        50% { transform: translateY(-2px) rotate(4deg); }
+        75% { transform: translateY(-5px) rotate(-4deg); }
+      }
+    `}</style>
     <nav ref={navRef} className={navClasses}>
       <div className="px-4 sm:px-6 lg:px-20 xl:px-28">
         <div className="flex items-center justify-between h-20">
@@ -285,18 +293,34 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
             )}
             {showPageTitle && pageTitle && <div className="h-6 w-px bg-gray-300" />}
             <div className="flex items-center space-x-8">
-              {navLinks.map((link) => (
-                <button
-                  key={link.path}
-                  onClick={() => router.push(link.path)}
-                  className={`text-base font-medium transition-colors duration-200 hover:text-gray-900 ${isActive(link.path)
-                    ? "text-gray-900"
-                    : "text-gray-600"
+              {navLinks.map((link) =>
+                link.highlight ? (
+                  <button
+                    key={link.path}
+                    onClick={() => router.push(link.path)}
+                    className={`group relative flex items-center justify-center w-[50px] h-[50px] rounded-full bg-gradient-to-tr from-orange-500 to-amber-400 border-none font-semibold cursor-pointer overflow-hidden transition-all duration-300 shadow-[0_0_0_4px_rgba(180,160,255,0.25)] hover:w-[140px] hover:rounded-[999px] hover:from-orange-400 hover:to-amber-300 ${
+                      isActive(link.path) ? "ring-2 ring-[rgba(181,160,255,0.6)]" : ""
                     }`}
-                >
-                  {link.label}
-                </button>
-              ))}
+                  >
+                    <div className="flex items-center justify-center w-full transition-transform duration-300 group-hover:-translate-y-4 group-hover:opacity-0">
+                      <Zap className="w-4 h-4 text-white" />
+                    </div>
+                    <div className="absolute bottom-[-20px] text-white text-[0px] font-semibold transition-all duration-300 group-hover:bottom-auto group-hover:text-[13px] group-hover:opacity-100">
+                      {link.label}
+                    </div>
+                  </button>
+                ) : (
+                  <button
+                    key={link.path}
+                    onClick={() => router.push(link.path)}
+                    className={`text-base font-medium transition-colors duration-200 hover:text-gray-900 ${
+                      isActive(link.path) ? "text-gray-900" : "text-gray-600"
+                    }`}
+                  >
+                    {link.label}
+                  </button>
+                )
+              )}
             </div>
           </div>
 
@@ -442,18 +466,34 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
         {isMobileMenuOpen && (
           <div className="md:hidden border-t backdrop-blur-md border-gray-200/50 bg-white/95">
             <div className="flex flex-col py-4 space-y-3">
-              {navLinks.map((link) => (
-                <button
-                  key={link.path}
-                  onClick={() => handleLinkClick(link.path)}
-                  className={`text-left px-4 py-2 text-base font-medium transition-colors duration-200 ${isActive(link.path)
-                    ? "text-gray-900 bg-gray-100"
-                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+              {navLinks.map((link) =>
+                link.highlight ? (
+                  <button
+                    key={link.path}
+                    onClick={() => handleLinkClick(link.path)}
+                    className={`text-left px-4 py-2 text-base font-medium transition-colors duration-200 inline-flex items-center gap-2 ${
+                      isActive(link.path)
+                        ? "text-orange-600 bg-orange-50"
+                        : "text-orange-500 hover:text-orange-600 hover:bg-orange-50"
                     }`}
-                >
-                  {link.label}
-                </button>
-              ))}
+                  >
+                    <Sparkles className="h-4 w-4" />
+                    {link.label}
+                  </button>
+                ) : (
+                  <button
+                    key={link.path}
+                    onClick={() => handleLinkClick(link.path)}
+                    className={`text-left px-4 py-2 text-base font-medium transition-colors duration-200 ${
+                      isActive(link.path)
+                        ? "text-gray-900 bg-gray-100"
+                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                    }`}
+                  >
+                    {link.label}
+                  </button>
+                )
+              )}
               <button
                 onClick={() => handleLinkClick("/browse-interviewed-candidates")}
                 className={`text-left px-4 py-2 text-base font-medium transition-colors duration-200 ${isActive("/browse-interviewed-candidates")
@@ -468,6 +508,7 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
         )}
       </div>
     </nav>
+    </>
   );
 };
 
