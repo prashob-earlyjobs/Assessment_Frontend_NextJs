@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import NavbarV2 from "../components/v2/navbar/navbar.v2";
 import Footer from "../components/pages/footer";
@@ -16,11 +16,55 @@ import {
   PlusCircle,
   Sparkles,
   Filter,
+  Brain,
 } from "lucide-react";
+import { useUser } from "../context";
+import { createAIBuddySession } from "../components/services/staticApis";
 
 const DashboardV2 = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
+  const { userCredentials } = useUser();
+  const [aiBuddyRole, setAiBuddyRole] = useState<string | null>(null);
+  const [aiBuddySessionId, setAiBuddySessionId] = useState<string | null>(null);
+  const [showAiBuddyDialog, setShowAiBuddyDialog] = useState(false);
+
+  useEffect(() => {
+    try {
+      if (typeof window === "undefined") return;
+      const raw = localStorage.getItem("aiBuddyPendingInterview");
+      if (!raw) return;
+      localStorage.removeItem("aiBuddyPendingInterview");
+      const parsed = JSON.parse(raw);
+      if (parsed?.role) {
+        setAiBuddyRole(parsed.role);
+        (async () => {
+          try {
+            const fullName = userCredentials?.name || "";
+            const parts = fullName.trim().split(" ").filter(Boolean);
+            const firstName = parts[0] || null;
+            const lastName = parts.length > 1 ? parts.slice(1).join(" ") : null;
+            const sessionData = await createAIBuddySession({
+              role: parsed.role,
+              subCategory: parsed.subCategory || null,
+              firstName,
+              lastName,
+              email: userCredentials?.email || null,
+              phone: userCredentials?.mobile || null,
+            });
+            const sessionId = sessionData?.data?.sessionId || sessionData?.sessionId || sessionData?.data?._id || null;
+            setAiBuddySessionId(sessionId);
+          } catch (e) {
+            console.error("Failed to create AI buddy session", e);
+          } finally {
+            setShowAiBuddyDialog(true);
+          }
+        })();
+      }
+    } catch (e) {
+      console.error("Failed to read AI buddy redirect info", e);
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white via-gray-50/40 to-white scroll-smooth">
@@ -76,7 +120,7 @@ const DashboardV2 = () => {
             </div>
 
             {/* Key metrics */}
-            <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-2">
               <Card
                 className="border border-gray-100 shadow-sm p-5 sm:p-6 cursor-pointer transition-transform hover:-translate-y-0.5 hover:shadow-md"
                 onClick={() => router.push("/applications-v2")}
@@ -137,6 +181,27 @@ const DashboardV2 = () => {
                 <p className="text-3xl font-semibold text-gray-900">3</p>
                 <p className="text-xs text-gray-500 mt-2">
                   Prepare well and keep track of upcoming interview dates.
+                </p>
+              </Card>
+
+              <Card
+                className="border border-gray-100 shadow-sm p-5 sm:p-6 sm:col-span-2 xl:col-span-1 cursor-pointer transition-transform hover:-translate-y-0.5 hover:shadow-md"
+                onClick={() => router.push("/interviews")}
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center">
+                    <Brain className="w-4 h-4 text-red-500" />
+                  </div>
+                  <span className="rounded-full bg-red-50 text-red-600 text-[11px] font-medium px-2 py-0.5">
+                    2 this week
+                  </span>
+                </div>
+                <p className="text-[11px] uppercase tracking-wide text-gray-400 mb-1.5">
+                  AI Interview Sessions
+                </p>
+                <p className="text-3xl font-semibold text-gray-900">3</p>
+                <p className="text-xs text-gray-500 mt-2">
+                  Practice with real interview scenarios and get AI-powered feedback to improve your skills.
                 </p>
               </Card>
             </div>
@@ -350,6 +415,49 @@ const DashboardV2 = () => {
       </main>
 
       <Footer />
+
+      {showAiBuddyDialog && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/20"
+          onClick={() => setShowAiBuddyDialog(false)}
+        >
+          <div
+            className="bg-white rounded-lg shadow-lg w-full max-w-sm mx-4 p-5"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <p className="text-sm font-semibold text-gray-800 mb-1">
+              Continue your AI interview?
+            </p>
+            <p className="text-xs text-gray-500 mb-4">
+              You selected <span className="font-medium text-gray-800">{aiBuddyRole}</span>. Ready to start?
+            </p>
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setShowAiBuddyDialog(false)}
+                className="px-3 py-1.5 text-xs font-medium text-gray-600 rounded-md border border-gray-200 hover:bg-gray-50"
+              >
+                Not now
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (aiBuddyRole) {
+                    const url = aiBuddySessionId
+                      ? `${process.env.NEXT_PUBLIC_AI_ASSESSMENT_URL}interview?sessionId=${aiBuddySessionId}`
+                      : `/interview-buddy/${encodeURIComponent(aiBuddyRole)}`;
+                    router.push(url);
+                  }
+                  setShowAiBuddyDialog(false);
+                }}
+                className="px-4 py-1.5 text-xs font-medium text-white bg-orange-500 rounded-md hover:bg-orange-600"
+              >
+                Proceed to interview
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

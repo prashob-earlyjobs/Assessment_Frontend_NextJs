@@ -15,6 +15,7 @@ import {
   ChevronLeft,
   ChevronRight,
   GraduationCap,
+  MessageCircle,
 } from 'lucide-react';
 import { useAdmin } from '../../context/AdminContext';
 
@@ -41,6 +42,12 @@ const menuItems = [
     title: 'Assessments',
     url: '/admin/assessments',
     icon: Calendar,
+    permission: 'manage_assessments',
+  },
+  {
+    title: 'Interview Buddy',
+    url: '/interview-buddy',
+    icon: MessageCircle,
     permission: 'manage_assessments',
   },
   {

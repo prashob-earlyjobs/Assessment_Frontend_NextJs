@@ -5,12 +5,13 @@ import { Button } from "../ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { Menu, X, ChevronLeft, ChevronRight, Search, Filter, Star, Award, Briefcase, MapPin, TrendingUp } from "lucide-react";
+import { Menu, X, ChevronLeft, ChevronRight, Search, Filter, Star, Award, Briefcase, MapPin } from "lucide-react";
 import Footer from "./footer";
 import Navbar from "./navbar";
 import Cookies from "js-cookie";
 import axiosInstance from "../services/apiinterseptor";
 import NavbarV2 from "../v2/navbar/navbar.v2";
+import InterestedCandidateForm from "../InterestedCandidateForm";
 
 export default function BrowseCandidatesClient() {
   const pathname = usePathname();
@@ -298,7 +299,7 @@ export default function BrowseCandidatesClient() {
                     <p className="text-base lg:text-lg text-gray-600 mt-2 font-medium">
                       Connect with{" "}
                       {/* <span className="text-orange-600 font-semibold">{totalCandidates}+</span>{" "} */}
-                      pre-assessed professionals ready to join your team
+                      pre-interviewed professionals ready to join your team
                     </p>
                   </div>
                 </div>
@@ -745,50 +746,11 @@ export default function BrowseCandidatesClient() {
       </div>
       <Footer />
 
-      {showLimitModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white max-w-md w-full mx-4 rounded-2xl shadow-2xl border border-orange-100 p-6 sm:p-8 relative transform animate-scale-in">
-            <button
-              onClick={() => setShowLimitModal(false)}
-              className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 transition-colors"
-              aria-label="Close"
-            >
-              <X className="w-5 h-5" />
-            </button>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="h-10 w-10 rounded-full bg-orange-100 flex items-center justify-center">
-                <TrendingUp className="w-5 h-5 text-orange-600" />
-              </div>
-              <h2 className="text-xl font-bold text-gray-900">
-                Want to browse more candidates?
-              </h2>
-            </div>
-            <p className="text-sm sm:text-base text-gray-600 mb-6">
-              You&apos;re currently viewing a limited set of profiles. To unlock full access and
-              browse more candidates, please connect with our team.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 sm:justify-end">
-              <Button
-                variant="outline"
-                className="border-gray-200 hover:bg-gray-50"
-                onClick={() => setShowLimitModal(false)}
-              >
-                Close
-              </Button>
-              <Button
-                className="relative overflow-hidden bg-orange-500 hover:bg-orange-600 text-white font-semibold transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
-                onClick={() => {
-                  setShowLimitModal(false);
-                  router.push("/contact-us");
-                }}
-              >
-                <span className="relative z-10">Contact Us</span>
-                <span className="pointer-events-none absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+      <InterestedCandidateForm
+        isOpen={showLimitModal}
+        onClose={() => setShowLimitModal(false)}
+        candidateName="more candidates"
+      />
     </>
   );
 }
