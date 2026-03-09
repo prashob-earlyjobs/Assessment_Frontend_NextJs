@@ -97,6 +97,7 @@ export default function InterviewBuddyClient() {
     skills: [{ name: "", difficulty: "intermediate" as string, timeLimit: 12 }],
   });
   const [assessErrors, setAssessErrors] = useState<Record<string, string>>({});
+  const [aiRoleGenerating, setAiRoleGenerating] = useState(false);
   const [assessSaving, setAssessSaving] = useState(false);
   const [editingAssessmentId, setEditingAssessmentId] = useState<string | null>(null);
   const [searchLoading, setSearchLoading] = useState(false);
@@ -289,7 +290,12 @@ export default function InterviewBuddyClient() {
         credentials: "include",
         body: JSON.stringify(body),
       });
-      if (!res.ok) throw new Error(isEditing ? "Failed to update assessment" : "Failed to create assessment");
+      // if (!res.ok) throw new Error(isEditing ? "Failed to update assessment" : "Failed to create assessment");
+      if (!res.ok) {
+        const data = await res.json();
+        toast.error(data?.message || "Failed to create assessment");
+        return;
+      }
       toast.success(isEditing ? "Assessment updated" : "Assessment created");
       setAssessPopup(false);
       setEditingAssessmentId(null);
@@ -446,6 +452,21 @@ export default function InterviewBuddyClient() {
 
     fetchCategories();
   }, []);
+
+  // Automatically select first category + first subcategory on initial load
+  useEffect(() => {
+    if (categoriesLoading) return;
+    if (selectedCategoryKey) return;
+    if (!categories || categories.length === 0) return;
+
+    const firstWithSubs = categories.find((c) => Array.isArray(c.subs) && c.subs.length > 0);
+    if (!firstWithSubs) return;
+
+    const firstSub = firstWithSubs.subs[0];
+    if (!firstSub) return;
+
+    setSelectedCategoryKey(`${firstWithSubs.main}-${firstSub}`);
+  }, [categoriesLoading, categories, selectedCategoryKey]);
 
   const searchAssessments = useCallback(async (query: string) => {
     const trimmed = query.trim();
@@ -755,7 +776,7 @@ export default function InterviewBuddyClient() {
                               setAssessErrors({});
                               setAssessPopup(true);
                             }}
-                            className="p-1 text-gray-300 hover:text-orange-500 rounded transition-colors"
+                            className="p-1 rounded-full bg-white text-gray-400 shadow-sm hover:bg-orange-50 hover:text-orange-500 transition-colors"
                             title="Edit assessment"
                           >
                             <Pencil className="h-3 w-3" />
@@ -770,7 +791,7 @@ export default function InterviewBuddyClient() {
                                 assessmentId: interview._id,
                               })
                             }
-                            className="p-1 text-gray-300 hover:text-red-500 rounded transition-colors"
+                            className="p-1 rounded-full bg-white text-gray-400 shadow-sm hover:bg-red-50 hover:text-red-500 transition-colors"
                             title="Delete assessment"
                           >
                             <Trash2 className="h-3 w-3" />
@@ -822,6 +843,24 @@ export default function InterviewBuddyClient() {
                       Pick a category on the left to see AI-powered mock interviews
                       tailored to that area.
                     </p>
+                    {userCredentials?.role === "super_admin" && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const parts = selectedCategoryKey?.split("-") || [];
+                          const cat = parts[0] || "";
+                          const sub = parts.slice(1).join("-") || "";
+                          setAssessForm((f) => ({ ...f, category: cat, subCategory: sub }));
+                          setEditingAssessmentId(null);
+                          setAssessErrors({});
+                          setAssessPopup(true);
+                        }}
+                        className="mt-4 px-4 py-2 text-sm font-medium text-orange-600 bg-orange-50 hover:bg-orange-100 rounded-lg border border-orange-200 inline-flex items-center gap-2 transition-colors"
+                      >
+                        <Plus className="h-4 w-4" />
+                        Add Assessment
+                      </button>
+                    )}
                   </div>
                 )}
               </div>
@@ -925,14 +964,99 @@ export default function InterviewBuddyClient() {
             <div className="space-y-3">
               {/* Assessment Role */}
               <div>
-                <label className="text-xs text-gray-500">Assessment Role *</label>
-                <input
-                  type="text"
-                  value={assessForm.assessmentRole}
-                  onChange={(e) => setAssessForm((f) => ({ ...f, assessmentRole: e.target.value }))}
-                  placeholder="e.g. IT Infrastructure Manager"
-                  className={`mt-1 w-full rounded-md border px-2.5 py-1.5 text-sm focus:outline-none focus:border-orange-400 ${assessErrors.assessmentRole ? "border-red-300" : "border-gray-200"}`}
-                />
+                <div className="flex items-center justify-between gap-2">
+                  <label className="text-xs text-gray-500">Assessment Role *</label>
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      setAiRoleGenerating(true);
+                      try {
+                        const aiUrl = process.env.NEXT_PUBLIC_AI_API_URL;
+                        if (!aiUrl) {
+                          toast.error("AI API URL not configured.");
+                          return;
+                        }
+                        const category = assessForm.category;
+                        const subcategory = assessForm.subCategory;
+                        const payload = {
+                          category: category,
+                          subcategory: subcategory,
+                          // skills: assessForm.skills.map((s) =>{ return { skill: s.name, difficulty: s.difficulty } }),
+                        };
+                        const res = await fetch(`${aiUrl}api/public/generateAIContentForAIBuddy`, {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify(payload),
+                        });
+                        if (!res.ok) throw new Error("API request failed");
+
+                        const data = await res.json();
+                        const aiData = data?.data || {};
+                        const role = (aiData.role || "").trim();
+                        const jobDescription = (aiData.jobDescription || "").trim();
+                        const skills = Array.isArray(aiData.skills) ? aiData.skills : [];
+
+                        if (!role && !jobDescription && skills.length === 0) {
+                          toast.info("No AI content returned.");
+                          return;
+                        }
+
+                        setAssessForm((f) => {
+                          const baseTimeLimit = f.skills[0]?.timeLimit ?? 12;
+                          const mappedSkills =
+                            skills.length > 0
+                              ? skills.map((s: any) => ({
+                                  name: s.name || "",
+                                  difficulty: s.difficulty || "intermediate",
+                                  timeLimit: baseTimeLimit,
+                                }))
+                              : f.skills;
+
+                          return {
+                            ...f,
+                            assessmentRole: role || f.assessmentRole,
+                            jobDescription: jobDescription || f.jobDescription,
+                            skills: mappedSkills,
+                          };
+                        });
+
+                        toast.success("AI content applied to the form.");
+                      } catch (e) {
+                        console.error(e);
+                        toast.error("Failed to generate suggestion.");
+                      } finally {
+                        setAiRoleGenerating(false);
+                      }
+                    }}
+                    disabled={aiRoleGenerating}
+                    className="group inline-flex items-center gap-1 rounded-full border border-orange-200 bg-orange-50 px-2.5 py-1 text-[11px] font-medium text-orange-600 hover:bg-orange-500 hover:text-white transition-colors disabled:opacity-60"
+                    title="Let AI fill role, description & skills"
+                  >
+                    {aiRoleGenerating ? (
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    ) : (
+                      <Sparkles className="h-3.5 w-3.5" />
+                    )}
+                    <span className="transition-colors duration-200">
+                      AI suggest
+                    </span>
+                  </button>
+                </div>
+                <div
+                  className={`mt-1 rounded-md border focus-within:ring-1 focus-within:ring-orange-400/20 ${
+                    assessErrors.assessmentRole ? "border-red-300" : "border-gray-200 focus-within:border-orange-400"
+                  }`}
+                >
+                  <input
+                    type="text"
+                    value={assessForm.assessmentRole}
+                    onChange={(e) =>
+                      setAssessForm((f) => ({ ...f, assessmentRole: e.target.value }))
+                    }
+                    placeholder="e.g. IT Infrastructure Manager"
+                    className="w-full rounded-md border-0 bg-transparent px-2.5 py-1.5 text-sm focus:outline-none focus:ring-0"
+                  />
+                </div>
                 {assessErrors.assessmentRole && <p className="text-[11px] text-red-500 mt-0.5">{assessErrors.assessmentRole}</p>}
               </div>
 
