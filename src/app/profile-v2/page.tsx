@@ -28,6 +28,8 @@ import {
   CommandItem,
   CommandList,
 } from "../components/ui/command";
+import { getStaticSkills, getStaticRoles, getStaticTools } from "../components/services/staticApis";
+import ProtectedRoute from "../components/services/protectedRoute";
 import { useUser } from "../context";
 import { updateProfile, uploadResume } from "../components/services/servicesapis";
 import {
@@ -66,7 +68,7 @@ const EMPLOYMENT_TYPE_OPTIONS = [
   "Internship",
 ];
 
-const COMMON_LANGUAGES = ["Abkhazian","Achinese","Acoli","Adangme","Adyghe","Afar","Afrihili","Afrikaans","Aghem","Ainu","Akan","Akkadian","Akoose","Alabama","Albanian","Aleut","Algerian Arabic","American English","American Sign Language","Amharic","Ancient Egyptian","Ancient Greek","Angika","Ao Naga","Arabic","Aragonese","Aramaic","Araona","Arapaho","Arawak","Armenian","Aromanian","Arpitan","Assamese","Asturian","Asu","Atsam","Australian English","Austrian German","Avaric","Avestan","Awadhi","Aymara","Azerbaijani","Badaga","Bafia","Bafut","Bakhtiari","Balinese","Baluchi","Bambara","Bamun","Banjar","Basaa","Bashkir","Basque","Batak Toba","Bavarian","Beja","Belarusian","Bemba","Bena","Bengali","Betawi","Bhojpuri","Bikol","Bini","Bishnupriya","Bislama","Blin","Blissymbols","Bodo","Bosnian","Brahui","Braj","Brazilian Portuguese","Breton","British English","Buginese","Bulgarian","Bulu","Buriat","Burmese","Caddo","Cajun French","Canadian English","Canadian French","Cantonese","Capiznon","Carib","Catalan","Cayuga","Cebuano","Central Atlas Tamazight","Central Dusun","Central Kurdish","Central Yupik","Chadian Arabic","Chagatai","Chamorro","Chechen","Cherokee","Cheyenne","Chibcha","Chiga","Chimborazo Highland Quichua","Chinese","Chinook Jargon","Chipewyan","Choctaw","Church Slavic","Chuukese","Chuvash","Classical Newari","Classical Syriac","Colognian","Comorian","Congo Swahili","Coptic","Cornish","Corsican","Cree","Creek","Crimean Turkish","Croatian","Czech","Dakota","Danish","Dargwa","Dazaga","Delaware","Dinka","Divehi","Dogri","Dogrib","Duala","Dutch","Dyula","Dzongkha","Eastern Frisian","Efik","Egyptian Arabic","Ekajuk","Elamite","Embu","Emilian","English","Erzya","Esperanto","Estonian","European Portuguese","European Spanish","Ewe","Ewondo","Extremaduran","Fang","Fanti","Faroese","Fiji Hindi","Fijian","Filipino","Finnish","Flemish","Fon","Frafra","French","Friulian","Fulah","Ga","Gagauz","Galician","Gan Chinese","Ganda","Gayo","Gbaya","Geez","Georgian","German","Gheg Albanian","Ghomala","Gilaki","Gilbertese","Goan Konkani","Gondi","Gorontalo","Gothic","Grebo","Greek","Guarani","Gujarati","Gusii","Gwichʼin","Haida","Haitian","Hakka Chinese","Hausa","Hawaiian","Hebrew","Herero","Hiligaynon","Hindi","Hiri Motu","Hittite","Hmong","Hungarian","Hupa","Iban","Ibibio","Icelandic","Ido","Igbo","Iloko","Inari Sami","Indonesian","Ingrian","Ingush","Interlingua","Interlingue","Inuktitut","Inupiaq","Irish","Italian","Jamaican Creole English","Japanese","Javanese","Jju","Jola-Fonyi","Judeo-Arabic","Judeo-Persian","Jutish","Kabardian","Kabuverdianu","Kabyle","Kachin","Kaingang","Kako","Kalaallisut","Kalenjin","Kalmyk","Kamba","Kanembu","Kannada","Kanuri","Kara-Kalpak","Karachay-Balkar","Karelian","Kashmiri","Kashubian","Kawi","Kazakh","Kenyang","Khasi","Khmer","Khotanese","Khowar","Kikuyu","Kimbundu","Kinaray-a","Kinyarwanda","Kirmanjki","Klingon","Kom","Komi","Komi-Permyak","Kongo","Konkani","Korean","Koro","Kosraean","Kotava","Koyra Chiini","Koyraboro Senni","Kpelle","Krio","Kuanyama","Kumyk","Kurdish","Kurukh","Kutenai","Kwasio","Kyrgyz","Kʼicheʼ","Ladino","Lahnda","Lakota","Lamba","Langi","Lao","Latgalian","Latin","Latin American Spanish","Latvian","Laz","Lezghian","Ligurian","Limburgish","Lingala","Lingua Franca Nova","Literary Chinese","Lithuanian","Livonian","Lojban","Lombard","Low German","Lower Silesian","Lower Sorbian","Lozi","Luba-Katanga","Luba-Lulua","Luiseno","Lule Sami","Lunda","Luo","Luxembourgish","Luyia","Maba","Macedonian","Machame","Madurese","Mafa","Magahi","Main-Franconian","Maithili","Makasar","Makhuwa-Meetto","Makonde","Malagasy","Malay","Malayalam","Maltese","Manchu","Mandar","Mandingo","Manipuri","Manx","Maori","Mapuche","Marathi","Mari","Marshallese","Marwari","Masai","Mazanderani","Medumba","Mende","Mentawai","Meru","Metaʼ","Mexican Spanish","Micmac","Middle Dutch","Middle English","Middle French","Middle High German","Middle Irish","Min Nan Chinese","Minangkabau","Mingrelian","Mirandese","Mizo","Modern Standard Arabic","Mohawk","Moksha","Moldavian","Mongo","Mongolian","Morisyen","Moroccan Arabic","Mossi","Multiple Languages","Mundang","Muslim Tat","Myene","Nama","Nauru","Navajo","Ndonga","Neapolitan","Nepali","Newari","Ngambay","Ngiemboon","Ngomba","Nheengatu","Nias","Niuean","No linguistic content","Nogai","North Ndebele","Northern Frisian","Northern Sami","Northern Sotho","Norwegian","Norwegian Bokmål","Norwegian Nynorsk","Novial","Nuer","Nyamwezi","Nyanja","Nyankole","Nyasa Tonga","Nyoro","Nzima","NʼKo","Occitan","Ojibwa","Old English","Old French","Old High German","Old Irish","Old Norse","Old Persian","Old Provençal","Oriya","Oromo","Osage","Ossetic","Ottoman Turkish","Pahlavi","Palatine German","Palauan","Pali","Pampanga","Pangasinan","Papiamento","Pashto","Pennsylvania German","Persian","Phoenician","Picard","Piedmontese","Plautdietsch","Pohnpeian","Polish","Pontic","Portuguese","Prussian","Punjabi","Quechua","Rajasthani","Rapanui","Rarotongan","Riffian","Romagnol","Romanian","Romansh","Romany","Rombo","Root","Rotuman","Roviana","Rundi","Russian","Rusyn","Rwa","Saho","Sakha","Samaritan Aramaic","Samburu","Samoan","Samogitian","Sandawe","Sango","Sangu","Sanskrit","Santali","Sardinian","Sasak","Sassarese Sardinian","Saterland Frisian","Saurashtra","Scots","Scottish Gaelic","Selayar","Selkup","Sena","Seneca","Serbian","Serbo-Croatian","Serer","Seri","Shambala","Shan","Shona","Sichuan Yi","Sicilian","Sidamo","Siksika","Silesian","Simplified Chinese","Sindhi","Sinhala","Skolt Sami","Slave","Slovak","Slovenian","Soga","Sogdien","Somali","Soninke","South Azerbaijani","South Ndebele","Southern Altai","Southern Sami","Southern Sotho","Spanish","Sranan Tongo","Standard Moroccan Tamazight","Sukuma","Sumerian","Sundanese","Susu","Swahili","Swati","Swedish","Swiss French","Swiss German","Swiss High German","Syriac","Tachelhit","Tagalog","Tahitian","Taita","Tajik","Talysh","Tamashek","Tamil","Taroko","Tasawaq","Tatar","Telugu","Tereno","Teso","Tetum","Thai","Tibetan","Tigre","Tigrinya","Timne","Tiv","Tlingit","Tok Pisin","Tokelau","Tongan","Tornedalen Finnish","Traditional Chinese","Tsakhur","Tsakonian","Tsimshian","Tsonga","Tswana","Tulu","Tumbuka","Tunisian Arabic","Turkish","Turkmen","Turoyo","Tuvalu","Tuvinian","Twi","Tyap","Udmurt","Ugaritic","Ukrainian","Umbundu","Unknown Language","Upper Sorbian","Urdu","Uyghur","Uzbek","Vai","Venda","Venetian","Veps","Vietnamese","Volapük","Võro","Votic","Vunjo","Walloon","Walser","Waray","Warlpiri","Washo","Wayuu","Welsh","West Flemish","Western Frisian","Western Mari","Wolaytta","Wolof","Wu Chinese","Xhosa","Xiang Chinese","Yangben","Yao","Yapese","Yemba","Yiddish","Yoruba","Zapotec","Zarma","Zaza","Zeelandic","Zenaga","Zhuang","Zoroastrian Dari","Zulu","Zuni"];
+const COMMON_LANGUAGES = ["Hindi", "English"];
 
 const initialForm = {
   fullName: "",
@@ -92,6 +94,7 @@ const initialForm = {
   collegeName: "",
   yearOfPassing: "",
   keySkills: "",
+  tools: "",
   languages: "",
   preferredJobTitles: "",
   preferredLocations: "",
@@ -101,6 +104,26 @@ const initialForm = {
   preferredEmploymentTypes: "",
   preferredWorkTypes: "",
   howSoonReady: "",
+};
+
+const mapStaticOptions = (data: any): { value: string; label: string }[] => {
+  if (!data) return [];
+  const list = data.data || data.items || data.skills || data.tools || data;
+  if (!Array.isArray(list)) return [];
+  return list
+    .map((item: any) => {
+      if (typeof item === "string") {
+        return { value: item, label: item };
+      }
+      if (item && typeof item === "object") {
+        const value = item.value || item.id || item.slug || item.name || "";
+        const label = item.label || item.name || item.title || item.value || "";
+        if (!value || !label) return null;
+        return { value, label };
+      }
+      return null;
+    })
+    .filter(Boolean) as { value: string; label: string }[];
 };
 
 export default function ProfileV2Page() {
@@ -116,9 +139,49 @@ export default function ProfileV2Page() {
   const [languageOptions, setLanguageOptions] = useState<
     { value: string; label: string }[]
   >(COMMON_LANGUAGES.map((lang) => ({ value: lang, label: lang })));
+  const [skillOptions, setSkillOptions] = useState<{ value: string; label: string }[]>([]);
+  const [toolOptions, setToolOptions] = useState<{ value: string; label: string }[]>([]);
   const [citySearch, setCitySearch] = useState("");
   const [openCityDropdown, setOpenCityDropdown] = useState(false);
   const [cityHighlightedIndex, setCityHighlightedIndex] = useState(-1);
+
+  // If user is not logged in (no token/credentials in storage), redirect them to login
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const hasAccessToken = !!localStorage.getItem("accessToken");
+      const hasStoredCreds = !!localStorage.getItem("userCredentials");
+      if (!hasAccessToken && !hasStoredCreds) {
+        const redirectPath = "/profile-v2";
+        router.replace(`/login?redirect=${encodeURIComponent(redirectPath)}`);
+      }
+    } catch (e) {
+      // If storage is unavailable, fail closed and route to login
+      const redirectPath = "/profile-v2";
+      router.replace(`/login?redirect=${encodeURIComponent(redirectPath)}`);
+    }
+  }, [router]);
+
+  useEffect(() => {
+    const loadStaticSkillAndToolOptions = async () => {
+      try {
+        const [skillsResp, toolsResp] = await Promise.all([
+          getStaticSkills(""),
+          getStaticTools(""),
+        ]);
+
+        const skillOpts = mapStaticOptions(skillsResp);
+        if (skillOpts.length) setSkillOptions(skillOpts);
+
+        const toolOpts = mapStaticOptions(toolsResp);
+        if (toolOpts.length) setToolOptions(toolOpts);
+      } catch (err) {
+        console.error("Failed to load static skills/tools", err);
+      }
+    };
+
+    loadStaticSkillAndToolOptions();
+  }, []);
 
   useEffect(() => {
     if (!userCredentials) return;
@@ -180,6 +243,9 @@ export default function ProfileV2Page() {
       collegeName: (firstEdu.institution as string) ?? "",
       yearOfPassing: (firstEdu.year as string) ?? "",
       keySkills: Array.isArray(p?.skills) ? (p.skills as string[]).join(", ") : "",
+      tools: Array.isArray((pro as any)?.tools)
+        ? ((pro as any).tools as string[]).join(", ")
+        : (((pro as any)?.tools as string) ?? ""),
       languages: Array.isArray(p?.languages) ? (p.languages as string[]).join(", ") : (p?.languages as string) ?? "",
       preferredJobTitles: (p?.preferredJobRole as string) ?? "",
       preferredLocations: Array.isArray(p?.prefJobLocations)
@@ -291,6 +357,9 @@ export default function ProfileV2Page() {
       const languagesArray = form.languages
         ? form.languages.split(",").map((s) => s.trim()).filter(Boolean)
         : [];
+      const toolsArray = form.tools
+        ? form.tools.split(",").map((s) => s.trim()).filter(Boolean)
+        : [];
       const industriesArray = form.preferredIndustries
         ? form.preferredIndustries.split(",").map((s) => s.trim()).filter(Boolean)
         : [];
@@ -359,6 +428,14 @@ export default function ProfileV2Page() {
               ? workTypesArray
               : (((userCredentials?.profile as any)?.professionalInformation
                   ?.preferredWorkTypes) ?? []),
+            skills: skillsArray.length
+              ? skillsArray
+              : (((userCredentials?.profile as any)?.professionalInformation
+                  ?.skills) ?? []),
+            tools: toolsArray.length
+              ? toolsArray
+              : (((userCredentials?.profile as any)?.professionalInformation
+                  ?.tools) ?? []),
             howSoonReady:
               form.howSoonReady ||
               ((userCredentials?.profile as any)?.professionalInformation
@@ -397,10 +474,11 @@ export default function ProfileV2Page() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-gray-50/40 to-white scroll-smooth">
-      <NavbarV2 pageTitle="My Profile" showPageTitle />
+    <ProtectedRoute>
+      <div className="min-h-screen bg-gradient-to-b from-white via-gray-50/40 to-white scroll-smooth">
+        <NavbarV2 pageTitle="My Profile" showPageTitle />
 
-      <main className="max-w-7.5xl mx-auto px-4 sm:px-8 lg:px-20 xl:px-28 pt-32 pb-20 space-y-8 sm:space-y-10">
+        <main className="max-w-7.5xl mx-auto px-4 sm:px-8 lg:px-20 xl:px-28 pt-32 pb-20 space-y-8 sm:space-y-10">
         {/* Header */}
         <section className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -479,7 +557,8 @@ export default function ProfileV2Page() {
                     type="email"
                     placeholder="you@example.com"
                     value={form.email}
-                    onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+                    disabled
+                    className="bg-gray-50 cursor-not-allowed border-gray-200 text-gray-500"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -490,9 +569,9 @@ export default function ProfileV2Page() {
                   <div className="flex gap-2">
                     <Select
                       value={form.countryCode}
-                      onValueChange={(v) => setForm((f) => ({ ...f, countryCode: v }))}
+                      disabled
                     >
-                      <SelectTrigger className="w-[7.5rem] border-gray-300">
+                      <SelectTrigger className="w-[7.5rem] border-gray-200 bg-gray-50 cursor-not-allowed">
                         <SelectValue>
                           {COUNTRY_CODES.find((c) => c.code === form.countryCode)?.flag} {form.countryCode}
                         </SelectValue>
@@ -513,14 +592,9 @@ export default function ProfileV2Page() {
                       type="tel"
                       placeholder={form.countryCode === "+91" ? "98765 43210" : "Enter mobile number"}
                       value={form.mobile}
-                      onChange={(e) =>
-                        setForm((f) => ({
-                          ...f,
-                          mobile: e.target.value.replace(/\D/g, "").slice(0, f.countryCode === "+91" ? 10 : 15),
-                        }))
-                      }
+                      disabled
                       maxLength={form.countryCode === "+91" ? 10 : 15}
-                      className="flex-1"
+                      className="flex-1 bg-gray-50 cursor-not-allowed border-gray-200 text-gray-500"
                     />
                   </div>
                 </div>
@@ -565,7 +639,7 @@ export default function ProfileV2Page() {
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="space-y-1.5 sm:col-span-2">
+                <div className="space-y-1.5 sm:col-span-2 lg:col-span-1">
                   <label className="text-xs font-medium text-gray-700">
                     Aadhar number (optional)
                   </label>
@@ -598,7 +672,7 @@ export default function ProfileV2Page() {
                 </div>
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-1.5 sm:col-span-2">
+                <div className="space-y-1.5 sm:col-span-2 lg:col-span-1">
                   <label className="text-xs font-medium text-gray-700">Street address</label>
                   <Input
                     placeholder="Enter street address"
@@ -886,14 +960,196 @@ export default function ProfileV2Page() {
                     onChange={(e) => setForm((f) => ({ ...f, yearOfPassing: e.target.value }))}
                   />
                 </div>
-                <div className="space-y-1.5 sm:col-span-2">
-                  <label className="text-xs font-medium text-gray-700">Key skills</label>
-                  <Textarea
-                    rows={2}
-                    placeholder="e.g. Field sales, cold calling, CRM tools, MS Excel, Hindi, English"
-                    value={form.keySkills}
-                    onChange={(e) => setForm((f) => ({ ...f, keySkills: e.target.value }))}
-                  />
+                <div className="space-y-3 sm:col-span-2">
+                  <div className="grid gap-3 lg:grid-cols-2">
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-medium text-gray-700">Key skills</label>
+                      <CreatableSelect
+                        isMulti
+                        isSearchable
+                        placeholder="e.g. Field sales, cold calling"
+                        className="w-full"
+                        filterOption={() => true}
+                        onInputChange={(input) => {
+                          // Fetch skills for every keystroke
+                          (async () => {
+                            try {
+                              const resp = await getStaticSkills(input);
+                              const opts = mapStaticOptions(resp);
+                              if (opts.length) setSkillOptions(opts);
+                            } catch (err) {
+                              console.error("Failed to fetch static skills", err);
+                            }
+                          })();
+                          return input;
+                        }}
+                        options={skillOptions}
+                        value={
+                          form.keySkills
+                            ? form.keySkills.split(",").map((s) => {
+                                const trimmed = s.trim();
+                                return trimmed
+                                  ? { value: trimmed, label: trimmed }
+                                  : null;
+                              }).filter(Boolean) as { value: string; label: string }[]
+                            : []
+                        }
+                        onChange={(newValue) => {
+                          const values = (newValue || []) as { value: string; label: string }[];
+                          const labels = values.map((v) => v.label).filter(Boolean);
+                          setForm((f) => ({ ...f, keySkills: labels.join(", ") }));
+
+                          // Merge new custom skills into options list
+                          setSkillOptions((prev) => {
+                            const existing = new Set(prev.map((o) => o.value));
+                            const additions = labels
+                              .filter((l) => !existing.has(l))
+                              .map((l) => ({ value: l, label: l }));
+                            return additions.length ? [...prev, ...additions] : prev;
+                          });
+                        }}
+                        styles={{
+                          control: (base, state) => ({
+                            ...base,
+                            borderColor: state.isFocused ? "#F97316" : "#D1D5DB",
+                            boxShadow: state.isFocused
+                              ? "0 0 0 2px rgba(249, 115, 22, 0.4)"
+                              : "none",
+                            "&:hover": {
+                              borderColor: state.isFocused ? "#F97316" : "#FB923C",
+                            },
+                            borderWidth: "1px",
+                            borderRadius: "0.5rem",
+                            minHeight: "40px",
+                            fontSize: "0.875rem",
+                          }),
+                          option: (base, state) => ({
+                            ...base,
+                            backgroundColor: state.isSelected
+                              ? "#F97316"
+                              : state.isFocused
+                              ? "#FED7AA"
+                              : "white",
+                            color: state.isSelected ? "white" : "#1F2937",
+                            "&:active": {
+                              backgroundColor: "#FB923C",
+                            },
+                          }),
+                          multiValue: (base) => ({
+                            ...base,
+                            backgroundColor: "rgba(249,115,22,0.08)",
+                            borderRadius: "999px",
+                          }),
+                          multiValueLabel: (base) => ({
+                            ...base,
+                            color: "#EA580C",
+                            fontSize: "0.75rem",
+                          }),
+                          multiValueRemove: (base) => ({
+                            ...base,
+                            color: "#EA580C",
+                            ":hover": {
+                              backgroundColor: "rgba(248,113,113,0.12)",
+                              color: "#B91C1C",
+                            },
+                          }),
+                        }}
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-medium text-gray-700">Tools & platforms you use</label>
+                      <CreatableSelect
+                        isMulti
+                        isSearchable
+                        placeholder="e.g. Salesforce, HubSpot CRM"
+                        className="w-full"
+                        filterOption={() => true}
+                        onInputChange={(input) => {
+                          // Fetch tools for every keystroke
+                          (async () => {
+                            try {
+                              const resp = await getStaticTools(input);
+                              const opts = mapStaticOptions(resp);
+                              if (opts.length) setToolOptions(opts);
+                            } catch (err) {
+                              console.error("Failed to fetch static tools", err);
+                            }
+                          })();
+                          return input;
+                        }}
+                        options={toolOptions}
+                        value={
+                          form.tools
+                            ? form.tools.split(",").map((s) => {
+                                const trimmed = s.trim();
+                                return trimmed
+                                  ? { value: trimmed, label: trimmed }
+                                  : null;
+                              }).filter(Boolean) as { value: string; label: string }[]
+                            : []
+                        }
+                        onChange={(newValue) => {
+                          const values = (newValue || []) as { value: string; label: string }[];
+                          const labels = values.map((v) => v.label).filter(Boolean);
+                          setForm((f) => ({ ...f, tools: labels.join(", ") }));
+
+                          setToolOptions((prev) => {
+                            const existing = new Set(prev.map((o) => o.value));
+                            const additions = labels
+                              .filter((l) => !existing.has(l))
+                              .map((l) => ({ value: l, label: l }));
+                            return additions.length ? [...prev, ...additions] : prev;
+                          });
+                        }}
+                        styles={{
+                          control: (base, state) => ({
+                            ...base,
+                            borderColor: state.isFocused ? "#F97316" : "#D1D5DB",
+                            boxShadow: state.isFocused
+                              ? "0 0 0 2px rgba(249, 115, 22, 0.4)"
+                              : "none",
+                            "&:hover": {
+                              borderColor: state.isFocused ? "#F97316" : "#FB923C",
+                            },
+                            borderWidth: "1px",
+                            borderRadius: "0.5rem",
+                            minHeight: "40px",
+                            fontSize: "0.875rem",
+                          }),
+                          option: (base, state) => ({
+                            ...base,
+                            backgroundColor: state.isSelected
+                              ? "#F97316"
+                              : state.isFocused
+                              ? "#FED7AA"
+                              : "white",
+                            color: state.isSelected ? "white" : "#1F2937",
+                            "&:active": {
+                              backgroundColor: "#FB923C",
+                            },
+                          }),
+                          multiValue: (base) => ({
+                            ...base,
+                            backgroundColor: "rgba(249,115,22,0.08)",
+                            borderRadius: "999px",
+                          }),
+                          multiValueLabel: (base) => ({
+                            ...base,
+                            color: "#EA580C",
+                            fontSize: "0.75rem",
+                          }),
+                          multiValueRemove: (base) => ({
+                            ...base,
+                            color: "#EA580C",
+                            ":hover": {
+                              backgroundColor: "rgba(248,113,113,0.12)",
+                              color: "#B91C1C",
+                            },
+                          }),
+                        }}
+                      />
+                    </div>
+                  </div>
                 </div>
                 <div className="space-y-1.5 sm:col-span-2">
                   <label className="text-sm font-semibold text-slate-700">
@@ -1290,10 +1546,11 @@ export default function ProfileV2Page() {
             </div>
           </aside>
         </section>
-      </main>
+        </main>
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </ProtectedRoute>
   );
 }
 

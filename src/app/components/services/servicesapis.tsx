@@ -146,6 +146,7 @@ export const userSignup = async ({
   name,
   email,
   mobile,
+  countryCode,
   password,
   referrerId,
   experienceLevel,
@@ -156,6 +157,7 @@ export const userSignup = async ({
   password?: string;
   name: string;
   mobile: string;
+  countryCode?: string;
   referrerId?: string;
   experienceLevel?: string;
   currentCity?: string;
@@ -167,6 +169,7 @@ export const userSignup = async ({
       password: password || "",
       name,
       mobile,
+      countryCode,
       experienceLevel,
       currentCity,
       referrerId,

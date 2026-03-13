@@ -28,6 +28,9 @@ const DashboardV2 = () => {
   const [aiBuddyRole, setAiBuddyRole] = useState<string | null>(null);
   const [aiBuddySessionId, setAiBuddySessionId] = useState<string | null>(null);
   const [showAiBuddyDialog, setShowAiBuddyDialog] = useState(false);
+  const [dashboardData, setDashboardData] = useState<any | null>(null);
+  const [searchPreviewJobs, setSearchPreviewJobs] = useState<any[]>([]);
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_2_0 || process.env.NEXT_PUBLIC_BACKEND_URL;
 
   useEffect(() => {
     try {
@@ -66,6 +69,85 @@ const DashboardV2 = () => {
     }
   }, []);
 
+  // Load dashboard data for the logged-in user
+  useEffect(() => {
+    const email = userCredentials?.email;
+    if (!backendUrl || !email) return;
+
+    const controller = new AbortController();
+    const fetchDashboardData = async () => {
+      try {
+        const params = new URLSearchParams({ userEmail: email });
+        const url = `${backendUrl}/public/dashboardDatas?${params.toString()}`;
+        const res = await fetch(url, { signal: controller.signal });
+        if (!res.ok) {
+          // Silently fail for now; UI is still using static placeholders
+          console.error("Failed to load dashboard data", res.status);
+          return;
+        }
+        const data = await res.json();
+        setDashboardData(data);
+      } catch (err) {
+        if ((err as any).name === "AbortError") return;
+        console.error("Error fetching dashboard data", err);
+      }
+    };
+
+    fetchDashboardData();
+
+    return () => controller.abort();
+  }, [backendUrl, userCredentials?.email]);
+
+  // Debounced backend recommendations as the user types in the dashboard search
+  useEffect(() => {
+    if (!backendUrl) return;
+    const query = searchTerm.trim();
+    if (query.length < 3) {
+      setSearchPreviewJobs([]);
+      return;
+    }
+
+    const controller = new AbortController();
+    const timeout = setTimeout(async () => {
+      try {
+        // Reuse the jobs search semantics (slugify like JobsClient)
+        const slug = query
+          .toLowerCase()
+          .replace(/\./g, "dot")
+          .replace(/\s+/g, "-");
+        const params = new URLSearchParams({
+          search: slug,
+          page: "1",
+          pageSize: "5",
+          status: "published",
+        });
+        const url = `${backendUrl}/public/jobs?${params.toString()}`;
+        const res = await fetch(url, { signal: controller.signal });
+        if (!res.ok) {
+          setSearchPreviewJobs([]);
+          return;
+        }
+        const data = await res.json();
+        const raw =
+          data?.data?.jobs ||
+          data?.data?.data ||
+          data?.jobs ||
+          data?.data ||
+          [];
+        const list: any[] = Array.isArray(raw) ? raw : [];
+        setSearchPreviewJobs(list);
+      } catch (err) {
+        if ((err as any).name === "AbortError") return;
+        setSearchPreviewJobs([]);
+      }
+    }, 500);
+
+    return () => {
+      clearTimeout(timeout);
+      controller.abort();
+    };
+  }, [backendUrl, searchTerm]);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-white via-gray-50/40 to-white scroll-smooth">
       <NavbarV2 pageTitle="My Dashboard" showPageTitle />
@@ -88,34 +170,85 @@ const DashboardV2 = () => {
             </div>
 
             {/* Search strip */}
-            <div className="bg-white/90 backdrop-blur-sm rounded-2xl border border-gray-100 shadow-md px-5 py-4 sm:px-6 sm:py-5 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
-              <div className="flex items-center gap-3 flex-1">
-                <div className="w-9 h-9 rounded-full bg-orange-50 flex items-center justify-center">
-                  <Search className="w-4 h-4 text-orange-500" />
+            <div className="bg-white/90 backdrop-blur-sm rounded-2xl border border-gray-100 shadow-md px-5 py-4 sm:px-6 sm:py-5 flex flex-col gap-3">
+              <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+                <div className="flex items-center gap-3 flex-1">
+                  <div className="w-9 h-9 rounded-full bg-orange-50 flex items-center justify-center">
+                    <Search className="w-4 h-4 text-orange-500" />
+                  </div>
+                  <div className="flex-1 relative">
+                    <Input
+                      placeholder="Search jobs, companies, or locations"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="h-9 border-0 bg-transparent px-0 text-sm focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-400"
+                    />
+                    {searchPreviewJobs.length > 0 && (
+                      <div className="absolute z-20 mt-1 w-full rounded-xl border border-gray-200 bg-white shadow-lg max-h-64 overflow-y-auto">
+                        {searchPreviewJobs.map((job) => (
+                          <button
+                            key={job.jobId || job.id || job._id}
+                            type="button"
+                            onClick={() => {
+                              const title =
+                                job.title ||
+                                job.jobTitle ||
+                                "job";
+                              const location =
+                                job.location ||
+                                "location";
+                              const slugTitle = String(title)
+                                .toLowerCase()
+                                .replace(/\s+/g, "-")
+                                .replace(/[^a-z0-9-]/g, "");
+                              const slugLocation = String(location)
+                                .toLowerCase()
+                                .replace(/\s+/g, "-")
+                                .replace(/[^a-z0-9-]/g, "");
+                              const jobId = job.jobId || job.id || job._id;
+                              if (jobId) {
+                                router.push(
+                                  `/jobs/${slugTitle}-${slugLocation}/${jobId}`
+                                );
+                              }
+                            }}
+                            className="w-full text-left px-3 py-2 text-xs sm:text-sm hover:bg-gray-50 flex items-center justify-between gap-2"
+                          >
+                            <div className="min-w-0">
+                              <p className="font-medium text-gray-900 truncate">
+                                {job.title || job.jobTitle || "Job title"}
+                              </p>
+                              <p className="text-[11px] text-gray-500 truncate">
+                                {job.companyName || job.company_name || ""}
+                                {job.location ? ` • ${job.location}` : ""}
+                              </p>
+                            </div>
+                            {typeof job.minExperience === "number" &&
+                              typeof job.maxExperience === "number" && (
+                                <span className="text-[11px] text-gray-500 whitespace-nowrap">
+                                  {job.minExperience}-{job.maxExperience} yrs
+                                </span>
+                              )}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <Input
-                    placeholder="Search jobs, companies, or locations"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="h-9 border-0 bg-transparent px-0 text-sm focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-400"
-                  />
+                <div className="flex gap-2 justify-end">
+                  <Button
+                    size="sm"
+                    className="bg-orange-500 hover:bg-orange-600 text-white gap-1.5"
+                    onClick={() => {
+                      const query = searchTerm.trim();
+                      Cookies.set("searchQuery", query);
+                      router.push("/jobs");
+                    }}
+                  >
+                    <Search className="w-4 h-4" />
+                    Search jobs
+                  </Button>
                 </div>
-              </div>
-              <div className="flex gap-2 justify-end">
-              
-                <Button
-                  size="sm"
-                  className="bg-orange-500 hover:bg-orange-600 text-white gap-1.5"
-                  onClick={() => {
-                    const query = searchTerm.trim();
-                    Cookies.set("searchQuery", query);
-                    router.push("/jobs");
-                  }}
-                >
-                  <Search className="w-4 h-4" />
-                  Search jobs
-                </Button>
               </div>
             </div>
 
@@ -130,13 +263,15 @@ const DashboardV2 = () => {
                     <Briefcase className="w-4 h-4 text-orange-500" />
                   </div>
                   <span className="rounded-full bg-green-50 text-green-600 text-[11px] font-medium px-2 py-0.5">
-                    +2 this week
+                    {(dashboardData?.data?.applicationInProcessingCount ?? 0)} total
                   </span>
                 </div>
                 <p className="text-[11px] uppercase tracking-wide text-gray-400 mb-1.5">
                   Applications in progress
                 </p>
-                <p className="text-3xl font-semibold text-gray-900">8</p>
+                <p className="text-3xl font-semibold text-gray-900">
+                  {dashboardData?.data?.applicationInProcessingCount ?? 0}
+                </p>
                 <p className="text-xs text-gray-500 mt-2">
                   Stay on top of each application and never miss a follow-up.
                 </p>
@@ -151,13 +286,15 @@ const DashboardV2 = () => {
                     <Users className="w-4 h-4 text-blue-500" />
                   </div>
                   <span className="rounded-full bg-blue-50 text-blue-600 text-[11px] font-medium px-2 py-0.5">
-                    4 new this week
+                    {(dashboardData?.data?.savedJobCount ?? 0)} total
                   </span>
                 </div>
                 <p className="text-[11px] uppercase tracking-wide text-gray-400 mb-1.5">
                   Saved jobs
                 </p>
-                <p className="text-3xl font-semibold text-gray-900">21</p>
+                <p className="text-3xl font-semibold text-gray-900">
+                  {dashboardData?.data?.savedJobCount ?? 0}
+                </p>
                 <p className="text-xs text-gray-500 mt-2">
                   Keep interesting roles in one place and apply when you&apos;re ready.
                 </p>
@@ -172,13 +309,15 @@ const DashboardV2 = () => {
                     <Building2 className="w-4 h-4 text-emerald-500" />
                   </div>
                   <span className="rounded-full bg-emerald-50 text-emerald-600 text-[11px] font-medium px-2 py-0.5">
-                    2 this week
+                    {(dashboardData?.data?.interviewScheduleCount ?? 0)} total
                   </span>
                 </div>
                 <p className="text-[11px] uppercase tracking-wide text-gray-400 mb-1.5">
                   Interviews scheduled
                 </p>
-                <p className="text-3xl font-semibold text-gray-900">3</p>
+                <p className="text-3xl font-semibold text-gray-900">
+                  {dashboardData?.data?.interviewScheduleCount ?? 0}
+                </p>
                 <p className="text-xs text-gray-500 mt-2">
                   Prepare well and keep track of upcoming interview dates.
                 </p>
@@ -193,13 +332,15 @@ const DashboardV2 = () => {
                     <Brain className="w-4 h-4 text-red-500" />
                   </div>
                   <span className="rounded-full bg-red-50 text-red-600 text-[11px] font-medium px-2 py-0.5">
-                    2 this week
+                    {(dashboardData?.data?.AiinterviewCount ?? 0)} total
                   </span>
                 </div>
                 <p className="text-[11px] uppercase tracking-wide text-gray-400 mb-1.5">
                   AI Interview Sessions
                 </p>
-                <p className="text-3xl font-semibold text-gray-900">3</p>
+                <p className="text-3xl font-semibold text-gray-900">
+                  {dashboardData?.data?.AiinterviewCount ?? 0}
+                </p>
                 <p className="text-xs text-gray-500 mt-2">
                   Practice with real interview scenarios and get AI-powered feedback to improve your skills.
                 </p>
@@ -300,7 +441,7 @@ const DashboardV2 = () => {
 
         {/* Second row: Recommended roles + Application overview */}
         <section className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.3fr)] items-start">
-          {/* Recommended roles list (UI only, no data wiring) */}
+          {/* Recommended roles list (driven by relatedJobs from dashboard API) */}
           <Card className="border border-gray-100 shadow-sm p-5 sm:p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
@@ -320,35 +461,18 @@ const DashboardV2 = () => {
               </Button>
             </div>
             <div className="divide-y divide-gray-100 text-sm">
-              {[
-                {
-                  title: "Senior Sales Executive",
-                  location: "Bengaluru · Hybrid",
-                  applicants: 42,
-                  stage: "Screening",
-                },
-                {
-                  title: "Customer Support Associate",
-                  location: "Mumbai · On-site",
-                  applicants: 19,
-                  stage: "Interviewing",
-                },
-                {
-                  title: "Business Development Manager",
-                  location: "Remote · India",
-                  applicants: 33,
-                  stage: "Shortlisting",
-                },
-              ].map((role) => (
+              {(dashboardData?.data?.relatedJobs || []).slice(0, 5).map((job: any) => (
                 <div
-                  key={role.title}
+                  key={job._id || job.id || job.title}
                   className="py-3 flex items-center justify-between gap-3"
                 >
                   <div className="min-w-0">
                     <p className="font-medium text-gray-900 truncate">
-                      {role.title}
+                      {job.title || "Job title"}
                     </p>
-                    <p className="text-xs text-gray-500">{role.location}</p>
+                    <p className="text-xs text-gray-500">
+                      {job.location || "Location not specified"}
+                    </p>
                   </div>
                   <div className="flex items-center gap-4">
                     <div className="text-right">
@@ -356,11 +480,11 @@ const DashboardV2 = () => {
                         Applicants
                       </p>
                       <p className="text-sm font-semibold text-gray-900">
-                        {role.applicants}
+                        {job.applicantsCount ?? 0}
                       </p>
                     </div>
                     <span className="inline-flex items-center rounded-full bg-gray-50 px-3 py-1 text-[11px] font-medium text-gray-700 border border-gray-200">
-                      {role.stage}
+                      {job.workType || "—"}
                     </span>
                   </div>
                 </div>
@@ -383,30 +507,20 @@ const DashboardV2 = () => {
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div className="rounded-xl bg-orange-50 px-4 py-3">
                 <p className="text-xs text-orange-700 mb-1">Applied</p>
-                <p className="text-xl font-semibold text-orange-900">68</p>
+                <p className="text-xl font-semibold text-orange-900">
+                  {dashboardData?.data?.appliedCount ?? 0}
+                </p>
                 <p className="text-[11px] text-orange-700/80 mt-1">
                   Applications successfully submitted and awaiting review.
                 </p>
               </div>
-              <div className="rounded-xl bg-blue-50 px-4 py-3">
-                <p className="text-xs text-blue-700 mb-1">Interviewing</p>
-                <p className="text-xl font-semibold text-blue-900">27</p>
-                <p className="text-[11px] text-blue-700/80 mt-1">
-                  Interviews scheduled or in progress with companies.
-                </p>
-              </div>
               <div className="rounded-xl bg-emerald-50 px-4 py-3">
                 <p className="text-xs text-emerald-700 mb-1">Offers</p>
-                <p className="text-xl font-semibold text-emerald-900">9</p>
+                <p className="text-xl font-semibold text-emerald-900">
+                  {dashboardData?.data?.offersCount ?? 0}
+                </p>
                 <p className="text-[11px] text-emerald-700/80 mt-1">
                   Track offer details, negotiations, and joining dates.
-                </p>
-              </div>
-              <div className="rounded-xl bg-gray-50 px-4 py-3">
-                <p className="text-xs text-gray-700 mb-1">On hold</p>
-                <p className="text-xl font-semibold text-gray-900">5</p>
-                <p className="text-[11px] text-gray-700/80 mt-1">
-                  Applications paused or awaiting further updates.
                 </p>
               </div>
             </div>
