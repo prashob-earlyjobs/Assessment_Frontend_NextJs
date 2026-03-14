@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import InterviewBuddyClient from "../components/pages/InterviewBuddyClient";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.earlyjobs.ai";
@@ -22,7 +23,19 @@ export const metadata: Metadata = {
   },
 };
 
+function InterviewBuddyFallback() {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-white via-gray-50/40 to-white flex items-center justify-center">
+      <div className="animate-pulse text-slate-500 text-sm">Loading...</div>
+    </div>
+  );
+}
+
 export default function InterviewBuddyPage() {
-  return <InterviewBuddyClient />;
+  return (
+    <Suspense fallback={<InterviewBuddyFallback />}>
+      <InterviewBuddyClient />
+    </Suspense>
+  );
 }
 
