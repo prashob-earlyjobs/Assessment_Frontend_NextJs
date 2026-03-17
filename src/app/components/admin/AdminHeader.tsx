@@ -35,7 +35,7 @@ export const AdminHeader: React.FC = () => {
       }
       toast.success("Logged out successfully!");
       setCurrentUser(null); // Clear user credentials
-      navigate.push('/login');
+      navigate.push('/');
     }
 
 
@@ -85,7 +85,7 @@ export const AdminHeader: React.FC = () => {
           </div>
         </div>
         <AlertDialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
-          <AlertDialogContent className="rounded-3xl bg-white"  style={{backgroundColor: 'white' }}>
+          <AlertDialogContent className="rounded-3xl bg-white" style={{ backgroundColor: 'white' }}>
             <AlertDialogHeader>
               <AlertDialogTitle>Confirm Logout</AlertDialogTitle>
               <AlertDialogDescription>

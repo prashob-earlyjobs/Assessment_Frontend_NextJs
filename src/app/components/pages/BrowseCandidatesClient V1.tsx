@@ -316,7 +316,7 @@ export default function BrowseCandidatesClient() {
                     <p className="text-base lg:text-lg text-gray-600 mt-2 font-medium">
                       Connect with{" "}
                       {/* <span className="text-orange-600 font-semibold">{totalCandidates}+</span>{" "} */}
-                      pre-assessed professionals ready to join your team
+                      pre-interviewed professionals ready to join your team
                     </p>
                   </div>
                 </div>

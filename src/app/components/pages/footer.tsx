@@ -343,7 +343,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <p className="text-gray-400 text-base font-normal leading-6 text-center mt-8 lg:mt-0">© 2024-25 Victa EarlyJobs Technologies Private Limited | <span className="font-semibold">CIN</span>: U78300KA2025PTC198732 | All rights reserved.</p>
+        <p className="text-gray-400 text-base font-normal leading-6 text-center mt-8 lg:mt-0">© 2024-{new Date().getFullYear()} Victa EarlyJobs Technologies Private Limited | <span className="font-semibold">CIN</span>: U78300KA2025PTC198732 | All rights reserved.</p>
       </footer>
       <FooterScroll />
     </>

@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { Suspense } from "react";
 import BrowseCandidatesClient from "../components/pages/BrowseCandidatesClient";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.earlyjobs.ai";
@@ -30,5 +31,9 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <BrowseCandidatesClient />;
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-gray-600">Loading candidates...</div>}>
+      <BrowseCandidatesClient />
+    </Suspense>
+  );
 }

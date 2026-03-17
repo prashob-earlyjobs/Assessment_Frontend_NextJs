@@ -1,18 +1,22 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { Button } from "../ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { Menu, X, ChevronLeft, ChevronRight, Search, Filter, Star, Award, Briefcase, MapPin, TrendingUp } from "lucide-react";
+import { Menu, X, ChevronLeft, ChevronRight, Search, Filter, Star, Award, Briefcase, MapPin } from "lucide-react";
 import Footer from "./footer";
 import Navbar from "./navbar";
 import Cookies from "js-cookie";
 import axiosInstance from "../services/apiinterseptor";
 import NavbarV2 from "../v2/navbar/navbar.v2";
+import InterestedCandidateForm from "../InterestedCandidateForm";
 
 export default function BrowseCandidatesClient() {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [scoreFilter, setScoreFilter] = useState("");
@@ -20,11 +24,18 @@ export default function BrowseCandidatesClient() {
   const [candidates, setCandidates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [showLimitModal, setShowLimitModal] = useState(false);
   const [itemsPerPage] = useState(12);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCandidates, setTotalCandidates] = useState(0);
   const router = useRouter();
+  const didMountRef = useRef(false);
+
+  // Derive current page from URL so back/forward navigation always restores it
+  const currentPage = useMemo(() => {
+    const pageFromUrl = Number(searchParams.get("page") || "1");
+    return Number.isNaN(pageFromUrl) || pageFromUrl < 1 ? 1 : pageFromUrl;
+  }, [searchParams]);
 
   // Debounce search input before calling API (prevents request on every keystroke)
   useEffect(() => {
@@ -33,6 +44,22 @@ export default function BrowseCandidatesClient() {
     }, 400);
     return () => clearTimeout(t);
   }, [searchTerm]);
+
+  // When filters/search change, go back to page 1 (but don't override initial URL-based page on first mount)
+  useEffect(() => {
+    if (!didMountRef.current) {
+      didMountRef.current = true;
+      return;
+    }
+
+    // Only reset to page 1 if we're not already on page 1
+    if (currentPage !== 1) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete("page");
+      const nextUrl = params.toString() ? `${pathname}?${params.toString()}` : pathname;
+      router.push(nextUrl, { scroll: false });
+    }
+  }, [debouncedSearchTerm, scoreFilter, currentPage, pathname, router, searchParams]);
 
   useEffect(() => {
     const fetchCandidates = async () => {
@@ -114,11 +141,6 @@ export default function BrowseCandidatesClient() {
  
     fetchCandidates();
   }, [currentPage, itemsPerPage, scoreFilter, debouncedSearchTerm]);
-
-  // Reset to page 1 when search term or score filter changes
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [debouncedSearchTerm, scoreFilter]);
 
   const scrollToSection = (sectionId) => {
     const section = document.getElementById(sectionId);
@@ -227,8 +249,24 @@ export default function BrowseCandidatesClient() {
   const filteredCandidates = useMemo(() => candidates, [candidates]);
 
   const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Block access to page 3 or higher and show popup
+    if (newPage >= 3) {
+      setShowLimitModal(true);
+      return;
+    }
+
+    // Update the URL so that browser back/forward preserves the page
+    const params = new URLSearchParams(searchParams.toString());
+    if (newPage > 1) {
+      params.set("page", String(newPage));
+    } else {
+      params.delete("page");
+    }
+
+    const nextUrl = params.toString() ? `${pathname}?${params.toString()}` : pathname;
+    router.push(nextUrl, { scroll: false });
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   // Calculate display values
@@ -261,7 +299,7 @@ export default function BrowseCandidatesClient() {
                     <p className="text-base lg:text-lg text-gray-600 mt-2 font-medium">
                       Connect with{" "}
                       {/* <span className="text-orange-600 font-semibold">{totalCandidates}+</span>{" "} */}
-                      pre-assessed professionals ready to join your team
+                      pre-interviewed professionals ready to join your team
                     </p>
                   </div>
                 </div>
@@ -707,6 +745,12 @@ export default function BrowseCandidatesClient() {
         </div>
       </div>
       <Footer />
+
+      <InterestedCandidateForm
+        isOpen={showLimitModal}
+        onClose={() => setShowLimitModal(false)}
+        candidateName="more candidates"
+      />
     </>
   );
 }

@@ -58,7 +58,7 @@ const clientLogos = [
 
 
 
-const HERO_SPECIAL_LOCATIONS = ["All Locations", "Remote"] as const;
+const HERO_SPECIAL_LOCATIONS = ["Remote"] as const;
 
 const HeroV2 = ({ data }: { data: any }) => {
     const router = useRouter();
@@ -172,12 +172,11 @@ const HeroV2 = ({ data }: { data: any }) => {
                 <div className="space-y-3 sm:space-y-6 md:space-y-8 lg:space-y-10 xl:space-y-12">
                     {/* Main Title */}
                     <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-bold text-center leading-tight px-2 sm:px-4">
-                        Find Your Dream Job Today!
-                    </h1>
+                        Connecting Talent with Opportunities Across India.</h1>
 
                     {/* Subtitle */}
                     <p className="text-sm sm:text-base md:text-lg lg:text-xl text-center text-gray-300 max-w-3xl mx-auto px-2 sm:px-6">
-                        Connecting Talent with Opportunity: Your Gateway to Career Success
+                        India’s Women Recruiter Network: Your Career Partner, From Interview to Onboarding.
                     </p>
 
                     {/* Search Bar */}
