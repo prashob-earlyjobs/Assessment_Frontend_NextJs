@@ -22,6 +22,8 @@ import {
     ChevronUp,
     Mail,
     X,
+    Headphones,
+    User,
 } from "lucide-react"
 
 const Card = ({ className = "", children, ...props }) => (
@@ -99,7 +101,7 @@ const Popup = ({ message, type, onClose }) => {
     )
 }
 
-const Ghaziabad = () => {
+const Lucknow = () => {
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -144,7 +146,7 @@ const Ghaziabad = () => {
                 setShowPopup({
                     type: "success",
                     message:
-                        "Welcome to the EarlyJobs Ghaziabad network! Our team will contact you within 24 hours to discuss your career goals and upcoming opportunities.",
+                        "Welcome to the EarlyJobs Lucknow network! Our team will contact you within 24 hours to discuss your career goals and upcoming opportunities.",
                 })
             } else {
                 setError("Failed to submit form. Please try again.")
@@ -186,8 +188,7 @@ const Ghaziabad = () => {
                 role: "",
                 YourExpectations: "",
                 industry: "",
-                city: "Ghaziabad",
-                city: "Ghaziabad",
+                city: "Lucknow",
                 resume: null,
             })
         }
@@ -196,16 +197,16 @@ const Ghaziabad = () => {
     const steps = [
         {
             icon: UserPlus,
-            title: "Register on EarlyJobs Ghaziabad Portal",
+            title: "Register on EarlyJobs Lucknow Portal",
             description:
-                "Create your profile in minutes. Upload your resume, add your skills, and tell us about your career aspirations. Our platform is designed specifically for Ghaziabad's job market and NCR opportunities.",
+                "Create your profile in minutes. Upload your resume, add your skills, and tell us about your career aspirations. Our platform is designed specifically for Lucknow's job market.",
             color: "bg-orange-500",
         },
         {
             icon: Search,
             title: "Get Matched with Local Opportunities",
             description:
-                "Our smart algorithm connects you with relevant jobs, internships, and skill-building programs in Ghaziabad and NCR. From IT companies to manufacturing units, retail chains to educational institutions.",
+                "Our smart algorithm connects you with relevant jobs, internships, and skill-building programs in Lucknow. From IT companies to manufacturing units, retail chains to educational institutions.",
             color: "bg-orange-400",
         },
         {
@@ -218,7 +219,7 @@ const Ghaziabad = () => {
     ]
 
     const studentBenefits = [
-        "Verified local jobs & internship opportunities in Ghaziabad & NCR",
+        "Verified local jobs & internship opportunities in Lucknow",
         "Skill-building workshops & certification programs",
         "Regular walk-in interview drives in the city",
         "Career guidance & resume building support",
@@ -236,7 +237,7 @@ const Ghaziabad = () => {
     ]
 
     const companyBenefits = [
-        "Access to pre-vetted local talent pool in Ghaziabad & NCR",
+        "Access to pre-vetted local talent pool in Lucknow",
         "Quick hiring process & reduced recruitment time",
         "Cost-effective recruitment solutions",
         "Campus recruitment support & coordination",
@@ -246,29 +247,29 @@ const Ghaziabad = () => {
 
     const faqs = [
         {
-            question: "What services does EarlyJobs Ghaziabad offer?",
+            question: "What services does EarlyJobs Lucknow offer?",
             answer:
-                "We provide comprehensive recruitment solutions including job placements, internships, skill development programs, campus recruitment drives, and career counseling specifically for the Ghaziabad and NCR region. Our services connect local talent with opportunities across IT, manufacturing, retail, education, and emerging sectors in Ghaziabad.",
+                "We provide comprehensive recruitment solutions including job placements, internships, skill development programs, campus recruitment drives, and career counseling specifically for the Lucknow region. Our services connect local talent with opportunities across IT, manufacturing, retail, education, and emerging sectors in Lucknow.",
         },
         {
-            question: "Is there any registration fee to join EarlyJobs Ghaziabad?",
+            question: "Is there any registration fee to join EarlyJobs Lucknow?",
             answer:
-                "No, registration is completely free for job seekers and students. We believe in accessible career opportunities for everyone in Ghaziabad. Our revenue comes from our employer partners, not from candidates.",
+                "No, registration is completely free for job seekers and students. We believe in accessible career opportunities for everyone in Lucknow. Our revenue comes from our employer partners, not from candidates.",
         },
         {
-            question: "Which companies hire through EarlyJobs in Ghaziabad?",
+            question: "Which companies hire through EarlyJobs in Lucknow?",
             answer:
-                "We partner with 100+ companies ranging from IT firms, manufacturing units, retail chains, educational institutions, and government organizations. Our partners include both established corporates and growing businesses in the Ghaziabad and NCR ecosystem.",
+                "We partner with numerous companies ranging from IT firms, manufacturing units, retail chains, educational institutions, and government organizations. Our partners include both established corporates and growing businesses in the Lucknow ecosystem.",
         },
         {
             question: "Do you provide training and skill development programs?",
             answer:
-                "Yes! We conduct regular workshops on communication skills, technical training, interview preparation, resume building, and industry-specific certification programs. All training is designed considering the local job market requirements in Ghaziabad and NCR.",
+                "Yes! We conduct regular workshops on communication skills, technical training, interview preparation, resume building, and industry-specific certification programs. All training is designed considering the local job market requirements in Lucknow.",
         },
         {
-            question: "How often do you conduct walk-in interviews in Ghaziabad?",
+            question: "How often do you conduct walk-in interviews in Lucknow?",
             answer:
-                "We organize walk-in interview drives at least twice a month at various locations across Ghaziabad including convenient venues in the city. We also conduct special campus drives at local colleges and institutions.",
+                "We organize walk-in interview drives at least twice a month at various locations across Lucknow including convenient venues in the city. We also conduct special campus drives at local colleges and institutions.",
         },
         {
             question: "Can final year students register for placements?",
@@ -284,11 +285,11 @@ const Ghaziabad = () => {
             <section className="relative min-h-screen overflow-hidden">
                 <div className="absolute inset-0">
                     <img
-                        src="/images/ghaziabad.jpg"
-                        alt="Ghaziabad skyline with students and professionals"
+                        src="/images/lucknow.jpg"
+                        alt="Lucknow skyline"
                         className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-orange-800/70"></div>
+                    <div className="absolute inset-0 bg-orange-800/50"></div>
                 </div>
 
                 <div className="relative z-10 container mx-auto px-4 pt-20">
@@ -296,23 +297,23 @@ const Ghaziabad = () => {
                         <div className="text-white space-y-8">
                             <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 text-sm font-medium">
                                 <MapPin className="w-4 h-4" />
-                                Ghaziabad, Uttar Pradesh
+                                Lucknow, Uttar Pradesh
                             </div>
 
                             <div className="space-y-4">
                                 <h1 className="text-4xl md:text-6xl font-bold">
-                                    Shaping Ghaziabad’s Next
-                                    <span className="block text-orange-200">Career Leaders</span>
+                                    Building Lucknow’s Future
+                                    <span className="block text-orange-200">Career Champions</span>
                                 </h1>
                                 <p className="text-xl md:text-2xl font-medium opacity-90">
-                                    Where Your Career Journey Takes Off in Ghaziabad
+                                    Where Your Career Journey Takes Off in Lucknow
                                 </p>
                             </div>
 
                             <div className="text-center">
                                 <p className="text-lg md:text-xl">
-                                    Connecting Ghaziabad's brightest talent with top employers across IT, Manufacturing, Retail &
-                                    Education sectors. Build skills, find opportunities, and grow your career with EarlyJobs Ghaziabad.
+                                    Connecting Lucknow's brightest talent with top employers across IT, Manufacturing, Retail &
+                                    Education sectors. Build skills, find opportunities, and grow your career with EarlyJobs Lucknow.
                                 </p>
                             </div>
 
@@ -359,13 +360,13 @@ const Ghaziabad = () => {
                             transition={{ duration: 0.8 }}
                         >
                             <p className="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-semibold bg-orange-100 text-orange-700 mb-6 shadow-sm border border-orange-200">
-                                <MapPin className="w-3 h-3 mr-2" /> Ghaziabad · NCR Hub
+                                <MapPin className="w-3 h-3 mr-2" /> Lucknow · Uttar Pradesh
                             </p>
                             <h2 className="text-4xl md:text-5xl font-extrabold text-orange-900 mb-6 leading-tight">
-                                About <span className="bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">EarlyJobs Ghaziabad</span>
+                                About <span className="bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">EarlyJobs Lucknow</span>
                             </h2>
                             <p className="text-lg text-orange-800 leading-relaxed mb-6">
-                                <span className="font-bold text-orange-900">EarlyJobs</span> is India's leading tech-enabled recruitment franchise, and the Ghaziabad chapter plays a key role in linking local talent to meaningful, high-impact career opportunities
+                                <span className="font-bold text-orange-900">EarlyJobs</span> is India's leading tech-enabled recruitment franchise, and the Lucknow chapter plays a key role in linking local talent to meaningful, high-impact career opportunities
                             </p>
 
                             <div className="bg-white/80 backdrop-blur-sm border-l-4 border-orange-500 p-6 rounded-r-xl mb-8 shadow-sm">
@@ -375,11 +376,11 @@ const Ghaziabad = () => {
                                 </div>
                                 <p className="text-2xl font-bold text-orange-900 mb-2">Connect. Develop. Succeed.</p>
                                 <p className="text-orange-700/80 font-medium">
-                                    We help students and professionals in Ghaziabad build meaningful careers right here in our vibrant city.
+                                    We help students and professionals in Lucknow build meaningful careers right here in our vibrant city.
                                 </p>
                             </div>
                             <div className="flex flex-wrap gap-3">
-                                <span className="px-3 py-1 rounded-full bg-white text-orange-800 text-sm shadow-sm">NCR-focused hiring</span>
+                                <span className="px-3 py-1 rounded-full bg-white text-orange-800 text-sm shadow-sm">Lucknow-focused hiring</span>
                                 <span className="px-3 py-1 rounded-full bg-white text-orange-800 text-sm shadow-sm">Campus to corporate</span>
                                 <span className="px-3 py-1 rounded-full bg-white text-orange-800 text-sm shadow-sm">AI-driven matching</span>
                                 <span className="px-3 py-1 rounded-full bg-white text-orange-800 text-sm shadow-sm">Local support team</span>
@@ -396,8 +397,8 @@ const Ghaziabad = () => {
                         >
                             <div className="rounded-3xl overflow-hidden shadow-xl border border-orange-100 bg-white/80 backdrop-blur">
                                 <img
-                                    src="/images/ghaziabad.jpg"
-                                    alt="Ghaziabad city"
+                                    src="/images/lucknow.jpg"
+                                    alt="Lucknow city"
                                     className="w-full h-56 object-cover"
                                 />
                                 <div className="p-6 grid grid-cols-3 gap-4">
@@ -424,11 +425,11 @@ const Ghaziabad = () => {
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-16">
                         <h2 className="text-3xl md:text-4xl font-bold text-orange-700 mb-6">
-                            Benefits for Everyone in the Ghaziabad Ecosystem
+                            Benefits for Everyone in the Lucknow Ecosystem
                         </h2>
                         <p className="text-lg text-orange-800 max-w-3xl mx-auto">
                             Whether you're a student seeking opportunities, a college looking to improve placements, or a company
-                            searching for talent, EarlyJobs Ghaziabad has solutions tailored for you.
+                            searching for talent, EarlyJobs Lucknow has solutions tailored for you.
                         </p>
                     </div>
 
@@ -474,35 +475,35 @@ const Ghaziabad = () => {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.5, delay: index * 0.2 }}
-                                className={`relative group bg-white rounded-2xl p-8 border ${item.borderColor} hover:${item.hoverBorderColor} shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2`}
+                                className="relative group"
                             >
-                                <div
-                                    className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${item.color} opacity-5 rounded-bl-full -mr-4 -mt-4 transition-all group-hover:scale-110`}
-                                />
+                                <div className={`absolute inset-0 bg-gradient-to-br ${item.color} rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl`} />
+                                <div className="relative bg-white rounded-2xl p-8 border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 h-full flex flex-col hover:-translate-y-2">
+                                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-6 shadow-md group-hover:scale-110 transition-transform duration-300`}>
+                                        <item.icon className="w-8 h-8 text-white" />
+                                    </div>
 
-                                <div className={`relative w-20 h-20 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-6 shadow-lg transform group-hover:rotate-6 transition-transform`}>
-                                    <item.icon className={`w-10 h-10 ${item.iconColor}`} />
-                                </div>
+                                    <h3 className="text-2xl font-bold text-gray-800 mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-orange-600 group-hover:to-red-600 transition-colors">
+                                        {item.title}
+                                    </h3>
+                                    <p className="text-gray-600 mb-6 font-medium">{item.subtitle}</p>
 
-                                <h3 className="text-2xl font-bold text-gray-800 mb-2 group-hover:text-amber-700 transition-colors">
-                                    {item.title}
-                                </h3>
-                                <p className="text-gray-600 mb-6 font-medium">{item.subtitle}</p>
+                                    <ul className="space-y-4 mb-8 flex-grow">
+                                        {item.benefits.map((benefit, idx) => (
+                                            <li key={idx} className="flex items-start gap-3">
+                                                <div className={`mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-orange-100 flex items-center justify-center group-hover:bg-orange-200 transition-colors`}>
+                                                    <CheckCircle className={`w-3 h-3 text-orange-600`} />
+                                                </div>
+                                                <span className="text-gray-700 text-sm leading-relaxed group-hover:text-gray-900 transition-colors">{benefit}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
 
-                                <ul className="space-y-4">
-                                    {item.benefits.map((benefit, idx) => (
-                                        <li key={idx} className="flex items-start gap-3">
-                                            <div className={`mt-1 p-0.5 rounded-full bg-gradient-to-br ${item.color}`}>
-                                                <CheckCircle className="w-4 h-4 text-white" />
-                                            </div>
-                                            <span className="text-gray-700 text-sm leading-relaxed">{benefit}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-
-                                <div className="mt-8 pt-6 border-t border-gray-100">
-                                    <button className="flex items-center text-sm font-bold text-gray-500 group-hover:text-amber-600 transition-colors">
-                                        Learn more <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                                    <button className={`w-full py-3 rounded-xl border-2 font-bold text-sm transition-all duration-300 
+                                        ${index === 0 ? 'border-blue-100 text-blue-600 group-hover:bg-blue-50 group-hover:border-blue-200' :
+                                            index === 1 ? 'border-orange-100 text-orange-600 group-hover:bg-orange-50 group-hover:border-orange-200' :
+                                                'border-purple-100 text-purple-600 group-hover:bg-purple-50 group-hover:border-purple-200'}`}>
+                                        View Details
                                     </button>
                                 </div>
                             </motion.div>
@@ -515,7 +516,7 @@ const Ghaziabad = () => {
                                 Ready to Transform Your Career Journey?
                             </h3>
                             <p className="text-lg text-orange-800 mb-8 max-w-2xl mx-auto">
-                                Join hundreds of successful professionals who started their journey with EarlyJobs Ghaziabad. Your dream
+                                Join hundreds of successful professionals who started their journey with EarlyJobs Lucknow. Your dream
                                 career is just a registration away.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -536,10 +537,10 @@ const Ghaziabad = () => {
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-16">
                         <h2 className="text-3xl md:text-4xl font-bold text-orange-700 mb-6">
-                            How EarlyJobs Ghaziabad Works
+                            How EarlyJobs Lucknow Works
                         </h2>
                         <p className="text-lg text-orange-800 max-w-3xl mx-auto">
-                            Getting started with your career journey in Ghaziabad is simple. Follow these three easy steps to unlock
+                            Getting started with your career journey in Lucknow is simple. Follow these three easy steps to unlock
                             opportunities in your city.
                         </p>
                     </div>
@@ -589,74 +590,121 @@ const Ghaziabad = () => {
                 </div>
             </section>
 
-            <section id="register" className="py-24 bg-gradient-to-b from-orange-50 to-white relative overflow-hidden">
-                {/* Decorative Elements */}
-                <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-orange-200 to-transparent" />
-                <div className="absolute -left-20 top-40 w-64 h-64 bg-orange-200 rounded-full blur-3xl opacity-20" />
-                <div className="absolute -right-20 bottom-40 w-64 h-64 bg-red-200 rounded-full blur-3xl opacity-20" />
+            <section id="register" className="py-24 bg-white relative overflow-hidden">
+                <div className="absolute inset-0 bg-orange-50/50 skew-y-3 transform origin-bottom-left z-0"></div>
 
                 <div className="container mx-auto px-4 relative z-10">
-                    <div className="max-w-3xl mx-auto">
+                    <div className="max-w-4xl mx-auto">
                         {submitted && !showPopup ? (
-                            <Card className="text-center p-12 border-none shadow-2xl bg-white/80 backdrop-blur-sm">
-                                <div className="w-20 h-20 bg-gradient-to-br from-green-100 to-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
-                                    <CheckCircle className="w-10 h-10 text-green-600" />
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className="bg-white rounded-3xl shadow-xl border border-orange-100 p-12 text-center relative overflow-hidden"
+                            >
+                                <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-green-400 to-emerald-500"></div>
+                                <div className="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-8 animate-bounce-slow">
+                                    <CheckCircle className="w-12 h-12 text-green-500" />
                                 </div>
-                                <h2 className="text-4xl font-extrabold text-gray-900 mb-4 tracking-tight">
+                                <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
                                     Registration Successful!
                                 </h2>
-                                <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                                    Welcome to the EarlyJobs Ghaziabad network! Our team will contact you within 24 hours to discuss your
-                                    career goals and upcoming opportunities.
+                                <p className="text-lg text-gray-600 mb-10 max-w-lg mx-auto">
+                                    Welcome to the EarlyJobs Lucknow network! We've received your details and will get back to you shortly.
                                 </p>
-                                <div className="bg-gradient-to-br from-orange-50 to-orange-100/50 p-8 rounded-2xl border border-orange-100 text-left">
-                                    <h3 className="text-xl font-bold text-orange-800 mb-4 flex items-center gap-2">
-                                        <Star className="w-5 h-5 fill-orange-500 text-orange-500" />
-                                        What's Next?
+                                <div className="bg-orange-50 rounded-xl p-6 text-left max-w-lg mx-auto border border-orange-100">
+                                    <h3 className="font-bold text-orange-800 mb-4 flex items-center gap-2">
+                                        <Star className="w-5 h-5 text-orange-500 fill-current" />
+                                        Next Steps
                                     </h3>
-                                    <ul className="space-y-4">
-                                        {["Profile verification & skills assessment", "Job matching based on your preferences", "Interview preparation support", "Regular updates on opportunities in Ghaziabad"].map((item, i) => (
-                                            <li key={i} className="flex items-start gap-3">
-                                                <div className="mt-1 w-5 h-5 rounded-full bg-orange-200 flex items-center justify-center flex-shrink-0">
-                                                    <CheckCircle className="w-3 h-3 text-orange-700" />
+                                    <ul className="space-y-3">
+                                        {["Profile verification", "Skill assessment", "Job matching", "Interview scheduling"].map((step, i) => (
+                                            <li key={i} className="flex items-center gap-3 text-gray-700">
+                                                <div className="w-6 h-6 rounded-full bg-white border border-orange-200 flex items-center justify-center text-orange-600 font-bold text-xs shadow-sm">
+                                                    {i + 1}
                                                 </div>
-                                                <span className="text-gray-700 font-medium">{item}</span>
+                                                {step}
                                             </li>
                                         ))}
                                     </ul>
                                 </div>
-                            </Card>
+                            </motion.div>
                         ) : (
-                            <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden relative">
-                                {/* Form Header */}
-                                <div className="bg-gradient-to-r from-orange-600 to-red-600 p-8 md:p-12 text-center relative overflow-hidden">
-                                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-                                    <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4 relative z-10">
-                                        Join EarlyJobs Ghaziabad
-                                    </h2>
-                                    <p className="text-orange-50 text-lg relative z-10 font-medium">
-                                        Start your career journey with Ghaziabad's most trusted recruitment partner
-                                    </p>
-                                </div>
-                                <div className="p-8 md:p-12">
-                                    {error && !showPopup && (
-                                        <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-r-lg mb-8 flex items-center gap-3">
-                                            <X className="w-5 h-5" />
-                                            {error}
+                            <div className="grid lg:grid-cols-5 gap-8 bg-white rounded-3xl shadow-2xl overflow-hidden border border-orange-100">
+                                {/* Left Side - Form Info */}
+                                <div className="lg:col-span-2 bg-gradient-to-br from-orange-600 to-red-700 p-10 text-white flex flex-col justify-between relative overflow-hidden">
+                                    <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl -mr-32 -mt-32"></div>
+                                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-black opacity-10 rounded-full blur-3xl -ml-32 -mb-32"></div>
+
+                                    <div className="relative z-10">
+                                        <h3 className="text-3xl font-bold mb-2">Join EarlyJobs Lucknow</h3>
+                                        <p className="text-orange-100 mb-8">Launch your career with the region's fastest growing recruitment network.</p>
+
+                                        <div className="space-y-6">
+                                            <div className="flex items-start gap-4">
+                                                <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0 backdrop-blur-sm">
+                                                    <Users className="w-5 h-5 text-white" />
+                                                </div>
+                                                <div>
+                                                    <h4 className="font-bold text-lg">Massive Network</h4>
+                                                    <p className="text-sm text-orange-100 opacity-80">Connect with 200+ partner companies in Lucknow.</p>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-start gap-4">
+                                                <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0 backdrop-blur-sm">
+                                                    <Award className="w-5 h-5 text-white" />
+                                                </div>
+                                                <div>
+                                                    <h4 className="font-bold text-lg">Quality Hiring</h4>
+                                                    <p className="text-sm text-orange-100 opacity-80">Verified jobs and verified candidates only.</p>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-start gap-4">
+                                                <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0 backdrop-blur-sm">
+                                                    <Headphones className="w-5 h-5 text-white" />
+                                                </div>
+                                                <div>
+                                                    <h4 className="font-bold text-lg">Support</h4>
+                                                    <p className="text-sm text-orange-100 opacity-80">Dedicated career counselors to guide you.</p>
+                                                </div>
+                                            </div>
                                         </div>
+                                    </div>
+
+                                    <div className="mt-12 relative z-10 pt-8 border-t border-white/20">
+                                        <p className="text-sm text-orange-100 opacity-70 mb-2">Have questions?</p>
+                                        <p className="font-bold text-xl flex items-center gap-2">
+                                            <Phone className="w-5 h-5" /> +91 8217527926
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Right Side - Form */}
+                                <div className="lg:col-span-3 p-10 bg-white">
+                                    {error && !showPopup && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: -10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6 flex items-center gap-2 text-sm"
+                                        >
+                                            <X className="w-4 h-4" />
+                                            {error}
+                                        </motion.div>
                                     )}
 
-                                    <form onSubmit={handleSubmit} className="space-y-8">
-                                        <div className="space-y-1">
-                                            <Label htmlFor="role">I am a... <span className="text-red-500">*</span></Label>
-                                            <div className="relative">
+                                    <form onSubmit={handleSubmit} className="space-y-6">
+                                        <div>
+                                            <Label htmlFor="role" className="text-gray-600 font-medium">I am a... <span className="text-red-500">*</span></Label>
+                                            <div className="relative group">
+                                                <Users className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-orange-500 transition-colors pointer-events-none z-10" />
                                                 <select
                                                     id="role"
                                                     name="role"
                                                     required
                                                     value={formData.role}
                                                     onChange={handleInputChange}
-                                                    className="w-full p-4 border-2 border-transparent bg-gray-50 rounded-xl text-gray-900 outline-none focus:bg-white focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 transition-all duration-300 appearance-none cursor-pointer"
+                                                    className="w-full pl-12 pr-4 py-4 border border-gray-200 bg-gray-50 rounded-xl text-gray-900 outline-none focus:bg-white focus:border-orange-500 focus:ring-4 focus:ring-orange-100 transition-all appearance-none cursor-pointer"
                                                 >
                                                     <option value="">Select your role</option>
                                                     <option value="student">Job Seeker</option>
@@ -668,100 +716,112 @@ const Ghaziabad = () => {
                                         </div>
 
                                         <div className="grid md:grid-cols-2 gap-6">
-                                            <div className="space-y-1">
-                                                <Label htmlFor="name">Full Name <span className="text-red-500">*</span></Label>
-                                                <Input
-                                                    id="name"
-                                                    name="name"
-                                                    type="text"
-                                                    required
-                                                    value={formData.name}
-                                                    onChange={handleInputChange}
-                                                    placeholder="Ex. Rahul Sharma"
-                                                />
+                                            <div>
+                                                <Label htmlFor="name" className="text-gray-600 font-medium">Full Name <span className="text-red-500">*</span></Label>
+                                                <div className="relative group">
+                                                    <div className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-orange-500 transition-colors pointer-events-none z-10 flex items-center justify-center">
+                                                        <User className="w-5 h-5" />
+                                                    </div>
+                                                    <input
+                                                        id="name"
+                                                        name="name"
+                                                        type="text"
+                                                        required
+                                                        value={formData.name}
+                                                        onChange={handleInputChange}
+                                                        placeholder="John Doe"
+                                                        className="w-full pl-12 pr-4 py-4 border border-gray-200 bg-gray-50 rounded-xl text-gray-900 placeholder-gray-400 outline-none focus:bg-white focus:border-orange-500 focus:ring-4 focus:ring-orange-100 transition-all"
+                                                    />
+                                                </div>
                                             </div>
 
-                                            <div className="space-y-1">
-                                                <Label htmlFor="phone">Phone Number <span className="text-red-500">*</span></Label>
-                                                <Input
-                                                    id="phone"
-                                                    name="phone"
-                                                    type="tel"
-                                                    required
-                                                    maxLength={10}
-                                                    value={formData.phone}
-                                                    onChange={handleInputChange}
-                                                    placeholder="9876543210"
-                                                />
+                                            <div>
+                                                <Label htmlFor="phone" className="text-gray-600 font-medium">Phone <span className="text-red-500">*</span></Label>
+                                                <div className="relative group">
+                                                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-orange-500 transition-colors pointer-events-none z-10" />
+                                                    <input
+                                                        id="phone"
+                                                        name="phone"
+                                                        type="tel"
+                                                        required
+                                                        maxLength={10}
+                                                        value={formData.phone}
+                                                        onChange={handleInputChange}
+                                                        placeholder="9876543210"
+                                                        className="w-full pl-12 pr-4 py-4 border border-gray-200 bg-gray-50 rounded-xl text-gray-900 placeholder-gray-400 outline-none focus:bg-white focus:border-orange-500 focus:ring-4 focus:ring-orange-100 transition-all"
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
 
                                         <div className="grid md:grid-cols-2 gap-6">
-                                            <div className="space-y-1">
-                                                <Label htmlFor="email">Email Address <span className="text-red-500">*</span></Label>
-                                                <Input
-                                                    id="email"
-                                                    name="email"
-                                                    type="email"
-                                                    required
-                                                    value={formData.email}
-                                                    onChange={handleInputChange}
-                                                    placeholder="rahul@example.com"
-                                                />
+                                            <div>
+                                                <Label htmlFor="email" className="text-gray-600 font-medium">Email <span className="text-red-500">*</span></Label>
+                                                <div className="relative group">
+                                                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-orange-500 transition-colors pointer-events-none z-10" />
+                                                    <input
+                                                        id="email"
+                                                        name="email"
+                                                        type="email"
+                                                        required
+                                                        value={formData.email}
+                                                        onChange={handleInputChange}
+                                                        placeholder="john@example.com"
+                                                        className="w-full pl-12 pr-4 py-4 border border-gray-200 bg-gray-50 rounded-xl text-gray-900 placeholder-gray-400 outline-none focus:bg-white focus:border-orange-500 focus:ring-4 focus:ring-orange-100 transition-all"
+                                                    />
+                                                </div>
                                             </div>
 
-                                            <div className="space-y-1">
-                                                <Label htmlFor="city">City <span className="text-red-500">*</span></Label>
-                                                <div className="relative">
-                                                    <Input
+                                            <div>
+                                                <Label htmlFor="city" className="text-gray-600 font-medium">City <span className="text-red-500">*</span></Label>
+                                                <div className="relative group">
+                                                    <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-orange-500 transition-colors pointer-events-none z-10" />
+                                                    <input
                                                         id="city"
                                                         name="city"
                                                         type="text"
                                                         required
                                                         value={formData.city}
                                                         onChange={handleInputChange}
-                                                        className="bg-orange-50/50 text-orange-900 font-medium"
+                                                        className="w-full pl-12 pr-4 py-4 border border-gray-200 bg-gray-50 rounded-xl text-gray-900 font-medium outline-none focus:bg-white focus:border-orange-500 focus:ring-4 focus:ring-orange-100 transition-all"
                                                     />
-                                                    <MapPin className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-orange-400" />
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className="space-y-1">
-                                            <Label htmlFor="YourExpectations"> Your Expectations <span className="text-red-500">*</span></Label>
-                                            <textarea
-                                                id="Your Expectations"
-                                                name="Your Expectations"
-                                                value={formData.YourExpectations}
-                                                type="text"
-                                                required
-                                                onChange={handleInputChange}
-                                                rows={3}
-                                                className="w-full p-4 border-2 border-transparent bg-gray-50 rounded-xl text-gray-900 outline-none focus:bg-white focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 transition-all duration-300 resize-none placeholder-gray-400"
-                                                placeholder="Tell us about your expectations..."
-                                            />
+                                        <div>
+                                            <Label htmlFor="YourExpectations" className="text-gray-600 font-medium">Your Expectations <span className="text-red-500">*</span></Label>
+                                            <div className="relative group">
+                                                <textarea
+                                                    id="YourExpectations"
+                                                    name="YourExpectations"
+                                                    value={formData.YourExpectations}
+                                                    required
+                                                    onChange={handleInputChange}
+                                                    rows={3}
+                                                    className="w-full p-4 border border-gray-200 bg-gray-50 rounded-xl text-gray-900 placeholder-gray-400 outline-none focus:bg-white focus:border-orange-500 focus:ring-4 focus:ring-orange-100 transition-all resize-none"
+                                                    placeholder="Tell us about the role, industry, or skills you're interested in..."
+                                                />
+                                            </div>
                                         </div>
 
                                         <Button
                                             type="submit"
                                             disabled={loading}
-                                            className={`w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-bold py-4 text-lg rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.01] transition-all duration-300 ${loading ? "opacity-70 pointer-events-none cursor-not-allowed" : ""}`}
+                                            className={`w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-orange-200 hover:-translate-y-0.5 transition-all duration-300 ${loading ? "opacity-70 cursor-not-allowed" : ""}`}
                                         >
                                             {loading ? (
                                                 <span className="flex items-center justify-center gap-2">
-                                                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                                    </svg>
+                                                    <span className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></span>
                                                     Processing...
                                                 </span>
                                             ) : (
-                                                "Join EarlyJobs Ghaziabad Network"
+                                                "Join Network"
                                             )}
                                         </Button>
 
-                                        <p className="text-xs text-center text-gray-500 mt-6">
-                                            By registering, you agree to our <a href="#" className="underline hover:text-orange-600">Terms of Service</a> and <a href="#" className="underline hover:text-orange-600">Privacy Policy</a>.
+                                        <p className="text-xs text-center text-gray-400 mt-4">
+                                            By submitting, you agree to our <a href="#" className="underline hover:text-orange-600">Privacy Policy</a>.
                                         </p>
                                     </form>
                                 </div>
@@ -779,7 +839,7 @@ const Ghaziabad = () => {
                                 Frequently Asked Questions
                             </h2>
                             <p className="text-lg text-orange-800">
-                                Got questions? We've got answers. Here are the most common questions about EarlyJobs Ghaziabad.
+                                Got questions? We've got answers. Here are the most common questions about EarlyJobs Lucknow.
                             </p>
                         </div>
 
@@ -799,46 +859,55 @@ const Ghaziabad = () => {
                                             <ChevronDown className="w-5 h-5 text-orange-600 flex-shrink-0" />
                                         )}
                                     </button>
-
                                     {openIndex === index && (
-                                        <div className="mt-4 pt-4 border-t border-orange-200">
-                                            <p className="text-orange-800 leading-relaxed">{faq.answer}</p>
-                                        </div>
+                                        <p className="text-orange-800 mt-3 pl-0 leading-relaxed">
+                                            {faq.answer}
+                                        </p>
                                     )}
                                 </Card>
                             ))}
                         </div>
 
-                        <div className="mt-16 bg-orange-100 rounded-2xl p-8 text-center shadow-lg">
-                            <h3 className="text-2xl font-bold text-orange-700 mb-4">
-                                Still Have Questions?
-                            </h3>
-                            <p className="text-lg text-orange-800 mb-6">
-                                Our team is here to help you succeed. Reach out to us anytime!
-                            </p>
+                        <div className="mt-20 relative rounded-3xl overflow-hidden bg-slate-900 text-white shadow-2xl">
+                            <div className="absolute inset-0 bg-gradient-to-br from-orange-600/20 to-purple-600/20 opacity-50"></div>
+                            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
 
-                            <div className="grid md:grid-cols-3 gap-6 max-w-3xl mx-auto">
-                                <div className="flex flex-col items-center">
-                                    <Phone className="w-8 h-8 text-orange-600 mb-2" />
-                                    <p className="font-semibold text-orange-700">Call Us</p>
-                                    <p className="text-orange-800">+91 8217527926</p>
-                                </div>
+                            <div className="relative z-10 py-8 px-6 text-center">
+                                <h3 className="text-3xl md:text-4xl font-bold mb-3 bg-gradient-to-r from-orange-200 to-white bg-clip-text text-transparent inline-block">
+                                    Still Have Questions?
+                                </h3>
+                                <p className="text-slate-300 mb-6 max-w-2xl mx-auto text-lg">
+                                    Our team is here to help you succeed. Whether you're a student, college, or company, we're just a message away.
+                                </p>
 
-                                <div className="flex flex-col items-center">
-                                    <Mail className="w-8 h-8 text-orange-600 mb-2" />
-                                    <p className="font-semibold text-orange-700">Email Us</p>
-                                    <p className="text-orange-800">ghaziabad@earlyjobs.in</p>
-                                </div>
+                                <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                                    <div className="bg-white/5 backdrop-blur-lg border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition-all duration-300 group cursor-pointer hover:-translate-y-1">
+                                        <div className="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                                            <Phone className="w-6 h-6 text-orange-400" />
+                                        </div>
+                                        <p className="font-bold text-lg mb-1">Call Us</p>
+                                        <p className="text-slate-400 group-hover:text-orange-300 transition-colors">+91 8217527926</p>
+                                    </div>
 
-                                <div className="flex flex-col items-center">
-                                    <MapPin className="w-8 h-8 text-orange-600 mb-2" />
-                                    <p className="font-semibold text-orange-700">Visit Us</p>
-                                    <p className="text-orange-800">
-                                        Ghaziabad, Uttar Pradesh, NCR Region
-                                    </p>
+                                    <div className="bg-white/5 backdrop-blur-lg border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition-all duration-300 group cursor-pointer hover:-translate-y-1">
+                                        <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                                            <Mail className="w-6 h-6 text-blue-400" />
+                                        </div>
+                                        <p className="font-bold text-lg mb-1">Email Us</p>
+                                        <p className="text-slate-400 group-hover:text-blue-300 transition-colors">lucknow@earlyjobs.in</p>
+                                    </div>
+
+                                    <div className="bg-white/5 backdrop-blur-lg border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition-all duration-300 group cursor-pointer hover:-translate-y-1">
+                                        <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                                            <MapPin className="w-6 h-6 text-purple-400" />
+                                        </div>
+                                        <p className="font-bold text-lg mb-1">Visit Us</p>
+                                        <p className="text-slate-400">Lucknow, Uttar Pradesh</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </section>
@@ -846,4 +915,4 @@ const Ghaziabad = () => {
     )
 }
 
-export default Ghaziabad
+export default Lucknow

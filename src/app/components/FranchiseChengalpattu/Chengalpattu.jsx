@@ -99,7 +99,7 @@ const Popup = ({ message, type, onClose }) => {
     )
 }
 
-const Ghaziabad = () => {
+const Chengalpattu = () => {
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -107,6 +107,7 @@ const Ghaziabad = () => {
         role: "",
         city: "",
         resume: null,
+        YourExpectations: "",
     })
     const [submitted, setSubmitted] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -144,7 +145,7 @@ const Ghaziabad = () => {
                 setShowPopup({
                     type: "success",
                     message:
-                        "Welcome to the EarlyJobs Ghaziabad network! Our team will contact you within 24 hours to discuss your career goals and upcoming opportunities.",
+                        "Welcome to the EarlyJobs Chengalpattu network! Our team will contact you within 24 hours to discuss your career goals and upcoming opportunities.",
                 })
             } else {
                 setError("Failed to submit form. Please try again.")
@@ -185,9 +186,7 @@ const Ghaziabad = () => {
                 phone: "",
                 role: "",
                 YourExpectations: "",
-                industry: "",
-                city: "Ghaziabad",
-                city: "Ghaziabad",
+                city: "Chengalpattu",
                 resume: null,
             })
         }
@@ -196,16 +195,16 @@ const Ghaziabad = () => {
     const steps = [
         {
             icon: UserPlus,
-            title: "Register on EarlyJobs Ghaziabad Portal",
+            title: "Register on EarlyJobs Chengalpattu Portal",
             description:
-                "Create your profile in minutes. Upload your resume, add your skills, and tell us about your career aspirations. Our platform is designed specifically for Ghaziabad's job market and NCR opportunities.",
+                "Create your profile in minutes. Upload your resume, add your skills, and tell us about your career aspirations. Our platform is designed specifically for Chengalpattu's job market and Chennai Region opportunities.",
             color: "bg-orange-500",
         },
         {
             icon: Search,
             title: "Get Matched with Local Opportunities",
             description:
-                "Our smart algorithm connects you with relevant jobs, internships, and skill-building programs in Ghaziabad and NCR. From IT companies to manufacturing units, retail chains to educational institutions.",
+                "Our smart algorithm connects you with relevant jobs, internships, and skill-building programs in Chengalpattu and Chennai Region. From IT companies to manufacturing units, retail chains to educational institutions.",
             color: "bg-orange-400",
         },
         {
@@ -218,7 +217,7 @@ const Ghaziabad = () => {
     ]
 
     const studentBenefits = [
-        "Verified local jobs & internship opportunities in Ghaziabad & NCR",
+        "Verified local jobs & internship opportunities in Chengalpattu & Chennai Region",
         "Skill-building workshops & certification programs",
         "Regular walk-in interview drives in the city",
         "Career guidance & resume building support",
@@ -236,7 +235,7 @@ const Ghaziabad = () => {
     ]
 
     const companyBenefits = [
-        "Access to pre-vetted local talent pool in Ghaziabad & NCR",
+        "Access to pre-vetted local talent pool in Chengalpattu & Chennai Region",
         "Quick hiring process & reduced recruitment time",
         "Cost-effective recruitment solutions",
         "Campus recruitment support & coordination",
@@ -246,29 +245,29 @@ const Ghaziabad = () => {
 
     const faqs = [
         {
-            question: "What services does EarlyJobs Ghaziabad offer?",
+            question: "What services does EarlyJobs Chengalpattu offer?",
             answer:
-                "We provide comprehensive recruitment solutions including job placements, internships, skill development programs, campus recruitment drives, and career counseling specifically for the Ghaziabad and NCR region. Our services connect local talent with opportunities across IT, manufacturing, retail, education, and emerging sectors in Ghaziabad.",
+                "We provide comprehensive recruitment solutions including job placements, internships, skill development programs, campus recruitment drives, and career counseling specifically for the Chengalpattu and Chennai Region. Our services connect local talent with opportunities across IT, manufacturing, retail, education, and emerging sectors in Chengalpattu.",
         },
         {
-            question: "Is there any registration fee to join EarlyJobs Ghaziabad?",
+            question: "Is there any registration fee to join EarlyJobs Chengalpattu?",
             answer:
-                "No, registration is completely free for job seekers and students. We believe in accessible career opportunities for everyone in Ghaziabad. Our revenue comes from our employer partners, not from candidates.",
+                "No, registration is completely free for job seekers and students. We believe in accessible career opportunities for everyone in Chengalpattu. Our revenue comes from our employer partners, not from candidates.",
         },
         {
-            question: "Which companies hire through EarlyJobs in Ghaziabad?",
+            question: "Which companies hire through EarlyJobs in Chengalpattu?",
             answer:
-                "We partner with 100+ companies ranging from IT firms, manufacturing units, retail chains, educational institutions, and government organizations. Our partners include both established corporates and growing businesses in the Ghaziabad and NCR ecosystem.",
+                "We partner with 100+ companies ranging from IT firms, manufacturing units, retail chains, educational institutions, and government organizations. Our partners include both established corporates and growing businesses in the Chengalpattu and Chennai ecosystem.",
         },
         {
             question: "Do you provide training and skill development programs?",
             answer:
-                "Yes! We conduct regular workshops on communication skills, technical training, interview preparation, resume building, and industry-specific certification programs. All training is designed considering the local job market requirements in Ghaziabad and NCR.",
+                "Yes! We conduct regular workshops on communication skills, technical training, interview preparation, resume building, and industry-specific certification programs. All training is designed considering the local job market requirements in Chengalpattu and Chennai Region.",
         },
         {
-            question: "How often do you conduct walk-in interviews in Ghaziabad?",
+            question: "How often do you conduct walk-in interviews in Chengalpattu?",
             answer:
-                "We organize walk-in interview drives at least twice a month at various locations across Ghaziabad including convenient venues in the city. We also conduct special campus drives at local colleges and institutions.",
+                "We organize walk-in interview drives at least twice a month at various locations across Chengalpattu including convenient venues in the city. We also conduct special campus drives at local colleges and institutions.",
         },
         {
             question: "Can final year students register for placements?",
@@ -284,11 +283,11 @@ const Ghaziabad = () => {
             <section className="relative min-h-screen overflow-hidden">
                 <div className="absolute inset-0">
                     <img
-                        src="/images/ghaziabad.jpg"
-                        alt="Ghaziabad skyline with students and professionals"
+                        src="/images/chengalpattu.jpg"
+                        alt="Chengalpattu skyline with students and professionals"
                         className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-orange-800/70"></div>
+                    <div className="absolute inset-0 bg-orange-800/50"></div>
                 </div>
 
                 <div className="relative z-10 container mx-auto px-4 pt-20">
@@ -296,23 +295,23 @@ const Ghaziabad = () => {
                         <div className="text-white space-y-8">
                             <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 text-sm font-medium">
                                 <MapPin className="w-4 h-4" />
-                                Ghaziabad, Uttar Pradesh
+                                Chengalpattu, Tamil Nadu
                             </div>
 
                             <div className="space-y-4">
-                                <h1 className="text-4xl md:text-6xl font-bold">
-                                    Shaping Ghaziabad’s Next
-                                    <span className="block text-orange-200">Career Leaders</span>
+                                <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+                                    Shaping Chengalpattu’s Next
+                                    <span className="block text-orange-200 mt-2">Career Leaders</span>
                                 </h1>
                                 <p className="text-xl md:text-2xl font-medium opacity-90">
-                                    Where Your Career Journey Takes Off in Ghaziabad
+                                    Where Your Career Journey Takes Off in Chengalpattu
                                 </p>
                             </div>
 
                             <div className="text-center">
                                 <p className="text-lg md:text-xl">
-                                    Connecting Ghaziabad's brightest talent with top employers across IT, Manufacturing, Retail &
-                                    Education sectors. Build skills, find opportunities, and grow your career with EarlyJobs Ghaziabad.
+                                    Connecting Chengalpattu's brightest talent with top employers across IT, Manufacturing, Retail &
+                                    Education sectors. Build skills, find opportunities, and grow your career with EarlyJobs Chengalpattu.
                                 </p>
                             </div>
 
@@ -359,13 +358,13 @@ const Ghaziabad = () => {
                             transition={{ duration: 0.8 }}
                         >
                             <p className="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-semibold bg-orange-100 text-orange-700 mb-6 shadow-sm border border-orange-200">
-                                <MapPin className="w-3 h-3 mr-2" /> Ghaziabad · NCR Hub
+                                <MapPin className="w-3 h-3 mr-2" /> Chengalpattu · Chennai Region Hub
                             </p>
                             <h2 className="text-4xl md:text-5xl font-extrabold text-orange-900 mb-6 leading-tight">
-                                About <span className="bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">EarlyJobs Ghaziabad</span>
+                                About <span className="bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">EarlyJobs Chengalpattu</span>
                             </h2>
                             <p className="text-lg text-orange-800 leading-relaxed mb-6">
-                                <span className="font-bold text-orange-900">EarlyJobs</span> is India's leading tech-enabled recruitment franchise, and the Ghaziabad chapter plays a key role in linking local talent to meaningful, high-impact career opportunities
+                                <span className="font-bold text-orange-900">EarlyJobs</span> is India's leading tech-enabled recruitment franchise, and the Chengalpattu chapter plays a key role in linking local talent to meaningful, high-impact career opportunities
                             </p>
 
                             <div className="bg-white/80 backdrop-blur-sm border-l-4 border-orange-500 p-6 rounded-r-xl mb-8 shadow-sm">
@@ -375,11 +374,11 @@ const Ghaziabad = () => {
                                 </div>
                                 <p className="text-2xl font-bold text-orange-900 mb-2">Connect. Develop. Succeed.</p>
                                 <p className="text-orange-700/80 font-medium">
-                                    We help students and professionals in Ghaziabad build meaningful careers right here in our vibrant city.
+                                    We help students and professionals in Chengalpattu build meaningful careers right here in our vibrant city.
                                 </p>
                             </div>
                             <div className="flex flex-wrap gap-3">
-                                <span className="px-3 py-1 rounded-full bg-white text-orange-800 text-sm shadow-sm">NCR-focused hiring</span>
+                                <span className="px-3 py-1 rounded-full bg-white text-orange-800 text-sm shadow-sm">Chennai Region-focused hiring</span>
                                 <span className="px-3 py-1 rounded-full bg-white text-orange-800 text-sm shadow-sm">Campus to corporate</span>
                                 <span className="px-3 py-1 rounded-full bg-white text-orange-800 text-sm shadow-sm">AI-driven matching</span>
                                 <span className="px-3 py-1 rounded-full bg-white text-orange-800 text-sm shadow-sm">Local support team</span>
@@ -396,8 +395,8 @@ const Ghaziabad = () => {
                         >
                             <div className="rounded-3xl overflow-hidden shadow-xl border border-orange-100 bg-white/80 backdrop-blur">
                                 <img
-                                    src="/images/ghaziabad.jpg"
-                                    alt="Ghaziabad city"
+                                    src="/images/chengalpattu.jpg"
+                                    alt="Chengalpattu city"
                                     className="w-full h-56 object-cover"
                                 />
                                 <div className="p-6 grid grid-cols-3 gap-4">
@@ -424,11 +423,11 @@ const Ghaziabad = () => {
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-16">
                         <h2 className="text-3xl md:text-4xl font-bold text-orange-700 mb-6">
-                            Benefits for Everyone in the Ghaziabad Ecosystem
+                            Benefits for Everyone in the Chengalpattu Ecosystem
                         </h2>
                         <p className="text-lg text-orange-800 max-w-3xl mx-auto">
                             Whether you're a student seeking opportunities, a college looking to improve placements, or a company
-                            searching for talent, EarlyJobs Ghaziabad has solutions tailored for you.
+                            searching for talent, EarlyJobs Chengalpattu has solutions tailored for you.
                         </p>
                     </div>
 
@@ -515,7 +514,7 @@ const Ghaziabad = () => {
                                 Ready to Transform Your Career Journey?
                             </h3>
                             <p className="text-lg text-orange-800 mb-8 max-w-2xl mx-auto">
-                                Join hundreds of successful professionals who started their journey with EarlyJobs Ghaziabad. Your dream
+                                Join hundreds of successful professionals who started their journey with EarlyJobs Chengalpattu. Your dream
                                 career is just a registration away.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -536,10 +535,10 @@ const Ghaziabad = () => {
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-16">
                         <h2 className="text-3xl md:text-4xl font-bold text-orange-700 mb-6">
-                            How EarlyJobs Ghaziabad Works
+                            How EarlyJobs Chengalpattu Works
                         </h2>
                         <p className="text-lg text-orange-800 max-w-3xl mx-auto">
-                            Getting started with your career journey in Ghaziabad is simple. Follow these three easy steps to unlock
+                            Getting started with your career journey in Chengalpattu is simple. Follow these three easy steps to unlock
                             opportunities in your city.
                         </p>
                     </div>
@@ -606,7 +605,7 @@ const Ghaziabad = () => {
                                     Registration Successful!
                                 </h2>
                                 <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                                    Welcome to the EarlyJobs Ghaziabad network! Our team will contact you within 24 hours to discuss your
+                                    Welcome to the EarlyJobs Chengalpattu network! Our team will contact you within 24 hours to discuss your
                                     career goals and upcoming opportunities.
                                 </p>
                                 <div className="bg-gradient-to-br from-orange-50 to-orange-100/50 p-8 rounded-2xl border border-orange-100 text-left">
@@ -615,7 +614,7 @@ const Ghaziabad = () => {
                                         What's Next?
                                     </h3>
                                     <ul className="space-y-4">
-                                        {["Profile verification & skills assessment", "Job matching based on your preferences", "Interview preparation support", "Regular updates on opportunities in Ghaziabad"].map((item, i) => (
+                                        {["Profile verification & skills assessment", "Job matching based on your preferences", "Interview preparation support", "Regular updates on opportunities in Chengalpattu"].map((item, i) => (
                                             <li key={i} className="flex items-start gap-3">
                                                 <div className="mt-1 w-5 h-5 rounded-full bg-orange-200 flex items-center justify-center flex-shrink-0">
                                                     <CheckCircle className="w-3 h-3 text-orange-700" />
@@ -632,10 +631,10 @@ const Ghaziabad = () => {
                                 <div className="bg-gradient-to-r from-orange-600 to-red-600 p-8 md:p-12 text-center relative overflow-hidden">
                                     <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
                                     <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4 relative z-10">
-                                        Join EarlyJobs Ghaziabad
+                                        Join EarlyJobs Chengalpattu
                                     </h2>
                                     <p className="text-orange-50 text-lg relative z-10 font-medium">
-                                        Start your career journey with Ghaziabad's most trusted recruitment partner
+                                        Start your career journey with Chengalpattu's most trusted recruitment partner
                                     </p>
                                 </div>
                                 <div className="p-8 md:p-12">
@@ -731,9 +730,8 @@ const Ghaziabad = () => {
                                             <Label htmlFor="YourExpectations"> Your Expectations <span className="text-red-500">*</span></Label>
                                             <textarea
                                                 id="Your Expectations"
-                                                name="Your Expectations"
+                                                name="YourExpectations" // Fixed name attribute to match state key
                                                 value={formData.YourExpectations}
-                                                type="text"
                                                 required
                                                 onChange={handleInputChange}
                                                 rows={3}
@@ -756,7 +754,7 @@ const Ghaziabad = () => {
                                                     Processing...
                                                 </span>
                                             ) : (
-                                                "Join EarlyJobs Ghaziabad Network"
+                                                "Join EarlyJobs Chengalpattu Network"
                                             )}
                                         </Button>
 
@@ -779,7 +777,7 @@ const Ghaziabad = () => {
                                 Frequently Asked Questions
                             </h2>
                             <p className="text-lg text-orange-800">
-                                Got questions? We've got answers. Here are the most common questions about EarlyJobs Ghaziabad.
+                                Got questions? We've got answers. Here are the most common questions about EarlyJobs Chengalpattu.
                             </p>
                         </div>
 
@@ -809,33 +807,42 @@ const Ghaziabad = () => {
                             ))}
                         </div>
 
-                        <div className="mt-16 bg-orange-100 rounded-2xl p-8 text-center shadow-lg">
-                            <h3 className="text-2xl font-bold text-orange-700 mb-4">
-                                Still Have Questions?
-                            </h3>
-                            <p className="text-lg text-orange-800 mb-6">
-                                Our team is here to help you succeed. Reach out to us anytime!
-                            </p>
+                        <div className="mt-12 relative rounded-3xl overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800 text-white shadow-2xl">
+                            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+                            <div className="relative z-10 py-8 px-6 md:py-10 md:px-12 text-center">
+                                <h3 className="text-2xl md:text-3xl font-bold mb-3 bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent inline-block">
+                                    Still Have Questions?
+                                </h3>
+                                <p className="text-sm md:text-base text-slate-300 mb-6 max-w-2xl mx-auto leading-relaxed">
+                                    Our team is here to help you succeed. Whether you're a student, college, or company, we're just a message away.
+                                </p>
 
-                            <div className="grid md:grid-cols-3 gap-6 max-w-3xl mx-auto">
-                                <div className="flex flex-col items-center">
-                                    <Phone className="w-8 h-8 text-orange-600 mb-2" />
-                                    <p className="font-semibold text-orange-700">Call Us</p>
-                                    <p className="text-orange-800">+91 8217527926</p>
-                                </div>
+                                <div className="grid md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+                                    <div className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300 group cursor-pointer hover:-translate-y-1">
+                                        <div className="w-10 h-10 mx-auto bg-orange-500/20 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                            <Phone className="w-5 h-5 text-orange-400" />
+                                        </div>
+                                        <p className="font-bold text-sm md:text-base mb-1">Call Us</p>
+                                        <p className="text-slate-400 text-xs hover:text-orange-300 transition-colors">+91 8217527926</p>
+                                    </div>
 
-                                <div className="flex flex-col items-center">
-                                    <Mail className="w-8 h-8 text-orange-600 mb-2" />
-                                    <p className="font-semibold text-orange-700">Email Us</p>
-                                    <p className="text-orange-800">ghaziabad@earlyjobs.in</p>
-                                </div>
+                                    <div className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300 group cursor-pointer hover:-translate-y-1">
+                                        <div className="w-10 h-10 mx-auto bg-blue-500/20 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                            <Mail className="w-5 h-5 text-blue-400" />
+                                        </div>
+                                        <p className="font-bold text-sm md:text-base mb-1">Email Us</p>
+                                        <p className="text-slate-400 text-xs hover:text-blue-300 transition-colors">chengalpattu@earlyjobs.in</p>
+                                    </div>
 
-                                <div className="flex flex-col items-center">
-                                    <MapPin className="w-8 h-8 text-orange-600 mb-2" />
-                                    <p className="font-semibold text-orange-700">Visit Us</p>
-                                    <p className="text-orange-800">
-                                        Ghaziabad, Uttar Pradesh, NCR Region
-                                    </p>
+                                    <div className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300 group cursor-pointer hover:-translate-y-1">
+                                        <div className="w-10 h-10 mx-auto bg-purple-500/20 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                            <MapPin className="w-5 h-5 text-purple-400" />
+                                        </div>
+                                        <p className="font-bold text-sm md:text-base mb-1">Visit Us</p>
+                                        <p className="text-slate-400 text-xs">
+                                            Chengalpattu, Tamil Nadu, Chennai Region
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -846,4 +853,4 @@ const Ghaziabad = () => {
     )
 }
 
-export default Ghaziabad
+export default Chengalpattu
