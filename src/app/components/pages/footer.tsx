@@ -189,6 +189,13 @@ const Footer = () => {
                 Sonipat
               </p>
 
+              <p
+                onClick={() => router.push("/franchise/sikar")}
+                className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
+              >
+                Sikar
+              </p>
+
             </div>
           </div>
 
