@@ -670,7 +670,7 @@ function LoginContent() {
         {/* Content */}
         <div className="relative z-10 flex flex-col justify-center items-start p-12 text-white">
           <h2 className="text-4xl font-bold mb-6 leading-tight">
-            Over {(dashboardData?.candidates ?? 175324).toLocaleString("en-IN")} candidates waiting for good employees.
+            Over {(dashboardData?.candidates ?? 175324).toLocaleString("en-IN")} candidates waiting for good employers.
           </h2>
 
           {/* Statistics - from dashboard API */}
