@@ -6,8 +6,12 @@ import { Badge } from "../../ui/badge";
 import { Bookmark, Clock, Briefcase, IndianRupee, Calendar, MapPin, Globe } from "lucide-react";
 import { useState } from "react";
 import { EARLYJOBS_ORANGE, EARLYJOBS_LIGHT_ORANGE, TEXT_PRIMARY, BORDER_COLOR } from "../../../../constants/theme";
+import { useUser } from "@/app/context";
+import { toast } from "sonner";
 
 interface JobCardProps {
+  jobId?: string;
+  savedJob?: boolean;
   company: string;
   brandName?: string;
   logo?: string;
@@ -27,6 +31,8 @@ interface JobCardProps {
 }
 
 const JobCard = ({
+  jobId,
+  savedJob,
   company,
   brandName,
   logo,
@@ -44,7 +50,10 @@ const JobCard = ({
   postedTime,
   onJobClick,
 }: JobCardProps) => {
-  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(!!savedJob);
+  const [bookmarkLoading, setBookmarkLoading] = useState(false);
+  const { userCredentials } = useUser();
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_2_0 || process.env.NEXT_PUBLIC_BACKEND_URL;
 
   // Normalize employmentType and workType for display
   const normalizeEmploymentType = (type: string): string => {
@@ -155,10 +164,46 @@ const JobCard = ({
     }
   };
 
-  // Handle bookmark toggle
-  const handleBookmarkClick = (e: React.MouseEvent) => {
+  // Handle bookmark toggle – call API with jobId and user email
+  const handleBookmarkClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    setIsBookmarked(!isBookmarked);
+    if (!jobId) {
+      toast.error("Job ID is missing.");
+      return;
+    }
+    const userEmail = userCredentials?.email;
+    if (!userEmail) {
+      toast.error("Please log in to save this job.");
+      return;
+    }
+    setBookmarkLoading(true);
+    try {
+      const baseUrl = `${backendUrl}/public/saveJobs`;
+      if (isBookmarked) {
+        const url = `${baseUrl}?jobId=${encodeURIComponent(jobId)}&userEmail=${encodeURIComponent(userEmail)}`;
+        const response = await fetch(url, { method: "DELETE" });
+        if (!response.ok) {
+          const data = await response.json().catch(() => ({}));
+          throw new Error(data?.message || "Failed to remove saved job");
+        }
+      } else {
+        const response = await fetch(baseUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ jobId, userEmail }),
+        });
+        if (!response.ok) {
+          const data = await response.json().catch(() => ({}));
+          throw new Error(data?.message || "Failed to save job");
+        }
+      }
+      setIsBookmarked(!isBookmarked);
+      toast.success(isBookmarked ? "Job removed from saved." : "Job saved.");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to save job.");
+    } finally {
+      setBookmarkLoading(false);
+    }
   };
 
   return (
@@ -202,11 +247,14 @@ const JobCard = ({
           <Button
             variant="ghost"
             size="sm"
-            className="p-1 h-auto"
+            className={`p-1 h-auto ${isBookmarked ? "text-[#ea6a4e]" : "text-gray-400"}`}
             onClick={handleBookmarkClick}
+            disabled={bookmarkLoading}
             aria-label={isBookmarked ? "Remove bookmark" : "Bookmark job"}
           >
-            <Bookmark className={`w-4 h-4 ${isBookmarked ? "fill-current" : ""}`} />
+            <Bookmark
+              className={`w-4 h-4 ${isBookmarked ? "fill-[#ea6a4e]" : ""}`}
+            />
           </Button>
         </div>
 

@@ -81,6 +81,8 @@ const RecentJobsV2 = ({ data }: { data: any }) => {
             data.recentJobs.map((job: any) => (
               <JobCard
                 key={job.jobId || job.id}
+                jobId={job.jobId || job.id}
+                savedJob={job.savedJob}
                 company={job.companyName || job.company_name || ""}
                 brandName={job.brandName || job.companyName}
                 logo={job.companyLogoUrl || job.company_logo_url || "/images/company_placeholder.png"}

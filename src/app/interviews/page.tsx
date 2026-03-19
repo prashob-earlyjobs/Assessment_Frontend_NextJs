@@ -21,9 +21,12 @@ import {
   Info,
   ArrowLeft,
   FileText,
+  Plus,
 } from "lucide-react";
 import { toast } from "sonner";
 import { getUserInterviews, getAssessmentById } from "@/app/components/services/servicesapis";
+import { getStaticSkills } from "@/app/components/services/staticApis";
+import CreatableSelect from "react-select/creatable";
 import { useUser } from "@/app/context";
 import Header from "@/app/components/pages/header";
 import Footer from "@/app/components/pages/footer";
@@ -61,6 +64,34 @@ const InterviewsPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [selectedInterview, setSelectedInterview] = useState<InterviewCard | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [createSkillsInput, setCreateSkillsInput] = useState<string[]>([]);
+  const [createError, setCreateError] = useState<string | null>(null);
+  const [createSubmitting, setCreateSubmitting] = useState(false);
+  const [skillsOptions, setSkillsOptions] = useState<{ label: string; value: string }[]>([]);
+  const [skillsLoading, setSkillsLoading] = useState(false);
+  // Load skills from static API for the create dialog
+  const fetchSkills = async (query: string) => {
+    // Load all or search-filtered skills; backend can decide based on query
+    try {
+      setSkillsLoading(true);
+      const data = await getStaticSkills(query.trim());
+      const skillsArray: any[] = Array.isArray(data?.data) ? data.data : Array.isArray(data) ? data : [];
+      const mapped = skillsArray
+        .filter((s) => s && typeof s.value === "string" && typeof s.label === "string")
+        .map((s) => ({ label: s.label, value: s.value }));
+      setSkillsOptions(mapped);
+    } catch (e) {
+      // ignore; caller still can create skills manually
+    } finally {
+      setSkillsLoading(false);
+    }
+  };
+
+  const [page, setPage] = useState<number>(1);
+  const [pageSize] = useState<number>(9);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [totalResults, setTotalResults] = useState<number>(0);
 
   // Icon mapping based on category
   const getIconForCategory = (category: string, subCategory: string) => {
@@ -156,27 +187,43 @@ const InterviewsPage = () => {
         setLoading(true);
         setError(null);
         
-        const response = await getUserInterviews(userCredentials._id);
+        const response = await getUserInterviews(userCredentials._id, page, pageSize);
         console.log("Interviews response:", response);
-        if (!response.success) {
-          throw new Error(response.message || "Failed to fetch interviews");
+        const success = response?.success ?? true;
+        if (!success) {
+          throw new Error(response?.message || "Failed to fetch interviews");
         }
-        
-        if (response.interviews && response.interviews.length > 0) {
+
+        const dataBlock = response?.data || response;
+        const list =
+          dataBlock?.interviews ||
+          dataBlock?.items ||
+          dataBlock?.data ||
+          dataBlock?.results ||
+          [];
+
+        let nextInterviews: InterviewCard[] = [];
+        if (Array.isArray(list) && list.length > 0) {
           // Transform all interviews
           const transformedInterviews = await Promise.all(
-            response.interviews.map((interview: any) => transformInterviewData(interview))
+            list.map((interview: any) => transformInterviewData(interview))
           );
           
           // Filter out null values and set state
           const validInterviews = transformedInterviews.filter(
             (interview): interview is InterviewCard => interview !== null
           );
-          
-          setInterviews(validInterviews);
+          nextInterviews = validInterviews;
         } else {
-          setInterviews([]);
+          nextInterviews = [];
         }
+
+        setInterviews(nextInterviews);
+
+        const tp = Number(dataBlock?.totalPages ?? 1);
+        const tr = Number(dataBlock?.totalResults ?? nextInterviews.length ?? 0);
+        setTotalPages(tp > 0 ? tp : 1);
+        setTotalResults(tr >= 0 ? tr : 0);
       } catch (error: any) {
         console.error("Error fetching interviews:", error);
         setError(error.message || "Failed to fetch interviews. Please try again later.");
@@ -187,7 +234,7 @@ const InterviewsPage = () => {
     };
 
     fetchInterviews();
-  }, [userCredentials]);
+  }, [userCredentials?._id, page, pageSize]);
 
   const handleStart = (interviewId: string) => {
     // Find the interview by ID and open the info popup
@@ -231,8 +278,8 @@ const InterviewsPage = () => {
       <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-purple-50">
         <Header />
         <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 lg:py-12">
-          {/* Back Button */}
-          <div className="mb-6">
+          {/* Top actions: back + create interview */}
+          <div className="mb-6 flex items-center justify-between gap-3">
             <Button
               onClick={() => navigate.push("/dashboard")}
               variant="ghost"
@@ -240,18 +287,30 @@ const InterviewsPage = () => {
             >
               <ArrowLeft className="h-4 w-4" />
             </Button>
+            <Button
+              size="sm"
+              className="bg-orange-500 hover:bg-orange-600 text-white gap-1.5"
+              onClick={() => {
+                setCreateSkillsInput([]);
+                setCreateError(null);
+                if (skillsOptions.length === 0) {
+                  fetchSkills("");
+                }
+                setIsCreateDialogOpen(true);
+              }}
+            >
+              <Plus className="w-4 h-4" />
+              <span className="text-xs sm:text-sm">Create interview</span>
+            </Button>
           </div>
 
-          {/* Hero Section */}
-          <div className="mb-12 text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-500 to-purple-600 rounded-2xl mb-4 shadow-lg">
-              <Brain className="h-8 w-8 text-white" />
-            </div>
-            <h1 className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-orange-600 to-purple-600 bg-clip-text text-transparent mb-3">
-              Interview Assessments
+          {/* Hero Section – toned down */}
+          <div className="mb-8 text-left">
+            <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-2">
+              My interview assessments
             </h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Showcase your skills and advance your career with our comprehensive interview assessments
+            <p className="text-sm sm:text-base text-gray-600 max-w-xl">
+              See upcoming and completed interviews, and create new practice sessions based on your skills.
             </p>
           </div>
 
@@ -327,11 +386,12 @@ const InterviewsPage = () => {
               </Button>
             </div>
           ) : (
+            <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
               {interviews.map((interview, index) => (
                 <div
                   key={interview.id}
-                  className="group bg-white rounded-2xl border border-gray-200/60 shadow-lg hover:shadow-2xl transition-all duration-500 p-6 lg:p-7 relative overflow-hidden hover:border-orange-300 hover:-translate-y-1"
+                  className="group bg-white rounded-2xl border border-gray-200/60 shadow-lg hover:shadow-2xl transition-all duration-500 p-6 lg:p-7 relative overflow-hidden hover:border-orange-300 hover:-translate-y-1 flex flex-col"
                   style={{
                     animationDelay: `${index * 100}ms`,
                   }}
@@ -347,7 +407,7 @@ const InterviewsPage = () => {
                   {/* Decorative corner accent */}
                   <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-orange-500/10 to-purple-500/10 rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   
-                  <div className="relative z-10">
+                  <div className="relative z-10 flex flex-col h-full">
                     {/* Top Section: Icon and Badge */}
                     <div className="flex items-start justify-between mb-6">
                       <div className={`${interview.iconBg} p-4 rounded-2xl group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-md ${(interview.status === "COMPLETED" || interview.status === "completed") ? "" : "group-hover:bg-gradient-to-br group-hover:from-orange-100 group-hover:to-orange-50"}`}>
@@ -397,13 +457,16 @@ const InterviewsPage = () => {
                       <span className="text-sm text-gray-600 font-medium">{interview.subCategory}</span>
                     </div>
 
-                    {/* Description */}
-                    <p className="text-sm text-gray-700 leading-relaxed mb-6 min-h-[3.5rem] max-h-[4.5rem] line-clamp-3 overflow-hidden text-ellipsis group-hover:text-gray-800 transition-colors duration-300">
-                      <ReactMarkdown>{interview.description}</ReactMarkdown>
-                    </p>
+                    {/* Description (JD comes as HTML; render it accordingly) */}
+                    <div className="mb-6 flex-1">
+                      <div
+                        className="text-sm text-gray-700 leading-relaxed min-h-[3.5rem] max-h-[4.5rem] line-clamp-3 overflow-hidden text-ellipsis group-hover:text-gray-800 transition-colors duration-300 prose prose-sm max-w-none"
+                        dangerouslySetInnerHTML={{ __html: interview.description }}
+                      />
+                    </div>
 
                     {/* Bottom Section: Time/Status and Action */}
-                    <div className="flex items-center justify-between pt-6 border-t border-gray-100 group-hover:border-gradient-to-r group-hover:from-orange-200 group-hover:to-purple-200 group-hover:border-orange-200 transition-all duration-500">
+                    <div className="mt-auto flex items-center justify-between pt-6 border-t border-gray-100 group-hover:border-gradient-to-r group-hover:from-orange-200 group-hover:to-purple-200 group-hover:border-orange-200 transition-all duration-500">
                       <div className="flex items-center gap-2.5 text-sm font-medium">
                         {interview.status === "COMPLETED" || interview.status === "completed" ? (
                           <>
@@ -443,6 +506,57 @@ const InterviewsPage = () => {
                 </div>
               ))}
             </div>
+            {(totalPages > 1 || page > 1) && (
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-8">
+                <div className="flex justify-center sm:justify-start">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={loading || page === 1}
+                    onClick={() => setPage((prev) => Math.max(1, prev - 1))}
+                  >
+                    Previous
+                  </Button>
+                </div>
+                <div className="flex items-center justify-center gap-1">
+                  {Array.from({ length: totalPages }, (_, idx) => idx + 1).map((p) => {
+                    const isActive = p === page;
+                    return (
+                      <button
+                        key={p}
+                        type="button"
+                        onClick={() => setPage(p)}
+                        disabled={loading && isActive}
+                        className={[
+                          "min-w-8 h-8 px-2 rounded-full text-xs font-medium border transition-colors",
+                          isActive
+                            ? "bg-orange-500 text-white border-orange-500"
+                            : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50",
+                        ].join(" ")}
+                      >
+                        {p}
+                      </button>
+                    );
+                  })}
+                </div>
+                <div className="flex justify-center sm:justify-end">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={loading || page === totalPages}
+                    onClick={() => setPage((prev) => Math.min(totalPages, prev + 1))}
+                  >
+                    Next
+                  </Button>
+                </div>
+              </div>
+            )}
+            {totalResults > 0 && (
+              <p className="pt-2 text-[11px] text-center text-gray-400">
+                Showing page {page} of {totalPages} · {totalResults} total interviews
+              </p>
+            )}
+            </>
           )}
         </main>
         <Footer />
@@ -558,6 +672,152 @@ const InterviewsPage = () => {
               </div>
             </div>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Create interview dialog */}
+      <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-semibold">
+              Create a practice interview
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 mt-2">
+            <p className="text-xs sm:text-sm text-gray-600">
+              Select or type at least <span className="font-semibold">3 skills</span> you want to be
+              interviewed on. You can add new skills if they&apos;re not in the list.
+            </p>
+            <CreatableSelect
+              isMulti
+              isClearable={false}
+              isDisabled={skillsLoading}
+              options={skillsOptions}
+              value={
+                Array.isArray(createSkillsInput)
+                  ? createSkillsInput.map((s) => ({ label: s, value: s }))
+                  : []
+              }
+              onChange={(value) => {
+                setCreateSkillsInput(value.map((v) => v.value));
+                setCreateError(null);
+              }}
+              // Let react-select manage the input text; we pre-load options when dialog opens
+              placeholder="Start typing a skill (e.g. Sales, Communication, Java)…"
+              classNamePrefix="react-select"
+              styles={{
+                control: (base) => ({
+                  ...base,
+                  minHeight: "40px",
+                  borderColor: createError ? "#f97373" : base.borderColor,
+                  boxShadow: "none",
+                }),
+              }}
+            />
+            {createError && (
+              <p className="text-xs text-red-500">{createError}</p>
+            )}
+            <div className="flex justify-end gap-2 pt-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-xs"
+                onClick={() => setIsCreateDialogOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                size="sm"
+                className="bg-orange-500 hover:bg-orange-600 text-white text-xs"
+                disabled={createSubmitting}
+                onClick={async () => {
+                  const skills = createSkillsInput.filter(Boolean);
+                  if (skills.length < 3) {
+                    setCreateError("Please select or add at least 3 skills.");
+                    return;
+                  }
+                  const backendUrl = process.env.NEXT_PUBLIC_AI_API_URL;
+                  if (!backendUrl) {
+                    toast.error("AI interview service URL is not configured.");
+                    return;
+                  }
+
+                  const fullName = userCredentials?.name || "";
+                  const parts = fullName.trim().split(" ").filter(Boolean);
+                  const firstName = parts[0] || "";
+                  const lastName = parts.length > 1 ? parts.slice(1).join(" ") : "";
+                  const email = userCredentials?.email || "";
+                  const phone = userCredentials?.mobile || "";
+
+                  if (!email || !phone) {
+                    setCreateError("Your email and phone must be set in your profile to create an interview.");
+                    return;
+                  }
+
+                  // Derive numeric experience (max) from user profile experience strings
+                  let experienceYears = 0;
+                  const expArr = userCredentials?.profile?.experience || [];
+                  if (Array.isArray(expArr) && expArr.length > 0) {
+                    const nums: number[] = [];
+                    expArr.forEach((e) => {
+                      if (typeof e === "string") {
+                        const matches = e.match(/\d+(\.\d+)?/g);
+                        if (matches) {
+                          matches.forEach((m) => {
+                            const n = parseFloat(m);
+                            if (!Number.isNaN(n)) nums.push(n);
+                          });
+                        }
+                      }
+                    });
+                    if (nums.length > 0) {
+                      experienceYears = Math.max(...nums);
+                    }
+                  }
+
+                  setCreateSubmitting(true);
+                  try {
+                    const payload = {
+                      skills,
+                      experience: experienceYears,
+                      firstName,
+                      lastName,
+                      email,
+                      phone,
+                    };
+
+                    const res = await fetch(
+                      `${backendUrl}api/public/createdAssessmentFromSkills`,
+                      {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(payload),
+                      },
+                    );
+
+                    if (!res.ok) {
+                      const err = await res.json().catch(() => ({}));
+                      throw new Error(err.message || "Failed to create interview from skills");
+                    }
+
+                    toast.success("Interview created from your skills. It will appear in your list shortly.");
+                    setIsCreateDialogOpen(false);
+                    // Optionally refresh current page
+                    setPage(1);
+                  } catch (e: any) {
+                    console.error("Failed to create interview from skills", e);
+                    toast.error(e?.message || "Failed to create interview from skills");
+                  } finally {
+                    setCreateSubmitting(false);
+                  }
+                }}
+              >
+                {createSubmitting ? "Creating..." : "Create"}
+              </Button>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </ProtectedRoute>

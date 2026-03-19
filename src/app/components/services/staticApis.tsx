@@ -47,6 +47,29 @@ export const getStaticSkills = async (searchQuery: string = "") => {
     }
   };
 
+  export const getStaticTools = async (searchQuery: string = "") => {
+    try {
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+      const response = await fetch(`${backendUrl}/static/tools?searchQuery=${searchQuery}`, {
+        method: "GET",
+      });
+
+      console.log("Static tools response:", response);
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || `HTTP ${response.status}: Failed to get static tools`);
+      }
+
+      const data = await response.json();
+      console.log("Static tools response:", data);
+      return data;
+    } catch (error: any) {
+      console.error("Failed to get static tools:", error.message);
+      throw error;
+    }
+  };
+
   export const getAIBuddyInterviews = async (
     subCategory: string,
     page?: number,

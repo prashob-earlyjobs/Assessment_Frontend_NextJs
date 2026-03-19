@@ -146,6 +146,7 @@ export const userSignup = async ({
   name,
   email,
   mobile,
+  countryCode,
   password,
   referrerId,
   experienceLevel,
@@ -156,6 +157,7 @@ export const userSignup = async ({
   password?: string;
   name: string;
   mobile: string;
+  countryCode?: string;
   referrerId?: string;
   experienceLevel?: string;
   currentCity?: string;
@@ -167,6 +169,7 @@ export const userSignup = async ({
       password: password || "",
       name,
       mobile,
+      countryCode,
       experienceLevel,
       currentCity,
       referrerId,
@@ -1029,10 +1032,15 @@ export const getPaidAssessments = async (userId) => {
   }
 };
 
-export const getUserInterviews = async (userId) => {
+export const getUserInterviews = async (userId: string, page?: number, pageSize?: number) => {
   try {
+    const params: any = {};
+    if (page) params.page = page;
+    if (pageSize) params.pageSize = pageSize;
+
     const response = await axiosInstance.get(
-      `/interviews/getUserInterviews/${userId}`
+      `/interviews/getUserInterviews/${userId}`,
+      { params }
     );
     return response.data;
   } catch (error) {

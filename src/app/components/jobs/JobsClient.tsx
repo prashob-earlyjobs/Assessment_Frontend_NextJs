@@ -10,11 +10,13 @@ import Cookies from "js-cookie";
 import NavbarV2 from "../v2/navbar/navbar.v2";
 import { EARLYJOBS_ORANGE, BORDER_COLOR, TEXT_PRIMARY, ACCENT_COLOR_LIGHT, ACCENT_COLOR_DARK, TEXT_SECONDARY, PRIMARY_COLOR_LIGHT, PRIMARY_COLOR } from "../../../constants/theme";
 import HeaderV2 from "../v2/headerBlack/header.v2";
+import { useUser } from "@/app/context";
 import { Search, Briefcase } from "lucide-react";
 interface Job {
   id: string;
   jobId: string;
   companyName: string;
+  savedJob?: boolean;
   brandName?: string;
   companyLogoUrl?: string;
   title: string;
@@ -70,6 +72,7 @@ const JobsClient = () => {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { userCredentials } = useUser();
 
 
   const [searchInput, setSearchInput] = useState(() => {
@@ -224,6 +227,10 @@ const JobsClient = () => {
       if (experienceRange.length > 0) {
         params.append("experience", experienceRange.join(","));
       }
+      const userEmail = userCredentials?.email;
+      if (userEmail) {
+        params.append("userEmail", userEmail);
+      }
       if (tpoId) {
         params.append("tpoId", tpoId);
       }
@@ -267,7 +274,7 @@ const JobsClient = () => {
       console.log("Setting loading to false");
       setLoading(false);
     }
-  }, [backendUrl]);
+  }, [backendUrl, userCredentials]);
 
   // Sort jobs based on sortBy value
   const jobsData = useMemo(() => {
@@ -522,6 +529,8 @@ const JobsClient = () => {
                       }}
                     >
                       <JobCard
+                        jobId={job.jobId || job.id}
+                        savedJob={job.savedJob}
                         company={job.companyName}
                         brandName={job.brandName}
                         logo={job.companyLogoUrl}
@@ -667,6 +676,8 @@ const JobsClient = () => {
                         {suggestedJobs.map((job) => (
                           <div key={job.id || job.jobId} className="animate-fade-in-up">
                             <JobCard
+                              jobId={job.jobId || job.id}
+                              savedJob={job.savedJob}
                               company={job.companyName}
                               brandName={job.brandName}
                               logo={job.companyLogoUrl}
