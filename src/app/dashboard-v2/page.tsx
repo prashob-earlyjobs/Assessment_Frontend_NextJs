@@ -302,29 +302,6 @@ const DashboardV2 = () => {
 
               <Card
                 className="border border-gray-100 shadow-sm p-5 sm:p-6 sm:col-span-2 xl:col-span-1 cursor-pointer transition-transform hover:-translate-y-0.5 hover:shadow-md"
-                onClick={() => router.push("/interviews-v2")}
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center">
-                    <Building2 className="w-4 h-4 text-emerald-500" />
-                  </div>
-                  <span className="rounded-full bg-emerald-50 text-emerald-600 text-[11px] font-medium px-2 py-0.5">
-                    {(dashboardData?.data?.interviewScheduleCount ?? 0)} total
-                  </span>
-                </div>
-                <p className="text-[11px] uppercase tracking-wide text-gray-400 mb-1.5">
-                  Interviews scheduled
-                </p>
-                <p className="text-3xl font-semibold text-gray-900">
-                  {dashboardData?.data?.interviewScheduleCount ?? 0}
-                </p>
-                <p className="text-xs text-gray-500 mt-2">
-                  Prepare well and keep track of upcoming interview dates.
-                </p>
-              </Card>
-
-              <Card
-                className="border border-gray-100 shadow-sm p-5 sm:p-6 sm:col-span-2 xl:col-span-1 cursor-pointer transition-transform hover:-translate-y-0.5 hover:shadow-md"
                 onClick={() => router.push("/interviews")}
               >
                 <div className="flex items-center justify-between mb-4">
