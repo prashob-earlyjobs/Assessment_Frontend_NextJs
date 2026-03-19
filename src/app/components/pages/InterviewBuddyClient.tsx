@@ -1,8 +1,19 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Sparkles, Loader2, Plus, X, Trash2, Pencil } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  Sparkles,
+  Loader2,
+  Plus,
+  X,
+  Trash2,
+  Pencil,
+  ChevronLeft,
+  ChevronRight,
+  Menu,
+  Share2,
+} from "lucide-react";
 import { getAIBuddyInterviews, createAIBuddySession } from "../services/staticApis";
 import {
   Accordion,
@@ -74,9 +85,12 @@ const DEFAULT_CATEGORIES: NormalizedCategory[] = [
 export default function InterviewBuddyClient() {
   const [assessmentSearch, setAssessmentSearch] = useState("");
   const [selectedCategoryKey, setSelectedCategoryKey] = useState<string | null>(null);
+  const [openCategory, setOpenCategory] = useState<string | undefined>(undefined);
+  const hasSyncedFromUrlRef = useRef(false);
   const [categories, setCategories] = useState<NormalizedCategory[]>(DEFAULT_CATEGORIES);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
   const [interviews, setInterviews] = useState<any[] | null>(null);
+  const [interviewPagination, setInterviewPagination] = useState<{ total: number; totalPages: number } | null>(null);
   const [interviewsLoading, setInterviewsLoading] = useState(false);
   const [startingRole, setStartingRole] = useState<string | null>(null);
   const [subCatPopup, setSubCatPopup] = useState<{ open: boolean; category: string; categoryId?: string }>({ open: false, category: "" });
@@ -114,8 +128,18 @@ export default function InterviewBuddyClient() {
     assessmentId?: string;
   }>({ open: false, type: "assessment", label: "" });
   const [deleting, setDeleting] = useState(false);
+  const [categoriesDrawerOpen, setCategoriesDrawerOpen] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { userCredentials } = useUser();
+
+  const PER_PAGE = 12;
+  const pageFromUrl = Math.max(1, parseInt(searchParams.get("page") || "1", 10) || 1);
+  const interviewList = Array.isArray(interviews) ? interviews : [];
+  const totalItems = interviewPagination?.total ?? interviewList.length;
+  const totalPages = Math.max(1, interviewPagination?.totalPages ?? (Math.ceil(interviewList.length / PER_PAGE) || 1));
+  const currentPage = Math.min(pageFromUrl, totalPages);
+  const paginatedInterviews = interviewList;
 
   const handleAddSubcategory = async () => {
     const name = subCatName.trim();
@@ -308,8 +332,14 @@ export default function InterviewBuddyClient() {
       if (selectedCategoryKey) {
         const sub = selectedCategoryKey.split("-").slice(1).join("-");
         if (sub) {
-          const response = await getAIBuddyInterviews(sub);
-          setInterviews(response.data);
+          const response = await getAIBuddyInterviews(sub, 1, PER_PAGE);
+          setInterviews(normalizeInterviewsResponse(response));
+          const p = response?.data?.pagination;
+          setInterviewPagination(
+            p && typeof p.total === "number" && typeof p.totalPages === "number"
+              ? { total: p.total, totalPages: p.totalPages }
+              : null
+          );
         }
       }
     } catch (err) {
@@ -453,20 +483,57 @@ export default function InterviewBuddyClient() {
     fetchCategories();
   }, []);
 
-  // Automatically select first category + first subcategory on initial load
+  // Initial sync of selected category/subcategory with URL (?category=...&sub=...)
   useEffect(() => {
-    if (categoriesLoading) return;
-    if (selectedCategoryKey) return;
-    if (!categories || categories.length === 0) return;
+    // Run this sync only once, after categories are loaded
+    if (categoriesLoading || hasSyncedFromUrlRef.current) return;
 
-    const firstWithSubs = categories.find((c) => Array.isArray(c.subs) && c.subs.length > 0);
-    if (!firstWithSubs) return;
+    const searchParams = new URLSearchParams(window.location.search);
+    const rawUrlCat = searchParams.get("category");
+    const rawUrlSub = searchParams.get("sub");
+    const urlCat = rawUrlCat ? rawUrlCat.trim() : null;
+    const urlSub = rawUrlSub ? rawUrlSub.trim() : null;
 
-    const firstSub = firstWithSubs.subs[0];
-    if (!firstSub) return;
+    // If URL has both category and sub, try to match them to loaded categories
+    if (urlCat && urlSub && categories && categories.length > 0) {
+      const catMatch = categories.find(
+        (c) => c.main.trim().toLowerCase() === urlCat.toLowerCase()
+      );
 
-    setSelectedCategoryKey(`${firstWithSubs.main}-${firstSub}`);
-  }, [categoriesLoading, categories, selectedCategoryKey]);
+      if (catMatch) {
+        const subMatch = catMatch.subs.find(
+          (s) => s.trim().toLowerCase() === urlSub.toLowerCase()
+        );
+
+        if (subMatch) {
+          const key = `${catMatch.main}-${subMatch}`;
+          setSelectedCategoryKey(key);
+          setOpenCategory(catMatch.main);
+          return;
+        }
+      }
+    }
+
+    // Fallback: auto-select first category + subcategory when URL has no valid selection
+    if (categories && categories.length > 0) {
+      const firstWithSubs = categories.find(
+        (c) => Array.isArray(c.subs) && c.subs.length > 0
+      );
+      if (firstWithSubs && firstWithSubs.subs[0]) {
+        const firstSub = firstWithSubs.subs[0];
+        setSelectedCategoryKey(`${firstWithSubs.main}-${firstSub}`);
+        setOpenCategory(firstWithSubs.main);
+
+        const params = new URLSearchParams(window.location.search);
+        params.set("category", firstWithSubs.main);
+        params.set("sub", firstSub);
+        params.set("page", "1");
+        router.replace(`?${params.toString()}`);
+      }
+    }
+
+    hasSyncedFromUrlRef.current = true;
+  }, [categoriesLoading, categories, router]);
 
   const searchAssessments = useCallback(async (query: string) => {
     const trimmed = query.trim();
@@ -499,7 +566,10 @@ export default function InterviewBuddyClient() {
         const sub = selectedCategoryKey.split("-").slice(1).join("-");
         if (sub) {
           getAIBuddyInterviews(sub)
-            .then((response) => setInterviews(response.data))
+            .then((response) => {
+              setInterviews(normalizeInterviewsResponse(response));
+              setInterviewPagination(null);
+            })
             .catch(() => {});
         }
       } else {
@@ -518,19 +588,63 @@ export default function InterviewBuddyClient() {
     };
   }, []);
 
+  const normalizeInterviewsResponse = useCallback((response: any): any[] => {
+    const d = response?.data;
+    if (Array.isArray(d?.data)) return d.data;
+    if (Array.isArray(d)) return d;
+    return [];
+  }, []);
+
+  const handleOpenInterviewDetails = useCallback(
+    (interview: any) => {
+      try {
+        if (typeof window !== "undefined") {
+          window.sessionStorage.setItem(
+            "aiBuddySelectedInterview",
+            JSON.stringify(interview)
+          );
+        }
+      } catch {
+        // ignore storage errors
+      }
+
+      const id = interview?._id || "";
+      const baseParams = new URLSearchParams(window.location.search);
+      if (interview?.category) {
+        baseParams.set("category", String(interview.category));
+      }
+      if (interview?.subCategory) {
+        baseParams.set("sub", String(interview.subCategory));
+      }
+      baseParams.delete("page");
+
+      const query = baseParams.toString();
+      const suffix = query ? `?id=${encodeURIComponent(id)}&${query}` : `?id=${encodeURIComponent(id)}`;
+      router.push(`/interview-buddy/details${suffix}`);
+    },
+    [router]
+  );
+
   useEffect(() => {
     const loadInterviews = async () => {
       if (!selectedCategoryKey) {
         setInterviews(null);
+        setInterviewPagination(null);
         return;
       }
       const subCategory = selectedCategoryKey.split("-").slice(1).join("-");
       if (!subCategory) return;
       try {
         setInterviewsLoading(true);
-        const response = await getAIBuddyInterviews(subCategory);
-        console.log("AIBuddy interviews data:", response.data);
-        setInterviews(response.data);
+        const response = await getAIBuddyInterviews(subCategory, pageFromUrl, PER_PAGE);
+        const list = normalizeInterviewsResponse(response);
+        const pagination = response?.data?.pagination ?? null;
+        setInterviews(list);
+        setInterviewPagination(
+          pagination && typeof pagination.total === "number" && typeof pagination.totalPages === "number"
+            ? { total: pagination.total, totalPages: pagination.totalPages }
+            : null
+        );
       } catch (e) {
         console.error("Error loading interviews for AI Buddy", e);
       } finally {
@@ -539,17 +653,76 @@ export default function InterviewBuddyClient() {
     };
 
     loadInterviews();
-  }, [selectedCategoryKey]);
+  }, [selectedCategoryKey, pageFromUrl, normalizeInterviewsResponse]);
+
+  const goToPage = useCallback(
+    (page: number) => {
+      const params = new URLSearchParams(window.location.search);
+      params.set("page", String(page));
+      router.replace(`?${params.toString()}`);
+    },
+    [router]
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white via-gray-50/40 to-white scroll-smooth flex flex-col">
       <NavbarV2 pageTitle="AI Interview Buddy" showPageTitle />
 
-      <main className="flex-1">
-        <div className="w-full px-4 sm:px-8 lg:px-20 xl:px-28 pt-32 pb-20 grid gap-5 lg:grid-cols-[minmax(0,0.45fr)_minmax(0,1.55fr)]">
-          {/* Left: search + categories */}
-          <aside className="lg:self-stretch">
-            <div className="rounded-2xl border border-slate-200 bg-white/90 shadow-sm p-4 h-full flex flex-col">
+      <style jsx global>{`
+        .ai-sidebar-scroll::-webkit-scrollbar {
+          width:0px;
+        }
+        .ai-sidebar-scroll::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .ai-sidebar-scroll::-webkit-scrollbar-thumb {
+          background-color: rgba(148, 163, 184, 0.9); /* slate-400 */
+          border-radius: 999px;
+        }
+      `}</style>
+
+      <main className="flex-1 pt-24 lg:pt-0">
+        {/* Mobile: trigger to open categories drawer */}
+        <div className="lg:hidden w-full px-4 sm:px-8 pt-2 pb-2">
+          <button
+            type="button"
+            onClick={() => setCategoriesDrawerOpen(true)}
+            className="w-full flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white shadow-sm py-3 px-4 text-sm font-medium text-slate-700 hover:bg-slate-50"
+          >
+            <Menu className="h-5 w-5 text-slate-600" />
+            Browse categories
+          </button>
+        </div>
+
+        {/* Backdrop for drawer (mobile only) — above navbar */}
+        <div
+          aria-hidden
+          className={`lg:hidden fixed inset-0 z-[60] bg-black/30 transition-opacity duration-300 ${
+            categoriesDrawerOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
+          onClick={() => setCategoriesDrawerOpen(false)}
+        />
+
+        <div className="w-full px-4 sm:px-8 lg:px-20 xl:px-28 pt-2 pb-20 lg:pt-32 grid gap-5 lg:grid-cols-[minmax(0,0.45fr)_minmax(0,1.55fr)]">
+          {/* Left: search + categories — drawer on mobile, sidebar on lg (drawer above navbar) */}
+          <aside
+            className={`lg:self-stretch fixed left-0 top-0 bottom-0 z-[70] w-[min(320px,85vw)] lg:relative lg:z-auto lg:w-auto transition-transform duration-300 ease-out lg:translate-x-0 ${
+              categoriesDrawerOpen ? "translate-x-0" : "-translate-x-full"
+            }`}
+          >
+            <div className="rounded-none lg:rounded-2xl border-0 lg:border border-slate-200 bg-white lg:bg-white/90 shadow-xl lg:shadow-sm p-4 h-full max-h-[100vh] lg:max-h-[72vh] flex flex-col overflow-hidden">
+              {/* Close drawer button (mobile only) */}
+              <div className="lg:hidden flex items-center justify-between mb-2">
+                <span className="text-xs font-semibold text-gray-700">Browse categories</span>
+                <button
+                  type="button"
+                  onClick={() => setCategoriesDrawerOpen(false)}
+                  className="p-2 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-700"
+                  aria-label="Close menu"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
               <div className="relative">
                 <input
                   type="text"
@@ -563,7 +736,7 @@ export default function InterviewBuddyClient() {
                   <Loader2 className="absolute right-2.5 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-slate-400" />
                 )}
               </div>
-              <div className="mt-4">
+              <div className="mt-4 flex-1 overflow-y-auto pr-1 ai-sidebar-scroll">
                 <p className="text-[11px] font-semibold text-gray-700 mb-1.5">
                   Browse categories
                 </p>
@@ -577,7 +750,13 @@ export default function InterviewBuddyClient() {
                     ))}
                   </div>
                 ) : (
-                  <Accordion type="single" collapsible className="w-full">
+                  <Accordion
+                    type="single"
+                    collapsible
+                    className="w-full"
+                    value={openCategory}
+                    onValueChange={(val) => setOpenCategory(val || undefined)}
+                  >
                     {categories.map((cat) => (
                       <AccordionItem key={cat.main} value={cat.main}>
                         <div className="flex items-center group/cat">
@@ -604,7 +783,7 @@ export default function InterviewBuddyClient() {
                             </button>
                           )}
                         </div>
-                        <AccordionContent className="px-3">
+                        <AccordionContent className="px-3 max-h-48 overflow-y-auto ai-sidebar-scroll">
                           {userCredentials?.role === "super_admin" && (
                             <button
                               type="button"
@@ -626,11 +805,29 @@ export default function InterviewBuddyClient() {
                                 <li key={sub} className="list-none flex items-center group/sub">
                                   <button
                                     type="button"
-                                    onClick={() =>
-                                      setSelectedCategoryKey(
-                                        isSelected ? null : key
-                                      )
-                                    }
+                                    onClick={() => {
+                                      const nextKey = isSelected ? null : key;
+                                      setSelectedCategoryKey(nextKey);
+
+                                      if (nextKey) {
+                                        setOpenCategory(cat.main);
+                                        setCategoriesDrawerOpen(false);
+                                      }
+
+                                      const params = new URLSearchParams(window.location.search);
+                                      if (nextKey) {
+                                        const [catMain, ...rest] = nextKey.split("-");
+                                        const subName = rest.join("-");
+                                        params.set("category", catMain);
+                                        params.set("sub", subName);
+                                        params.set("page", "1");
+                                      } else {
+                                        params.delete("category");
+                                        params.delete("sub");
+                                        params.delete("page");
+                                      }
+                                      router.replace(`?${params.toString()}`);
+                                    }}
                                     className={`flex-1 text-left pl-6 pr-2 py-3 rounded-md transition-colors ${
                                       isSelected
                                         ? "bg-slate-100 text-slate-900 font-medium"
@@ -745,10 +942,11 @@ export default function InterviewBuddyClient() {
                   )}
 
                 {!interviewsLoading &&
-                  interviews?.map((interview) => (
+                  paginatedInterviews.map((interview) => (
                     <div
                       key={interview.assessmentRole}
-                      className="flex flex-col justify-between gap-2 p-3 rounded-lg bg-white shadow-sm group/tile relative"
+                      className="flex flex-col justify-between gap-2 p-3 rounded-lg bg-white shadow-sm group/tile relative cursor-pointer"
+                      onClick={() => handleOpenInterviewDetails(interview)}
                     >
                       {userCredentials?.role === "super_admin" && (
                         <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover/tile:opacity-100 transition-all">
@@ -810,23 +1008,28 @@ export default function InterviewBuddyClient() {
                         {interview.skills.map((skill: any) => skill.name).join(", ")}
                       </div>
 
-                      <button
-                        type="button"
-                        className="relative text-xs w-full rounded-md py-1.5 px-2 border border-gray-300 bg-white overflow-hidden group transition-colors duration-200 hover:bg-slate-50 hover:border-slate-400 disabled:opacity-60 disabled:cursor-not-allowed"
-                        onClick={() => handleStartInterview(interview)}
-                        disabled={startingRole === interview.assessmentRole}
-                      >
-                        <span
-                          className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-orange-50 via-orange-300/70 to-orange-50 opacity-0 transition-transform transition-opacity duration-600 group-hover:translate-x-full group-hover:opacity-100"
-                          aria-hidden="true"
-                        />
-                        <span className="relative z-10 inline-flex items-center justify-center gap-1.5">
-                          {startingRole === interview.assessmentRole && (
-                            <Loader2 className="h-3.5 w-3.5 animate-spin text-slate-700" />
-                          )}
-                          <span>Start Interview</span>
-                        </span>
-                      </button>
+                      <div className="mt-1 flex items-center">
+                        <button
+                          type="button"
+                          className="relative w-full text-xs py-1.5 px-2 border border-gray-300 bg-white overflow-hidden group transition-colors duration-200 hover:bg-slate-50 hover:border-slate-400"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleStartInterview(interview);
+                          }}
+                          disabled={startingRole === interview.assessmentRole}
+                        >
+                          <span
+                            className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-orange-50 via-orange-300/70 to-orange-50 opacity-0 transition-transform transition-opacity duration-600 group-hover:translate-x-full group-hover:opacity-100"
+                            aria-hidden="true"
+                          />
+                          <span className="relative z-10 inline-flex items-center justify-center gap-1.5">
+                            {startingRole === interview.assessmentRole && (
+                              <Loader2 className="h-3.5 w-3.5 animate-spin text-slate-700" />
+                            )}
+                            <span>Start Interview</span>
+                          </span>
+                        </button>
+                      </div>
 
                     </div>
                   ))}
@@ -861,6 +1064,37 @@ export default function InterviewBuddyClient() {
                         Add Assessment
                       </button>
                     )}
+                  </div>
+                )}
+
+                {!interviewsLoading && interviews && interviews.length > 0 && totalPages > 1 && (
+                  <div className="col-span-2 md:col-span-4 flex flex-wrap items-center justify-between gap-3 pt-4 pb-2 border-t border-slate-100">
+                    <p className="text-xs text-slate-600">
+                      Showing {(currentPage - 1) * PER_PAGE + 1}–{Math.min(currentPage * PER_PAGE, totalItems)} of {totalItems}
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => goToPage(currentPage - 1)}
+                        disabled={currentPage <= 1}
+                        className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 shadow-sm hover:bg-slate-50 disabled:opacity-50 disabled:pointer-events-none"
+                      >
+                        <ChevronLeft className="h-4 w-4" />
+                        Previous
+                      </button>
+                      <span className="text-xs text-slate-600 px-2">
+                        Page {currentPage} of {totalPages}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => goToPage(currentPage + 1)}
+                        disabled={currentPage >= totalPages}
+                        className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 shadow-sm hover:bg-slate-50 disabled:opacity-50 disabled:pointer-events-none"
+                      >
+                        Next
+                        <ChevronRight className="h-4 w-4" />
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>

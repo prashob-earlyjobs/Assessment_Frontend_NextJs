@@ -70,15 +70,21 @@ export const getStaticSkills = async (searchQuery: string = "") => {
     }
   };
 
-  export const getAIBuddyInterviews = async (subCategory: string) => {
+  export const getAIBuddyInterviews = async (
+    subCategory: string,
+    page?: number,
+    limit?: number
+  ) => {
     try {
       const backendUrl = process.env.NEXT_PUBLIC_AI_API_URL;
       if (!backendUrl) {
         throw new Error("Missing NEXT_PUBLIC_AI_API_URL");
       }
-      const encoded = encodeURIComponent(subCategory);
+      const params = new URLSearchParams({ subCategory });
+      if (page != null) params.set("page", String(page));
+      if (limit != null) params.set("limit", String(limit));
       const response = await fetch(
-        `${backendUrl}api/public/interviewsForAIBuddy?subCategory=${encoded}`,
+        `${backendUrl}api/public/interviewsForAIBuddy?${params.toString()}`,
         {
           method: "GET",
         }

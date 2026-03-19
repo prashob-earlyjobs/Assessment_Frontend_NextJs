@@ -79,6 +79,7 @@ const Dashboard = () => {
 
   const [aiBuddyRole, setAiBuddyRole] = useState<string | null>(null);
   const [aiBuddySubCategory, setAiBuddySubCategory] = useState<string | null>(null);
+  const [aiBuddySessionId, setAiBuddySessionId] = useState<string | null>(null);
   const [showAiBuddyDialog, setShowAiBuddyDialog] = useState(false);
 
   const handleProfileClick = () => {
@@ -176,7 +177,7 @@ const Dashboard = () => {
             const lastName =
               parts.length > 1 ? parts.slice(1).join(" ") : null;
 
-            await createAIBuddySession({
+            const sessionData = await createAIBuddySession({
               role: parsed.role,
               subCategory: parsed.subCategory || null,
               firstName,
@@ -184,6 +185,12 @@ const Dashboard = () => {
               email: userCredentials?.email || null,
               phone: userCredentials?.mobile || null,
             });
+            const sessionId =
+              sessionData?.data?.sessionId ||
+              sessionData?.sessionId ||
+              sessionData?.data?._id ||
+              null;
+            setAiBuddySessionId(sessionId);
           } catch (e) {
             console.error("Failed to create AI buddy session", e);
           } finally {
@@ -227,9 +234,10 @@ const Dashboard = () => {
             <Button
               onClick={() => {
                 if (aiBuddyRole) {
-                  navigate.push(
-                    `/interview-buddy/${encodeURIComponent(aiBuddyRole)}`
-                  );
+                  const url = aiBuddySessionId
+                    ? `${process.env.NEXT_PUBLIC_AI_ASSESSMENT_URL}interview?sessionId=${aiBuddySessionId}`
+                    : `/interview-buddy/${encodeURIComponent(aiBuddyRole)}`;
+                  navigate.push(url);
                 }
                 setShowAiBuddyDialog(false);
               }}
