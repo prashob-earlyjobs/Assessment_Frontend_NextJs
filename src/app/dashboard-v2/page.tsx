@@ -256,7 +256,7 @@ const DashboardV2 = () => {
             <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-2">
               <Card
                 className="border border-gray-100 shadow-sm p-5 sm:p-6 cursor-pointer transition-transform hover:-translate-y-0.5 hover:shadow-md"
-                onClick={() => router.push("/applications-v2")}
+                onClick={() => router.push("/applications")}
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="w-9 h-9 rounded-lg bg-orange-50 flex items-center justify-center">
@@ -279,7 +279,7 @@ const DashboardV2 = () => {
 
               <Card
                 className="border border-gray-100 shadow-sm p-5 sm:p-6 cursor-pointer transition-transform hover:-translate-y-0.5 hover:shadow-md"
-                onClick={() => router.push("/saved-jobs-v2")}
+                onClick={() => router.push("/saved-jobs")}
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center">
@@ -345,7 +345,7 @@ const DashboardV2 = () => {
                     <Button
                       size="sm"
                       className="bg-orange-500 hover:bg-orange-600 text-white text-xs px-3"
-                      onClick={() => router.push("/profile-v2")}
+                      onClick={() => router.push("/profile")}
                     >
                       Improve my profile
                     </Button>
