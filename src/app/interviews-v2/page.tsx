@@ -75,7 +75,7 @@ export default function InterviewsV2Page() {
               variant="outline"
               size="sm"
               className="border-gray-200 text-gray-700 hover:bg-gray-50 gap-1.5"
-              onClick={() => router.push("/dashboard-v2")}
+              onClick={() => router.push("/dashboard")}
             >
               <ChevronLeft className="w-4 h-4" />
               Back to dashboard
