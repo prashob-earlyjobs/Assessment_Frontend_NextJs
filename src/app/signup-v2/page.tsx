@@ -84,7 +84,7 @@ function SignupV2Content() {
         router.push("/dashboard");
       }
     };
-    if (pathname.startsWith("/signup-v2")) checkUserLoggedIn();
+    if (pathname.startsWith("/signup")) checkUserLoggedIn();
   }, [router, pathname, setUserCredentials]);
 
   const getMobileMaxLen = () => (signupData.countryCode === "+91" ? 10 : 15);

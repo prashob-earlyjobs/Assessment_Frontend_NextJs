@@ -148,7 +148,7 @@ export default function ApplicationsV2Client() {
       params.set("page", String(nextPage));
     }
     const query = params.toString();
-    const url = query ? `${pathname}?${query}` : pathname || "/applications-v2";
+    const url = query ? `${pathname}?${query}` : pathname || "/applications";
     router.replace(url);
   };
 
@@ -304,7 +304,7 @@ export default function ApplicationsV2Client() {
               variant="outline"
               size="sm"
               className="border-gray-200 text-gray-700 hover:bg-gray-50 gap-1.5"
-              onClick={() => router.push("/dashboard-v2")}
+              onClick={() => router.push("/dashboard")}
             >
               <ChevronLeft className="w-4 h-4" />
               Back to dashboard
@@ -440,7 +440,7 @@ export default function ApplicationsV2Client() {
                       className="border-gray-200 text-gray-700 hover:bg-gray-50 text-xs"
                       onClick={() =>
                         router.push(
-                          `/applications-v2/track?applicationId=${encodeURIComponent(app._id)}`,
+                          `/applications/track?applicationId=${encodeURIComponent(app._id)}`,
                         )
                       }
                     >
