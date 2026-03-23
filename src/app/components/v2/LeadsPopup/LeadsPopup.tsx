@@ -25,6 +25,12 @@ const LeadsPopup = () => {
     const useStorageFlags = process.env.NEXT_PUBLIC_LEADS_POPUP_USE_STORAGE === "true"
 
     useEffect(() => {
+        // If user is already logged in, never show this popup.
+        const isLoggedIn =
+            !!localStorage.getItem("accessToken") ||
+            !!localStorage.getItem("userCredentials")
+        if (isLoggedIn) return
+
         const isSubmitted = localStorage.getItem("leads_popup_submitted")
         const isDismissed = sessionStorage.getItem("leads_popup_dismissed")
 

@@ -68,7 +68,7 @@ const EMPLOYMENT_TYPE_OPTIONS = [
   "Internship",
 ];
 
-const COMMON_LANGUAGES = ["Hindi", "English"];
+const COMMON_LANGUAGES = ["Abkhazian","Achinese","Acoli","Adangme","Adyghe","Afar","Afrihili","Afrikaans","Aghem","Ainu","Akan","Akkadian","Akoose","Alabama","Albanian","Aleut","Algerian Arabic","American English","American Sign Language","Amharic","Ancient Egyptian","Ancient Greek","Angika","Ao Naga","Arabic","Aragonese","Aramaic","Araona","Arapaho","Arawak","Armenian","Aromanian","Arpitan","Assamese","Asturian","Asu","Atsam","Australian English","Austrian German","Avaric","Avestan","Awadhi","Aymara","Azerbaijani","Badaga","Bafia","Bafut","Bakhtiari","Balinese","Baluchi","Bambara","Bamun","Banjar","Basaa","Bashkir","Basque","Batak Toba","Bavarian","Beja","Belarusian","Bemba","Bena","Bengali","Betawi","Bhojpuri","Bikol","Bini","Bishnupriya","Bislama","Blin","Blissymbols","Bodo","Bosnian","Brahui","Braj","Brazilian Portuguese","Breton","British English","Buginese","Bulgarian","Bulu","Buriat","Burmese","Caddo","Cajun French","Canadian English","Canadian French","Cantonese","Capiznon","Carib","Catalan","Cayuga","Cebuano","Central Atlas Tamazight","Central Dusun","Central Kurdish","Central Yupik","Chadian Arabic","Chagatai","Chamorro","Chechen","Cherokee","Cheyenne","Chibcha","Chiga","Chimborazo Highland Quichua","Chinese","Chinook Jargon","Chipewyan","Choctaw","Church Slavic","Chuukese","Chuvash","Classical Newari","Classical Syriac","Colognian","Comorian","Congo Swahili","Coptic","Cornish","Corsican","Cree","Creek","Crimean Turkish","Croatian","Czech","Dakota","Danish","Dargwa","Dazaga","Delaware","Dinka","Divehi","Dogri","Dogrib","Duala","Dutch","Dyula","Dzongkha","Eastern Frisian","Efik","Egyptian Arabic","Ekajuk","Elamite","Embu","Emilian","English","Erzya","Esperanto","Estonian","European Portuguese","European Spanish","Ewe","Ewondo","Extremaduran","Fang","Fanti","Faroese","Fiji Hindi","Fijian","Filipino","Finnish","Flemish","Fon","Frafra","French","Friulian","Fulah","Ga","Gagauz","Galician","Gan Chinese","Ganda","Gayo","Gbaya","Geez","Georgian","German","Gheg Albanian","Ghomala","Gilaki","Gilbertese","Goan Konkani","Gondi","Gorontalo","Gothic","Grebo","Greek","Guarani","Gujarati","Gusii","Gwichʼin","Haida","Haitian","Hakka Chinese","Hausa","Hawaiian","Hebrew","Herero","Hiligaynon","Hindi","Hiri Motu","Hittite","Hmong","Hungarian","Hupa","Iban","Ibibio","Icelandic","Ido","Igbo","Iloko","Inari Sami","Indonesian","Ingrian","Ingush","Interlingua","Interlingue","Inuktitut","Inupiaq","Irish","Italian","Jamaican Creole English","Japanese","Javanese","Jju","Jola-Fonyi","Judeo-Arabic","Judeo-Persian","Jutish","Kabardian","Kabuverdianu","Kabyle","Kachin","Kaingang","Kako","Kalaallisut","Kalenjin","Kalmyk","Kamba","Kanembu","Kannada","Kanuri","Kara-Kalpak","Karachay-Balkar","Karelian","Kashmiri","Kashubian","Kawi","Kazakh","Kenyang","Khasi","Khmer","Khotanese","Khowar","Kikuyu","Kimbundu","Kinaray-a","Kinyarwanda","Kirmanjki","Klingon","Kom","Komi","Komi-Permyak","Kongo","Konkani","Korean","Koro","Kosraean","Kotava","Koyra Chiini","Koyraboro Senni","Kpelle","Krio","Kuanyama","Kumyk","Kurdish","Kurukh","Kutenai","Kwasio","Kyrgyz","Kʼicheʼ","Ladino","Lahnda","Lakota","Lamba","Langi","Lao","Latgalian","Latin","Latin American Spanish","Latvian","Laz","Lezghian","Ligurian","Limburgish","Lingala","Lingua Franca Nova","Literary Chinese","Lithuanian","Livonian","Lojban","Lombard","Low German","Lower Silesian","Lower Sorbian","Lozi","Luba-Katanga","Luba-Lulua","Luiseno","Lule Sami","Lunda","Luo","Luxembourgish","Luyia","Maba","Macedonian","Machame","Madurese","Mafa","Magahi","Main-Franconian","Maithili","Makasar","Makhuwa-Meetto","Makonde","Malagasy","Malay","Malayalam","Maltese","Manchu","Mandar","Mandingo","Manipuri","Manx","Maori","Mapuche","Marathi","Mari","Marshallese","Marwari","Masai","Mazanderani","Medumba","Mende","Mentawai","Meru","Metaʼ","Mexican Spanish","Micmac","Middle Dutch","Middle English","Middle French","Middle High German","Middle Irish","Min Nan Chinese","Minangkabau","Mingrelian","Mirandese","Mizo","Modern Standard Arabic","Mohawk","Moksha","Moldavian","Mongo","Mongolian","Morisyen","Moroccan Arabic","Mossi","Multiple Languages","Mundang","Muslim Tat","Myene","Nama","Nauru","Navajo","Ndonga","Neapolitan","Nepali","Newari","Ngambay","Ngiemboon","Ngomba","Nheengatu","Nias","Niuean","No linguistic content","Nogai","North Ndebele","Northern Frisian","Northern Sami","Northern Sotho","Norwegian","Norwegian Bokmål","Norwegian Nynorsk","Novial","Nuer","Nyamwezi","Nyanja","Nyankole","Nyasa Tonga","Nyoro","Nzima","NʼKo","Occitan","Ojibwa","Old English","Old French","Old High German","Old Irish","Old Norse","Old Persian","Old Provençal","Oriya","Oromo","Osage","Ossetic","Ottoman Turkish","Pahlavi","Palatine German","Palauan","Pali","Pampanga","Pangasinan","Papiamento","Pashto","Pennsylvania German","Persian","Phoenician","Picard","Piedmontese","Plautdietsch","Pohnpeian","Polish","Pontic","Portuguese","Prussian","Punjabi","Quechua","Rajasthani","Rapanui","Rarotongan","Riffian","Romagnol","Romanian","Romansh","Romany","Rombo","Root","Rotuman","Roviana","Rundi","Russian","Rusyn","Rwa","Saho","Sakha","Samaritan Aramaic","Samburu","Samoan","Samogitian","Sandawe","Sango","Sangu","Sanskrit","Santali","Sardinian","Sasak","Sassarese Sardinian","Saterland Frisian","Saurashtra","Scots","Scottish Gaelic","Selayar","Selkup","Sena","Seneca","Serbian","Serbo-Croatian","Serer","Seri","Shambala","Shan","Shona","Sichuan Yi","Sicilian","Sidamo","Siksika","Silesian","Simplified Chinese","Sindhi","Sinhala","Skolt Sami","Slave","Slovak","Slovenian","Soga","Sogdien","Somali","Soninke","South Azerbaijani","South Ndebele","Southern Altai","Southern Sami","Southern Sotho","Spanish","Sranan Tongo","Standard Moroccan Tamazight","Sukuma","Sumerian","Sundanese","Susu","Swahili","Swati","Swedish","Swiss French","Swiss German","Swiss High German","Syriac","Tachelhit","Tagalog","Tahitian","Taita","Tajik","Talysh","Tamashek","Tamil","Taroko","Tasawaq","Tatar","Telugu","Tereno","Teso","Tetum","Thai","Tibetan","Tigre","Tigrinya","Timne","Tiv","Tlingit","Tok Pisin","Tokelau","Tongan","Tornedalen Finnish","Traditional Chinese","Tsakhur","Tsakonian","Tsimshian","Tsonga","Tswana","Tulu","Tumbuka","Tunisian Arabic","Turkish","Turkmen","Turoyo","Tuvalu","Tuvinian","Twi","Tyap","Udmurt","Ugaritic","Ukrainian","Umbundu","Unknown Language","Upper Sorbian","Urdu","Uyghur","Uzbek","Vai","Venda","Venetian","Veps","Vietnamese","Volapük","Võro","Votic","Vunjo","Walloon","Walser","Waray","Warlpiri","Washo","Wayuu","Welsh","West Flemish","Western Frisian","Western Mari","Wolaytta","Wolof","Wu Chinese","Xhosa","Xiang Chinese","Yangben","Yao","Yapese","Yemba","Yiddish","Yoruba","Zapotec","Zarma","Zaza","Zeelandic","Zenaga","Zhuang","Zoroastrian Dari","Zulu","Zuni"];
 
 const initialForm = {
   fullName: "",
@@ -126,6 +126,67 @@ const mapStaticOptions = (data: any): { value: string; label: string }[] => {
     .filter(Boolean) as { value: string; label: string }[];
 };
 
+/** Empty is valid; if provided, must be exactly 12 digits (numbers only). */
+function isValidOptionalAadhar(value: string): boolean {
+  const v = (value ?? "").trim();
+  if (!v) return true;
+  return /^\d{12}$/.test(v);
+}
+
+/** Avoid "[object Object]" when API returns languages as objects or react-select value is non-string. */
+function normalizeLanguagesFromApi(input: unknown): string {
+  if (input == null) return "";
+  if (typeof input === "string") return input;
+  if (Array.isArray(input)) {
+    const parts = input
+      .map((item) => {
+        if (typeof item === "string") return item.trim();
+        if (item && typeof item === "object") {
+          const o = item as Record<string, unknown>;
+          const label = o.label ?? o.name ?? o.language ?? o.title;
+          if (typeof label === "string" && label.trim()) return label.trim();
+          const val = o.value;
+          if (typeof val === "string" && val.trim()) return val.trim();
+        }
+        return "";
+      })
+      .filter(Boolean);
+    return parts.join(", ");
+  }
+  return "";
+}
+
+function languageOptionToString(opt: { value: unknown; label: unknown }): string {
+  const pickString = (x: unknown): string => {
+    if (typeof x === "string") return x.trim();
+    if (x != null && typeof x === "object") {
+      const o = x as Record<string, unknown>;
+      const candidates = [
+        o.label,
+        o.name,
+        o.language,
+        o.title,
+        o.value,
+        o.text,
+        (o as any).labelText,
+      ];
+      for (const c of candidates) {
+        if (typeof c === "string" && c.trim()) return c.trim();
+      }
+    }
+    return "";
+  };
+
+  // Prefer label if possible, since that's usually what should display in the pill.
+  const fromLabel = pickString(opt.label);
+  if (fromLabel) return fromLabel;
+
+  const fromValue = pickString(opt.value);
+  if (fromValue) return fromValue;
+
+  return "";
+}
+
 export default function ProfileV2Page() {
   const router = useRouter();
   const { userCredentials, setUserCredentials } = useUser();
@@ -141,9 +202,60 @@ export default function ProfileV2Page() {
   >(COMMON_LANGUAGES.map((lang) => ({ value: lang, label: lang })));
   const [skillOptions, setSkillOptions] = useState<{ value: string; label: string }[]>([]);
   const [toolOptions, setToolOptions] = useState<{ value: string; label: string }[]>([]);
+  const [aadharError, setAadharError] = useState("");
   const [citySearch, setCitySearch] = useState("");
   const [openCityDropdown, setOpenCityDropdown] = useState(false);
   const [cityHighlightedIndex, setCityHighlightedIndex] = useState(-1);
+
+  // Keep CreatableSelect in sync with form.languages so adding one language
+  // never drops the previously selected ones.
+  const selectedLanguageOptions =
+    form.languages
+      ? form.languages
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean)
+          .map((lang) => ({ value: lang, label: lang }))
+      : [];
+
+  // Ensure react-select recognizes currently selected languages as options.
+  // Otherwise, onCreate/onChange may drop existing selections.
+  useEffect(() => {
+    if (!selectedLanguageOptions.length) return;
+    setLanguageOptions((prev) => {
+      const existing = new Set(prev.map((o) => o.value));
+      const additions = selectedLanguageOptions
+        .map((opt) => opt.value)
+        .filter((v) => v && !existing.has(v))
+        .map((v) => ({ value: v, label: v }));
+      return additions.length ? [...prev, ...additions] : prev;
+    });
+    // Intentionally depend only on the string values.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedLanguageOptions.map((o) => o.value).join("|")]);
+
+  const selectedToolOptions =
+    form.tools
+      ? form.tools
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean)
+          .map((t) => ({ value: t, label: t }))
+      : [];
+
+  // Keep CreatableSelect tool options in sync with saved tools (same idea as languages).
+  useEffect(() => {
+    if (!selectedToolOptions.length) return;
+    setToolOptions((prev) => {
+      const existing = new Set(prev.map((o) => o.value));
+      const additions = selectedToolOptions
+        .map((opt) => opt.value)
+        .filter((v) => v && !existing.has(v))
+        .map((v) => ({ value: v, label: v }));
+      return additions.length ? [...prev, ...additions] : prev;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedToolOptions.map((o) => o.value).join("|")]);
 
   // If user is not logged in (no token/credentials in storage), redirect them to login
   useEffect(() => {
@@ -182,6 +294,30 @@ export default function ProfileV2Page() {
 
     loadStaticSkillAndToolOptions();
   }, []);
+
+  // Re-fetch static tools when profile context is ready so the dropdown is populated like skills
+  // (avoids empty options if the initial mount request failed or returned late).
+  useEffect(() => {
+    if (!userCredentials) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const toolsResp = await getStaticTools("");
+        const toolOpts = mapStaticOptions(toolsResp);
+        if (cancelled || !toolOpts.length) return;
+        setToolOptions((prev) => {
+          const existing = new Set(prev.map((o) => o.value));
+          const additions = toolOpts.filter((o) => !existing.has(o.value));
+          return additions.length ? [...prev, ...additions] : prev;
+        });
+      } catch (err) {
+        console.error("Failed to load static tools after profile load", err);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [userCredentials]);
 
   useEffect(() => {
     if (!userCredentials) return;
@@ -243,19 +379,40 @@ export default function ProfileV2Page() {
       collegeName: (firstEdu.institution as string) ?? "",
       yearOfPassing: (firstEdu.year as string) ?? "",
       keySkills: Array.isArray(p?.skills) ? (p.skills as string[]).join(", ") : "",
-      tools: Array.isArray((pro as any)?.tools)
-        ? ((pro as any).tools as string[]).join(", ")
-        : (((pro as any)?.tools as string) ?? ""),
-      languages: Array.isArray(p?.languages) ? (p.languages as string[]).join(", ") : (p?.languages as string) ?? "",
+      tools: (() => {
+        const profileTools = p?.tools;
+        const proTools = (pro as any)?.tools;
+        if (Array.isArray(profileTools)) {
+          return (profileTools as string[]).join(", ");
+        }
+        if (typeof profileTools === "string" && profileTools.trim()) {
+          return profileTools;
+        }
+        if (Array.isArray(proTools)) {
+          return (proTools as string[]).join(", ");
+        }
+        return typeof proTools === "string" ? proTools : "";
+      })(),
+      languages: normalizeLanguagesFromApi(p?.languages),
       preferredJobTitles: (p?.preferredJobRole as string) ?? "",
       preferredLocations: Array.isArray(p?.prefJobLocations)
         ? (p.prefJobLocations as string[]).join(", ")
         : "",
       expectedCTC: (pro.expectedSalaryAnnual as string) ?? "",
       noticePeriod: (pro.noticePeriod as string) ?? "",
-      preferredIndustries: Array.isArray((pro as any)?.preferredJobCategories)
-        ? ((pro as any).preferredJobCategories as string[]).join(", ")
-        : "",
+      preferredIndustries: (() => {
+        const fromProfile = (p as any)?.preferredIndustries;
+        if (Array.isArray(fromProfile)) {
+          return (fromProfile as string[]).join(", ");
+        }
+        if (typeof fromProfile === "string" && fromProfile.trim()) {
+          return fromProfile;
+        }
+        if (Array.isArray((pro as any)?.preferredJobCategories)) {
+          return ((pro as any).preferredJobCategories as string[]).join(", ");
+        }
+        return "";
+      })(),
       preferredEmploymentTypes: Array.isArray((pro as any)?.preferredEmploymentTypes)
         ? ((pro as any).preferredEmploymentTypes as string[]).join(", ")
         : "",
@@ -346,6 +503,12 @@ export default function ProfileV2Page() {
       toast.error("Please log in to save your profile.");
       return;
     }
+    if (!isValidOptionalAadhar(form.aadharNumber)) {
+      setAadharError("Enter exactly 12 digits, or leave blank.");
+      toast.error("Aadhar number must be exactly 12 digits, or leave it empty.");
+      return;
+    }
+    setAadharError("");
     setSaving(true);
     try {
       const skillsArray = form.keySkills
@@ -357,6 +520,15 @@ export default function ProfileV2Page() {
       const languagesArray = form.languages
         ? form.languages.split(",").map((s) => s.trim()).filter(Boolean)
         : [];
+      const languagesObjectsArray =
+        languagesArray.length > 0
+          ? languagesArray.map((langName) => ({
+              name: langName,
+              write: true,
+              speak: true,
+              read: true,
+            }))
+          : [];
       const toolsArray = form.tools
         ? form.tools.split(",").map((s) => s.trim()).filter(Boolean)
         : [];
@@ -386,13 +558,60 @@ export default function ProfileV2Page() {
           skills: skillsArray.length
             ? skillsArray
             : userCredentials?.profile?.skills ?? [],
+          tools: toolsArray.length
+            ? toolsArray
+            : (((userCredentials?.profile as any)?.tools as string[]) ?? []),
           prefJobLocations: locationsArray.length
             ? locationsArray
             : (userCredentials?.profile?.prefJobLocations ?? []),
-          languages: languagesArray.length
-            ? languagesArray
-            : (((userCredentials?.profile as Record<string, unknown>)
-                ?.languages as string[]) ?? []),
+          preferredIndustries: (() => {
+            const raw = form.preferredIndustries.trim();
+            if (raw) return raw;
+            const prev = (userCredentials?.profile as any)?.preferredIndustries;
+            if (typeof prev === "string") return prev;
+            if (Array.isArray(prev)) return (prev as string[]).join(", ");
+            return "";
+          })(),
+          languages:
+            languagesObjectsArray.length > 0
+              ? languagesObjectsArray
+              : Array.isArray(
+                  ((userCredentials?.profile as Record<string, unknown>)
+                    ?.languages as unknown)
+                )
+                ? (((userCredentials?.profile as Record<string, unknown>)
+                    ?.languages as Array<unknown>)
+                    .map((l) => {
+                      if (typeof l === "string") {
+                        const name = l.trim();
+                        if (!name) return null;
+                        return { name, write: true, speak: true, read: true };
+                      }
+                      if (l && typeof l === "object") {
+                        const o = l as Record<string, unknown>;
+                        const name =
+                          (o.name as string) ??
+                          (o.language as string) ??
+                          (o.label as string) ??
+                          (o.title as string) ??
+                          "";
+                        if (typeof name !== "string" || !name.trim()) return null;
+                        return {
+                          name: name.trim(),
+                          write: (o.write as boolean) ?? true,
+                          speak: (o.speak as boolean) ?? true,
+                          read: (o.read as boolean) ?? true,
+                        };
+                      }
+                      return null;
+                    })
+                    .filter(Boolean) as Array<{
+                    name: string;
+                    write: boolean;
+                    speak: boolean;
+                    read: boolean;
+                  }>)
+                : [],
           address: {
             ...userCredentials?.profile?.address,
             street: form.streetAddress || userCredentials?.profile?.address.street,
@@ -644,16 +863,36 @@ export default function ProfileV2Page() {
                     Aadhar number (optional)
                   </label>
                   <Input
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    autoComplete="off"
                     placeholder="12-digit Aadhar number"
                     maxLength={12}
+                    aria-invalid={!!aadharError}
                     value={form.aadharNumber}
-                    onChange={(e) =>
+                    onChange={(e) => {
+                      setAadharError("");
                       setForm((f) => ({
                         ...f,
                         aadharNumber: e.target.value.replace(/\D/g, "").slice(0, 12),
-                      }))
+                      }));
+                    }}
+                    onBlur={() => {
+                      const v = form.aadharNumber.trim();
+                      if (v.length > 0 && v.length !== 12) {
+                        setAadharError("Enter exactly 12 digits, or leave blank.");
+                      }
+                    }}
+                    className={
+                      aadharError ? "border-red-500 focus-visible:ring-red-500/30" : undefined
                     }
                   />
+                  {aadharError ? (
+                    <p className="text-xs text-red-600">{aadharError}</p>
+                  ) : (
+                    <p className="text-xs text-gray-500">12 digits only when provided.</p>
+                  )}
                 </div>
               </div>
             </Card>
@@ -1162,6 +1401,7 @@ export default function ProfileV2Page() {
                       isMulti
                       placeholder="Select a language to add"
                       className="w-full"
+                      value={selectedLanguageOptions}
                       components={{
                         // Hide selected chips inside the control; we show them below instead
                         MultiValue: () => null,
@@ -1196,7 +1436,9 @@ export default function ProfileV2Page() {
                       }}
                       onChange={(selectedOptions) => {
                         const values = Array.isArray(selectedOptions)
-                          ? selectedOptions.map((opt) => opt.value)
+                          ? selectedOptions
+                              .map((opt) => languageOptionToString(opt))
+                              .filter(Boolean)
                           : [];
                         setForm((f) => ({
                           ...f,
@@ -1207,17 +1449,10 @@ export default function ProfileV2Page() {
                         const trimmed = inputValue.trim();
                         if (!trimmed) return;
                         const newOption = { value: trimmed, label: trimmed };
-                        setLanguageOptions((prev) => [...prev, newOption]);
-                        setForm((f) => {
-                          const existing = f.languages
-                            .split(",")
-                            .map((s) => s.trim())
-                            .filter(Boolean);
-                          if (existing.includes(trimmed)) return f;
-                          return {
-                            ...f,
-                            languages: [...existing, trimmed].join(", "),
-                          };
+                        // Only update available options; the selected value comes from onChange.
+                        setLanguageOptions((prev) => {
+                          const exists = prev.some((p) => p.value === trimmed);
+                          return exists ? prev : [...prev, newOption];
                         });
                       }}
                     />
