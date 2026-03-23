@@ -93,11 +93,11 @@ const Footer = () => {
             <button
               type="button"
               className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline text-left lg:mt-6 bg-transparent p-0"
-              onClick={() => toast.info("We're working on Auto-Apply! This feature will be updated soon.")}
+              onClick={() => toast.info("We're working on it! This feature will be updated soon.")}
               style={{ outline: "none", border: "none" }}
             >
               <Rocket className="w-5 h-5 mr-2 inline-block" />
-              Auto-Apply
+              Agencies and consultancies tie-up
             </button>
 
             <Link href="/clientele" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
@@ -112,10 +112,15 @@ const Footer = () => {
               <Users className="w-5 h-5 mr-2 inline-block" />
               Join Creator Programme
             </Link>
-            <Link href="/freelance-career-counsellor" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
+            <Link href="/recruiter" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
+              <Users className="w-5 h-5 mr-2 inline-block" />
+              Become Freelance Recruiter
+            </Link>
+
+            {/* <Link href="/freelance-career-counsellor" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
               <UserCog className="w-5 h-5 mr-2 inline-block" />
               Freelance Career Counsellor
-            </Link>
+            </Link> */}
           </div>
         </div>
         <div className="w-full  mt-2 px-4 pb-10">

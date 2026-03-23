@@ -169,21 +169,19 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
         onClick={() => !disabled && setIsOpen(!isOpen)}
         onKeyDown={handleKeyDown}
         disabled={disabled}
-        className={`w-full px-4 py-2.5 pr-10 border-2 rounded-lg text-left transition-all duration-200 appearance-none font-medium flex items-center justify-between text-sm ${
-          disabled
-            ? 'bg-gray-100 cursor-not-allowed border-gray-300 text-gray-500'
-            : isOpen
+        className={`w-full px-4 py-2.5 pr-10 border-2 rounded-lg text-left transition-all duration-200 appearance-none font-medium flex items-center justify-between text-sm ${disabled
+          ? 'bg-gray-100 cursor-not-allowed border-gray-300 text-gray-500'
+          : isOpen
             ? 'bg-white border-orange-200 ring-2 ring-orange-200 cursor-pointer shadow-sm hover:shadow-md'
             : value
-            ? 'bg-white border-gray-300 hover:border-orange-200 cursor-pointer shadow-sm hover:shadow-md'
-            : 'bg-white border-gray-300 hover:border-orange-200 cursor-pointer shadow-sm hover:shadow-md'
-        } ${!value && !disabled ? 'text-gray-400' : disabled ? 'text-gray-500' : 'text-gray-900'}`}
+              ? 'bg-white border-gray-300 hover:border-orange-200 cursor-pointer shadow-sm hover:shadow-md'
+              : 'bg-white border-gray-300 hover:border-orange-200 cursor-pointer shadow-sm hover:shadow-md'
+          } ${!value && !disabled ? 'text-gray-400' : disabled ? 'text-gray-500' : 'text-gray-900'}`}
       >
         <span>{selectedLabel}</span>
         <svg
-          className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${
-            isOpen ? 'transform rotate-180' : ''
-          }`}
+          className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${isOpen ? 'transform rotate-180' : ''
+            }`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -232,15 +230,14 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
                   type="button"
                   onClick={() => handleSelect(option)}
                   onMouseEnter={() => setHighlightedIndex(index)}
-                  className={`w-full px-3 py-2 text-left transition-colors duration-150 text-sm ${
-                    value === option
-                      ? highlightedIndex === index
-                        ? 'bg-orange-100 text-orange-700 font-medium'
-                        : 'bg-orange-50 text-orange-600 font-medium'
-                      : highlightedIndex === index
+                  className={`w-full px-3 py-2 text-left transition-colors duration-150 text-sm ${value === option
+                    ? highlightedIndex === index
+                      ? 'bg-orange-100 text-orange-700 font-medium'
+                      : 'bg-orange-50 text-orange-600 font-medium'
+                    : highlightedIndex === index
                       ? 'bg-orange-100 text-orange-700'
                       : 'text-gray-900 hover:bg-gray-50'
-                  }`}
+                    }`}
                 >
                   {option}
                 </button>
@@ -303,33 +300,34 @@ const ContactFormPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const [loadingPermanentCities, setLoadingPermanentCities] = useState(false);
 
   const [indianStates, setIndianStates] = useState<any[]>([]);
- 
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+
 
   useLayoutEffect(() => {
     const fetchInitialData = async () => {
       try {
         setIsLoading(true);
         setHasError(false);
-        
+
         // Load states first
         const states = State.getStatesOfCountry("IN");
         setIndianStates(states);
-        
+
         const response = await getInitialDataAPI(id || undefined);
-       
-        if(response && response.status ==="success"){
+
+        if (response && response.status === "success") {
           const data = response.data;
           // Check if addresses are the same
-          const addressesMatch = 
+          const addressesMatch =
             data.currentAddress && data.permanentAddress &&
             data.currentAddress.street === data.permanentAddress.street &&
             data.currentAddress.area === data.permanentAddress.area &&
             data.currentAddress.city === data.permanentAddress.city &&
             data.currentAddress.state === data.permanentAddress.state &&
             data.currentAddress.pincode === data.permanentAddress.pincode;
-          
+
           setSameAsCurrentAddress(addressesMatch);
-          
+
           setFormData(prev => ({
             ...prev,
             name: data.name || '',
@@ -439,22 +437,27 @@ const ContactFormPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     let processedValue = value;
-    
+
     // For alternate mobile number, only allow numbers and limit to 10 digits
     if (name === 'alternateMobileNumber') {
       processedValue = value.replace(/\D/g, '').slice(0, 10);
     }
-    
+
     // For pincode fields, only allow numbers and limit to 6 digits
     if (name === 'currentPincode' || name === 'permanentPincode') {
       processedValue = value.replace(/\D/g, '').slice(0, 6);
     }
-    
+
     // For aadhar number, only allow numbers and limit to 12 digits
     if (name === 'aadharNumber') {
       processedValue = value.replace(/\D/g, '').slice(0, 12);
     }
-    
+
+    // For PAN number, uppercase and limit to 10 characters
+    if (name === 'panNumber') {
+      processedValue = value.toUpperCase().slice(0, 10);
+    }
+
     setFormData((prev) => {
       const updated = {
         ...prev,
@@ -463,8 +466,8 @@ const ContactFormPage = ({ params }: { params: Promise<{ id: string }> }) => {
       // If same as current address is checked, copy all current address fields to permanent
       // Note: City and State are handled in handleDropdownChange
       if (sameAsCurrentAddress && (
-        name === 'currentStreetAddress' || 
-        name === 'currentArea' || 
+        name === 'currentStreetAddress' ||
+        name === 'currentArea' ||
         name === 'currentPincode'
       )) {
         if (name === 'currentStreetAddress') updated.permanentStreetAddress = processedValue;
@@ -498,8 +501,8 @@ const ContactFormPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const handleDropdownChange = async (name: string, value: string) => {
     setFormData((prev) => {
       const updated = {
-      ...prev,
-      [name]: value,
+        ...prev,
+        [name]: value,
       };
       // If same as current address is checked and current state is changed, copy to permanent
       if (sameAsCurrentAddress && name === 'currentState') {
@@ -524,7 +527,7 @@ const ContactFormPage = ({ params }: { params: Promise<{ id: string }> }) => {
           const cities = City.getCitiesOfState("IN", stateObj.isoCode);
           const cityNames = cities.map(city => city.name);
           setCurrentCities(cityNames);
-          
+
           // If same as current address is checked, also update permanent cities
           if (sameAsCurrentAddress) {
             setPermanentCities(cityNames);
@@ -591,19 +594,24 @@ const ContactFormPage = ({ params }: { params: Promise<{ id: string }> }) => {
   };
 
   const validateForm = (): string | null => {
-    // Validate alternate mobile number (optional, but if provided, must be 3-10 digits)
+    // Validate alternate mobile number (optional, but 10 digits if provided)
     if (formData.alternateMobileNumber) {
-      if (formData.alternateMobileNumber.length < 3) {
-        return 'Alternate Mobile Number must be at least 3 characters';
-      }
-      if (formData.alternateMobileNumber.length > 10) {
-        return 'Alternate Mobile Number must not exceed 10 characters';
+      const phoneRegex = /^[6-9]\d{9}$/;
+      if (!phoneRegex.test(formData.alternateMobileNumber)) {
+        setFieldErrors(prev => ({ ...prev, alternateMobileNumber: 'mobile number format is not valid' }));
+        return 'PHONE_ERROR';
+      } else {
+        setFieldErrors(prev => ({ ...prev, alternateMobileNumber: '' }));
       }
     }
 
     // Validate PAN number
-    if (!formData.panNumber || formData.panNumber.length !== 10) {
-      return 'PAN Card Number is required and must be exactly 10 characters';
+    const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+    if (!formData.panNumber || !panRegex.test(formData.panNumber)) {
+      setFieldErrors(prev => ({ ...prev, panNumber: 'pan number format is not valid' }));
+      return 'PAN_ERROR';
+    } else {
+      setFieldErrors(prev => ({ ...prev, panNumber: '' }));
     }
 
     // Validate Aadhar number
@@ -676,20 +684,20 @@ const ContactFormPage = ({ params }: { params: Promise<{ id: string }> }) => {
         otp: otp, // OTP is included in the main API call
       };
 
- 
+
       const response = await submitAdditionalDetailsAPI(id || undefined, submissionData);
 
-      
+
       // Close OTP modal and show success
       setShowOTPModal(false);
       showToast('Form submitted successfully!', 'success');
       return response;
     } catch (error: any) {
       console.log('Form submission error:', error.response);
-      if(error.response?.status === 400 && error.response?.data?.message?.includes('OTP')) {
+      if (error.response?.status === 400 && error.response?.data?.message?.includes('OTP')) {
         if (error.response.data.message === 'Invalid OTP') {
           showToast('Invalid OTP. Please try again.', 'error');
-        } else if(error.response.data.message === "OTP expired") {
+        } else if (error.response.data.message === "OTP expired") {
           showToast('OTP expired. Please try again.', 'error');
         } else {
           showToast('Failed to submit form. Please try again.', 'error');
@@ -715,11 +723,13 @@ const ContactFormPage = ({ params }: { params: Promise<{ id: string }> }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     // Validate form
     const validationError = validateForm();
     if (validationError) {
-      showToast(validationError, 'error');
+      if (validationError !== 'PAN_ERROR' && validationError !== 'PHONE_ERROR') {
+        showToast(validationError, 'error');
+      }
       setIsSubmitting(false);
       return;
     }
@@ -741,8 +751,9 @@ const ContactFormPage = ({ params }: { params: Promise<{ id: string }> }) => {
 
   return (
     <>
-    <Header/>
-      <style dangerouslySetInnerHTML={{__html: `
+      <Header />
+      <style dangerouslySetInnerHTML={{
+        __html: `
         @keyframes slideInRight {
           from {
             transform: translateX(100%);
@@ -754,7 +765,7 @@ const ContactFormPage = ({ params }: { params: Promise<{ id: string }> }) => {
           }
         }
       `}} />
-     
+
       {/* OTP Modal */}
       <OTPModal
         isOpen={showOTPModal}
@@ -764,7 +775,7 @@ const ContactFormPage = ({ params }: { params: Promise<{ id: string }> }) => {
         isSubmitting={isSubmitting}
         showToast={showToast}
       />
-      
+
       {showSuccessModal && (
         <div className="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -804,21 +815,19 @@ const ContactFormPage = ({ params }: { params: Promise<{ id: string }> }) => {
         </div>
       )}
       {toast && (
-        <div 
+        <div
           className="fixed top-4 right-4 z-50"
           style={{
             animation: 'slideInRight 0.3s ease-out',
           }}
         >
-          <div className={`rounded-xl shadow-2xl p-4 min-w-[320px] max-w-md backdrop-blur-sm ${
-            toast.type === 'error' 
-              ? 'bg-white border border-red-200' 
-              : 'bg-white border border-green-200'
-          }`}>
+          <div className={`rounded-xl shadow-2xl p-4 min-w-[320px] max-w-md backdrop-blur-sm ${toast.type === 'error'
+            ? 'bg-white border border-red-200'
+            : 'bg-white border border-green-200'
+            }`}>
             <div className="flex items-start">
-              <div className={`flex-shrink-0 rounded-full p-2 ${
-                toast.type === 'error' ? 'bg-red-100' : 'bg-green-100'
-              }`}>
+              <div className={`flex-shrink-0 rounded-full p-2 ${toast.type === 'error' ? 'bg-red-100' : 'bg-green-100'
+                }`}>
                 {toast.type === 'error' ? (
                   <svg className="h-5 w-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -830,14 +839,12 @@ const ContactFormPage = ({ params }: { params: Promise<{ id: string }> }) => {
                 )}
               </div>
               <div className="ml-3 flex-1">
-                <p className={`text-sm font-semibold ${
-                  toast.type === 'error' ? 'text-red-900' : 'text-green-900'
-                }`}>
+                <p className={`text-sm font-semibold ${toast.type === 'error' ? 'text-red-900' : 'text-green-900'
+                  }`}>
                   {toast.type === 'error' ? 'Error' : 'Success'}
                 </p>
-                <p className={`text-sm mt-1 ${
-                  toast.type === 'error' ? 'text-red-700' : 'text-green-700'
-                }`}>
+                <p className={`text-sm mt-1 ${toast.type === 'error' ? 'text-red-700' : 'text-green-700'
+                  }`}>
                   {toast.message}
                 </p>
               </div>
@@ -854,9 +861,9 @@ const ContactFormPage = ({ params }: { params: Promise<{ id: string }> }) => {
         </div>
       )}
       <div className="max-w-7xl mx-auto px-8 pt-8">
-       
+
         <div className="mb-6">
-         
+
         </div>
       </div>
       <div className="max-w-7xl mx-auto px-8 pb-8">
@@ -869,469 +876,472 @@ const ContactFormPage = ({ params }: { params: Promise<{ id: string }> }) => {
               </p>
             </div>
           </div>
-          
+
           {/* Right Column - Form */}
           <div className="col-span-1 lg:col-span-2">
             <form onSubmit={handleSubmit} className="space-y-5">
-      {hasError && (
-        <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded">
-          <div className="flex">
-            <div className="flex-shrink-0">
-              <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-              </svg>
-            </div>
-            <div className="ml-3">
-              <p className="text-sm text-red-700">
-                Something went wrong. Please contact your recruiter.
-              </p>
-            </div>
+              {hasError && (
+                <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded">
+                  <div className="flex">
+                    <div className="flex-shrink-0">
+                      <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div className="ml-3">
+                      <p className="text-sm text-red-700">
+                        Something went wrong. Please contact your recruiter.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+              <div className="bg-gray-50 p-5 rounded-lg border border-gray-200 space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label
+                      htmlFor="name"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      Name
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      readOnly
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 bg-gray-100 cursor-not-allowed text-sm"
+                      placeholder="Enter your name"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      readOnly
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 bg-gray-100 cursor-not-allowed text-sm"
+                      placeholder="Enter your email"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="phone"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      Mobile Number
+                    </label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      readOnly
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 bg-gray-100 cursor-not-allowed text-sm"
+                      placeholder="Enter your phone number"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="alternateMobileNumber"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Alternate Mobile Number
+                  </label>
+                   <input
+                    type="tel"
+                    id="alternateMobileNumber"
+                    name="alternateMobileNumber"
+                    value={formData.alternateMobileNumber}
+                    onChange={handleChange}
+                    maxLength={10}
+                    inputMode="numeric"
+                    className={`w-full px-4 py-2.5 border rounded-md text-gray-900 bg-white focus:ring-2 outline-none transition-colors text-sm ${
+                      fieldErrors.alternateMobileNumber ? 'border-red-500 focus:ring-red-200 focus:border-red-200' : 'border-gray-300 focus:ring-orange-200 focus:border-orange-200'
+                    }`}
+                    placeholder="Enter alternate mobile number (10 digits)"
+                  />
+                  {fieldErrors.alternateMobileNumber && (
+                    <p className="text-red-500 text-xs mt-1">{fieldErrors.alternateMobileNumber}</p>
+                  )}
+                </div>
+
+
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label
+                      htmlFor="panNumber"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      PAN number <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="panNumber"
+                      name="panNumber"
+                      value={formData.panNumber}
+                      onChange={handleChange}
+                      minLength={10}
+                      maxLength={10}
+                      className={`w-full px-4 py-2.5 border rounded-md text-gray-900 bg-white focus:ring-2 outline-none transition-colors uppercase text-sm ${
+                        fieldErrors.panNumber ? 'border-red-500 focus:ring-red-200 focus:border-red-200' : 'border-gray-300 focus:ring-orange-500 focus:border-orange-200'
+                      }`}
+                      placeholder="Enter PAN number (10 characters)"
+                      required
+                    />
+                    {fieldErrors.panNumber && (
+                      <p className="text-red-500 text-xs mt-1">{fieldErrors.panNumber}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="aadharNumber"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      Aadhar Number <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="aadharNumber"
+                      name="aadharNumber"
+                      value={formData.aadharNumber}
+                      onChange={handleChange}
+                      minLength={12}
+                      maxLength={12}
+                      pattern="[0-9]{12}"
+                      inputMode="numeric"
+                      required
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-200 outline-none transition-colors text-sm"
+                      placeholder="Enter Aadhar number (12 digits)"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label
+                      htmlFor="qualification"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      Qualification<span className="text-red-500">*</span>
+                    </label>
+                    <CustomDropdown
+                      id="qualification"
+                      name="qualification"
+                      options={qualificationOptions}
+                      value={formData.qualification}
+                      onChange={(value) => handleDropdownChange('qualification', value)}
+                      placeholder="Select qualification"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="previousExperience"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      Candidate Previous Experience <span className="text-red-500">*</span>
+                    </label>
+                    <CustomDropdown
+                      id="previousExperience"
+                      name="previousExperience"
+                      options={experienceOptions}
+                      value={formData.previousExperience}
+                      onChange={(value) => handleDropdownChange('previousExperience', value)}
+                      placeholder="Select experience"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-4 bg-gray-50 p-5 rounded-lg border border-gray-200">
+                <h3 className="text-base font-semibold text-gray-800 mb-1">Current Address</h3>
+
+                <div>
+                  <label
+                    htmlFor="currentStreetAddress"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Street Address <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="currentStreetAddress"
+                    name="currentStreetAddress"
+                    value={formData.currentStreetAddress}
+                    onChange={handleChange}
+                    minLength={3}
+                    required
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 bg-white focus:ring-2 focus:ring-orange-200 focus:border-orange-200 outline-none transition-colors text-sm"
+                    placeholder="Enter street address"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="currentArea"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Area/Locality <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="currentArea"
+                    name="currentArea"
+                    value={formData.currentArea}
+                    onChange={handleChange}
+                    minLength={3}
+                    required
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 bg-white focus:ring-2 focus:ring-orange-200 focus:border-orange-200 outline-none transition-colors text-sm"
+                    placeholder="Enter area/locality"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label
+                      htmlFor="currentState"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      State <span className="text-red-500">*</span>
+                    </label>
+                    <CustomDropdown
+                      id="currentState"
+                      name="currentState"
+                      options={indianStates?.map((state) => state.name)}
+                      value={formData.currentState}
+                      onChange={(value) => handleDropdownChange('currentState', value)}
+                      placeholder="Select state"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="currentCity"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      City <span className="text-red-500">*</span>
+                    </label>
+                    {loadingCurrentCities ? (
+                      <div className="w-full px-4 py-2.5 border border-gray-300 rounded-md bg-gray-50 text-gray-500 text-sm flex items-center">
+                        <div className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-orange-500 mr-2"></div>
+                        Loading cities...
+                      </div>
+                    ) : (
+                      <CustomDropdown
+                        id="currentCity"
+                        name="currentCity"
+                        options={currentCities}
+                        value={formData.currentCity}
+                        onChange={(value) => handleDropdownChange('currentCity', value)}
+                        placeholder={formData.currentState ? (currentCities.length === 0 ? "No cities found" : "Select city") : "Select state first"}
+                        required
+                        disabled={!formData.currentState || currentCities.length === 0}
+                      />
+                    )}
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="currentPincode"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Pin Code <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="currentPincode"
+                    name="currentPincode"
+                    value={formData.currentPincode}
+                    onChange={handleChange}
+                    minLength={6}
+                    maxLength={6}
+                    pattern="[0-9]{6}"
+                    inputMode="numeric"
+                    required
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 bg-white focus:ring-2 focus:ring-orange-200 focus:border-orange-200 outline-none transition-colors text-sm"
+                    placeholder="Enter pincode (6 digits)"
+                  />
+                </div>
+              </div>
+
+              <div className="mb-4">
+                <label className="flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={sameAsCurrentAddress}
+                    onChange={handleSameAsCurrentAddress}
+                    className="w-4 h-4 text-orange-500 border-gray-300 rounded focus:ring-orange-200 cursor-pointer"
+                  />
+                  <span className="ml-2 text-sm text-gray-700">
+                    Permanent address same as current address
+                  </span>
+                </label>
+              </div>
+
+              <div className="space-y-4 bg-gray-50 p-5 rounded-lg border border-gray-200">
+                <h3 className="text-base font-semibold text-gray-800 mb-1">Permanent Address</h3>
+
+                <div>
+                  <label
+                    htmlFor="permanentStreetAddress"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Street Address {!sameAsCurrentAddress && <span className="text-red-500">*</span>}
+                  </label>
+                  <input
+                    type="text"
+                    id="permanentStreetAddress"
+                    name="permanentStreetAddress"
+                    value={formData.permanentStreetAddress}
+                    onChange={handleChange}
+                    disabled={sameAsCurrentAddress}
+                    minLength={3}
+                    required={!sameAsCurrentAddress}
+                    className={`w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 focus:ring-2 focus:ring-orange-200 focus:border-orange-200 outline-none transition-colors text-sm ${sameAsCurrentAddress ? 'bg-gray-100 cursor-not-allowed' : 'bg-white'
+                      }`}
+                    placeholder="Enter street address"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="permanentArea"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Area/Locality {!sameAsCurrentAddress && <span className="text-red-500">*</span>}
+                  </label>
+                  <input
+                    type="text"
+                    id="permanentArea"
+                    name="permanentArea"
+                    value={formData.permanentArea}
+                    onChange={handleChange}
+                    disabled={sameAsCurrentAddress}
+                    minLength={3}
+                    required={!sameAsCurrentAddress}
+                    className={`w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 focus:ring-2 focus:ring-orange-200 focus:border-orange-200 outline-none transition-colors text-sm ${sameAsCurrentAddress ? 'bg-gray-100 cursor-not-allowed' : 'bg-white'
+                      }`}
+                    placeholder="Enter area/locality"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label
+                      htmlFor="permanentState"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      State {!sameAsCurrentAddress && <span className="text-red-500">*</span>}
+                    </label>
+                    <CustomDropdown
+                      id="permanentState"
+                      name="permanentState"
+                      options={indianStates?.map((state) => state.name) || []}
+                      value={formData.permanentState}
+                      onChange={(value) => handleDropdownChange('permanentState', value)}
+                      placeholder="Select state"
+                      required={!sameAsCurrentAddress}
+                      disabled={sameAsCurrentAddress}
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="permanentCity"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      City {!sameAsCurrentAddress && <span className="text-red-500">*</span>}
+                    </label>
+                    {loadingPermanentCities ? (
+                      <div className="w-full px-4 py-2.5 border border-gray-300 rounded-md bg-gray-50 text-gray-500 text-sm flex items-center">
+                        <div className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-orange-500 mr-2"></div>
+                        Loading cities...
+                      </div>
+                    ) : (
+                      <CustomDropdown
+                        id="permanentCity"
+                        name="permanentCity"
+                        options={permanentCities}
+                        value={formData.permanentCity}
+                        onChange={(value) => handleDropdownChange('permanentCity', value)}
+                        placeholder={formData.permanentState ? "Select city" : "Select state first"}
+                        required={!sameAsCurrentAddress}
+                        disabled={sameAsCurrentAddress || !formData.permanentState || permanentCities.length === 0}
+                      />
+                    )}
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="permanentPincode"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Pin Code {!sameAsCurrentAddress && <span className="text-red-500">*</span>}
+                  </label>
+                  <input
+                    type="text"
+                    id="permanentPincode"
+                    name="permanentPincode"
+                    value={formData.permanentPincode}
+                    onChange={handleChange}
+                    disabled={sameAsCurrentAddress}
+                    minLength={6}
+                    maxLength={6}
+                    pattern="[0-9]{6}"
+                    inputMode="numeric"
+                    required={!sameAsCurrentAddress}
+                    className={`w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 focus:ring-2 focus:ring-orange-200 focus:border-orange-200 outline-none transition-colors text-sm ${sameAsCurrentAddress ? 'bg-gray-100 cursor-not-allowed' : 'bg-white'
+                      }`}
+                    placeholder="Enter pincode (6 digits)"
+                  />
+                </div>
+              </div>
+              <div className="flex gap-4 mt-6">
+                <button
+                  type="button"
+                  onClick={clearForm}
+                  disabled={isSubmitting}
+                  className={`py-2 px-3 rounded-md font-medium text-xs text-gray-700 bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+                    }`}
+                >
+                  Clear
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className={`flex-1 py-2.5 px-4 rounded-md font-medium text-sm text-white transition-colors ${isSubmitting
+                    ? 'bg-gray-400 cursor-not-allowed'
+                    : 'bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2'
+                    }`}
+                >
+                  {isSubmitting ? 'Submitting...' : 'Submit'}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
-      )}
-      <div className="bg-gray-50 p-5 rounded-lg border border-gray-200 space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div>
-        <label 
-          htmlFor="name" 
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-          Name
-        </label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          value={formData.name}
-          readOnly
-            className="w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 bg-gray-100 cursor-not-allowed text-sm"
-          placeholder="Enter your name"
-        />
-      </div>
 
-      <div>
-        <label 
-          htmlFor="email" 
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-          Email
-        </label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          value={formData.email}
-          readOnly
-            className="w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 bg-gray-100 cursor-not-allowed text-sm"
-          placeholder="Enter your email"
-        />
       </div>
-
-      <div>
-        <label 
-          htmlFor="phone" 
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-          Mobile Number
-        </label>
-        <input
-          type="tel"
-          id="phone"
-          name="phone"
-          value={formData.phone}
-          readOnly
-            className="w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 bg-gray-100 cursor-not-allowed text-sm"
-          placeholder="Enter your phone number"
-        />
-        </div>
-      </div>
-
-      <div>
-        <label 
-          htmlFor="alternateMobileNumber" 
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-          Alternate Mobile Number
-        </label>
-        <input
-          type="tel"
-          id="alternateMobileNumber"
-          name="alternateMobileNumber"
-          value={formData.alternateMobileNumber}
-          onChange={handleChange}
-          minLength={3}
-          maxLength={10}
-          pattern="[0-9]{3,10}"
-          inputMode="numeric"
-          className="w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 bg-white focus:ring-2 focus:ring-orange-200 focus:border-orange-200 outline-none transition-colors text-sm"
-          placeholder="Enter alternate mobile number (3-10 digits)"
-        />
-      </div>
-
-     
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div>
-        <label 
-            htmlFor="panNumber" 
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-          PAN number <span className="text-red-500">*</span>
-        </label>
-        <input
-          type="text"
-            id="panNumber"
-            name="panNumber"
-            value={formData.panNumber}
-          onChange={handleChange}
-            minLength={10}
-            maxLength={10}
-            className="w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-200 outline-none transition-colors uppercase text-sm"
-          placeholder="Enter PAN number (10 characters)"
-          required
-        />
-      </div>
-
-      <div>
-        <label 
-          htmlFor="aadharNumber" 
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-          Aadhar Number <span className="text-red-500">*</span>
-        </label>
-          <input
-          type="text"
-          id="aadharNumber"
-          name="aadharNumber"
-          value={formData.aadharNumber}
-          onChange={handleChange}
-          minLength={12}
-          maxLength={12}
-          pattern="[0-9]{12}"
-          inputMode="numeric"
-          required
-          className="w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-200 outline-none transition-colors text-sm"
-          placeholder="Enter Aadhar number (12 digits)"
-        />
-      </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div>
-        <label 
-          htmlFor="qualification" 
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-          Qualification<span className="text-red-500">*</span>
-        </label>
-        <CustomDropdown
-          id="qualification"
-          name="qualification"
-          options={qualificationOptions}
-          value={formData.qualification}
-          onChange={(value) => handleDropdownChange('qualification', value)}
-          placeholder="Select qualification"
-          required
-        />
-      </div>
-
-      <div>
-        <label 
-          htmlFor="previousExperience" 
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-          Candidate Previous Experience <span className="text-red-500">*</span>
-        </label>
-        <CustomDropdown
-          id="previousExperience"
-          name="previousExperience"
-          options={experienceOptions}
-          value={formData.previousExperience}
-          onChange={(value) => handleDropdownChange('previousExperience', value)}
-          placeholder="Select experience"
-          required
-        />
-      </div>
-      </div>
-      </div>
-      <div className="space-y-4 bg-gray-50 p-5 rounded-lg border border-gray-200">
-        <h3 className="text-base font-semibold text-gray-800 mb-1">Current Address</h3>
-
-      <div>
-        <label 
-            htmlFor="currentStreetAddress" 
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-            Street Address <span className="text-red-500">*</span>
-        </label>
-          <input
-            type="text"
-            id="currentStreetAddress"
-            name="currentStreetAddress"
-            value={formData.currentStreetAddress}
-          onChange={handleChange}
-            minLength={3}
-          required
-            className="w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 bg-white focus:ring-2 focus:ring-orange-200 focus:border-orange-200 outline-none transition-colors text-sm"
-            placeholder="Enter street address"
-        />
-      </div>
-
-      <div>
-        <label 
-            htmlFor="currentArea" 
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-            Area/Locality <span className="text-red-500">*</span>
-        </label>
-        <input
-          type="text"
-            id="currentArea"
-            name="currentArea"
-            value={formData.currentArea}
-          onChange={handleChange}
-            minLength={3}
-          required
-            className="w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 bg-white focus:ring-2 focus:ring-orange-200 focus:border-orange-200 outline-none transition-colors text-sm"
-            placeholder="Enter area/locality"
-        />
-      </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div>
-        <label 
-              htmlFor="currentState" 
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-              State <span className="text-red-500">*</span>
-        </label>
-        <CustomDropdown
-              id="currentState"
-              name="currentState"
-              options={indianStates?.map((state) => state.name)}
-              value={formData.currentState}
-              onChange={(value) => handleDropdownChange('currentState', value)}
-              placeholder="Select state"
-          required
-        />
-      </div>
-
-      <div>
-        <label 
-              htmlFor="currentCity" 
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-              City <span className="text-red-500">*</span>
-        </label>
-        {loadingCurrentCities ? (
-          <div className="w-full px-4 py-2.5 border border-gray-300 rounded-md bg-gray-50 text-gray-500 text-sm flex items-center">
-            <div className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-orange-500 mr-2"></div>
-            Loading cities...
-          </div>
-        ) : (
-        <CustomDropdown
-            id="currentCity"
-            name="currentCity"
-            options={currentCities}
-            value={formData.currentCity}
-            onChange={(value) => handleDropdownChange('currentCity', value)}
-            placeholder={formData.currentState ? (currentCities.length === 0 ? "No cities found" : "Select city") : "Select state first"}
-          required
-            disabled={!formData.currentState || currentCities.length === 0}
-        />
-        )}
-      </div>
-      </div>
-
-      <div>
-        <label 
-              htmlFor="currentPincode" 
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-              Pin Code <span className="text-red-500">*</span>
-        </label>
-        <input
-          type="text"
-              id="currentPincode"
-              name="currentPincode"
-              value={formData.currentPincode}
-          onChange={handleChange}
-              minLength={6}
-              maxLength={6}
-              pattern="[0-9]{6}"
-              inputMode="numeric"
-          required
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 bg-white focus:ring-2 focus:ring-orange-200 focus:border-orange-200 outline-none transition-colors text-sm"
-              placeholder="Enter pincode (6 digits)"
-        />
-      </div>
-      </div>
-
-      <div className="mb-4">
-        <label className="flex items-center cursor-pointer">
-          <input
-            type="checkbox"
-            checked={sameAsCurrentAddress}
-            onChange={handleSameAsCurrentAddress}
-            className="w-4 h-4 text-orange-500 border-gray-300 rounded focus:ring-orange-200 cursor-pointer"
-          />
-          <span className="ml-2 text-sm text-gray-700">
-            Permanent address same as current address
-          </span>
-        </label>
-      </div>
-
-      <div className="space-y-4 bg-gray-50 p-5 rounded-lg border border-gray-200">
-        <h3 className="text-base font-semibold text-gray-800 mb-1">Permanent Address</h3>
-
-      <div>
-        <label 
-            htmlFor="permanentStreetAddress" 
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-            Street Address {!sameAsCurrentAddress && <span className="text-red-500">*</span>}
-          </label>
-          <input
-            type="text"
-            id="permanentStreetAddress"
-            name="permanentStreetAddress"
-            value={formData.permanentStreetAddress}
-            onChange={handleChange}
-            disabled={sameAsCurrentAddress}
-            minLength={3}
-            required={!sameAsCurrentAddress}
-            className={`w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 focus:ring-2 focus:ring-orange-200 focus:border-orange-200 outline-none transition-colors text-sm ${
-              sameAsCurrentAddress ? 'bg-gray-100 cursor-not-allowed' : 'bg-white'
-            }`}
-            placeholder="Enter street address"
-          />
-        </div>
-
-        <div>
-          <label 
-            htmlFor="permanentArea" 
-            className="block text-sm font-medium text-gray-700 mb-2"
-          >
-            Area/Locality {!sameAsCurrentAddress && <span className="text-red-500">*</span>}
-          </label>
-          <input
-            type="text"
-            id="permanentArea"
-            name="permanentArea"
-            value={formData.permanentArea}
-            onChange={handleChange}
-            disabled={sameAsCurrentAddress}
-            minLength={3}
-            required={!sameAsCurrentAddress}
-            className={`w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 focus:ring-2 focus:ring-orange-200 focus:border-orange-200 outline-none transition-colors text-sm ${
-              sameAsCurrentAddress ? 'bg-gray-100 cursor-not-allowed' : 'bg-white'
-            }`}
-            placeholder="Enter area/locality"
-          />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div>
-        <label 
-              htmlFor="permanentState" 
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-              State {!sameAsCurrentAddress && <span className="text-red-500">*</span>}
-        </label>
-        <CustomDropdown
-              id="permanentState"
-              name="permanentState"
-              options={indianStates?.map((state) => state.name) || []}
-              value={formData.permanentState}
-              onChange={(value) => handleDropdownChange('permanentState', value)}
-              placeholder="Select state"
-              required={!sameAsCurrentAddress}
-              disabled={sameAsCurrentAddress}
-        />
-      </div>
-
-      <div>
-        <label 
-              htmlFor="permanentCity" 
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-              City {!sameAsCurrentAddress && <span className="text-red-500">*</span>}
-        </label>
-        {loadingPermanentCities ? (
-          <div className="w-full px-4 py-2.5 border border-gray-300 rounded-md bg-gray-50 text-gray-500 text-sm flex items-center">
-            <div className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-orange-500 mr-2"></div>
-            Loading cities...
-          </div>
-        ) : (
-        <CustomDropdown
-            id="permanentCity"
-            name="permanentCity"
-            options={permanentCities}
-            value={formData.permanentCity}
-            onChange={(value) => handleDropdownChange('permanentCity', value)}
-            placeholder={formData.permanentState ? "Select city" : "Select state first"}
-            required={!sameAsCurrentAddress}
-            disabled={sameAsCurrentAddress || !formData.permanentState || permanentCities.length === 0}
-          />
-        )}
-      </div>
-      </div>
-
-          <div>
-            <label 
-              htmlFor="permanentPincode" 
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Pin Code {!sameAsCurrentAddress && <span className="text-red-500">*</span>}
-            </label>
-            <input
-              type="text"
-              id="permanentPincode"
-              name="permanentPincode"
-              value={formData.permanentPincode}
-              onChange={handleChange}
-              disabled={sameAsCurrentAddress}
-              minLength={6}
-              maxLength={6}
-              pattern="[0-9]{6}"
-              inputMode="numeric"
-              required={!sameAsCurrentAddress}
-              className={`w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 focus:ring-2 focus:ring-orange-200 focus:border-orange-200 outline-none transition-colors text-sm ${
-                sameAsCurrentAddress ? 'bg-gray-100 cursor-not-allowed' : 'bg-white'
-              }`}
-              placeholder="Enter pincode (6 digits)"
-            />
-          </div>
-      </div>
-      <div className="flex gap-4 mt-6">
-        <button
-          type="button"
-          onClick={clearForm}
-          disabled={isSubmitting}
-          className={`py-2 px-3 rounded-md font-medium text-xs text-gray-700 bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors ${
-            isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
-          }`}
-        >
-          Clear
-        </button>
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className={`flex-1 py-2.5 px-4 rounded-md font-medium text-sm text-white transition-colors ${
-            isSubmitting
-              ? 'bg-gray-400 cursor-not-allowed'
-              : 'bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2'
-          }`}
-        >
-          {isSubmitting ? 'Submitting...' : 'Submit'}
-        </button>
-      </div>
-    </form>
-          </div>
-        </div>
-      
-      </div>
-      <Footer/>
+      <Footer />
     </>
   );
 };
