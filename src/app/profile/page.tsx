@@ -400,9 +400,19 @@ export default function ProfileV2Page() {
         : "",
       expectedCTC: (pro.expectedSalaryAnnual as string) ?? "",
       noticePeriod: (pro.noticePeriod as string) ?? "",
-      preferredIndustries: Array.isArray((pro as any)?.preferredJobCategories)
-        ? ((pro as any).preferredJobCategories as string[]).join(", ")
-        : "",
+      preferredIndustries: (() => {
+        const fromProfile = (p as any)?.preferredIndustries;
+        if (Array.isArray(fromProfile)) {
+          return (fromProfile as string[]).join(", ");
+        }
+        if (typeof fromProfile === "string" && fromProfile.trim()) {
+          return fromProfile;
+        }
+        if (Array.isArray((pro as any)?.preferredJobCategories)) {
+          return ((pro as any).preferredJobCategories as string[]).join(", ");
+        }
+        return "";
+      })(),
       preferredEmploymentTypes: Array.isArray((pro as any)?.preferredEmploymentTypes)
         ? ((pro as any).preferredEmploymentTypes as string[]).join(", ")
         : "",
@@ -554,6 +564,14 @@ export default function ProfileV2Page() {
           prefJobLocations: locationsArray.length
             ? locationsArray
             : (userCredentials?.profile?.prefJobLocations ?? []),
+          preferredIndustries: (() => {
+            const raw = form.preferredIndustries.trim();
+            if (raw) return raw;
+            const prev = (userCredentials?.profile as any)?.preferredIndustries;
+            if (typeof prev === "string") return prev;
+            if (Array.isArray(prev)) return (prev as string[]).join(", ");
+            return "";
+          })(),
           languages:
             languagesObjectsArray.length > 0
               ? languagesObjectsArray
