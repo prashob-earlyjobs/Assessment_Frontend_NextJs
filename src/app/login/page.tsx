@@ -115,7 +115,7 @@ function LoginContent() {
     try {
       // Determine if input is email or mobile
       const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.emailOrMobile);
-      const phoneNumber = isEmail ? "" : formData.emailOrMobile.replace(/^\+91/, '').replace(/\D/g, '').slice(0, 10);
+      const phoneNumber = isEmail ? "" : formData.emailOrMobile.replace(/^\+91/, "").replace(/\D/g, "").slice(0, 10);
       const email = isEmail ? formData.emailOrMobile : "";
       console.log("phoneNumber", phoneNumber, "email", email);
       console.log("isRecruiterMode", isRecruiterMode);
@@ -246,7 +246,7 @@ function LoginContent() {
     try {
       // Determine if input is email or mobile
       const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.emailOrMobile);
-      const phoneNumber = isEmail ? "" : formData.emailOrMobile.replace(/^\+91/, '').replace(/\D/g, '').slice(0, 10);
+      const phoneNumber = isEmail ? "" : formData.emailOrMobile.replace(/^\+91/, "").replace(/\D/g, "").slice(0, 10);
       const email = isEmail ? formData.emailOrMobile : "";
 
       // Use different API based on mode
@@ -349,7 +349,7 @@ function LoginContent() {
     try {
       // Determine if input is email or mobile
       const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.emailOrMobile);
-      const phoneNumber = isEmail ? "" : formData.emailOrMobile.replace(/^\+91/, '').replace(/\D/g, '').slice(0, 10);
+      const phoneNumber = isEmail ? "" : formData.emailOrMobile.replace(/^\+91/, "").replace(/\D/g, "").slice(0, 10);
       const email = isEmail ? formData.emailOrMobile : "";
 
       // Use different API based on mode
@@ -454,14 +454,14 @@ function LoginContent() {
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="emailOrMobile">Mobile number</Label>
+              <Label htmlFor="emailOrMobile">Email or mobile number</Label>
               <Input
                 id="emailOrMobile"
                 type="text"
                 placeholder="9876543210"
                 value={formData.emailOrMobile}
                 onChange={(e) => setFormData({ ...formData, emailOrMobile: e.target.value })}
-                  className="h-12 bg-white text-gray-900 border-gray-300 placeholder:text-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="h-12 bg-white text-gray-900 border-gray-300 placeholder:text-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 required
               />
             </div>
@@ -670,7 +670,7 @@ function LoginContent() {
         {/* Content */}
         <div className="relative z-10 flex flex-col justify-center items-start p-12 text-white">
           <h2 className="text-4xl font-bold mb-6 leading-tight">
-            Over {(dashboardData?.candidates ?? 175324).toLocaleString("en-IN")} candidates waiting for good employees.
+            Over {(dashboardData?.candidates ?? 175324).toLocaleString("en-IN")} candidates waiting for good employers.
           </h2>
 
           {/* Statistics - from dashboard API */}

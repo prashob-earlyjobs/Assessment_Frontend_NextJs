@@ -21,6 +21,7 @@ import {
 } from "../../components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "../../components/ui/avatar";
 import { Badge } from "../../components/ui/badge";
+import NavbarV2 from "../v2/navbar/navbar.v2";
 import {
   User,
   Mail,
@@ -1118,28 +1119,7 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-purple-50">
-      <header className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div className="flex items-center space-x-2 sm:space-x-4">
-              <Button
-                variant="ghost"
-                onClick={() => window.history.back()}
-                className="rounded-2xl"
-              >
-                <ArrowLeft className="h-5 w-5 mr-2" />
-                <span className="hidden sm:inline">Back</span>
-              </Button>
-              <img
-                src="/images/logo.png"
-                alt="EarlyJobs Logo"
-                className="h-12 sm:h-[5rem] w-auto max-w-full"
-              />
-            </div>
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Update Profile</h1>
-          </div>
-        </div>
-      </header>
+      <NavbarV2 pageTitle="Update Profile" showPageTitle />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-8 w-full">
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-8 w-full items-start">

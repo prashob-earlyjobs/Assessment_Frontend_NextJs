@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { FaLinkedin, FaInstagram } from "react-icons/fa";
 import { useRouter ,useSearchParams, usePathname} from "next/navigation";
 import { verifyCertificate } from "../services/servicesapis";
+import { useUser } from "@/app/context";
 
 
 interface JobDetailsData {
@@ -119,6 +120,7 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [resumeFileName, setResumeFileName] = useState<string>('');
+  const { userCredentials } = useUser();
 
   // Fetch job details
   useEffect(() => {
@@ -145,6 +147,23 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
 
     fetchJobDetails();
   }, [jobid]);
+
+  // Prefill application form from logged-in user data when modal opens
+  useEffect(() => {
+    if (!showApplyModal || !userCredentials) return;
+
+    setApplicationForm((prev) => ({
+      ...prev,
+      fullName: prev.fullName || userCredentials.name || "",
+      email: prev.email || userCredentials.email || "",
+      phone: prev.phone || (userCredentials.mobile || "").replace(/^(\+91)?/, "") || "",
+      currentLocation:
+        prev.currentLocation ||
+        userCredentials.profile?.address?.city ||
+        userCredentials.profile?.address?.state ||
+        "",
+    }));
+  }, [showApplyModal, userCredentials]);
 
   // Handle click outside to close language dropdown
   useEffect(() => {

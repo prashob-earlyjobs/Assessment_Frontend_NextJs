@@ -2,7 +2,18 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Sparkles, Loader2, Plus, X, Trash2, Pencil, ChevronLeft, ChevronRight, Menu } from "lucide-react";
+import {
+  Sparkles,
+  Loader2,
+  Plus,
+  X,
+  Trash2,
+  Pencil,
+  ChevronLeft,
+  ChevronRight,
+  Menu,
+  Share2,
+} from "lucide-react";
 import { getAIBuddyInterviews, createAIBuddySession } from "../services/staticApis";
 import {
   Accordion,
@@ -584,6 +595,36 @@ export default function InterviewBuddyClient() {
     return [];
   }, []);
 
+  const handleOpenInterviewDetails = useCallback(
+    (interview: any) => {
+      try {
+        if (typeof window !== "undefined") {
+          window.sessionStorage.setItem(
+            "aiBuddySelectedInterview",
+            JSON.stringify(interview)
+          );
+        }
+      } catch {
+        // ignore storage errors
+      }
+
+      const id = interview?._id || "";
+      const baseParams = new URLSearchParams(window.location.search);
+      if (interview?.category) {
+        baseParams.set("category", String(interview.category));
+      }
+      if (interview?.subCategory) {
+        baseParams.set("sub", String(interview.subCategory));
+      }
+      baseParams.delete("page");
+
+      const query = baseParams.toString();
+      const suffix = query ? `?id=${encodeURIComponent(id)}&${query}` : `?id=${encodeURIComponent(id)}`;
+      router.push(`/interview-buddy/details${suffix}`);
+    },
+    [router]
+  );
+
   useEffect(() => {
     const loadInterviews = async () => {
       if (!selectedCategoryKey) {
@@ -904,7 +945,8 @@ export default function InterviewBuddyClient() {
                   paginatedInterviews.map((interview) => (
                     <div
                       key={interview.assessmentRole}
-                      className="flex flex-col justify-between gap-2 p-3 rounded-lg bg-white shadow-sm group/tile relative"
+                      className="flex flex-col justify-between gap-2 p-3 rounded-lg bg-white shadow-sm group/tile relative cursor-pointer"
+                      onClick={() => handleOpenInterviewDetails(interview)}
                     >
                       {userCredentials?.role === "super_admin" && (
                         <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover/tile:opacity-100 transition-all">
@@ -966,23 +1008,28 @@ export default function InterviewBuddyClient() {
                         {interview.skills.map((skill: any) => skill.name).join(", ")}
                       </div>
 
-                      <button
-                        type="button"
-                        className="relative text-xs w-full rounded-md py-1.5 px-2 border border-gray-300 bg-white overflow-hidden group transition-colors duration-200 hover:bg-slate-50 hover:border-slate-400 disabled:opacity-60 disabled:cursor-not-allowed"
-                        onClick={() => handleStartInterview(interview)}
-                        disabled={startingRole === interview.assessmentRole}
-                      >
-                        <span
-                          className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-orange-50 via-orange-300/70 to-orange-50 opacity-0 transition-transform transition-opacity duration-600 group-hover:translate-x-full group-hover:opacity-100"
-                          aria-hidden="true"
-                        />
-                        <span className="relative z-10 inline-flex items-center justify-center gap-1.5">
-                          {startingRole === interview.assessmentRole && (
-                            <Loader2 className="h-3.5 w-3.5 animate-spin text-slate-700" />
-                          )}
-                          <span>Start Interview</span>
-                        </span>
-                      </button>
+                      <div className="mt-1 flex items-center">
+                        <button
+                          type="button"
+                          className="relative w-full text-xs py-1.5 px-2 border border-gray-300 bg-white overflow-hidden group transition-colors duration-200 hover:bg-slate-50 hover:border-slate-400"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleStartInterview(interview);
+                          }}
+                          disabled={startingRole === interview.assessmentRole}
+                        >
+                          <span
+                            className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-orange-50 via-orange-300/70 to-orange-50 opacity-0 transition-transform transition-opacity duration-600 group-hover:translate-x-full group-hover:opacity-100"
+                            aria-hidden="true"
+                          />
+                          <span className="relative z-10 inline-flex items-center justify-center gap-1.5">
+                            {startingRole === interview.assessmentRole && (
+                              <Loader2 className="h-3.5 w-3.5 animate-spin text-slate-700" />
+                            )}
+                            <span>Start Interview</span>
+                          </span>
+                        </button>
+                      </div>
 
                     </div>
                   ))}

@@ -7,8 +7,8 @@ import DashboardV1 from "../components/pages/Dashboard";
 const DashboardPage = () => {
   return (
     <ProtectedRoute>
-      {/* <DashboardV2 /> */}
-      <DashboardV1 />
+      <DashboardV2 />
+      {/* <DashboardV1 /> */}
     </ProtectedRoute>
   );
 };
