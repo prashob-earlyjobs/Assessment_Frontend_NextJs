@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Image from "next/image";
 import { Button } from "../../ui/button";
-import { Menu, X, User, LogOut, Settings, Briefcase, Users, Sparkles, Zap } from "lucide-react";
+import { Menu, X, User, LogOut, Briefcase, Users, Sparkles, Zap } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -421,13 +421,6 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
                   >
                     <User className="mr-2 h-4 w-4" />
                     <span>My Profile</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => router.push("/settings")}
-                    className="cursor-pointer text-gray-700 hover:bg-gray-100 focus:bg-gray-100"
-                  >
-                    <Settings className="mr-2 h-4 w-4" />
-                    <span>Settings</span>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator className="bg-gray-200" />
                   <DropdownMenuItem
