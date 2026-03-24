@@ -478,7 +478,7 @@ const Sikar = () => {
                                     </div>
                                     <div>
                                         <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Email</h4>
-                                        <p className="text-slate-700 font-medium">ssvconsultancy@gmail.com</p>
+                                        <p className="text-slate-700 font-medium">sikar@earlyjobs.ai</p>
                                     </div>
                                 </div>
                             </div>
@@ -760,7 +760,7 @@ const Sikar = () => {
                                 </div>
                                 <div>
                                     <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2">Email</h4>
-                                    <p className="text-slate-600 font-medium">ssvconsultancy@gmail.com</p>
+                                    <p className="text-slate-600 font-medium">sikar@earlyjobs.ai</p>
                                 </div>
                             </motion.div>
 
