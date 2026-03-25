@@ -19,7 +19,7 @@ export const userLogin = async ({
     const data = response.data;
     const accessToken = data.data.accessToken; // Corrected destructuring
     if (accessToken) {
-      axiosInstance.defaults.headers.Authorization = `Bearer ${accessToken}`; 
+      axiosInstance.defaults.headers.Authorization = `Bearer ${accessToken}`;
       localStorage.setItem("accessToken", accessToken); // Set for all future requests
       console.log(accessToken, "accessToken in servicesapis.tsx");
     }
@@ -40,7 +40,7 @@ export const userLogin = async ({
 export const isUserLoggedIn = async () => {
   try {
     const response = await axiosInstance.get("/auth/is-logged-in");
-    
+
     return response.data;
   } catch (error) {
 
@@ -91,7 +91,7 @@ export const verifyOtpMobile = async ({ phoneNumber, email, otp, toLogin = false
 };
 
 // Recruiter Portal APIs
-export const sendOtpToRecruiter = async ({ phoneNumber}) => {
+export const sendOtpToRecruiter = async ({ phoneNumber }) => {
 
   const emailorphone = phoneNumber;
   console.log("phoneNumber", emailorphone, "email");
@@ -299,7 +299,7 @@ export const getColleges = async (search) => {
     const response = await axiosInstance.get(
       `/auth/colleges?search=${encodeURIComponent(search)}`
     );
-    if(response.status !== 200){
+    if (response.status !== 200) {
       throw new Error("Failed to fetch colleges");
     }
     console.log("response", response);
@@ -318,7 +318,7 @@ export const userLogout = async () => {
     }
     Cookies.remove("accessToken");
     localStorage.removeItem("userCredentials");
-    axiosInstance.defaults.headers.Authorization = ""; 
+    axiosInstance.defaults.headers.Authorization = "";
     toast.success("Logged out successfully!");
     return response.data;
   } catch (error) {
@@ -876,13 +876,13 @@ export const redeemOffer = async (code: string) => {
 };
 export const updateCertificateLink = async ({ userId, interviewId, certificateId }) => {
   try {
-   
+
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
     const response = await fetch(`${backendUrl}/certificates/update-certificate`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        
+
       },
       body: JSON.stringify({
         userId,
@@ -992,23 +992,21 @@ export const storeAssessmentDetailsApi = async (userId, data) => {
     return response.data;
   } catch (error) {
     toast.error(
-      `${
-        error?.response?.data?.message || "Failed to store assessment details"
+      `${error?.response?.data?.message || "Failed to store assessment details"
       }.`
     );
     throw error;
   }
 };
-export const getShortIdForUrl= async () => {
-   try {
+export const getShortIdForUrl = async () => {
+  try {
     const response = await axiosInstance.get(
       "/assessments/getShortIdForUrl"
     );
     return response.data;
   } catch (error) {
     toast.error(
-      `${
-        error?.response?.data?.message || "Failed to store assessment details"
+      `${error?.response?.data?.message || "Failed to store assessment details"
       }.`
     );
     throw error;

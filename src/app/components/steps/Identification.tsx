@@ -4,7 +4,7 @@ import { Label } from '../../components/ui/label';
 import { Button } from '../../components/ui/button';
 import { Card, CardContent } from '../../components/ui/card';
 import { Upload, Plus, Trash2, X } from 'lucide-react';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import type { FormData } from '../pages/applyform';
 import { uploadFile } from '../services/usersapi';
 
@@ -94,19 +94,19 @@ export const Identification = forwardRef<IdentificationRef, IdentificationProps>
       try {
         // Show loading toast
         const loadingToast = toast.loading('Uploading profile photo...');
-        
+
         // Create and show temporary preview immediately
         previewUrl = URL.createObjectURL(file);
         updateIdentification('profilePhoto', previewUrl);
-        
+
         const folderPath = getFolderPath('profile');
         const response = await uploadFile(file, folderPath);
-        
+
         // Update with server URL
         if (response && response.fileUrl) {
           updateIdentification('profilePhoto', response.fileUrl);
         }
-        
+
         toast.dismiss(loadingToast);
         toast.success('Profile photo uploaded successfully');
       } catch (error) {
@@ -128,20 +128,20 @@ export const Identification = forwardRef<IdentificationRef, IdentificationProps>
     if (file) {
       try {
         const loadingToast = toast.loading(`Uploading Aadhar ${side}...`);
-        
+
         // Create and show temporary preview immediately
         const previewUrl = URL.createObjectURL(file);
         const field = `aadhar${side.charAt(0).toUpperCase() + side.slice(1)}`;
         updateIdentification(field, previewUrl);
-        
+
         const folderPath = getFolderPath('aadhar');
         const response = await uploadFile(file, folderPath);
-        
+
         // Update with server URL
         if (response && response.fileUrl) {
           updateIdentification(field, response.fileUrl);
         }
-        
+
         toast.dismiss(loadingToast);
         toast.success(`Aadhar ${side} uploaded successfully`);
       } catch (error) {
@@ -158,20 +158,20 @@ export const Identification = forwardRef<IdentificationRef, IdentificationProps>
     if (file) {
       try {
         const loadingToast = toast.loading(`Uploading PAN ${side}...`);
-        
+
         // Create and show temporary preview immediately
         const previewUrl = URL.createObjectURL(file);
         const field = `pan${side.charAt(0).toUpperCase() + side.slice(1)}`;
         updateIdentification(field, previewUrl);
-        
+
         const folderPath = getFolderPath('pan');
         const response = await uploadFile(file, folderPath);
-        
+
         // Update with server URL
         if (response && response.fileUrl) {
           updateIdentification(field, response.fileUrl);
         }
-        
+
         toast.dismiss(loadingToast);
         toast.success(`PAN ${side} uploaded successfully`);
       } catch (error) {
@@ -260,7 +260,7 @@ export const Identification = forwardRef<IdentificationRef, IdentificationProps>
       if (missingFields.length > 0) {
         isValid = false;
         toast.error(
-          `Member ${memberNumber}: Please fill in the following required fields: ${missingFields.join(', ')}`, 
+          `Member ${memberNumber}: Please fill in the following required fields: ${missingFields.join(', ')}`,
           {
             duration: 4000,
             position: 'top-center',
@@ -278,14 +278,14 @@ export const Identification = forwardRef<IdentificationRef, IdentificationProps>
     // Only proceed with other validations if family members are valid
     if (isValid) {
       if (!validateRequired(formData.identification.aadharNumber)) {
-        toast.error('Aadhar number is required', { 
+        toast.error('Aadhar number is required', {
           duration: 3000,
           position: 'top-center'
         });
         newErrors.aadharNumber = 'Aadhar number is required';
         isValid = false;
       } else if (!validateAadharNumber(formData.identification.aadharNumber)) {
-        toast.error('Please enter a valid 12-digit Aadhar number', { 
+        toast.error('Please enter a valid 12-digit Aadhar number', {
           duration: 3000,
           position: 'top-center'
         });
@@ -294,18 +294,46 @@ export const Identification = forwardRef<IdentificationRef, IdentificationProps>
       }
 
       if (isValid && !validateRequired(formData.identification.panNumber)) {
-        toast.error('PAN number is required', { 
+        toast.error('PAN number is required', {
           duration: 3000,
           position: 'top-center'
         });
         newErrors.panNumber = 'PAN number is required';
         isValid = false;
       } else if (isValid && !validatePanNumber(formData.identification.panNumber)) {
-        toast.error('Please enter a valid PAN number (e.g., AAAAA1111A)', { 
-          duration: 3000,
-          position: 'top-center'
-        });
-        newErrors.panNumber = 'Invalid PAN number';
+        newErrors.panNumber = 'pan number format is not valid';
+        isValid = false;
+      }
+
+      // Validate Emergency Contact
+      if (!formData.identification.emergencyContact) {
+        newErrors.emergencyContact = 'Emergency contact is required';
+        isValid = false;
+      } else if (!validateMobileNumber(formData.identification.emergencyContact)) {
+        newErrors.emergencyContact = 'Mobile number is not valid';
+        isValid = false;
+      }
+
+      // Validate Documents
+      if (!formData.identification.aadharFront) {
+        newErrors.aadharFront = 'Aadhar Card front image is required';
+        isValid = false;
+      }
+      if (!formData.identification.aadharBack) {
+        newErrors.aadharBack = 'Aadhar Card back image is required';
+        isValid = false;
+      }
+      if (!formData.identification.panFront) {
+        newErrors.panFront = 'PAN Card front image is required';
+        isValid = false;
+      }
+      if (!formData.identification.panBack) {
+        newErrors.panBack = 'PAN Card back image is required';
+        isValid = false;
+      }
+
+      if (!formData.identification.profilePhoto) {
+        newErrors.profilePhoto = 'Profile photo is required';
         isValid = false;
       }
 
@@ -389,7 +417,7 @@ export const Identification = forwardRef<IdentificationRef, IdentificationProps>
       });
       return;
     }
-    
+
     const updatedMembers = formData.identification.familyMembers.filter((_, i) => i !== index);
     updateIdentification('familyMembers', updatedMembers);
     toast.success('Family member removed successfully', { duration: 2000 });
@@ -435,7 +463,7 @@ export const Identification = forwardRef<IdentificationRef, IdentificationProps>
               </div>
             </div>
           )}
-          
+
           {formData.identification.aadharFront && (
             <div className={previewStyles.imageWrapper}>
               <img
@@ -520,9 +548,8 @@ export const Identification = forwardRef<IdentificationRef, IdentificationProps>
           <Label className="text-sm font-medium text-gray-700 block text-center">
             Profile Photo <span className="text-red-500">*</span>
           </Label>
-          <Card className={`border-2 border-dashed  hover:border-form-accent transition-colors cursor-pointer ${
-            errors.profilePhoto ? 'border-red-500' : 'border-gray-300'
-          }`}>
+          <Card className={`border-2 border-dashed  hover:border-form-accent transition-colors cursor-pointer ${errors.profilePhoto ? 'border-red-500' : 'border-gray-300'
+            }`}>
             <CardContent className="p-6 text-center">
               <div
                 className="relative w-fit mx-auto"
@@ -573,9 +600,8 @@ export const Identification = forwardRef<IdentificationRef, IdentificationProps>
               updateIdentification('aadharNumber', e.target.value);
               clearError('aadharNumber');
             }}
-            className={`mt-1 focus:ring-form-accent focus:border-form-accent ${
-              errors.aadharNumber ? 'border-red-500' : 'border-gray-300'
-            }`}
+            className={`mt-1 focus:ring-form-accent focus:border-form-accent ${errors.aadharNumber ? 'border-red-500' : 'border-gray-300'
+              }`}
             maxLength={12}
           />
           {errors.aadharNumber && (
@@ -592,12 +618,11 @@ export const Identification = forwardRef<IdentificationRef, IdentificationProps>
             placeholder="Ex. AAAAA1111A"
             value={formData.identification.panNumber}
             onChange={(e) => {
-              updateIdentification('panNumber', e.target.value);
+              updateIdentification('panNumber', e.target.value.toUpperCase());
               clearError('panNumber');
             }}
-            className={`mt-1 focus:ring-form-accent focus:border-form-accent ${
-              errors.panNumber ? 'border-red-500' : 'border-gray-300'
-            }`}
+            className={`mt-1 focus:ring-form-accent focus:border-form-accent ${errors.panNumber ? 'border-red-500' : 'border-gray-300'
+              }`}
             maxLength={10}
             style={{ textTransform: 'uppercase' }}
           />
@@ -610,13 +635,12 @@ export const Identification = forwardRef<IdentificationRef, IdentificationProps>
       {/* Aadhar Card upload below Aadhar number */}
       <div className="space-y-2">
         <Label className="text-sm font-medium text-gray-700">
-          Aadhar Card
+          Aadhar Card <span className="text-red-500">*</span>
         </Label>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <Card className={`border-2 border-dashed hover:border-form-accent transition-colors cursor-pointer ${
-              errors.aadharFront ? 'border-red-500' : 'border-gray-300'
-            }`}>
+            <Card className={`border-2 border-dashed hover:border-form-accent transition-colors cursor-pointer ${errors.aadharFront ? 'border-red-500' : 'border-gray-300'
+              }`}>
               <CardContent className="p-4 text-center">
                 <div
                   onClick={() => {
@@ -651,9 +675,8 @@ export const Identification = forwardRef<IdentificationRef, IdentificationProps>
             )}
           </div>
           <div>
-            <Card className={`border-2 border-dashed hover:border-form-accent transition-colors cursor-pointer ${
-              errors.aadharBack ? 'border-red-500' : 'border-gray-300'
-            }`}>
+            <Card className={`border-2 border-dashed hover:border-form-accent transition-colors cursor-pointer ${errors.aadharBack ? 'border-red-500' : 'border-gray-300'
+              }`}>
               <CardContent className="p-4 text-center">
                 <div
                   onClick={() => {
@@ -693,13 +716,12 @@ export const Identification = forwardRef<IdentificationRef, IdentificationProps>
       {/* PAN Card upload */}
       <div className="space-y-2">
         <Label className="text-sm font-medium text-gray-700">
-          PAN Card
+          PAN Card <span className="text-red-500">*</span>
         </Label>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <Card className={`border-2 border-dashed hover:border-form-accent transition-colors cursor-pointer ${
-              errors.panFront ? 'border-red-500' : 'border-gray-300'
-            }`}>
+            <Card className={`border-2 border-dashed hover:border-form-accent transition-colors cursor-pointer ${errors.panFront ? 'border-red-500' : 'border-gray-300'
+              }`}>
               <CardContent className="p-4 text-center">
                 <div
                   onClick={() => {
@@ -734,9 +756,8 @@ export const Identification = forwardRef<IdentificationRef, IdentificationProps>
             )}
           </div>
           <div>
-            <Card className={`border-2 border-dashed hover:border-form-accent transition-colors cursor-pointer ${
-              errors.panBack ? 'border-red-500' : 'border-gray-300'
-            }`}>
+            <Card className={`border-2 border-dashed hover:border-form-accent transition-colors cursor-pointer ${errors.panBack ? 'border-red-500' : 'border-gray-300'
+              }`}>
               <CardContent className="p-4 text-center">
                 <div
                   onClick={() => {
@@ -780,15 +801,17 @@ export const Identification = forwardRef<IdentificationRef, IdentificationProps>
         </Label>
         <Input
           id="emergencyContact"
+          type="tel"
           placeholder="Ex. 9876543210"
           value={formData.identification.emergencyContact}
           onChange={(e) => {
-            updateIdentification('emergencyContact', e.target.value);
+            const value = e.target.value.replace(/\D/g, '').slice(0, 10);
+            updateIdentification('emergencyContact', value);
             clearError('emergencyContact');
           }}
-          className={`mt-1 focus:ring-form-accent focus:border-form-accent ${
-            errors.emergencyContact ? 'border-red-500' : 'border-gray-300'
-          }`}
+          className={`mt-1 focus:ring-form-accent focus:border-form-accent ${errors.emergencyContact ? 'border-red-500' : 'border-gray-300'
+            }`}
+          maxLength={10}
         />
         {errors.emergencyContact && (
           <p className="text-red-500 text-sm mt-1">{errors.emergencyContact}</p>
@@ -797,24 +820,24 @@ export const Identification = forwardRef<IdentificationRef, IdentificationProps>
 
       {/* Family Members Section */}
       <div className="space-y-4">
-     <div className="flex items-center justify-between">
-  <div>
-    <h3 className="text-lg font-medium text-gray-900">
-      Details of Family Members <span className="text-red-500">*</span>
-    </h3>
-    <p className="text-sm text-gray-500 mt-1">
-      (Minimum 3 members required)
-    </p>
-  </div>
-  <Button
-    type="button"
-    onClick={addFamilyMember}
-    className="bg-orange-500 text-white px-4 py-2 text-sm"
-  >
-    <Plus className="w-4 h-4 mr-2" />
-    Add Member
-  </Button>
-</div>
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-lg font-medium text-gray-900">
+              Details of Family Members <span className="text-red-500">*</span>
+            </h3>
+            <p className="text-sm text-gray-500 mt-1">
+              (Minimum 3 members required)
+            </p>
+          </div>
+          <Button
+            type="button"
+            onClick={addFamilyMember}
+            className="bg-orange-500 text-white px-4 py-2 text-sm"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Add Member
+          </Button>
+        </div>
 
         {formData.identification.familyMembers.map((member, index) => (
           <Card key={index} className="border-gray-300">
@@ -847,9 +870,8 @@ export const Identification = forwardRef<IdentificationRef, IdentificationProps>
                       updateFamilyMember(index, 'name', e.target.value);
                       clearError(`familyMember-${index}-name`);
                     }}
-                    className={`mt-1 focus:ring-form-accent focus:border-form-accent ${
-                      errors[`familyMember-${index}-name`] ? 'border-red-500' : 'border-gray-300'
-                    }`}
+                    className={`mt-1 focus:ring-form-accent focus:border-form-accent ${errors[`familyMember-${index}-name`] ? 'border-red-500' : 'border-gray-300'
+                      }`}
                   />
                   {errors[`familyMember-${index}-name`] && (
                     <p className="text-red-500 text-sm mt-1">{errors[`familyMember-${index}-name`]}</p>
@@ -868,9 +890,8 @@ export const Identification = forwardRef<IdentificationRef, IdentificationProps>
                       updateFamilyMember(index, 'relationship', e.target.value);
                       clearError(`familyMember-${index}-relationship`);
                     }}
-                    className={`mt-1 focus:ring-form-accent focus:border-form-accent ${
-                      errors[`familyMember-${index}-relationship`] ? 'border-red-500' : 'border-gray-300'
-                    }`}
+                    className={`mt-1 focus:ring-form-accent focus:border-form-accent ${errors[`familyMember-${index}-relationship`] ? 'border-red-500' : 'border-gray-300'
+                      }`}
                   />
                   {errors[`familyMember-${index}-relationship`] && (
                     <p className="text-red-500 text-sm mt-1">{errors[`familyMember-${index}-relationship`]}</p>
@@ -891,9 +912,8 @@ export const Identification = forwardRef<IdentificationRef, IdentificationProps>
                       updateFamilyMember(index, 'occupation', e.target.value);
                       clearError(`familyMember-${index}-occupation`);
                     }}
-                    className={`mt-1 focus:ring-form-accent focus:border-form-accent ${
-                      errors[`familyMember-${index}-occupation`] ? 'border-red-500' : 'border-gray-300'
-                    }`}
+                    className={`mt-1 focus:ring-form-accent focus:border-form-accent ${errors[`familyMember-${index}-occupation`] ? 'border-red-500' : 'border-gray-300'
+                      }`}
                   />
                   {errors[`familyMember-${index}-occupation`] && (
                     <p className="text-red-500 text-sm mt-1">{errors[`familyMember-${index}-occupation`]}</p>
@@ -924,9 +944,8 @@ export const Identification = forwardRef<IdentificationRef, IdentificationProps>
                     }}
                     type="text" // Keep as text to handle the input validation ourselves
                     inputMode="numeric" // Shows numeric keyboard on mobile devices
-                    className={`mt-1 focus:ring-form-accent focus:border-form-accent ${
-                      errors[`familyMember-${index}-age`] ? 'border-red-500' : 'border-gray-300'
-                    }`}
+                    className={`mt-1 focus:ring-form-accent focus:border-form-accent ${errors[`familyMember-${index}-age`] ? 'border-red-500' : 'border-gray-300'
+                      }`}
                     maxLength={3} // Limit to 3 digits
                   />
                   {errors[`familyMember-${index}-age`] && (
