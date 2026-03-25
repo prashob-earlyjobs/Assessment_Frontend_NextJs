@@ -116,6 +116,8 @@ const CityFranchise = ({ data }) => {
     const [showPopup, setShowPopup] = useState(null)
     const [openIndex, setOpenIndex] = useState(0)
 
+    const defaultHeroImage = "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80"
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         setLoading(true)
@@ -193,7 +195,7 @@ const CityFranchise = ({ data }) => {
         }
     }
 
-    const steps = [
+    const steps = data.steps || [
         {
             icon: UserPlus,
             title: `Register on EarlyJobs ${data.name} Portal`,
@@ -217,7 +219,7 @@ const CityFranchise = ({ data }) => {
         },
     ]
 
-    const faqs = [
+    const faqs = data.faqs || [
         {
             question: `What services does EarlyJobs ${data.name} offer?`,
             answer:
@@ -228,9 +230,19 @@ const CityFranchise = ({ data }) => {
             answer:
                 `No, registration is completely free for job seekers and students. We believe in accessible career opportunities for everyone in ${data.name}.`,
         },
+        {
+            question: `Which companies hire through EarlyJobs in ${data.name}?`,
+            answer:
+                `We partner with 100+ companies ranging from IT firms, manufacturing units, retail chains, educational institutions, and government organizations. Our partners include both established corporates and growing businesses in the ${data.name}.`,
+        },
+        {
+            question: `Do you provide training and skill development programs?`,
+            answer:
+                `Yes! We conduct regular workshops on communication skills, technical training, interview preparation, resume building, and industry-specific certification programs. All training is designed considering the local job market requirements in ${data.name}.`,
+        },
     ]
 
-    const studentBenefits = [
+    const studentBenefits = data.studentBenefits || [
         `Verified local jobs & internship opportunities in ${data.name}`,
         "Skill-building workshops & certification programs",
         "Regular walk-in interview drives in the city",
@@ -239,7 +251,7 @@ const CityFranchise = ({ data }) => {
         "Industry-specific training programs",
     ]
 
-    const collegeBenefits = [
+    const collegeBenefits = data.collegeBenefits || [
         "Enhanced placement statistics & outcomes",
         "Industry partnerships & guest lecture programs",
         "Customized recruitment drives for your students",
@@ -248,7 +260,7 @@ const CityFranchise = ({ data }) => {
         "Campus-to-corporate transition support",
     ]
 
-    const companyBenefits = [
+    const companyBenefits = data.companyBenefits || [
         `Access to pre-vetted local talent pool in ${data.name}`,
         "Quick hiring process & reduced recruitment time",
         "Cost-effective recruitment solutions",
@@ -264,9 +276,12 @@ const CityFranchise = ({ data }) => {
             <section className="relative min-h-screen overflow-hidden">
                 <div className="absolute inset-0">
                     <img
-                        src={data.heroImage}
+                        src={data.heroImage || defaultHeroImage}
                         alt={`${data.name} skyline`}
                         className="w-full h-full object-cover"
+                        onError={(e) => {
+                            e.target.src = defaultHeroImage
+                        }}
                     />
                     <div className={`absolute inset-0 bg-${data.theme.primary}-800/70`}></div>
                 </div>
@@ -301,7 +316,9 @@ const CityFranchise = ({ data }) => {
                             >
                                 Register Now
                             </Button>
-                            <Button className={`hover:bg-${data.theme.primary}-100 text-${data.theme.primary}-900 border border-${data.theme.primary}-500 flex justify-center bg-white`}>
+                            <Button className={`hover:bg-${data.theme.primary}-100 text-${data.theme.primary}-900 border border-${data.theme.primary}-500 flex justify-center bg-orange`}
+                                onClick={() => document.getElementById("still-have-questions")?.scrollIntoView({ behavior: "smooth" })}
+                            >
                                 <Phone className="w-5 h-5 mr-2" />
                                 Call Us Today
                             </Button>
@@ -321,13 +338,17 @@ const CityFranchise = ({ data }) => {
                             transition={{ duration: 0.8 }}
                         >
                             <p className="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-semibold bg-orange-100 text-orange-700 mb-6 shadow-sm border border-orange-200">
-                                <MapPin className="w-3 h-3 mr-2" /> {data.name} · {data.ncr}
+                                <MapPin className="w-3 h-3 mr-2" /> {data.name} · {data.hub}
                             </p>
                             <h2 className="text-4xl md:text-5xl font-extrabold text-orange-900 mb-6 leading-tight">
                                 About <span className={`bg-gradient-to-r ${data.theme.gradient} bg-clip-text text-transparent`}>EarlyJobs {data.name}</span>
                             </h2>
                             <p className="text-lg text-orange-800 leading-relaxed mb-6">
-                                <span className="font-bold text-orange-900">EarlyJobs</span> is India's leading tech-enabled recruitment franchise. The {data.name} chapter plays a key role in linking local talent to meaningful career opportunities.
+                                {data.aboutText || (
+                                    <>
+                                        <span className="font-bold text-orange-900">EarlyJobs</span> is India's leading tech-enabled recruitment franchise. The {data.name} chapter plays a key role in linking local talent to meaningful career opportunities.
+                                    </>
+                                )}
                             </p>
                         </motion.div>
                         <motion.div
@@ -339,21 +360,24 @@ const CityFranchise = ({ data }) => {
                         >
                             <div className="rounded-3xl overflow-hidden shadow-xl border border-orange-100 bg-white/80 backdrop-blur">
                                 <img
-                                    src={data.heroImage}
+                                    src={data.heroImage || defaultHeroImage}
                                     alt={data.name}
                                     className="w-full h-56 object-cover"
+                                    onError={(e) => {
+                                        e.target.src = defaultHeroImage
+                                    }}
                                 />
                                 <div className="p-6 grid grid-cols-3 gap-4">
                                     <div className="text-center">
-                                        <p className="text-2xl font-bold text-orange-700">{data.placements}</p>
+                                        <p className="text-2xl font-bold text-orange-700">1500+</p>
                                         <p className="text-xs text-orange-800/80">Placements</p>
                                     </div>
                                     <div className="text-center">
-                                        <p className="text-2xl font-bold text-orange-700">{data.partnerCompanies}</p>
+                                        <p className="text-2xl font-bold text-orange-700">100+</p>
                                         <p className="text-xs text-orange-800/80">Partner Companies</p>
                                     </div>
                                     <div className="text-center">
-                                        <p className="text-2xl font-bold text-orange-700">{data.localColleges}</p>
+                                        <p className="text-2xl font-bold text-orange-700">150+</p>
                                         <p className="text-xs text-orange-800/80">Colleges</p>
                                     </div>
                                 </div>
@@ -403,32 +427,6 @@ const CityFranchise = ({ data }) => {
                 </div>
             </section>
 
-            {/* FAQ Section */}
-            <section className="py-20 bg-orange-50">
-                <div className="container mx-auto px-4 max-w-4xl">
-                    <h2 className="text-3xl md:text-4xl font-bold text-center text-orange-700 mb-12">
-                        Frequently Asked Questions
-                    </h2>
-                    <div className="space-y-4">
-                        {faqs.map((faq, index) => (
-                            <div key={index} className="bg-white rounded-xl shadow-sm overflow-hidden">
-                                <button
-                                    onClick={() => toggleFAQ(index)}
-                                    className="w-full p-6 text-left flex justify-between items-center"
-                                >
-                                    <span className="font-semibold text-gray-800">{faq.question}</span>
-                                    {openIndex === index ? <ChevronUp /> : <ChevronDown />}
-                                </button>
-                                {openIndex === index && (
-                                    <div className="p-6 pt-0 text-gray-600 border-t border-gray-50">
-                                        {faq.answer}
-                                    </div>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
 
             {/* Registration Form */}
             <section id="register" className="py-20 bg-white">
@@ -483,6 +481,74 @@ const CityFranchise = ({ data }) => {
                                 {loading ? "Processing..." : `Join EarlyJobs ${data.name} Network`}
                             </Button>
                         </form>
+                    </div>
+                </div>
+            </section>
+
+            {/* FAQ Section */}
+            <section className="py-20 bg-orange-50">
+                <div className="container mx-auto px-4 max-w-4xl">
+                    <h2 className="text-3xl md:text-4xl font-bold text-center text-orange-700 mb-12">
+                        Frequently Asked Questions
+                    </h2>
+                    <div className="space-y-4">
+                        {faqs.map((faq, index) => (
+                            <div key={index} className="bg-white rounded-xl shadow-sm overflow-hidden">
+                                <button
+                                    onClick={() => toggleFAQ(index)}
+                                    className="w-full p-6 text-left flex justify-between items-center"
+                                >
+                                    <span className="font-semibold text-gray-800">{faq.question}</span>
+                                    {openIndex === index ? <ChevronUp /> : <ChevronDown />}
+                                </button>
+                                {openIndex === index && (
+                                    <div className="p-6 pt-0 text-gray-600 border-t border-gray-50">
+                                        {faq.answer}
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            <section className="py-20 bg-orange-50">
+                <div className="container mx-auto px-4 max-w-4xl">
+                    <div id="still-have-questions" className="bg-orange-100 rounded-3xl p-8 md:p-12 text-center shadow-lg border border-orange-200">
+                        <h3 className="text-2xl md:text-3xl font-bold text-orange-700 mb-4">
+                            Still Have Questions?
+                        </h3>
+                        <p className="text-lg text-orange-800 mb-8 max-w-2xl mx-auto">
+                            Our team is here to help you succeed. Reach out to us anytime!
+                        </p>
+
+                        <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                            <div className="flex flex-col items-center">
+                                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm mb-4">
+                                    <Phone className="w-6 h-6 text-orange-600" />
+                                </div>
+                                <p className="font-bold text-orange-900 mb-1">Call Us</p>
+                                <p className="text-orange-800 font-medium">{data.contactInfo?.phone || "+91 9462162272"}</p>
+                            </div>
+
+                            <div className="flex flex-col items-center">
+                                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm mb-4">
+                                    <Mail className="w-6 h-6 text-orange-600" />
+                                </div>
+                                <p className="font-bold text-orange-900 mb-1">Email Us</p>
+                                <p className="text-orange-800 font-medium">{data.contactInfo?.email || "info@earlyjobs.in"}</p>
+                            </div>
+
+                            <div className="flex flex-col items-center">
+                                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm mb-4">
+                                    <MapPin className="w-6 h-6 text-orange-600" />
+                                </div>
+                                <p className="font-bold text-orange-900 mb-1">Visit Us</p>
+                                <p className="text-orange-800 font-medium">
+                                    {data.contactInfo?.address || `${data.name}, India`}
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>

@@ -7,7 +7,7 @@ import { PersonalDetails, PersonalDetailsRef } from '../steps/PersonalDetails';
 import { Qualification, QualificationRef } from '../steps/Qualification';
 import { About, AboutRef } from '../steps/About';
 import { References, ReferencesRef } from '../steps/References';
-import { Identification } from '../steps/Identification';
+import { Identification, IdentificationRef } from '../steps/Identification';
 import { createUserOnboarding } from '../services/usersapi';
 import { toast } from 'sonner';
 
@@ -79,7 +79,7 @@ interface IOnboardingData {
       organization: string;
       email: string;
       phone: string;
-      connection: string; 
+      connection: string;
     };
   };
 }
@@ -110,8 +110,8 @@ export interface FormData {
       pincode: string;
     };
     languages: string[];
-  applyFor: string;
-  spokenLanguages: string[];
+    applyFor: string;
+    spokenLanguages: string[];
   };
   qualification: {
     highestQualification: string;
@@ -188,7 +188,8 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ onFormSubmit, isCompact =
   const qualificationRef = useRef<QualificationRef>(null);
   const aboutRef = useRef<AboutRef>(null);
   const referencesRef = useRef<ReferencesRef>(null);
-  
+  const identificationRef = useRef<IdentificationRef>(null);
+
   const [formData, setFormData] = useState<FormData>(() => {
     try {
       const savedData = localStorage.getItem('multiStepFormData');
@@ -273,7 +274,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ onFormSubmit, isCompact =
   const nextStep = () => {
     // Validate current step before proceeding
     let isValid = true;
-    
+
     if (currentStep === 1) {
       // Validate Personal Details
       if (personalDetailsRef.current) {
@@ -295,7 +296,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ onFormSubmit, isCompact =
         isValid = referencesRef.current.validateForm();
       }
     }
-    
+
     if (isValid && currentStep < steps.length) {
       setCurrentStep(currentStep + 1);
       // Scroll to top after successful step change
@@ -353,26 +354,16 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ onFormSubmit, isCompact =
       }
     }
 
-    // 5. Validate Family Members
-    const familyMembers = formData.identification.familyMembers;
-    if (!familyMembers || familyMembers.length < 3) {
-      validationErrors.push('Please add at least 3 family members');
-      isValid = false;
-    } else {
-      // Validate first 3 family members thoroughly
-      for (let i = 0; i < 3; i++) {
-        const member = familyMembers[i];
-        if (!member.name || !member.relationship || !member.occupation || !member.age || member.dependent === undefined) {
-          validationErrors.push(`Family member ${i + 1} has incomplete information`);
-          isValid = false;
-        }
+    // 5. Validate Identification Details
+    if (identificationRef.current) {
+      if (!identificationRef.current.validateForm()) {
+        isValid = false;
       }
     }
 
-    // 6. Validate Identification Documents
-    const identification = formData.identification;
-    if (!identification.aadharNumber || !identification.panNumber || !identification.emergencyContact) {
-      validationErrors.push('Identification details are incomplete');
+    const familyMembers = formData.identification.familyMembers;
+    if (!familyMembers || familyMembers.length < 3) {
+      validationErrors.push('Please add at least 3 family members');
       isValid = false;
     }
 
@@ -405,7 +396,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ onFormSubmit, isCompact =
     try {
       setIsSubmitting(true);
       const loadingToast = toast.loading('Submitting your application...');
-      
+
       const onboardingData: IOnboardingData = {
         updatedDateTime: new Date().toISOString(),
         personalDetails: {
@@ -457,7 +448,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ onFormSubmit, isCompact =
               question: "How many hours can you contribute?",
               answer: formData.about.hoursContribute
             },
-        
+
           ]
         },
         familyMembers: formData.identification.familyMembers.reduce((acc, member, index) => ({
@@ -471,14 +462,14 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ onFormSubmit, isCompact =
           }
         }), {}),
         newIdentityProof: {
-          aadharFront: "https://media.istockphoto.com/id/517188688/photo/mountain-landscape.jpg" ,
-          aadharBack: "https://media.istockphoto.com/id/517188688/photo/mountain-landscape.jpg" ,
+          aadharFront: "https://media.istockphoto.com/id/517188688/photo/mountain-landscape.jpg",
+          aadharBack: "https://media.istockphoto.com/id/517188688/photo/mountain-landscape.jpg",
           aadharNumber: formData.identification.aadharNumber,
-          panFront: "https://media.istockphoto.com/id/517188688/photo/mountain-landscape.jpg" ,
-          panBack: "https://media.istockphoto.com/id/517188688/photo/mountain-landscape.jpg" ,
+          panFront: "https://media.istockphoto.com/id/517188688/photo/mountain-landscape.jpg",
+          panBack: "https://media.istockphoto.com/id/517188688/photo/mountain-landscape.jpg",
           panNumber: formData.identification.panNumber.toUpperCase(),
           emergencyNumber: formData.identification.emergencyContact,
-          photo: "https://media.istockphoto.com/id/517188688/photo/mountain-landscape.jpg" 
+          photo: "https://media.istockphoto.com/id/517188688/photo/mountain-landscape.jpg"
         },
         references: formData.references.reduce((acc, ref, index) => ({
           ...acc,
@@ -493,7 +484,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ onFormSubmit, isCompact =
         }), {})
       };
 
-      
+
       console.log("Submitting onboarding data:", onboardingData);
       await createUserOnboarding(null, onboardingData);
 
@@ -525,7 +516,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ onFormSubmit, isCompact =
 
     } catch (error) {
       console.error('Failed to submit form:', error);
-      
+
       toast.error('❌ Failed to submit application. Please try again.', {
         duration: 5000,
         style: {
@@ -547,7 +538,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ onFormSubmit, isCompact =
     <div className={isCompact ? "w-full" : "min-h-screen bg-gray-50 py-16 px-2 sm:px-4 lg:px-10"}>
       <div className="w-full max-w-none mx-auto">
         <StepIndicator currentStep={currentStep} totalSteps={steps.length} steps={steps} />
-        
+
         <Card className="shadow-lg border border-gray-200 w-full bg-white">
           <CardContent className="p-4 sm:p-6 lg:p-8">
             <div className="mb-6">
@@ -581,6 +572,12 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ onFormSubmit, isCompact =
               ) : currentStep === 4 ? (
                 <References
                   ref={referencesRef}
+                  formData={formData}
+                  updateFormData={updateFormData}
+                />
+              ) : currentStep === 5 ? (
+                <Identification
+                  ref={identificationRef}
                   formData={formData}
                   updateFormData={updateFormData}
                 />
