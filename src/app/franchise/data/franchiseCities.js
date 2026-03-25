@@ -330,19 +330,19 @@ export const franchiseCities = {
             gradient: "from-orange-600 to-red-600"
         }
     },
-    medchal_malajgiri: {
-        name: "Medchal-Malajgiri",
+    medchal_malkajgiri: {
+        name: "Medchal-Malkajgiri",
         state: "Telangana",
-        hub: "Medchal-Malajgiri Hub",
+        hub: "Medchal-Malkajgiri Hub",
         // heroImage: "/images/medchal_malajgiri.jpg",
-        heroTitle: "Shaping Medchal-Malajgiri’s Next Career Leaders",
-        heroSubtitle: "Where Your Career Journey Takes Off in Medchal-Malajgiri",
-        heroDescription: "Connecting Medchal-Malajgiri's brightest talent with top employers across IT, Manufacturing, Retail & Education sectors. Build skills, find opportunities, and grow your career with EarlyJobs Medchal-Malajgiri.",
-        aboutText: "EarlyJobs Medchal-Malajgiri is dedicated to empowering the youth of Telangana by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
+        heroTitle: "Shaping Medchal-Malkajgiri’s Next Career Leaders",
+        heroSubtitle: "Where Your Career Journey Takes Off in Medchal-Malkajgiri",
+        heroDescription: "Connecting Medchal-Malkajgiri's brightest talent with top employers across IT, Manufacturing, Retail & Education sectors. Build skills, find opportunities, and grow your career with EarlyJobs Medchal-Malkajgiri.",
+        aboutText: "EarlyJobs Medchal-Malkajgiri is dedicated to empowering the youth of Telangana by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 9462162272",
-            email: "medchal_malajgiri@earlyjobs.in",
-            address: "Medchal-Malajgiri, Telangana"
+            email: "medchal@earlyjobs.ai",
+            address: "Medchal-Malkajgiri, Telangana"
         },
         theme: {
             primary: "orange",
@@ -12873,6 +12873,7 @@ export const allowedCities = [
     "kurnool",
     "mahbubnagar",
     "medak",
+    "medchal-malkajgiri",
     "nalgonda",
     "nellore",
     "nizamabad",
@@ -13053,6 +13054,7 @@ export const allowedCities = [
     "sirsa",
     "sonipat",
     "kanpurdehat",
+    "kanpurnagar",
     "yamunanagar",
     "bokaro",
     "chatra",
