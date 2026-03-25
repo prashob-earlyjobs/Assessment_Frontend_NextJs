@@ -23,7 +23,7 @@ function LoginContent() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { userCredentials, setUserCredentials } = useUser();
-  
+
   // Detect mode from URL query param (default: candidate)
   const mode = searchParams.get("mode") || "candidate";
   const isRecruiterMode = mode === "recruiter";
@@ -97,7 +97,7 @@ function LoginContent() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validate input
     const isValidEmailOrMobile = (input: string) => {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -111,7 +111,7 @@ function LoginContent() {
     }
 
     setIsLoading(true);
-    
+
     try {
       // Determine if input is email or mobile
       const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.emailOrMobile);
@@ -126,16 +126,16 @@ function LoginContent() {
       const otpResponse = isRecruiterMode
         ? await sendOtpToRecruiter({ phoneNumber })
         : await sendOtptoMobile({
-            phoneNumber: phoneNumber,
-            email: email,
-            toLogin: true
-          });
+          phoneNumber: phoneNumber,
+          email: email,
+          toLogin: true
+        });
 
       if (!otpResponse.success) {
         // Check if the failure is due to user not found (404)
-        if (otpResponse.statusCode === 404 || otpResponse.statusCode === 400 || 
-            otpResponse.message?.toLowerCase().includes('not found') ||
-            otpResponse.message?.toLowerCase().includes('does not exist')) {
+        if (otpResponse.statusCode === 404 || otpResponse.statusCode === 400 ||
+          otpResponse.message?.toLowerCase().includes('not found') ||
+          otpResponse.message?.toLowerCase().includes('does not exist')) {
           if (isRecruiterMode) {
             const mobileForPrefill = (phoneNumber || formData.emailOrMobile.replace(/\D/g, '').slice(0, 10)) || '';
             const params = new URLSearchParams();
@@ -156,7 +156,7 @@ function LoginContent() {
       setOtpSent(true);
       setResendTimer(60); // 60 seconds countdown
       setOtp(Array(6).fill(""));
-      
+
       // Start countdown timer
       const timer = setInterval(() => {
         setResendTimer((prev) => {
@@ -167,11 +167,11 @@ function LoginContent() {
           return prev - 1;
         });
       }, 1000);
-      
+
       setTimeout(() => {
         otpInputRefs.current[0]?.focus();
       }, 100);
-      
+
       toast.success("OTP sent to your mobile number and email!");
     } catch (error: any) {
       // Check if error is 404 (user not found)
@@ -242,7 +242,7 @@ function LoginContent() {
 
     setIsVerifying(true);
     isLoggingInRef.current = true; // Set flag to prevent useEffect from interfering
-    
+
     try {
       // Determine if input is email or mobile
       const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.emailOrMobile);
@@ -253,11 +253,11 @@ function LoginContent() {
       const loginResponse = isRecruiterMode
         ? await verifyOtpRecruiter({ phoneNumber, email, otp: otpToVerify })
         : await verifyOtpMobile({
-            phoneNumber: phoneNumber,
-            email: email,
-            otp: otpToVerify,
-            toLogin: true
-          });
+          phoneNumber: phoneNumber,
+          email: email,
+          otp: otpToVerify,
+          toLogin: true
+        });
 
       if (!loginResponse.success) {
         toast.error(loginResponse?.response?.data?.message || loginResponse?.data?.message || loginResponse?.message || "Error verifying OTP");
@@ -272,7 +272,7 @@ function LoginContent() {
       // Handle successful login
       const accessToken = loginResponse.data?.accessToken || loginResponse.data?.data?.accessToken;
       const user = loginResponse.data?.user || loginResponse.data?.data?.user;
-      
+
       if (isRecruiterMode) {
         // For recruiter: navigate to portal domain and store tokens there
         if (accessToken) {
@@ -285,9 +285,9 @@ function LoginContent() {
           if (user) {
             portalUrl.searchParams.set("user", JSON.stringify(user));
           }
-          
+
           toast.success("Login successful! Redirecting to portal...");
-          
+
           // Navigate to portal dashboard with token
           window.location.href = portalUrl.toString();
           return;
@@ -304,29 +304,29 @@ function LoginContent() {
           localStorage.setItem("accessToken", accessToken);
           axiosInstance.defaults.headers.Authorization = `Bearer ${accessToken}`;
         }
-        
+
         if (user) {
           setUserCredentials(user);
         }
-        
+
         // Reset OTP form state
         setOtpSent(false);
         setOtp(Array(6).fill(""));
         setResendTimer(0);
-        
+
         toast.success("Login successful!");
-        
+
         // Determine redirect path based on user role
         let redirectPath = localStorage.getItem("redirectAfterLogin") || '/dashboard';
-        
+
         if (user?.role === 'super_admin' || user?.role === 'franchise_admin') {
           redirectPath = '/admin';
         } else if (user?.role === 'creator') {
           redirectPath = '/creator';
         }
-        
+
         localStorage.removeItem("redirectAfterLogin");
-        
+
         // Use Next.js router for navigation - use replace to prevent back navigation to login
         router.replace(redirectPath);
       }
@@ -344,7 +344,7 @@ function LoginContent() {
 
   const handleResendOtp = async () => {
     if (resendTimer > 0) return;
-    
+
     setIsLoading(true);
     try {
       // Determine if input is email or mobile
@@ -356,20 +356,20 @@ function LoginContent() {
       const otpResponse = isRecruiterMode
         ? await sendOtpToRecruiter({ phoneNumber })
         : await sendOtptoMobile({
-            phoneNumber: phoneNumber,
-            email: email,
-            toLogin: true
-          });
+          phoneNumber: phoneNumber,
+          email: email,
+          toLogin: true
+        });
 
       if (!otpResponse.success) {
         toast.error(otpResponse.message || "Failed to resend OTP");
         setIsLoading(false);
         return;
       }
-      
+
       setOtp(Array(6).fill(""));
       setResendTimer(60);
-      
+
       // Start countdown timer
       const timer = setInterval(() => {
         setResendTimer((prev) => {
@@ -380,11 +380,11 @@ function LoginContent() {
           return prev - 1;
         });
       }, 1000);
-      
+
       setTimeout(() => {
         otpInputRefs.current[0]?.focus();
       }, 100);
-      
+
       toast.success("OTP resent to your mobile number and email!");
     } catch (error: any) {
       toast.error(error?.response?.data?.message || error.message || "Error resending OTP");
@@ -428,67 +428,66 @@ function LoginContent() {
       <div className="w-full lg:w-1/2 bg-white flex items-center justify-center p-8">
         {!otpSent ? (
           <div className="w-full max-w-md space-y-8">
-          {/* Logo and Title */}
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 mb-6">
-              <Image
-                src="/v2/logo/logo (1).png"
-                alt="EarlyJobs"
-                width={300}
-                height={100}
-                className="object-contain h-20 w-auto"
-                priority
-              />
-            </div>
-            <h1 className="text-3xl font-bold text-gray-900">
-              {isRecruiterMode ? "Recruiter Login" : "Log in"}
-            </h1>
-            <p className="text-gray-600">
-              Enter your mobile number to receive an OTP.{" "}
-              {/* <Link href="/signup" className="hover:underline font-medium" style={{ color: PRIMARY_COLOR }}>
+            {/* Logo and Title */}
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 mb-6">
+                <Image
+                  src="/v2/logo/logo (1).png"
+                  alt="EarlyJobs"
+                  width={300}
+                  height={100}
+                  className="object-contain h-20 w-auto"
+                  priority
+                />
+              </div>
+              <h1 className="text-3xl font-bold text-gray-900">
+                {isRecruiterMode ? "Recruiter Login" : "Log in"}
+              </h1>
+              <p className="text-gray-600">
+                Enter your mobile number to receive an OTP.{" "}
+                {/* <Link href="/signup" className="hover:underline font-medium" style={{ color: PRIMARY_COLOR }}>
                 Don't have an account? Sign Up
               </Link> */}
-            </p>
-          </div>
-
-          {/* Login Form */}
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="space-y-2">
-              <Label htmlFor="emailOrMobile">Email or mobile number</Label>
-              <Input
-                id="emailOrMobile"
-                type="text"
-                placeholder="9876543210"
-                value={formData.emailOrMobile}
-                onChange={(e) => setFormData({ ...formData, emailOrMobile: e.target.value })}
-                className="h-12 bg-white text-gray-900 border-gray-300 placeholder:text-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                required
-              />
+              </p>
             </div>
 
-            <div className="flex justify-center">
-              <Button
-                type="submit"
-                disabled={isLoading}
-                className={`text-white text-base font-medium hover:opacity-90 transition-all duration-300 ${
-                  isLoading 
-                    ? "h-12 w-12 rounded-full" 
-                    : "w-full h-12"
-                }`}
-                style={{ backgroundColor: PRIMARY_COLOR }}
-              >
-                {isLoading ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                ) : (
-                  <>
-                    Send OTP <ArrowRight className="w-5 h-5 ml-2" />
-                  </>
-                )}
-              </Button>
-            </div>
-          </form>
+            {/* Login Form */}
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="space-y-2">
+                <Label htmlFor="emailOrMobile">Email or mobile number</Label>
+                <Input
+                  id="emailOrMobile"
+                  type="text"
+                  placeholder="9876543210"
+                  value={formData.emailOrMobile}
+                  onChange={(e) => setFormData({ ...formData, emailOrMobile: e.target.value })}
+                  className="h-12 bg-white text-gray-900 border-gray-300 placeholder:text-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  required
+                />
+              </div>
 
-          {/* Divider */}
+              <div className="flex justify-center">
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className={`text-white text-base font-medium hover:opacity-90 transition-all duration-300 ${isLoading
+                      ? "h-12 w-12 rounded-full"
+                      : "w-full h-12"
+                    }`}
+                  style={{ backgroundColor: PRIMARY_COLOR }}
+                >
+                  {isLoading ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <>
+                      Send OTP <ArrowRight className="w-5 h-5 ml-2" />
+                    </>
+                  )}
+                </Button>
+              </div>
+            </form>
+
+            {/* Divider */}
             {/* <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-300"></div>
@@ -498,7 +497,7 @@ function LoginContent() {
             </div>
             </div> */}
 
-          {/* Social Login Buttons */}
+            {/* Social Login Buttons */}
             {/* <div className="space-y-3">
             <Button
               type="button"
@@ -555,24 +554,24 @@ function LoginContent() {
         ) : (
           /* OTP Verification Component */
           <div className="w-full max-w-md space-y-8">
-          {/* Logo and Title */}
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 mb-6">
-              <Image
-                src="/v2/logo/logo (1).png"
-                alt="EarlyJobs"
-                width={300}
-                height={100}
-                className="object-contain h-20 w-auto"
-                priority
-              />
-            </div>
+            {/* Logo and Title */}
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 mb-6">
+                <Image
+                  src="/v2/logo/logo (1).png"
+                  alt="EarlyJobs"
+                  width={300}
+                  height={100}
+                  className="object-contain h-20 w-auto"
+                  priority
+                />
+              </div>
               <h1 className="text-3xl font-bold text-gray-900">Enter OTP</h1>
-            <p className="text-gray-600">
+              <p className="text-gray-600">
                 Enter the 6-digit OTP sent to{" "}
                 <span className="font-medium text-gray-900">{formData.emailOrMobile}</span>
-            </p>
-          </div>
+              </p>
+            </div>
 
             {/* OTP Input Form */}
             <form onSubmit={(e) => { e.preventDefault(); handleOtpVerify(); }} className="space-y-6">
@@ -580,10 +579,10 @@ function LoginContent() {
                 <Label className="text-center block">Enter 6-digit OTP</Label>
                 <div className="flex justify-center gap-2 sm:gap-3 px-4">
                   {otp.map((digit, index) => (
-              <Input
+                    <Input
                       key={index}
                       ref={(el) => { otpInputRefs.current[index] = el; }}
-                type="text"
+                      type="text"
                       inputMode="numeric"
                       maxLength={1}
                       value={digit}
@@ -598,26 +597,26 @@ function LoginContent() {
                     />
                   ))}
                 </div>
-            </div>
+              </div>
 
               <div className="space-y-3">
-              <Button
-                type="submit"
+                <Button
+                  type="submit"
                   disabled={isVerifying || otp.some((digit) => !digit)}
                   className="w-full h-12 text-white text-base font-medium hover:opacity-90 transition-all duration-300"
-                style={{ backgroundColor: PRIMARY_COLOR }}
-              >
+                  style={{ backgroundColor: PRIMARY_COLOR }}
+                >
                   {isVerifying ? (
                     <>
                       <Loader2 className="w-5 h-5 mr-2 animate-spin" />
                       Verifying...
                     </>
-                ) : (
-                  <>
+                  ) : (
+                    <>
                       Verify OTP <ArrowRight className="w-5 h-5 ml-2" />
-                  </>
-                )}
-              </Button>
+                    </>
+                  )}
+                </Button>
 
                 <div className="flex items-center justify-center gap-2 text-sm">
                   <span className="text-gray-600">Didn't receive OTP?</span>
@@ -639,10 +638,10 @@ function LoginContent() {
                       </>
                     )}
                   </button>
-          </div>
+                </div>
 
                 <button
-              type="button"
+                  type="button"
                   onClick={handleBackToEmail}
                   className="w-full text-sm text-gray-600 hover:text-gray-900 hover:underline transition-colors"
                 >
@@ -663,7 +662,7 @@ function LoginContent() {
             backgroundImage: "url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=800&q=80')",
           }}
         ></div>
-        
+
         {/* Dark Overlay */}
         {/* <div className="absolute inset-0" style={{ backgroundColor: `${PRIMARY_COLOR_DARK}CC` }}></div> */}
 
