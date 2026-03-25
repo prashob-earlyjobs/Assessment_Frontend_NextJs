@@ -323,7 +323,10 @@ const Ghaziabad = () => {
                                 >
                                     Register Now
                                 </Button>
-                                <Button className="hover:bg-orange-100 text-orange-900 border border-orange-500 flex justify-center">
+                                <Button
+                                    className="hover:bg-orange-100 text-orange-900 border border-orange-500 flex justify-center"
+                                    onClick={() => document.getElementById("still-have-questions")?.scrollIntoView({ behavior: "smooth" })}
+                                >
                                     <Phone className="w-5 h-5 mr-2" />
                                     Call Us Today
                                 </Button>
@@ -501,7 +504,10 @@ const Ghaziabad = () => {
                                 </ul>
 
                                 <div className="mt-8 pt-6 border-t border-gray-100">
-                                    <button className="flex items-center text-sm font-bold text-gray-500 group-hover:text-amber-600 transition-colors">
+                                    <button
+                                        className="flex items-center text-sm font-bold text-gray-500 group-hover:text-amber-600 transition-colors"
+                                        onClick={() => document.getElementById("register")?.scrollIntoView({ behavior: "smooth" })}
+                                    >
                                         Learn more <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
                                     </button>
                                 </div>
@@ -525,7 +531,12 @@ const Ghaziabad = () => {
                                 >
                                     Register Now
                                 </Button>
-                                <Button className="bg-orange-500 hover:bg-orange-600">Schedule a Callback</Button>
+                                <Button
+                                    className="bg-orange-500 hover:bg-orange-600"
+                                    onClick={() => document.getElementById("register")?.scrollIntoView({ behavior: "smooth" })}
+                                >
+                                    Schedule a Callback
+                                </Button>
                             </div>
                         </div>
                     </div>
@@ -809,7 +820,7 @@ const Ghaziabad = () => {
                             ))}
                         </div>
 
-                        <div className="mt-16 bg-orange-100 rounded-2xl p-8 text-center shadow-lg">
+                        <div id="still-have-questions" className="mt-16 bg-orange-100 rounded-2xl p-8 text-center shadow-lg">
                             <h3 className="text-2xl font-bold text-orange-700 mb-4">
                                 Still Have Questions?
                             </h3>

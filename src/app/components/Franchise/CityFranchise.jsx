@@ -316,7 +316,9 @@ const CityFranchise = ({ data }) => {
                             >
                                 Register Now
                             </Button>
-                            <Button className={`hover:bg-${data.theme.primary}-100 text-${data.theme.primary}-900 border border-${data.theme.primary}-500 flex justify-center bg-orange`}>
+                            <Button className={`hover:bg-${data.theme.primary}-100 text-${data.theme.primary}-900 border border-${data.theme.primary}-500 flex justify-center bg-orange`}
+                                onClick={() => document.getElementById("still-have-questions")?.scrollIntoView({ behavior: "smooth" })}
+                            >
                                 <Phone className="w-5 h-5 mr-2" />
                                 Call Us Today
                             </Button>
@@ -512,7 +514,7 @@ const CityFranchise = ({ data }) => {
 
             <section className="py-20 bg-orange-50">
                 <div className="container mx-auto px-4 max-w-4xl">
-                    <div className="bg-orange-100 rounded-3xl p-8 md:p-12 text-center shadow-lg border border-orange-200">
+                    <div id="still-have-questions" className="bg-orange-100 rounded-3xl p-8 md:p-12 text-center shadow-lg border border-orange-200">
                         <h3 className="text-2xl md:text-3xl font-bold text-orange-700 mb-4">
                             Still Have Questions?
                         </h3>
