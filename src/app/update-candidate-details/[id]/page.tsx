@@ -960,7 +960,7 @@ const ContactFormPage = ({ params }: { params: Promise<{ id: string }> }) => {
                   >
                     Alternate Mobile Number
                   </label>
-                   <input
+                  <input
                     type="tel"
                     id="alternateMobileNumber"
                     name="alternateMobileNumber"
@@ -968,9 +968,8 @@ const ContactFormPage = ({ params }: { params: Promise<{ id: string }> }) => {
                     onChange={handleChange}
                     maxLength={10}
                     inputMode="numeric"
-                    className={`w-full px-4 py-2.5 border rounded-md text-gray-900 bg-white focus:ring-2 outline-none transition-colors text-sm ${
-                      fieldErrors.alternateMobileNumber ? 'border-red-500 focus:ring-red-200 focus:border-red-200' : 'border-gray-300 focus:ring-orange-200 focus:border-orange-200'
-                    }`}
+                    className={`w-full px-4 py-2.5 border rounded-md text-gray-900 bg-white focus:ring-2 outline-none transition-colors text-sm ${fieldErrors.alternateMobileNumber ? 'border-red-500 focus:ring-red-200 focus:border-red-200' : 'border-gray-300 focus:ring-orange-200 focus:border-orange-200'
+                      }`}
                     placeholder="Enter alternate mobile number (10 digits)"
                   />
                   {fieldErrors.alternateMobileNumber && (
@@ -996,9 +995,8 @@ const ContactFormPage = ({ params }: { params: Promise<{ id: string }> }) => {
                       onChange={handleChange}
                       minLength={10}
                       maxLength={10}
-                      className={`w-full px-4 py-2.5 border rounded-md text-gray-900 bg-white focus:ring-2 outline-none transition-colors uppercase text-sm ${
-                        fieldErrors.panNumber ? 'border-red-500 focus:ring-red-200 focus:border-red-200' : 'border-gray-300 focus:ring-orange-500 focus:border-orange-200'
-                      }`}
+                      className={`w-full px-4 py-2.5 border rounded-md text-gray-900 bg-white focus:ring-2 outline-none transition-colors uppercase text-sm ${fieldErrors.panNumber ? 'border-red-500 focus:ring-red-200 focus:border-red-200' : 'border-gray-300 focus:ring-orange-500 focus:border-orange-200'
+                        }`}
                       placeholder="Enter PAN number (10 characters)"
                       required
                     />

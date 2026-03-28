@@ -2587,8 +2587,29 @@ export const franchiseCities = {
             gradient: "from-orange-600 to-red-600"
         }
     },
-    goa: {
-        name: "Goa",
+    "south goa": {
+        name: "South Goa",
+        state: "Goa",
+        hub: "Goa Hub",
+        heroTitle: "Shaping Goa’s Next Career Leaders",
+        heroSubtitle: "Where Your Career Journey Takes Off in Goa",
+        heroDescription: "Expanding career horizons in Tourism, Pharma, and IT across Goa.",
+        placements: "1500+",
+        partnerCompanies: "100+",
+        localColleges: "150+",
+        aboutText: "EarlyJobs Goa brings professional stability and growth to the coastal economy through strategic talent placement.",
+        contactInfo: {
+            phone: "+91 9462162272",
+            email: "goa@earlyjobs.in",
+            address: "Goa, India"
+        },
+        theme: {
+            primary: "orange",
+            gradient: "from-orange-600 to-red-600"
+        }
+    },
+    "north goa": {
+        name: "North Goa",
         state: "Goa",
         hub: "Goa Hub",
         heroTitle: "Shaping Goa’s Next Career Leaders",
@@ -12990,13 +13011,14 @@ export const allowedCities = [
     "najafgarh",
     "narela",
     "rohini",
-    "s. pahar ganj",
+    "s.pahar ganj",
     "shahadra (n)",
     "shahadra (s)",
     "south",
     "west",
     "dadra & nagar haveli",
-    "goa",
+    "south goa",
+    "north goa",
     "ahmedabad",
     "amreli",
     "anand",

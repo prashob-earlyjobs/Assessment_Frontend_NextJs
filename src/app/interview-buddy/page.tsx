@@ -14,12 +14,28 @@ export const metadata: Metadata = {
       "Prepare for interviews with Interview Buddy on EarlyJobs. Practice, review, and track your progress.",
     url: `${baseUrl}/interview-buddy`,
     type: "website",
+    images: [
+      {
+        url: `${baseUrl}/assets/interview-buddy.png`,
+        width: 1200,
+        height: 630,
+        alt: "Interview Buddy - Practice Smarter Interviews | EarlyJobs",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Interview Buddy - Practice Smarter Interviews | EarlyJobs",
     description:
       "Prepare for interviews with Interview Buddy on EarlyJobs. Practice, review, and track your progress.",
+    images: [
+      {
+        url: `${baseUrl}/assets/images/interview-buddy.png`,
+        width: 1200,
+        height: 630,
+        alt: "Interview Buddy - Practice Smarter Interviews | EarlyJobs",
+      },
+    ],
   },
 };
 
