@@ -2313,7 +2313,7 @@ export const franchiseCities = {
             gradient: "from-orange-600 to-red-600"
         }
     },
-    central: {
+    "central delhi": {
         name: "Central Delhi",
         state: "Delhi",
         hub: "Central Delhi Hub",
@@ -2461,49 +2461,49 @@ export const franchiseCities = {
             gradient: "from-orange-600 to-red-600"
         }
     },
-    "s. pahar ganj": {
-        name: "Pahar Ganj",
+    "north east delhi": {
+        name: "North East Delhi",
         state: "Delhi",
-        hub: "Pahar Ganj Hub",
-        heroTitle: "Shaping Pahar Ganj’s Next Career Leaders",
-        heroSubtitle: "Where Your Career Journey Takes Off in Pahar Ganj",
-        heroDescription: "Building professional futures in Pahar Ganj's dynamic commercial hub.",
+        hub: "NCR Hub",
+        heroTitle: "North East Delhi’s Next Career Leaders",
+        heroSubtitle: "Where Your Career Journey Takes Off in North East Delhi",
+        heroDescription: "Building professional futures in North East Delhi's dynamic commercial hub.",
         placements: "1500+",
         partnerCompanies: "100+",
         localColleges: "150+",
-        aboutText: "EarlyJobs Pahar Ganj creates value by matching local hospitality and trade experience with broader industry needs.",
+        aboutText: "EarlyJobs North East Delhi creates value by matching local hospitality and trade experience with broader industry needs.",
         contactInfo: {
             phone: "+91 9462162272",
-            email: "paharganj@earlyjobs.in",
-            address: "Pahar Ganj, Delhi"
+            email: "northeastdelhi@earlyjobs.in",
+            address: "North East Delhi, Delhi"
         },
         theme: {
             primary: "orange",
             gradient: "from-orange-600 to-red-600"
         }
     },
-    "shahadra (n)": {
-        name: "Shahadra North",
+    "east delhi": {
+        name: "East Delhi",
         state: "Delhi",
-        hub: "Shahadra Hub",
-        heroTitle: "Shaping Shahadra’s Next Career Leaders",
+        hub: "Delhi Hub",
+        heroTitle: "Shaping East Delhi’s Next Career Leaders",
         heroSubtitle: "Where Your Career Journey Takes Off in Shahadra North",
         heroDescription: "Fueling the growth of East Delhi's professional workforce.",
         placements: "1500+",
         partnerCompanies: "100+",
         localColleges: "150+",
-        aboutText: "EarlyJobs Shahadra North specializes in vocational placement and corporate entry for motivated candidates.",
+        aboutText: "EarlyJobs East Delhi North specializes in vocational placement and corporate entry for motivated candidates.",
         contactInfo: {
             phone: "+91 9462162272",
-            email: "shahadra@earlyjobs.in",
-            address: "Shahadra, Delhi"
+            email: "eastdelhia@earlyjobs.in",
+            address: "East Delhi, Delhi"
         },
         theme: {
             primary: "orange",
             gradient: "from-orange-600 to-red-600"
         }
     },
-    "shahadra (s)": {
+    shahadra: {
         name: "Shahadra South",
         state: "Delhi",
         hub: "Shahadra Hub",
@@ -2524,7 +2524,7 @@ export const franchiseCities = {
             gradient: "from-orange-600 to-red-600"
         }
     },
-    south: {
+    "south delhi": {
         name: "South Delhi",
         state: "Delhi",
         hub: "South Delhi Hub",
@@ -2545,7 +2545,7 @@ export const franchiseCities = {
             gradient: "from-orange-600 to-red-600"
         }
     },
-    west: {
+    "west delhi": {
         name: "West Delhi",
         state: "Delhi",
         hub: "West Delhi Hub",
@@ -7480,48 +7480,28 @@ export const franchiseCities = {
             gradient: "from-orange-600 to-red-600"
         }
     },
-    "aizawal west": {
-        name: "Aizawal West",
+    "aizawl": {
+        name: "Aizawl ",
         state: "Mizoram",
         hub: "Aizawl Hub",
-        heroTitle: "Shaping Aizawal West’s Next Career Leaders",
-        heroSubtitle: "Where Your Career Journey Takes Off in Aizawal West",
+        heroTitle: "Shaping Aizawl’s Next Career Leaders",
+        heroSubtitle: "Where Your Career Journey Takes Off in Aizawl",
         heroDescription: "Leading the professional revolution in Mizoram's vibrant capital region.",
         placements: "1500+",
         partnerCompanies: "100+",
         localColleges: "150+",
-        aboutText: "EarlyJobs Aizawal West is the leading destination for technical and administrative recruitment in the state.",
+        aboutText: "EarlyJobs Aizawl is the leading destination for technical and administrative recruitment in the state.",
         contactInfo: {
             phone: "+91 9462162272",
-            email: "aizawalwest@earlyjobs.in",
-            address: "Aizawl West, Mizoram"
+            email: "aizawl@earlyjobs.in",
+            address: "Aizawl, Mizoram"
         },
         theme: {
             primary: "orange",
             gradient: "from-orange-600 to-red-600"
         }
     },
-    "aizawl east": {
-        name: "Aizawl East",
-        state: "Mizoram",
-        hub: "Aizawl Hub",
-        heroTitle: "Shaping Aizawl East’s Next Career Leaders",
-        heroSubtitle: "Where Your Career Journey Takes Off in Aizawl East",
-        heroDescription: "Driving career excellence for the student and professional community in Eastern Aizawl.",
-        placements: "1500+",
-        partnerCompanies: "100+",
-        localColleges: "150+",
-        aboutText: "EarlyJobs Aizawl East provides elite recruitment services matching local talent with top national employers.",
-        contactInfo: {
-            phone: "+91 9462162272",
-            email: "aizawleast@earlyjobs.in",
-            address: "Aizawl East, Mizoram"
-        },
-        theme: {
-            primary: "orange",
-            gradient: "from-orange-600 to-red-600"
-        }
-    },
+
     champhai: {
         name: "Champhai",
         state: "Mizoram",
@@ -11281,17 +11261,17 @@ export const franchiseCities = {
             gradient: "from-orange-600 to-red-600"
         }
     },
-    gautam_budh_nagar: {
-        name: "Gautam Budh Nagar",
+    gautam_buddh_nagar: {
+        name: "Gautam Buddh Nagar",
         state: "Uttar Pradesh",
         hub: "Noida Hub",
         heroTitle: "Shaping Noida’s Next Career Leaders",
-        heroSubtitle: "Where Your Career Journey Takes Off in Gautam Budh Nagar",
+        heroSubtitle: "Where Your Career Journey Takes Off in Gautam Buddh Nagar",
         heroDescription: "Leading the professional revolution in the tech and industrial powerhouse of Noida.",
         placements: "1500+",
         partnerCompanies: "100+",
         localColleges: "150+",
-        aboutText: "EarlyJobs Gautam Budh Nagar is the premier recruitment powerhouse for IT, SaaS, and electronics industries in North India.",
+        aboutText: "EarlyJobs Gautam Buddh Nagar is the premier recruitment powerhouse for IT, SaaS, and electronics industries in North India.",
         contactInfo: {
             phone: "+91 9462162272",
             email: "noida@earlyjobs.in",
@@ -11365,7 +11345,7 @@ export const franchiseCities = {
             gradient: "from-orange-600 to-red-600"
         }
     },
-    "hamirpur-up": {
+    "hamirpur": {
         name: "Hamirpur",
         state: "Uttar Pradesh",
         hub: "Chitrakoot Division Hub",
@@ -11537,7 +11517,7 @@ export const franchiseCities = {
         name: "Kanpur Nagar",
         state: "Uttar Pradesh",
         hub: "Kanpur Hub",
-        heroTitle: "Shaping Kanpur’s Next Career Leaders",
+        heroTitle: "Shaping Kanpur nagar’s Next Career Leaders",
         heroSubtitle: "Where Your Career Journey Takes Off in Kanpur",
         heroDescription: "Leading the professional revolution in the industrial capital of Uttar Pradesh.",
         placements: "1500+",
@@ -11554,7 +11534,7 @@ export const franchiseCities = {
             gradient: "from-blue-600 to-indigo-600"
         }
     },
-    kanpurdehat: {
+    "kanpur dehat": {
         name: "Kanpur Dehat",
         state: "Uttar Pradesh",
         hub: "Kanpur Metro Hub",
@@ -12457,21 +12437,42 @@ export const franchiseCities = {
             gradient: "from-orange-600 to-red-600"
         }
     },
-    barddhaman: {
-        name: "Bardhaman",
+    "west bardhaman": {
+        name: "West Bardhaman",
         state: "West Bengal",
         hub: "Industrial Hub",
-        heroTitle: "Shaping Bardhaman’s Next Career Leaders",
-        heroSubtitle: "Where Your Career Journey Takes Off in Bardhaman",
+        heroTitle: "Shaping West Bardhaman’s Next Career Leaders",
+        heroSubtitle: "Where Your Career Journey Takes Off in West Bardhaman",
         heroDescription: "Driving industrial excellence in the 'Rice Bowl' of West Bengal.",
         placements: "2000+",
         partnerCompanies: "150+",
         localColleges: "150+",
-        aboutText: "EarlyJobs Barddhaman is dedicated to empowering the local youth by bridging the gap between talent and industry.",
+        aboutText: "EarlyJobs West Bardhaman is dedicated to empowering the local youth by bridging the gap between talent and industry.",
         contactInfo: {
             phone: "+91 9462162272",
-            email: "bardhaman@earlyjobs.in",
-            address: "Bardhaman, West Bengal"
+            email: "westbardhaman@earlyjobs.in",
+            address: "West Bardhaman, West Bengal"
+        },
+        theme: {
+            primary: "orange",
+            gradient: "from-orange-600 to-red-600"
+        }
+    },
+    "east bardhaman": {
+        name: "East Bardhaman",
+        state: "West Bengal",
+        hub: "Industrial Hub",
+        heroTitle: "Shaping East Bardhaman’s Next Career Leaders",
+        heroSubtitle: "Where Your Career Journey Takes Off in East Bardhaman",
+        heroDescription: "Driving industrial excellence in the 'Rice Bowl' of West Bengal.",
+        placements: "2000+",
+        partnerCompanies: "150+",
+        localColleges: "150+",
+        aboutText: "EarlyJobs East Bardhaman is dedicated to empowering the local youth by bridging the gap between talent and industry.",
+        contactInfo: {
+            phone: "+91 9462162272",
+            email: "eastbardhaman@earlyjobs.in",
+            address: "East Bardhaman, West Bengal"
         },
         theme: {
             primary: "orange",
@@ -12877,7 +12878,182 @@ export const franchiseCities = {
             gradient: "from-blue-600 to-indigo-600"
         }
     },
-};
+    khordha: {
+        name: "Khordha",
+        state: "Odisha",
+        hub: "Bhubaneswar Hub",
+        heroTitle: "Shaping Khordha’s Next Career Leaders",
+        heroSubtitle: "Where Your Career Journey Takes Off in Khordha",
+        heroDescription: "Empowering the next generation of professionals in Odisha's thriving capital region.",
+        placements: "1500+",
+        partnerCompanies: "100+",
+        localColleges: "80+",
+        aboutText: "EarlyJobs Khordha is dedicated to providing high-end professional placement for the district's residents.",
+        contactInfo: {
+            phone: "+91 9462162272",
+            email: "khordha@earlyjobs.in",
+            address: "Bhubaneswar, Odisha"
+        },
+        theme: {
+            primary: "orange",
+            gradient: "from-orange-600 to-red-600"
+        }
+    },
+    "kamrup metropolitan": {
+        name: "Kamrup Metropolitan",
+        state: "Assam",
+        hub: "Guwahati Hub",
+        heroTitle: "Shaping Kamrup Metropolitan’s Next Career Leaders",
+        heroSubtitle: "Where Your Career Journey Takes Off in Kamrup Metropolitan",
+        heroDescription: "Empowering the next generation of professionals in Assam's thriving capital region.",
+        placements: "1500+",
+        partnerCompanies: "100+",
+        localColleges: "80+",
+        aboutText: "EarlyJobs Kamrup Metropolitan is dedicated to providing high-end professional placement for the district's residents.",
+        contactInfo: {
+            phone: "+91 9462162272",
+            email: "kamrupmetropolitan@earlyjobs.in",
+            address: "Guwahati, Assam"
+        },
+        theme: {
+            primary: "orange",
+            gradient: "from-orange-600 to-red-600"
+        }
+    },
+    "mumbai suburban": {
+        name: "Mumbai Suburban",
+        state: "Maharashtra",
+        hub: "Mumbai Suburban Hub",
+        heroTitle: "Shaping Mumbai Suburban’s Next Career Leaders",
+        heroSubtitle: "Where Your Career Journey Takes Off in Mumbai Suburban",
+        heroDescription: "Empowering the next generation of professionals in Mumbai Suburban's thriving capital region.",
+        placements: "1500+",
+        partnerCompanies: "100+",
+        localColleges: "80+",
+        aboutText: "EarlyJobs Mumbai Suburban is dedicated to providing high-end professional placement for the district's residents.",
+        contactInfo: {
+            phone: "+91 9462162272",
+            email: "mumbaisuburban@earlyjobs.in",
+            address: "Mumbai Suburban, Maharashtra"
+        },
+        theme: {
+            primary: "orange",
+            gradient: "from-orange-600 to-red-600"
+        }
+    },
+    "new delhi": {
+        name: "New Delhi",
+        state: "Delhi",
+        hub: "NCR Hub",
+        heroTitle: "Shaping New Delhi’s Next Career Leaders",
+        heroSubtitle: "Where Your Career Journey Takes Off in New Delhi",
+        heroDescription: "Empowering the next generation of professionals in New Delhi's thriving capital region.",
+        placements: "1500+",
+        partnerCompanies: "100+",
+        localColleges: "80+",
+        aboutText: "EarlyJobs New Delhi is dedicated to providing high-end professional placement for the district's residents.",
+        contactInfo: {
+            phone: "+91 9462162272",
+            email: "newdelhi@earlyjobs.in",
+            address: "New Delhi,Delhi"
+        },
+        theme: {
+            primary: "orange",
+            gradient: "from-orange-600 to-red-600"
+        }
+
+    },
+    "North Delhi": {
+        name: "North Delhi",
+        state: "Delhi",
+        hub: "NCR Hub",
+        heroTitle: "Shaping North Delhi’s Next Career Leaders",
+        heroSubtitle: "Where Your Career Journey Takes Off in North Delhi Suburban",
+        heroDescription: "Empowering the next generation of professionals in North Delhi's thriving capital region.",
+        placements: "1500+",
+        partnerCompanies: "100+",
+        localColleges: "80+",
+        aboutText: "EarlyJobs North Delhi is dedicated to providing high-end professional placement for the district's residents.",
+        contactInfo: {
+            phone: "+91 9462162272",
+            email: "northdelhi@earlyjobs.in",
+            address: "North Delhi, Delhi"
+        },
+        theme: {
+            primary: "orange",
+            gradient: "from-orange-600 to-red-600"
+        }
+
+    },
+    "north west delhi": {
+        name: "North West Delhi",
+        state: "Delhi",
+        hub: "NCR Hub",
+        heroTitle: "North west Delhi’s Next Career Leaders",
+        heroSubtitle: "Where Your Career Journey Takes Off in North west Delhi",
+        heroDescription: "Building professional futures in North West Delhi's dynamic commercial hub.",
+        placements: "1500+",
+        partnerCompanies: "100+",
+        localColleges: "150+",
+        aboutText: "EarlyJobs North west Delhi creates value by matching local hospitality and trade experience with broader industry needs.",
+        contactInfo: {
+            phone: "+91 9462162272",
+            email: "northwestdelhi@earlyjobs.in",
+            address: "Nort west Delhi, Delhi"
+        },
+        theme: {
+            primary: "orange",
+            gradient: "from-orange-600 to-red-600"
+        }
+    },
+    "south east delhi": {
+        name: "South East Delhi",
+        state: "Delhi",
+        hub: "NCR Hub",
+        heroTitle: "South East Delhi’s Next Career Leaders",
+        heroSubtitle: "Where Your Career Journey Takes Off in South East Delhi",
+        heroDescription: "Building professional futures in South East Delhi's dynamic commercial hub.",
+        placements: "1500+",
+        partnerCompanies: "100+",
+        localColleges: "150+",
+        aboutText: "EarlyJobs South East Delhi creates value by matching local hospitality and trade experience with broader industry needs.",
+        contactInfo: {
+            phone: "+91 9462162272",
+            email: "southeastdelhi@earlyjobs.in",
+            address: "South East Delhi, Delhi"
+        },
+        theme: {
+            primary: "orange",
+            gradient: "from-orange-600 to-red-600"
+        }
+
+    },
+    "south west delhi": {
+        name: "South West Delhi",
+        state: "Delhi",
+        hub: "NCR Hub",
+        heroTitle: "South West Delhi’s Next Career Leaders",
+        heroSubtitle: "Where Your Career Journey Takes Off in South West Delhi",
+        heroDescription: "Building professional futures in South West Delhi's dynamic commercial hub.",
+        placements: "1500+",
+        partnerCompanies: "100+",
+        localColleges: "150+",
+        aboutText: "EarlyJobs South West Delhi creates value by matching local hospitality and trade experience with broader industry needs.",
+        contactInfo: {
+            phone: "+91 9462162272",
+            email: "southwestdelhi@earlyjobs.in",
+            address: "South West Delhi, Delhi"
+        },
+        theme: {
+            primary: "orange",
+            gradient: "from-orange-600 to-red-600"
+        }
+
+    }
+
+
+
+}
 
 export const allowedCities = [
     "andaman_nicobar_is",
@@ -12969,6 +13145,7 @@ export const allowedCities = [
     "madhepura",
     "madhubani",
     "munger",
+    "khordha",
     "muzaffarpur",
     "nalanda",
     "nawada",
@@ -13033,6 +13210,7 @@ export const allowedCities = [
     "junagadh",
     "kheda",
     "kutch",
+    "Gautam Buddha Nagar",
     "mahesana",
     "narmada",
     "navsari",
@@ -13252,8 +13430,7 @@ export const allowedCities = [
     "ujjain",
     "umaria",
     "vidisha",
-    "aizawal west",
-    "aizawl east",
+    "aizawl",
     "champhai",
     "kolasib",
     "lawngtlai",
@@ -13433,12 +13610,12 @@ export const allowedCities = [
     "farrukhabad",
     "fatehpur",
     "firozabad",
-    "gautam_budh_nagar",
+    "gautam_buddh_nagar",
     "ghaziabad",
     "ghazipur",
     "gonda",
     "gorakhpur",
-    "hamirpur-up",
+    "hamirpur",
     "hardoi",
     "hathras/mahamayanagar",
     "jalaun",
@@ -13512,6 +13689,17 @@ export const allowedCities = [
     "ballari",
     "rajkot",
     "sikar",
+    "kamrup metropolitan",
+    "west bardhaman",
+    "east bardhaman",
+    "mumbai suburban",
+    "east delhi",
+    "new delhi",
+    "north delhi",
+    "north east delhi",
+    "north west delhi",
+    "south west delhi"
+
 
 
 ];
