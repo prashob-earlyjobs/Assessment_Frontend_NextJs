@@ -91,7 +91,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: 'website',
       images: [
         {
-          url: '/images/pre_interviewd_talent.jpg',
+          url: 'https://www.earlyjobs.ai/images/pre_interviewd_talent.png',
           width: 1200,
           height: 627,
           alt: title,
@@ -102,7 +102,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: 'summary_large_image',
       title,
       description,
-      images: ['/images/pre_interviewd_talent.jpg'],
+      images: ['https://www.earlyjobs.ai/images/pre_interviewd_talent.png'],
     },
     alternates: {
       canonical: `${baseUrl}/browse-interviewed-candidates/${nameAssessmentTitle}/${id}`,

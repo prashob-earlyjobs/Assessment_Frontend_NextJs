@@ -226,5 +226,6 @@ export function combineSitemapData(data: SitemapData): MetadataRoute.Sitemap {
     ...data.assessmentPages,
     ...data.jobPages,
     ...data.subJobPages,
+    
   ]
 }

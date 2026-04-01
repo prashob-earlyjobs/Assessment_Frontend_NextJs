@@ -14,12 +14,21 @@ export const metadata: Metadata = {
       "Prepare for interviews with Interview Buddy on EarlyJobs. Practice, review, and track your progress.",
     url: `${baseUrl}/interview-buddy`,
     type: "website",
+    images: [
+      {
+        url: `${baseUrl}/images/og_interview_buddy.png`,
+        width: 1200,
+        height: 630,
+        alt: "Interview Buddy on EarlyJobs",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Interview Buddy - Practice Smarter Interviews | EarlyJobs",
     description:
       "Prepare for interviews with Interview Buddy on EarlyJobs. Practice, review, and track your progress.",
+    images: [`${baseUrl}/images/og_interview_buddy.png`],
   },
 };
 
