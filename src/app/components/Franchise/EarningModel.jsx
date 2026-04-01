@@ -42,13 +42,13 @@ const EarningModel = () => {
                 <span className="earnings-item-value">2% bonus</span>
               </div>
 
-              <div className="earnings-item">
+              {/* <div className="earnings-item">
                 <div>
                   <p className="earnings-item-label">Candidate Assessment</p>
                   <p className="earnings-item-sublabel">Pre-hiring testing</p>
                 </div>
                 <span className="earnings-item-value">70% (net)</span>
-              </div>
+              </div> */}
             </div>
           </div>
 
@@ -89,7 +89,7 @@ const EarningModel = () => {
 
             <div className="earnings-gradient-card">
               <h3 className="earnings-gradient-title">
-                Break-even in just 6–9 months ✅
+                Break-even in just 8-12 months ✅
               </h3>
               <p>Quick return on your franchise investment</p>
             </div>

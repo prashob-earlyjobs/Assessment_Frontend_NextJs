@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next'
 import { getAssessmentsfromSearch } from '../components/services/servicesapis'
+import { allowedCities } from '../franchise/data/franchiseCities'
 
 const MAX_URLS_PER_SITEMAP = 50000
 
@@ -8,6 +9,7 @@ export interface SitemapData {
   assessmentPages: MetadataRoute.Sitemap
   jobPages: MetadataRoute.Sitemap
   subJobPages: MetadataRoute.Sitemap
+  franchisePages: MetadataRoute.Sitemap
 }
 
 /**
@@ -96,6 +98,12 @@ export async function getAllSitemapUrls(): Promise<SitemapData> {
       lastModified: new Date(),
       changeFrequency: 'monthly' as const,
       priority: 0.5,
+    },
+    {
+        url: `${baseUrl}/franchise/locations`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
     },
   ]
 
@@ -196,11 +204,20 @@ export async function getAllSitemapUrls(): Promise<SitemapData> {
     console.error('Error fetching subjobs for sitemap:', error)
   }
 
+  // Franchise pages
+  const franchisePages: MetadataRoute.Sitemap = allowedCities.map((slug) => ({
+    url: `${baseUrl}/franchise/${slug.toLowerCase().replace(/\s+/g, '-')}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.7,
+  }))
+
   return {
     staticPages,
     assessmentPages,
     jobPages,
     subJobPages,
+    franchisePages,
   }
 }
 
@@ -226,6 +243,6 @@ export function combineSitemapData(data: SitemapData): MetadataRoute.Sitemap {
     ...data.assessmentPages,
     ...data.jobPages,
     ...data.subJobPages,
-    
+    ...data.franchisePages,
   ]
 }
