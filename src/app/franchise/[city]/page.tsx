@@ -7,7 +7,7 @@ import CityFranchise from "../../components/Franchise/CityFranchise";
 import { franchiseCities, getDefaultCityData, allowedCities } from "../data/franchiseCities";
 
 type Props = {
-    params: { city: string };
+    params: Promise<{ city: string }>;
 };
 
 function getMatchedSlug(citySlug: string): string | null {
@@ -27,10 +27,11 @@ function getMatchedSlug(citySlug: string): string | null {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const matchedSlug = getMatchedSlug(params.city);
+    const { city } = await params;
+    const matchedSlug = getMatchedSlug(city);
     const cityData = matchedSlug
         ? franchiseCities[matchedSlug] || getDefaultCityData(matchedSlug)
-        : getDefaultCityData(params.city);
+        : getDefaultCityData(city);
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.earlyjobs.ai";
 
@@ -43,7 +44,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         openGraph: {
             title: `EarlyJobs ${cityData.name} Franchise`,
             description: cityData.heroSubtitle || cityData.heroDescription,
-            url: `${baseUrl}/franchise/${params.city}`,
+            url: `${baseUrl}/franchise/${city}`,
             images: [
                 {
                     url: cityData.heroImage || `/images/og-franchise.jpg`,
@@ -54,13 +55,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             ],
         },
         alternates: {
-            canonical: `${baseUrl}/franchise/${params.city}`,
+            canonical: `${baseUrl}/franchise/${city}`,
         },
     };
 }
 
-export default function DynamicCityFranchise({ params }: Props) {
-    const matchedSlug = getMatchedSlug(params.city);
+export default async function DynamicCityFranchise({ params }: Props) {
+    const { city } = await params;
+    const matchedSlug = getMatchedSlug(city);
 
     if (!matchedSlug) {
         notFound();
