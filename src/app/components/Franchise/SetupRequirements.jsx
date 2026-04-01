@@ -61,16 +61,16 @@ const SetupRequirements = () => {
                 </tr>
                 <tr>
                   <td>Office Setup & Equipment</td>
-                  <td>₹2,00,000 - ₹3,00,000</td>
+                  <td>₹1,00,000 - ₹2,00,000</td>
                 </tr>
 
                 <tr>
-                  <td>Working Capital (Every month)</td>
-                  <td>₹30,000 - ₹35,000</td>
+                  <td>Working Capital (5-6 months runway)</td>
+                  <td>4,00,000 - 5,00,000</td>
                 </tr>
                 <tr>
                   <td>Total Setup Investment</td>
-                  <td>₹4,00,000 - ₹6,00,000</td>
+                  <td>₹7,00,000 - ₹9,00,000</td>
                 </tr>
               </tbody>
             </table>
