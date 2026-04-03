@@ -1,6 +1,5 @@
 "use client"
 import { MapPin, Building, GraduationCap, Lightbulb, Users, Tag, FileText, BarChart2, Rocket, UserCog } from "lucide-react";
-import { toast } from "sonner";
 import React from 'react';
 import { FaFacebook, FaLinkedin } from "react-icons/fa";
 import { AiFillInstagram } from "react-icons/ai";
@@ -66,6 +65,7 @@ const Footer = () => {
             <Link href="/team" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Team</Link>
             <Link href="/blogs" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Blogs</Link>
             <Link href="/franchise" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Franchise With Us</Link>
+            <Link href="/franchise/locations" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Franchise Locations</Link>
             <a href="tel:+918217527926" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 cursor-pointer lg:mt-6" id="contact-link">Contact Us</a>
             <Link href="/story" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Our Story</Link>
             <Link href="/jobs" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Job Openings</Link>
@@ -90,15 +90,13 @@ const Footer = () => {
               <BarChart2 className="w-5 h-5 mr-2 inline-block" />
               Assessments
             </Link>
-            <button
-              type="button"
+            <Link
+              href="/agency-onboarding"
               className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline text-left lg:mt-6 bg-transparent p-0"
-              onClick={() => toast.info("We're working on it! This feature will be updated soon.")}
-              style={{ outline: "none", border: "none" }}
             >
               <Rocket className="w-5 h-5 mr-2 inline-block" />
               Agencies and consultancies tie-up
-            </button>
+            </Link>
 
             <Link href="/clientele" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
               <Building className="w-5 h-5 mr-2 inline-block" />
@@ -281,6 +279,12 @@ const Footer = () => {
                 className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
               >
                 Udupi
+              </p>
+              <p
+                onClick={() => router.push("/franchise/locations")}
+                className="text-orange-500 font-semibold text-lg hover:text-orange-400 transition-all duration-300 cursor-pointer"
+              >
+                View All Locations →
               </p>
 
             </div>
