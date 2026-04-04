@@ -28,7 +28,7 @@ const Button = ({ className = "", children, ...props }) => (
 
 const FloatingChat = () => (
     <a
-        href="https://wa.me/919462162272"
+        href="https://wa.me/918217527926"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 z-50 bg-[#00D166] hover:bg-[#00b85a] text-white px-5 py-3 rounded-full font-semibold flex items-center gap-2 shadow-lg hover:shadow-xl transition-all hover:-translate-y-1"
@@ -82,7 +82,7 @@ const Sikar = () => {
                     </a>
                     <div className="flex items-center gap-6">
                         <div className="font-bold text-white/90">
-                            <span className="text-base">+91 9462162272</span>
+                            <span className="text-base">+91 8217527926</span>
                         </div>
                         <Button onClick={scrollToForm} className="px-5 py-2 text-sm bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20">Get Started</Button>
                     </div>
