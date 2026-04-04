@@ -528,7 +528,7 @@ const CityFranchise = ({ data }) => {
                                     <Phone className="w-6 h-6 text-orange-600" />
                                 </div>
                                 <p className="font-bold text-orange-900 mb-1">Call Us</p>
-                                <p className="text-orange-800 font-medium">{data.contactInfo?.phone || "+91 9462162272"}</p>
+                                <p className="text-orange-800 font-medium">{data.contactInfo?.phone || "+91 8217527926"}</p>
                             </div>
 
                             <div className="flex flex-col items-center">
