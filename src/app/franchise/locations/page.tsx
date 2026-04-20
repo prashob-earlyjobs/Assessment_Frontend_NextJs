@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { franchiseCities, allowedCities } from "../data/franchiseCities";
+import { franchiseCities, allowedCities, getDefaultCityData } from "../data/franchiseCities";
 import Footer from "../../components/pages/footer";
 import NavbarV2 from "../../components/v2/navbar/navbar.v2";
 
@@ -15,13 +15,21 @@ export default function FranchiseLocations() {
   const groupedCities: Record<string, { slug: string; name: string }[]> = {};
 
   allowedCities.forEach((slug) => {
-    // Try to find the city in the data object
-    // Handle potential key variations (spaces vs underscores)
-    const lookupSlug = slug.toLowerCase().replace(/\s+/g, "_");
-    const cityData = franchiseCities[lookupSlug] || franchiseCities[slug] || { name: slug, state: "India" };
+    // Try multiple key formats to handle inconsistent naming patterns
+    const withUnderscores = slug.toLowerCase().replace(/[\s\-\/]+/g, "_");
+    const concatenated = slug.toLowerCase().replace(/[\s\-\/]+/g, "");
 
-    const state = cityData.state || "India";
-    const cityName = cityData.name || slug.charAt(0).toUpperCase() + slug.slice(1);
+    const cityData =
+      franchiseCities[slug] ||
+      franchiseCities[withUnderscores] ||
+      franchiseCities[concatenated] ||
+      getDefaultCityData(slug);
+
+    const state = cityData.state;
+    // Don't group under "India" state; if state is missing or "India", it won't be shown in a separate state box
+    if (!state || state === "India") return;
+
+    const cityName = cityData.name || slug.split(/[\s\-_]/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
 
     if (!groupedCities[state]) {
       groupedCities[state] = [];
@@ -63,9 +71,6 @@ export default function FranchiseLocations() {
                   <h2 className="text-xl font-bold text-gray-900 group flex items-center">
                     <span className="w-2 h-6 bg-orange-600 rounded-full mr-3"></span>
                     {state}
-                    <span className="ml-auto text-sm font-medium text-orange-600 bg-white px-2 py-0.5 rounded-full border border-orange-100">
-                      {groupedCities[state].length}
-                    </span>
                   </h2>
                 </div>
                 <div className="p-6">
