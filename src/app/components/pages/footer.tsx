@@ -1,6 +1,5 @@
 "use client"
 import { MapPin, Building, GraduationCap, Lightbulb, Users, Tag, FileText, BarChart2, Rocket, UserCog } from "lucide-react";
-import { toast } from "sonner";
 import React from 'react';
 import { FaFacebook, FaLinkedin } from "react-icons/fa";
 import { AiFillInstagram } from "react-icons/ai";
@@ -91,15 +90,13 @@ const Footer = () => {
               <BarChart2 className="w-5 h-5 mr-2 inline-block" />
               Assessments
             </Link>
-            <button
-              type="button"
+            <Link
+              href="/agency-onboarding"
               className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline text-left lg:mt-6 bg-transparent p-0"
-              onClick={() => toast.info("We're working on it! This feature will be updated soon.")}
-              style={{ outline: "none", border: "none" }}
             >
               <Rocket className="w-5 h-5 mr-2 inline-block" />
               Agencies and consultancies tie-up
-            </button>
+            </Link>
 
             <Link href="/clientele" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
               <Building className="w-5 h-5 mr-2 inline-block" />
