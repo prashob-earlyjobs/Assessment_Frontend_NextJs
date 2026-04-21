@@ -26,6 +26,10 @@ interface Job {
   createdAt?: string;
   minSalary?: number;
   maxSalary?: number;
+  paymentFrequency?: string;
+  payment_frequency?: string;
+  salaryMode?: string;
+  salary_mode?: string;
   minExperience?: number;
   maxExperience?: number;
   noOfOpenings?: number;
@@ -111,6 +115,15 @@ const JobsClient = () => {
   const [suggestedJobs, setSuggestedJobs] = useState<Job[]>([]);
   const [suggestedLoading, setSuggestedLoading] = useState(false);
 
+  const getSalaryMode = (job: Job): "monthly" | "yearly" => {
+    const rawMode =
+      job.paymentFrequency ??
+      job.payment_frequency ??
+      job.salaryMode ??
+      job.salary_mode;
+    return String(rawMode || "").toLowerCase() === "monthly" ? "monthly" : "yearly";
+  };
+
   // Calculate pagination values
   const totalPages = Math.ceil(totalJobs / pageSize);
   const startIndex = (currentPage - 1) * pageSize + 1;
@@ -166,6 +179,11 @@ const JobsClient = () => {
         if (Array.isArray(list) && list.length > 0) {
           const normalized = list.slice(0, 6).map((job: Job) => ({
             ...job,
+            paymentFrequency:
+              job.paymentFrequency ??
+              job.payment_frequency ??
+              job.salaryMode ??
+              job.salary_mode,
             employmentType: job.employmentType
               ? job.employmentType.toLowerCase().replace(/\s+/g, "-")
               : undefined,
@@ -255,6 +273,11 @@ const JobsClient = () => {
       if (data.status === "success" && data.data?.jobs) {
         const normalizedJobs = data.data.jobs.map((job: Job) => ({
           ...job,
+          paymentFrequency:
+            job.paymentFrequency ??
+            job.payment_frequency ??
+            job.salaryMode ??
+            job.salary_mode,
           employmentType: job.employmentType
             ? job.employmentType.toLowerCase().replace(/\s+/g, "-")
             : undefined,
@@ -542,7 +565,7 @@ const JobsClient = () => {
                         max_salary={job.maxSalary ? String(job.maxSalary) : undefined}
                         min_experience={job.minExperience != null ? String(job.minExperience) : undefined}
                         max_experience={job.maxExperience != null ? String(job.maxExperience) : undefined}
-                        salary_mode="yearly"
+                        salary_mode={getSalaryMode(job)}
                         location={job.location || "Location Not Specified"}
                         postedTime={job.createdAt || "Not Disclosed"}
                         onJobClick={() => handleJobClick(job.jobId)}
@@ -689,7 +712,7 @@ const JobsClient = () => {
                               max_salary={job.maxSalary != null ? String(job.maxSalary) : undefined}
                               min_experience={job.minExperience != null ? String(job.minExperience) : undefined}
                               max_experience={job.maxExperience != null ? String(job.maxExperience) : undefined}
-                              salary_mode="yearly"
+                              salary_mode={getSalaryMode(job)}
                               location={job.location || "Location Not Specified"}
                               postedTime={job.createdAt || "Not Disclosed"}
                               onJobClick={() => handleJobClick(job.jobId, job)}
