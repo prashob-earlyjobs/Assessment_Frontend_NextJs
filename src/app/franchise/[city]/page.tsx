@@ -47,7 +47,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             url: `${baseUrl}/franchise/${city}`,
             images: [
                 {
-                    url: cityData.heroImage || `/images/og-franchise.jpg`,
+                    url: cityData.heroImage || `/images/newog-franchise.jpeg`,
                     width: 1200,
                     height: 630,
                     alt: `EarlyJobs ${cityData.name} Franchise`,

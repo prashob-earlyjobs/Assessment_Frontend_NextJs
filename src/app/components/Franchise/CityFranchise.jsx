@@ -116,7 +116,7 @@ const CityFranchise = ({ data }) => {
     const [showPopup, setShowPopup] = useState(null)
     const [openIndex, setOpenIndex] = useState(0)
 
-    const defaultHeroImage = "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80"
+    const defaultHeroImage = "https://res.cloudinary.com/ddsy9p8fg/image/upload/v1776657676/defaultheroImage_ewfnj4.jpg"
 
     const handleSubmit = async (e) => {
         e.preventDefault()
