@@ -288,7 +288,7 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
             <div className="flex items-center space-x-8">
               {navLinks.map((link) =>
                 link.highlight ? (
-                  <div key={link.path} className="relative group mr-3 sm:mr-4">
+                  <div key={link.path} className="relative group mr-3 sm:mr-4 pb-2 -mb-2">
                     <button
                       onClick={() => router.push("/interview-buddy")}
                       className={`relative inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-orange-500 to-amber-400 px-3 py-1.5 text-xs sm:text-sm font-semibold text-white shadow-md transition-colors duration-300 hover:from-orange-400 hover:to-amber-300 ${
@@ -305,7 +305,8 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
                       <ChevronDown className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
                     </button>
 
-                    <div className="absolute left-0 top-full mt-2 w-52 rounded-xl border border-orange-100 bg-white shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-200 z-50">
+                    <div className="absolute left-0 top-full h-2 w-52" />
+                    <div className="absolute left-0 top-full w-52 rounded-xl border border-orange-100 bg-white shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-200 z-50">
                       <button
                         onClick={() => router.push("/interview-buddy")}
                         className="w-full text-left px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 rounded-t-xl"
