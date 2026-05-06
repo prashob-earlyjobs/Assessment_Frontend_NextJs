@@ -1,3 +1,5 @@
+"use client"
+
 import { useState } from 'react'
 import { CalendlyEmbed } from './CalendlyEmbed'
 import './App.css'
