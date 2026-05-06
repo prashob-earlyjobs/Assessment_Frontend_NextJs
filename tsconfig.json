@@ -19,5 +19,5 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/components/pages/Jobfair.tsx", "src/app/components/pages/features.jsx"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "EJhunter"]
 }
