@@ -4,7 +4,7 @@ import './App.css'
 import './index.css'
 
 /** Full event URL from Calendly (Share → Add to Website). Example: https://calendly.com/your-org/30-minute-intro */
-const CALENDLY_EVENT_URL = (process.env.NEXT_PUBLIC_HUNTLO_CALENDLY_EVENT_URL ?? process.env.NEXT_PUBLIC_CALENDLY_EVENT_URL ?? '').trim()
+const CALENDLY_EVENT_URL ="https://calendly.com/earlyjobs-info/30min";
 
 function App() {
   const [activeFaq, setActiveFaq] = useState<number | null>(0);
