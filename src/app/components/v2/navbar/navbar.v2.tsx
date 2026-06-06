@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Image from "next/image";
 import { Button } from "../../ui/button";
-import { Menu, X, User, LogOut, Briefcase, Users, Sparkles, Zap, ChevronDown } from "lucide-react";
+import { Menu, X, User, LogOut, Briefcase, Users, Zap } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -63,7 +63,7 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
     { label: "Jobs", path: "/jobs" },
     { label: "Resume", path: "/resume" },
     { label: "Talent Pool", path: "/talent-pool" },
-    { label: "AI Interview", path: "/interview-buddy", highlight: true },
+    { label: "Try Huntlo AI", path: "https://www.huntlo.ai", highlight: true },
   ];
 
   const isActive = (path: string) => {
@@ -74,7 +74,11 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
   };
 
   const handleLinkClick = (path: string) => {
-    router.push(path);
+    if (path.startsWith("http")) {
+      window.open(path, "_blank", "noopener,noreferrer");
+    } else {
+      router.push(path);
+    }
     setIsMobileMenuOpen(false);
   };
 
@@ -288,39 +292,25 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
             <div className="flex items-center space-x-8">
               {navLinks.map((link) =>
                 link.highlight ? (
-                  <div key={link.path} className="relative group mr-3 sm:mr-4 pb-2 -mb-2">
-                    <button
-                      onClick={() => router.push("/interview-buddy")}
-                      className={`relative inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-orange-500 to-amber-400 px-3 py-1.5 text-xs sm:text-sm font-semibold text-white shadow-md transition-colors duration-300 hover:from-orange-400 hover:to-amber-300 ${
-                        isActive("/interview-buddy") || isActive("/huntlo")
-                          ? "ring-2 ring-[rgba(181,160,255,0.6)]"
-                          : ""
-                      }`}
-                    >
-                      <span className="hidden sm:inline-flex absolute -top-2 right-3 rounded-full bg-white px-1.5 py-0.5 text-[9px] font-semibold text-orange-600 shadow border border-orange-200">
-                        New
-                      </span>
-                      <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
-                      <span className="inline">AI Agents</span>
-                      <ChevronDown className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
-                    </button>
-
-                    <div className="absolute left-0 top-full h-2 w-52" />
-                    <div className="absolute left-0 top-full w-52 rounded-xl border border-orange-100 bg-white shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-200 z-50">
-                      <button
-                        onClick={() => router.push("/interview-buddy")}
-                        className="w-full text-left px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 rounded-t-xl"
-                      >
-                        AI Interview Buddy
-                      </button>
-                      <button
-                        onClick={() => router.push("/huntlo")}
-                        className="w-full text-left px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 rounded-b-xl"
-                      >
-                        Huntlo
-                      </button>
-                    </div>
-                  </div>
+                  <button
+                    key={link.path}
+                    onClick={() => handleLinkClick(link.path)}
+                    className={`relative inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-orange-500 to-amber-400 px-3 py-1.5 text-xs sm:text-sm font-semibold text-white shadow-md transition-colors duration-300 hover:from-orange-400 hover:to-amber-300 mr-3 sm:mr-4 ${
+                      isActive(link.path)
+                        ? "ring-2 ring-[rgba(181,160,255,0.6)]"
+                        : ""
+                    }`}
+                  >
+                    <Image
+                      src="/v2/icons/huntlo-favicon.png"
+                      alt=""
+                      width={18}
+                      height={18}
+                      className="hidden sm:block absolute -top-2.5 -right-1 h-[18px] w-[18px] rounded-full object-cover scale-110 shadow border border-white"
+                    />
+                    <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
+                    <span className="inline">{link.label}</span>
+                  </button>
                 ) : (
                   <button
                     key={link.path}
@@ -483,7 +473,7 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
                         : "text-orange-500 hover:text-orange-600 hover:bg-orange-50"
                     }`}
                   >
-                    <Sparkles className="h-4 w-4" />
+                    <Zap className="h-4 w-4" />
                     {link.label}
                   </button>
                 ) : (
