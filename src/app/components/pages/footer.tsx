@@ -1,5 +1,5 @@
 "use client"
-import { MapPin, Building, GraduationCap, Lightbulb, Users, Tag, FileText, BarChart2, Rocket, UserCog } from "lucide-react";
+import { MapPin, Building, GraduationCap, Lightbulb, Users, Tag, BarChart2, Rocket, UserCog } from "lucide-react";
 import React from 'react';
 import { FaFacebook, FaLinkedin } from "react-icons/fa";
 import { AiFillInstagram } from "react-icons/ai";
@@ -82,10 +82,6 @@ const Footer = () => {
           </div>
           <div className="flex flex-col">
             <h3 className="pt-8 text-white text-base font-semibold uppercase leading-5 lg:pt-12">Tools & Tie-Ups</h3>
-            <Link href="/airesume" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
-              <FileText className="w-5 h-5 mr-2 inline-block" />
-              AI Resume Builder
-            </Link>
             <Link href="/assessments" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
               <BarChart2 className="w-5 h-5 mr-2 inline-block" />
               Assessments
