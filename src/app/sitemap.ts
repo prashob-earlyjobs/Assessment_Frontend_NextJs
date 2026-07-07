@@ -2,8 +2,7 @@ import { MetadataRoute } from 'next'
 import { getAllSitemapUrls, combineSitemapData, chunkUrls } from './lib/sitemap-utils'
 
 // Revalidate sitemap every 1 hour (3600 seconds)
-// This means the sitemap will regenerate automatically after 1 hour
-// export const revalidate = 3600
+export const revalidate = 3600
 
 const MAX_URLS_PER_SITEMAP = 50000
 
