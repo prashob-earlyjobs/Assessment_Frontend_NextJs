@@ -199,12 +199,12 @@ const PromoBannerV2 = ({ data }: PromoBannerV2Props) => {
               label: "Successful Placements",
               value:
                 data && typeof data === "object"
-                  ? `${data.summary?.placedCount ?? "-"} Franchises`
+                  ? `${data.summary?.placedCount ?? "-"}`
                   : "-",
             },
             { label: "Companies", value: data && typeof data === "object" ? data.summary?.companiesCount ?? "-" : "-" },
             { label: "Colleges", value: data && typeof data === "object" ? data.summary?.collegesCount ?? "-" : "-" },
-            { label: "Expanding Hiring Access", value: data && typeof data === "object" ? data.summary?.franchiseCount ?? "-" : "-" }
+            { label: "Expanding Hiring Access", value: data && typeof data === "object" ? `${data.summary?.franchiseCount ?? "-"} Franchises` : "-" }
           ].map((stat, index) => (
             <div
               key={index}
