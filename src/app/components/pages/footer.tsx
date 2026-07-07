@@ -82,10 +82,10 @@ const Footer = () => {
           </div>
           <div className="flex flex-col">
             <h3 className="pt-8 text-white text-base font-semibold uppercase leading-5 lg:pt-12">Tools & Tie-Ups</h3>
-            <Link href="/assessments" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
+            {/* <Link href="/assessments" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
               <BarChart2 className="w-5 h-5 mr-2 inline-block" />
               Assessments
-            </Link>
+            </Link> */}
             <Link
               href="/agency-onboarding"
               className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline text-left lg:mt-6 bg-transparent p-0"
@@ -102,10 +102,10 @@ const Footer = () => {
               <GraduationCap className="w-5 h-5 mr-2 inline-block" />
               College Tie-Ups
             </Link>
-            <Link href="/join-creator-programme" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
+            {/* <Link href="/join-creator-programme" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
               <Users className="w-5 h-5 mr-2 inline-block" />
               Join Creator Programme
-            </Link>
+            </Link> */}
             <Link href="/recruiter" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
               <Users className="w-5 h-5 mr-2 inline-block" />
               Become Freelance Recruiter

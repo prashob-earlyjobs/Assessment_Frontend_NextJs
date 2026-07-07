@@ -39,7 +39,7 @@ const Index = () => {
       <HeroV2 data={dashboard}/>
       <RecentJobsV2 data={dashboard}/> 
       <BrowseCategoryV2 />
-      <PromoBannerV2 />
+      <PromoBannerV2 data={dashboard}/>
       <TestimonialsV2 />
       <NewsBlogV2 />
 
