@@ -536,7 +536,12 @@ const CityFranchise = ({ data }) => {
                                     <Mail className="w-6 h-6 text-orange-600" />
                                 </div>
                                 <p className="font-bold text-orange-900 mb-1">Email Us</p>
-                                <p className="text-orange-800 font-medium">{data.contactInfo?.email || "info@earlyjobs.in"}</p>
+                                <a
+                                    href={`mailto:${data.contactInfo?.email || "franchise@earlyjobs.in"}`}
+                                    className="text-orange-800 font-medium no-underline hover:underline"
+                                >
+                                    {data.contactInfo?.email || "franchise@earlyjobs.in"}
+                                </a>
                             </div>
 
                             <div className="flex flex-col items-center">

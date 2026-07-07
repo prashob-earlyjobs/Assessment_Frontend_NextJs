@@ -12,7 +12,20 @@ import {
   CarouselPrevious,
 } from "../../ui/carousel";
 
-const PromoBannerV2 = () => {
+type PromoBannerV2Props = {
+  data?: {
+    summary?: {
+      interviewCount?: string;
+      companiesCount?: string;
+      selectedCount?: string;
+      collegesCount?: string;
+      franchiseCount?: string;
+      placedCount?: string;
+    };
+  } | null | boolean;
+};
+
+const PromoBannerV2 = ({ data }: PromoBannerV2Props) => {
   const router = useRouter();
 
   const banners = [
@@ -180,12 +193,18 @@ const PromoBannerV2 = () => {
         {/* Statistics Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
           {[
-            { label: "Interviews Conducted", value: "35000+" },
-            { label: "Total Selections", value: "8000+" },
-            { label: "Successful Placements", value: "2700+" },
-            { label: "Companies", value: "200+" },
-            { label: "Colleges", value: "200+" },
-            { label: "Expanding Hiring Access", value: "22+ Districts" }
+            { label: "Interviews Conducted", value: data && typeof data === "object" ? data.summary?.interviewCount ?? "-" : "-" },
+            { label: "Total Selections", value: data && typeof data === "object" ? data.summary?.selectedCount ?? "-" : "-" },
+            {
+              label: "Successful Placements",
+              value:
+                data && typeof data === "object"
+                  ? `${data.summary?.placedCount ?? "-"}`
+                  : "-",
+            },
+            { label: "Companies", value: data && typeof data === "object" ? data.summary?.companiesCount ?? "-" : "-" },
+            { label: "Colleges", value: data && typeof data === "object" ? data.summary?.collegesCount ?? "-" : "-" },
+            { label: "Expanding Hiring Access", value: data && typeof data === "object" ? `${data.summary?.franchiseCount ?? "-"} Franchises` : "-" }
           ].map((stat, index) => (
             <div
               key={index}

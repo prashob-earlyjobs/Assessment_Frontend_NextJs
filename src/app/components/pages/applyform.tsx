@@ -170,94 +170,94 @@ interface MultiStepFormProps {
 
 const MultiStepForm: React.FC<MultiStepFormProps> = ({ onFormSubmit, isCompact = false }) => {
 
-  const [currentStep, setCurrentStep] = useState(() => {
-    try {
-      const savedStep = localStorage.getItem('multiStepFormCurrentStep');
-      if (savedStep) {
-        const step = parseInt(savedStep, 10);
-        if (!isNaN(step)) {
-          return step;
-        }
-      }
-    } catch (error) {
-      console.error("Failed to parse current step from local storage", error);
-    }
-    return 1;
-  });
+  const [currentStep, setCurrentStep] = useState(1);
   const personalDetailsRef = useRef<PersonalDetailsRef>(null);
   const qualificationRef = useRef<QualificationRef>(null);
   const aboutRef = useRef<AboutRef>(null);
   const referencesRef = useRef<ReferencesRef>(null);
   const identificationRef = useRef<IdentificationRef>(null);
 
-  const [formData, setFormData] = useState<FormData>(() => {
+  const [formData, setFormData] = useState<FormData>({
+    personalDetails: {
+      recruiterType: '',
+      fullName: '',
+      dateOfBirth: '',
+      gender: '',
+      phoneNumber: '',
+      whatsappNumber: '',
+      email: '',
+      currentAddress: {
+        buildingFlat: '',
+        street: '',
+        areaVillage: '',
+        cityTownBlock: '',
+        state: '',
+        pincode: '',
+      },
+      permanentAddress: {
+        buildingFlat: '',
+        street: '',
+        areaVillage: '',
+        cityTownBlock: '',
+        state: '',
+        pincode: '',
+      },
+      languages: [],
+      spokenLanguages: [],
+      applyFor: '',
+    },
+    qualification: {
+      highestQualification: '',
+      workExperience: [],
+    },
+    about: {
+      tellAboutYourself: '',
+      whyJoinHR: '',
+      howContribute: '',
+      hoursContribute: '',
+      categories: [],
+      availability: '',
+    },
+    references: [
+      {
+        name: '',
+        contactNumber: '',
+        email: '',
+        organization: '',
+        designation: '',
+        howTheyKnow: '',
+      },
+    ],
+    identification: {
+      aadharNumber: '',
+      panNumber: '',
+      emergencyContact: '',
+      familyMembers: [],
+    },
+  });
+
+  useEffect(() => {
+    try {
+      const savedStep = localStorage.getItem('multiStepFormCurrentStep');
+      if (savedStep) {
+        const step = parseInt(savedStep, 10);
+        if (!isNaN(step)) {
+          setCurrentStep(step);
+        }
+      }
+    } catch (error) {
+      console.error("Failed to parse current step from local storage", error);
+    }
+
     try {
       const savedData = localStorage.getItem('multiStepFormData');
       if (savedData) {
-        return JSON.parse(savedData);
+        setFormData(JSON.parse(savedData));
       }
     } catch (error) {
       console.error("Failed to parse form data from local storage", error);
     }
-    return {
-      personalDetails: {
-        recruiterType: '',
-        fullName: '',
-        dateOfBirth: '',
-        gender: '',
-        phoneNumber: '',
-        whatsappNumber: '',
-        email: '',
-        currentAddress: {
-          buildingFlat: '',
-          street: '',
-          areaVillage: '',
-          cityTownBlock: '',
-          state: '',
-          pincode: '',
-        },
-        permanentAddress: {
-          buildingFlat: '',
-          street: '',
-          areaVillage: '',
-          cityTownBlock: '',
-          state: '',
-          pincode: '',
-        },
-        languages: [],
-        spokenLanguages: [],
-        applyFor: '',
-      },
-      qualification: {
-        highestQualification: '',
-        workExperience: [],
-      },
-      about: {
-        tellAboutYourself: '',
-        whyJoinHR: '',
-        howContribute: '',
-        hoursContribute: '',
-        categories: [],
-        availability: '',
-      },
-      references: [
-        {
-          name: '',
-          contactNumber: '',
-          email: '',
-          organization: '',
-          designation: '',
-          howTheyKnow: '',
-        },
-      ],
-      identification: {
-        aadharNumber: '',
-        panNumber: '',
-        emergencyContact: '',
-        familyMembers: [],
-      },
-    };
-  });
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('multiStepFormData', JSON.stringify(formData));

@@ -1,13 +1,29 @@
 "use client"
 import { MapPin, Building, GraduationCap, Lightbulb, Users, Tag, BarChart2, Rocket, UserCog } from "lucide-react";
 import React from 'react';
-import { FaFacebook, FaLinkedin } from "react-icons/fa";
+import { FaFacebook, FaLinkedin, FaYoutube } from "react-icons/fa";
 import { AiFillInstagram } from "react-icons/ai";
+import { SiAnthropic, SiGithubcopilot, SiGooglegemini, SiOpenai, SiPerplexity, SiX } from "react-icons/si";
 import { SlLocationPin } from "react-icons/sl";
 import { HiOutlinePhone, HiOutlineMail } from "react-icons/hi";
 import Link from 'next/link';
 import { useRouter } from "next/navigation";
 import FooterScroll from "./FooterScroll";
+
+const EARLYJOBS_AI_PROMPT =
+  "What is EarlyJobs.ai (https://www.earlyjobs.ai) and how can it help job seekers, employers, and recruiters in India?";
+
+const buildAiAssistantUrl = (baseUrl: string, param: "q" | "prompt" = "q") =>
+  `${baseUrl}?${param}=${encodeURIComponent(EARLYJOBS_AI_PROMPT)}`;
+
+const aiAssistantLinks = [
+  { name: "ChatGPT", href: buildAiAssistantUrl("https://chatgpt.com"), Icon: SiOpenai },
+  { name: "Grok", href: buildAiAssistantUrl("https://grok.com"), Icon: SiX },
+  { name: "Claude", href: buildAiAssistantUrl("https://claude.ai/new"), Icon: SiAnthropic },
+  { name: "Gemini", href: buildAiAssistantUrl("https://gemini.google.com/app", "prompt"), Icon: SiGooglegemini },
+  { name: "Perplexity", href: buildAiAssistantUrl("https://www.perplexity.ai/search"), Icon: SiPerplexity },
+  { name: "Copilot", href: buildAiAssistantUrl("https://copilot.microsoft.com"), Icon: SiGithubcopilot },
+];
 
 const Footer = () => {
   const router = useRouter();
@@ -48,14 +64,8 @@ const Footer = () => {
               <a href={process.env.NEXT_PUBLIC_LINKEDIN_URL} className="mr-5 no-underline" rel="noreferrer" target="_blank">
                 <FaLinkedin className="text-white text-2xl" />
               </a>
-            </div>
-            <h3 className="pt-5 text-white text-base font-semibold uppercase leading-5">Also Available In</h3>
-            <div className="flex items-center mt-5">
-              <a href="https://play.google.com/store/apps/details?id=com.victaman.earlyjobs" rel="noreferrer" target="_blank" className="mr-5">
-                <img src="/images/google-play-badge-logo.svg" alt="google-play" className="w-[120px] select-none" />
-              </a>
-              <a href="https://apps.apple.com/in/app/earlyjobs-ai/id6754554572" rel="noreferrer" target="_blank">
-                <img src="/images/app-store-logo.svg" alt="app-store" className="w-[120px] select-none" />
+              <a href={process.env.NEXT_PUBLIC_YOUTUBE_URL} className="mr-5 no-underline" rel="noreferrer" target="_blank">
+                <FaYoutube className="text-white text-2xl" />
               </a>
             </div>
           </div>
@@ -82,10 +92,10 @@ const Footer = () => {
           </div>
           <div className="flex flex-col">
             <h3 className="pt-8 text-white text-base font-semibold uppercase leading-5 lg:pt-12">Tools & Tie-Ups</h3>
-            <Link href="/assessments" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
+            {/* <Link href="/assessments" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
               <BarChart2 className="w-5 h-5 mr-2 inline-block" />
               Assessments
-            </Link>
+            </Link> */}
             <Link
               href="/agency-onboarding"
               className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline text-left lg:mt-6 bg-transparent p-0"
@@ -102,10 +112,10 @@ const Footer = () => {
               <GraduationCap className="w-5 h-5 mr-2 inline-block" />
               College Tie-Ups
             </Link>
-            <Link href="/join-creator-programme" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
+            {/* <Link href="/join-creator-programme" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
               <Users className="w-5 h-5 mr-2 inline-block" />
               Join Creator Programme
-            </Link>
+            </Link> */}
             <Link href="/recruiter" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
               <Users className="w-5 h-5 mr-2 inline-block" />
               Become Freelance Recruiter
@@ -115,6 +125,44 @@ const Footer = () => {
               <UserCog className="w-5 h-5 mr-2 inline-block" />
               Freelance Career Counsellor
             </Link> */}
+          </div>
+        </div>
+        <div className="w-full px-4 lg:px-8 mt-8">
+          <h3 className="text-white text-base font-semibold uppercase leading-5">Also Available In</h3>
+          <div className="flex items-center justify-between gap-4 mt-4 w-full">
+            <div className="flex items-center gap-3 shrink-0">
+              <a
+                href="https://play.google.com/store/apps/details?id=com.victaman.earlyjobs"
+                rel="noreferrer"
+                target="_blank"
+                className="shrink-0"
+              >
+                <img src="/images/google-play-badge-logo.svg" alt="google-play" className="w-[120px] h-auto select-none" />
+              </a>
+              <a
+                href="https://apps.apple.com/in/app/earlyjobs-ai/id6754554572"
+                rel="noreferrer"
+                target="_blank"
+                className="shrink-0"
+              >
+                <img src="/images/app-store-logo.svg" alt="app-store" className="w-[120px] h-auto select-none" />
+              </a>
+            </div>
+            <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+              {aiAssistantLinks.map(({ name, href, Icon }) => (
+                <a
+                  key={name}
+                  href={href}
+                  className="shrink-0 text-white transition-transform duration-200 hover:scale-105 active:scale-95"
+                  rel="noreferrer"
+                  target="_blank"
+                  aria-label={name}
+                  title={name}
+                >
+                  <Icon className="text-xl sm:text-2xl" />
+                </a>
+              ))}
+            </div>
           </div>
         </div>
         <div className="w-full  mt-2 px-4 pb-10">
@@ -195,13 +243,27 @@ const Footer = () => {
                 Sikar
               </p>
 
+              <p
+                onClick={() => router.push("/franchise/ballari")}
+                className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
+              >
+                Bellari
+              </p>
+
+              <p
+                onClick={() => router.push("/franchise/medchal_malkajgiri")}
+                className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
+              >
+                Medchal
+              </p>
+
             </div>
           </div>
 
           {/* Expanding in section */}
 
 
-          <div className=" pb-4 mb-6 text-center mt-10 lg:mt-0">
+          <div className="hidden pb-4 mb-6 text-center mt-10 lg:mt-0">
             <span className=" text-2xl font-bold text-gray-300 block sm:inline">Starting Soon:</span>
             <div className="flex flex-wrap gap-4 mt-3 justify-center">
               <p

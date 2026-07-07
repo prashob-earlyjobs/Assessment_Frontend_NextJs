@@ -150,7 +150,7 @@ const LeadCaptureSection = () => {
                 </div>
                 <div className="contact-item">
                   <Mail className="contact-icon" />
-                  <span>Chandigarh@earlyjobs.in</span>
+                  <a href="mailto:franchise@earlyjobs.in" className="no-underline hover:underline">franchise@earlyjobs.in</a>
                 </div>
                 {/* <div className="contact-item">
                   <MapPin className="contact-icon" />
