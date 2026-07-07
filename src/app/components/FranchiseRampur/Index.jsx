@@ -940,7 +940,7 @@ const Rampur = () => {
                 <div className="flex flex-col items-center">
                   <Mail className="w-8 h-8 text-orange-600 mb-2" />
                   <p className="font-semibold text-orange-700">Email Us</p>
-                  <p className="text-orange-800">rampur@earlyjobs.in</p>
+                  <a href="mailto:franchise@earlyjobs.in" className="text-orange-800 no-underline hover:underline">franchise@earlyjobs.in</a>
                 </div>
 
                 <div className="flex flex-col items-center">

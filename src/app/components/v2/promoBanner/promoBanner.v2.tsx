@@ -20,7 +20,7 @@ type PromoBannerV2Props = {
       selectedCount?: string;
       collegesCount?: string;
       franchiseCount?: string;
-      palcedCount?: string;
+      placedCount?: string;
     };
   } | null | boolean;
 };
@@ -195,7 +195,13 @@ const PromoBannerV2 = ({ data }: PromoBannerV2Props) => {
           {[
             { label: "Interviews Conducted", value: data && typeof data === "object" ? data.summary?.interviewCount ?? "-" : "-" },
             { label: "Total Selections", value: data && typeof data === "object" ? data.summary?.selectedCount ?? "-" : "-" },
-            { label: "Successful Placements", value: data && typeof data === "object" ? data.summary?.palcedCount ?? "-" : "-" },
+            {
+              label: "Successful Placements",
+              value:
+                data && typeof data === "object"
+                  ? `${data.summary?.placedCount ?? "-"} Franchises`
+                  : "-",
+            },
             { label: "Companies", value: data && typeof data === "object" ? data.summary?.companiesCount ?? "-" : "-" },
             { label: "Colleges", value: data && typeof data === "object" ? data.summary?.collegesCount ?? "-" : "-" },
             { label: "Expanding Hiring Access", value: data && typeof data === "object" ? data.summary?.franchiseCount ?? "-" : "-" }
