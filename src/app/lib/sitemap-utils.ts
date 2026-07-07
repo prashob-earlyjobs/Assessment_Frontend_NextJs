@@ -18,6 +18,7 @@ export interface SitemapData {
 export async function getAllSitemapUrls(): Promise<SitemapData> {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.earlyjobs.ai'
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL_2_0
+  const canFetchBackendUrls = Boolean(backendUrl)
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
@@ -146,28 +147,32 @@ export async function getAllSitemapUrls(): Promise<SitemapData> {
   let jobPages: MetadataRoute.Sitemap = []
   
   try {
-    // Fetch all jobs from the backend API
-    const jobsResponse = await fetch(`${backendUrl}/public/jobs?page=1&pageSize=1000`)
-    
-    if (jobsResponse.ok) {
-      const jobsData = await jobsResponse.json()
-      const jobs = jobsData?.data?.jobs || jobsData?.jobs || []
-      
-      jobPages = jobs.map((job: any) => {
-        // Create URL-friendly job title with hyphens instead of spaces and escape special characters
-        const jobTitle = (job.title || job.jobTitle || job.name || 'job')
-          .replace(/[&<>"']/g, '') // Remove XML special characters
-          .replace(/\s+/g, '-')
-          .replace(/[^\w\-]/g, '') // Remove any remaining non-word characters except hyphens
-          .toLowerCase()
-        
-        return {
-          url: `${baseUrl}/jobs/${jobTitle}/${job.jobId}`,
-          lastModified: new Date(job.updatedAt || job.createdAt || Date.now()),
-          changeFrequency: 'daily' as const,
-          priority: 0.8,
-        }
-      })
+    if (!canFetchBackendUrls) {
+      console.warn('Skipping sitemap job fetch because NEXT_PUBLIC_BACKEND_URL_2_0 is not set')
+    } else {
+      // Fetch all jobs from the backend API
+      const jobsResponse = await fetch(`${backendUrl}/public/jobs?page=1&pageSize=1000`)
+
+      if (jobsResponse.ok) {
+        const jobsData = await jobsResponse.json()
+        const jobs = jobsData?.data?.jobs || jobsData?.jobs || []
+
+        jobPages = jobs.map((job: any) => {
+          // Create URL-friendly job title with hyphens instead of spaces and escape special characters
+          const jobTitle = (job.title || job.jobTitle || job.name || 'job')
+            .replace(/[&<>"']/g, '') // Remove XML special characters
+            .replace(/\s+/g, '-')
+            .replace(/[^\w\-]/g, '') // Remove any remaining non-word characters except hyphens
+            .toLowerCase()
+
+          return {
+            url: `${baseUrl}/jobs/${jobTitle}/${job.jobId}`,
+            lastModified: new Date(job.updatedAt || job.createdAt || Date.now()),
+            changeFrequency: 'daily' as const,
+            priority: 0.8,
+          }
+        })
+      }
     }
   } catch (error) {
     console.error('Error fetching jobs for sitemap:', error)
@@ -177,28 +182,32 @@ export async function getAllSitemapUrls(): Promise<SitemapData> {
   let subJobPages: MetadataRoute.Sitemap = []
   
   try {
-    // Fetch all subjobs from the backend API
-    const jobsResponse = await fetch(`${backendUrl}/public/subjobs`)
-    
-    if (jobsResponse.ok) {
-      const jobsData = await jobsResponse.json()
-      const subjobs = jobsData?.data?.subjobs || []
-      
-      subJobPages = subjobs.map((job: any) => {
-        // Create URL-friendly job title with hyphens instead of spaces and escape special characters
-        const jobTitle = job.title
-          .replace(/[&<>"']/g, '') // Remove XML special characters
-          .replace(/\s+/g, '-')
-          .replace(/[^\w\-]/g, '') // Remove any remaining non-word characters except hyphens
-          .toLowerCase()
-        
-        return {
-          url: `${baseUrl}/jobs/${jobTitle}/${job.subjobId}`,
-          lastModified: new Date(job.updatedAt || job.createdAt || Date.now()),
-          changeFrequency: 'daily' as const,
-          priority: 0.8,
-        }
-      })
+    if (!canFetchBackendUrls) {
+      console.warn('Skipping sitemap subjob fetch because NEXT_PUBLIC_BACKEND_URL_2_0 is not set')
+    } else {
+      // Fetch all subjobs from the backend API
+      const jobsResponse = await fetch(`${backendUrl}/public/subjobs`)
+
+      if (jobsResponse.ok) {
+        const jobsData = await jobsResponse.json()
+        const subjobs = jobsData?.data?.subjobs || []
+
+        subJobPages = subjobs.map((job: any) => {
+          // Create URL-friendly job title with hyphens instead of spaces and escape special characters
+          const jobTitle = job.title
+            .replace(/[&<>"']/g, '') // Remove XML special characters
+            .replace(/\s+/g, '-')
+            .replace(/[^\w\-]/g, '') // Remove any remaining non-word characters except hyphens
+            .toLowerCase()
+
+          return {
+            url: `${baseUrl}/jobs/${jobTitle}/${job.subjobId}`,
+            lastModified: new Date(job.updatedAt || job.createdAt || Date.now()),
+            changeFrequency: 'daily' as const,
+            priority: 0.8,
+          }
+        })
+      }
     }
   } catch (error) {
     console.error('Error fetching subjobs for sitemap:', error)
