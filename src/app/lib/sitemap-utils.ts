@@ -1,8 +1,8 @@
 import { MetadataRoute } from 'next'
-import { getAssessmentsfromSearch } from '../components/services/servicesapis'
 import { allowedCities } from '../franchise/data/franchiseCities'
 
 const MAX_URLS_PER_SITEMAP = 50000
+const SITEMAP_FETCH_TIMEOUT_MS = 10000
 
 export interface SitemapData {
   staticPages: MetadataRoute.Sitemap
@@ -10,6 +10,26 @@ export interface SitemapData {
   jobPages: MetadataRoute.Sitemap
   subJobPages: MetadataRoute.Sitemap
   franchisePages: MetadataRoute.Sitemap
+}
+
+async function fetchJsonWithTimeout(url: string) {
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), SITEMAP_FETCH_TIMEOUT_MS)
+
+  try {
+    const response = await fetch(url, {
+      signal: controller.signal,
+      cache: 'no-store',
+    })
+
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}`)
+    }
+
+    return await response.json()
+  } finally {
+    clearTimeout(timeoutId)
+  }
 }
 
 /**
@@ -112,33 +132,29 @@ export async function getAllSitemapUrls(): Promise<SitemapData> {
   let assessmentPages: MetadataRoute.Sitemap = []
   
   try {
-    // Fetch all assessments from the API
-    const response = await getAssessmentsfromSearch({
-      page: 1,
-      limit: 1000, // Get a large number to ensure we get all assessments
-      type: "",
-      difficulty: "",
-      searchQuery: "",
-      category: "",
-    })
+    if (!canFetchBackendUrls) {
+      console.warn('Skipping sitemap assessment fetch because NEXT_PUBLIC_BACKEND_URL_2_0 is not set')
+    } else {
+      const assessmentUrl = `${backendUrl}/assessments?category=&title=&type=&difficulty=&page=1&limit=1000`
+      const response = await fetchJsonWithTimeout(assessmentUrl)
+      const assessments = response?.data?.assessments || []
 
-    const assessments = response?.data?.assessments || []
-    
-    assessmentPages = assessments.map((assessment: any) => {
-      // Create URL-friendly assessment name with hyphens instead of spaces and escape special characters
-      const assessmentName = (assessment.title || assessment.name || 'assessment')
-        .replace(/[&<>"']/g, '') // Remove XML special characters
-        .replace(/\s+/g, '-')
-        .replace(/[^\w\-]/g, '') // Remove any remaining non-word characters except hyphens
-        .toLowerCase()
-      
-      return {
-        url: `${baseUrl}/assessments/${assessmentName}/${assessment._id}`,
-        lastModified: new Date(assessment.updatedAt || assessment.createdAt || Date.now()),
-        changeFrequency: 'weekly' as const,
-        priority: 0.8,
-      }
-    })
+      assessmentPages = assessments.map((assessment: any) => {
+        // Create URL-friendly assessment name with hyphens instead of spaces and escape special characters
+        const assessmentName = (assessment.title || assessment.name || 'assessment')
+          .replace(/[&<>"']/g, '') // Remove XML special characters
+          .replace(/\s+/g, '-')
+          .replace(/[^\w\-]/g, '') // Remove any remaining non-word characters except hyphens
+          .toLowerCase()
+
+        return {
+          url: `${baseUrl}/assessments/${assessmentName}/${assessment._id}`,
+          lastModified: new Date(assessment.updatedAt || assessment.createdAt || Date.now()),
+          changeFrequency: 'weekly' as const,
+          priority: 0.8,
+        }
+      })
+    }
   } catch (error) {
     console.error('Error fetching assessments for sitemap:', error)
   }
@@ -151,28 +167,24 @@ export async function getAllSitemapUrls(): Promise<SitemapData> {
       console.warn('Skipping sitemap job fetch because NEXT_PUBLIC_BACKEND_URL_2_0 is not set')
     } else {
       // Fetch all jobs from the backend API
-      const jobsResponse = await fetch(`${backendUrl}/public/jobs?page=1&pageSize=1000`)
+      const jobsData = await fetchJsonWithTimeout(`${backendUrl}/public/jobs?page=1&pageSize=1000`)
+      const jobs = jobsData?.data?.jobs || jobsData?.jobs || []
 
-      if (jobsResponse.ok) {
-        const jobsData = await jobsResponse.json()
-        const jobs = jobsData?.data?.jobs || jobsData?.jobs || []
+      jobPages = jobs.map((job: any) => {
+        // Create URL-friendly job title with hyphens instead of spaces and escape special characters
+        const jobTitle = (job.title || job.jobTitle || job.name || 'job')
+          .replace(/[&<>"']/g, '') // Remove XML special characters
+          .replace(/\s+/g, '-')
+          .replace(/[^\w\-]/g, '') // Remove any remaining non-word characters except hyphens
+          .toLowerCase()
 
-        jobPages = jobs.map((job: any) => {
-          // Create URL-friendly job title with hyphens instead of spaces and escape special characters
-          const jobTitle = (job.title || job.jobTitle || job.name || 'job')
-            .replace(/[&<>"']/g, '') // Remove XML special characters
-            .replace(/\s+/g, '-')
-            .replace(/[^\w\-]/g, '') // Remove any remaining non-word characters except hyphens
-            .toLowerCase()
-
-          return {
-            url: `${baseUrl}/jobs/${jobTitle}/${job.jobId}`,
-            lastModified: new Date(job.updatedAt || job.createdAt || Date.now()),
-            changeFrequency: 'daily' as const,
-            priority: 0.8,
-          }
-        })
-      }
+        return {
+          url: `${baseUrl}/jobs/${jobTitle}/${job.jobId}`,
+          lastModified: new Date(job.updatedAt || job.createdAt || Date.now()),
+          changeFrequency: 'daily' as const,
+          priority: 0.8,
+        }
+      })
     }
   } catch (error) {
     console.error('Error fetching jobs for sitemap:', error)
@@ -186,28 +198,24 @@ export async function getAllSitemapUrls(): Promise<SitemapData> {
       console.warn('Skipping sitemap subjob fetch because NEXT_PUBLIC_BACKEND_URL_2_0 is not set')
     } else {
       // Fetch all subjobs from the backend API
-      const jobsResponse = await fetch(`${backendUrl}/public/subjobs`)
+      const jobsData = await fetchJsonWithTimeout(`${backendUrl}/public/subjobs`)
+      const subjobs = jobsData?.data?.subjobs || []
 
-      if (jobsResponse.ok) {
-        const jobsData = await jobsResponse.json()
-        const subjobs = jobsData?.data?.subjobs || []
+      subJobPages = subjobs.map((job: any) => {
+        // Create URL-friendly job title with hyphens instead of spaces and escape special characters
+        const jobTitle = job.title
+          .replace(/[&<>"']/g, '') // Remove XML special characters
+          .replace(/\s+/g, '-')
+          .replace(/[^\w\-]/g, '') // Remove any remaining non-word characters except hyphens
+          .toLowerCase()
 
-        subJobPages = subjobs.map((job: any) => {
-          // Create URL-friendly job title with hyphens instead of spaces and escape special characters
-          const jobTitle = job.title
-            .replace(/[&<>"']/g, '') // Remove XML special characters
-            .replace(/\s+/g, '-')
-            .replace(/[^\w\-]/g, '') // Remove any remaining non-word characters except hyphens
-            .toLowerCase()
-
-          return {
-            url: `${baseUrl}/jobs/${jobTitle}/${job.subjobId}`,
-            lastModified: new Date(job.updatedAt || job.createdAt || Date.now()),
-            changeFrequency: 'daily' as const,
-            priority: 0.8,
-          }
-        })
-      }
+        return {
+          url: `${baseUrl}/jobs/${jobTitle}/${job.subjobId}`,
+          lastModified: new Date(job.updatedAt || job.createdAt || Date.now()),
+          changeFrequency: 'daily' as const,
+          priority: 0.8,
+        }
+      })
     }
   } catch (error) {
     console.error('Error fetching subjobs for sitemap:', error)
