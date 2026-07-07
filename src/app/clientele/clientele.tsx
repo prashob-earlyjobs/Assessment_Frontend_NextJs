@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Header from "../components/pages/header";
 import Footer from "../components/pages/footer";
+import { useRouter } from "next/navigation";
 
 interface Company {
   id: string;
@@ -19,6 +20,7 @@ interface Company {
 }
 
 const Clientele: React.FC = () => {
+  const router = useRouter();
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -91,9 +93,9 @@ const Clientele: React.FC = () => {
               <h3 className="text-lg font-semibold text-gray-800">{company.name}</h3>
               <button
                 className="mt-4 px-4 py-2 bg-yellow-500 text-white rounded-full hover:bg-yellow-600"
-                onClick={() => alert(`View services for ${company.name}`)}
+                onClick={() => router.push(`/jobs?search=${encodeURIComponent(company.name)}`)}
               >
-                Services
+                Job Openings
               </button>
             </div>
           ))}

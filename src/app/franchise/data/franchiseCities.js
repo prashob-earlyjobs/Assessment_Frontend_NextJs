@@ -13,7 +13,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Andaman & Nicobar is dedicated to empowering the youth of the islands by bridging the gap between local talent and global industry requirements.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "andaman@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Port Blair, Andaman & Nicobar Islands"
         },
         theme: {
@@ -35,7 +35,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs is India's leading tech-enabled recruitment franchise. The Ghaziabad chapter plays a key role in linking local talent to meaningful career opportunities across the NCR region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "ghaziabad@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Ghaziabad, Uttar Pradesh, NCR Region"
         },
         theme: {
@@ -57,7 +57,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Lucknow connects the city's diverse talent pool with emerging opportunities in IT, retail, and manufacturing, fostering career growth in the heart of Uttar Pradesh.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "lucknow@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Lucknow, Uttar Pradesh"
         },
         theme: {
@@ -76,7 +76,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Ballari is dedicated to empowering the youth of Karnataka by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "ballari@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Ballari, Karnataka"
         },
         theme: {
@@ -95,7 +95,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Adilabad is dedicated to empowering the youth of Telangana by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "adilabad@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Adilabad, Telangana"
         },
         theme: {
@@ -114,7 +114,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Anantapur is dedicated to empowering the youth of Andhra Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "anantapur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Anantapur, Andhra Pradesh"
         },
         theme: {
@@ -133,7 +133,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Chittoor is dedicated to empowering the youth of Andhra Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "chittoor@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Chittoor, Andhra Pradesh"
         },
         theme: {
@@ -152,7 +152,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs East Godavari is dedicated to empowering the youth of Andhra Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "east_godavari@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "East Godavari, Andhra Pradesh"
         },
         theme: {
@@ -171,7 +171,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Guntur is dedicated to empowering the youth of Andhra Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "guntur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Guntur, Andhra Pradesh"
         },
         theme: {
@@ -190,7 +190,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Hyderabad is dedicated to empowering the youth of Telangana by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "hyderabad@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Hyderabad, Telangana"
         },
         theme: {
@@ -209,7 +209,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kadapa is dedicated to empowering the youth of Andhra Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kadapa@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kadapa, Andhra Pradesh"
         },
         theme: {
@@ -228,7 +228,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Karimnagar is dedicated to empowering the youth of Telangana by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "karimnagar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Karimnagar, Telangana"
         },
         theme: {
@@ -247,7 +247,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Khammam is dedicated to empowering the youth of Telangana by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "khammam@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Khammam, Telangana"
         },
         theme: {
@@ -266,7 +266,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Krishna is dedicated to empowering the youth of Andhra Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "krishna@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Krishna, Andhra Pradesh"
         },
         theme: {
@@ -285,7 +285,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kurnool is dedicated to empowering the youth of Andhra Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kurnool@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kurnool, Andhra Pradesh"
         },
         theme: {
@@ -304,7 +304,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Mahbubnagar is dedicated to empowering the youth of Telangana by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "mahbubnagar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Mahbubnagar, Telangana"
         },
         theme: {
@@ -323,7 +323,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Medak is dedicated to empowering the youth of Telangana by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "medak@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Medak, Telangana"
         },
         theme: {
@@ -361,7 +361,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Nalgonda is dedicated to empowering the youth of Telangana by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "nalgonda@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Nalgonda, Telangana"
         },
         theme: {
@@ -380,7 +380,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Nellore is dedicated to empowering the youth of Andhra Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "nellore@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Nellore, Andhra Pradesh"
         },
         theme: {
@@ -399,7 +399,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Nizamabad is dedicated to empowering the youth of Telangana by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "nizamabad@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Nizamabad, Telangana"
         },
         theme: {
@@ -418,7 +418,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Prakasam is dedicated to empowering the youth of Andhra Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "prakasam@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Prakasam, Andhra Pradesh"
         },
         theme: {
@@ -437,7 +437,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Rangareddi is dedicated to empowering the youth of Telangana by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "rangareddi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Rangareddi, Telangana"
         },
         theme: {
@@ -456,7 +456,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Srikakulam is dedicated to empowering the youth of Andhra Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "srikakulam@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Srikakulam, Andhra Pradesh"
         },
         theme: {
@@ -475,7 +475,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Visakhapatnam is dedicated to empowering the youth of Andhra Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "visakhapatnam@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Visakhapatnam, Andhra Pradesh"
         },
         theme: {
@@ -494,7 +494,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Vizianagaram is dedicated to empowering the youth of Andhra Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "vizianagaram@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Vizianagaram, Andhra Pradesh"
         },
         theme: {
@@ -516,7 +516,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs West Godavari specializes in linking local agricultural and industrial expertise with modern corporate roles.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "westgodavari@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "West Godavari, Andhra Pradesh"
         },
         theme: {
@@ -535,7 +535,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Warangal is dedicated to empowering the youth of Telangana by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "warangal@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Warangal, Telangana"
         },
         theme: {
@@ -554,7 +554,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs West Godavari is dedicated to empowering the youth of Andhra Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "westgodavari@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "West Godavari, Andhra Pradesh"
         },
         theme: {
@@ -573,7 +573,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Anjaw is dedicated to empowering the youth of Arunachal Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "anjaw@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Anjaw, Arunachal Pradesh"
         },
         theme: {
@@ -592,7 +592,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Changlang is dedicated to empowering the youth of Arunachal Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "changlang@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Changlang, Arunachal Pradesh"
         },
         theme: {
@@ -611,7 +611,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs East Kameng is dedicated to empowering the youth of Arunachal Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "eastkameng@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "East Kameng, Arunachal Pradesh"
         },
         theme: {
@@ -630,7 +630,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs East Siang is dedicated to empowering the youth of Arunachal Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "east siang@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "East Siang, Arunachal Pradesh"
         },
         theme: {
@@ -649,7 +649,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kurung Kumey is dedicated to empowering the youth of Arunachal Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kurungkumey@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kurung Kumey, Arunachal Pradesh"
         },
         theme: {
@@ -671,7 +671,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs East Kameng brings specialized recruitment to the northeastern frontier.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "eastkameng@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "East Kameng, Arunachal Pradesh"
         },
         theme: {
@@ -693,7 +693,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs West Kameng provides high-quality placement for the region's rising professionals.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "westkameng@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "West Kameng, Arunachal Pradesh"
         },
         theme: {
@@ -715,7 +715,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs West Siang connects the local community with modern career resources.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "westsiang@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "West Siang, Arunachal Pradesh"
         },
         theme: {
@@ -737,7 +737,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Lower Dibang Valley focuses on specialized recruitment in Arunachal's scenic valleys.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "lowerdibang@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Lower Dibang Valley, Arunachal Pradesh"
         },
         theme: {
@@ -759,7 +759,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Upper Dibang Valley provides specialized support for remote regional recruitment.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "upperdibang@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Upper Dibang Valley, Arunachal Pradesh"
         },
         theme: {
@@ -781,7 +781,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Lower Subansiri helps young professionals navigate the journey to corporate success.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "lowersubansiri@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Lower Subansiri, Arunachal Pradesh"
         },
         theme: {
@@ -800,7 +800,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Lohit is dedicated to empowering the youth of Arunachal Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "lohit@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Lohit, Arunachal Pradesh"
         },
         theme: {
@@ -819,7 +819,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Lower Dibang Valley is dedicated to empowering the youth of Arunachal Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "lowerdibangvalley@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Lower Dibang Valley, Arunachal Pradesh"
         },
         theme: {
@@ -838,7 +838,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Lower Subansiri is dedicated to empowering the youth of Arunachal Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "lowersubansiri@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Lower Subansiri, Arunachal Pradesh"
         },
         theme: {
@@ -857,7 +857,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Papum Pare is dedicated to empowering the youth of Arunachal Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "papumpare@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Papum Pare, Arunachal Pradesh"
         },
         theme: {
@@ -876,7 +876,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Papum Pare is dedicated to empowering the youth of Arunachal Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "papumpare@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Papum Pare, Arunachal Pradesh"
         },
         theme: {
@@ -895,7 +895,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Tawang is dedicated to empowering the youth of Arunachal Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "tawang@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Tawang, Arunachal Pradesh"
         },
         theme: {
@@ -914,7 +914,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Tirap is dedicated to empowering the youth of Arunachal Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "tirap@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Tirap, Arunachal Pradesh"
         },
         theme: {
@@ -933,7 +933,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Upper Dibang Valley is dedicated to empowering the youth of Arunachal Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "upperdibangvalley@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Upper Dibang Valley, Arunachal Pradesh"
         },
         theme: {
@@ -952,7 +952,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Upper Siang is dedicated to empowering the youth of Arunachal Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "upper_siang@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Upper Siang, Arunachal Pradesh"
         },
         theme: {
@@ -971,7 +971,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Upper Subansiri is dedicated to empowering the youth of Arunachal Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "upper_subansiri@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Upper Subansiri, Arunachal Pradesh"
         },
         theme: {
@@ -990,7 +990,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs West Kameng is dedicated to empowering the youth of Arunachal Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "westkameng@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "West Kameng, Arunachal Pradesh"
         },
         theme: {
@@ -1009,7 +1009,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs West Siang is dedicated to empowering the youth of Arunachal Pradesh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "westsiang@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "West Siang, Arunachal Pradesh"
         },
         theme: {
@@ -1028,7 +1028,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Baksa is dedicated to empowering the youth of Assam by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "baksa@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Baksa, Assam"
         },
         theme: {
@@ -1047,7 +1047,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Barpeta is dedicated to empowering the youth of Assam by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "barpeta@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Barpeta, Assam"
         },
         theme: {
@@ -1069,7 +1069,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Biswanath provides elite recruitment expertise focused on the tea and agricultural economy of the region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "biswanath@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Biswanath, Assam"
         },
         theme: {
@@ -1091,7 +1091,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Charaideo is committed to bridging the gap between local potential and industry requirements.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "charaideo@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Charaideo, Assam"
         },
         theme: {
@@ -1113,7 +1113,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Dhubri serves as a vital professional link for the youth in the trade and transport sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "dhubri@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Dhubri, Assam"
         },
         theme: {
@@ -1135,7 +1135,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Hojai focuses on providing high-impact professional placement for the district's rising talent.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "hojai@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Hojai, Assam"
         },
         theme: {
@@ -1154,7 +1154,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bongaigaon is dedicated to empowering the youth of Assam by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bongaigaon@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bongaigaon, Assam"
         },
         theme: {
@@ -1173,7 +1173,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Cachar is dedicated to empowering the youth of Assam by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "cachar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Cachar, Assam"
         },
         theme: {
@@ -1192,7 +1192,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Chirang is dedicated to empowering the youth of Assam by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "chirang@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Chirang, Assam"
         },
         theme: {
@@ -1211,7 +1211,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Darrang is dedicated to empowering the youth of Assam by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "darrang@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Darrang, Assam"
         },
         theme: {
@@ -1230,7 +1230,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Dhemaji is dedicated to empowering the youth of Assam by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "dhemaji@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Dhemaji, Assam"
         },
         theme: {
@@ -1249,7 +1249,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Dibrugarh is dedicated to empowering the youth of Assam by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "dibrugarh@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Dibrugarh, Assam"
         },
         theme: {
@@ -1268,7 +1268,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Goalpara is dedicated to empowering the youth of Assam by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "goalpara@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Goalpara, Assam"
         },
         theme: {
@@ -1287,7 +1287,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Golaghat is dedicated to empowering the youth of Assam by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "golaghat@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Golaghat, Assam"
         },
         theme: {
@@ -1306,7 +1306,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Hailakandi is dedicated to empowering the youth of Assam by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "hailakandi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Hailakandi, Assam"
         },
         theme: {
@@ -1325,7 +1325,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jorhat is dedicated to empowering the youth of Assam by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jorhat@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jorhat, Assam"
         },
         theme: {
@@ -1344,7 +1344,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kamrup is dedicated to empowering the youth of Assam by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kamrup@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kamrup, Assam"
         },
         theme: {
@@ -1363,7 +1363,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Karbi Anglong is dedicated to empowering the youth of Assam by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "karbi_anglong@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Karbi Anglong, Assam"
         },
         theme: {
@@ -1385,7 +1385,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs South Salmara-Mankachar connects local talent with Assam's burgeoning industrial network.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "southsalmara@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "South Salmara, Assam"
         },
         theme: {
@@ -1404,7 +1404,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Karimganj is dedicated to empowering the youth of Assam by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "karimganj@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Karimganj, Assam"
         },
         theme: {
@@ -1423,7 +1423,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kokrajhar is dedicated to empowering the youth of Assam by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kokrajhar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kokrajhar, Assam"
         },
         theme: {
@@ -1442,7 +1442,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Lakhimpur is dedicated to empowering the youth of Assam by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "lakhimpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Lakhimpur, Assam"
         },
         theme: {
@@ -1461,7 +1461,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Morigaon is dedicated to empowering the youth of Assam by bridging the gap between local talent and industry requirements in the industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "marigaon@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Marigaon, Assam"
         },
         theme: {
@@ -1480,7 +1480,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Nagaon is dedicated to empowering the youth of Assam by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "nagaon@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Nagaon, Assam"
         },
         theme: {
@@ -1499,7 +1499,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Nalbari is dedicated to empowering the youth of Assam by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "nalbari@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Nalbari, Assam"
         },
         theme: {
@@ -1518,7 +1518,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Dima Hasao is dedicated to empowering the youth of Assam by bridging the gap between local talent and industry requirements in the region's rising sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "north_cachar_hills@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "North Cachar Hills, Assam"
         },
         theme: {
@@ -1537,7 +1537,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sibsagar is dedicated to empowering the youth of Assam by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sibsagar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sibsagar, Assam"
         },
         theme: {
@@ -1556,7 +1556,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sonitpur is dedicated to empowering the youth of Assam by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sonitpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sonitpur, Assam"
         },
         theme: {
@@ -1575,7 +1575,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Tinsukia is dedicated to empowering the youth of Assam by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "tinsukia@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Tinsukia, Assam"
         },
         theme: {
@@ -1594,7 +1594,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Udalguri is dedicated to empowering the youth of Assam by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "udalguri@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Udalguri, Assam"
         },
         theme: {
@@ -1616,7 +1616,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Majuli is dedicated to preserving culture while advancing careers in the heart of the Brahmaputra.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "majuli@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Majuli, Assam"
         },
         theme: {
@@ -1638,7 +1638,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs South Salmara-Mankachar provides localized recruitment for regional growth.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "south_salmara@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Hatsingimari, Assam"
         },
         theme: {
@@ -1660,7 +1660,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs West Karbi Anglong focuses on delivering professional recruitment for the district's residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "west_karbi_anglong@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Hamren, Assam"
         },
         theme: {
@@ -1679,7 +1679,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Araria is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "araria@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Araria, Bihar"
         },
         theme: {
@@ -1698,7 +1698,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Arwal is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "arwal@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Arwal, Bihar"
         },
         theme: {
@@ -1717,7 +1717,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Aurangabad is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "aurangabad-bi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Aurangabad-bi, Bihar"
         },
         theme: {
@@ -1736,7 +1736,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Banka is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "banka@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Banka, Bihar"
         },
         theme: {
@@ -1755,7 +1755,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Begusarai is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "begusarai@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Begusarai, Bihar"
         },
         theme: {
@@ -1774,7 +1774,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bhagalpur is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bhagalpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bhagalpur, Bihar"
         },
         theme: {
@@ -1793,7 +1793,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bhojpur is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bhojpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bhojpur, Bihar"
         },
         theme: {
@@ -1812,7 +1812,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Buxar is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "buxar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Buxar, Bihar"
         },
         theme: {
@@ -1831,7 +1831,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Darbhanga is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "darbhanga@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Darbhanga, Bihar"
         },
         theme: {
@@ -1850,7 +1850,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs East Champaran is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "eastchamparan@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "East Champaran, Bihar"
         },
         theme: {
@@ -1869,7 +1869,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Gaya is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "gaya@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Gaya, Bihar"
         },
         theme: {
@@ -1888,7 +1888,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Gopalganj is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "gopalganj@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Gopalganj, Bihar"
         },
         theme: {
@@ -1907,7 +1907,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jamui is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jamui@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jamui, Bihar"
         },
         theme: {
@@ -1926,7 +1926,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jehanabad is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jehanabad@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jehanabad, Bihar"
         },
         theme: {
@@ -1945,7 +1945,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kaimur is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kaimur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kaimur, Bihar"
         },
         theme: {
@@ -1964,7 +1964,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Katihar is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "katihar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Katihar, Bihar"
         },
         theme: {
@@ -1983,7 +1983,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Khagaria is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "khagaria@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Khagaria, Bihar"
         },
         theme: {
@@ -2002,7 +2002,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kishanganj is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kishanganj@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kishanganj, Bihar"
         },
         theme: {
@@ -2021,7 +2021,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Lakhisarai is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "lakhisarai@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Lakhisarai, Bihar"
         },
         theme: {
@@ -2040,7 +2040,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Madhubani is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "madhubani@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Madhubani, Bihar"
         },
         theme: {
@@ -2059,7 +2059,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Madhepura is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "madhepura@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Madhepura, Bihar"
         },
         theme: {
@@ -2078,7 +2078,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Munger is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "munger@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Munger, Bihar"
         },
         theme: {
@@ -2097,7 +2097,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Muzaffarpur is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "muzaffarpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Muzaffarpur, Bihar"
         },
         theme: {
@@ -2116,7 +2116,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Nalanda is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "nalanda@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Nalanda, Bihar"
         },
         theme: {
@@ -2135,7 +2135,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Nawada is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "nawada@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Nawada, Bihar"
         },
         theme: {
@@ -2154,7 +2154,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Patna is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "patna@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Patna, Bihar"
         },
         theme: {
@@ -2173,7 +2173,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Purnia is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "purnia@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Purnia, Bihar"
         },
         theme: {
@@ -2192,7 +2192,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Rohtas is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "rohtas@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Rohtas, Bihar"
         },
         theme: {
@@ -2211,7 +2211,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Saharsa is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "saharsa@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Saharsa, Bihar"
         },
         theme: {
@@ -2230,7 +2230,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Samastipur is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "samastipur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Samastipur, Bihar"
         },
         theme: {
@@ -2249,7 +2249,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sheohar is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sheohar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sheohar, Bihar"
         },
         theme: {
@@ -2268,7 +2268,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sitamarhi is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sitamarhi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sitamarhi, Bihar"
         },
         theme: {
@@ -2287,7 +2287,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Siwan is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "siwan@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Siwan, Bihar"
         },
         theme: {
@@ -2306,7 +2306,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Supaul is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "supaul@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Supaul, Bihar"
         },
         theme: {
@@ -2325,7 +2325,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Vaishali is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "vaishali@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Vaishali, Bihar"
         },
         theme: {
@@ -2344,7 +2344,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs West Champaran is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "west_champaran@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "West Champaran, Bihar"
         },
         theme: {
@@ -2366,7 +2366,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Saran is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in Saran district.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "saran@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Saran (Chapra), Bihar"
         },
         theme: {
@@ -2388,7 +2388,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sheikhpura is dedicated to empowering the youth of Bihar by bridging the gap between local talent and industry requirements in Sheikhpura district.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sheikhpura@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sheikhpura, Bihar"
         },
         theme: {
@@ -2407,7 +2407,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bastar is dedicated to empowering the youth of Chhattisgarh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bastar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bastar, Chhattisgarh"
         },
         theme: {
@@ -2426,7 +2426,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bilaspur is dedicated to empowering the youth of Chhattisgarh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bilaspur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bilaspur, Chhattisgarh"
         },
         theme: {
@@ -2448,7 +2448,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Dhamtari empowers youth in Chhattisgarh's fertile belt with professional career pathways.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "dhamtari@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Dhamtari, Chhattisgarh"
         },
         theme: {
@@ -2470,7 +2470,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jashpur connects tribal and local talent with growing industrial opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jashpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jashpur, Chhattisgarh"
         },
         theme: {
@@ -2492,7 +2492,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kanker provides professional placement for the district's rural and semi-urban workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kanker@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kanker, Chhattisgarh"
         },
         theme: {
@@ -2514,7 +2514,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kabirdham serves as the primary career bridge for the district's growing youth population.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kabirdham@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kabirdham, Chhattisgarh"
         },
         theme: {
@@ -2533,7 +2533,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Dantewada is dedicated to empowering the youth of Chhattisgarh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "dantewada@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Dantewada, Chhattisgarh"
         },
         theme: {
@@ -2552,7 +2552,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Durg is dedicated to empowering the youth of Chhattisgarh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "durg@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Durg, Chhattisgarh"
         },
         theme: {
@@ -2571,7 +2571,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Janjgir is dedicated to empowering the youth of Chhattisgarh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "janjgir@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Janjgir, Chhattisgarh"
         },
         theme: {
@@ -2590,7 +2590,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Korba is dedicated to empowering the youth of Chhattisgarh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "korba@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Korba, Chhattisgarh"
         },
         theme: {
@@ -2609,7 +2609,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Koriya is dedicated to empowering the youth of Chhattisgarh by bridging the gap between local talent and industry requirements in the mining and industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "koriya@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Koriya, Chhattisgarh"
         },
         theme: {
@@ -2631,7 +2631,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Mahasamund is dedicated to empowering the youth of Chhattisgarh by bridging the gap between local talent and industry requirements.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "mahasamund@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Mahasamund, Chhattisgarh"
         },
         theme: {
@@ -2653,7 +2653,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Raigarh is dedicated to empowering the youth of Chhattisgarh by linking them with career-defining roles in the industrial landscape.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "raigarh@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Raigarh, Chhattisgarh"
         },
         theme: {
@@ -2675,7 +2675,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Raipur is the premier recruitment platform in Chhattisgarh, driving economic growth by connecting talent to local and global opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "raipur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Raipur, Chhattisgarh"
         },
         theme: {
@@ -2697,7 +2697,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Rajnandgaon is committed to uplifting the local career landscape by offering specialized recruitment services across key industries.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "rajnandgaon@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Rajnandgaon, Chhattisgarh"
         },
         theme: {
@@ -2719,7 +2719,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Surguja empowers the local youth of Ambikapur by providing a direct link to the region's best career opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "surguja@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Surguja, Chhattisgarh"
         },
         theme: {
@@ -2741,7 +2741,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Chandigarh links the Tri-city's vibrant workforce with top-tier opportunities in the modern professional landscape.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "chandigarh@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Chandigarh, India"
         },
         theme: {
@@ -2763,7 +2763,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Daman is focused on the industrial potential of the union territory, matching skilled workers with manufacturing hubs.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "daman@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Daman, India"
         },
         theme: {
@@ -2785,7 +2785,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Diu bridges the career gaps for the coastal workforce, providing paths to diverse professional opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "diu@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Diu, India"
         },
         theme: {
@@ -2807,7 +2807,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Central Delhi serves the heart of the capital, offering premier recruitment solutions for professionals in every sector.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "central@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Central Delhi, Delhi"
         },
         theme: {
@@ -2828,7 +2828,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs City Zone provides tailored career paths for Delhi's urban workforce through our specialized network.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "cityzone@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Delhi, India"
         },
         theme: {
@@ -2849,7 +2849,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Civil Line focuses on high-impact professional roles for the residents of Delhi's established areas.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "civilline@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Civil Line, Delhi"
         },
         theme: {
@@ -2870,7 +2870,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Karol Bagh integrates with the local commercial ecosystem to provide unparalleled career access.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "karolbagh@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Karol Bagh, Delhi"
         },
         theme: {
@@ -2891,7 +2891,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Najafgarh is dedicated to bringing modernization to the local recruitment process.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "najafgarh@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Najafgarh, Delhi"
         },
         theme: {
@@ -2912,7 +2912,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Narela matches technical and vocational skills with the region's vast industrial demand.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "narela@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Narela, Delhi"
         },
         theme: {
@@ -2933,7 +2933,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Rohini serves as a major gateway for young professionals in North Delhi.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "rohini@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Rohini, Delhi"
         },
         theme: {
@@ -2955,7 +2955,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs North East Delhi creates value by matching local hospitality and trade experience with broader industry needs.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "northeastdelhi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "North East Delhi, Delhi"
         },
         theme: {
@@ -2977,7 +2977,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs East Delhi North specializes in vocational placement and corporate entry for motivated candidates.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "eastdelhia@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "East Delhi, Delhi"
         },
         theme: {
@@ -2999,7 +2999,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Shahadra South provides expert career guidance and placement within Delhi's thriving commercial districts.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "shahadra@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Shahadra, Delhi"
         },
         theme: {
@@ -3021,7 +3021,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs South Delhi is the leading partner for elite corporate recruitment and professional development in the capital.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "southdelhi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "South Delhi, Delhi"
         },
         theme: {
@@ -3043,7 +3043,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs West Delhi bridges the gap between suburban talent and major metropolitan job markets.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "westdelhi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "West Delhi, Delhi"
         },
         theme: {
@@ -3065,7 +3065,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Dadra & Nagar Haveli provides expert recruitment localized to the union territory's unique economic profile.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "dnh@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Dadra & Nagar Haveli, India"
         },
         theme: {
@@ -3087,7 +3087,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Goa brings professional stability and growth to the coastal economy through strategic talent placement.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "goa@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Goa, India"
         },
         theme: {
@@ -3109,7 +3109,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Goa brings professional stability and growth to the coastal economy through strategic talent placement.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "goa@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Goa, India"
         },
         theme: {
@@ -3131,7 +3131,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Ahmedabad is the city's key to unlocking potential in Manufacturing, IT, and Finance.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "ahmedabad@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Ahmedabad, Gujarat"
         },
         theme: {
@@ -3153,7 +3153,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Amreli bridges local potential with the broader Gujarat industrial and service network.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "amreli@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Amreli, Gujarat"
         },
         theme: {
@@ -3175,7 +3175,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Anand leverages the city's unique agricultural and educational background to place top-tier talent.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "anand@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Anand, Gujarat"
         },
         theme: {
@@ -3197,7 +3197,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Banaskantha is dedicated to providing specialized local recruitment and skills assessment services.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "banaskantha@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Banaskantha, Gujarat"
         },
         theme: {
@@ -3219,7 +3219,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bharuch provides industrial-grade recruitment expertise for one of India's key production hubs.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bharuch@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bharuch, Gujarat"
         },
         theme: {
@@ -3241,7 +3241,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bhavnagar is your local expert in matching administrative and technical talent to regional demand.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bhavnagar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bhavnagar, Gujarat"
         },
         theme: {
@@ -3263,7 +3263,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Dahod is focused on providing accessible recruitment services to the district's emerging talent pool.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "dahod@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Dahod, Gujarat"
         },
         theme: {
@@ -3285,7 +3285,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Dang matches local skills with statewide industry requirements to ensure career success.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "dang@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Dang, Gujarat"
         },
         theme: {
@@ -3307,7 +3307,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Gandhinagar is at the forefront of Gujarat's administrative and tech growth, providing elite recruitment services.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "gandhinagar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Gandhinagar, Gujarat"
         },
         theme: {
@@ -3329,7 +3329,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Panchmahal connects local ambitious youth with statewide professional opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "godhara@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Godhara, Gujarat"
         },
         theme: {
@@ -3351,7 +3351,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jamnagar focuses on specialized recruitment for the energy and manufacturing sectors in the region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jamnagar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jamnagar, Gujarat"
         },
         theme: {
@@ -3373,7 +3373,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Junagadh is dedicated to bringing digital-first recruitment solutions to the local workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "junagadh@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Junagadh, Gujarat"
         },
         theme: {
@@ -3395,7 +3395,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kheda leverages local industry connections to provide stable and growing career paths.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kheda@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kheda, Gujarat"
         },
         theme: {
@@ -3417,7 +3417,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kutch provides expert recruitment tailored to the port and industrial ecosystem of the district.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kutch@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kutch, Gujarat"
         },
         theme: {
@@ -3439,7 +3439,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Mahesana is the trusted partner for technical and professional placement in North Gujarat.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "mahesana@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Mahesana, Gujarat"
         },
         theme: {
@@ -3461,7 +3461,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Narmada is dedicated to empowering local communities through sustainable career growth.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "narmada@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Narmada, Gujarat"
         },
         theme: {
@@ -3483,7 +3483,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Navsari serves as a catalyst for professional development in the South Gujarat region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "navsari@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Navsari, Gujarat"
         },
         theme: {
@@ -3505,7 +3505,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Patan focuses on bringing high-growth entry-level and executive roles to the district.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "patan@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Patan, Gujarat"
         },
         theme: {
@@ -3527,7 +3527,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Porbandar provides localized recruitment expertise geared towards the coastal economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "porbandar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Porbandar, Gujarat"
         },
         theme: {
@@ -3549,7 +3549,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Rajkot is the premier destination for recruitment in Saurahtra's economic heartland.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "rajkot@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Rajkot, Gujarat"
         },
         theme: {
@@ -3571,7 +3571,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sabarkantha is dedicated to bringing corporate quality recruitment to the district.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sabarkantha@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sabarkantha, Gujarat"
         },
         theme: {
@@ -3593,7 +3593,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Surat integrates with the city's textiles, diamond, and IT hubs to provide elite placements.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "surat@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Surat, Gujarat"
         },
         theme: {
@@ -3615,7 +3615,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Surendranagar matches local dedication with statewide career requirements.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "surendranagar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Surendranagar, Gujarat"
         },
         theme: {
@@ -3637,7 +3637,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Vadodara is the leading provider for placement in the city's chemicals, engineering, and IT sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "vadodara@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Vadodara, Gujarat"
         },
         theme: {
@@ -3659,7 +3659,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Valsad provides essential links for the district's skilled workforce to the Vapi industrial belt.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "valsad@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Valsad, Gujarat"
         },
         theme: {
@@ -3681,7 +3681,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Tapi is dedicated to providing specialized local recruitment services that ensure long-term career growth.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "tapi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Tapi, Gujarat"
         },
         theme: {
@@ -3703,7 +3703,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bilaspur bridges the gap for local youth seeking meaningful roles in Himachal and beyond.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bilaspurhp@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bilaspur, Himachal Pradesh"
         },
         theme: {
@@ -3725,7 +3725,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Chamba provides specialized recruitment support to help rural talent transition into corporate roles.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "chamba@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Chamba, Himachal Pradesh"
         },
         theme: {
@@ -3747,7 +3747,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Hamirpur leverages the district's high literacy to place candidates in top national industries.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "hamirpurhp@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Hamirpur, Himachal Pradesh"
         },
         theme: {
@@ -3769,7 +3769,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kangra is the leading partner for employment in Dharamshala and surrounding commercial zones.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kangra@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kangra, Himachal Pradesh"
         },
         theme: {
@@ -3791,7 +3791,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kullu focuses on sustainable career development matching local passion with global opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kullu@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kullu, Himachal Pradesh"
         },
         theme: {
@@ -3813,7 +3813,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Mandi provides elite entry to the corporate world for local graduates and professionals.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "mandi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Mandi, Himachal Pradesh"
         },
         theme: {
@@ -3835,7 +3835,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Shimla is the premier recruitment link for top-tier government and private sector roles.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "shimla@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Shimla, Himachal Pradesh"
         },
         theme: {
@@ -3857,7 +3857,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sirmaur provides direct career links to the expanding industrial belts in the district.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sirmaur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sirmaur, Himachal Pradesh"
         },
         theme: {
@@ -3879,7 +3879,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Solan specializes in pharma and industrial placements within Himachal's main industrial corridor.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "solan@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Solan, Himachal Pradesh"
         },
         theme: {
@@ -3901,7 +3901,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Una facilitates easy access to high-quality jobs across the Himachal-Punjab border region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "una@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Una, Himachal Pradesh"
         },
         theme: {
@@ -3923,7 +3923,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Ambala provides the essential connectivity for local talent to thrive in the scientific and educational sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "ambala@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Ambala, Haryana"
         },
         theme: {
@@ -3945,7 +3945,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bhiwani is dedicated to providing high-impact professional placement for the youth of Haryana.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bhiwani@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bhiwani, Haryana"
         },
         theme: {
@@ -3967,7 +3967,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Faridabad is the primary recruitment link in one of Haryana's largest industrial and commercial centers.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "faridabad@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Faridabad, Haryana"
         },
         theme: {
@@ -3989,7 +3989,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Fatehabad connects local ambition with diverse professional paths across Northern India.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "fatehabad@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Fatehabad, Haryana"
         },
         theme: {
@@ -4011,7 +4011,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Gurgaon is the leading provider for elite tech, consulting, and management placements in India's corporate heart.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "gurgaon@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Gurgaon, Haryana"
         },
         theme: {
@@ -4033,7 +4033,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Hisar serves as a vital bridge for professionals in Haryana's steel and educational center.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "hisar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Hisar, Haryana"
         },
         theme: {
@@ -4055,7 +4055,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jhajjar provides localized expertise to ensure regional talent thrives in the expanding NCR market.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jhajjar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jhajjar, Haryana"
         },
         theme: {
@@ -4077,7 +4077,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jind focuses on bridging the gap between traditional industry and new-age career paths.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jind@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jind, Haryana"
         },
         theme: {
@@ -4099,7 +4099,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kaithal is dedicated to elevating the career prospects of graduates and professionals in the region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kaithal@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kaithal, Haryana"
         },
         theme: {
@@ -4121,7 +4121,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Karnal leverages the city's strategic location to provide elite placements across different sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "karnal@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Karnal, Haryana"
         },
         theme: {
@@ -4143,7 +4143,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kurukshetra provides specialized recruitment services tailored to the region's educational and technical talent.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kurukshetra@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kurukshetra, Haryana"
         },
         theme: {
@@ -4165,7 +4165,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Nuh is focused on inclusive growth, ensuring local talent has access to modern economic opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "mewat@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Mewat, Haryana"
         },
         theme: {
@@ -4187,7 +4187,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Narnaul connects regional dedication with broader industrial and service sector opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "narnaul@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Narnaul, Haryana"
         },
         theme: {
@@ -4209,7 +4209,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Palwal serves as a critical junction for talent moving into Haryana's expanding business corridors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "palwal@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Palwal, Haryana"
         },
         theme: {
@@ -4231,7 +4231,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Panchkula provides refined recruitment services for the city's growing IT and government sector needs.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "panchkula@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Panchkula, Haryana"
         },
         theme: {
@@ -4253,7 +4253,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Panipat focuses on recruitment for the textiles, chemicals, and manufacturing sectors in the region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "panipat@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Panipat, Haryana"
         },
         theme: {
@@ -4275,7 +4275,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Rewari is the leading partner for specialized recruitment in the Southern Haryana region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "rewari@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Rewari, Haryana"
         },
         theme: {
@@ -4297,7 +4297,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Rohtak leverages the city's role as an educational hub to place top talent in diverse industries.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "rohtak@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Rohtak, Haryana"
         },
         theme: {
@@ -4319,7 +4319,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sirsa is dedicated to bringing corporate-scale recruitment solutions to the district's motivated talent pool.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sirsa@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sirsa, Haryana"
         },
         theme: {
@@ -4341,7 +4341,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sonipat provides a bridge for local students and professionals to excel in the competitive NCR economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sonipat@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sonipat, Haryana"
         },
         theme: {
@@ -4362,7 +4362,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Yamunanagar specializes in recruitment for the timber, sugar, and industrial sectors of Haryana.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "yamunanagar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Yamunanagar, Haryana"
         },
         theme: {
@@ -4383,7 +4383,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bokaro focuses on elite placements for engineering and technical talent in India's industrial heartland.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bokaro@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bokaro, Jharkhand"
         },
         theme: {
@@ -4404,7 +4404,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Chatra is dedicated to bringing localized recruitment support to ensure long-term career growth in the state.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "chatra@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Chatra, Jharkhand"
         },
         theme: {
@@ -4425,7 +4425,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Deogarh provides modern career-matching solutions to the motivated people of Jharkhand.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "deogarh@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Deogarh, Jharkhand"
         },
         theme: {
@@ -4446,7 +4446,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Dhanbad is the premier destination for recruitment in the region's energy and mining ecosystem.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "dhanbad@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Dhanbad, Jharkhand"
         },
         theme: {
@@ -4467,7 +4467,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Dumka serves as a vital bridge for professionals in Jharkhand's sub-capital region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "dumka@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Dumka, Jharkhand"
         },
         theme: {
@@ -4488,7 +4488,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs East Singhbhum is the leading partner for elite industrial and technical recruitment in the district.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "eastsinghbhum@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "East Singhbhum, Jharkhand"
         },
         theme: {
@@ -4509,7 +4509,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Garhwa is dedicated to providing specialized local recruitment services that ensure long-term career growth.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "garhwa@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Garhwa, Jharkhand"
         },
         theme: {
@@ -4530,7 +4530,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Giridih matches local dedication with state and national career requirements.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "giridih@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Giridih, Jharkhand"
         },
         theme: {
@@ -4552,7 +4552,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Godda provides modern recruitment solutions to bring corporate opportunities to the district.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "godda@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Godda, Jharkhand"
         },
         theme: {
@@ -4574,7 +4574,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Gumla focuses on sustainable career development by linking local talent to the national job market.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "gumla@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Gumla, Jharkhand"
         },
         theme: {
@@ -4596,7 +4596,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Hazaribagh is the leading recruitment link for technical and academic talent in the region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "hazaribagh@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Hazaribagh, Jharkhand"
         },
         theme: {
@@ -4618,7 +4618,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jamtara is at the forefront of bringing professional recruitment services to the district's motivated workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jamtara@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jamtara, Jharkhand"
         },
         theme: {
@@ -4640,7 +4640,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kodarma connects local ambitious youth with statewide and national professional opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kodarma@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kodarma, Jharkhand"
         },
         theme: {
@@ -4662,7 +4662,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Lathehar leverages local potential to provide stable and growing career paths in Jharkhand.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "lathehar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Lathehar, Jharkhand"
         },
         theme: {
@@ -4684,7 +4684,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Lohardaga is dedicated to providing specialized local recruitment services that ensure long-term career growth.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "lohardaga@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Lohardaga, Jharkhand"
         },
         theme: {
@@ -4706,7 +4706,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Pakur provides localized expertise to ensure regional talent thrives in the expanding state market.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "pakur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Pakur, Jharkhand"
         },
         theme: {
@@ -4728,7 +4728,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Palamu is the primary recruitment link for professionals in Western Jharkhand.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "palamu@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Palamu, Jharkhand"
         },
         theme: {
@@ -4750,7 +4750,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Ranchi is at the heart of the state's economic growth, providing elite recruitment services for all sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "ranchi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Ranchi, Jharkhand"
         },
         theme: {
@@ -4772,7 +4772,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sahibganj focuses on bringing high-growth career opportunities to the district's motivated talent.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sahibganj@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sahibganj, Jharkhand"
         },
         theme: {
@@ -4794,7 +4794,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Saraikela-Kharsawan provides critical links for the district's skilled workforce to top industrial roles.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "saraikela@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Saraikela-Kharsawan, Jharkhand"
         },
         theme: {
@@ -4816,7 +4816,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Simdega focuses on empowering local communities through sustainable and high-impact career growth.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "simdega@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Simdega, Jharkhand"
         },
         theme: {
@@ -4838,7 +4838,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs West Singhbhum is dedicated to bringing elite recruitment solutions to the district's vibrant workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "westsinghbhum@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "West Singhbhum, Jharkhand"
         },
         theme: {
@@ -4860,7 +4860,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Baramula provides top-tier recruitment services to help local youth transition into successful careers.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "baramula@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Baramula, Jammu & Kashmir"
         },
         theme: {
@@ -4882,7 +4882,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Doda focuses on bringing high-impact professional placement to the motivated people of the region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "doda@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Doda, Jammu & Kashmir"
         },
         theme: {
@@ -4904,7 +4904,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jammu is at the forefront of the region's economic activity, linking top talent to major national employers.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jammu@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jammu, Jammu & Kashmir"
         },
         theme: {
@@ -4926,7 +4926,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kathua is the primary recruitment link in the gateway to Jammu and Kashmir's industrial hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kathua@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kathua, Jammu & Kashmir"
         },
         theme: {
@@ -4948,7 +4948,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kishtwar is dedicated to providing specialized local recruitment that ensures national career success.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kishtwar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kishtwar, Jammu & Kashmir"
         },
         theme: {
@@ -4970,7 +4970,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Poonch focuses on elevating the career prospects of professionals in the border region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "poonch@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Poonch, Jammu & Kashmir"
         },
         theme: {
@@ -4992,7 +4992,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Rajouri is the leading recruitment link for talented graduates and professionals in the region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "rajouri@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Rajouri, Jammu & Kashmir"
         },
         theme: {
@@ -5014,7 +5014,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Ramban serves as a vital bridge for career growth in the heart of Jammu & Kashmir.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "ramban@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Ramban, Jammu & Kashmir"
         },
         theme: {
@@ -5036,7 +5036,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Reasi provides specialized recruitment that fuels local talent in the district's rising economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "reasi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Reasi, Jammu & Kashmir"
         },
         theme: {
@@ -5058,7 +5058,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sambha is the leading destination for technical and industrial recruitment in the district.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sambha@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sambha, Jammu & Kashmir"
         },
         theme: {
@@ -5080,7 +5080,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Udhampur is the premier recruitment link for diverse roles in Jammu and Kashmir's administrative hub.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "udhampur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Udhampur, Jammu & Kashmir"
         },
         theme: {
@@ -5102,7 +5102,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bagalkot is the premier destination for recruitment in Northern Karnataka's vibrant economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bagalkot@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bagalkot, Karnataka"
         },
         theme: {
@@ -5124,7 +5124,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bangalore Rural is at the forefront of the district's expansion, linking talent to the Silicon Valley of India.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bangalorerural@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bangalore Rural, Karnataka"
         },
         theme: {
@@ -5146,7 +5146,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bangalore Urban provides elite recruitment services for corporate, tech, and creative sectors in the city.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bangaloreurban@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bangalore Urban, Karnataka"
         },
         theme: {
@@ -5168,7 +5168,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Belagavi serves as a refined recruitment link for the city's booming heavy industry and educational sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "belgaum@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Belgaum, Karnataka"
         },
         theme: {
@@ -5189,7 +5189,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bellary is the trusted partner for massive-scale technical and management recruitment in the region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bellary@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bellary, Karnataka"
         },
         theme: {
@@ -5211,7 +5211,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bidar focuses on bringing corporate quality recruitment to the state's northernmost district.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bidar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bidar, Karnataka"
         },
         theme: {
@@ -5233,7 +5233,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Vijayapura is dedicated to providing elite recruitment solutions to help local youth excel in diverse fields.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bijapur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bijapur, Karnataka"
         },
         theme: {
@@ -5255,7 +5255,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Chamarajanagar provides essential links for the district's motivated talent to thrive across the state.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "chamarajanagar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Chamarajanagar, Karnataka"
         },
         theme: {
@@ -5277,7 +5277,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Chikkaballapur is a vital link in the expansion of Karnataka's industrial and educational corridors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "chikkaballapur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Chikkaballapur, Karnataka"
         },
         theme: {
@@ -5299,7 +5299,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Chikkamagaluru is dedicated to providing high-impact professional placement for the motivated talent in the region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "chikmagalur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Chikmagalur, Karnataka"
         },
         theme: {
@@ -5321,7 +5321,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Chitradurga is dedicated to bringing digital-first recruitment solutions to the local workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "chitradurga@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Chitradurga, Karnataka"
         },
         theme: {
@@ -5343,7 +5343,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Dakshina Kannada specializes in high-end placements for the region's elite academic and technical talent.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "dakshinakannada@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Dakshina Kannada, Karnataka"
         },
         theme: {
@@ -5365,7 +5365,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Davanagere leverages the city's role as an educational hub to place top talent in diverse industries.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "davanagere@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Davanagere, Karnataka"
         },
         theme: {
@@ -5387,7 +5387,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Dharwad provides refined recruitment services for the city's growing IT and educational sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "dharwad@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Dharwad, Karnataka"
         },
         theme: {
@@ -5409,7 +5409,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Gadag is dedicated to elevating the career prospects of graduates and professionals in the district.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "gadag@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Gadag, Karnataka"
         },
         theme: {
@@ -5431,7 +5431,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kalaburagi serves as a vital bridge for professionals in Northern Karnataka's expanding business corridors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "gulbarga@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Gulbarga, Karnataka"
         },
         theme: {
@@ -5453,7 +5453,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Hassan leverages local potential to provide stable and growing career paths in South-Interior Karnataka.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "hassan@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Hassan, Karnataka"
         },
         theme: {
@@ -5475,7 +5475,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Haveri provides essential links for the district's motivated talent to thrive across the state's industries.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "haveri@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Haveri, Karnataka"
         },
         theme: {
@@ -5497,7 +5497,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kodagu focuses on sustainable career development matching local passion with global opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kodagu@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kodagu, Karnataka"
         },
         theme: {
@@ -5519,7 +5519,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kolar provides high-impact professional placement for the motivated talent in the region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kolar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kolar, Karnataka"
         },
         theme: {
@@ -5541,7 +5541,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Koppal is dedicated to providing specialized local recruitment services that ensure long-term career growth.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "koppal@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Koppal, Karnataka"
         },
         theme: {
@@ -5563,7 +5563,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Mandya facilitates high-growth entry-level and executive roles for the district's talent pool.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "mandya@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Mandya, Karnataka"
         },
         theme: {
@@ -5585,7 +5585,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Mysore is the leading partner for elite IT, tourism, and industrial placements in the city.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "mysore@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Mysore, Karnataka"
         },
         theme: {
@@ -5607,7 +5607,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Raichur provides essential career links for the district's industrial and technical workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "raichur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Raichur, Karnataka"
         },
         theme: {
@@ -5629,7 +5629,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Ramanagara matches local dedication with state and global career requirements.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "ramanagara@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Ramanagara, Karnataka"
         },
         theme: {
@@ -5651,7 +5651,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Shivamogga provides professional placement for the city's motivated student and professional community.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "shimoga@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Shimoga, Karnataka"
         },
         theme: {
@@ -5673,7 +5673,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Tumakuru specializes in placements for engineering and management talent in the expanding NCR of Bangalore.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "tumkur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Tumkur, Karnataka"
         },
         theme: {
@@ -5695,7 +5695,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Udupi serves as a catalyst for professional development in the coastal Karnataka region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "udupi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Udupi, Karnataka"
         },
         theme: {
@@ -5717,7 +5717,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Vijayanagara specializes in industrial and technical recruitment for the newly formed district.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "vijayanagara@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Vijayanagara, Karnataka"
         },
         theme: {
@@ -5739,7 +5739,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Yadgir is dedicated to providing high-impact professional placement for the district's rising talent pool.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "yadgir@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Yadgir, Karnataka"
         },
         theme: {
@@ -5761,7 +5761,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Uttara Kannada provides localized recruitment expertise geared towards the coastal and forest economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "uttarakannada@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Uttara Kannada, Karnataka"
         },
         theme: {
@@ -5783,7 +5783,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Alappuzha is dedicated to bringing elite recruitment solutions to the heart of Kerala's backwaters.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "alappuzha@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Alappuzha, Kerala"
         },
         theme: {
@@ -5805,7 +5805,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Ernakulam is leading the way in professional recruitment for Kochi's IT, maritime, and finance hubs.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "ernakulam@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Ernakulam, Kerala"
         },
         theme: {
@@ -5827,7 +5827,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Idukki focuses on sustainable career growth matching local passion with global opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "idukki@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Idukki, Kerala"
         },
         theme: {
@@ -5849,7 +5849,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kannur provides localized expertise to ensure regional talent thrives in the expanding global market.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kannur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kannur, Kerala"
         },
         theme: {
@@ -5871,7 +5871,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kasaragod is dedicated to providing high-impact professional placement for the youth of Kerala.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kasaragod@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kasaragod, Kerala"
         },
         theme: {
@@ -5893,7 +5893,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kollam serves as a vital bridge for professionals in Southern Kerala's industrial hubs.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kollam@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kollam, Kerala"
         },
         theme: {
@@ -5915,7 +5915,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kottayam leverages the city's academic strength to place candidates in top national industries.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kottayam@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kottayam, Kerala"
         },
         theme: {
@@ -5937,7 +5937,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kozhikode provides refined recruitment services for the city's growing IT and service sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kozhikode@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kozhikode, Kerala"
         },
         theme: {
@@ -5959,7 +5959,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Malappuram matches local dedication with state and global career requirements.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "malappuram@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Malappuram, Kerala"
         },
         theme: {
@@ -5981,7 +5981,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Palakkad serves as a vital gateway for professional career growth in the heart of Kerala's industrial belt.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "palakkad@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Palakkad, Kerala"
         },
         theme: {
@@ -6003,7 +6003,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Pathanamthitta is dedicated to providing high-impact professional placement matching local skills with global demands.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "pathanamthitta@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Pathanamthitta, Kerala"
         },
         theme: {
@@ -6025,7 +6025,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Thiruvananthapuram is the primary destination for elite IT, administrative, and creative recruitment in the state.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "trivandrum@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Thiruvananthapuram, Kerala"
         },
         theme: {
@@ -6047,7 +6047,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Thrissur provides refined recruitment solutions that empower the city's banking, gold, and healthcare sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "thrissur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Thrissur, Kerala"
         },
         theme: {
@@ -6069,7 +6069,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Wayanad focuses on bringing modern career growth to the district's motivated and talented workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "wayanad@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Wayanad, Kerala"
         },
         theme: {
@@ -6091,7 +6091,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Lakshadweep is dedicated to providing high-impact digital and remote career access to the island's residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "lakshadweep@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kavaratti, Lakshadweep"
         },
         theme: {
@@ -6113,7 +6113,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bhoi provides elite recruitment services tailored to the district's burgeoning talent pool.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bhoi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Ri Bhoi, Meghalaya"
         },
         theme: {
@@ -6135,7 +6135,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs East Garo Hills connects local career aspirations with statewide and national opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "eastgarohills@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Williamnagar, Meghalaya"
         },
         theme: {
@@ -6157,7 +6157,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs East Khasi Hills provides elite placement services for the region's top performing academic talent.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "eastkhasihills@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Shillong, Meghalaya"
         },
         theme: {
@@ -6179,7 +6179,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jaintia Hills serves as a refined recruitment link for the district's mineral and commerce sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jaintiahills@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jowai, Meghalaya"
         },
         theme: {
@@ -6201,7 +6201,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs South Garo Hills focuses on localized recruitment that ensures national corporate access.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "southgarohills@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Baghmara, Meghalaya"
         },
         theme: {
@@ -6223,7 +6223,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs West Garo Hills provides essential recruitment links for the district's rising professional community.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "westgarohills@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Tura, Meghalaya"
         },
         theme: {
@@ -6245,7 +6245,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs West Khasi Hills provides critical professional links for high-impact local talent.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "westkhasihills@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Nongstoin, Meghalaya"
         },
         theme: {
@@ -6267,7 +6267,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Ahmednagar specializes in integrating local talent with the booming industries of Maharashtra.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "ahmednagar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Ahmednagar, Maharashtra"
         },
         theme: {
@@ -6289,7 +6289,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Akola provides elite recruitment for the city's expanding education and textile sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "akola@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Akola, Maharashtra"
         },
         theme: {
@@ -6311,7 +6311,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Amravati leverages the city's academic prestige to place top talent in diverse national industries.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "amaravati@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Amaravati, Maharashtra"
         },
         theme: {
@@ -6333,7 +6333,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Aurangabad is the primary partner for elite manufacturing, automotive, and IT placements in the region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "aurangabad@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Aurangabad, Maharashtra"
         },
         theme: {
@@ -6355,7 +6355,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Beed is dedicated to providing high-impact professional placement for the district's motivated youth.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "beed@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Beed, Maharashtra"
         },
         theme: {
@@ -6377,7 +6377,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bhandara provides essential career links for the district's rising workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bhandara@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bhandara, Maharashtra"
         },
         theme: {
@@ -6399,7 +6399,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Buldhana focuses on bringing modern recruitment services to the district's hard-working community.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "buldana@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Buldana, Maharashtra"
         },
         theme: {
@@ -6421,7 +6421,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Chandrapur specializes in high-end industrial and technical placements for the region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "chandrapur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Chandrapur, Maharashtra"
         },
         theme: {
@@ -6443,7 +6443,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Dhule provides elite recruitment expertise tailored for the district's multifaceted economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "dhule@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Dhule, Maharashtra"
         },
         theme: {
@@ -6465,7 +6465,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Gadchiroli serves as a bridge for the district's motivated talent to enter growth sectors across India.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "gadchiroli@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Gadchiroli, Maharashtra"
         },
         theme: {
@@ -6487,7 +6487,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Gondia provides high-end professional placement, helping residents thrive in diverse industrial contexts.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "gondia@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Gondia, Maharashtra"
         },
         theme: {
@@ -6509,7 +6509,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Hingoli focuses on localized recruitment that links talent to Maharashtra's dynamic economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "hingoli@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Hingoli, Maharashtra"
         },
         theme: {
@@ -6531,7 +6531,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jalgaon provides premier recruitment services tailored to the district's industrial and agricultural success.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jalgaon@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jalgaon, Maharashtra"
         },
         theme: {
@@ -6553,7 +6553,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jalna serves as a vital bridge for professionals in Maharashtra's booming steel and agricultural sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jalna@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jalna, Maharashtra"
         },
         theme: {
@@ -6575,7 +6575,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kolhapur is the leading partner for elite engineering, automotive, and IT placements.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kolhapur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kolhapur, Maharashtra"
         },
         theme: {
@@ -6597,7 +6597,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Latur leverages the city's academic strengths to provide elite corporate recruitment across industries.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "latur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Latur, Maharashtra"
         },
         theme: {
@@ -6619,7 +6619,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Nagpur is at the center of the state's geographical and economic hub, providing elite recruitment for all sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "nagpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Nagpur, Maharashtra"
         },
         theme: {
@@ -6641,7 +6641,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Nanded serves as a primary link for professional development in the Marathwada region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "nanded@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Nanded, Maharashtra"
         },
         theme: {
@@ -6663,7 +6663,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Nandurbar focuses on sustainable career development matching local potential with state-wide opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "nandurbar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Nandurbar, Maharashtra"
         },
         theme: {
@@ -6685,7 +6685,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Nashik is the premier partner for elite manufacturing, automotive, and wine industry placements.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "nasik@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Nasik, Maharashtra"
         },
         theme: {
@@ -6707,7 +6707,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Osmanabad is dedicated to providing high-impact professional placement for the district's motivated workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "osmanabad@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Osmanabad, Maharashtra"
         },
         theme: {
@@ -6729,7 +6729,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Parbhani serves as a refined recruitment link for the city's growing education and agricultural sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "parbhani@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Parbhani, Maharashtra"
         },
         theme: {
@@ -6751,7 +6751,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Pune is the leading partner for elite IT, automotive, and educational placements in the city.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "pune@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Pune, Maharashtra"
         },
         theme: {
@@ -6773,7 +6773,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Raigad provides elite recruitment expertise tailored for the district's booming industrial sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "raigad@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Raigad, Maharashtra"
         },
         theme: {
@@ -6795,7 +6795,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Ratnagiri focuses on matching local passion with state-wide and national career opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "ratnagiri@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Ratnagiri, Maharashtra"
         },
         theme: {
@@ -6817,7 +6817,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sangli provides essential career links for the district's motivated talent pool.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sangli@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sangli, Maharashtra"
         },
         theme: {
@@ -6839,7 +6839,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Satara leverages local potential to provide stable and growing career paths across the state.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "satara@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Satara, Maharashtra"
         },
         theme: {
@@ -6861,7 +6861,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sindhudurg focuses on bringing elite recruitment solutions to the district's motivated talent.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sindhudurg@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sindhudurg, Maharashtra"
         },
         theme: {
@@ -6883,7 +6883,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Solapur is the primary destination for technical and business recruitment in the district.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "solapur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Solapur, Maharashtra"
         },
         theme: {
@@ -6905,7 +6905,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Thane provides elite recruitment services for the city's booming IT, corporate, and real estate sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "thane@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Thane, Maharashtra"
         },
         theme: {
@@ -6927,7 +6927,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Wardha focuses on providing specialized recruitment that ensures statewide career success.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "wardha@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Wardha, Maharashtra"
         },
         theme: {
@@ -6949,7 +6949,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Washim focuses on bringing corporate quality recruitment to the district's hard-working community.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "washim@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Washim, Maharashtra"
         },
         theme: {
@@ -6971,7 +6971,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Yavatmal provides essential professional links for the district's rising workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "yawatmal@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Yawatmal, Maharashtra"
         },
         theme: {
@@ -6993,7 +6993,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bishnupur provides elite recruitment services tailored to the district's multi-talented workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bishnupur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bishnupur, Manipur"
         },
         theme: {
@@ -7015,7 +7015,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Chandel focuses on providing professional career access to the youth of the region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "chandel@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Chandel, Manipur"
         },
         theme: {
@@ -7037,7 +7037,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Churachandpur focuses on providing specialized recruitment geared towards regional and state-wide talent.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "churachandpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Churachandpur, Manipur"
         },
         theme: {
@@ -7059,7 +7059,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Imphal East is the leading destination for technical and administrative recruitment in the state.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "imphaleast@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Imphal East, Manipur"
         },
         theme: {
@@ -7081,7 +7081,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Imphal West provides elite recruitment services matching local talent with top national employers.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "imphalwest@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Imphal West, Manipur"
         },
         theme: {
@@ -7103,7 +7103,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kangpokpi focuses on specialized recruitment matching motivated individuals with nationwide roles.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kangpokpi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kangpokpi, Manipur"
         },
         theme: {
@@ -7125,7 +7125,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Senapati serves as a katalyst for professional development in the hill region of Manipur.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "senapati@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Senapati, Manipur"
         },
         theme: {
@@ -7147,7 +7147,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Tamenglong is dedicated to provide high-impact career links for local youth.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "tamenglong@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Tamenglong, Manipur"
         },
         theme: {
@@ -7169,7 +7169,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Thoubal is the leading partner for professional placement in the district's rising economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "thoubal@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Thoubal, Manipur"
         },
         theme: {
@@ -7191,7 +7191,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Ukhrul provides essential links for regional talent to thrive in the expanding state and national markets.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "ukhrul@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Ukhrul, Manipur"
         },
         theme: {
@@ -7213,7 +7213,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Anupur focuses on bringing modern career growth to the district's motivated workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "anupur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Anupur, Madhya Pradesh"
         },
         theme: {
@@ -7234,7 +7234,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Ashok Nagar is dedicated to providing specialized recruitment matching motivated individuals with nationwide roles.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "ashoknagar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Ashok Nagar, Madhya Pradesh"
         },
         theme: {
@@ -7255,7 +7255,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Balaghat serves as a vital bridge for professionals in the district's rising economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "balaghat@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Balaghat, Madhya Pradesh"
         },
         theme: {
@@ -7276,7 +7276,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Barwani focuses on providing career development matching local talent with state-wide demands.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "barwani@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Barwani, Madhya Pradesh"
         },
         theme: {
@@ -7297,7 +7297,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Betul is dedicated to linking local professionals with significant career growth opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "betul@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Betul, Madhya Pradesh"
         },
         theme: {
@@ -7318,7 +7318,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bhind provides high-impact recruitment matching local dedication with national corporate needs.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bhind@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bhind, Madhya Pradesh"
         },
         theme: {
@@ -7339,7 +7339,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bhopal is the center for elite IT, administrative, and engineering recruitment in the state.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bhopal@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bhopal, Madhya Pradesh"
         },
         theme: {
@@ -7360,7 +7360,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Burhanpur provides elite recruitment services tailored to the district's textile and trade sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "burhanpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Burhanpur, Madhya Pradesh"
         },
         theme: {
@@ -7381,7 +7381,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Chhatarpur focuses on bringing modern career growth to the heart of Bundelkhand.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "chhatarpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Chhatarpur, Madhya Pradesh"
         },
         theme: {
@@ -7402,7 +7402,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Chhindwara provides critical career links for the district's rising professional community.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "chhindwara@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Chhindwara, Madhya Pradesh"
         },
         theme: {
@@ -7423,7 +7423,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Damoh serves as a bridge for local talent to enter high-growth sectors across India.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "damoh@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Damoh, Madhya Pradesh"
         },
         theme: {
@@ -7444,7 +7444,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Datia focuses on localized recruitment that ensures major corporate access.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "datia@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Datia, Madhya Pradesh"
         },
         theme: {
@@ -7465,7 +7465,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Dewas provides elite recruitment services tailored to the city's robust industrial base.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "dewas@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Dewas, Madhya Pradesh"
         },
         theme: {
@@ -7486,7 +7486,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Dhar specializes in high-impact recruitment for the district's rising talent pool.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "dhar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Dhar, Madhya Pradesh"
         },
         theme: {
@@ -7507,7 +7507,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Dindori focuses on matching local pride with nationwide career success.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "dindori@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Dindori, Madhya Pradesh"
         },
         theme: {
@@ -7528,7 +7528,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Guna provides essential recruitment links for the district's burgeoning professional community.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "guna@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Guna, Madhya Pradesh"
         },
         theme: {
@@ -7549,7 +7549,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Gwalior serves as a major recruitment center for the state's top academic and technical talent.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "gwalior@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Gwalior, Madhya Pradesh"
         },
         theme: {
@@ -7570,7 +7570,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Harda focuses on localized recruitment that ensures national corporate access.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "harda@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Harda, Madhya Pradesh"
         },
         theme: {
@@ -7591,7 +7591,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Hoshangabad provides elite recruitment for the city's key sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "hoshangabad@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Hoshangabad, Madhya Pradesh"
         },
         theme: {
@@ -7612,7 +7612,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Indore is the premier recruitment powerhouse for IT, finance, and manufacturing in the region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "indore@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Indore, Madhya Pradesh"
         },
         theme: {
@@ -7633,7 +7633,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jabalpur provides elite placement services for the city's academic, industrial, and government sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jabalpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jabalpur, Madhya Pradesh"
         },
         theme: {
@@ -7654,7 +7654,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jhabua focuses on delivering professional recruitment geared towards the local workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jhabua@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jhabua, Madhya Pradesh"
         },
         theme: {
@@ -7675,7 +7675,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Katni serves as a primary hub for professional placement in the district's mineral and transport sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "katni@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Katni, Madhya Pradesh"
         },
         theme: {
@@ -7696,7 +7696,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Khandwa provides specialized recruitment tailored to the city's key economic drivers.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "khandwa@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Khandwa, Madhya Pradesh"
         },
         theme: {
@@ -7718,7 +7718,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Khargone provides high-end professional placement for the district's hardworking residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "khargone@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Khargone, Madhya Pradesh"
         },
         theme: {
@@ -7740,7 +7740,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Mandla focuses on providing elite recruitment for the district's rising professional community.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "mandla@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Mandla, Madhya Pradesh"
         },
         theme: {
@@ -7762,7 +7762,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Mandsaur focuses on state-wide professional recruitment for local experts.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "mandsaur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Mandsaur, Madhya Pradesh"
         },
         theme: {
@@ -7784,7 +7784,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Morena is the leading partner for professional placement in the district's rising economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "morena@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Morena, Madhya Pradesh"
         },
         theme: {
@@ -7806,7 +7806,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Narsinghpur provides essential links for regional talent to thrive in expanding markets.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "narsinghpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Narsinghpur, Madhya Pradesh"
         },
         theme: {
@@ -7828,7 +7828,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Neemuch focuses on delivering elite recruitment tailored to the district's industrial and business needs.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "neemuch@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Neemuch, Madhya Pradesh"
         },
         theme: {
@@ -7850,7 +7850,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Panna serves as a katalyst for professional development in the diamond city of India.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "panna@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Panna, Madhya Pradesh"
         },
         theme: {
@@ -7872,7 +7872,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Raisen focuses on bringing modern career growth to the district's industrial workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "raisen@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Raisen, Madhya Pradesh"
         },
         theme: {
@@ -7894,7 +7894,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Rajgarh provides specialized professional recruitment tailored to the district's rising workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "rajgarh@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Rajgarh, Madhya Pradesh"
         },
         theme: {
@@ -7916,7 +7916,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Ratlam focuses on providing high-impact professional matching for the city's multifaceted economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "ratlam@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Ratlam, Madhya Pradesh"
         },
         theme: {
@@ -7938,7 +7938,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Rewa is dedicated to linking local professionals with significant career growth opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "rewa@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Rewa, Madhya Pradesh"
         },
         theme: {
@@ -7960,7 +7960,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sagar provides high-impact recruitment matching local dedication with national corporate needs.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sagar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sagar, Madhya Pradesh"
         },
         theme: {
@@ -7982,7 +7982,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Satna is the leading partner for professional placement in the district's rising economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "satna@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Satna, Madhya Pradesh"
         },
         theme: {
@@ -8004,7 +8004,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Seoni focuses on bringing modern career growth to the heart of Madhya Pradesh.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "seoni@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Seoni, Madhya Pradesh"
         },
         theme: {
@@ -8026,7 +8026,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Shahdol provides critical career links for the district's rising professional community.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "shahdol@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Shahdol, Madhya Pradesh"
         },
         theme: {
@@ -8048,7 +8048,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Shajapur serves as a bridge for local talent to enter high-growth sectors across India.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "shajapur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Shajapur, Madhya Pradesh"
         },
         theme: {
@@ -8070,7 +8070,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sheopur focuses on localized recruitment that ensures major corporate access.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sheopur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sheopur, Madhya Pradesh"
         },
         theme: {
@@ -8092,7 +8092,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Shivpuri provides elite recruitment services tailored to the district's tourism and trade sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "shivpuri@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Shivpuri, Madhya Pradesh"
         },
         theme: {
@@ -8114,7 +8114,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sidhi specializes in high-impact recruitment for the district's rising talent pool.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sidhi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sidhi, Madhya Pradesh"
         },
         theme: {
@@ -8136,7 +8136,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Tikamgarh focuses on matching local pride with nationwide career success.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "tikamgarh@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Tikamgarh, Madhya Pradesh"
         },
         theme: {
@@ -8158,7 +8158,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Ujjain serves as a major recruitment center for the region's top performing academic and business talent.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "ujjain@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Ujjain, Madhya Pradesh"
         },
         theme: {
@@ -8180,7 +8180,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Umaria focuses on centralized professional recruitment for local experts.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "umaria@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Umaria, Madhya Pradesh"
         },
         theme: {
@@ -8202,7 +8202,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Vidisha provides specialized professional recruitment tailored to the district's rising workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "vidisha@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Vidisha, Madhya Pradesh"
         },
         theme: {
@@ -8224,7 +8224,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Agar Malwa is dedicated to empowering the youth of Madhya Pradesh by bridging the gap between local talent and industry requirements.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "agar_malwa@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Agar Malwa, Madhya Pradesh"
         },
         theme: {
@@ -8246,7 +8246,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Alirajpur is committed to driving professional placement and career development for the district's talented workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "alirajpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Alirajpur, Madhya Pradesh"
         },
         theme: {
@@ -8268,7 +8268,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Niwari empowers local talent in this newly formed district, connecting candidates with opportunities across the region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "niwari@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Niwari, Madhya Pradesh"
         },
         theme: {
@@ -8290,7 +8290,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Maihar is dedicated to providing career access and professional placement services for the district's rising workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "maihar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Maihar, Madhya Pradesh"
         },
         theme: {
@@ -8312,7 +8312,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Mauganj connects local talent with industry opportunities across IT, Manufacturing, and Education sectors in this newly formed district.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "mauganj@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Mauganj, Madhya Pradesh"
         },
         theme: {
@@ -8334,7 +8334,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Pandhurna is dedicated to empowering the youth of Madhya Pradesh by bridging the gap between local talent and industry requirements.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "pandhurna@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Pandhurna, Madhya Pradesh"
         },
         theme: {
@@ -8356,7 +8356,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Chachaura connects local talent with industry opportunities across IT, Manufacturing, and Education sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "chachaura@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Chachaura, Madhya Pradesh"
         },
         theme: {
@@ -8378,7 +8378,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Nagda provides career access and professional placement for the district's growing industrial workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "nagda@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Nagda, Madhya Pradesh"
         },
         theme: {
@@ -8400,7 +8400,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Aizawl is the leading destination for technical and administrative recruitment in the state.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "aizawl@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Aizawl, Mizoram"
         },
         theme: {
@@ -8423,7 +8423,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Champhai is dedicated to providing high-impact career access to the region's residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "champhai@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Champhai, Mizoram"
         },
         theme: {
@@ -8445,7 +8445,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kolasib provides elite recruitment services tailored to the district's multifaceted economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kolasib@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kolasib, Mizoram"
         },
         theme: {
@@ -8467,7 +8467,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Lawngtlai is dedicated to linking local professionals with significant career growth opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "lawngtlai@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Lawngtlai, Mizoram"
         },
         theme: {
@@ -8489,7 +8489,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Lunglei focuses on providing elite career access geared towards the region's rising professional community.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "lunglei@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Lunglei, Mizoram"
         },
         theme: {
@@ -8511,7 +8511,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Mamit provides essential links for regional talent to thrive in expanding national markets.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "mamit@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Mamit, Mizoram"
         },
         theme: {
@@ -8533,7 +8533,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Saiha focuses on providing high-impact career matching for the district's talented community.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "saiha@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Saiha, Mizoram"
         },
         theme: {
@@ -8555,7 +8555,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Serchhip is dedicated to providing professional career development for the region's top experts.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "serchhip@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Serchhip, Mizoram"
         },
         theme: {
@@ -8577,7 +8577,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Dimapur is the premier recruitment powerhouse for trade, finance, and logistics in the region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "dimapur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Dimapur, Nagaland"
         },
         theme: {
@@ -8599,7 +8599,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kiphire is dedicated to linking local professionals with nationwide professional roles.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kiphire@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kiphire, Nagaland"
         },
         theme: {
@@ -8621,7 +8621,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kohima is the center for elite administrative, educational, and service sector recruitment in the state.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kohima@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kohima, Nagaland"
         },
         theme: {
@@ -8643,7 +8643,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Longleng provides high-impact recruitment matching local dedication with national needs.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "longleng@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Longleng, Nagaland"
         },
         theme: {
@@ -8665,7 +8665,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Mokokchung provides premier recruitment services tailored to the region's top performing academic talent.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "mokokchung@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Mokokchung, Nagaland"
         },
         theme: {
@@ -8687,7 +8687,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Mon serves as a bridge for local talent to enter high-growth sectors across India.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "mon@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Mon, Nagaland"
         },
         theme: {
@@ -8709,7 +8709,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Peren focuses on localized recruitment that ensures major corporate access.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "peren@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Peren, Nagaland"
         },
         theme: {
@@ -8731,7 +8731,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Phek is dedicated to providing specialized recruitment matching motivated individuals with nationwide roles.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "phek@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Phek, Nagaland"
         },
         theme: {
@@ -8753,7 +8753,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Tuensang is dedicated to linking local talent with high-impact career growth opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "tuensang@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Tuensang, Nagaland"
         },
         theme: {
@@ -8775,7 +8775,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Wokha provides high-impact recruitment matching local dedication with national corporate needs.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "wokha@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Wokha, Nagaland"
         },
         theme: {
@@ -8797,7 +8797,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Zunheboto is dedicated to providing high-end professional placement for the district's residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "zunheboto@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Zunheboto, Nagaland"
         },
         theme: {
@@ -8819,7 +8819,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Angul provides elite recruitment services tailored to the city's robust industrial base.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "angul@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Angul, Odisha"
         },
         theme: {
@@ -8841,7 +8841,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Balangir focuses on delivering professional recruitment geared towards the local workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "balangir@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Balangir, Odisha"
         },
         theme: {
@@ -8863,7 +8863,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Baleshwar serves as a primary hub for professional placement in the district's rising economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "baleshwar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Baleshwar, Odisha"
         },
         theme: {
@@ -8885,7 +8885,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bargarh provides elite recruitment services matching local talent with top national employers.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bargarh@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bargarh, Odisha"
         },
         theme: {
@@ -8907,7 +8907,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Baudh provide essential links for regional talent to thrive in expanding national markets.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "baudh@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Baudh, Odisha"
         },
         theme: {
@@ -8929,7 +8929,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bhadrak is dedicated to providing high-impact professional matching for the district's multi-faceted economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bhadrak@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bhadrak, Odisha"
         },
         theme: {
@@ -8951,7 +8951,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Cuttack is the premier recruitment powerhouse for medical, legal, and educational sectors in the state.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "cuttack@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Cuttack, Odisha"
         },
         theme: {
@@ -8973,7 +8973,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Debagarh focuses on localized recruitment that ensures major corporate access.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "debagarh@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Debagarh, Odisha"
         },
         theme: {
@@ -8995,7 +8995,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Dhenkanal specializes in high-impact recruitment for the district's rising talent pool.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "dhenkanal@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Dhenkanal, Odisha"
         },
         theme: {
@@ -9017,7 +9017,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Gajapati is dedicated to linking local professionals with significant career growth opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "gajapati@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Gajapati, Odisha"
         },
         theme: {
@@ -9039,7 +9039,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Ganjam focuses on delivering elite recruitment tailored to the district's trade and manufacturing sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "ganjam@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Ganjam, Odisha"
         },
         theme: {
@@ -9061,7 +9061,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jagatsinghapur focuses on providing elite career access geared towards the port and industrial belt.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jagatsinghapur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jagatsinghapur, Odisha"
         },
         theme: {
@@ -9083,7 +9083,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jajpur provides elite recruitment services tailored to the district's robust industrial base.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jajpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jajpur, Odisha"
         },
         theme: {
@@ -9105,7 +9105,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jharsuguda serves as a primary hub for professional placement in the district's mineral and manufacturing sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jharsuguda@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jharsuguda, Odisha"
         },
         theme: {
@@ -9127,7 +9127,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kalahandi focuses on providing elite career access for the district's rising professional community.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kalahandi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kalahandi, Odisha"
         },
         theme: {
@@ -9149,7 +9149,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kandhamal focuses on matching local dedication with national professional roles.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kandhamal@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kandhamal, Odisha"
         },
         theme: {
@@ -9171,7 +9171,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kendrapara is the leading partner for professional placement in the district's rising economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kendrapara@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kendrapara, Odisha"
         },
         theme: {
@@ -9193,7 +9193,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Keonjhar specializes in technical and industrial recruitment for the district's powerhouse economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "keonjhar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Keonjhar, Odisha"
         },
         theme: {
@@ -9215,7 +9215,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Khordha is the center for elite IT, educational, and service sector recruitment in the state.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "khurda@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Khurda, Odisha"
         },
         theme: {
@@ -9237,7 +9237,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Koraput provides essential links for regional talent to thrive in expanding corporate markets.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "koraput@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Koraput, Odisha"
         },
         theme: {
@@ -9259,7 +9259,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Malkangiri focuses on providing professional career development for the region's rising workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "malkangiri@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Malkangiri, Odisha"
         },
         theme: {
@@ -9281,7 +9281,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Mayurbhanj is dedicated to providing elite recruitment services for the district's residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "mayurbhanj@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Mayurbhanj, Odisha"
         },
         theme: {
@@ -9303,7 +9303,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Nabarangapur focuses on matching local pride with nationwide career success.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "nabarangapur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Nabarangapur, Odisha"
         },
         theme: {
@@ -9325,7 +9325,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Nayagarh is dedicated to providing professional career development for the region's top experts.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "nayagarh@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Nayagarh, Odisha"
         },
         theme: {
@@ -9347,7 +9347,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Nuapada focuses on centralized professional recruitment for local experts.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "nuapada@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Nuapada, Odisha"
         },
         theme: {
@@ -9369,7 +9369,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Puri provides elite recruitment services tailored to the district's hospitality and craft sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "puri@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Puri, Odisha"
         },
         theme: {
@@ -9391,7 +9391,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Rayagada serves as a major hub for professional placement in the district's mining and manufacturing powerhouse.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "rayagada@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Rayagada, Odisha"
         },
         theme: {
@@ -9413,7 +9413,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sambalpur serves as a major recruitment center for the region's top performing academic and industrial talent.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sambalpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sambalpur, Odisha"
         },
         theme: {
@@ -9435,7 +9435,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Subarnapur focuses on localized recruitment that ensures major corporate access.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sonapur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sonapur/Subarnapur, Odisha"
         },
         theme: {
@@ -9457,7 +9457,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sundargarh provides elite recruitment services tailored to the district's robust mining and steel base.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sundargarh@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sundargarh, Odisha"
         },
         theme: {
@@ -9479,7 +9479,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Pondicherry is the leading destination for technical, educational, and service sector recruitment in the region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "pondicherry@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Pondicherry, Puducherry"
         },
         theme: {
@@ -9501,7 +9501,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Amritsar serves as a major recruitment center for the region's top hospitality, trade, and academic talent.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "amritsar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Amritsar, Punjab"
         },
         theme: {
@@ -9523,7 +9523,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bathinda provides elite recruitment services tailored to the city's robust industrial and agricultural base.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bathinda@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bathinda, Punjab"
         },
         theme: {
@@ -9545,7 +9545,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Barnala is dedicated to linking local professionals with significant career growth opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "barnala@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Barnala, Punjab"
         },
         theme: {
@@ -9567,7 +9567,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Faridkot provides high-impact recruitment matching local dedication with national corporate needs.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "faridkot@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Faridkot, Punjab"
         },
         theme: {
@@ -9589,7 +9589,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Fategarh Sahib focuses on delivering professional recruitment geared towards the local workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "fategarhsahib@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Fategarh Sahib, Punjab"
         },
         theme: {
@@ -9611,7 +9611,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Firozpur serves as a primary hub for professional placement in the district's rising economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "firozpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Firozpur, Punjab"
         },
         theme: {
@@ -9633,7 +9633,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Gurdaspur serves as a bridge for local talent to enter high-growth sectors across North India.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "gurdaspur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Gurdaspur, Punjab"
         },
         theme: {
@@ -9655,7 +9655,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Hoshiarpur focuses on localized recruitment that ensures major corporate access.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "hoshiarpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Hoshiarpur, Punjab"
         },
         theme: {
@@ -9677,7 +9677,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jalandhar serves as a major recruitment center for the state's top performancer industrial and technical talent.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jalandhar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jalandhar, Punjab"
         },
         theme: {
@@ -9699,7 +9699,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kapurthala provides elite recruitment services tailored to the district's multifaceted engineering base.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kapurthala@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kapurthala, Punjab"
         },
         theme: {
@@ -9721,7 +9721,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Ludhiana is the premier recruitment powerhouse for textiles, machinery, and trade in the region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "ludhiana@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Ludhiana, Punjab"
         },
         theme: {
@@ -9743,7 +9743,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Mansa focuses on matching local dedication with nationwide career success.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "mansa@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Mansa, Punjab"
         },
         theme: {
@@ -9765,7 +9765,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Moga provides high-end professional placement for the district's hardworking residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "moga@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Moga, Punjab"
         },
         theme: {
@@ -9787,7 +9787,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Mohali is the center for elite IT, engineering, and service sector recruitment in the state.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "mohali@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Mohali, Punjab"
         },
         theme: {
@@ -9809,7 +9809,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Mukatsar focuses on delivering elite recruitment tailored to the district's rising workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "mukatsar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Mukatsar, Punjab"
         },
         theme: {
@@ -9831,7 +9831,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Nawanshahr focuses on state-wide professional recruitment for local experts.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "nawanshahr@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Nawanshahr, Punjab"
         },
         theme: {
@@ -9853,7 +9853,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Patiala provides elite placement services for the city's academic, industrial, and government sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "patiala@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Patiala, Punjab"
         },
         theme: {
@@ -9875,7 +9875,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Rupnagar focuses on localized recruitment that ensures major corporate access.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "rupnagar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Rupnagar, Punjab"
         },
         theme: {
@@ -9897,7 +9897,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sangrur provides high-impact professional matching for the district's multifaceted economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sangrur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sangrur, Punjab"
         },
         theme: {
@@ -9919,7 +9919,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Tarn Taran focuses on delivering high-impact recruitment geared towards the local workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "tarntaran@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Tarn Taran, Punjab"
         },
         theme: {
@@ -9941,7 +9941,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Ajmer serves as a major recruitment center for the region's top performing academic and service talent.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "ajmer@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Ajmer, Rajasthan"
         },
         theme: {
@@ -9963,7 +9963,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Alwar provides elite recruitment services tailored to the district's robust industrial base in the NCR.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "alwar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Alwar, Rajasthan"
         },
         theme: {
@@ -9985,7 +9985,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Banswara is dedicated to providing high-impact career access for the district's residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "banswara@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Banswara, Rajasthan"
         },
         theme: {
@@ -10007,7 +10007,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Baran focuses on specialized professional recruitment for the district's multifaceted workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "baran@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Baran, Rajasthan"
         },
         theme: {
@@ -10029,7 +10029,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Barmer provides high-end professional placement for the district's hardworking residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "barmer@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Barmer, Rajasthan"
         },
         theme: {
@@ -10051,7 +10051,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bharatpur serves as a primary hub for professional placement in the district's rising economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bharatpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bharatpur, Rajasthan"
         },
         theme: {
@@ -10073,7 +10073,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bhilwara provides elite recruitment services tailored to the district's robust textile and manufacturing base.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bhilwara@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bhilwara, Rajasthan"
         },
         theme: {
@@ -10095,7 +10095,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bikaner serves as a major recruitment center for the region's top performing academic and service talent.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bikaner@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bikaner, Rajasthan"
         },
         theme: {
@@ -10117,7 +10117,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bundi focuses on specialized professional recruitment for the district's multifaceted workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bundi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bundi, Rajasthan"
         },
         theme: {
@@ -10139,7 +10139,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Chittorgarh provides elite recruitment services tailored to the district's robust industrial and mineral base.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "chittaurgarh@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Chittaurgarh, Rajasthan"
         },
         theme: {
@@ -10161,7 +10161,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Churu is dedicated to providing high-impact career access for the district's residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "churu@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Churu, Rajasthan"
         },
         theme: {
@@ -10183,7 +10183,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Dausa focuses on matching local dedication with national professional roles.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "dausa@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Dausa, Rajasthan"
         },
         theme: {
@@ -10205,7 +10205,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Dholpur serves as a primary hub for professional placement in the district's rising economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "dhaulpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Dhaulpur, Rajasthan"
         },
         theme: {
@@ -10227,7 +10227,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Dungarpur focuses on providing elite career access for the district's rising professional community.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "dungarpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Dungarpur, Rajasthan"
         },
         theme: {
@@ -10249,7 +10249,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sri Ganganagar provides high-end professional placement for the district's hardworking residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "ganganagar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Ganganagar, Rajasthan"
         },
         theme: {
@@ -10271,7 +10271,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Hanumangarh focuses on localized recruitment that ensures major corporate access.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "hanumangarh@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Hanumangarh, Rajasthan"
         },
         theme: {
@@ -10293,7 +10293,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jaipur City is the premier recruitment powerhouse for IT, service, and heritage-based industries in the state.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jaipur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jaipur, Rajasthan"
         },
         theme: {
@@ -10315,7 +10315,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jaisalmer is dedicated to linking local talent with high-impact career growth opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jaisalmer@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jaisalmer, Rajasthan"
         },
         theme: {
@@ -10337,7 +10337,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jalore serves as a bridge for local talent to enter high-growth sectors across North India.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jalore@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jalore, Rajasthan"
         },
         theme: {
@@ -10359,7 +10359,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jhalawar focuses on state-wide professional recruitment for local experts.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jhalawar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jhalawar, Rajasthan"
         },
         theme: {
@@ -10381,7 +10381,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jhunjhunu is dedicated to providing high-impact career access for the region's residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jhunjhunun@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jhunjhunun, Rajasthan"
         },
         theme: {
@@ -10403,7 +10403,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jodhpur City is the premier recruitment powerhouse for industrial, heritage, and service sector recruitment in Western Rajasthan.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jodhpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jodhpur, Rajasthan"
         },
         theme: {
@@ -10425,7 +10425,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Karauli is dedicated to providing high-end professional placement for the district's residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "karauli@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Karauli, Rajasthan"
         },
         theme: {
@@ -10447,7 +10447,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kota provides elite placement services for the city's academic, industrial, and technology sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kota@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kota, Rajasthan"
         },
         theme: {
@@ -10469,7 +10469,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Nagaur serves as a major hub for professional placement in the district's multifaceted industrial base.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "nagaur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Nagaur, Rajasthan"
         },
         theme: {
@@ -10491,7 +10491,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Pali provides elite recruitment services tailored to the district's robust industrial economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "pali@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Pali, Rajasthan"
         },
         theme: {
@@ -10513,7 +10513,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Pratapgarh (RJ) is dedicated to providing professional career development for the region's top candidates.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "pratapgarh@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Pratapgarh, Rajasthan"
         },
         theme: {
@@ -10535,7 +10535,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Rajsamand provides high-end professional placement for the district's hardworking residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "rajsamand@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Rajsamand, Rajasthan"
         },
         theme: {
@@ -10557,7 +10557,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sawai Madhopur serves as a primary hub for professional placement in the district's rising economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sawaimadhopur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sawai Madhopur, Rajasthan"
         },
         theme: {
@@ -10579,7 +10579,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sikar is the premier recruitment powerhouse for educational, tourism, and technical sectors in Rajasthan.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sikar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sikar, Rajasthan"
         },
         theme: {
@@ -10601,7 +10601,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sirohi focuses on providing elite career access geared towards the district's local experts.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sirohi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sirohi, Rajasthan"
         },
         theme: {
@@ -10623,7 +10623,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Tonk is dedicated to linking local professionals with significant career growth opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "tonk@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Tonk, Rajasthan"
         },
         theme: {
@@ -10645,7 +10645,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Udaipur is the premier recruitment powerhouse for tourism, mineral, and service industries in Southern Rajasthan.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "udaipur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Udaipur, Rajasthan"
         },
         theme: {
@@ -10666,7 +10666,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sujangarh is committed to providing elite career access for the region's rising professional community.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sujangarh@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sujangarh, Rajasthan"
         },
         theme: {
@@ -10687,7 +10687,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Anupgarh is dedicated to providing specialized career recruitment for the district's rising workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "anupgarh@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Anupgarh, Rajasthan"
         },
         theme: {
@@ -10708,7 +10708,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Balotra provides elite recruitment services tailored to the district's robust textile and industrial base.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "balotra@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Balotra, Rajasthan"
         },
         theme: {
@@ -10729,7 +10729,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Beawar connects local industrial expertise with national career opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "beawar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Beawar, Rajasthan"
         },
         theme: {
@@ -10750,7 +10750,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Deeg is committed to linking local potential with the region's expanding corporate sector.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "deeg@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Deeg, Rajasthan"
         },
         theme: {
@@ -10771,7 +10771,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Didwana-Kuchaman leverages the region's educational strength to place top talent.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "didwanakuchaman@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Didwana-Kuchaman, Rajasthan"
         },
         theme: {
@@ -10792,7 +10792,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Dudu provides essential professional links for the district's rising workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "dudu@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Dudu, Rajasthan"
         },
         theme: {
@@ -10813,7 +10813,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Gangapur City focuses on specialized recruitment for the district's rising professional community.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "gangapurcity@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Gangapur City, Rajasthan"
         },
         theme: {
@@ -10834,7 +10834,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jaipur Rural is dedicated to providing high-end professional placement for the district's residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jaipurrural@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jaipur Rural, Rajasthan"
         },
         theme: {
@@ -10855,7 +10855,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jodhpur Rural connects rural talent with Western Rajasthan's thriving industrial base.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jodhpurrural@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jodhpur Rural, Rajasthan"
         },
         theme: {
@@ -10876,7 +10876,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kekri provides a bridge for local talent to enter high-growth sectors across Rajasthan.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kekri@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kekri, Rajasthan"
         },
         theme: {
@@ -10897,7 +10897,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Khairthal-Tijara leverages the district's industrial strength for elite professional placements.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "khairthaltijara@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Khairthal-Tijara, Rajasthan"
         },
         theme: {
@@ -10918,7 +10918,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kotputli-Behror specializes in recruitment for the manufacturing and industrial sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kotputlibehror@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kotputli-Behror, Rajasthan"
         },
         theme: {
@@ -10939,7 +10939,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Neem Ka Thana provides specialized career paths for the region's top candidates.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "neemkathana@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Neem Ka Thana, Rajasthan"
         },
         theme: {
@@ -10960,7 +10960,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Phalodi connects local experts with high-growth sectors across North India.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "phalodi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Phalodi, Rajasthan"
         },
         theme: {
@@ -10981,7 +10981,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Salumbar provides high-impact career access geared towards the district's residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "salumbar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Salumbar, Rajasthan"
         },
         theme: {
@@ -11002,7 +11002,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Shahpura matches local dedication with significant national career growth opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "shahpura@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Shahpura, Rajasthan"
         },
         theme: {
@@ -11024,7 +11024,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs East Sikkim is the premier recruitment hub for technical, academic, and service sector roles in the region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "eastsikkim@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "East Sikkim, Sikkim"
         },
         theme: {
@@ -11046,7 +11046,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs North Sikkim is dedicated to linking local talent with high-impact career growth opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "northsikkim@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "North Sikkim, Sikkim"
         },
         theme: {
@@ -11068,7 +11068,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs South Sikkim provides high-impact recruitment matching local dedication with national corporate needs.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "southsikkim@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "South Sikkim, Sikkim"
         },
         theme: {
@@ -11090,7 +11090,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs West Sikkim is dedicated to linking local talent with high-impact career growth opportunities in the tourism and services sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "westsikkim@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "West Sikkim, Sikkim"
         },
         theme: {
@@ -11112,7 +11112,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kancheepuram provides elite recruitment services tailored to the district's robust textile and automobile manufacturing base.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kancheepuram@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kancheepuram, Tamil Nadu"
         },
         theme: {
@@ -11133,7 +11133,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Saidapet serves as a major recruitment center for the city's top performing service and technical talent.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "saidapet@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Saidapet, Chennai, Tamil Nadu"
         },
         theme: {
@@ -11155,7 +11155,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Thiruvallore provides elite recruitment services tailored to the district's robust industrial and automotive base.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "thiruvallore@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Thiruvallore, Tamil Nadu"
         },
         theme: {
@@ -11176,7 +11176,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Poonamallee focuses on providing professional recruitment geared towards the manufacturing and logistics workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "poonamallee@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Poonamallee, Chennai, Tamil Nadu"
         },
         theme: {
@@ -11198,7 +11198,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Vellore is the premier recruitment powerhouse for academic, medical, and industrial sectors in the region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "vellore@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Vellore, Tamil Nadu"
         },
         theme: {
@@ -11220,7 +11220,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Thiruppattur is dedicated to providing high-impact career access for the region's residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "thiruppattur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Thiruppattur, Tamil Nadu"
         },
         theme: {
@@ -11242,7 +11242,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Tiruvannamalai serves as a primary hub for professional placement in the district's rising economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "tiruvannamalai@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Tiruvannamalai, Tamil Nadu"
         },
         theme: {
@@ -11263,7 +11263,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Cheyyar provides elite recruitment services tailored to the district's robust industrial and agricultural base.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "cheyyar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Cheyyar, Tamil Nadu"
         },
         theme: {
@@ -11285,7 +11285,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Cuddalore is dedicated to providing high-impact recruitment matching local dedication with national corporate needs.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "cuddalore@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Cuddalore, Tamil Nadu"
         },
         theme: {
@@ -11307,7 +11307,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Villupuram focuses on delivering elite recruitment tailored to the district's multifaceted economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "villupuram@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Villupuram, Tamil Nadu"
         },
         theme: {
@@ -11329,7 +11329,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kallakurichi focuses on matching local dedication with nationwide career success.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kallakurichi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kallakurichi, Tamil Nadu"
         },
         theme: {
@@ -11351,7 +11351,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Thanjavur serves as a major recruitment center for the city's top performing academic and service talent.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "thanjavur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Thanjavur, Tamil Nadu"
         },
         theme: {
@@ -11373,7 +11373,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Thiruvarur focuses on localized recruitment that ensures major corporate access.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "thiruvarur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Thiruvarur, Tamil Nadu"
         },
         theme: {
@@ -11395,7 +11395,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Nagapattinam focuses on delivering professional recruitment geared towards the local trade and maritime sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "nagapattinam@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Nagapattinam, Tamil Nadu"
         },
         theme: {
@@ -11417,7 +11417,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Trichy is the premier recruitment powerhouse for engineering, service, and administrative sectors in the state.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "trichy@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Tiruchirappalli, Tamil Nadu"
         },
         theme: {
@@ -11439,7 +11439,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Karur provides elite recruitment services tailored to the district's robust manufacturing and trade base.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "karur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Karur, Tamil Nadu"
         },
         theme: {
@@ -11461,7 +11461,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Perambalur focuses on providing professional recruitment geared towards the rising local workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "perambalur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Perambalur, Tamil Nadu"
         },
         theme: {
@@ -11483,7 +11483,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Pudukottai serves as a bridge for local talent to enter high-growth sectors across South India.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "pudukottai@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Pudukottai, Tamil Nadu"
         },
         theme: {
@@ -11504,7 +11504,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Aranthangi focuses on localized recruitment that ensures major corporate access.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "aranthangi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Aranthangi, Tamil Nadu"
         },
         theme: {
@@ -11526,7 +11526,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Madurai is the premier recruitment powerhouse for IT, healthcare, and educational sectors in the city.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "madurai@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Madurai, Tamil Nadu"
         },
         theme: {
@@ -11548,7 +11548,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Theni provides high-end professional placement for the district's motivated residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "theni@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Theni, Tamil Nadu"
         },
         theme: {
@@ -11570,7 +11570,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Dindigul provides elite recruitment services tailored to the district's robust industrial and agricultural base.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "dindigul@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Dindigul, Tamil Nadu"
         },
         theme: {
@@ -11591,7 +11591,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Palani focuses on delivering professional recruitment geared towards the local workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "palani@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Palani, Tamil Nadu"
         },
         theme: {
@@ -11613,7 +11613,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Ramanathapuram focuses on matching local dedication with national professional roles.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "ramanathapuram@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Ramanathapuram, Tamil Nadu"
         },
         theme: {
@@ -11634,7 +11634,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Paramakudi serves as a primary hub for professional placement in the district's rising economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "paramakudi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Paramakudi, Tamil Nadu"
         },
         theme: {
@@ -11656,7 +11656,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sivaganga is dedicated to linking local professionals with significant career growth opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sivaganga@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sivaganga, Tamil Nadu"
         },
         theme: {
@@ -11678,7 +11678,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Virudhunagar focuses on delivering elite recruitment tailored to the district's trade and manufacturing sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "virudhunagar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Virudhunagar, Tamil Nadu"
         },
         theme: {
@@ -11699,7 +11699,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sivakasi provides elite recruitment services tailored to the city's powerhouse manufacturing economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sivakasi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sivakasi, Tamil Nadu"
         },
         theme: {
@@ -11721,7 +11721,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Thirunelveli is the premier recruitment powerhouse for academic, service, and administrative sectors in the region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "thirunelveli@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Thirunelveli, Tamil Nadu"
         },
         theme: {
@@ -11742,7 +11742,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sankarankoil provides high-impact career access geared towards the district's local experts.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sankarankoil@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sankarankoil, Tamil Nadu"
         },
         theme: {
@@ -11764,7 +11764,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Thoothukudi provides elite recruitment services tailored to the district's robust maritime and industrial base.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "thoothukudi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Thoothukudi, Tamil Nadu"
         },
         theme: {
@@ -11785,7 +11785,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kovilpatti focuses on providing professional recruitment geared towards the local manufacturing workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kovilpatti@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kovilpatti, Tamil Nadu"
         },
         theme: {
@@ -11806,7 +11806,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Nagercoil serves as a major hub for professional placement in the district's high-performing academic region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "nagercoil@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Nagercoil, Tamil Nadu"
         },
         theme: {
@@ -11828,7 +11828,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Salem provides elite recruitment services tailored to the district's robust textile and manufacturing belt.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "salem@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Salem, Tamil Nadu"
         },
         theme: {
@@ -11850,7 +11850,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Namakkal focuses on providing elite career access for the region's transport and poultry sector experts.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "namakkal@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Namakkal, Tamil Nadu"
         },
         theme: {
@@ -11872,7 +11872,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Dharmapuri is dedicated to providing high-impact career access for the district's residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "dharmapuri@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Dharmapuri, Tamil Nadu"
         },
         theme: {
@@ -11894,7 +11894,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Krishnagiri is the premier recruitment powerhouse for technical and manufacturing sectors in the region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "krishnagiri@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Krishnagiri, Tamil Nadu"
         },
         theme: {
@@ -11916,7 +11916,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Coimbatore is the premier recruitment powerhouse for IT, engineering, and textile industries in the state.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "coimbatore@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Coimbatore, Tamil Nadu"
         },
         theme: {
@@ -11938,7 +11938,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Thiruppur provides elite recruitment services tailored to the district's robust textile and export manufacturing base.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "thiruppur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Thiruppur, Tamil Nadu"
         },
         theme: {
@@ -11960,7 +11960,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Erode serves as a primary hub for professional placement in the district's rising economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "erode@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Erode, Tamil Nadu"
         },
         theme: {
@@ -11982,7 +11982,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Ariyalur is dedicated to empowering the youth of Tamil Nadu by bridging the gap between local talent and industry requirements.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "ariyalur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Ariyalur, Tamil Nadu"
         },
         theme: {
@@ -12004,7 +12004,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Chengalpattu connects the district's talent with premium employers across IT, manufacturing, and logistics sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "chengalpattu@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Chengalpattu, Tamil Nadu"
         },
         theme: {
@@ -12026,7 +12026,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Chennai is the premier recruitment powerhouse for IT, automotive, manufacturing, and service sectors in South India.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "chennai@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Chennai, Tamil Nadu"
         },
         theme: {
@@ -12048,7 +12048,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Mayiladuthurai empowers the district's growing workforce in this recently formed Tamil Nadu district.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "mayiladuthurai@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Mayiladuthurai, Tamil Nadu"
         },
         theme: {
@@ -12070,7 +12070,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Ranipet provides specialist recruitment for the district's thriving leather goods, chemicals and manufacturing industries.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "dharapuram@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Dharapuram, Tamil Nadu"
         },
         theme: {
@@ -12092,7 +12092,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs The Nilgiris focuses on provide high-impact recruitment geared towards the local plantation and tourism workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "thenilgiris@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "The Nilgiris, Tamil Nadu"
         },
         theme: {
@@ -12114,7 +12114,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Chennai Corp is the premier recruitment powerhouse for IT, SaaS, and manufacturing sectors in South India.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "chennai@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Chennai, Tamil Nadu"
         },
         theme: {
@@ -12136,7 +12136,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Dhalai is dedicated to providing high-impact career access for the region's top candidates.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "dhalai@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Ambassa, Dhalai, Tripura"
         },
         theme: {
@@ -12158,7 +12158,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs North Tripura serves as a primary hub for professional placement in the district's rising economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "northtripura@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Dharmanagar, Tripura"
         },
         theme: {
@@ -12180,7 +12180,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs South Tripura provides high-end professional placement for the district's motivated residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "southtripura@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Belonia, Tripura"
         },
         theme: {
@@ -12202,7 +12202,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs West Tripura is the premier recruitment powerhouse for IT, service, and administrative sectors in the state.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "agartala@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Agartala, Tripura"
         },
         theme: {
@@ -12224,7 +12224,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Agra is the premier recruitment powerhouse for tourism, service, and industrial sectors in Western UP.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "agra@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Agra, Uttar Pradesh"
         },
         theme: {
@@ -12246,7 +12246,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Aligarh provides elite recruitment infrastructure for the district's rising professional community.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "aligarh@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Aligarh, Uttar Pradesh"
         },
         theme: {
@@ -12268,7 +12268,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs  Prayagraj provides elite placement services for the city's academic, service, and technology sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "allahabad@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Allahabad, Uttar Pradesh"
         },
         theme: {
@@ -12290,7 +12290,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Ambedkar Nagar is dedicated to linking local talent with high-impact career growth opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "ambedkarnagar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Ambedkar Nagar, Uttar Pradesh"
         },
         theme: {
@@ -12312,7 +12312,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Auraiya focuses on provide high-impact recruitment geared towards the local workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "auraiya@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Auraiya, Uttar Pradesh"
         },
         theme: {
@@ -12334,7 +12334,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Azamgarh focuses on matching local dedication with national professional roles.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "azamgarh@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Azamgarh, Uttar Pradesh"
         },
         theme: {
@@ -12356,7 +12356,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Baghpat serves as a primary hub for professional placement in the district's rising economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "baghpat@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Baghpat, Uttar Pradesh"
         },
         theme: {
@@ -12378,7 +12378,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bahraich is dedicated to linking local experts with significant career growth opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bahraich@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bahraich, Uttar Pradesh"
         },
         theme: {
@@ -12400,7 +12400,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Ballia focuses on providing professional career development for the region's top candidates.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "ballia@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Ballia, Uttar Pradesh"
         },
         theme: {
@@ -12422,7 +12422,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Balrampur focuses on delivered professional recruitment geared towards the local workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "balrampur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Balrampur, Uttar Pradesh"
         },
         theme: {
@@ -12444,7 +12444,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Banda provides high-impact recruitment matching local dedication with national corporate needs.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "banda@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Banda, Uttar Pradesh"
         },
         theme: {
@@ -12466,7 +12466,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Barabanki focuses on ensure seamless career transitions for the district's rising professional community.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "barabanki@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Barabanki, Uttar Pradesh"
         },
         theme: {
@@ -12488,7 +12488,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bareilly provides elite recruitment services tailored to the district's robust manufacturing and trade base.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bareilly@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bareilly, Uttar Pradesh"
         },
         theme: {
@@ -12510,7 +12510,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Basti is dedicated to providing high-impact career access for the district's residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "basti@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Basti, Uttar Pradesh"
         },
         theme: {
@@ -12532,7 +12532,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bijnor serves as a primary hub for professional placement in the district's rising economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bijnor@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bijnor, Uttar Pradesh"
         },
         theme: {
@@ -12554,7 +12554,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Budaun focuses on localized recruitment that ensures major corporate access for the district's experts.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "budaun@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Budaun, Uttar Pradesh"
         },
         theme: {
@@ -12576,7 +12576,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bulandshahar is dedicated to linking local talent with high-impact career growth opportunities in the NCR region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bulandshahar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bulandshahar, Uttar Pradesh"
         },
         theme: {
@@ -12598,7 +12598,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Chandauli focuses on matching local dedication with national professional roles.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "chandauli@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Chandauli, Uttar Pradesh"
         },
         theme: {
@@ -12620,7 +12620,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Chitrakoot is dedicated to providing high-end professional placement for the district's residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "chitrakoot@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Chitrakoot, Uttar Pradesh"
         },
         theme: {
@@ -12642,7 +12642,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Deoria serves as a primary hub for professional placement in the district's rising economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "deoria@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Deoria, Uttar Pradesh"
         },
         theme: {
@@ -12664,7 +12664,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Etah focuses on deliver professional recruitment geared towards the local experts.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "etah@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Etah, Uttar Pradesh"
         },
         theme: {
@@ -12686,7 +12686,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Etawah focuses on providing elite career access for the region's rising professional community.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "etawah@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Etawah, Uttar Pradesh"
         },
         theme: {
@@ -12708,7 +12708,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Faizabad is the premier recruitment powerhouse for academic, service, and administrative sectors in the region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "faizabad@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Faizabad, Uttar Pradesh"
         },
         theme: {
@@ -12730,7 +12730,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Farrukhabad is dedicated to providing high-impact recruitment for the district's residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "farrukhabad@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Farrukhabad, Uttar Pradesh"
         },
         theme: {
@@ -12752,7 +12752,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Fatehpur serves as a major recruitment center for the district's rising economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "fatehpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Fatehpur, Uttar Pradesh"
         },
         theme: {
@@ -12774,7 +12774,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Firozabad provides elite recruitment services tailored to the city's robust glass manufacturing base.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "firozabad@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Firozabad, Uttar Pradesh"
         },
         theme: {
@@ -12796,7 +12796,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Gautam Buddh Nagar is the premier recruitment powerhouse for IT, SaaS, and electronics industries in North India.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "noida@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Noida, Uttar Pradesh"
         },
         theme: {
@@ -12818,7 +12818,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Ghazipur is dedicated to linking local talent with high-impact career growth opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "ghazipur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Ghazipur, Uttar Pradesh"
         },
         theme: {
@@ -12840,7 +12840,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Gonda focuses on providing elite career access for the region's rising professional community.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "gonda@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Gonda, Uttar Pradesh"
         },
         theme: {
@@ -12862,7 +12862,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Gorakhpur is the premier recruitment powerhouse for healthcare, education, and service sectors in the region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "gorakhpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Gorakhpur, Uttar Pradesh"
         },
         theme: {
@@ -12884,7 +12884,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Hamirpur is dedicated to providing high-impact career access for the district's residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "hamirpur_up@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Hamirpur, Uttar Pradesh"
         },
         theme: {
@@ -12906,7 +12906,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Hardoi focuses on matching local dedication with national professional roles.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "hardoi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Hardoi, Uttar Pradesh"
         },
         theme: {
@@ -12928,7 +12928,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Hathras serves as a primary hub for professional placement in the district's rising manufacturing economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "hathras@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Hathras, Uttar Pradesh"
         },
         theme: {
@@ -12950,7 +12950,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jalaun focuses on deliver professional recruitment geared towards the local workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jalaun@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jalaun, Uttar Pradesh"
         },
         theme: {
@@ -12972,7 +12972,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jaunpur is dedicated to providing high-impact recruitment for the district's motivated residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jaunpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jaunpur, Uttar Pradesh"
         },
         theme: {
@@ -12994,7 +12994,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kasganj provides high-impact career access geared towards the district's top candidates.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kasganj@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kasganj, Uttar Pradesh"
         },
         theme: {
@@ -13016,7 +13016,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Shamli provides high-impact career access geared towards the district's top candidates.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "shamli@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Shamli, Uttar Pradesh"
         },
         theme: {
@@ -13038,7 +13038,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jhansi is the premier recruitment powerhouse for industrial, defense, and service sectors in the region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jhansi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jhansi, Uttar Pradesh"
         },
         theme: {
@@ -13060,7 +13060,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Amroha provides elite recruitment services tailored to the district's robust manufacturing and artisanal base.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "amroha@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Amroha, Uttar Pradesh"
         },
         theme: {
@@ -13082,7 +13082,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kannauj focuses on delivered professional recruitment geared towards the local experts in trade and manufacture.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kannauj@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kannauj, Uttar Pradesh"
         },
         theme: {
@@ -13104,7 +13104,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kanpur Nagar is the premier recruitment powerhouse for manufacturing, textile, and IT sectors in Central UP.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kanpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kanpur, Uttar Pradesh"
         },
         theme: {
@@ -13126,7 +13126,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kanpur Dehat provides elite career access for the region's rising professional community.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kanpurdehat@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kanpur Dehat, Uttar Pradesh"
         },
         theme: {
@@ -13148,7 +13148,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kaushambi serves as a bridge for local talent to enter high-growth sectors across North India.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kaushambi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kaushambi, Uttar Pradesh"
         },
         theme: {
@@ -13170,7 +13170,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kheri provides high-impact career access geared towards the district's local experts.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kheri@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Lakhimpur Kheri, Uttar Pradesh"
         },
         theme: {
@@ -13192,7 +13192,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kushinagar is dedicated to providing high-end professional placement for the district's residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kushinagar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kushinagar, Uttar Pradesh"
         },
         theme: {
@@ -13214,7 +13214,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Lalitpur focuses on matching local dedication with national professional roles.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "lalitpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Lalitpur, Uttar Pradesh"
         },
         theme: {
@@ -13236,7 +13236,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Maharajganj serves as a primary hub for professional placement in the district's rising economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "maharajganj@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Maharajganj, Uttar Pradesh"
         },
         theme: {
@@ -13258,7 +13258,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Mahoba provides high-impact career access geared towards the district's residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "mahoba@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Mahoba, Uttar Pradesh"
         },
         theme: {
@@ -13280,7 +13280,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Mainpuri focuses on providing elite career access for the region's rising professional community.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "mainpuri@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Mainpuri, Uttar Pradesh"
         },
         theme: {
@@ -13302,7 +13302,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Mathura is the premier recruitment powerhouse for tourism, service, and technical sectors in Braj region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "mathura@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Mathura, Uttar Pradesh"
         },
         theme: {
@@ -13324,7 +13324,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Mau provides elite recruitment infrastructure for one of Eastern UP's vital industrial districts.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "mau@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Mau, Uttar Pradesh"
         },
         theme: {
@@ -13346,7 +13346,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Meerut is the premier recruitment powerhouse for manufacturing, education, and sports industries in the NCR.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "meerut@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Meerut, Uttar Pradesh"
         },
         theme: {
@@ -13368,7 +13368,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Mirzapur serves as a primary hub for professional placement in the region's diverse economic sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "mirzapur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Mirzapur, Uttar Pradesh"
         },
         theme: {
@@ -13390,7 +13390,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Moradabad provides elite recruitment services tailored to the district's robust export and manufacturing base.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "moradabad@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Moradabad, Uttar Pradesh"
         },
         theme: {
@@ -13412,7 +13412,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Muzaffarnagar focuses on localize recruitment that ensures major corporate access for the district's experts.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "muzaffarnagar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Muzaffarnagar, Uttar Pradesh"
         },
         theme: {
@@ -13434,7 +13434,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Pilibhit serves as a bridge for local talent to enter high-growth sectors across North India.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "pilibhit@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Pilibhit, Uttar Pradesh"
         },
         theme: {
@@ -13456,7 +13456,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Pratapgarh (UP) provides high-impact career access geared towards the district's top candidates.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "pratapgarh_up@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Pratapgarh, Uttar Pradesh"
         },
         theme: {
@@ -13478,7 +13478,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Ayodhya provides high-impact career access geared towards the district's top candidates.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "ayodhya@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Ayodhya, Uttar Pradesh"
         },
         theme: {
@@ -13500,7 +13500,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Raebareli is dedicated to linking local talent with high-impact career growth opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "raebareli@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Raebareli, Uttar Pradesh"
         },
         theme: {
@@ -13522,7 +13522,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Rampur provides elite recruitment infrastructure for the district's rising professional community.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "rampur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Rampur, Uttar Pradesh"
         },
         theme: {
@@ -13544,7 +13544,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Amethi provides high-impact career access geared towards the district's top candidates.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "amethi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Amethi, Uttar Pradesh"
         },
         theme: {
@@ -13566,7 +13566,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sambhal provides elite recruitment infrastructure for the district's rising professional community.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sambhal@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sambhal, Uttar Pradesh"
         },
         theme: {
@@ -13588,7 +13588,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Saharanpur serves as a primary hub for professional placement in the district's trade and woodworking sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "saharanpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Saharanpur, Uttar Pradesh"
         },
         theme: {
@@ -13610,7 +13610,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sant Kabir Nagar matches local dedication with national professional roles.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "santkabirnagar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Khalilabad, Sant Kabir Nagar, Uttar Pradesh"
         },
         theme: {
@@ -13632,7 +13632,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bhadohi provides elite recruitment services tailored to the city's world-renowned export base.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bhadohi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bhadohi, Uttar Pradesh"
         },
         theme: {
@@ -13654,7 +13654,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Shahjahanpur is dedicated to provide high-impact recruitment geared towards the local workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "shahjahanpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Shahjahanpur, Uttar Pradesh"
         },
         theme: {
@@ -13676,7 +13676,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Shravasti serves as a primary hub for professional placement in the district's rising economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "shravasti@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Shravasti, Uttar Pradesh"
         },
         theme: {
@@ -13698,7 +13698,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Siddharthnagar is dedicated to linking local talent with significant career growth opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "siddharthnagar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Siddharthnagar, Uttar Pradesh"
         },
         theme: {
@@ -13720,7 +13720,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sitapur focuses on ensure seamless career transitions for the district's rising professional community.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sitapur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sitapur, Uttar Pradesh"
         },
         theme: {
@@ -13742,7 +13742,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sonbhadra provides elite recruitment services tailored to the district's robust power and industrial base.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sonbhadra@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Robertsganj, Sonbhadra, Uttar Pradesh"
         },
         theme: {
@@ -13764,7 +13764,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sultanpur is dedicated to linking local talent with high-impact career growth opportunities.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sultanpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sultanpur, Uttar Pradesh"
         },
         theme: {
@@ -13786,7 +13786,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Unnao is the premier recruitment powerhouse for industrial and service sectors linking Lucknow and Kanpur.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "unnao@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Unnao, Uttar Pradesh"
         },
         theme: {
@@ -13808,7 +13808,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Varanasi is the premier recruitment powerhouse for tourism, education, and emerging IT sectors in Eastern UP.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "varanasi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Varanasi, Uttar Pradesh"
         },
         theme: {
@@ -13830,7 +13830,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Almora provides high-impact career access geared towards the district's top candidates in the Kumaon region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "almora@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Almora, Uttarakhand"
         },
         theme: {
@@ -13852,7 +13852,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bageshwar is dedicated to providing high-end professional placement for the district's residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bageshwar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bageshwar, Uttarakhand"
         },
         theme: {
@@ -13874,7 +13874,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Chamoli is dedicated to providing high-end professional placement for the district's residents in the Garhwal Himalayas.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "chamoli@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Chamoli, Uttarakhand"
         },
         theme: {
@@ -13896,7 +13896,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Champawat serve as a primary hub for professional placement in the district's trade and service sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "champawat@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Champawat, Uttarakhand"
         },
         theme: {
@@ -13918,7 +13918,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Dehradun is the premier recruitment powerhouse for IT, research, tourism, and education sectors in the state capital.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "dehradun@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Dehradun, Uttarakhand"
         },
         theme: {
@@ -13940,7 +13940,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Pauri Garhwal focuses on matching local dedication with national professional roles.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "pauri@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Pauri, Uttarakhand"
         },
         theme: {
@@ -13962,7 +13962,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Haridwar provides elite recruitment infrastructure for the district's robust manufacturing and industrial base.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "haridwar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Haridwar, Uttarakhand"
         },
         theme: {
@@ -13984,7 +13984,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Nainital serves as a bridge for local talent to enter high-growth sectors across North India.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "nainital@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Haldwani, Nainital, Uttarakhand"
         },
         theme: {
@@ -14006,7 +14006,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Pithoragarh is dedicated to providing high-quality career access geared towards the district's residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "pithoragarh@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Pithoragarh, Uttarakhand"
         },
         theme: {
@@ -14028,7 +14028,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Rudraprayag focuses on providing elite career access for the region's rising professional community.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "rudraprayag@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Rudraprayag, Uttarakhand"
         },
         theme: {
@@ -14050,7 +14050,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Tehri Garhwal is dedicated to providing high-impact career access geared towards the local workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "tehri@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "New Tehri, Uttarakhand"
         },
         theme: {
@@ -14072,7 +14072,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Udham Singh Nagar provides elite recruitment services tailored to the district's robust manufacturing base.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "rudrapur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Rudrapur, Udham Singh Nagar, Uttarakhand"
         },
         theme: {
@@ -14094,7 +14094,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Uttarkashi serves as a primary hub for professional placement in the district's rising economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "uttarkashi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Uttarkashi, Uttarakhand"
         },
         theme: {
@@ -14116,7 +14116,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Bankura provides elite recruitment infrastructure for one of West Bengal's vital agricultural and trade districts.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "bankura@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bankura, West Bengal"
         },
         theme: {
@@ -14138,7 +14138,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Barddhaman is dedicated to providing high-end professional placement for the district's rising talent.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "barddhaman@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Barddhaman, West Bengal"
         },
         theme: {
@@ -14160,7 +14160,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs West Bardhaman is dedicated to empowering the local youth by bridging the gap between talent and industry.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "westbardhaman@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "West Bardhaman, West Bengal"
         },
         theme: {
@@ -14182,7 +14182,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs East Bardhaman is dedicated to empowering the local youth by bridging the gap between talent and industry.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "eastbardhaman@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "East Bardhaman, West Bengal"
         },
         theme: {
@@ -14204,7 +14204,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Birbhum focuses on matching local dedication with national professional roles.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "birbhum@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Suri, Birbhum, West Bengal"
         },
         theme: {
@@ -14226,7 +14226,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Cooch Behar provides high-impact career access geared towards the district's expert workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "coochbehar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Cooch Behar, West Bengal"
         },
         theme: {
@@ -14248,7 +14248,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Dakshin Dinajpur serves as a gateway for local talent to enter high-growth sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "ddinajpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Balurghat, West Bengal"
         },
         theme: {
@@ -14270,7 +14270,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Darjeeling is the premier recruitment powerhouse for tourism, education, and service sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "darjeeling@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Darjeeling, West Bengal"
         },
         theme: {
@@ -14292,7 +14292,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs East Medinipur is dedicated to bridging the gap between local talent and industry requirements.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "purba_medinipur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Tamluk, West Bengal"
         },
         theme: {
@@ -14314,7 +14314,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Howrah is the premier recruitment hub for manufacturing, logistics, and IT sectors in Greater Kolkata.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "howrah@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Howrah, West Bengal"
         },
         theme: {
@@ -14336,7 +14336,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Hooghly focuses on matching local talent with high-impact corporate opportunities in the industrial belt.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "hooghly@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Chinsurah, Hooghly, West Bengal"
         },
         theme: {
@@ -14358,7 +14358,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Jalpaiguri provides elite recruitment infrastructure for the region's tourism and transport sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "jalpaiguri@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Jalpaiguri, West Bengal"
         },
         theme: {
@@ -14380,7 +14380,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kolkata is the premier recruitment powerhouse for IT, finance, media, and emerging manufacturing sectors in the East.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kolkata@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Kolkata, West Bengal"
         },
         theme: {
@@ -14402,7 +14402,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Malda focuses on providing elite career access for the region's rising professional community.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "malda@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "English Bazar, Malda, West Bengal"
         },
         theme: {
@@ -14424,7 +14424,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Murshidabad serves as a primary hub for professional placement in the district's diverse economic sectors.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "murshidabad@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Berhampore, West Bengal"
         },
         theme: {
@@ -14446,7 +14446,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Nadia is dedicated to empowering local youth through strategic industry connections.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "nadia@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Krishnanagar, West Bengal"
         },
         theme: {
@@ -14468,7 +14468,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs North 24 Parganas serves as a primary bridge for career success in the industrial and IT zones.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "n24parganas@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Barasat, West Bengal"
         },
         theme: {
@@ -14490,7 +14490,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Purulia provides high-impact career access geared towards the district's rising workforce.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "purulia@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Purulia, West Bengal"
         },
         theme: {
@@ -14512,7 +14512,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs South 24 Parganas focuses on providing elite career paths for the diverse talent in the region.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "s24parganas@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Alipore, West Bengal"
         },
         theme: {
@@ -14534,7 +14534,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Uttar Dinajpur is dedicated to providing high-end professional placement for the district's residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "udinajpur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Raiganj, West Bengal"
         },
         theme: {
@@ -14556,7 +14556,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs West Mednapur serves as a primary hub for professional placement in the district's rising industrial economy.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "paschim_medinipur@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Midnapore, West Bengal"
         },
         theme: {
@@ -14578,7 +14578,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Rajkot is the premier recruitment powerhouse for engineering, manufacturing, and business sectors in Gujarat.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "rajkot@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Rajkot, Gujarat"
         },
         theme: {
@@ -14599,7 +14599,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Sikar is the premier recruitment powerhouse for educational, tourism, and technical sectors in Rajasthan.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "sikar@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Sikar, Rajasthan"
         },
         theme: {
@@ -14620,7 +14620,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Khordha is dedicated to providing high-end professional placement for the district's residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "khordha@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Bhubaneswar, Odisha"
         },
         theme: {
@@ -14642,7 +14642,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Kamrup Metropolitan is dedicated to providing high-end professional placement for the district's residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "kamrupmetropolitan@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Guwahati, Assam"
         },
         theme: {
@@ -14664,7 +14664,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs Mumbai Suburban is dedicated to providing high-end professional placement for the district's residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "mumbaisuburban@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Mumbai Suburban, Maharashtra"
         },
         theme: {
@@ -14686,7 +14686,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs New Delhi is dedicated to providing high-end professional placement for the district's residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "newdelhi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "New Delhi,Delhi"
         },
         theme: {
@@ -14709,7 +14709,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs North Delhi is dedicated to providing high-end professional placement for the district's residents.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "northdelhi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "North Delhi, Delhi"
         },
         theme: {
@@ -14732,7 +14732,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs North west Delhi creates value by matching local hospitality and trade experience with broader industry needs.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "northwestdelhi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "Nort west Delhi, Delhi"
         },
         theme: {
@@ -14754,7 +14754,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs South East Delhi creates value by matching local hospitality and trade experience with broader industry needs.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "southeastdelhi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "South East Delhi, Delhi"
         },
         theme: {
@@ -14777,7 +14777,7 @@ export const franchiseCities = {
         aboutText: "EarlyJobs South West Delhi creates value by matching local hospitality and trade experience with broader industry needs.",
         contactInfo: {
             phone: "+91 8217527926",
-            email: "southwestdelhi@earlyjobs.in",
+            email: "franchise@earlyjobs.in",
             address: "South West Delhi, Delhi"
         },
         theme: {
@@ -15473,7 +15473,7 @@ export const getDefaultCityData = (cityName) => ({
     aboutText: `EarlyJobs is India's leading tech-enabled recruitment franchise. Our ${cityName} chapter plays a key role in linking local talent to meaningful career opportunities.`,
     contactInfo: {
         phone: "+91 8217527926",
-        email: "info@earlyjobs.in",
+        email: "franchise@earlyjobs.in",
         address: `${cityName}, India`
     },
     theme: {

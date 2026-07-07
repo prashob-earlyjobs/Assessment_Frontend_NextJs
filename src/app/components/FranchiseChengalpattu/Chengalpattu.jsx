@@ -831,7 +831,7 @@ const Chengalpattu = () => {
                                             <Mail className="w-5 h-5 text-blue-400" />
                                         </div>
                                         <p className="font-bold text-sm md:text-base mb-1">Email Us</p>
-                                        <p className="text-slate-400 text-xs hover:text-blue-300 transition-colors">chengalpattu@earlyjobs.in</p>
+                                        <a href="mailto:franchise@earlyjobs.in" className="text-slate-400 text-xs hover:text-blue-300 transition-colors no-underline">franchise@earlyjobs.in</a>
                                     </div>
 
                                     <div className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300 group cursor-pointer hover:-translate-y-1">
