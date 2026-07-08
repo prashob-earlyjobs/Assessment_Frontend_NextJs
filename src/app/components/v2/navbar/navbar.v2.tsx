@@ -258,7 +258,7 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
   }, [isMobileMenuOpen]);
 
   // Dynamic classes based on background contrast - Always use light background for better logo visibility
-  const navClasses = "fixed top-4 left-4 right-4 z-50 mx-auto max-w-8xl bg-white/95 backdrop-blur-md supports-[backdrop-filter]:bg-white/90 border border-gray-200/50 rounded-2xl shadow-lg text-gray-900";
+  const navClasses = "fixed top-2 left-2 right-2 sm:top-3 sm:left-3 sm:right-3 md:top-4 md:left-4 md:right-4 z-50 mx-auto max-w-8xl bg-white/95 backdrop-blur-md supports-[backdrop-filter]:bg-white/90 border border-gray-200/50 rounded-xl sm:rounded-2xl shadow-lg text-gray-900";
 
   return (
     <>
@@ -271,8 +271,8 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
       }
     `}</style>
     <nav ref={navRef} className={navClasses}>
-      <div className="px-4 sm:px-6 lg:px-20 xl:px-28">
-        <div className="flex items-center justify-between h-20">
+      <div className="px-3 sm:px-6 lg:px-20 xl:px-28">
+        <div className="flex items-center justify-between h-14 sm:h-16 md:h-20 gap-2">
           {/* Left side - Logo, Page Title (when scrolled) and Navigation Links (Desktop) */}
           <div className="hidden md:flex items-center space-x-6">
             {/* Logo */}
@@ -327,24 +327,24 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
           </div>
 
           {/* Mobile Logo */}
-          <div className="md:hidden flex items-center pr-2">
+          <div className="md:hidden flex items-center min-w-0 flex-1">
             <button
               onClick={() => router.push("/")}
-              className="flex items-center"
+              className="flex items-center min-w-0"
             >
               <Image
                 src="/v2/logo/logo (1).png"
                 alt="EarlyJobs"
                 width={180}
                 height={60}
-                className="object-contain h-12 w-auto"
+                className="object-contain h-9 sm:h-10 w-auto max-w-[130px] sm:max-w-[150px]"
                 priority
               />
             </button>
           </div>
 
           {/* Right side - Browse Candidates, Login/User and Hamburger Menu */}
-          <div className="flex items-center space-x-4 sm:space-x-5 md:space-x-6">
+          <div className="flex items-center gap-2 sm:gap-4 md:gap-6 flex-shrink-0">
             <Button
               onClick={() => router.push("/browse-interviewed-candidates")}
               className={`hidden md:flex bg-[#ea6a4e] hover:bg-[#c95a42] text-white font-medium px-4 sm:px-6 py-2 rounded-lg transition-colors duration-200 text-sm sm:text-base ${isActive("/browse-interviewed-candidates") ? "ring-2 ring-[#ea6a4e]/50" : ""}`}
@@ -353,11 +353,11 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
               <span className="hidden lg:inline">Browse Candidates</span>
             </Button>
 
-            {/* Login and User Dropdown - Moved here to be left of Menu */}
+            {/* Login and User Dropdown - desktop only; mobile uses the slide-out menu */}
             {userLoggedIn !== "true" && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="text-sm sm:text-base font-medium transition-colors duration-200 text-gray-900 hover:text-gray-700 px-2">
+                  <button className="hidden md:inline-flex text-sm sm:text-base font-medium transition-colors duration-200 text-gray-900 hover:text-gray-700 px-2">
                     Login
                   </button>
                 </DropdownMenuTrigger>
@@ -394,7 +394,7 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
-                    className="flex items-center justify-center w-10 h-10 rounded-full transition-all duration-200 font-semibold bg-gray-200 hover:bg-gray-300 text-gray-700 mx-1"
+                    className="hidden md:flex items-center justify-center w-10 h-10 rounded-full transition-all duration-200 font-semibold bg-gray-200 hover:bg-gray-300 text-gray-700 mx-1"
                     aria-label="User menu"
                   >
                     <span className="text-sm uppercase">
@@ -446,7 +446,7 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
             {/* Mobile Menu Toggle - Always at the far right end */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 transition-colors text-gray-900 hover:text-gray-700 ml-1"
+              className="md:hidden p-1.5 sm:p-2 transition-colors text-gray-900 hover:text-gray-700"
               aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? (
@@ -461,7 +461,83 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden border-t backdrop-blur-md border-gray-200/50 bg-white/95">
-            <div className="flex flex-col py-4 space-y-3">
+            <div className="flex flex-col py-3 sm:py-4 space-y-1 sm:space-y-3">
+              {userLoggedIn === "true" && (
+                <div className="px-4 py-3 border-b border-gray-100 mb-1">
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 text-gray-700 font-semibold text-sm uppercase flex-shrink-0">
+                      {userCredentials?.name?.charAt(0) || "U"}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold text-gray-900 truncate">
+                        {userCredentials?.name || "User"}
+                      </p>
+                      {userCredentials?.email && (
+                        <p className="text-xs text-gray-500 truncate">
+                          {userCredentials.email}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="mt-3 flex flex-col gap-1">
+                    <button
+                      onClick={() => handleLinkClick("/dashboard")}
+                      className="flex items-center gap-2 px-2 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
+                    >
+                      <User className="h-4 w-4" />
+                      Dashboard
+                    </button>
+                    <button
+                      onClick={() => handleLinkClick("/profile")}
+                      className="flex items-center gap-2 px-2 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
+                    >
+                      <User className="h-4 w-4" />
+                      My Profile
+                    </button>
+                    <button
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        handleLogout();
+                      }}
+                      className="flex items-center gap-2 px-2 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {userLoggedIn !== "true" && (
+                <div className="px-4 py-3 border-b border-gray-100 mb-1 space-y-2">
+                  <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Login</p>
+                  <button
+                    onClick={() => handleLinkClick("/login?mode=candidate")}
+                    className="flex items-start gap-3 w-full p-2 rounded-lg hover:bg-[#ea6a4e]/10 transition-colors"
+                  >
+                    <div className="flex items-center justify-center w-9 h-9 rounded-full bg-[#ea6a4e]/10 flex-shrink-0">
+                      <Users className="h-4 w-4 text-[#ea6a4e]" />
+                    </div>
+                    <div className="text-left">
+                      <span className="text-sm font-semibold text-gray-900">Login as Candidate</span>
+                      <span className="block text-xs text-gray-500">Find jobs and take assessments</span>
+                    </div>
+                  </button>
+                  <button
+                    onClick={() => handleLinkClick("/login?mode=recruiter")}
+                    className="flex items-start gap-3 w-full p-2 rounded-lg hover:bg-[#ea6a4e]/10 transition-colors"
+                  >
+                    <div className="flex items-center justify-center w-9 h-9 rounded-full bg-[#ea6a4e]/10 flex-shrink-0">
+                      <Briefcase className="h-4 w-4 text-[#ea6a4e]" />
+                    </div>
+                    <div className="text-left">
+                      <span className="text-sm font-semibold text-gray-900">Login as Recruiter</span>
+                      <span className="block text-xs text-gray-500">Post jobs and find candidates</span>
+                    </div>
+                  </button>
+                </div>
+              )}
+
               {navLinks.map((link) =>
                 link.highlight ? (
                   <button
