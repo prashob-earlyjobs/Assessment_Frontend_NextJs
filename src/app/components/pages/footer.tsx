@@ -74,8 +74,6 @@ const Footer = () => {
             <Link href="/about-us" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">About Us</Link>
             <Link href="/team" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Team</Link>
             <Link href="/blogs" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Blogs</Link>
-            <Link href="/franchise" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Franchise With Us</Link>
-            <Link href="/franchise/locations" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Franchise Locations</Link>
             <a href="tel:+918217527926" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 cursor-pointer lg:mt-6" id="contact-link">Contact Us</a>
             <Link href="/story" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Our Story</Link>
             <Link href="/jobs" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Job Openings</Link>
@@ -108,9 +106,9 @@ const Footer = () => {
               <Building className="w-5 h-5 mr-2 inline-block" />
               Company Tie-Ups
             </Link>
-            <Link href="/college-tieups" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
-              <GraduationCap className="w-5 h-5 mr-2 inline-block" />
-              College Tie-Ups
+            <Link href="/franchise" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
+              <MapPin className="w-5 h-5 mr-2 inline-block" />
+              Franchise With Us
             </Link>
             {/* <Link href="/join-creator-programme" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">
               <Users className="w-5 h-5 mr-2 inline-block" />
@@ -127,9 +125,9 @@ const Footer = () => {
             </Link> */}
           </div>
         </div>
-        <div className="w-full px-4 lg:px-8 mt-8">
+        <div className="w-full px-4 lg:px-8 mt-5">
           <h3 className="text-white text-base font-semibold uppercase leading-5">Also Available In</h3>
-          <div className="flex items-center justify-between gap-4 mt-4 w-full">
+          <div className="flex items-center justify-between gap-4 mt-2 w-full">
             <div className="flex items-center gap-3 shrink-0">
               <a
                 href="https://play.google.com/store/apps/details?id=com.victaman.earlyjobs"
@@ -168,25 +166,18 @@ const Footer = () => {
         <div className="w-full  mt-2 px-4 pb-10">
           {/* Available in section */}
           <div className=" pb-4 mb-6 text-center mt-10 lg:mt-0">
-            <span className=" text-2xl font-bold text-gray-300 block sm:inline">Available in:</span>
+            <span
+              onClick={() => router.push("/franchise/locations")}
+              className="text-2xl font-bold text-gray-300 block sm:inline cursor-pointer hover:text-gray-200 transition-colors duration-200"
+            >
+              Available in:
+            </span>
             <div className="flex flex-wrap gap-4 mt-3 justify-center">
               <p
                 onClick={() => router.push("/franchise/mohali")}
                 className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
               >
                 Mohali
-              </p>
-              <p
-                onClick={() => router.push("/franchise/chandigarh")}
-                className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
-              >
-                Chandigarh
-              </p>
-              <p
-                onClick={() => router.push("/franchise/hyderabad")}
-                className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
-              >
-                Hyderabad
               </p>
               <p
                 onClick={() => router.push("/franchise/chennai")}
@@ -196,18 +187,11 @@ const Footer = () => {
               </p>
 
               <p
-                onClick={() => router.push("/franchise/rampur")}
-                className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
-              >
-                Rampur
-              </p>
-              <p
                 onClick={() => router.push("/franchise/coimbatore")}
                 className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
               >
                 Coimbatore
               </p>
-
               <p
                 onClick={() => router.push("/franchise/ananthapur")}
                 className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
@@ -256,6 +240,12 @@ const Footer = () => {
               >
                 Medchal
               </p>
+              <p
+                onClick={() => router.push("/franchise/Lucknow")}
+                className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
+              >
+                Lucknow
+              </p>
 
             </div>
           </div>
@@ -277,12 +267,6 @@ const Footer = () => {
                 className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
               >
                 Chengalpattu
-              </p>
-              <p
-                onClick={() => router.push("/franchise/Lucknow")}
-                className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
-              >
-                Lucknow
               </p>
               <p
                 onClick={() => router.push("/")}
