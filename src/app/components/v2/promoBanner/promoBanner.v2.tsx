@@ -28,6 +28,22 @@ type PromoBannerV2Props = {
 const PromoBannerV2 = ({ data }: PromoBannerV2Props) => {
   const router = useRouter();
 
+  const highlightSlides = [
+    {
+      id: 1,
+      image: "/v2/images/Award.png",
+      alt: "Startup Awards 2026 HRTech of the Year",
+      caption: "Honored to receive the Startup Awards 2026 – HRTech of the Year from Entrepreneur India. 🏆",
+      href: "https://www.entrepreneurindia.com/startup/awards_winner.php",
+    },
+    {
+      id: 2,
+      image: "/v2/images/google-antler-immersion.png",
+      alt: "Team EarlyJobs at Google for Startups x Antler Immersion",
+      caption: "Team EarlyJobs at Google for Startups x Antler Immersion",
+    },
+  ];
+
   const banners = [
     {
       id: 1,
@@ -155,23 +171,46 @@ const PromoBannerV2 = ({ data }: PromoBannerV2Props) => {
         {/* First Section: Good Life Begins */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-12 items-start">
           <div>
-            <div className="relative w-full h-64 md:h-80 lg:h-96 rounded-2xl overflow-hidden">
-              <Image
-                src="/v2/images/Award.png"
-                alt="Good Company"
-                fill
-                className="object-cover rounded-2xl"
-                priority={false}
-              />
-            </div>
-            <a
-              href="https://www.entrepreneurindia.com/startup/awards_winner.php"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-4 text-center font-bold text-gray-800 hover:text-orange-500 transition-colors cursor-pointer block"
+            <Carousel
+              plugins={[
+                Autoplay({
+                  delay: 5000,
+                }),
+              ]}
+              className="w-full"
             >
-              Honored to receive the Startup Awards 2026 – HRTech of the Year from Entrepreneur India. 🏆
-            </a>
+              <CarouselContent>
+                {highlightSlides.map((slide) => (
+                  <CarouselItem key={slide.id}>
+                    <div className="relative w-full h-64 md:h-80 lg:h-96 rounded-2xl overflow-hidden">
+                      <Image
+                        src={slide.image}
+                        alt={slide.alt}
+                        fill
+                        className="object-cover rounded-2xl"
+                        priority={slide.id === 1}
+                      />
+                    </div>
+                    {slide.href ? (
+                      <a
+                        href={slide.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-4 text-center font-bold text-gray-800 hover:text-orange-500 transition-colors cursor-pointer block"
+                      >
+                        {slide.caption}
+                      </a>
+                    ) : (
+                      <p className="mt-4 text-center font-bold text-gray-800">
+                        {slide.caption}
+                      </p>
+                    )}
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="left-3 bg-white/80 hover:bg-white border-none text-gray-800 shadow-md" />
+              <CarouselNext className="right-3 bg-white/80 hover:bg-white border-none text-gray-800 shadow-md" />
+            </Carousel>
           </div>
           <div className="flex flex-col justify-start items-center text-center pt-2 md:pt-4 lg:pt-6">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-orange-500 leading-tight mb-4">

@@ -31,7 +31,7 @@ const Footer = () => {
   return (
     <>
       <footer className="w-full flex flex-col items-center py-8 bg-[#0A0F10] text-white md:py-10 lg:py-10 px-3">
-        <div className="grid grid-cols-1 gap-5 px-4 w-full sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
+        <div className="grid grid-cols-1 gap-5 px-4 w-full sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 lg:px-8">
           <div className="flex flex-col">
             <Link href="/" className="mb-5">
               <img src="/images/logo.png" alt="earlyjobs" className="w-[130px] h-[90px]" />
@@ -77,6 +77,15 @@ const Footer = () => {
             <a href="tel:+918217527926" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 cursor-pointer lg:mt-6" id="contact-link">Contact Us</a>
             <Link href="/story" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Our Story</Link>
             <Link href="/jobs" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Job Openings</Link>
+          </div>
+          <div className="flex flex-col">
+            <h3 className="pt-8 text-white text-base font-semibold uppercase leading-5 lg:pt-12">GCC</h3>
+            <Link href="/gcc-hiring-solutions" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">GCC Hiring Solutions</Link>
+            <Link href="/build-gcc-india" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Build GCC India</Link>
+            <Link href="/gcc-recruitment-partner" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">GCC Recruitment Partner</Link>
+            <Link href="/offshore-capability-center-hiring" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">Offshore Capability Center Hiring</Link>
+            <Link href="/gcc-talent-acquisition" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">GCC Talent Acquisition</Link>
+            <Link href="/india-gcc-hiring-services" className="text-gray-400 text-base font-normal leading-5 mt-4 hover:text-gray-200 no-underline lg:mt-6">India GCC Hiring Services</Link>
           </div>
           <div className="flex flex-col">
             <h3 className="pt-8 text-white text-base font-semibold uppercase leading-5 lg:pt-12">Our Services</h3>
@@ -126,24 +135,24 @@ const Footer = () => {
           </div>
         </div>
         <div className="w-full px-4 lg:px-8 mt-5">
-          <h3 className="text-white text-base font-semibold uppercase leading-5">Also Available In</h3>
-          <div className="flex items-center justify-between gap-4 mt-2 w-full">
+          <h3 className="text-white text-base font-semibold leading-5">Available on</h3>
+          <div className="flex items-center justify-between gap-4 mt-1 w-full">
             <div className="flex items-center gap-3 shrink-0">
               <a
                 href="https://play.google.com/store/apps/details?id=com.victaman.earlyjobs"
                 rel="noreferrer"
                 target="_blank"
-                className="shrink-0"
+                className="shrink-0 h-[92px] overflow-hidden flex items-center"
               >
-                <img src="/images/google-play-badge-logo.svg" alt="google-play" className="w-[120px] h-auto select-none" />
+                <img src="/images/google-play-badge-logo.svg" alt="google-play" className="w-[120px] h-auto select-none -translate-y-1" />
               </a>
               <a
                 href="https://apps.apple.com/in/app/earlyjobs-ai/id6754554572"
                 rel="noreferrer"
                 target="_blank"
-                className="shrink-0"
+                className="shrink-0 h-[92px] overflow-hidden flex items-center"
               >
-                <img src="/images/app-store-logo.svg" alt="app-store" className="w-[120px] h-auto select-none" />
+                <img src="/images/app-store-logo.svg" alt="app-store" className="w-[120px] h-auto select-none -translate-y-1" />
               </a>
             </div>
             <div className="flex items-center gap-2 sm:gap-3 shrink-0">
@@ -163,14 +172,14 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <div className="w-full  mt-2 px-4 pb-10">
+        <div className="w-full mt-2 px-4 pb-4">
           {/* Available in section */}
-          <div className=" pb-4 mb-6 text-center mt-10 lg:mt-0">
+          <div className="text-center mt-6 lg:mt-0 mb-4">
             <span
               onClick={() => router.push("/franchise/locations")}
               className="text-2xl font-bold text-gray-300 block sm:inline cursor-pointer hover:text-gray-200 transition-colors duration-200"
             >
-              Available in:
+              Franchise Location
             </span>
             <div className="flex flex-wrap gap-4 mt-3 justify-center">
               <p
@@ -368,7 +377,7 @@ const Footer = () => {
 
 
         </div>
-        <div className="w-full border-t border-gray-300 mt-10 px-4 py-6 ">
+        <div className="w-full border-t border-gray-300 mt-6 px-4 py-6 ">
           <div className="flex justify-center items-center text-center">
             <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-8">
               <div className="flex space-x-6">
