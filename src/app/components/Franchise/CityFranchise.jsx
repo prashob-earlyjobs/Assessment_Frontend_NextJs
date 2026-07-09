@@ -25,6 +25,8 @@ import {
     User,
 } from "lucide-react"
 
+const BACKEND_URL_2_0 = process.env.NEXT_PUBLIC_BACKEND_URL_2_0 || "http://localhost:5001/api"
+
 const Card = ({ className = "", children, ...props }) => (
     <motion.div
         initial={{ opacity: 0, y: 100, scale: 0.9 }}
@@ -115,8 +117,24 @@ const CityFranchise = ({ data }) => {
     const [error, setError] = useState(null)
     const [showPopup, setShowPopup] = useState(null)
     const [openIndex, setOpenIndex] = useState(0)
+    const [dashboardSummary, setDashboardSummary] = useState(null)
 
     const defaultHeroImage = "https://res.cloudinary.com/ddsy9p8fg/image/upload/v1776657676/defaultheroImage_ewfnj4.jpg"
+
+    useEffect(() => {
+        const getDashboardData = async () => {
+            try {
+                const response = await fetch(`${BACKEND_URL_2_0}/dashboard`, { cache: "no-store" })
+                const result = await response.json()
+                if (!response.ok) throw new Error(result?.message || "Failed to fetch dashboard")
+                setDashboardSummary(result?.data?.summary ?? null)
+            } catch (err) {
+                console.error("Error fetching dashboard data:", err)
+            }
+        }
+
+        getDashboardData()
+    }, [])
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -260,6 +278,10 @@ const CityFranchise = ({ data }) => {
         "Campus-to-corporate transition support",
     ]
 
+    const placementsCount = dashboardSummary?.placedCount ?? "-"
+    const partnerCompaniesCount = dashboardSummary?.companiesCount ?? "-"
+    const localCollegesCount = dashboardSummary?.collegesCount ?? "-"
+
     const companyBenefits = data.companyBenefits || [
         `Access to pre-vetted local talent pool in ${data.name}`,
         "Quick hiring process & reduced recruitment time",
@@ -369,15 +391,15 @@ const CityFranchise = ({ data }) => {
                                 />
                                 <div className="p-6 grid grid-cols-3 gap-4">
                                     <div className="text-center">
-                                        <p className="text-2xl font-bold text-orange-700">1500+</p>
+                                        <p className="text-2xl font-bold text-orange-700">{placementsCount}</p>
                                         <p className="text-xs text-orange-800/80">Placements</p>
                                     </div>
                                     <div className="text-center">
-                                        <p className="text-2xl font-bold text-orange-700">100+</p>
+                                        <p className="text-2xl font-bold text-orange-700">{partnerCompaniesCount}</p>
                                         <p className="text-xs text-orange-800/80">Partner Companies</p>
                                     </div>
                                     <div className="text-center">
-                                        <p className="text-2xl font-bold text-orange-700">150+</p>
+                                        <p className="text-2xl font-bold text-orange-700">{localCollegesCount}</p>
                                         <p className="text-xs text-orange-800/80">Colleges</p>
                                     </div>
                                 </div>

@@ -273,18 +273,18 @@ const GccHiringSolutionsPage = () => {
                 </p>
                 <div className="mt-8 flex flex-wrap gap-4">
                   <a
-                    href="tel:+918217527926"
+                    href="mailto:info@earlyjobs.in"
                     className="inline-flex items-center gap-2 rounded-xl bg-[#F08504] px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-orange-900/30 transition hover:bg-orange-600"
                   >
                     Book a GCC Hiring Consultation
                     <ArrowRight className="h-4 w-4" />
                   </a>
-                  <a
-                    href="mailto:info@earlyjobs.in"
+                  <button
+                    type="button"
                     className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white/80 px-6 py-3.5 text-sm font-semibold text-slate-800 backdrop-blur-sm transition hover:bg-white"
                   >
                     Download GCC Hiring Playbook
-                  </a>
+                  </button>
                 </div>
 
                 {/* Hiring flow — horizontal on desktop */}
