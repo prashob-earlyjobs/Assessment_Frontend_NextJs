@@ -31,7 +31,7 @@ const Footer = () => {
   return (
     <>
       <footer className="w-full flex flex-col items-center py-8 bg-[#0A0F10] text-white md:py-10 lg:py-10 px-3">
-        <div className="grid grid-cols-1 gap-5 px-4 w-full sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-5 px-4 w-full sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 lg:px-8">
           <div className="flex flex-col">
             <Link href="/" className="mb-5">
               <img src="/images/logo.png" alt="earlyjobs" className="w-[130px] h-[90px]" />
@@ -136,23 +136,23 @@ const Footer = () => {
         </div>
         <div className="w-full px-4 lg:px-8 mt-5">
           <h3 className="text-white text-base font-semibold leading-5">Available on</h3>
-          <div className="flex items-center justify-between gap-4 mt-2 w-full">
+          <div className="flex items-center justify-between gap-4 mt-1 w-full">
             <div className="flex items-center gap-3 shrink-0">
               <a
                 href="https://play.google.com/store/apps/details?id=com.victaman.earlyjobs"
                 rel="noreferrer"
                 target="_blank"
-                className="shrink-0"
+                className="shrink-0 h-[92px] overflow-hidden flex items-center"
               >
-                <img src="/images/google-play-badge-logo.svg" alt="google-play" className="w-[120px] h-auto select-none" />
+                <img src="/images/google-play-badge-logo.svg" alt="google-play" className="w-[120px] h-auto select-none -translate-y-1" />
               </a>
               <a
                 href="https://apps.apple.com/in/app/earlyjobs-ai/id6754554572"
                 rel="noreferrer"
                 target="_blank"
-                className="shrink-0"
+                className="shrink-0 h-[92px] overflow-hidden flex items-center"
               >
-                <img src="/images/app-store-logo.svg" alt="app-store" className="w-[120px] h-auto select-none" />
+                <img src="/images/app-store-logo.svg" alt="app-store" className="w-[120px] h-auto select-none -translate-y-1" />
               </a>
             </div>
             <div className="flex items-center gap-2 sm:gap-3 shrink-0">
