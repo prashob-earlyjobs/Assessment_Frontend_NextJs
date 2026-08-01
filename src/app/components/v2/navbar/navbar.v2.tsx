@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Image from "next/image";
 import { Button } from "../../ui/button";
-import { Menu, X, User, LogOut, Briefcase, Users, Zap } from "lucide-react";
+import { Menu, X, User, LogOut, Briefcase, Zap } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -362,7 +362,7 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" sideOffset={8} className="w-64 p-2 bg-white border border-gray-200 shadow-lg mt-2">
-                  <DropdownMenuItem
+                  {/* <DropdownMenuItem
                     onClick={() => router.push("/login?mode=candidate")}
                     className="flex items-start gap-3 p-3 cursor-pointer hover:bg-[#ea6a4e]/10 rounded-lg bg-white"
                   >
@@ -373,7 +373,7 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
                       <span className="text-sm font-semibold text-gray-900">Login as Candidate</span>
                       <span className="text-xs text-gray-500">Find jobs and take assessments</span>
                     </div>
-                  </DropdownMenuItem>
+                  </DropdownMenuItem> */}
                   <DropdownMenuItem
                     onClick={() => router.push("/login?mode=recruiter")}
                     className="flex items-start gap-3 p-3 cursor-pointer hover:bg-[#ea6a4e]/10 rounded-lg bg-white"
@@ -511,7 +511,7 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
               {userLoggedIn !== "true" && (
                 <div className="px-4 py-3 border-b border-gray-100 mb-1 space-y-2">
                   <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Login</p>
-                  <button
+                  {/* <button
                     onClick={() => handleLinkClick("/login?mode=candidate")}
                     className="flex items-start gap-3 w-full p-2 rounded-lg hover:bg-[#ea6a4e]/10 transition-colors"
                   >
@@ -522,7 +522,7 @@ const NavbarV2 = ({ pageTitle, showPageTitle }: { pageTitle?: string; showPageTi
                       <span className="text-sm font-semibold text-gray-900">Login as Candidate</span>
                       <span className="block text-xs text-gray-500">Find jobs and take assessments</span>
                     </div>
-                  </button>
+                  </button> */}
                   <button
                     onClick={() => handleLinkClick("/login?mode=recruiter")}
                     className="flex items-start gap-3 w-full p-2 rounded-lg hover:bg-[#ea6a4e]/10 transition-colors"
