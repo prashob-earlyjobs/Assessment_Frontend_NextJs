@@ -27,6 +27,7 @@ interface JobCardProps {
   location: string;
   skills?: string[];
   postedTime: string;
+  isSubJob?: boolean;
   onJobClick?: () => void;
 }
 
@@ -48,6 +49,7 @@ const JobCard = ({
   location,
   skills,
   postedTime,
+  isSubJob,
   onJobClick,
 }: JobCardProps) => {
   const [isBookmarked, setIsBookmarked] = useState(!!savedJob);
@@ -241,7 +243,13 @@ const JobCard = ({
               >
                 {title}
               </h3>
-              <p className="text-gray-600 text-sm">{brandName}</p>
+              <div className="flex items-center gap-2 flex-wrap">
+                <p className="text-gray-600 text-sm">For {brandName}</p>
+                <span className="w-1.5 h-1.5 rounded-full bg-gray-400 flex-shrink-0" aria-hidden="true" />
+                <p className="text-gray-500 text-sm">
+                  {isSubJob ? "Posted by EarlyJobs recruiter" : "Posted by EarlyJobs"}
+                </p>
+              </div>
             </div>
           </div>
           <Button

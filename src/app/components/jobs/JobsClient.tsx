@@ -34,6 +34,8 @@ interface Job {
   maxExperience?: number;
   noOfOpenings?: number;
   status?: string;
+  type?: string;
+  isSubJob?: boolean;
 }
 
 interface JobDetailsData {
@@ -568,6 +570,7 @@ const JobsClient = () => {
                         salary_mode={getSalaryMode(job)}
                         location={job.location || "Location Not Specified"}
                         postedTime={job.createdAt || "Not Disclosed"}
+                        isSubJob={job.type === "sub" || job.isSubJob === true}
                         onJobClick={() => handleJobClick(job.jobId)}
                       />
                     </div>
@@ -715,6 +718,7 @@ const JobsClient = () => {
                               salary_mode={getSalaryMode(job)}
                               location={job.location || "Location Not Specified"}
                               postedTime={job.createdAt || "Not Disclosed"}
+                              isSubJob={job.type === "sub" || job.isSubJob === true}
                               onJobClick={() => handleJobClick(job.jobId, job)}
                             />
                           </div>

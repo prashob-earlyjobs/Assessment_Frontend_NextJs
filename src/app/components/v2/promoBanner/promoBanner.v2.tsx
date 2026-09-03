@@ -152,7 +152,7 @@ const PromoBannerV2 = ({ data }: PromoBannerV2Props) => {
       buttonClass: "bg-white hover:bg-gray-100 text-[#F08504]",
       title: "Powering Consultancy Growth",
       description: [
-        <span key="desc-1"><strong className="font-bold">◉ Free Job Posting & Sourcing -:</strong>  Post unlimited jobs and access active candidates without heavy portal costs..</span>,
+        // <span key="desc-1"><strong className="font-bold">◉ Free Job Posting & Sourcing -:</strong>  Post unlimited jobs and access active candidates without heavy portal costs..</span>,
         <span key="desc-2"><strong className="font-bold">◉ AI-Powered Candidate Matching -:</strong>   Smart AI helps you find relevant profiles faster, reducing manual screening time.</span>,
         <span key="desc-3"><strong className="font-bold">◉ Higher Closures, Faster Turnaround -:</strong>  Access to a wider talent pool increases submission quality and improves closure ratio</span>,
         <span key="desc-4"><strong className="font-bold">◉ Pan-India Recruiter Network -:</strong> Collaborate with 400+ freelance recruiters and expand your reach beyond your local market.</span>,

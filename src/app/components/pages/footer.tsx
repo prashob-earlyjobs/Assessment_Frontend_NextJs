@@ -189,13 +189,6 @@ const Footer = () => {
                 Mohali
               </p>
               <p
-                onClick={() => router.push("/franchise/chennai")}
-                className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
-              >
-                Chennai
-              </p>
-
-              <p
                 onClick={() => router.push("/franchise/coimbatore")}
                 className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
               >
@@ -206,13 +199,6 @@ const Footer = () => {
                 className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
               >
                 Ananthapur
-              </p>
-
-              <p
-                onClick={() => router.push("/franchise/bangalore")}
-                className="text-gray-400  text-lg hover:text-amber-600 transition-all duration-300 cursor-pointer"
-              >
-                Bangalore
               </p>
 
               <p
