@@ -53,6 +53,8 @@ const directors: Director[] = [
   },
   {
     id: "5",
+    name: "Shankar Gaur",
+    designation: "Non-Executive Director",
     imageUrl: "/images/1769533094910.jpeg",
     biography:
       "Non-Executive Director at EarlyJobs with 30+ years of leadership experience, including expertise in scaling job marketplaces and high-growth startups.",
