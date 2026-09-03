@@ -183,7 +183,7 @@ const JobCard = ({
               <h3 className="font-semibold text-lg text-earlyjobs-text hover:text-earlyjobs-orange transition-colors">
                 {title}
               </h3>
-              <p className="text-gray-600 text-sm">{brandName }</p>
+              <p className="text-gray-600 text-sm">For {brandName}</p>
             </div>
           </div>
           <Button

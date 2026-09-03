@@ -55,6 +55,7 @@ interface JobDetailsData {
   related_jobs?: JobDetailsData[];
   isExternal?: boolean;
   isActive?: boolean;
+  type?: string;
 }
 interface ICreateApplicantRequestBody {
   tpoId?: string;
@@ -799,7 +800,13 @@ const JobDetailsClient = ({ jobid, currentUrl }: JobDetailsClientProps) => {
                     <h2 className="text-lg sm:text-xl font-semibold text-earlyjobs-text mb-1">
                       {jobData.title}
                     </h2>
-                    <p className="text-sm sm:text-base text-gray-600">{jobData.brand_name}</p>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <p className="text-sm sm:text-base text-gray-600">For {jobData.brand_name}</p>
+                      <span className="w-1.5 h-1.5 rounded-full bg-gray-400 flex-shrink-0" aria-hidden="true" />
+                      <p className="text-sm sm:text-base text-gray-500">
+                        {jobData.type === "sub" ? "Posted by EarlyJobs recruiter" : "Posted by EarlyJobs"}
+                      </p>
+                    </div>
                   </div>
                 </div>
                 
