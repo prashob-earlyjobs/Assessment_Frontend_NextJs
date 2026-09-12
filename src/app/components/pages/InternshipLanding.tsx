@@ -9,9 +9,10 @@ import {
   Check,
   ArrowRight,
   Star,
+  Mail,
 } from "lucide-react";
 
-const LUMA_EVENT_PAGE = "https://lu.ma/event/evt-hlD5xmTyFiYbLZA";
+const LUMA_EVENT_PAGE = "https://luma.com/3rjmwn73";
 
 const NAV_LINKS = [
   { label: "The Program", href: "#solution" },
@@ -230,6 +231,7 @@ export default function InternshipLanding() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [lastMailtoUrl, setLastMailtoUrl] = useState("");
   const [showStickyCta, setShowStickyCta] = useState(false);
 
   useEffect(() => {
@@ -261,7 +263,31 @@ export default function InternshipLanding() {
 
     setIsSubmitting(true);
     try {
-      const response = await submitEnquiry({
+      const recipient = "info@earlyjobs.in";
+      const subject = `HR Recruitment Internship Application - ${formData.name.trim()}`;
+      const bodyLines = [
+        "Hello EarlyJobs Team,",
+        "",
+        "I would like to apply for the HR Recruitment Internship Program. Here are my application details:",
+        "",
+        `• Full Name: ${formData.name.trim()}`,
+        `• Phone Number: ${phone}`,
+        `• Email Address: ${formData.email.trim()}`,
+        `• City: ${formData.city.trim()}`,
+        `• Current Status: ${formData.status}`,
+        formData.message.trim() ? `• Message: ${formData.message.trim()}` : "",
+        "",
+        "Submitted via EarlyJobs Internship Portal (https://www.earlyjobs.ai/internship)",
+      ].filter(Boolean);
+
+      const mailtoUrl = `mailto:${recipient}?subject=${encodeURIComponent(
+        subject
+      )}&body=${encodeURIComponent(bodyLines.join("\n"))}`;
+
+      setLastMailtoUrl(mailtoUrl);
+
+      // Non-blocking background sync to backend enquiries
+      submitEnquiry({
         name: formData.name.trim(),
         mobile: phone,
         email: formData.email.trim().toLowerCase(),
@@ -272,17 +298,19 @@ export default function InternshipLanding() {
         ],
         remarks: formData.message.trim() || undefined,
         source: "internship-landing",
+      }).catch(() => {
+        // Background sync catch
       });
 
-      if (response?.success !== false) {
-        setSubmitted(true);
-        setFormData({ name: "", phone: "", email: "", city: "", status: "", message: "" });
-        toast.success("Application submitted!", {
-          description: "Our team will reach out within 24–48 hours.",
-        });
-      }
+      // Trigger mail client to send directly to info@earlyjobs.in
+      window.location.href = mailtoUrl;
+
+      setSubmitted(true);
+      toast.success("Application ready!", {
+        description: "Directing to info@earlyjobs.in via your email client.",
+      });
     } catch {
-      // toast handled in submitEnquiry
+      toast.error("Could not process application. Please email info@earlyjobs.in directly.");
     } finally {
       setIsSubmitting(false);
     }
@@ -509,16 +537,16 @@ export default function InternshipLanding() {
           <div className="grid lg:grid-cols-3 gap-5 lg:gap-4 items-stretch">
             {CAREER_STEPS.map((step, i) => (
               <React.Fragment key={step.title}>
-                <div className="ij-card bg-[var(--ij-navy-soft)] border-white/10">
-                  <p className="text-xs uppercase tracking-wider text-[var(--ij-orange-glow)] mb-2">
+                <div className="ij-card ij-card-dark">
+                  <p className="text-xs uppercase tracking-wider text-[var(--ij-orange-glow)] mb-2 font-semibold">
                     Step {i + 1}
                   </p>
                   <h3 className="text-xl font-semibold text-white mb-4">{step.title}</h3>
                   <ul className="space-y-2.5">
                     {step.items.map((item) => (
-                      <li key={item} className="flex gap-2 text-sm text-white/75 leading-relaxed">
+                      <li key={item} className="flex gap-2 text-sm text-white/85 leading-relaxed">
                         <Check className="w-4 h-4 text-[var(--ij-orange-glow)] flex-shrink-0 mt-0.5" />
-                        {item}
+                        <span>{item}</span>
                       </li>
                     ))}
                   </ul>
@@ -775,21 +803,34 @@ export default function InternshipLanding() {
 
           <div className="bg-[var(--ij-paper)] rounded-[22px] p-6 sm:p-8 shadow-xl border border-white/40">
             {submitted ? (
-              <div className="text-center py-8">
+              <div className="text-center py-6">
                 <div className="w-14 h-14 rounded-full bg-[var(--ij-orange-soft)] text-[var(--ij-orange)] inline-flex items-center justify-center mb-4">
                   <Check className="w-7 h-7" />
                 </div>
-                <h3 className="text-xl font-semibold text-[var(--ij-navy)] mb-2">Thanks for applying!</h3>
-                <p className="text-[var(--ij-ink-soft)] text-sm">
-                  Our team will reach out within 24–48 hours with next steps.
+                <h3 className="text-xl font-semibold text-[var(--ij-navy)] mb-2">Application Ready!</h3>
+                <p className="text-[var(--ij-ink-soft)] text-sm mb-4">
+                  Your application details have been prepared for <strong className="text-[var(--ij-navy)]">info@earlyjobs.in</strong>. If your email app did not open automatically, click below to send:
                 </p>
-                <button
-                  type="button"
-                  className="ij-btn ij-btn-ghost mt-6"
-                  onClick={() => setSubmitted(false)}
-                >
-                  Submit another application
-                </button>
+                {lastMailtoUrl && (
+                  <a
+                    href={lastMailtoUrl}
+                    className="ij-btn ij-btn-primary inline-flex items-center justify-center gap-2 mb-3 w-full sm:w-auto"
+                  >
+                    <Mail className="w-4 h-4" /> Send Email to info@earlyjobs.in
+                  </a>
+                )}
+                <div>
+                  <button
+                    type="button"
+                    className="ij-btn ij-btn-ghost mt-2 text-xs"
+                    onClick={() => {
+                      setSubmitted(false);
+                      setFormData({ name: "", phone: "", email: "", city: "", status: "", message: "" });
+                    }}
+                  >
+                    Submit another application
+                  </button>
+                </div>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -874,9 +915,15 @@ export default function InternshipLanding() {
                   disabled={isSubmitting}
                   className="ij-btn ij-btn-primary w-full inline-flex items-center justify-center gap-2"
                 >
-                  {isSubmitting ? "Submitting..." : "Submit Application"}
+                  {isSubmitting ? "Preparing Email..." : "Submit Application"}
                   {!isSubmitting && <ArrowRight className="w-4 h-4" />}
                 </button>
+                <p className="text-xs text-center text-[var(--ij-ink-soft)] mt-2">
+                  Applications are delivered directly to{" "}
+                  <a href="mailto:info@earlyjobs.in" className="underline font-semibold text-[var(--ij-navy)]">
+                    info@earlyjobs.in
+                  </a>
+                </p>
               </form>
             )}
           </div>
@@ -985,6 +1032,12 @@ export default function InternshipLanding() {
           border: 1px solid var(--ij-line);
           border-radius: 22px;
           padding: 1.5rem;
+        }
+        .internship-landing .ij-card.ij-card-dark,
+        .internship-landing .ij-card-dark {
+          background: var(--ij-navy-soft) !important;
+          border: 1px solid rgba(255, 255, 255, 0.12) !important;
+          color: #ffffff;
         }
         .internship-landing .ij-stat-card {
           background: linear-gradient(145deg, var(--ij-navy) 0%, #121820 100%);
