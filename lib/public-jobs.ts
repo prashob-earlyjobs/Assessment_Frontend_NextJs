@@ -298,6 +298,7 @@ type PublicJobRecord = {
   keywords?: { keyword?: string; isShared?: boolean }[] | string[];
   hiring_need?: string;
   shift_timings?: string;
+  isActive?: boolean;
   isExternal?: boolean;
   related_jobs?: {
     title?: string;
