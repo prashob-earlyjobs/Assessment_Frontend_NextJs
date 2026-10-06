@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { gsap, playMotion, ScrollTrigger, useGSAP } from "@/lib/gsap";
 
 const before = [
@@ -40,18 +40,15 @@ function Route({
   label,
   steps,
   tone,
-  progress,
 }: {
   label: string;
   steps: readonly string[];
   tone: "muted" | "brand";
-  progress: number;
 }) {
   const brand = tone === "brand";
-  const last = Math.max(1, steps.length - 1);
 
   return (
-    <div>
+    <div data-route={tone}>
       <p className={`text-sm font-medium ${brand ? "text-brand" : "text-neutral-500"}`}>{label}</p>
       <ol className="relative mt-5">
         {brand ? (
@@ -60,30 +57,26 @@ function Route({
         {brand ? (
           <span
             aria-hidden
-            className="absolute top-2 left-[5px] w-px bg-brand"
-            style={{ height: `calc((100% - 16px) * ${Math.min(1, Math.max(0, progress))})` }}
+            data-progress-line
+            className="absolute top-2 left-[5px] w-px origin-top bg-brand"
+            style={{ height: "calc(100% - 16px)", transform: "scaleY(0)" }}
           />
         ) : null}
         {steps.map((step, index) => {
-          const reached = progress + 0.02 >= index / last;
           const shift = brand ? 0 : beforeNudge[index];
           return (
-            <li key={step} className="relative h-14">
+            <li key={step} data-step className="relative h-14" data-index={index}>
               <span
                 aria-hidden
+                data-dot
                 className={`absolute top-2 size-[11px] rounded-full border-2 ${
-                  reached
-                    ? brand
-                      ? "border-brand bg-brand"
-                      : "border-neutral-600 bg-neutral-600"
-                    : "border-neutral-300 bg-white"
+                  brand ? "border-neutral-300 bg-white" : "border-neutral-300 bg-white"
                 }`}
                 style={{ left: shift }}
               />
               <span
-                className={`absolute top-1 max-w-[16rem] text-sm font-medium leading-5 ${
-                  reached ? "text-neutral-950" : "text-neutral-300"
-                }`}
+                data-label
+                className="absolute top-1 max-w-[16rem] text-sm font-medium leading-5 text-neutral-300"
                 style={{ left: shift + 22 }}
               >
                 {step}
@@ -98,21 +91,58 @@ function Route({
 
 function RouteMap() {
   const ref = useRef<HTMLDivElement>(null);
-  const [progress, setProgress] = useState(0);
 
   useGSAP(
     () =>
       playMotion(ref, (reduce) => {
+        const root = ref.current;
+        if (!root) return;
+
+        const paint = (progress: number) => {
+          const line = root.querySelector<HTMLElement>("[data-progress-line]");
+          if (line) gsap.set(line, { scaleY: progress, transformOrigin: "top center" });
+
+          root.querySelectorAll<HTMLElement>("[data-route]").forEach((route) => {
+            const brand = route.dataset.route === "brand";
+            const steps = route.querySelectorAll<HTMLElement>("[data-step]");
+            const last = Math.max(1, steps.length - 1);
+            steps.forEach((step, index) => {
+              const reached = progress + 0.02 >= index / last;
+              const shift = brand ? 0 : beforeNudge[index] ?? 0;
+              const dot = step.querySelector<HTMLElement>("[data-dot]");
+              const label = step.querySelector<HTMLElement>("[data-label]");
+              if (dot) {
+                dot.className = `absolute top-2 size-[11px] rounded-full border-2 ${
+                  reached
+                    ? brand
+                      ? "border-brand bg-brand"
+                      : "border-neutral-600 bg-neutral-600"
+                    : "border-neutral-300 bg-white"
+                }`;
+                dot.style.left = `${shift}px`;
+              }
+              if (label) {
+                label.className = `absolute top-1 max-w-[16rem] text-sm font-medium leading-5 ${
+                  reached ? "text-neutral-950" : "text-neutral-300"
+                }`;
+                label.style.left = `${shift + 22}px`;
+              }
+            });
+          });
+        };
+
         if (reduce) {
-          setProgress(1);
+          paint(1);
           return;
         }
+
+        paint(0);
         ScrollTrigger.create({
-          trigger: ref.current,
+          trigger: root,
           start: "top 62%",
           end: "bottom 62%",
-          scrub: true,
-          onUpdate: (self) => setProgress(self.progress),
+          scrub: 0.7,
+          onUpdate: (self) => paint(self.progress),
         });
       }),
     { scope: ref },
@@ -120,8 +150,8 @@ function RouteMap() {
 
   return (
     <div ref={ref} className="mt-12 grid max-w-5xl grid-cols-1 gap-12 sm:grid-cols-2 sm:gap-10">
-      <Route label="Before EarlyJobs" steps={before} tone="muted" progress={progress} />
-      <Route label="With EarlyJobs" steps={withEarlyJobs} tone="brand" progress={progress} />
+      <Route label="Before EarlyJobs" steps={before} tone="muted" />
+      <Route label="With EarlyJobs" steps={withEarlyJobs} tone="brand" />
     </div>
   );
 }
@@ -154,7 +184,7 @@ export function WhyEarlyJobs() {
               ease: "none",
               scrollTrigger: reduce
                 ? undefined
-                : { trigger: fragment, start: "top 72%", end: "top 20%", scrub: true },
+                : { trigger: fragment, start: "top 72%", end: "top 20%", scrub: 0.7 },
             },
           );
         }
@@ -163,35 +193,57 @@ export function WhyEarlyJobs() {
           const copy = row.querySelector<HTMLElement>("[data-copy]");
           const bullet = row.querySelector<HTMLElement>("[data-bullet]");
           if (reduce) {
-            if (copy) gsap.set(copy, { x: 12 });
+            if (copy) gsap.set(copy, { x: 0 });
             if (bullet) gsap.set(bullet, { scale: 1 });
             return;
           }
-          const timeline = gsap.timeline({
-            scrollTrigger: { trigger: row, start: "top 80%", end: "top 50%", scrub: true },
+          if (bullet) gsap.set(bullet, { scale: 0, force3D: true });
+          ScrollTrigger.create({
+            trigger: row,
+            start: "top 82%",
+            once: true,
+            onEnter: () => {
+              if (bullet) {
+                gsap.to(bullet, {
+                  scale: 1,
+                  duration: 0.45,
+                  ease: "back.out(1.6)",
+                  force3D: true,
+                  overwrite: true,
+                });
+              }
+              if (copy) {
+                gsap.fromTo(
+                  copy,
+                  { x: 8, autoAlpha: 0.55 },
+                  { x: 0, autoAlpha: 1, duration: 0.45, ease: "power3.out", force3D: true },
+                );
+              }
+            },
           });
-          if (bullet) {
-            timeline.fromTo(bullet, { scale: 0 }, { scale: 1.2, duration: 0.72, ease: "none" }, 0);
-            timeline.to(bullet, { scale: 1, duration: 0.28, ease: "none" }, 0.72);
-          }
-          if (copy) timeline.fromTo(copy, { x: 0 }, { x: 12, duration: 1, ease: "none" }, 0);
         });
 
         const circles = gsap.utils.toArray<HTMLElement>("[data-circle]", pairRef.current);
         if (reduce) {
-          gsap.set(circles, { x: 0, y: 0 });
+          gsap.set(circles, { x: 0, y: 0, autoAlpha: 1 });
           return;
         }
-        const pair = gsap.timeline({
-          scrollTrigger: {
-            trigger: pairRef.current,
-            start: "top 82%",
-            end: "top 38%",
-            scrub: true,
+        if (circles[0]) gsap.set(circles[0], { x: -56, y: -25, autoAlpha: 1, force3D: true });
+        if (circles[1]) gsap.set(circles[1], { x: 56, y: 25, autoAlpha: 1, force3D: true });
+        ScrollTrigger.create({
+          trigger: pairRef.current,
+          start: "top 80%",
+          once: true,
+          onEnter: () => {
+            const pair = gsap.timeline({ defaults: { force3D: true, overwrite: true } });
+            if (circles[0]) {
+              pair.to(circles[0], { x: 0, y: 0, duration: 0.85, ease: "power3.out" }, 0);
+            }
+            if (circles[1]) {
+              pair.to(circles[1], { x: 0, y: 0, duration: 0.85, ease: "power3.out" }, 0);
+            }
           },
         });
-        if (circles[0]) pair.fromTo(circles[0], { x: -56, y: -25.2 }, { x: 0, y: 0, duration: 1, ease: "none" }, 0);
-        if (circles[1]) pair.fromTo(circles[1], { x: 56, y: 25.2 }, { x: 0, y: 0, duration: 1, ease: "none" }, 0);
       }),
     { scope: sectionRef },
   );
@@ -219,38 +271,38 @@ export function WhyEarlyJobs() {
         </h2>
 
         <div className="mt-5 grid items-center gap-10 lg:grid-cols-[minmax(0,36rem)_auto]">
-        <div ref={pointsRef} className="max-w-xl space-y-3 text-sm leading-6 text-neutral-600">
-          {points.map((point) => (
-            <p key={point} data-point className="relative">
-              <span
-                aria-hidden
-                data-bullet
-                className="absolute top-[0.55rem] left-0 size-1.5 rounded-full bg-brand"
-                style={{ transform: "scale(0)" }}
-              />
-              <span data-copy className="inline-block">
-                {point}
-              </span>
+          <div ref={pointsRef} className="max-w-xl space-y-3 text-sm leading-6 text-neutral-600">
+            {points.map((point) => (
+              <p key={point} data-point className="relative pl-4">
+                <span
+                  aria-hidden
+                  data-bullet
+                  className="absolute top-[0.55rem] left-0 size-1.5 rounded-full bg-brand"
+                  style={{ transform: "scale(0)" }}
+                />
+                <span data-copy className="inline-block">
+                  {point}
+                </span>
+              </p>
+            ))}
+            <p className="font-medium text-neutral-800">
+              That&apos;s why we created The Recruiter-First Hiring Network.
             </p>
-          ))}
-          <p className="font-medium text-neutral-800">
-            That&apos;s why we created The Recruiter-First Hiring Network.
-          </p>
-        </div>
-        <div ref={pairRef} className="relative mx-auto h-52 w-64 lg:mx-0 lg:mr-6">
-          <div
-            data-circle
-            className="absolute top-3 left-2 flex size-32 items-center justify-center rounded-full bg-brand text-[11px] font-semibold tracking-[0.16em] text-white"
-          >
-            PEOPLE
           </div>
-          <div
-            data-circle
-            className="absolute right-0 bottom-3 flex size-36 items-center justify-center rounded-full bg-neutral-950 px-5 text-center text-[11px] font-semibold tracking-[0.12em] text-white"
-          >
-            OPPORTUNITY
+          <div ref={pairRef} className="relative mx-auto h-52 w-64 lg:mx-0 lg:mr-6">
+            <div
+              data-circle
+              className="absolute top-3 left-2 flex size-32 items-center justify-center rounded-full bg-brand text-[11px] font-semibold tracking-[0.16em] text-white"
+            >
+              PEOPLE
+            </div>
+            <div
+              data-circle
+              className="absolute right-0 bottom-3 flex size-36 items-center justify-center rounded-full bg-neutral-950 px-5 text-center text-[11px] font-semibold tracking-[0.12em] text-white"
+            >
+              OPPORTUNITY
+            </div>
           </div>
-        </div>
         </div>
 
         <RouteMap />

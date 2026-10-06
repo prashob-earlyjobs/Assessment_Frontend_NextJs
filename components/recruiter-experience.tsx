@@ -51,8 +51,7 @@ export function RecruiterExperience() {
             <span
               aria-hidden
               data-line
-              className="absolute -top-px left-0 h-0.5 bg-brand"
-              style={{ width: "0%" }}
+              className="absolute -top-px left-0 h-0.5 w-full origin-left bg-brand"
             />
             <h3 className="text-base font-medium tracking-[-0.02em] text-neutral-950">
               {benefit.title}

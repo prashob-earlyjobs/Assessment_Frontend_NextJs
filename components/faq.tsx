@@ -68,7 +68,7 @@ function FaqItem({
         className="flex w-full items-center justify-between gap-6 py-4 text-left text-base font-medium tracking-[-0.02em] text-neutral-950"
       >
         {question}
-        <span aria-hidden className="text-neutral-400">
+        <span aria-hidden className="text-brand">
           {open ? "–" : "+"}
         </span>
       </button>

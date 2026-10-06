@@ -205,7 +205,7 @@ export function HowItWorks() {
       </div>
 
       <div className="mt-10">
-        <SolidLink href="#recruiter-first">Explore How It Works</SolidLink>
+        <SolidLink href="/recruiters">Explore How It Works</SolidLink>
       </div>
     </Frame>
   );
