@@ -10,7 +10,7 @@ export function HeroMotion({ children }: { children: ReactNode }) {
     <section
       ref={root}
       id="section-1"
-      className="snap-section relative flex min-h-dvh flex-1 flex-col justify-center overflow-hidden bg-neutral-950 ![min-height:100dvh]"
+      className="snap-section relative flex min-h-dvh flex-1 flex-col justify-between overflow-hidden bg-neutral-950 pt-28 text-white sm:pt-32 ![min-height:100dvh]"
     >
       {children}
     </section>
