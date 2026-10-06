@@ -10,7 +10,7 @@ export function HeroMotion({ children }: { children: ReactNode }) {
     <section
       ref={root}
       id="section-1"
-      className="snap-section relative flex min-h-dvh flex-1 flex-col justify-center overflow-hidden bg-neutral-950 ![min-height:100dvh]"
+      className="snap-section relative flex min-h-dvh flex-1 flex-col justify-between overflow-hidden bg-neutral-950 pt-28 text-white sm:pt-32 ![min-height:100dvh]"
     >
       {children}
     </section>
@@ -85,22 +85,54 @@ export function AssembleList({ children, className }: { children: ReactNode; cla
           return;
         }
 
-        gsap.set(cells, { autoAlpha: 0, y: 16, force3D: true });
-        ScrollTrigger.create({
-          trigger: list,
-          start: "top 78%",
-          once: true,
-          onEnter: () => {
-            gsap.to(cells, {
-              autoAlpha: 1,
-              y: 0,
-              duration: 0.55,
-              ease: "power3.out",
-              stagger: 0.07,
-              overwrite: true,
-              force3D: true,
-            });
+        const scatter = [
+          [-1.1, -0.9],
+          [1.2, -0.7],
+          [-0.9, 0.85],
+          [1.05, 0.7],
+          [0.15, 1.15],
+        ] as const;
+
+        list.style.overflow = "visible";
+
+        const timeline = gsap.timeline({
+          scrollTrigger: {
+            trigger: list,
+            start: "top 78%",
+            end: "top 32%",
+            scrub: 0.65,
+            onLeave: () => {
+              list.style.overflow = "";
+            },
+            onEnterBack: () => {
+              list.style.overflow = "visible";
+            },
           },
+        });
+
+        cells.forEach((cell, index) => {
+          const [sx, sy] = scatter[index] ?? [0, 0.8];
+          timeline.fromTo(
+            cell,
+            {
+              x: sx * 32,
+              y: sy * 32,
+              autoAlpha: 0.15,
+              borderRadius: 10,
+              boxShadow: "0 0 0 1px rgba(0,0,0,0.08), 0 14px 28px rgba(0,0,0,0.05)",
+              force3D: true,
+            },
+            {
+              x: 0,
+              y: 0,
+              autoAlpha: 1,
+              borderRadius: 0,
+              boxShadow: "0 0 0 1px rgba(0,0,0,0), 0 0 0 rgba(0,0,0,0)",
+              ease: "none",
+              force3D: true,
+            },
+            0,
+          );
         });
       }),
     { scope: listRef },

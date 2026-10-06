@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState, type FormEvent } from "react";
+import { Search, ChevronDown } from "lucide-react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { HeroMotion } from "@/components/home/motion";
 import {
@@ -11,7 +12,13 @@ import {
 } from "@/lib/dashboard";
 import { jobsPageHref } from "@/lib/public-jobs";
 
+const clientLogos = Array.from({ length: 22 }, (_, index) => ({
+  src: `https://storage.googleapis.com/earlyjobs_datas/EJ_V2/${index + 1}.png`,
+  alt: `Client ${index + 1}`,
+}));
+
 const cities = [
+  "Remote",
   "Bangalore",
   "Mumbai",
   "Delhi",
@@ -28,31 +35,31 @@ const cities = [
   "Chandigarh",
   "Coimbatore",
   "Mangalore",
+  "Lucknow",
+  "Bhopal",
+  "Nagpur",
+  "Vadodara",
+  "Surat",
+  "Visakhapatnam",
+  "Mysore",
+  "Trivandrum",
+] as const;
+
+const typingPhrases = [
+  "Sales Executive",
+  "Frontend Developer",
+  "Data Analyst",
+  "TCS",
+  "Marketing Intern",
 ] as const;
 
 const statMeta = [
-  {
-    key: "jobs" as const,
-    label: "Jobs Openings",
-    icon: "/hero-icons/hjobs.png",
-  },
-  {
-    key: "recruiters" as const,
-    label: "Recruiters",
-    icon: "/hero-icons/hCandidates.png",
-  },
-  {
-    key: "companies" as const,
-    label: "Companies",
-    icon: "/hero-icons/hCompanies.png",
-  },
+  { key: "jobs" as const, label: "Jobs Openings", icon: "/v2/icons/hjobs.png" },
+  { key: "recruiters" as const, label: "Recruiters", icon: "/v2/icons/hCandidates.png" },
+  { key: "companies" as const, label: "Companies", icon: "/v2/icons/hCompanies.png" },
 ] as const;
 
-const partners = Array.from({ length: 18 }, (_, index) => `/partners/${index + 1}.png`);
-
-const typingPhrases = ["Data Analyst", "Marketing Intern", "Frontend Developer"] as const;
-
-function useCountUp(target: number, duration = 1400) {
+function useCountUp(target: number, duration = 2700) {
   const [value, setValue] = useState(0);
 
   useEffect(() => {
@@ -87,8 +94,8 @@ function useCountUp(target: number, duration = 1400) {
 function StatValue({ target }: { target: number }) {
   const value = useCountUp(target);
   return (
-    <span className="block text-xl font-semibold tracking-[-0.03em] text-white tabular-nums sm:text-2xl">
-      {formatStat(value)}
+    <span className="text-xl font-bold text-white tabular-nums sm:text-2xl md:text-3xl lg:text-4xl">
+      {formatStat(value).replace(/\+$/, "")}+
     </span>
   );
 }
@@ -104,7 +111,7 @@ function useTypingPlaceholder(phrases: readonly string[], enabled: boolean) {
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) {
-      setText(phrases[0] ?? "");
+      setText(`e.g. ${phrases[0]}`);
       return;
     }
 
@@ -118,25 +125,25 @@ function useTypingPlaceholder(phrases: readonly string[], enabled: boolean) {
 
       if (!deleting) {
         charIndex += 1;
-        setText(phrase.slice(0, charIndex));
+        setText(`e.g. ${phrase.slice(0, charIndex)}`);
         if (charIndex >= phrase.length) {
           deleting = true;
-          timer = window.setTimeout(tick, 1600);
+          timer = window.setTimeout(tick, 1200);
           return;
         }
-        timer = window.setTimeout(tick, 70);
+        timer = window.setTimeout(tick, 55);
         return;
       }
 
       charIndex -= 1;
-      setText(phrase.slice(0, Math.max(charIndex, 0)));
+      setText(`e.g. ${phrase.slice(0, Math.max(charIndex, 0))}`);
       if (charIndex <= 0) {
         deleting = false;
         phraseIndex = (phraseIndex + 1) % phrases.length;
         timer = window.setTimeout(tick, 400);
         return;
       }
-      timer = window.setTimeout(tick, 40);
+      timer = window.setTimeout(tick, 35);
     };
 
     timer = window.setTimeout(tick, 400);
@@ -146,81 +153,156 @@ function useTypingPlaceholder(phrases: readonly string[], enabled: boolean) {
   return text;
 }
 
+function LocationPicker({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (next: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  const options = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return cities;
+    return cities.filter((city) => city.toLowerCase().includes(q));
+  }, [query]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onPointer = (event: MouseEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
+    };
+    window.addEventListener("mousedown", onPointer);
+    return () => window.removeEventListener("mousedown", onPointer);
+  }, [open]);
+
+  return (
+    <div ref={rootRef} className="relative w-full sm:w-auto sm:min-w-[180px]">
+      <button
+        type="button"
+        onClick={() => setOpen((prev) => !prev)}
+        className="flex h-12 w-full items-center justify-between gap-2 rounded-lg border-0 bg-transparent px-4 text-left text-black focus:outline-none sm:h-14 sm:rounded-none sm:px-6"
+      >
+        <span className={value ? "text-black" : "text-gray-500"}>
+          {value || "Select Location"}
+        </span>
+        <ChevronDown className="h-4 w-4 shrink-0 opacity-60" />
+      </button>
+      {open ? (
+        <div className="absolute top-full left-0 z-30 mt-1 w-full min-w-[200px] overflow-hidden rounded-lg border border-black/10 bg-white shadow-lg sm:w-[220px]">
+          <input
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Search city..."
+            className="h-10 w-full border-b border-black/10 px-3 text-sm text-neutral-950 outline-none placeholder:text-neutral-400"
+          />
+          <ul className="max-h-56 overflow-y-auto py-1">
+            {options.length === 0 ? (
+              <li className="px-3 py-2 text-sm text-neutral-500">No city found.</li>
+            ) : (
+              options.map((city) => (
+                <li key={city}>
+                  <button
+                    type="button"
+                    className="w-full px-3 py-2 text-left text-sm text-neutral-800 hover:bg-neutral-50"
+                    onClick={() => {
+                      onChange(city);
+                      setOpen(false);
+                      setQuery("");
+                    }}
+                  >
+                    {city}
+                  </button>
+                </li>
+              ))
+            )}
+          </ul>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 function HeroSearch() {
   const router = useRouter();
-  const [search, setSearch] = useState("");
+  const [jobTitle, setJobTitle] = useState("");
   const [location, setLocation] = useState("");
-  const [focused, setFocused] = useState(false);
-  const typed = useTypingPlaceholder(typingPhrases, !search && !focused);
-  const placeholder = typed ? `e.g. ${typed}` : "e.g. ";
+  const typed = useTypingPlaceholder(typingPhrases, jobTitle.trim().length === 0);
 
-  function onSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  function onSubmit(event?: FormEvent) {
+    event?.preventDefault();
     const href = jobsPageHref(1, {
-      search: search.trim(),
+      search: jobTitle.trim(),
       location: location.trim(),
     });
     router.push(`${href}${href.includes("#") ? "" : "#job-search"}`);
   }
 
   return (
-    <form
-      onSubmit={onSubmit}
-      className="mx-auto flex h-auto w-full max-w-3xl flex-col overflow-hidden rounded-[1.75rem] bg-white shadow-[0_20px_60px_rgba(0,0,0,0.28)] sm:h-[3.5rem] sm:flex-row sm:items-stretch sm:rounded-full"
-    >
-      <label className="flex min-w-0 flex-1 items-center px-5 py-3.5 sm:py-0 sm:pr-2 sm:pl-6">
-        <span className="sr-only">Job title or company</span>
-        <input
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
-          placeholder={placeholder}
-          className="w-full bg-transparent text-[15px] text-neutral-950 outline-none placeholder:text-neutral-400"
-        />
-      </label>
-      <label className="relative flex min-w-0 w-full items-center border-t border-neutral-100 px-5 py-3.5 sm:w-[9rem] sm:flex-none sm:border-t-0 sm:py-0 sm:pr-3 sm:pl-1">
-        <span className="sr-only">Location</span>
-        <select
-          value={location}
-          onChange={(event) => setLocation(event.target.value)}
-          className={`w-full appearance-none bg-transparent pr-5 text-[15px] outline-none ${
-            location ? "text-neutral-950" : "text-neutral-400"
-          }`}
-        >
-          <option value="">Select Location</option>
-          {cities.map((city) => (
-            <option key={city} value={city}>
-              {city}
-            </option>
-          ))}
-        </select>
-        <svg
-          aria-hidden
-          viewBox="0 0 16 16"
-          className="pointer-events-none absolute right-4 size-3.5 text-neutral-400"
-        >
-          <path
-            d="M4 6.5 8 10.5 12 6.5"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+    <form onSubmit={onSubmit} className="mx-auto max-w-4xl px-2 sm:px-4">
+      <div className="flex flex-1 flex-col items-stretch overflow-hidden rounded-xl bg-white shadow-lg sm:flex-row sm:rounded-full">
+        <div className="flex flex-1 flex-col items-stretch gap-2 p-2.5 sm:flex-row sm:gap-2 sm:p-0 sm:pl-4">
+          <input
+            type="text"
+            value={jobTitle}
+            onChange={(event) => setJobTitle(event.target.value)}
+            placeholder={typed || "Job Title or Company"}
+            className="h-12 flex-1 rounded-lg border-0 bg-transparent px-8 text-black outline-none placeholder:text-gray-500 sm:h-14 sm:rounded-none sm:px-10"
           />
-        </svg>
-      </label>
-      <button
-        type="submit"
-        className="inline-flex h-12 items-center justify-center gap-2 bg-brand px-6 text-[15px] font-medium text-white transition-colors hover:bg-[#d85c42] sm:h-auto sm:shrink-0 sm:px-7"
-      >
-        <svg viewBox="0 0 16 16" className="size-4" fill="none" aria-hidden>
-          <circle cx="7" cy="7" r="4.25" stroke="currentColor" strokeWidth="1.5" />
-          <path d="M10.2 10.2 13.5 13.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-        </svg>
-        Search Job
-      </button>
+          <LocationPicker value={location} onChange={setLocation} />
+        </div>
+        <button
+          type="submit"
+          className="m-2 flex h-12 items-center justify-center gap-2 rounded-lg bg-[#ea6a4e] px-6 font-medium text-white transition-colors hover:bg-[#ea6a4e]/90 sm:m-0 sm:h-14 sm:rounded-l-none sm:rounded-r-full sm:px-8"
+        >
+          <Search className="h-5 w-5" />
+          <span className="hidden sm:inline">Search Job</span>
+          <span className="sm:hidden">Search</span>
+        </button>
+      </div>
     </form>
+  );
+}
+
+function LogoCarousel({
+  reverse = false,
+  className = "",
+}: {
+  reverse?: boolean;
+  className?: string;
+}) {
+  const logos = reverse ? clientLogos : [...clientLogos, ...clientLogos];
+  return (
+    <div className={`relative z-10 overflow-hidden ${className}`}>
+      <div className="mx-auto max-w-[90rem] px-2 sm:px-4 lg:px-8">
+        <div className="relative flex h-12 items-center overflow-hidden sm:h-14 md:h-16">
+          <div
+            className={`flex w-max gap-4 sm:gap-6 md:gap-8 lg:gap-12 ${
+              reverse ? "carousel-horizontal-top" : "carousel-horizontal"
+            }`}
+          >
+            {logos.map((logo, idx) => (
+              <div
+                key={`${reverse ? "top" : "bot"}-${idx}`}
+                className="flex h-14 w-20 shrink-0 items-center justify-center sm:h-20 sm:w-28 md:h-28 md:w-36"
+              >
+                <Image
+                  src={logo.src}
+                  alt={logo.alt}
+                  width={112}
+                  height={100}
+                  unoptimized
+                  className="h-full w-full object-contain grayscale transition-all duration-300 hover:grayscale-0"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -252,95 +334,58 @@ export function Hero() {
     <HeroMotion>
       <div className="absolute inset-0">
         <Image
-          src="/hero-bg.png"
+          src="/v2/images/hero-bg.png"
           alt=""
           fill
           priority
           sizes="100vw"
           className="object-cover object-center"
         />
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,10,12,0.55)_0%,rgba(8,10,12,0.62)_40%,rgba(8,10,12,0.78)_100%)]"
-        />
+        <div aria-hidden className="absolute inset-0 z-0 bg-black/60" />
       </div>
 
-      <div className="relative z-[1] mx-auto flex w-full max-w-5xl flex-1 flex-col items-center justify-center px-5 pt-10 pb-12 text-center sm:px-8 sm:pt-12 sm:pb-16">
-        <h1 className="mt-6 max-w-4xl text-[2.1rem] font-semibold leading-[1.08] tracking-[-0.04em] text-white sm:mt-8 sm:text-[3.25rem]">
-          Connecting Talent with Opportunities Across India.
-        </h1>
-        <p className="mt-4 max-w-2xl text-sm leading-6 text-white/75 sm:text-[15px]">
-          India&apos;s Women Recruiter Network: Your Career Partner, From Interview to Onboarding.
-        </p>
+      <div className="relative z-10 mx-auto flex min-h-0 w-full max-w-7xl flex-1 flex-col justify-center px-4 py-4 sm:px-6 sm:py-8 md:py-12 lg:px-8 lg:py-16 xl:py-20">
+        <div className="space-y-3 sm:space-y-6 md:space-y-8 lg:space-y-10 xl:space-y-12">
+          <h1 className="px-2 text-center text-3xl leading-tight font-bold text-white sm:px-4 sm:text-4xl md:text-5xl xl:text-6xl">
+            Connecting Talent with Opportunities Across India.
+          </h1>
 
-        <div className="mt-8 w-full sm:mt-10">
+          <p className="mx-auto max-w-3xl px-2 text-center text-sm text-white/80 sm:px-6 sm:text-base md:text-lg lg:text-xl">
+            India&apos;s Women Recruiter Network: Your Career Partner, From Interview to Onboarding.
+          </p>
+
           <HeroSearch />
-        </div>
 
-        <p className="mt-4 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm text-white/70 sm:mt-5">
-          <span>Built for recruiters</span>
-          <span aria-hidden className="text-white/35">
-            ·
-          </span>
-          <span>Trusted by employers</span>
-          <span aria-hidden className="text-white/35">
-            ·
-          </span>
-          <span>Loved by job seekers</span>
-        </p>
+          <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 px-2 text-sm text-white/70">
+            <span>Built for recruiters</span>
+            <span aria-hidden className="text-white/35">
+              ·
+            </span>
+            <span>Trusted by employers</span>
+            <span aria-hidden className="text-white/35">
+              ·
+            </span>
+            <span>Loved by job seekers</span>
+          </p>
 
-        <ul className="mt-10 flex w-full max-w-3xl flex-col items-center gap-5 sm:mt-12 sm:flex-row sm:justify-center sm:gap-10">
-          {statMeta.map((stat) => (
-            <li key={stat.label} className="flex items-center gap-3 text-left">
-              <Image
-                src={stat.icon}
-                alt=""
-                width={60}
-                height={60}
-                className="size-10 shrink-0 object-contain sm:size-11"
-              />
-              <span>
-                <StatValue target={dashboard[stat.key]} />
-                <span className="block text-xs text-white/65 sm:text-sm">{stat.label}</span>
-              </span>
-            </li>
-          ))}
-        </ul>
-
-        <div className="flex w-full max-w-6xl flex-col gap-2 sm:gap-3">
-          {[
-            { dir: "left" as const, className: "logo-track" },
-            { dir: "right" as const, className: "logo-track-right" },
-          ].map((row) => (
-            <div key={row.dir} className="logo-marquee w-full overflow-hidden">
-              <div className={`${row.className} flex w-max items-center gap-14 sm:gap-16`}>
-                {[0, 1].map((copy) => (
-                  <ul
-                    key={`${row.dir}-${copy}`}
-                    className="flex items-center gap-14 sm:gap-16"
-                    aria-hidden={copy === 1 || undefined}
-                  >
-                    {partners.map((src) => (
-                      <li
-                        key={`${row.dir}-${copy}-${src}`}
-                        className="flex h-24 w-48 shrink-0 items-center justify-center sm:h-28 sm:w-52"
-                      >
-                        <Image
-                          src={src}
-                          alt=""
-                          width={280}
-                          height={280}
-                          className="h-20 w-auto max-w-[12rem] object-contain brightness-0 invert sm:h-24 sm:max-w-[13rem]"
-                        />
-                      </li>
-                    ))}
-                  </ul>
-                ))}
+          <div className="mt-2 flex flex-wrap justify-center gap-2 pt-1 sm:mt-4 sm:gap-4 sm:pt-2 md:mt-8 md:gap-6 lg:mt-12 lg:gap-10 xl:gap-16">
+            {statMeta.map((stat) => (
+              <div key={stat.label} className="flex items-center gap-2 sm:gap-3">
+                <div className="relative h-8 w-8 shrink-0 sm:h-10 sm:w-10 md:h-12 md:w-12">
+                  <Image src={stat.icon} alt="" fill className="object-contain" />
+                </div>
+                <div>
+                  <StatValue target={dashboard[stat.key]} />
+                  <p className="text-xs text-white/70 sm:text-sm md:text-base">{stat.label}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
+
+      <LogoCarousel reverse className="hidden lg:block" />
+      <LogoCarousel className="shrink-0 pb-3 sm:pb-4" />
     </HeroMotion>
   );
 }

@@ -14,10 +14,10 @@ export default function Home() {
     <main className="relative">
       <Hero />
       <RecentJobs />
+      <JobSeekers />
       <Journey />
       <WhyEarlyJobs />
       <HowItWorks />
-      <JobSeekers />
       <RecruiterExperience />
       <SuccessStories />
       <Faq />
