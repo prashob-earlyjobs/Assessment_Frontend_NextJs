@@ -85,23 +85,59 @@ export function AssembleList({ children, className }: { children: ReactNode; cla
           return;
         }
 
-        gsap.set(cells, { autoAlpha: 0, y: 16, force3D: true });
-        ScrollTrigger.create({
-          trigger: list,
-          start: "top 78%",
-          once: true,
-          onEnter: () => {
-            gsap.to(cells, {
-              autoAlpha: 1,
-              y: 0,
-              duration: 0.55,
-              ease: "power3.out",
-              stagger: 0.07,
-              overwrite: true,
-              force3D: true,
-            });
-          },
+        const scatter = [
+          [-1.1, -0.9],
+          [1.2, -0.7],
+          [-0.9, 0.85],
+          [1.05, 0.7],
+          [0.15, 1.15],
+        ] as const;
+
+        cells.forEach((cell, index) => {
+          const [sx, sy] = scatter[index] ?? [0, 0.8];
+          gsap.set(cell, {
+            x: sx * 28,
+            y: sy * 28,
+            autoAlpha: 0,
+            borderRadius: 10,
+            boxShadow: "0 0 0 1px rgba(0,0,0,0.08), 0 14px 28px rgba(0,0,0,0.05)",
+            force3D: true,
+          });
         });
+
+        const play = () => {
+          list.style.overflow = "visible";
+          gsap.to(cells, {
+            x: 0,
+            y: 0,
+            autoAlpha: 1,
+            borderRadius: 0,
+            boxShadow: "0 0 0 1px rgba(0,0,0,0), 0 0 0 rgba(0,0,0,0)",
+            duration: 0.7,
+            ease: "power3.out",
+            stagger: 0.06,
+            overwrite: true,
+            force3D: true,
+            onComplete: () => {
+              list.style.overflow = "";
+            },
+          });
+        };
+
+        list.style.overflow = "visible";
+
+        const trigger = ScrollTrigger.create({
+          trigger: list,
+          start: "top 85%",
+          once: true,
+          onEnter: play,
+        });
+
+        // Section sits higher now — fire if already past the start line on mount.
+        if (trigger.progress > 0 || list.getBoundingClientRect().top < window.innerHeight * 0.85) {
+          play();
+          trigger.kill();
+        }
       }),
     { scope: listRef },
   );
