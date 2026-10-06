@@ -13,7 +13,15 @@ type Review = {
   image?: string;
 };
 
-const stories = [
+type Story = {
+  id: "seekers" | "recruiters" | "employers";
+  label: string;
+  title: string;
+  body: string;
+  reviews: Review[];
+};
+
+const stories: Story[] = [
   {
     id: "seekers",
     label: "Job Seekers",
@@ -40,7 +48,7 @@ const stories = [
         name: "Rahul V.",
         role: "Data Analyst",
       },
-    ] satisfies Review[],
+    ],
   },
   {
     id: "recruiters",
@@ -69,7 +77,7 @@ const stories = [
         name: "Saurav Das",
         role: "Happy Recruiter",
       },
-    ] satisfies Review[],
+    ],
   },
   {
     id: "employers",
@@ -98,11 +106,11 @@ const stories = [
         name: "Frankfinn Aviation Services Private Limited",
         role: "Happy Client",
       },
-    ] satisfies Review[],
+    ],
   },
-] as const;
+];
 
-type StoryId = (typeof stories)[number]["id"];
+type StoryId = Story["id"];
 
 function ReviewAvatar({ name, image }: { name: string; image?: string }) {
   const [failed, setFailed] = useState(false);
