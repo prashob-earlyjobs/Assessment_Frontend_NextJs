@@ -4,12 +4,6 @@ import { JourneyMotion } from "@/components/home/motion";
 const journeys = [
   {
     title: "I'm Looking for a Job",
-    description: [
-      "Don't just apply.",
-      "Get discovered.",
-      "Build a profile that recruiters actually use.",
-      "Receive opportunities that match your skills.",
-    ],
     features: [
       "AI-powered matching",
       "Recruiter guidance",
@@ -22,12 +16,6 @@ const journeys = [
   },
   {
     title: "I'm a Recruiter",
-    description: [
-      "Turn recruiting into a scalable career.",
-      "Access verified hiring mandates.",
-      "Earn from successful placements.",
-      "Use AI to work smarter—not harder.",
-    ],
     features: [
       "Verified hiring requirements",
       "Flexible work",
@@ -40,11 +28,6 @@ const journeys = [
   },
   {
     title: "I'm Hiring",
-    description: [
-      "Find better talent through recruiters who understand your hiring needs.",
-      "Skip irrelevant applications.",
-      "Receive qualified candidates faster.",
-    ],
     features: ["Recruiter-led hiring", "AI matching", "Faster hiring", "Better candidate quality"],
     cta: "Start Hiring",
     href: "/employers",
@@ -113,25 +96,18 @@ export function Journey() {
               <h3 className="mt-4 text-lg font-semibold tracking-[-0.03em] text-neutral-950">
                 {journey.title}
               </h3>
-              <div className="mt-3 space-y-2 text-sm leading-6 text-neutral-600">
-                {journey.description.map((line) => (
-                  <p key={line}>{line}</p>
-                ))}
-              </div>
               <ul className="mt-4 space-y-2">
                 {journey.features.map((feature) => (
-                  <li key={feature} data-check className="relative text-sm text-neutral-800">
+                  <li key={feature} data-check className="flex items-start gap-2 text-sm text-neutral-800">
                     <span
                       aria-hidden
                       data-mark
-                      className="absolute top-0 left-0 mt-0.5 origin-center text-brand"
-                      style={{ transform: "scale(0)" }}
+                      className="mt-0.5 inline-block w-3.5 shrink-0 origin-center text-brand"
+                      style={{ transform: "scale(0)", opacity: 0 }}
                     >
                       ✓
                     </span>
-                    <span data-copy className="inline-block">
-                      {feature}
-                    </span>
+                    <span data-copy>{feature}</span>
                   </li>
                 ))}
               </ul>

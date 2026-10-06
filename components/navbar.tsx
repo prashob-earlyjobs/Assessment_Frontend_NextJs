@@ -19,7 +19,6 @@ export const defaultNavbarLinks: NavbarLink[] = [
 
 type NavbarProps = {
   links?: NavbarLink[];
-  searchHref?: string;
   ctaHref?: string;
   ctaLabel?: string;
 };
@@ -106,7 +105,6 @@ function useSpringPill(target: Pill | null) {
 
 export function Navbar({
   links = defaultNavbarLinks,
-  searchHref = "/jobs",
   ctaHref = "/become-a-recruiter",
   ctaLabel = "Become a Recruiter",
 }: NavbarProps) {
@@ -114,14 +112,32 @@ export function Navbar({
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [menuHoldsHeader, setMenuHoldsHeader] = useState(false);
+  const isHome = pathname === "/";
   const solid = scrolled || menuHoldsHeader;
+  const overHero = isHome && !solid;
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    const headerOffset = () => (window.matchMedia("(min-width: 640px)").matches ? 64 : 56);
+
+    const onScroll = () => {
+      if (pathname === "/") {
+        const hero = document.getElementById("section-1");
+        if (hero) {
+          setScrolled(hero.getBoundingClientRect().bottom <= headerOffset());
+          return;
+        }
+      }
+      setScrolled(window.scrollY > 8);
+    };
+
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [pathname]);
 
   useEffect(() => {
     setOpen(false);
@@ -146,41 +162,47 @@ export function Navbar({
     return () => window.clearTimeout(timeout);
   }, [open]);
 
-  const jobsSearchHref = searchHref.includes("#") ? searchHref : `${searchHref}#job-search`;
-
-  function focusJobsSearch() {
-    window.requestAnimationFrame(() => {
-      const inputs = document.querySelectorAll<HTMLInputElement>("[data-job-search]");
-      const visible = Array.from(inputs).find((input) => input.getClientRects().length > 0);
-      (visible ?? inputs[0])?.focus({ preventScroll: true });
-    });
-  }
-
   return (
+    <>
     <header
       data-solid={solid ? "true" : "false"}
       className={cx(
-        "sticky top-0 z-50 transition-[background-color,border-color,box-shadow] duration-300",
+        "fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,box-shadow] duration-300",
         solid
           ? "border-b border-black/[0.08] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04)]"
           : "border-b border-transparent bg-transparent",
       )}
     >
-      <div className="mx-auto flex h-14 items-center justify-between gap-3 px-5 sm:h-16 sm:px-8 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:items-center">
-        <Logo />
+      <div className="mx-auto flex h-14 items-center justify-between gap-3 px-6 sm:h-16 sm:px-10 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:items-center lg:px-12">
+        <Logo inverted={overHero} />
 
-        <DesktopNav links={links} pathname={pathname} />
+        <DesktopNav links={links} pathname={pathname} inverted={overHero} />
 
         <div className="flex items-center justify-end gap-1 sm:gap-2">
-          <Link
-            href={jobsSearchHref}
-            aria-label="Search Jobs"
-            onClick={focusJobsSearch}
-            className="hidden items-center gap-1.5 rounded-full px-2.5 py-2 text-[13px] font-medium text-neutral-600 transition-colors hover:text-neutral-950 lg:inline-flex"
+          <a
+            href="https://www.huntlo.ai/"
+            target="_blank"
+            rel="noreferrer"
+            className="huntlo-btn hidden lg:inline-flex"
           >
-            <SearchIcon />
-            <span className="hidden xl:inline">Search Jobs</span>
-          </Link>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              className="huntlo-btn-badge"
+              src="/icons/huntlo-favicon.png"
+              alt=""
+              width={20}
+              height={20}
+            />
+            <span className="huntlo-btn-wrapper">
+              <span className="huntlo-btn-label">
+                <AiSparkIcon />
+                Try Huntlo
+              </span>
+              {Array.from({ length: 12 }, (_, i) => (
+                <span key={i} className={`huntlo-circle huntlo-circle-${i + 1}`} aria-hidden />
+              ))}
+            </span>
+          </a>
           <Link
             href={ctaHref}
             className="inline-flex h-9 items-center rounded-full bg-brand px-3.5 text-[13px] font-medium text-white transition-colors hover:bg-[#d85c42] sm:px-4"
@@ -189,7 +211,12 @@ export function Navbar({
           </Link>
           <button
             type="button"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full text-neutral-950 transition-colors hover:bg-black/[0.04] lg:hidden"
+            className={cx(
+              "inline-flex h-9 w-9 items-center justify-center rounded-full transition-colors lg:hidden",
+              overHero
+                ? "text-white hover:bg-white/10"
+                : "text-neutral-950 hover:bg-black/[0.04]",
+            )}
             aria-expanded={open}
             aria-controls="mobile-nav"
             onClick={() => setOpen((value) => !value)}
@@ -209,7 +236,7 @@ export function Navbar({
           open ? "pointer-events-auto" : "pointer-events-none",
         )}
       >
-          <nav aria-label="Mobile" className="mx-auto flex max-w-[1200px] flex-col px-5 py-3 sm:px-8">
+          <nav aria-label="Mobile" className="mx-auto flex max-w-[1200px] flex-col px-6 py-3 sm:px-10 lg:px-12">
             <ul className="flex flex-col">
               {links.map((link) => (
                 <li key={link.href}>
@@ -218,21 +245,33 @@ export function Navbar({
               ))}
             </ul>
             <div className="mt-2 flex flex-col gap-1 border-t border-black/[0.06] pt-2">
-              <Link
-                href={jobsSearchHref}
-                onClick={focusJobsSearch}
+              <a
+                href="https://www.huntlo.ai/"
+                target="_blank"
+                rel="noreferrer"
                 className="rounded-lg px-3 py-2.5 text-sm font-medium text-neutral-700"
               >
-                Search Jobs
-              </Link>
+                Try Huntlo
+              </a>
             </div>
           </nav>
         </div>
     </header>
+    {/* Home hero paints under the fixed nav; other pages need the reserved offset. */}
+    {!isHome ? <div className="h-14 shrink-0 sm:h-16" aria-hidden /> : null}
+    </>
   );
 }
 
-function DesktopNav({ links, pathname }: { links: NavbarLink[]; pathname: string }) {
+function DesktopNav({
+  links,
+  pathname,
+  inverted = false,
+}: {
+  links: NavbarLink[];
+  pathname: string;
+  inverted?: boolean;
+}) {
   const listRef = useRef<HTMLUListElement>(null);
   const anchors = useRef(new Map<string, HTMLAnchorElement>());
   const [pendingHref, setPendingHref] = useState<string | null>(null);
@@ -287,7 +326,10 @@ function DesktopNav({ links, pathname }: { links: NavbarLink[]; pathname: string
           <span
             aria-hidden
             data-selection-pill=""
-            className="pointer-events-none absolute inset-y-0 rounded-full bg-neutral-950/[0.06]"
+            className={cx(
+              "pointer-events-none absolute inset-y-0 rounded-full",
+              inverted ? "bg-white/15" : "bg-neutral-950/[0.06]",
+            )}
             style={{ width: pill.width, transform: `translate3d(${pill.x}px, 0, 0)` }}
           />
         ) : null}
@@ -296,6 +338,7 @@ function DesktopNav({ links, pathname }: { links: NavbarLink[]; pathname: string
             <NavAnchor
               link={link}
               pathname={pathname}
+              inverted={inverted}
               active={selectedHref === link.href}
               onSelect={() => setPendingHref(link.href)}
               linkRef={(node) => {
@@ -314,6 +357,7 @@ function NavAnchor({
   link,
   pathname,
   mobile = false,
+  inverted = false,
   linkRef,
   onSelect,
   active,
@@ -321,6 +365,7 @@ function NavAnchor({
   link: NavbarLink;
   pathname: string;
   mobile?: boolean;
+  inverted?: boolean;
   linkRef?: (node: HTMLAnchorElement | null) => void;
   onSelect?: () => void;
   active?: boolean;
@@ -338,9 +383,13 @@ function NavAnchor({
         mobile
           ? "block rounded-lg px-3 py-2.5 text-[15px]"
           : "relative rounded-full px-2.5 py-2 text-[13px]",
-        isCurrent
-          ? "text-neutral-950"
-          : "text-neutral-500 hover:text-neutral-950",
+        inverted && !mobile
+          ? isCurrent
+            ? "text-white"
+            : "text-white/70 hover:text-white"
+          : isCurrent
+            ? "text-neutral-950"
+            : "text-neutral-500 hover:text-neutral-950",
         mobile && isCurrent && "bg-black/[0.04]",
       )}
     >
@@ -349,7 +398,7 @@ function NavAnchor({
   );
 }
 
-function Logo() {
+function Logo({ inverted = false }: { inverted?: boolean }) {
   return (
     <Link href="/" className="flex w-fit shrink-0 items-center" aria-label="EarlyJobs home">
       <Image
@@ -358,17 +407,36 @@ function Logo() {
         width={234}
         height={106}
         priority
-        className="h-8 w-auto sm:h-10"
+        className={cx("h-8 w-auto sm:h-10", inverted && "brightness-0 invert")}
       />
     </Link>
   );
 }
 
-function SearchIcon() {
+function AiSparkIcon() {
   return (
-    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
-      <circle cx="6.5" cy="6.5" r="4.25" stroke="currentColor" strokeWidth="1.4" />
-      <path d="M9.8 9.8 13 13" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+    <svg
+      className="huntlo-btn-ai"
+      width="14"
+      height="14"
+      viewBox="0 0 16 16"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M8 1.2l1.05 3.55L12.6 5.8 9.05 7.25 8 10.8 6.95 7.25 3.4 5.8l3.55-1.05L8 1.2z"
+        fill="currentColor"
+      />
+      <path
+        d="M12.6 9.2l.55 1.85 1.85.55-1.85.55-.55 1.85-.55-1.85-1.85-.55 1.85-.55.55-1.85z"
+        fill="currentColor"
+        opacity="0.85"
+      />
+      <path
+        d="M3.2 9.8l.42 1.4 1.4.42-1.4.42-.42 1.4-.42-1.4-1.4-.42 1.4-.42.42-1.4z"
+        fill="currentColor"
+        opacity="0.7"
+      />
     </svg>
   );
 }
