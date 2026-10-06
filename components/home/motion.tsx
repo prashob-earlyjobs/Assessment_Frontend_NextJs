@@ -93,51 +93,47 @@ export function AssembleList({ children, className }: { children: ReactNode; cla
           [0.15, 1.15],
         ] as const;
 
-        cells.forEach((cell, index) => {
-          const [sx, sy] = scatter[index] ?? [0, 0.8];
-          gsap.set(cell, {
-            x: sx * 28,
-            y: sy * 28,
-            autoAlpha: 0,
-            borderRadius: 10,
-            boxShadow: "0 0 0 1px rgba(0,0,0,0.08), 0 14px 28px rgba(0,0,0,0.05)",
-            force3D: true,
-          });
-        });
-
-        const play = () => {
-          list.style.overflow = "visible";
-          gsap.to(cells, {
-            x: 0,
-            y: 0,
-            autoAlpha: 1,
-            borderRadius: 0,
-            boxShadow: "0 0 0 1px rgba(0,0,0,0), 0 0 0 rgba(0,0,0,0)",
-            duration: 0.7,
-            ease: "power3.out",
-            stagger: 0.06,
-            overwrite: true,
-            force3D: true,
-            onComplete: () => {
-              list.style.overflow = "";
-            },
-          });
-        };
-
         list.style.overflow = "visible";
 
-        const trigger = ScrollTrigger.create({
-          trigger: list,
-          start: "top 85%",
-          once: true,
-          onEnter: play,
+        const timeline = gsap.timeline({
+          scrollTrigger: {
+            trigger: list,
+            start: "top 78%",
+            end: "top 32%",
+            scrub: 0.65,
+            onLeave: () => {
+              list.style.overflow = "";
+            },
+            onEnterBack: () => {
+              list.style.overflow = "visible";
+            },
+          },
         });
 
-        // Section sits higher now — fire if already past the start line on mount.
-        if (trigger.progress > 0 || list.getBoundingClientRect().top < window.innerHeight * 0.85) {
-          play();
-          trigger.kill();
-        }
+        cells.forEach((cell, index) => {
+          const [sx, sy] = scatter[index] ?? [0, 0.8];
+          timeline.fromTo(
+            cell,
+            {
+              x: sx * 32,
+              y: sy * 32,
+              autoAlpha: 0.15,
+              borderRadius: 10,
+              boxShadow: "0 0 0 1px rgba(0,0,0,0.08), 0 14px 28px rgba(0,0,0,0.05)",
+              force3D: true,
+            },
+            {
+              x: 0,
+              y: 0,
+              autoAlpha: 1,
+              borderRadius: 0,
+              boxShadow: "0 0 0 1px rgba(0,0,0,0), 0 0 0 rgba(0,0,0,0)",
+              ease: "none",
+              force3D: true,
+            },
+            0,
+          );
+        });
       }),
     { scope: listRef },
   );
