@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Prod-vendored marketing pages; not held to rewamp lint rules.
+    "components/legacy/**",
   ]),
 ]);
 
