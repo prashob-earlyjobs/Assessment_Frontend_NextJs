@@ -48,7 +48,7 @@ export function GoToTop() {
         const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
       }}
-      className="fixed right-5 bottom-5 z-30 flex size-11 items-center justify-center rounded-full bg-brand text-white shadow-[0_8px_24px_rgba(234,106,78,0.28)] transition-colors hover:bg-[#d85c42]"
+      className="fixed right-5 bottom-5 z-20 flex size-11 items-center justify-center rounded-full bg-brand text-white shadow-[0_8px_24px_rgba(234,106,78,0.28)] transition-colors hover:bg-[#d85c42]"
     >
       <svg aria-hidden viewBox="0 0 16 16" className="size-4">
         <path

@@ -81,7 +81,7 @@ const social = [
 
 export function SiteFooter() {
   return (
-    <>
+    <div className="relative z-40">
       <footer className="site-footer mt-auto flex w-full flex-col items-center bg-[#0A0F10] px-3 py-8 text-white md:py-10 lg:py-10">
         <div className="grid w-full grid-cols-1 gap-5 px-4 sm:grid-cols-2 lg:grid-cols-3 lg:px-8 xl:grid-cols-5">
           <div className="flex flex-col">
@@ -92,8 +92,9 @@ export function SiteFooter() {
             <div className="mb-5 flex items-start">
               <SlLocationPin className="mr-2.5 text-2xl text-gray-400" />
               <p className="text-base font-normal leading-6 text-gray-400">
-                53, HustleHub, 5th Cross Rd, near Sony World Signal, 4th Block, Koramangala,
-                Bengaluru, Karnataka 560034
+                2nd Floor, Regent Insignia, Obeya Tulip, Mahakavi Vemana Rd, KHB Block
+                Koramangala, Koramangala 4-B Block, 4th Block, Koramangala, Bengaluru,
+                Karnataka 560095
               </p>
             </div>
             <div className="mb-5 flex items-start">
@@ -135,7 +136,7 @@ export function SiteFooter() {
               Company
             </h3>
             <Link
-              href="/about-us"
+              href="/about"
               className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
             >
               About Us
@@ -396,6 +397,6 @@ export function SiteFooter() {
         </p>
       </footer>
       <FooterScroll />
-    </>
+    </div>
   );
 }
