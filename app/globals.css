@@ -341,7 +341,8 @@ html.snap-release:has(.snap-section) {
   border-radius: 999px;
   padding: 0;
   margin: 0;
-  overflow: hidden;
+  /* Keep visible so the corner badge isn't clipped; circles clip via .huntlo-btn-wrapper */
+  overflow: visible;
   text-align: center;
   font-weight: 600;
   font-size: 13px;

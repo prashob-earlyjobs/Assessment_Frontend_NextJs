@@ -1,6 +1,6 @@
 "use client";
 
-import { Building, MapPin, Rocket, Users } from "lucide-react";
+import { Briefcase, Building, MapPin, Rocket, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { AiFillInstagram } from "react-icons/ai";
@@ -153,13 +153,6 @@ export function SiteFooter() {
             >
               Blogs
             </Link>
-            <a
-              href="tel:+918217527926"
-              className="mt-4 cursor-pointer text-base font-normal leading-5 text-gray-400 hover:text-gray-200 lg:mt-6"
-              id="contact-link"
-            >
-              Contact Us
-            </a>
             <Link
               href="/story"
               className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
@@ -171,12 +164,6 @@ export function SiteFooter() {
               className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
             >
               Job Openings
-            </Link>
-            <Link
-              href="/internship"
-              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
-            >
-              HR Internship
             </Link>
           </div>
 
@@ -302,6 +289,15 @@ export function SiteFooter() {
               <Users className="mr-2 inline-block h-5 w-5" />
               Become Freelance Recruiter
             </Link>
+            <a
+              href="https://gigkaro.in"
+              target="_blank"
+              rel="noreferrer"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
+              <Briefcase className="mr-2 inline-block h-5 w-5" />
+              Gigworkers Hiring
+            </a>
           </div>
         </div>
 
