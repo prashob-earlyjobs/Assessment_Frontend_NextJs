@@ -167,18 +167,18 @@ export function Navbar({
     <header
       data-solid={solid ? "true" : "false"}
       className={cx(
-        "fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,box-shadow] duration-300",
+        "fixed inset-x-0 top-0 z-50 overflow-x-clip transition-[background-color,border-color,box-shadow] duration-300",
         solid
           ? "border-b border-black/[0.08] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04)]"
           : "border-b border-transparent bg-transparent",
       )}
     >
-      <div className="mx-auto flex h-14 items-center justify-between gap-3 px-6 sm:h-16 sm:px-10 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:items-center lg:px-12">
+      <div className="mx-auto flex h-14 w-full max-w-6xl min-w-0 items-center justify-between gap-3 px-5 sm:h-16 sm:px-8 lg:grid lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:items-center">
         <Logo inverted={overHero} />
 
         <DesktopNav links={links} pathname={pathname} inverted={overHero} />
 
-        <div className="flex items-center justify-end gap-1 sm:gap-2">
+        <div className="flex min-w-0 items-center justify-end gap-1 sm:gap-2">
           <a
             href="https://www.huntlo.ai/"
             target="_blank"
@@ -236,7 +236,7 @@ export function Navbar({
           open ? "pointer-events-auto" : "pointer-events-none",
         )}
       >
-          <nav aria-label="Mobile" className="mx-auto flex max-w-[1200px] flex-col px-6 py-3 sm:px-10 lg:px-12">
+          <nav aria-label="Mobile" className="mx-auto flex w-full max-w-6xl flex-col px-5 py-3 sm:px-8">
             <ul className="flex flex-col">
               {links.map((link) => (
                 <li key={link.href}>
