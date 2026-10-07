@@ -1,6 +1,6 @@
 "use client";
 
-import { Briefcase, Building, MapPin, Rocket, Users } from "lucide-react";
+import { Building, GraduationCap, HardHat, MapPin, Rocket, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { AiFillInstagram } from "react-icons/ai";
@@ -90,15 +90,14 @@ export function SiteFooter() {
               <img src="/images/logo.png" alt="earlyjobs" className="h-[90px] w-[130px]" />
             </Link>
             <div className="mb-5 flex items-start">
-              <SlLocationPin className="mr-2.5 text-2xl text-gray-400" />
+              <SlLocationPin className="mr-2.5 shrink-0 text-2xl text-gray-400" />
               <p className="text-base font-normal leading-6 text-gray-400">
-                2nd Floor, Regent Insignia, Obeya Tulip, Mahakavi Vemana Rd, KHB Block
-                Koramangala, Koramangala 4-B Block, 4th Block, Koramangala, Bengaluru,
-                Karnataka 560095
+                2nd Floor, Regent Insignia, Obeya Tulip, Mahakavi Vemana Rd, KHB Block,
+                4th Block, Koramangala, Bengaluru, Karnataka 560095
               </p>
             </div>
             <div className="mb-5 flex items-start">
-              <HiOutlineMail className="mr-2.5 text-2xl text-gray-400" />
+              <HiOutlineMail className="mr-2.5 shrink-0 text-2xl text-gray-400" />
               <a
                 href="mailto:info@earlyjobs.in"
                 className="text-base font-normal leading-6 text-gray-400 no-underline"
@@ -107,7 +106,7 @@ export function SiteFooter() {
               </a>
             </div>
             <div className="mb-5 flex items-start">
-              <HiOutlinePhone className="mr-2.5 text-2xl text-gray-400" />
+              <HiOutlinePhone className="mr-2.5 shrink-0 text-2xl text-gray-400" />
               <a
                 href="tel:+918217527926"
                 className="text-base font-normal leading-6 text-gray-400 no-underline"
@@ -159,12 +158,12 @@ export function SiteFooter() {
             >
               Our Story
             </Link>
-            <Link
-              href="/jobs"
-              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
-            >
-              Job Openings
-            </Link>
+            <span className="mt-4 text-base font-normal leading-5 text-gray-400 lg:mt-6">
+              Press Release
+            </span>
+            <span className="mt-4 text-base font-normal leading-5 text-gray-400 lg:mt-6">
+              Investor Relations
+            </span>
           </div>
 
           <div className="flex flex-col">
@@ -231,12 +230,9 @@ export function SiteFooter() {
             >
               Sales & Marketing Recruitment
             </Link>
-            <Link
-              href="/top-executive-recruitment-firm"
-              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
-            >
-              Top Executive Recruitment
-            </Link>
+            <span className="mt-4 text-base font-normal leading-5 text-gray-400 lg:mt-6">
+              Global Recruitment
+            </span>
             <Link
               href="/hr-executive-recruitment-services"
               className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
@@ -248,12 +244,6 @@ export function SiteFooter() {
               className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
             >
               Recruitment Process Outsourcing
-            </Link>
-            <Link
-              href="/value-staffing-service"
-              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
-            >
-              Value Staffing Services
             </Link>
           </div>
 
@@ -295,9 +285,16 @@ export function SiteFooter() {
               rel="noreferrer"
               className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
             >
-              <Briefcase className="mr-2 inline-block h-5 w-5" />
-              Gigworkers Hiring
+              <HardHat className="mr-2 inline-block h-5 w-5" />
+              Hire Gigworkers
             </a>
+            <Link
+              href="/internship"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
+              <GraduationCap className="mr-2 inline-block h-5 w-5" />
+              HR Internships
+            </Link>
           </div>
         </div>
 
