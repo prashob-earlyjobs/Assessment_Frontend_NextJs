@@ -167,7 +167,7 @@ export function Navbar({
     <header
       data-solid={solid ? "true" : "false"}
       className={cx(
-        "fixed inset-x-0 top-0 z-50 overflow-x-clip transition-[background-color,border-color,box-shadow] duration-300",
+        "fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,box-shadow] duration-300",
         solid
           ? "border-b border-black/[0.08] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04)]"
           : "border-b border-transparent bg-transparent",
@@ -178,12 +178,12 @@ export function Navbar({
 
         <DesktopNav links={links} pathname={pathname} inverted={overHero} />
 
-        <div className="flex min-w-0 items-center justify-end gap-1 sm:gap-2">
+        <div className="flex min-w-0 items-center justify-end gap-1.5 sm:gap-2">
           <a
             href="https://www.huntlo.ai/"
             target="_blank"
             rel="noreferrer"
-            className="huntlo-btn hidden lg:inline-flex"
+            className="huntlo-btn hidden lg:inline-flex shrink-0"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
