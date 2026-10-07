@@ -2,16 +2,16 @@
 import React from 'react';
 import Header from '../components/pages/header';
 import Footer from '../components/pages/footer';
-import Hero from "../Franchise/Hero";
-import ProblemSolution from "../Franchise/ProblemSolution";
-import WhyFranchise from "../Franchise/WhyFranchise";
-import EarningModel from "../Franchise/EarningModel";
-import SetupRequirements from "../Franchise/SetupRequirements";
-import FranchiseRoadmap from "../Franchise/FranchiseRoadmap";
-import Navbar from '../components/pages/navbar';
+import Hero from "./Hero";
+import ProblemSolution from "./ProblemSolution";
+import WhyFranchise from "./WhyFranchise";
+import EarningModel from "./EarningModel";
+import SetupRequirements from "./SetupRequirements";
+import FranchiseRoadmap from "./FranchiseRoadmap";
+import Navbar from "../components/pages/navbar";
 
-import LimitedOffer from "../Franchise/LimitedOffer";
-import FAQ from "../Franchise/FAQ";
+import LimitedOffer from "./LimitedOffer";
+import FAQ from "./FAQ";
 
 
 const Franchise = () => {
