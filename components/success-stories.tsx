@@ -234,7 +234,7 @@ export function SuccessStories() {
               <figure
                 key={`${item.name}-${i}`}
                 aria-hidden={i >= story.reviews.length}
-                className="relative flex aspect-square w-[13.5rem] shrink-0 flex-col justify-between overflow-hidden bg-white p-4 shadow-[0_1px_0_rgba(0,0,0,0.04)]"
+                className="relative flex h-[13.5rem] w-[13.5rem] shrink-0 flex-col overflow-hidden bg-white p-4 shadow-[0_1px_0_rgba(0,0,0,0.04)]"
               >
                 <span
                   aria-hidden
@@ -242,20 +242,22 @@ export function SuccessStories() {
                 >
                   ”
                 </span>
-                <div className="relative min-h-0">
-                  <span aria-hidden className="block h-1 w-8 bg-brand" />
+                <div className="relative flex min-h-0 flex-1 flex-col">
+                  <span aria-hidden className="block h-1 w-8 shrink-0 bg-brand" />
                   {item.title ? (
-                    <p className="mt-3 text-[13px] font-semibold tracking-[-0.02em] text-neutral-950">
+                    <p className="mt-3 shrink-0 truncate text-[13px] font-semibold tracking-[-0.02em] text-neutral-950">
                       {item.title}
                     </p>
                   ) : null}
                   <blockquote
-                    className={`text-[12px] leading-[1.45] text-neutral-700 ${item.title ? "mt-1.5" : "mt-3"}`}
+                    className={`min-h-0 overflow-hidden break-words text-[12px] leading-[1.45] text-neutral-700 ${
+                      item.title ? "mt-1.5 line-clamp-5" : "mt-3 line-clamp-6"
+                    }`}
                   >
                     {item.quote}
                   </blockquote>
                 </div>
-                <figcaption className="relative flex items-center gap-2.5 border-t border-black/5 pt-3">
+                <figcaption className="relative mt-auto flex shrink-0 items-center gap-2.5 border-t border-black/5 pt-3">
                   <ReviewAvatar name={item.name} image={item.image} />
                   <span className="min-w-0">
                     <span className="block truncate text-sm font-medium text-neutral-950">

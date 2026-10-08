@@ -351,7 +351,7 @@ export function Hero() {
           </h1>
 
           <p className="mx-auto max-w-3xl px-2 text-center text-sm text-white/80 sm:px-6 sm:text-base md:text-lg lg:text-xl">
-            India&apos;s Women Recruiter Network: Your Career Partner, From Interview to Onboarding.
+            A Growing Network of Women Recruiters, Built for the Future of Hiring.
           </p>
 
           <HeroSearch />
