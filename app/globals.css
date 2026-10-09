@@ -279,6 +279,23 @@ html.snap-release:has(.snap-section) {
   animation: about-drift 7s ease-in-out infinite;
 }
 
+@keyframes newsroom-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.06);
+  }
+}
+
+.newsroom-pulse {
+  transform-origin: center;
+  animation: newsroom-pulse 4.5s ease-in-out infinite;
+}
+
 .experience-fill {
   clip-path: inset(0 100% 0 0);
 }
@@ -634,7 +651,8 @@ html.snap-release:has(.snap-section) {
   .node-float,
   .shimmer,
   .about-drift,
-  .huntlo-circle {
+  .huntlo-circle,
+  .newsroom-pulse {
     animation: none;
   }
 

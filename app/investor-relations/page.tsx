@@ -1,8 +1,14 @@
 import type { Metadata } from "next";
-import { SectionPage } from "@/components/section-page";
+import { InvestorsPage } from "@/components/investors/page";
 
-export const metadata: Metadata = { title: "Investor Relations | EarlyJobs" };
+export const metadata: Metadata = {
+  title: {
+    absolute: "Investors | EarlyJobs",
+  },
+  description:
+    "EarlyJobs is building a recruiter-first hiring network that connects employers, recruiters and talent through AI-powered recruitment infrastructure.",
+};
 
-export default function InvestorRelationsPage() {
-  return <SectionPage title="Investor Relations" />;
+export default function Page() {
+  return <InvestorsPage />;
 }
