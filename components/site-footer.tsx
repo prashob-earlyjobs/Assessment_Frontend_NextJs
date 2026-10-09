@@ -83,7 +83,7 @@ export function SiteFooter() {
   return (
     <div className="relative z-40 w-full min-w-0 overflow-x-clip">
       <footer className="site-footer mt-auto flex w-full flex-col items-center bg-[#0A0F10] px-3 py-8 text-white md:py-10 lg:py-10">
-        <div className="grid w-full grid-cols-1 gap-5 px-4 sm:grid-cols-2 lg:grid-cols-3 lg:px-8 xl:grid-cols-5">
+        <div className="relative grid w-full grid-cols-1 gap-5 px-4 sm:grid-cols-2 lg:grid-cols-3 lg:px-8 xl:grid-cols-5">
           <div className="flex flex-col">
             <Link href="/" className="mb-5">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -170,6 +170,49 @@ export function SiteFooter() {
             >
               Investor Relations
             </Link>
+
+            <h3 className="mt-10 text-base font-semibold leading-5 text-white uppercase lg:mt-12">
+              Our Businesses
+            </h3>
+            <a
+              href="https://www.earlyjobs.ai"
+              target="_blank"
+              rel="noreferrer"
+              className="mt-4 no-underline lg:mt-6"
+            >
+              <span className="block text-base font-semibold leading-5 text-white hover:text-gray-200">
+                EarlyJobs
+              </span>
+              <span className="mt-1 block text-sm font-normal leading-5 text-gray-400">
+                Recruiter-First Hiring Network
+              </span>
+            </a>
+            <a
+              href="https://www.huntlo.ai"
+              target="_blank"
+              rel="noreferrer"
+              className="mt-4 no-underline lg:mt-6"
+            >
+              <span className="block text-base font-semibold leading-5 text-white hover:text-gray-200">
+                Huntlo AI
+              </span>
+              <span className="mt-1 block text-sm font-normal leading-5 text-gray-400">
+                AI Hiring Infrastructure
+              </span>
+            </a>
+            <a
+              href="https://www.gigkaro.ai"
+              target="_blank"
+              rel="noreferrer"
+              className="mt-4 no-underline lg:mt-6"
+            >
+              <span className="block text-base font-semibold leading-5 text-white hover:text-gray-200">
+                GigKaro
+              </span>
+              <span className="mt-1 block text-sm font-normal leading-5 text-gray-400">
+                Gig Hiring Network
+              </span>
+            </a>
           </div>
 
           <div className="flex flex-col">
@@ -301,64 +344,63 @@ export function SiteFooter() {
               <GraduationCap className="mr-2 inline-block h-5 w-5" />
               HR Internships
             </Link>
-          </div>
-        </div>
-
-        <div className="mt-5 w-full px-4 lg:px-8">
-          <h3 className="text-base font-semibold leading-5 text-white">Available on</h3>
-          <div className="mt-1 flex w-full items-center justify-between gap-4">
-            <div className="flex shrink-0 items-center gap-3">
-              <a
-                href="https://play.google.com/store/apps/details?id=com.victaman.earlyjobs"
-                rel="noreferrer"
-                target="_blank"
-                className="flex h-[92px] shrink-0 items-center overflow-hidden"
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/images/google-play-badge-logo.svg"
-                  alt="google-play"
-                  className="-translate-y-1 h-auto w-[120px] select-none"
-                />
-              </a>
-              <a
-                href="https://apps.apple.com/in/app/earlyjobs-ai/id6754554572"
-                rel="noreferrer"
-                target="_blank"
-                className="flex h-[92px] shrink-0 items-center overflow-hidden"
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/images/app-store-logo.svg"
-                  alt="app-store"
-                  className="-translate-y-1 h-auto w-[120px] select-none"
-                />
-              </a>
-            </div>
-            <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-              {aiAssistantLinks.map((item) => (
+            <div className="mt-8 mb-4 flex flex-col items-start gap-4 xl:absolute xl:right-8 xl:bottom-4 xl:mt-0 xl:mb-0">
+              <div className="flex items-center gap-2 sm:gap-3">
+                {aiAssistantLinks.map((item) => (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    className="shrink-0 text-white transition-transform duration-200 hover:scale-105 active:scale-95"
+                    rel="noreferrer"
+                    target="_blank"
+                    aria-label={item.name}
+                    title={item.name}
+                  >
+                    {item.image ? (
+                      <Image
+                        src={item.image}
+                        alt=""
+                        width={20}
+                        height={20}
+                        className="size-5 object-contain sm:size-6"
+                      />
+                    ) : item.Icon ? (
+                      <item.Icon className="text-xl sm:text-2xl" />
+                    ) : null}
+                  </a>
+                ))}
+              </div>
+              <div className="flex flex-col items-start">
+                <p className="mt-2 text-base font-semibold leading-5 text-white">Available on</p>
+                <div className="mt-2 flex items-center gap-3">
                 <a
-                  key={item.name}
-                  href={item.href}
-                  className="shrink-0 text-white transition-transform duration-200 hover:scale-105 active:scale-95"
+                  href="https://play.google.com/store/apps/details?id=com.victaman.earlyjobs"
                   rel="noreferrer"
                   target="_blank"
-                  aria-label={item.name}
-                  title={item.name}
+                  className="flex h-10 shrink-0 items-center overflow-hidden"
                 >
-                  {item.image ? (
-                    <Image
-                      src={item.image}
-                      alt=""
-                      width={20}
-                      height={20}
-                      className="size-5 object-contain sm:size-6"
-                    />
-                  ) : item.Icon ? (
-                    <item.Icon className="text-xl sm:text-2xl" />
-                  ) : null}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/images/google-play-badge-logo.svg"
+                    alt="Get it on Google Play"
+                    className="-translate-y-1 h-auto w-[110px] select-none"
+                  />
                 </a>
-              ))}
+                <a
+                  href="https://apps.apple.com/in/app/earlyjobs-ai/id6754554572"
+                  rel="noreferrer"
+                  target="_blank"
+                  className="flex h-10 shrink-0 items-center overflow-hidden"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/images/app-store-logo.svg"
+                    alt="Download on the App Store"
+                    className="-translate-y-1 h-auto w-[110px] select-none"
+                  />
+                </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
