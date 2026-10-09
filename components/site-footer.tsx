@@ -158,12 +158,18 @@ export function SiteFooter() {
             >
               Our Story
             </Link>
-            <span className="mt-4 text-base font-normal leading-5 text-gray-400 lg:mt-6">
-              Press Release
-            </span>
-            <span className="mt-4 text-base font-normal leading-5 text-gray-400 lg:mt-6">
+            <Link
+              href="/newsroom"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
+              Newsroom
+            </Link>
+            <Link
+              href="/investor-relations"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
               Investor Relations
-            </span>
+            </Link>
           </div>
 
           <div className="flex flex-col">
