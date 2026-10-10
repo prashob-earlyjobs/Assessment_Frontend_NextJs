@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { EmployerFaq } from "@/components/employers/faq";
-import { EmployerFinalCta } from "@/components/employers/final-cta";
 import { EmployerHero } from "@/components/employers/hero";
 import { EmployerHowItWorks } from "@/components/employers/how-it-works";
 import { Industries } from "@/components/employers/industries";
@@ -37,7 +36,6 @@ export default function EmployersPage() {
         <Industries />
         <EmployerStories />
         <EmployerFaq />
-        <EmployerFinalCta />
       </div>
     </main>
   );

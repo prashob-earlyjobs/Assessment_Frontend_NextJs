@@ -6,7 +6,7 @@ export const metadata: Metadata = {
     absolute: "Our Story | EarlyJobs",
   },
   description:
-    "EarlyJobs was built around people — freelance recruiters, women returning to work, and district partners hiring across India.",
+    "EarlyJobs started by connecting overlooked talent with opportunity through a network of recruiters, Huntlo AI and GigKaro.",
 };
 
 export default function Page() {

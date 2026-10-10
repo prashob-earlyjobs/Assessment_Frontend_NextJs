@@ -1,89 +1,61 @@
 import Image from "next/image";
 import Link from "next/link";
-import { companyFacts } from "@/data/company-facts";
 
-const stats = [
-  companyFacts.recruiters,
-  companyFacts.companies,
-  companyFacts.joinings,
+const capabilities = [
+  {
+    name: "EarlyJobs",
+    title: "The Recruiter Network",
+    body: "We connect companies with a distributed network of recruiters who help execute hiring across roles, industries and geographies. We are creating flexible professional opportunities, particularly for women and people in emerging cities who deserve greater access to work.",
+  },
+  {
+    name: "Huntlo AI",
+    title: "Intelligent Hiring Infrastructure",
+    body: "Huntlo brings AI-powered capabilities into recruitment execution, helping teams streamline candidate sourcing, outreach, screening, interview scheduling and follow-ups. Our belief is not that technology should replace human judgment. It should help people make better decisions and execute hiring at scale.",
+  },
+  {
+    name: "GigKaro",
+    title: "Frontline Workforce Hiring",
+    body: "India's growth depends on the people who keep its economy moving: delivery professionals, warehouse workers, drivers, technicians, machine operators and many others. GigKaro extends our hiring network into frontline workforce recruitment, helping employers connect with talent across India's diverse markets.",
+  },
 ] as const;
 
-const values = [
+const beliefs = [
   {
-    eyebrow: "Our belief",
-    title: "We believe there is always a better way.",
-    body: "Hiring was broken on both sides of the table. Job seekers sent resumes into silence. Employers bought volume, not judgment. EarlyJobs started again from that contradiction.",
+    title: "We believe a woman should not have to choose between family responsibilities and professional ambition.",
     image: "/story/value-1.webp",
     alt: "Illustration of a paper plane and a paper boat finding another way forward",
   },
   {
-    eyebrow: "Our partners",
-    title: "We work beside the people who hire.",
-    body: "Recruiters, women returning to work, agencies and district partners are the network. Technology extends their reach. It does not replace the trust they already have.",
+    title: "We believe a recruiter in a smaller city should have access to meaningful hiring opportunities without needing to move to a metro.",
     image: "/story/value-2.webp",
     alt: "Illustration of people rowing one boat together",
   },
   {
-    eyebrow: "Our pace",
-    title: "We never learned to leave talent behind.",
-    body: "A career break, a smaller city, or a first interview should not end the chance to be seen. The network is built so more of India can take part in hiring.",
+    title: "We believe employers should be able to reach talent beyond conventional channels.",
     image: "/story/value-3.webp",
     alt: "Illustration of people at desks, one raising a hand",
   },
   {
-    eyebrow: "Our standard",
-    title: "We value judgment over title.",
-    body: "A recruiter in a district knows which candidate is real. An AI interview shows where a person actually stands. Decisions stay with people who can tell the difference.",
+    title: "We believe AI can make recruitment more efficient when combined with human relationships, local knowledge and accountability for outcomes.",
     image: "/story/value-4.webp",
     alt: "Illustration of chess pieces on uneven pedestals",
   },
 ] as const;
 
-const founders = [
-  {
-    name: "Saurav Kumar",
-    role: "Founder & CEO",
-    image: "/images/1756300384422.jpeg",
-  },
-  {
-    name: "Ravi Prakash Kumar",
-    role: "Founder & Director",
-    image: "/images/founder-image.jpg",
-  },
-  {
-    name: "Surbhi Rani",
-    role: "Co-Founder & Director",
-    image: "/images/1765196458989.jpeg",
-  },
-  {
-    name: "Prashob P",
-    role: "CTO",
-    image: "/images/1780079531953.png",
-  },
-] as const;
-
-const stories = [
-  {
-    year: "2026",
-    title: "The women building careers in recruitment",
-    body: "How flexible recruiting work helps women re-enter the workforce.",
-    href: "/newsroom",
-  },
-  {
-    year: "2026",
-    title: "Inside the recruiter-first hiring model",
-    body: "Why putting recruiters at the center changes the outcome of a hire.",
-    href: "/newsroom",
-  },
+const actions = [
+  { label: "Explore Careers", href: "/jobs" },
+  { label: "Become a Recruiter", href: "/become-a-recruiter" },
+  { label: "Partner With Us", href: "/agency-onboarding" },
 ] as const;
 
 export function BeliefStoryPage() {
   return (
     <main className="bg-white text-neutral-950">
       <section className="mx-auto w-full max-w-6xl px-5 pt-16 pb-8 sm:px-8 sm:pt-24">
-        <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-6">
-          <h1 className="max-w-[12ch] text-[2.6rem] font-semibold leading-[1.05] tracking-[-0.045em] sm:text-6xl">
-            We Believe In The Power Of People
+        <p className="text-[11px] font-semibold tracking-[0.16em] text-brand uppercase">Our Story</p>
+        <div className="mt-6 grid items-start gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-8">
+          <h1 className="max-w-[14ch] text-[2.4rem] leading-[1.05] font-semibold tracking-[-0.045em] sm:text-5xl">
+            We Started by Seeing Talent the World Was Overlooking.
           </h1>
           <div>
             <Image
@@ -94,88 +66,98 @@ export function BeliefStoryPage() {
               priority
               className="ml-auto h-auto w-full max-w-xl"
             />
-            <div className="mt-2 ml-auto max-w-md space-y-4 text-sm leading-6 text-neutral-500">
+            <div className="mt-4 ml-auto max-w-md space-y-4 text-sm leading-6 text-neutral-500">
+              <p>India doesn&apos;t lack talent. It lacks enough ways to connect that talent with opportunity.</p>
               <p>
-                Across India, countless women recruiters and aspiring recruiters face a silent
-                struggle. Opportunities often fade after college, marriage, or a career break,
-                leaving talent underutilized.
+                We saw capable women stepping away from their careers because of marriage, motherhood
+                or relocation. We saw young people searching for their first opportunity. And we saw
+                companies struggling to find the right people, at the right time, in the right places.
               </p>
               <p>
-                EarlyJobs was born to change this. A freelance recruiter network, a district
-                franchise model, and an AI interview that shows candidates where they actually
-                stand.
+                We realized that hiring needed more than job portals and recruitment software. It
+                needed a network of people, technology and local execution working together.
               </p>
-              <p>
-                Women form the backbone of the network. Local partners carry hiring into cities
-                the portals never reached.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-16 ml-auto max-w-3xl">
-          <h2 className="max-w-xl text-2xl font-semibold leading-tight tracking-[-0.04em] sm:text-[2rem]">
-            A recruiter-first hiring network, built in India.
-          </h2>
-          <dl className="mt-8 grid grid-cols-3 gap-4">
-            {stats.map((stat) => (
-              <div key={stat.label}>
-                <dt className="text-[11px] font-medium tracking-[0.14em] text-neutral-400 uppercase">
-                  {stat.label}
-                </dt>
-                <dd className="mt-2 text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">
-                  {stat.value}
-                </dd>
-              </div>
-            ))}
-          </dl>
-
-          <div className="mt-8 grid items-center gap-4 rounded-[28px] bg-[#e7f3fb] p-4 sm:grid-cols-[9rem_minmax(0,1fr)] sm:p-5">
-            <div className="px-2 py-2">
-              <p className="text-3xl font-semibold tracking-[-0.04em]">{companyFacts.interviews.value}</p>
-              <p className="mt-1 text-sm text-neutral-500">{companyFacts.interviews.label}</p>
-            </div>
-            <div className="relative aspect-[16/10] overflow-hidden rounded-2xl">
-              <Image
-                src="/story/impact-card.webp"
-                alt="Three people working together around a table"
-                fill
-                className="object-cover"
-                sizes="(min-width: 1024px) 36rem, 100vw"
-              />
-              <span className="absolute bottom-3 left-3 rounded-full bg-[#2f6bff] px-3 py-1 text-xs font-medium text-white">
-                {companyFacts.joinings.value} joinings
-              </span>
+              <p className="font-semibold text-neutral-950">That belief became EarlyJobs.</p>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-5xl px-5 py-20 sm:px-8 sm:py-28">
-        <h2 className="text-center text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">
-          At The Core Of
-          <br />
-          Everything We Do
+      <section className="mx-auto w-full max-w-3xl px-5 py-16 sm:px-8 sm:py-24">
+        <h2 className="text-3xl leading-tight font-semibold tracking-[-0.04em] sm:text-4xl">
+          From a Simple Observation to a Bigger Mission
         </h2>
-        <div className="mt-16 space-y-20 sm:mt-24 sm:space-y-28">
-          {values.map((value, index) => (
-            <article
-              key={value.title}
-              className="grid items-center gap-8 lg:grid-cols-2 lg:gap-16"
-            >
-              <div className={index % 2 === 1 ? "lg:order-2" : undefined}>
-                <p className="text-[11px] font-semibold tracking-[0.16em] text-[#e23b2f] uppercase">
-                  {value.eyebrow}
+        <div className="mt-6 space-y-4 text-sm leading-7 text-neutral-600 sm:text-base">
+          <p>
+            Our journey began with Victaman, where we witnessed firsthand the gap between people
+            looking for opportunities and businesses looking for talent.
+          </p>
+          <p>
+            What stood out was the untapped potential of people who wanted to work but needed
+            flexibility, access and a way to participate in the workforce on their own terms.
+          </p>
+          <p>We asked ourselves a simple question:</p>
+          <p className="text-lg leading-8 font-medium text-neutral-950 italic">
+            What if recruitment itself could become an opportunity for thousands of people, while
+            helping companies hire better and faster?
+          </p>
+          <p>That question shaped EarlyJobs.</p>
+          <p>
+            We began building a distributed network of recruiters who could work from anywhere,
+            connect with candidates in their communities and help companies execute hiring beyond
+            the limitations of traditional recruitment models.
+          </p>
+        </div>
+      </section>
+
+      <section className="bg-[#f7f5f2]">
+        <div className="mx-auto w-full max-w-6xl px-5 py-16 sm:px-8 sm:py-24">
+          <h2 className="max-w-3xl text-3xl leading-tight font-semibold tracking-[-0.04em] sm:text-4xl">
+            We Are Building More Than a Recruitment Company
+          </h2>
+          <p className="mt-4 max-w-2xl text-sm leading-7 text-neutral-600 sm:text-base">
+            EarlyJobs is building the infrastructure behind modern hiring. Our model brings together
+            three capabilities.
+          </p>
+          <ul className="mt-12 grid gap-5 lg:grid-cols-3">
+            {capabilities.map((item) => (
+              <li key={item.name} className="rounded-2xl bg-white p-6">
+                <p className="text-[11px] font-semibold tracking-[0.14em] text-brand uppercase">
+                  {item.name}
                 </p>
-                <h3 className="mt-3 max-w-sm text-2xl font-semibold leading-tight tracking-[-0.04em] sm:text-[1.7rem]">
-                  {value.title}
-                </h3>
-                <p className="mt-4 max-w-md text-sm leading-6 text-neutral-500">{value.body}</p>
-              </div>
+                <h3 className="mt-3 text-xl font-semibold tracking-[-0.03em]">{item.title}</h3>
+                <p className="mt-3 text-sm leading-6 text-neutral-600">{item.body}</p>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-10 max-w-3xl text-base font-semibold tracking-[-0.02em]">
+            Different capabilities. One larger ambition: make hiring more accessible, connected and
+            scalable.
+          </p>
+        </div>
+      </section>
+
+      <section className="mx-auto w-full max-w-5xl px-5 py-20 sm:px-8 sm:py-28">
+        <h2 className="mx-auto max-w-3xl text-center text-3xl leading-tight font-semibold tracking-[-0.04em] sm:text-4xl">
+          Our Belief: Talent Is Everywhere. Opportunity Should Be Too.
+        </h2>
+        <p className="mx-auto mt-4 max-w-2xl text-center text-sm leading-7 text-neutral-500">
+          These are not separate ideas. They are connected parts of the future we want to build.
+        </p>
+        <div className="mt-16 space-y-20 sm:mt-24 sm:space-y-28">
+          {beliefs.map((belief, index) => (
+            <article key={belief.title} className="grid items-center gap-8 lg:grid-cols-2 lg:gap-16">
+              <h3
+                className={`max-w-md text-2xl leading-tight font-semibold tracking-[-0.04em] ${
+                  index % 2 === 1 ? "lg:order-2" : ""
+                }`}
+              >
+                {belief.title}
+              </h3>
               <div className={index % 2 === 1 ? "lg:order-1" : undefined}>
                 <Image
-                  src={value.image}
-                  alt={value.alt}
+                  src={belief.image}
+                  alt={belief.alt}
                   width={974}
                   height={802}
                   className="h-auto w-full"
@@ -186,26 +168,53 @@ export function BeliefStoryPage() {
         </div>
       </section>
 
-      <section className="bg-[#e7f3fb]">
-        <div className="mx-auto w-full max-w-5xl px-5 py-16 sm:px-8 sm:py-20">
-          <h2 className="text-center text-3xl font-semibold tracking-[-0.04em] text-[#1d4ed8]">
-            Our Founders
+      <section className="mx-auto grid w-full max-w-6xl gap-12 px-5 py-8 sm:px-8 lg:grid-cols-2 lg:py-16">
+        <div>
+          <h2 className="text-3xl leading-tight font-semibold tracking-[-0.04em] sm:text-4xl">
+            The Network Is Our Foundation
           </h2>
-          <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {founders.map((person) => (
-              <li key={person.name} className="rounded-2xl bg-white px-4 py-6 text-center">
-                <Image
-                  src={person.image}
-                  alt=""
-                  width={160}
-                  height={160}
-                  className="mx-auto size-28 rounded-full bg-neutral-100 object-cover object-top ring-1 ring-black/10"
-                />
-                <p className="mt-4 text-sm font-semibold">{person.name}</p>
-                <p className="mt-1 text-xs text-[#1d4ed8]">{person.role}</p>
-              </li>
-            ))}
-          </ul>
+          <div className="mt-6 space-y-4 text-sm leading-7 text-neutral-600 sm:text-base">
+            <p>
+              Every recruiter who joins our network brings more than recruitment capacity. They
+              bring local knowledge, relationships, community access and an understanding of the
+              people behind every application.
+            </p>
+            <p>
+              As the network grows, we can reach more candidates, serve more employers and execute
+              hiring across a wider range of roles and locations.
+            </p>
+            <p>
+              Technology helps coordinate that network. Human relationships help make it effective.
+              Successful hiring outcomes create the foundation for sustainable growth.
+            </p>
+            <p>
+              This is how we believe hiring infrastructure should evolve: not through software
+              alone, but through the combination of people, intelligence and execution.
+            </p>
+          </div>
+        </div>
+        <div>
+          <h2 className="text-3xl leading-tight font-semibold tracking-[-0.04em] sm:text-4xl">
+            Built in India. Designed for a Bigger Future.
+          </h2>
+          <div className="mt-6 space-y-4 text-sm leading-7 text-neutral-600 sm:text-base">
+            <p>
+              We started by addressing a real problem in India&apos;s hiring ecosystem. Our ambition
+              is to build a model that can serve diverse hiring needs at scale, from high-volume
+              recruitment to frontline workforce hiring and technology-enabled recruitment
+              operations.
+            </p>
+            <p>
+              We are still building, learning and improving. Every employer we serve, every
+              recruiter who grows with us and every successful joining teaches us something about
+              how hiring can work better.
+            </p>
+            <p>Our journey is not just about filling vacancies.</p>
+            <p>
+              It is about expanding access to opportunity, helping businesses grow and building a
+              more connected hiring ecosystem.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -218,56 +227,38 @@ export function BeliefStoryPage() {
             className="object-cover"
             sizes="(min-width: 1024px) 64rem, 100vw"
           />
-          <div className="relative px-6 py-16 text-center sm:py-20">
-            <h2 className="text-2xl font-semibold tracking-[-0.03em] text-white sm:text-3xl">
-              Join us in shaping the future of hiring.
+          <div className="relative px-6 py-16 text-center text-white sm:px-12 sm:py-20">
+            <h2 className="text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">
+              The Future of Hiring Is Connected.
             </h2>
-            <Link
-              href="/become-a-recruiter"
-              className="mt-6 inline-flex h-11 items-center justify-center rounded-lg bg-neutral-950 px-5 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
-            >
-              Become a Recruiter
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto w-full max-w-5xl px-5 pb-20 sm:px-8">
-        <div className="rounded-[28px] bg-[#f4f6f8] px-6 py-10 text-center">
-          <p className="text-[11px] font-semibold tracking-[0.16em] text-[#e23b2f] uppercase">
-            Investors
-          </p>
-          <h2 className="mt-3 text-2xl font-semibold tracking-[-0.04em]">For the people building with us</h2>
-          <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-neutral-500">
-            Company metrics and materials live with investor relations. We publish only the numbers
-            we can stand behind.
-          </p>
-          <Link href="/investor-relations" className="mt-5 inline-flex text-sm font-medium text-[#1d4ed8]">
-            Investor relations →
-          </Link>
-        </div>
-
-        <div className="mt-16">
-          <p className="text-center text-sm text-neutral-400">
-            <span className="font-medium text-neutral-950">Journal</span>
-            <span className="mx-2">·</span>
-            Stories from the network
-          </p>
-          <ul className="mt-8 grid items-stretch gap-5 sm:grid-cols-2">
-            {stories.map((story, index) => (
-              <li key={story.title} className="h-full">
+            <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-white/90 sm:text-base">
+              We are building a future where companies can access distributed recruiting capacity,
+              recruiters can build sustainable professional careers, and technology can make hiring
+              more efficient without losing the human connection that matters.
+            </p>
+            <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-white/90 sm:text-base">
+              If you are an employer looking to hire, a recruiter looking to grow, a partner who
+              shares our vision or an investor interested in the future of hiring, we would love to
+              connect.
+            </p>
+            <p className="mt-8 text-lg font-semibold">EarlyJobs. Huntlo AI. GigKaro.</p>
+            <p className="mt-2 text-sm text-white/90 italic">One mission. A connected hiring ecosystem.</p>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              {actions.map((action, index) => (
                 <Link
-                  href={story.href}
-                  className={`flex h-full flex-col rounded-2xl p-6 ${index === 1 ? "bg-[#e7f3fb]" : "bg-[#f4f6f8]"}`}
+                  key={action.href}
+                  href={action.href}
+                  className={`inline-flex h-11 items-center justify-center rounded-lg px-5 text-sm font-medium ${
+                    index === 0
+                      ? "bg-neutral-950 text-white hover:bg-neutral-800"
+                      : "bg-white text-neutral-950 hover:bg-white/90"
+                  }`}
                 >
-                  <p className="text-xs text-neutral-400">{story.year}</p>
-                  <h3 className="mt-3 text-lg font-semibold tracking-[-0.03em]">{story.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-neutral-500">{story.body}</p>
-                  <span className="mt-auto pt-6 inline-flex text-sm font-medium">Read →</span>
+                  {action.label}
                 </Link>
-              </li>
-            ))}
-          </ul>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
     </main>

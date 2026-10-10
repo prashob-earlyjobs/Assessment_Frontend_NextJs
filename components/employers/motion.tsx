@@ -121,38 +121,3 @@ export function FaqMotion({ children }: { children: ReactNode }) {
   const root = useMotion((scope, reduce) => slideIn(".faq-row", scope.current, reduce));
   return <div ref={root}>{children}</div>;
 }
-
-export function CtaMotion({ children }: { children: ReactNode }) {
-  const root = useMotion((scope, reduce) => {
-    if (reduce) return;
-    gsap.from(".cta-line", {
-      y: 16,
-      duration: 0.7,
-      stagger: 0.08,
-      ease: "power3.out",
-      immediateRender: false,
-      scrollTrigger: {
-        trigger: scope.current,
-        start: "top 82%",
-        once: true,
-      },
-    });
-    gsap.fromTo(
-      ".cta-drift",
-      { y: (index: number) => (index % 2 === 0 ? 12 : -12) },
-      {
-        y: (index: number) => (index % 2 === 0 ? -16 : 16),
-        ease: "none",
-        immediateRender: false,
-        scrollTrigger: {
-          trigger: scope.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true,
-        },
-      },
-    );
-  });
-
-  return <div ref={root}>{children}</div>;
-}

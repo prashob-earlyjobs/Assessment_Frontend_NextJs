@@ -1,13 +1,5 @@
 import type { Metadata } from "next";
-import { AboutBelief } from "@/components/about/belief";
-import { AboutHero } from "@/components/about/hero";
-import { AboutImpact } from "@/components/about/impact";
-import { AboutJoin } from "@/components/about/join";
-import { AboutJourney } from "@/components/about/journey";
-import { AboutLeadership } from "@/components/about/leadership";
-import { AboutMission } from "@/components/about/mission";
-import { AboutNetwork } from "@/components/about/network";
-import { AboutWhy } from "@/components/about/why";
+import { AgencyPartnershipsPage } from "@/components/agency-partnerships/page";
 
 export const metadata: Metadata = {
   title: {
@@ -18,17 +10,5 @@ export const metadata: Metadata = {
 };
 
 export default function AboutPage() {
-  return (
-    <main className="relative bg-white">
-      <AboutHero />
-      <AboutBelief />
-      <AboutWhy />
-      <AboutNetwork />
-      <AboutJourney />
-      <AboutImpact />
-      <AboutMission />
-      <AboutLeadership />
-      <AboutJoin />
-    </main>
-  );
+  return <AgencyPartnershipsPage />;
 }
