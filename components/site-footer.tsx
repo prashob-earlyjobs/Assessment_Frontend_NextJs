@@ -201,7 +201,7 @@ export function SiteFooter() {
               </span>
             </a>
             <a
-              href="https://www.gigkaro.ai"
+              href="https://gigkaro.in"
               target="_blank"
               rel="noreferrer"
               className="mt-4 no-underline lg:mt-6"
@@ -210,7 +210,7 @@ export function SiteFooter() {
                 GigKaro
               </span>
               <span className="mt-1 block text-sm font-normal leading-5 text-gray-400">
-                Gig Hiring Network
+                Gig Hiring Infrastructure
               </span>
             </a>
           </div>
@@ -305,7 +305,7 @@ export function SiteFooter() {
               className="mt-4 bg-transparent p-0 text-left text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
             >
               <Rocket className="mr-2 inline-block h-5 w-5" />
-              Agencies and consultancies tie-up
+              Consultancies tie ups
             </Link>
             <Link
               href="/clientele"
