@@ -24,7 +24,7 @@ const cards = [
   },
 ] as const;
 
-const path = ["Professional", "Profile", "AI", "Recruiter", "Interview", "Joining"];
+const path = ["Professional", "AI", "Recruiter", "Interview", "Joining"];
 
 export function JobSeekers() {
   return (

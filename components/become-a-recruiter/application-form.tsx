@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { toast } from "sonner";
 import { PersonalDetailsStep } from "@/components/become-a-recruiter/personal-details";
 import { QualificationDetailsStep } from "@/components/become-a-recruiter/qualification-details";
@@ -49,6 +50,26 @@ const steps = [
 ] as const;
 
 type StepId = (typeof steps)[number]["id"];
+
+function BackLink() {
+  return (
+    <Link
+      href="/become-a-recruiter"
+      aria-label="Back"
+      className="mb-6 inline-flex size-10 items-center justify-center rounded-full border border-black/10 text-neutral-950 transition-colors hover:bg-neutral-50"
+    >
+      <svg viewBox="0 0 24 24" className="size-4" fill="none" aria-hidden>
+        <path
+          d="M15 6 9 12l6 6"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </Link>
+  );
+}
 
 const button =
   "inline-flex h-11 items-center justify-center rounded-[6px] px-4 text-[13px] font-medium transition-[border-radius,background-color] duration-500 ease-in-out hover:rounded-[22px]";
@@ -288,6 +309,7 @@ export function RecruiterApplicationForm() {
       <header>
         <p className="text-sm font-medium text-brand">Application</p>
         <h1 className="mt-2 text-[2rem] font-semibold leading-[1.1] tracking-[-0.045em] text-neutral-950 sm:text-[2.75rem]">
+        <BackLink />
           Become a Recruiter
         </h1>
         <p className="mt-3 max-w-xl text-sm leading-6 text-neutral-600">

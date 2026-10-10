@@ -3,13 +3,19 @@
 import { useRef } from "react";
 import { gsap, playMotion, ScrollTrigger, useGSAP } from "@/lib/gsap";
 
-const before = [
-  "Job Seeker",
-  "Applies Everywhere",
-  "No Response",
-  "Employer",
-  "Screens Hundreds of Resumes",
-  "Recruiter Works Alone",
+const beforeLanes = [
+  {
+    actor: "Job Seeker",
+    steps: ["Applies Everywhere", "No Response"],
+  },
+  {
+    actor: "Employer",
+    steps: ["Screens Hundreds of Resumes"],
+  },
+  {
+    actor: "Recruiter",
+    steps: ["Works Alone"],
+  },
 ] as const;
 
 const withEarlyJobs = [
@@ -34,56 +40,90 @@ function scrollToNextSection() {
   window.scrollTo({ top, behavior: reduce ? "auto" : "smooth" });
 }
 
-const beforeNudge = [0, 40, 12, 52, 6, 32];
-
-function Route({
-  label,
-  steps,
-  tone,
-}: {
-  label: string;
-  steps: readonly string[];
-  tone: "muted" | "brand";
-}) {
-  const brand = tone === "brand";
-
+function BeforeRoutes() {
   return (
-    <div data-route={tone}>
-      <p className={`text-sm font-medium ${brand ? "text-brand" : "text-neutral-500"}`}>{label}</p>
-      <ol className="relative mt-5">
-        {brand ? (
-          <span aria-hidden className="absolute top-2 bottom-2 left-[5px] w-px bg-[#f6d5cd]" />
-        ) : null}
-        {brand ? (
-          <span
-            aria-hidden
-            data-progress-line
-            className="absolute top-2 left-[5px] w-px origin-top bg-brand"
-            style={{ height: "calc(100% - 16px)", transform: "scaleY(0)" }}
-          />
-        ) : null}
-        {steps.map((step, index) => {
-          const shift = brand ? 0 : beforeNudge[index];
-          return (
-            <li key={step} data-step className="relative h-14" data-index={index}>
-              <span
-                aria-hidden
-                data-dot
-                className={`absolute top-2 size-[11px] rounded-full border-2 ${
-                  brand ? "border-neutral-300 bg-white" : "border-neutral-300 bg-white"
-                }`}
-                style={{ left: shift }}
-              />
-              <span
-                data-label
-                className="absolute top-1 max-w-[16rem] text-sm font-medium leading-5 text-neutral-300"
-                style={{ left: shift + 22 }}
-              >
-                {step}
-              </span>
-            </li>
-          );
-        })}
+    <div data-route="muted" className="relative">
+      <div className="flex items-baseline justify-between gap-3 border-b border-neutral-200 pb-3">
+        <p className="text-sm font-medium text-neutral-500">Before EarlyJobs</p>
+        <p className="text-[11px] font-semibold tracking-[0.14em] text-neutral-400 uppercase">
+          Fragmented
+        </p>
+      </div>
+      <ul className="mt-6 divide-y divide-neutral-200/80">
+        {beforeLanes.map((lane) => (
+          <li key={lane.actor} data-lane className="py-4 first:pt-0 last:pb-0">
+            <p className="text-[11px] font-semibold tracking-[0.14em] text-neutral-400 uppercase">
+              {lane.actor}
+            </p>
+            <p className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm font-medium leading-5 text-neutral-800">
+              {lane.steps.map((step, stepIndex) => {
+                const last = stepIndex === lane.steps.length - 1;
+                return (
+                  <span key={step} className="inline-flex items-center gap-2">
+                    <span
+                      className={
+                        step === "No Response"
+                          ? "text-neutral-400 line-through decoration-neutral-300"
+                          : undefined
+                      }
+                    >
+                      {step}
+                    </span>
+                    {!last ? (
+                      <span aria-hidden className="text-neutral-300">
+                        /
+                      </span>
+                    ) : null}
+                  </span>
+                );
+              })}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function WithRoute({ steps }: { steps: readonly string[] }) {
+  return (
+    <div data-route="brand" className="relative">
+      <div className="flex items-baseline justify-between gap-3 border-b border-brand/20 pb-3">
+        <p className="text-sm font-medium text-brand">With EarlyJobs</p>
+        <p className="text-[11px] font-semibold tracking-[0.14em] text-brand/70 uppercase">
+          Connected
+        </p>
+      </div>
+      <ol className="relative mt-6">
+        <span
+          aria-hidden
+          className="absolute top-0 bottom-0 left-[11px] w-px bg-[#f6d5cd]"
+        />
+        <span
+          aria-hidden
+          data-progress-line
+          className="absolute top-0 left-[11px] w-px origin-top bg-brand"
+          style={{ height: "100%", transform: "scaleY(0)" }}
+        />
+        {steps.map((step, index) => (
+          <li
+            key={step}
+            data-step
+            className="relative flex min-h-12 items-center gap-3 py-2.5"
+            data-index={index}
+          >
+            <span
+              aria-hidden
+              data-index-badge
+              className="relative z-[1] flex size-6 shrink-0 items-center justify-center bg-white text-[11px] font-semibold tabular-nums text-neutral-300"
+            >
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <span data-label className="text-sm font-medium leading-5 text-neutral-300">
+              {step}
+            </span>
+          </li>
+        ))}
       </ol>
     </div>
   );
@@ -102,31 +142,32 @@ function RouteMap() {
           const line = root.querySelector<HTMLElement>("[data-progress-line]");
           if (line) gsap.set(line, { scaleY: progress, transformOrigin: "top center" });
 
-          root.querySelectorAll<HTMLElement>("[data-route]").forEach((route) => {
-            const brand = route.dataset.route === "brand";
-            const steps = route.querySelectorAll<HTMLElement>("[data-step]");
+          const brandRoute = root.querySelector<HTMLElement>('[data-route="brand"]');
+          if (brandRoute) {
+            const steps = brandRoute.querySelectorAll<HTMLElement>("[data-step]");
             const last = Math.max(1, steps.length - 1);
             steps.forEach((step, index) => {
               const reached = progress + 0.02 >= index / last;
-              const shift = brand ? 0 : beforeNudge[index] ?? 0;
-              const dot = step.querySelector<HTMLElement>("[data-dot]");
+              const badge = step.querySelector<HTMLElement>("[data-index-badge]");
               const label = step.querySelector<HTMLElement>("[data-label]");
-              if (dot) {
-                dot.className = `absolute top-2 size-[11px] rounded-full border-2 ${
-                  reached
-                    ? brand
-                      ? "border-brand bg-brand"
-                      : "border-neutral-600 bg-neutral-600"
-                    : "border-neutral-300 bg-white"
+              if (badge) {
+                badge.className = `relative z-[1] flex size-6 shrink-0 items-center justify-center bg-white text-[11px] font-semibold tabular-nums ${
+                  reached ? "text-brand" : "text-neutral-300"
                 }`;
-                dot.style.left = `${shift}px`;
               }
               if (label) {
-                label.className = `absolute top-1 max-w-[16rem] text-sm font-medium leading-5 ${
+                label.className = `text-sm font-medium leading-5 ${
                   reached ? "text-neutral-950" : "text-neutral-300"
                 }`;
-                label.style.left = `${shift + 22}px`;
               }
+            });
+          }
+
+          root.querySelectorAll<HTMLElement>("[data-lane]").forEach((lane, index) => {
+            const reveal = progress >= index / Math.max(1, beforeLanes.length);
+            gsap.set(lane, {
+              autoAlpha: reveal || reduce ? 1 : 0.5,
+              y: reveal || reduce ? 0 : 6,
             });
           });
         };
@@ -149,9 +190,9 @@ function RouteMap() {
   );
 
   return (
-    <div ref={ref} className="mt-12 grid max-w-5xl grid-cols-1 gap-12 sm:grid-cols-2 sm:gap-10">
-      <Route label="Before EarlyJobs" steps={before} tone="muted" />
-      <Route label="With EarlyJobs" steps={withEarlyJobs} tone="brand" />
+    <div ref={ref} className="mt-12 grid max-w-5xl grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-8 lg:gap-12">
+      <BeforeRoutes />
+      <WithRoute steps={withEarlyJobs} />
     </div>
   );
 }
@@ -321,15 +362,15 @@ export function WhyEarlyJobs() {
         <button
           type="button"
           onClick={scrollToNextSection}
-          className="mt-8 inline-flex w-fit flex-col items-center gap-2 text-neutral-950"
+          className="mt-8 inline-flex w-fit flex-col items-center gap-2 text-brand"
         >
-          <span className="flex h-11 items-center justify-center rounded-[6px] border border-black/10 bg-white px-4 text-[13px] font-medium transition-[border-radius,background-color] duration-500 ease-in-out hover:rounded-[22px] hover:bg-neutral-50">
+          <span className="flex h-11 items-center justify-center rounded-[6px] bg-brand px-5 text-[13px] font-medium text-white transition-[border-radius,background-color] duration-500 ease-in-out hover:rounded-[22px] hover:bg-[#d85c42]">
             Discover How EarlyJobs Works
           </span>
           <svg
             aria-hidden
             viewBox="0 0 16 16"
-            className="hidden size-4 text-neutral-400 motion-safe:animate-bounce sm:block"
+            className="hidden size-4 text-brand motion-safe:animate-bounce sm:block"
           >
             <path
               d="M8 3v8M8 11 4.5 7.5M8 11l3.5-3.5"

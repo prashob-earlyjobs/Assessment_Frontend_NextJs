@@ -1,9 +1,14 @@
-import { RecruiterApplicationForm } from "@/components/become-a-recruiter/application-form";
+import type { Metadata } from "next";
+import { FreelanceRecruitersPage } from "@/components/freelance-recruiters/page";
+
+export const metadata: Metadata = {
+  title: {
+    absolute: "Become a Freelance Recruiter | EarlyJobs",
+  },
+  description:
+    "Build a career in recruitment on your terms. Join EarlyJobs as a freelance recruiter and work with flexibility across hiring opportunities.",
+};
 
 export default function BecomeARecruiterPage() {
-  return (
-    <main className="flex flex-1 justify-center px-5 py-12 sm:px-8 sm:py-16">
-      <RecruiterApplicationForm />
-    </main>
-  );
+  return <FreelanceRecruitersPage />;
 }
