@@ -14,6 +14,11 @@ export type DashboardStats = {
   jobs: number;
   recruiters: number;
   companies: number;
+  /** Preformatted strings from API summary (already include "+"). */
+  interviews: string;
+  joinings: string;
+  collegePartners: string;
+  hiringPartners: string;
 };
 
 export type DashboardPayload = DashboardStats & {
@@ -45,6 +50,14 @@ type DashboardResponse = {
     companies?: number;
     totalVacancies?: number;
     totalRecruiters?: number;
+    summary?: {
+      interviewCount?: string;
+      companiesCount?: string;
+      selectedCount?: string;
+      collegesCount?: string;
+      franchiseCount?: string;
+      placedCount?: string;
+    };
     recentJobs?: DashboardJob[];
   };
 };
@@ -53,6 +66,10 @@ export const fallbackDashboardStats: DashboardStats = {
   jobs: 6439,
   recruiters: 3404,
   companies: 264,
+  interviews: "25,000+",
+  joinings: "3,000+",
+  collegePartners: "150+",
+  hiringPartners: "20+",
 };
 
 export const fallbackDashboard: DashboardPayload = {
@@ -157,10 +174,16 @@ export async function getDashboard(): Promise<DashboardPayload> {
     throw new Error("Dashboard response was empty");
   }
 
+  const summary = body.data.summary ?? {};
+
   return {
     jobs: body.data.totalVacancies ?? fallbackDashboardStats.jobs,
     recruiters: body.data.totalRecruiters ?? fallbackDashboardStats.recruiters,
     companies: body.data.companies ?? fallbackDashboardStats.companies,
+    interviews: summary.interviewCount || fallbackDashboardStats.interviews,
+    joinings: summary.placedCount || fallbackDashboardStats.joinings,
+    collegePartners: summary.collegesCount || fallbackDashboardStats.collegePartners,
+    hiringPartners: summary.franchiseCount || fallbackDashboardStats.hiringPartners,
     recentJobs: (body.data.recentJobs ?? []).flatMap((job) => {
       const listing = toListing(job);
       return listing ? [listing] : [];
@@ -175,5 +198,9 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     jobs: data.jobs,
     recruiters: data.recruiters,
     companies: data.companies,
+    interviews: data.interviews,
+    joinings: data.joinings,
+    collegePartners: data.collegePartners,
+    hiringPartners: data.hiringPartners,
   };
 }
