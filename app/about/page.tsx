@@ -6,7 +6,7 @@ export const metadata: Metadata = {
     absolute: "About EarlyJobs | The Recruiter-First Hiring Network",
   },
   description:
-    "About EarlyJobs, the recruiter-first hiring network. Recruiters, employers, and professionals hire through people, relationships, and AI-powered hiring infrastructure.",
+    "EarlyJobs is building a recruiter-first hiring network that combines distributed human expertise, AI-powered hiring infrastructure and local execution.",
 };
 
 export default function AboutPage() {
