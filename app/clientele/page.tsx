@@ -4,7 +4,7 @@ import { CompanyTieUpsPage } from "@/components/clientele/page";
 export const metadata: Metadata = {
   title: { absolute: "Company Tie-Ups | EarlyJobs" },
   description:
-    "Companies hire through EarlyJobs, a recruiter-first network connecting employers with independent recruiters.",
+    "EarlyJobs helps companies hire across India and beyond—corporate recruitment, global hiring support, and frontline workforce hiring through GigKaro.",
 };
 
 export default function Page() {
