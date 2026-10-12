@@ -265,10 +265,10 @@ export function AgencyPartnershipsPage() {
       </section>
 
       {/* 4. HOW WE WORK — matches */}
-      <section id="how-we-work" className="scroll-mt-24 bg-[#121212] text-white">
+      <section id="how-we-work" className="scroll-mt-24 bg-[#f4f4f4] text-neutral-950">
         <div className="mx-auto w-full max-w-[1120px] px-5 py-16 sm:px-8 sm:py-24">
           <div className="grid gap-8 lg:grid-cols-[7.5rem_minmax(0,1fr)] lg:gap-10">
-            <p className="pt-1 text-[13px] text-white/55">How we work together</p>
+            <p className="pt-1 text-[13px] text-neutral-500">How we work together</p>
             <div className="max-w-3xl">
               <h2 className="text-[1.85rem] leading-[1.15] font-medium tracking-[-0.035em] sm:text-[2.45rem]">
                 Built around the way recruitment really works.
@@ -278,7 +278,7 @@ export function AgencyPartnershipsPage() {
 
           <div className="mt-14 grid gap-10 lg:mt-20 lg:grid-cols-[7.5rem_minmax(0,1fr)] lg:gap-10">
             <nav aria-label="Partnership stages" className="hidden lg:block">
-              <ul className="sticky top-28 divide-y divide-white/15 border-y border-white/15">
+              <ul className="sticky top-28 divide-y divide-black/10 border-y border-black/10">
                 {stages.map((stage) => {
                   const active = activeStage === stage.id;
                   return (
@@ -286,13 +286,13 @@ export function AgencyPartnershipsPage() {
                       <a
                         href={`#how-${stage.id}`}
                         className={`flex items-center justify-between py-3.5 text-[15px] transition-colors ${
-                          active ? "text-white" : "text-white/40 hover:text-white/70"
+                          active ? "text-neutral-950" : "text-neutral-400 hover:text-neutral-700"
                         }`}
                       >
                         <span>{stage.label}</span>
                         <span
                           aria-hidden
-                          className={`h-1.5 w-1.5 rounded-full ${active ? "bg-white" : "bg-white/25"}`}
+                          className={`h-1.5 w-1.5 rounded-full ${active ? "bg-neutral-950" : "bg-black/20"}`}
                         />
                       </a>
                     </li>
@@ -311,7 +311,7 @@ export function AgencyPartnershipsPage() {
                   }}
                   className="grid scroll-mt-28 items-center gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-12"
                 >
-                  <div className="overflow-hidden rounded-[20px] bg-[#1a1a1a]">
+                  <div className="overflow-hidden rounded-[20px] bg-neutral-200">
                     <Image
                       src={step.image}
                       alt={step.alt}
@@ -322,11 +322,11 @@ export function AgencyPartnershipsPage() {
                     />
                   </div>
                   <div className="max-w-md">
-                    <p className="text-sm text-white/40">{step.n}</p>
+                    <p className="text-sm text-neutral-400">{step.n}</p>
                     <h3 className="mt-3 text-[1.7rem] leading-[1.15] font-medium tracking-[-0.03em] sm:text-[2.1rem]">
                       {step.title}
                     </h3>
-                    <p className="mt-4 text-[15px] leading-7 text-white/55 sm:text-base">{step.body}</p>
+                    <p className="mt-4 text-[15px] leading-7 text-neutral-600 sm:text-base">{step.body}</p>
                   </div>
                 </article>
               ))}
@@ -336,7 +336,7 @@ export function AgencyPartnershipsPage() {
           <div className="mt-14 lg:pl-[calc(7.5rem+2.5rem)]">
             <Link
               href="#partnership-form"
-              className="inline-flex h-11 items-center justify-center rounded-full bg-white px-5 text-[13px] font-medium text-neutral-950 transition-colors hover:bg-white/90"
+              className="inline-flex h-11 items-center justify-center rounded-full bg-neutral-950 px-5 text-[13px] font-medium text-white transition-colors hover:bg-neutral-800"
             >
               Let&apos;s Explore a Partnership
             </Link>
@@ -397,7 +397,7 @@ export function AgencyPartnershipsPage() {
             />
             <div
               aria-hidden
-              className="absolute inset-0 bg-gradient-to-b from-white/80 via-white/65 to-white/90"
+              className="absolute inset-0 bg-gradient-to-b from-[#fff1ed]/90 via-[#ffe8e1]/80 to-[#fff1ed]/95"
             />
             <div className="relative z-10 mx-auto max-w-2xl text-center">
               <h2 className="text-[2rem] leading-[1.1] font-medium tracking-[-0.04em] text-neutral-950 sm:text-[2.6rem]">
