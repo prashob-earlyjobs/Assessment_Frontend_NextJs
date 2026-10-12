@@ -6,7 +6,7 @@ export const metadata: Metadata = {
     absolute: "Our Story | EarlyJobs",
   },
   description:
-    "EarlyJobs started by connecting overlooked talent with opportunity through a network of recruiters, Huntlo AI and GigKaro.",
+    "We're building a better way to hire—connecting people, networks and technology across EarlyJobs, Huntlo AI and GigKaro.",
 };
 
 export default function Page() {
