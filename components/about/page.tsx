@@ -2,9 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, type ChangeEvent, type FormEvent } from "react";
+import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import { toast } from "sonner";
 import { companyFacts } from "@/data/company-facts";
+import {
+  fallbackDashboardStats,
+  formatStat,
+  type DashboardStats,
+} from "@/lib/dashboard";
 
 const network = [
   {
@@ -53,14 +58,16 @@ const steps = [
   },
 ] as const;
 
-const impactMetrics = [
-  companyFacts.recruiters,
-  companyFacts.companies,
-  companyFacts.interviews,
-  companyFacts.joinings,
-  companyFacts.collegePartners,
-  companyFacts.hiringPartners,
-] as const;
+function impactMetricsFromDashboard(stats: DashboardStats) {
+  return [
+    { value: formatStat(stats.recruiters), label: companyFacts.recruiters.label },
+    { value: formatStat(stats.companies), label: companyFacts.companies.label },
+    { value: stats.interviews, label: companyFacts.interviews.label },
+    { value: stats.joinings, label: companyFacts.joinings.label },
+    { value: stats.collegePartners, label: companyFacts.collegePartners.label },
+    { value: stats.hiringPartners, label: companyFacts.hiringPartners.label },
+  ] as const;
+}
 
 const exploreOptions = [
   "Hiring mandates",
@@ -106,6 +113,30 @@ function SectionTag({ children }: { children: string }) {
 export function AboutPage() {
   const [form, setForm] = useState<FormState>(initialForm);
   const [submitting, setSubmitting] = useState(false);
+  const [dashboard, setDashboard] = useState<DashboardStats>(fallbackDashboardStats);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    fetch("/api/dashboard")
+      .then(async (response) => {
+        if (!response.ok) throw new Error("dashboard failed");
+        return (await response.json()) as { success?: boolean; data?: DashboardStats };
+      })
+      .then((body) => {
+        if (cancelled || !body.success || !body.data) return;
+        setDashboard(body.data);
+      })
+      .catch(() => {
+        /* keep fallback */
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const impactMetrics = impactMetricsFromDashboard(dashboard);
 
   const set =
     (key: keyof FormState) =>

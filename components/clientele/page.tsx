@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CompanyLogosGrid } from "@/components/company-logos-grid";
 
 const brandQuotes = [
@@ -56,16 +56,6 @@ const steps = [
     image: "/clientele/step-outcome.jpg",
     alt: "Team celebrating a successful hire with a handshake in the office",
   },
-] as const;
-
-const hiringTypes = [
-  "Corporate & Professional Hiring",
-  "Global Recruitment — US / UAE / Other",
-  "GCC Hiring Solutions",
-  "Frontline Workforce — GigKaro",
-  "Recruitment Process Outsourcing",
-  "Consultancy / Recruitment Partnership",
-  "Other",
 ] as const;
 
 const growthStages = [
@@ -297,45 +287,10 @@ export function CompanyTieUpsPage() {
   const [growthIndex, setGrowthIndex] = useState(0);
   const [whyIndex, setWhyIndex] = useState(0);
   const [faqIndex, setFaqIndex] = useState(0);
-  const [enquirySent, setEnquirySent] = useState(false);
-  const [enquiry, setEnquiry] = useState({
-    fullName: "",
-    company: "",
-    email: "",
-    phone: "",
-    locations: "",
-    hiringType: "",
-    roles: "",
-    hires: "",
-    timeline: "",
-    context: "",
-  });
   const [activeStage, setActiveStage] = useState<(typeof stages)[number]["id"]>("need");
   const item = brandQuotes[0]!;
   const growth = growthStages[growthIndex] ?? growthStages[0];
   const stepRefs = useRef<Record<string, HTMLElement | null>>({});
-
-  const updateEnquiry = (field: keyof typeof enquiry, value: string) => {
-    setEnquiry((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const submitEnquiry = (e: FormEvent) => {
-    e.preventDefault();
-    const lines = [
-      `Full name: ${enquiry.fullName}`,
-      `Company: ${enquiry.company}`,
-      `Work email: ${enquiry.email}`,
-      `Phone: ${enquiry.phone}`,
-      `Hiring location(s): ${enquiry.locations}`,
-      `Type of hiring: ${enquiry.hiringType}`,
-      `Roles / skills: ${enquiry.roles}`,
-      `Approximate hires: ${enquiry.hires}`,
-      `Timeline: ${enquiry.timeline}`,
-      `Additional context: ${enquiry.context || "—"}`,
-    ];
-    window.location.href = `mailto:info@earlyjobs.in?subject=${encodeURIComponent("Hiring enquiry")}&body=${encodeURIComponent(lines.join("\n"))}`;
-    setEnquirySent(true);
-  };
 
   const growthPrev = () => setGrowthIndex((i) => (i - 1 + growthStages.length) % growthStages.length);
   const growthNext = () => setGrowthIndex((i) => (i + 1) % growthStages.length);
@@ -381,7 +336,7 @@ export function CompanyTieUpsPage() {
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link
-              href="#enquiry"
+              href="/contact-us"
               className="inline-flex h-10 items-center justify-center rounded-full bg-neutral-950 px-5 text-[13px] font-medium text-white transition-colors hover:bg-neutral-800"
             >
               Tell Us What You Need
@@ -523,7 +478,7 @@ export function CompanyTieUpsPage() {
 
           <div className="mt-14 lg:pl-[calc(7.5rem+2.5rem)]">
             <Link
-              href="/employers"
+              href="/contact-us"
               className="inline-flex h-11 items-center justify-center rounded-full bg-neutral-950 px-5 text-[13px] font-medium text-white transition-colors hover:bg-neutral-800"
             >
               Discuss Your Hiring Requirements
@@ -740,7 +695,7 @@ export function CompanyTieUpsPage() {
             <div>
               <h2 className="text-[2rem] leading-[1.1] font-medium tracking-[-0.04em] text-neutral-950 sm:text-[2.5rem]">
                 Better hiring starts with better questions.
-              </h2>
+        </h2>
               <p className="mt-3 max-w-xl text-[15px] leading-7 text-neutral-600">
                 Explore practical perspectives on talent acquisition, recruitment strategy,
                 workforce planning and the changing world of work.
@@ -1023,168 +978,27 @@ export function CompanyTieUpsPage() {
               </p>
               <h2 className="mt-3 text-[2rem] leading-[1.1] font-medium tracking-[-0.04em] text-neutral-950 sm:text-[2.6rem]">
                 Make hiring a competitive advantage.
-              </h2>
+          </h2>
               <p className="mt-4 text-[15px] leading-7 text-neutral-700 sm:text-base">
                 Whether you&apos;re hiring a specialist professional, expanding into a new market,
                 building a capability centre or scaling a frontline workforce, start with a clear
                 conversation about the people your business needs.
               </p>
-            </div>
-          </div>
-
-          <div className="border-t border-black/8 bg-white px-5 py-10 sm:px-10 sm:py-12">
-            {enquirySent ? (
-              <div className="mx-auto max-w-xl text-center">
-                <h3 className="text-[1.5rem] font-medium tracking-[-0.03em] text-neutral-950">
-                  Thank you for sharing your hiring requirement.
-                </h3>
-                <p className="mt-3 text-[15px] leading-7 text-neutral-600">
-                  Our team will review your details and get in touch to discuss the next steps.
-                </p>
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+                <Link
+                  href="/contact-us"
+                  className="inline-flex h-11 items-center justify-center rounded-full bg-neutral-950 px-6 text-[13px] font-medium text-white hover:bg-neutral-800"
+                >
+                  Discuss My Hiring Needs
+                </Link>
+                <Link
+                  href="/contact-us"
+                  className="inline-flex h-11 items-center justify-center rounded-full border border-black/10 bg-white px-6 text-[13px] font-medium text-neutral-950 hover:bg-neutral-50"
+                >
+                  Contact Us
+                </Link>
               </div>
-            ) : (
-              <form onSubmit={submitEnquiry} className="mx-auto max-w-3xl">
-                <div className="max-w-xl">
-                  <h3 className="text-[1.35rem] font-medium tracking-[-0.03em] text-neutral-950 sm:text-[1.5rem]">
-                    Tell us who you need.
-                  </h3>
-                  <p className="mt-2 text-[15px] leading-7 text-neutral-600">
-                    Share a few details about your hiring requirement and our team will follow up
-                    with the right next step.
-                  </p>
-                </div>
-
-                <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                  <label className="block text-left">
-                    <span className="text-[12px] font-medium text-neutral-500">Full name</span>
-                    <input
-                      required
-                      value={enquiry.fullName}
-                      onChange={(e) => updateEnquiry("fullName", e.target.value)}
-                      className="mt-1.5 h-11 w-full rounded-xl border border-black/10 bg-[#fafafa] px-3.5 text-sm text-neutral-950 outline-none focus:border-black/25"
-                    />
-                  </label>
-                  <label className="block text-left">
-                    <span className="text-[12px] font-medium text-neutral-500">Company name</span>
-                    <input
-                      required
-                      value={enquiry.company}
-                      onChange={(e) => updateEnquiry("company", e.target.value)}
-                      className="mt-1.5 h-11 w-full rounded-xl border border-black/10 bg-[#fafafa] px-3.5 text-sm text-neutral-950 outline-none focus:border-black/25"
-                    />
-                  </label>
-                  <label className="block text-left">
-                    <span className="text-[12px] font-medium text-neutral-500">Work email</span>
-                    <input
-                      type="email"
-                      required
-                      value={enquiry.email}
-                      onChange={(e) => updateEnquiry("email", e.target.value)}
-                      className="mt-1.5 h-11 w-full rounded-xl border border-black/10 bg-[#fafafa] px-3.5 text-sm text-neutral-950 outline-none focus:border-black/25"
-                    />
-                  </label>
-                  <label className="block text-left">
-                    <span className="text-[12px] font-medium text-neutral-500">Phone number</span>
-                    <input
-                      type="tel"
-                      required
-                      value={enquiry.phone}
-                      onChange={(e) => updateEnquiry("phone", e.target.value)}
-                      className="mt-1.5 h-11 w-full rounded-xl border border-black/10 bg-[#fafafa] px-3.5 text-sm text-neutral-950 outline-none focus:border-black/25"
-                    />
-                  </label>
-                  <label className="block text-left sm:col-span-2">
-                    <span className="text-[12px] font-medium text-neutral-500">
-                      Hiring location(s)
-                    </span>
-                    <input
-                      required
-                      value={enquiry.locations}
-                      onChange={(e) => updateEnquiry("locations", e.target.value)}
-                      placeholder="City, region or country"
-                      className="mt-1.5 h-11 w-full rounded-xl border border-black/10 bg-[#fafafa] px-3.5 text-sm text-neutral-950 outline-none placeholder:text-neutral-400 focus:border-black/25"
-                    />
-                  </label>
-                  <label className="block text-left sm:col-span-2">
-                    <span className="text-[12px] font-medium text-neutral-500">Type of hiring</span>
-                    <select
-                      required
-                      value={enquiry.hiringType}
-                      onChange={(e) => updateEnquiry("hiringType", e.target.value)}
-                      className="mt-1.5 h-11 w-full rounded-xl border border-black/10 bg-[#fafafa] px-3.5 text-sm text-neutral-950 outline-none focus:border-black/25"
-                    >
-                      <option value="" disabled>
-                        Select hiring type
-                      </option>
-                      {hiringTypes.map((type) => (
-                        <option key={type} value={type}>
-                          {type}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label className="block text-left sm:col-span-2">
-                    <span className="text-[12px] font-medium text-neutral-500">
-                      Roles or skills required
-                    </span>
-                    <input
-                      required
-                      value={enquiry.roles}
-                      onChange={(e) => updateEnquiry("roles", e.target.value)}
-                      className="mt-1.5 h-11 w-full rounded-xl border border-black/10 bg-[#fafafa] px-3.5 text-sm text-neutral-950 outline-none focus:border-black/25"
-                    />
-                  </label>
-                  <label className="block text-left">
-                    <span className="text-[12px] font-medium text-neutral-500">
-                      Approximate number of hires
-                    </span>
-                    <input
-                      value={enquiry.hires}
-                      onChange={(e) => updateEnquiry("hires", e.target.value)}
-                      className="mt-1.5 h-11 w-full rounded-xl border border-black/10 bg-[#fafafa] px-3.5 text-sm text-neutral-950 outline-none focus:border-black/25"
-                    />
-                  </label>
-                  <label className="block text-left">
-                    <span className="text-[12px] font-medium text-neutral-500">
-                      Expected hiring timeline
-                    </span>
-                    <input
-                      value={enquiry.timeline}
-                      onChange={(e) => updateEnquiry("timeline", e.target.value)}
-                      placeholder="e.g. Immediate, 30–60 days"
-                      className="mt-1.5 h-11 w-full rounded-xl border border-black/10 bg-[#fafafa] px-3.5 text-sm text-neutral-950 outline-none placeholder:text-neutral-400 focus:border-black/25"
-                    />
-                  </label>
-                  <label className="block text-left sm:col-span-2">
-                    <span className="text-[12px] font-medium text-neutral-500">
-                      Additional context{" "}
-                      <span className="font-normal text-neutral-400">(optional)</span>
-                    </span>
-                    <textarea
-                      rows={3}
-                      value={enquiry.context}
-                      onChange={(e) => updateEnquiry("context", e.target.value)}
-                      className="mt-1.5 w-full resize-y rounded-xl border border-black/10 bg-[#fafafa] px-3.5 py-3 text-sm text-neutral-950 outline-none focus:border-black/25"
-                    />
-                  </label>
-                </div>
-
-                <div className="mt-8 flex flex-wrap items-center gap-3">
-                  <button
-                    type="submit"
-                    className="inline-flex h-11 items-center justify-center rounded-full bg-neutral-950 px-6 text-[13px] font-medium text-white hover:bg-neutral-800"
-                  >
-                    Discuss My Hiring Needs
-                  </button>
-                  <p className="text-[12px] text-neutral-500">
-                    Or email{" "}
-                    <a href="mailto:info@earlyjobs.in" className="underline underline-offset-2">
-                      info@earlyjobs.in
-                    </a>
-                  </p>
-                </div>
-              </form>
-            )}
+            </div>
           </div>
         </div>
       </section>

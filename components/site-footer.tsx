@@ -16,6 +16,7 @@ import {
 import { SlLocationPin } from "react-icons/sl";
 import type { IconType } from "react-icons";
 import { FooterScroll } from "@/components/footer-scroll";
+import { earlyJobsContact } from "@/lib/contact";
 
 const EARLYJOBS_AI_PROMPT =
   "What is EarlyJobs.ai (https://www.earlyjobs.ai) and how can it help job seekers, employers, and recruiters in India?";
@@ -92,26 +93,25 @@ export function SiteFooter() {
             <div className="mb-5 flex items-start">
               <SlLocationPin className="mr-2.5 shrink-0 text-2xl text-gray-400" />
               <p className="text-base font-normal leading-6 text-gray-400">
-                2nd Floor, Regent Insignia, Obeya Tulip, Mahakavi Vemana Rd, KHB Block,
-                4th Block, Koramangala, Bengaluru, Karnataka 560095
+                {earlyJobsContact.address}
               </p>
             </div>
             <div className="mb-5 flex items-start">
               <HiOutlineMail className="mr-2.5 shrink-0 text-2xl text-gray-400" />
               <a
-                href="mailto:info@earlyjobs.in"
+                href={`mailto:${earlyJobsContact.email}`}
                 className="text-base font-normal leading-6 text-gray-400 no-underline"
               >
-                info@earlyjobs.in
+                {earlyJobsContact.email}
               </a>
             </div>
             <div className="mb-5 flex items-start">
               <HiOutlinePhone className="mr-2.5 shrink-0 text-2xl text-gray-400" />
               <a
-                href="tel:+918217527926"
+                href={`tel:${earlyJobsContact.phoneTel}`}
                 className="text-base font-normal leading-6 text-gray-400 no-underline"
               >
-                +91 8217527926
+                {earlyJobsContact.phoneDisplay}
               </a>
             </div>
             <div className="mt-5 flex items-center">
@@ -422,7 +422,7 @@ export function SiteFooter() {
                   Terms & Conditions
                 </a>
                 <a
-                  href="tel:+918217527926"
+                  href="/contact-us"
                   className="text-lg text-gray-400 transition-all duration-300 hover:text-amber-500"
                 >
                   Contact Us
