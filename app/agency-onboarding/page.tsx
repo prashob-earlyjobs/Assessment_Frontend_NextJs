@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { CompanyTieUpsPage } from "@/components/clientele/page";
+import { AgencyPartnershipsPage } from "@/components/agency-partnerships/page";
 
 export const metadata: Metadata = {
   title: {
@@ -10,5 +10,5 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <CompanyTieUpsPage />;
+  return <AgencyPartnershipsPage />;
 }
