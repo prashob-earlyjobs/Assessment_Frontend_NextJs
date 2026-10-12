@@ -1,20 +1,21 @@
+"use client";
+
 import { SolidLink } from "@/components/home/primitives";
 import { LightSweep } from "@/components/light-sweep";
 import { DottedGlobe } from "@/components/recruiters/dotted-globe";
 import { HashLink } from "@/components/recruiters/hash-link";
-
-const metrics = [
-  { value: 350, label: "Recruiters" },
-  { value: 500, label: "Employers" },
-  { value: 3000, label: "Successful Placements" },
-  { value: 25000, label: "Interviews Facilitated" },
-] as const;
-
-function formatCount(value: number) {
-  return `${Math.round(value).toLocaleString("en-US")}+`;
-}
+import { formatStat, formatSummaryStat } from "@/lib/dashboard";
+import { useDashboardStats } from "@/lib/use-dashboard-stats";
 
 export function RecruiterHero() {
+  const dashboard = useDashboardStats();
+  const metrics = [
+    { value: formatStat(dashboard.recruiters), label: "Recruiters" },
+    { value: formatStat(dashboard.companies), label: "Employers" },
+    { value: formatSummaryStat(dashboard.joinings), label: "Successful Placements" },
+    { value: formatSummaryStat(dashboard.interviews), label: "Interviews Facilitated" },
+  ] as const;
+
   return (
     <section className="relative">
       <div className="mx-auto grid w-full max-w-6xl items-center gap-6 px-5 pt-10 pb-16 sm:px-8 sm:pt-14 sm:pb-20 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,26rem)] lg:gap-2">
@@ -40,7 +41,7 @@ export function RecruiterHero() {
             {metrics.map((metric) => (
               <li key={metric.label}>
                 <p className="text-[1.65rem] font-semibold leading-none tracking-[-0.04em] text-neutral-950">
-                  {formatCount(metric.value)}
+                  {metric.value}
                 </p>
                 <p className="mt-2 text-[13px] leading-5 text-neutral-500">{metric.label}</p>
               </li>

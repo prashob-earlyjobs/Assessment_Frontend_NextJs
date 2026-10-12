@@ -246,36 +246,65 @@ export function ContactPage() {
             </div>
 
             <div className="mt-10 grid gap-4 border-t border-black/8 pt-8 sm:grid-cols-2">
-              <div>
-                <p className="text-[13px] font-semibold text-neutral-950">GigKaro</p>
-                <p className="mt-1 text-[12px] leading-5 text-neutral-500">
+              <div className="space-y-1 leading-snug">
+                <a
+                  href={gigKaroContact.site}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex"
+                  aria-label="GigKaro"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/icons/gigkaro-wordmark.svg"
+                    alt="GigKaro"
+                    width={110}
+                    height={26}
+                    className="h-5 w-auto"
+                  />
+                </a>
+                <p className="text-[12px] leading-4 text-neutral-500">
                   Frontline &amp; gig workforce hiring
                 </p>
                 <a
                   href={`mailto:${gigKaroContact.email}`}
-                  className="mt-2 block text-[13px] font-medium text-brand hover:underline"
+                  className="block text-[13px] leading-4 font-medium text-brand hover:underline"
                 >
                   {gigKaroContact.email}
                 </a>
                 <a
                   href={`tel:${gigKaroContact.phoneTel}`}
-                  className="mt-1 block text-[13px] text-neutral-700 hover:underline"
+                  className="block text-[13px] leading-4 text-neutral-700 hover:underline"
                 >
                   {gigKaroContact.phoneDisplay}
                 </a>
               </div>
-              <div>
-                <p className="text-[13px] font-semibold text-neutral-950">Huntlo</p>
-                <p className="mt-1 text-[12px] leading-5 text-neutral-500">AI recruiting agent</p>
+              <div className="space-y-1 leading-snug">
+                <a
+                  href={huntloContact.site}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex"
+                  aria-label="Huntlo"
+                >
+                  <Image
+                    src="/icons/huntlo-logo.png"
+                    alt="Huntlo"
+                    width={110}
+                    height={31}
+                    className="h-5 w-auto object-contain object-left"
+                  />
+                </a>
+                <p className="text-[12px] leading-4 text-neutral-500">AI recruiting agent</p>
                 <a
                   href={`mailto:${huntloContact.email}`}
-                  className="mt-2 block text-[13px] font-medium text-brand hover:underline"
+                  className="block text-[13px] leading-4 font-medium text-brand hover:underline"
                 >
                   {huntloContact.email}
                 </a>
                 <a
                   href={`tel:${huntloContact.phoneTel}`}
-                  className="mt-1 block text-[13px] text-neutral-700 hover:underline"
+                  className="block text-[13px] leading-4 text-neutral-700 hover:underline"
                 >
                   {huntloContact.phoneDisplay}
                 </a>
@@ -648,19 +677,12 @@ export function ContactPage() {
         </div>
       </section>
 
-      {/* CTA — mockup style */}
+      {/* CTA — NYC night gradient */}
       <section className="px-5 pb-16 sm:px-8 sm:pb-24">
-        <div className="relative mx-auto flex min-h-[280px] w-full max-w-[1120px] items-center justify-center overflow-hidden rounded-[28px] px-5 py-14 sm:min-h-[320px] sm:px-10">
-          <Image
-            src="/clientele/cta-bg.jpg"
-            alt=""
-            fill
-            className="object-cover object-center"
-            sizes="(min-width: 1120px) 1120px, 100vw"
-          />
+        <div className="relative mx-auto flex min-h-[280px] w-full max-w-[1120px] items-center justify-center overflow-hidden rounded-[28px] bg-[linear-gradient(145deg,#070b14_0%,#101a2e_42%,#1a2740_72%,#0c121f_100%)] px-5 py-14 sm:min-h-[320px] sm:px-10">
           <div
             aria-hidden
-            className="absolute inset-0 bg-gradient-to-b from-neutral-950/70 via-neutral-950/65 to-neutral-950/80"
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(234,106,78,0.18),transparent_55%),radial-gradient(ellipse_at_bottom_left,rgba(59,130,246,0.12),transparent_50%)]"
           />
           <div className="relative z-10 mx-auto max-w-2xl text-center text-white">
             <h2 className="text-[1.85rem] leading-[1.15] font-medium tracking-[-0.035em] sm:text-[2.4rem]">

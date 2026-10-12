@@ -64,11 +64,11 @@ type DashboardResponse = {
 
 export const fallbackDashboardStats: DashboardStats = {
   jobs: 6439,
-  recruiters: 3404,
-  companies: 264,
-  interviews: "25,000+",
-  joinings: "3,000+",
-  collegePartners: "150+",
+  recruiters: 3449,
+  companies: 266,
+  interviews: "72,000+",
+  joinings: "5,500+",
+  collegePartners: "430+",
   hiringPartners: "20+",
 };
 
@@ -79,6 +79,17 @@ export const fallbackDashboard: DashboardPayload = {
 
 export function formatStat(value: number) {
   return `${value.toLocaleString("en-IN")}+`;
+}
+
+/** Normalize API summary strings like "72000+" → "72,000+". */
+export function formatSummaryStat(value: string) {
+  const trimmed = value.trim();
+  const match = trimmed.match(/^([\d,]+)\+?$/);
+  if (!match?.[1]) return trimmed;
+  const digits = match[1].replace(/,/g, "");
+  const num = Number(digits);
+  if (!Number.isFinite(num)) return trimmed;
+  return formatStat(num);
 }
 
 function trimNumber(value: number) {

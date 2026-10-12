@@ -1,12 +1,9 @@
+"use client";
+
 import { GhostLink, SolidLink } from "@/components/home/primitives";
 import { HeroMotion } from "@/components/employers/motion";
-
-const metrics = [
-  { value: "500+", label: "Hiring Companies" },
-  { value: "350+", label: "Recruiters" },
-  { value: "3,000+", label: "Successful Placements" },
-  { value: "25,000+", label: "Interviews" },
-] as const;
+import { formatStat, formatSummaryStat } from "@/lib/dashboard";
+import { useDashboardStats } from "@/lib/use-dashboard-stats";
 
 const path = [
   "Employer",
@@ -19,6 +16,14 @@ const path = [
 ] as const;
 
 export function EmployerHero() {
+  const dashboard = useDashboardStats();
+  const metrics = [
+    { value: formatStat(dashboard.companies), label: "Hiring Companies" },
+    { value: formatStat(dashboard.recruiters), label: "Recruiters" },
+    { value: formatSummaryStat(dashboard.joinings), label: "Successful Placements" },
+    { value: formatSummaryStat(dashboard.interviews), label: "Interviews" },
+  ] as const;
+
   return (
     <section className="relative">
       <HeroMotion>
@@ -51,7 +56,7 @@ export function EmployerHero() {
           <ul className="mt-10 grid grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-4">
             {metrics.map((metric) => (
               <li key={metric.label}>
-                <p className="text-[1.65rem] font-semibold leading-none tracking-[-0.04em] text-neutral-950">
+                <p className="text-[1.65rem] font-semibold leading-none tracking-[-0.04em] text-neutral-950 tabular-nums">
                   {metric.value}
                 </p>
                 <p className="mt-2 text-[13px] leading-5 text-neutral-500">{metric.label}</p>

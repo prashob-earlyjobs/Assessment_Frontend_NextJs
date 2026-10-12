@@ -2,14 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import { toast } from "sonner";
 import { companyFacts } from "@/data/company-facts";
-import {
-  fallbackDashboardStats,
-  formatStat,
-  type DashboardStats,
-} from "@/lib/dashboard";
+import { formatStat, formatSummaryStat, type DashboardStats } from "@/lib/dashboard";
+import { useDashboardStats } from "@/lib/use-dashboard-stats";
 
 const network = [
   {
@@ -62,10 +59,16 @@ function impactMetricsFromDashboard(stats: DashboardStats) {
   return [
     { value: formatStat(stats.recruiters), label: companyFacts.recruiters.label },
     { value: formatStat(stats.companies), label: companyFacts.companies.label },
-    { value: stats.interviews, label: companyFacts.interviews.label },
-    { value: stats.joinings, label: companyFacts.joinings.label },
-    { value: stats.collegePartners, label: companyFacts.collegePartners.label },
-    { value: stats.hiringPartners, label: companyFacts.hiringPartners.label },
+    { value: formatSummaryStat(stats.interviews), label: companyFacts.interviews.label },
+    { value: formatSummaryStat(stats.joinings), label: companyFacts.joinings.label },
+    {
+      value: formatSummaryStat(stats.collegePartners),
+      label: companyFacts.collegePartners.label,
+    },
+    {
+      value: formatSummaryStat(stats.hiringPartners),
+      label: companyFacts.hiringPartners.label,
+    },
   ] as const;
 }
 
@@ -113,29 +116,7 @@ function SectionTag({ children }: { children: string }) {
 export function AboutPage() {
   const [form, setForm] = useState<FormState>(initialForm);
   const [submitting, setSubmitting] = useState(false);
-  const [dashboard, setDashboard] = useState<DashboardStats>(fallbackDashboardStats);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    fetch("/api/dashboard")
-      .then(async (response) => {
-        if (!response.ok) throw new Error("dashboard failed");
-        return (await response.json()) as { success?: boolean; data?: DashboardStats };
-      })
-      .then((body) => {
-        if (cancelled || !body.success || !body.data) return;
-        setDashboard(body.data);
-      })
-      .catch(() => {
-        /* keep fallback */
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
+  const dashboard = useDashboardStats();
   const impactMetrics = impactMetricsFromDashboard(dashboard);
 
   const set =
@@ -197,7 +178,7 @@ export function AboutPage() {
           <p className="text-[11px] font-semibold tracking-[0.18em] text-white/70 uppercase">
             About EarlyJobs
           </p>
-          <h1 className="mt-4 max-w-3xl text-[2.4rem] font-semibold leading-[1.02] tracking-[-0.045em] text-white sm:text-[3.5rem]">
+          <h1 className="mt-4 max-w-3xl text-[2.88rem] font-semibold leading-[1.02] tracking-[-0.045em] text-white sm:text-[4.2rem]">
             Building the Infrastructure Behind Modern Hiring.
           </h1>
           <p className="mt-5 max-w-2xl text-sm leading-6 text-white/75 sm:text-base sm:leading-7">

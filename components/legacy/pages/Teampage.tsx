@@ -52,9 +52,37 @@ const directors: Director[] = [
     id: "5",
     name: "Shankar Gaur",
     designation: "Non-Executive Director",
-    imageUrl: "/images/1769533094910.jpeg",
+    imageUrl: "/images/shankar-gaur.jpg",
+    linkedInUrl: "https://www.linkedin.com/in/shankargaur/",
     biography:
       "Non-Executive Director at EarlyJobs with 30+ years of leadership experience, including expertise in scaling job marketplaces and high-growth startups.",
+  },
+  {
+    id: "6",
+    name: "Sridhar Sampathirao",
+    designation: "Advisor",
+    imageUrl: "/images/sridhar-sampathirao.jpg",
+    linkedInUrl: "https://www.linkedin.com/in/sridharsampathirao/",
+    biography:
+      "Advisor and angel investor with experience building and scaling businesses across consulting and high-growth environments. Supports EarlyJobs with strategic guidance.",
+  },
+  {
+    id: "7",
+    name: "Ratan Saha",
+    designation: "Advisor",
+    imageUrl: "/images/ratan-saha.jpg",
+    linkedInUrl: "https://www.linkedin.com/in/ratan-saha-47a2b8171/",
+    biography:
+      "Advisor supporting EarlyJobs with strategic guidance across growth, partnerships, and hiring network expansion.",
+  },
+  {
+    id: "8",
+    name: "Vishaal Pamulapati",
+    designation: "Advisor",
+    imageUrl: "/images/vishaal-pamulapati.jpg",
+    linkedInUrl: "https://www.linkedin.com/in/vishaal-pamulapati-4a392537/",
+    biography:
+      "Advisor supporting EarlyJobs with strategic guidance across growth, partnerships, and hiring network expansion.",
   },
 ];
 

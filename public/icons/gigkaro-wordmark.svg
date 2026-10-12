@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 168 40" fill="none" role="img" aria-label="GigKaro">
+  <rect width="40" height="40" rx="10" fill="#005BD7"/>
+  <path d="M28 13a11 11 0 1 0 2 13V20H20v5h5a6 6 0 1 1-1-9z" fill="#fff"/>
+  <text
+    x="52"
+    y="27"
+    fill="#005BD7"
+    font-family="Inter, system-ui, -apple-system, Segoe UI, sans-serif"
+    font-size="22"
+    font-weight="700"
+    letter-spacing="-0.03em"
+  >GigKaro</text>
+</svg>
