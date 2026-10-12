@@ -33,6 +33,12 @@ const audienceRoles = [
     image: "/images/vishaal-pamulapati.jpg",
     linkedInUrl: "https://www.linkedin.com/in/vishaal-pamulapati-4a392537/",
   },
+  {
+    name: "Joe Emmanual Jacob",
+    title: "Advisor",
+    body: "25+ years of experience, including Corporate HR and Facility Management and Business Development.",
+    image: "/images/joe-emmanual-jacob.jpg",
+  },
 ] as const;
 
 export function InvestorsPage() {
@@ -114,7 +120,7 @@ export function InvestorsPage() {
         </div>
 
         <div className="page-shell pb-16 sm:pb-20">
-          <ul className="reveal-stagger grid grid-cols-1 divide-y divide-[#e6e6e4] border border-[#e6e6e4] bg-white sm:grid-cols-2 sm:divide-x lg:grid-cols-4 lg:divide-y-0">
+          <ul className="reveal-stagger grid grid-cols-1 divide-y divide-[#e6e6e4] border border-[#e6e6e4] bg-white sm:grid-cols-2 sm:divide-x lg:grid-cols-3 xl:grid-cols-5 xl:divide-y-0">
             {audienceRoles.map((person) => (
               <Reveal
                 as="li"
@@ -126,7 +132,7 @@ export function InvestorsPage() {
                     src={person.image}
                     alt={person.name}
                     fill
-                    sizes="(min-width: 1024px) 16rem, (min-width: 640px) 40vw, 100vw"
+                    sizes="(min-width: 1280px) 14rem, (min-width: 1024px) 20rem, (min-width: 640px) 40vw, 100vw"
                     className="object-cover object-top"
                   />
                 </div>
@@ -137,17 +143,19 @@ export function InvestorsPage() {
                     </h3>
                     <p className="mt-1 text-[13px] font-medium text-brand">{person.title}</p>
                   </div>
-                  <a
-                    href={person.linkedInUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="mt-0.5 shrink-0 text-[#0077b5] transition-colors duration-200 hover:text-[#005885]"
-                    aria-label={`${person.name}'s LinkedIn profile`}
-                  >
-                    <svg viewBox="0 0 24 24" className="h-5 w-5 fill-current" aria-hidden>
-                      <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22 0H2C.9 0 0 .9 0 2v20c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V2c0-1.1-.9-2-2-2Z" />
-                    </svg>
-                  </a>
+                  {"linkedInUrl" in person && person.linkedInUrl ? (
+                    <a
+                      href={person.linkedInUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-0.5 shrink-0 text-[#0077b5] transition-colors duration-200 hover:text-[#005885]"
+                      aria-label={`${person.name}'s LinkedIn profile`}
+                    >
+                      <svg viewBox="0 0 24 24" className="h-5 w-5 fill-current" aria-hidden>
+                        <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22 0H2C.9 0 0 .9 0 2v20c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V2c0-1.1-.9-2-2-2Z" />
+                      </svg>
+                    </a>
+                  ) : null}
                 </div>
                 <p className="mt-2 text-[14px] leading-6 text-[#5a5a5a]">{person.body}</p>
               </Reveal>
