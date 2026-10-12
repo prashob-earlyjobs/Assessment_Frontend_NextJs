@@ -422,16 +422,16 @@ export function SiteFooter() {
                   Terms & Conditions
                 </a>
                 <a
-                  href="/contact-us"
-                  className="text-lg text-gray-400 transition-all duration-300 hover:text-amber-500"
-                >
-                  Contact Us
-                </a>
-                <a
                   href="/sitemap.xml"
                   className="text-lg text-gray-400 transition-all duration-300 hover:text-amber-500"
                 >
                   Sitemap
+                </a>
+                <a
+                  href="/contact-us"
+                  className="text-lg text-gray-400 transition-all duration-300 hover:text-amber-500"
+                >
+                  Contact Us
                 </a>
               </div>
             </div>
