@@ -951,7 +951,12 @@ export function CompanyTieUpsPage() {
             </article>
 
             <div className="grid gap-4">
-              {customerStories.slice(1).map((story) => (
+              {customerStories
+                .filter(
+                  (story): story is (typeof customerStories)[number] & { image: string } =>
+                    "image" in story && typeof story.image === "string",
+                )
+                .map((story) => (
                 <article
                   key={story.title}
                   className="grid gap-4 rounded-[22px] bg-white p-5 sm:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] sm:p-6"
@@ -978,7 +983,7 @@ export function CompanyTieUpsPage() {
                   </div>
                   <div className="relative min-h-[140px] overflow-hidden rounded-[16px]">
                     <Image
-                      src={story.image!}
+                      src={story.image}
                       alt=""
                       fill
                       className="object-cover object-center"
