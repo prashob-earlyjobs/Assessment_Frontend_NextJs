@@ -1,116 +1,38 @@
 import Image from "next/image";
-import Link from "next/link";
-import { companyFacts } from "@/data/company-facts";
+import { NetworkStatsCopy } from "@/components/investors/network-stats";
 
 const ink = "text-[#14352c]";
 
-const links = [
+const audienceRoles = [
   {
-    title: "Investor Deck",
-    href: "mailto:info@earlyjobs.in?subject=Investor%20deck%20request",
-    external: true,
-    icon: "document",
+    name: "Shankar Gaur",
+    title: "Non-Executive Director",
+    body: "30+ years of leadership experience, including expertise in scaling job marketplaces and high-growth startups.",
+    image: "/images/shankar-gaur.jpg",
+    linkedInUrl: "https://www.linkedin.com/in/shankargaur/",
   },
   {
-    title: "Company Metrics",
-    href: "mailto:info@earlyjobs.in?subject=Company%20metrics%20request",
-    external: true,
-    icon: "metrics",
+    name: "Sridhar Sampathirao",
+    title: "Advisor",
+    body: "Angel investor and operator with experience building and scaling businesses across consulting and high-growth environments.",
+    image: "/images/sridhar-sampathirao.jpg",
+    linkedInUrl: "https://www.linkedin.com/in/sridharsampathirao/",
   },
   {
-    title: "Newsroom",
-    href: "/newsroom",
-    external: false,
-    icon: "announce",
+    name: "Ratan Saha",
+    title: "Advisor",
+    body: "Supports EarlyJobs with strategic guidance across growth, partnerships, and hiring network expansion.",
+    image: "/images/ratan-saha.jpg",
+    linkedInUrl: "https://www.linkedin.com/in/ratan-saha-47a2b8171/",
   },
   {
-    title: "Leadership",
-    href: "/team",
-    external: false,
-    icon: "people",
-  },
-  {
-    title: "Contact Us",
-    href: "mailto:info@earlyjobs.in?subject=Investor%20enquiry",
-    external: true,
-    icon: "mail",
-  },
-  {
-    title: "Our Story",
-    href: "/story",
-    external: false,
-    icon: "archive",
-  },
-  {
-    title: "Financial Overview",
-    href: "mailto:info@earlyjobs.in?subject=Financial%20overview%20access%20request",
-    external: true,
-    icon: "results",
+    name: "Vishaal Pamulapati",
+    title: "Advisor",
+    body: "Supports EarlyJobs with strategic guidance across growth, partnerships, and hiring network expansion.",
+    image: "/images/vishaal-pamulapati.jpg",
+    linkedInUrl: "https://www.linkedin.com/in/vishaal-pamulapati-4a392537/",
   },
 ] as const;
-
-function LinkIcon({ name }: { name: (typeof links)[number]["icon"] }) {
-  const common = "h-6 w-6";
-  if (name === "metrics") {
-    return (
-      <svg viewBox="0 0 24 24" className={common} fill="none" aria-hidden>
-        <path d="M7 4.5h7.5L19 9v10.5H7V4.5Z" stroke="currentColor" strokeWidth="1.6" />
-        <path d="M14 4.8V9h4.2" stroke="currentColor" strokeWidth="1.6" />
-        <path d="M9.5 15.5l2-2 1.6 1.4 2.4-3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    );
-  }
-  if (name === "announce") {
-    return (
-      <svg viewBox="0 0 24 24" className={common} fill="none" aria-hidden>
-        <path d="M5 10.5v3.2c0 .6.4 1 1 1h1.2L12 18v-4.2" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
-        <path d="M12 6.2 7.2 9.2H6c-.6 0-1 .4-1 1v.6" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
-        <path d="M12 6.2v7.6l5.2-3.1c.8-.5.8-1.6 0-2.1L12 6.2Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
-      </svg>
-    );
-  }
-  if (name === "people") {
-    return (
-      <svg viewBox="0 0 24 24" className={common} fill="none" aria-hidden>
-        <path d="M4.5 18.5v-1.2A3.3 3.3 0 0 1 7.8 14h2.4a3.3 3.3 0 0 1 3.3 3.3v1.2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-        <circle cx="9" cy="8.2" r="2.4" stroke="currentColor" strokeWidth="1.6" />
-        <path d="M14 14.2h2.1A3.2 3.2 0 0 1 19.3 17.4v1.1" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-        <circle cx="15.2" cy="8.6" r="2" stroke="currentColor" strokeWidth="1.6" />
-      </svg>
-    );
-  }
-  if (name === "mail") {
-    return (
-      <svg viewBox="0 0 24 24" className={common} fill="none" aria-hidden>
-        <rect x="3.5" y="5.5" width="17" height="13" rx="1.5" stroke="currentColor" strokeWidth="1.6" />
-        <path d="m4.5 7 7.5 6L19.5 7" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
-      </svg>
-    );
-  }
-  if (name === "archive") {
-    return (
-      <svg viewBox="0 0 24 24" className={common} fill="none" aria-hidden>
-        <path d="M4 7.5h16v11.2a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7.5Z" stroke="currentColor" strokeWidth="1.6" />
-        <path d="M3.2 4.8h17.6V7.5H3.2V4.8Z" stroke="currentColor" strokeWidth="1.6" />
-        <path d="M9.5 12h5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-      </svg>
-    );
-  }
-  if (name === "results") {
-    return (
-      <svg viewBox="0 0 24 24" className={common} fill="none" aria-hidden>
-        <path d="M7 4.5h7.5L19 9v10.5H7V4.5Z" stroke="currentColor" strokeWidth="1.6" />
-        <path d="M9.2 16.2V13M12 16.2v-5M14.8 16.2V12" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-      </svg>
-    );
-  }
-  return (
-    <svg viewBox="0 0 24 24" className={common} fill="none" aria-hidden>
-      <path d="M7 4.5h7.5L19 9v10.5H7V4.5Z" stroke="currentColor" strokeWidth="1.6" />
-      <path d="M14 4.8V9h4.2M9.2 12.2h5.6M9.2 15.4h5.6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-    </svg>
-  );
-}
 
 export function InvestorsPage() {
   return (
@@ -152,12 +74,7 @@ export function InvestorsPage() {
             EarlyJobs connects employers, independent recruiters, agencies and talent so companies
             can hire across India without building a centralized recruitment team for every role.
           </p>
-          <p className="mt-4 max-w-xl text-[15px] leading-7 text-[#3a3a3a] sm:text-base">
-            Recruiters bring judgment and local context. Technology helps them move faster. The
-            network now includes {companyFacts.recruiters.value} recruiters and{" "}
-            {companyFacts.companies.value} hiring companies,             with {companyFacts.interviews.value} interviews and {companyFacts.joinings.value}{" "}
-            joinings.
-          </p>
+          <NetworkStatsCopy />
         </div>
         <div className="relative aspect-[5/4] overflow-hidden rounded-[28px]">
           <Image
@@ -170,43 +87,58 @@ export function InvestorsPage() {
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-6xl px-5 pt-4 pb-20 sm:px-8 sm:pb-28">
-        <h2 className={`text-[2.6rem] leading-none font-medium tracking-[-0.04em] sm:text-[3.4rem] ${ink}`}>
-          Quick Links
-        </h2>
-        <ul className="mt-10 grid gap-5 sm:grid-cols-2">
-          {links.map((item) => {
-            const className =
-              "flex h-full min-h-[240px] flex-col rounded-[22px] border border-[#e6e6e4] bg-white p-7 sm:p-8";
-            const inner = (
-              <>
-                <span className={`flex h-14 w-14 items-center justify-center rounded-2xl bg-[#f3f4f3] ${ink}`}>
-                  <LinkIcon name={item.icon} />
-                </span>
-                <h3 className={`mt-8 text-[1.35rem] font-medium tracking-[-0.02em] ${ink}`}>
-                  {item.title}
-                </h3>
-                <span className="mt-auto inline-flex w-fit rounded-full bg-[#f1f1ef] px-5 py-2.5 text-sm font-medium text-[#1f1f1f] transition-colors group-hover:bg-[#e7e7e4]">
-                  View Details
-                </span>
-              </>
-            );
-            return (
-              <li key={item.title}>
-                {item.external ? (
-                  <a href={item.href} className={`group ${className}`}>
-                    {inner}
+      <section className="overflow-hidden border-t border-[#e8e8e6]">
+        <div className="bg-[linear-gradient(105deg,#f4a27a_0%,#f7c4a0_28%,#f3b8c8_58%,#e8a0b8_100%)] px-5 pt-16 pb-12 sm:px-8 sm:pt-20 sm:pb-14">
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="text-[2rem] leading-[1.1] font-semibold tracking-[-0.04em] text-[#1c1c1c] sm:text-[2.75rem]">
+              Guided by operators and advisors
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-[15px] leading-7 text-[#3a3a3a] sm:text-base">
+              EarlyJobs is supported by directors and advisors who bring marketplace, growth, and
+              operating experience to help the hiring network scale with clarity.
+            </p>
+          </div>
+        </div>
+
+        <div className="mx-auto w-full max-w-6xl px-5 pb-16 sm:px-8 sm:pb-20">
+          <ul className="grid grid-cols-1 divide-y divide-[#e6e6e4] border border-[#e6e6e4] bg-white sm:grid-cols-2 sm:divide-x lg:grid-cols-4 lg:divide-y-0">
+            {audienceRoles.map((person) => (
+              <li key={person.name} className="bg-white p-5 sm:p-6">
+                <div className="relative aspect-[4/5] overflow-hidden bg-[#f3f4f3]">
+                  <Image
+                    src={person.image}
+                    alt={person.name}
+                    fill
+                    sizes="(min-width: 1024px) 16rem, (min-width: 640px) 40vw, 100vw"
+                    className="object-cover object-top"
+                  />
+                </div>
+                <div className="mt-5 flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <h3 className={`text-[1.15rem] font-semibold tracking-[-0.02em] ${ink}`}>
+                      {person.name}
+                    </h3>
+                    <p className="mt-1 text-[13px] font-medium text-[#EB6A4D]">{person.title}</p>
+                  </div>
+                  <a
+                    href={person.linkedInUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-0.5 shrink-0 text-[#0077b5] hover:text-[#005885]"
+                    aria-label={`${person.name}'s LinkedIn profile`}
+                  >
+                    <svg viewBox="0 0 24 24" className="h-5 w-5 fill-current" aria-hidden>
+                      <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22 0H2C.9 0 0 .9 0 2v20c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V2c0-1.1-.9-2-2-2Z" />
+                    </svg>
                   </a>
-                ) : (
-                  <Link href={item.href} className={`group ${className}`}>
-                    {inner}
-                  </Link>
-                )}
+                </div>
+                <p className="mt-2 text-[14px] leading-6 text-[#5a5a5a]">{person.body}</p>
               </li>
-            );
-          })}
-        </ul>
+            ))}
+          </ul>
+        </div>
       </section>
+
     </main>
   );
 }

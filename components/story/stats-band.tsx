@@ -1,15 +1,21 @@
-import { companyFacts } from "@/data/company-facts";
+"use client";
 
-const band = [
-  companyFacts.recruiters,
-  companyFacts.womenRecruiters,
-  companyFacts.companies,
-  companyFacts.interviews,
-  companyFacts.joinings,
-  companyFacts.districtPartners,
-] as const;
+import { companyFacts } from "@/data/company-facts";
+import { formatStat, formatSummaryStat } from "@/lib/dashboard";
+import { useDashboardStats } from "@/lib/use-dashboard-stats";
 
 export function StatsBand() {
+  const dashboard = useDashboardStats();
+
+  const band = [
+    { value: formatStat(dashboard.recruiters), label: companyFacts.recruiters.label },
+    companyFacts.womenRecruiters,
+    { value: formatStat(dashboard.companies), label: companyFacts.companies.label },
+    { value: formatSummaryStat(dashboard.interviews), label: companyFacts.interviews.label },
+    { value: formatSummaryStat(dashboard.joinings), label: companyFacts.joinings.label },
+    companyFacts.districtPartners,
+  ] as const;
+
   return (
     <section className="border-y border-[#E5E5E5] bg-white">
       <div className="mx-auto w-full max-w-[1120px] px-5 py-16 sm:px-8 sm:py-20">
