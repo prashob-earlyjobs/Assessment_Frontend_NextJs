@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { FounderOrigin, MissionBeliefClose } from "@/components/story/founder-origin";
 import { Reveal } from "@/components/ui/reveal";
 
 const milestones = [
@@ -84,12 +85,6 @@ const beliefs = [
   },
 ] as const;
 
-const founderMessage = [
-  "We were already in recruitment when we began seeing how much talent was being overlooked. Women looking for a way back into work, recruiters needing more flexible opportunities, and businesses struggling to reach the right people.",
-  "We realised hiring needed more than another portal or agency. It needed people, technology and local networks working together.",
-  "That is what we're building with EarlyJobs.",
-] as const;
-
 export function BeliefStoryPage() {
   return (
     <main className="bg-white text-neutral-950">
@@ -134,58 +129,10 @@ export function BeliefStoryPage() {
         </Reveal>
       </section>
 
-      {/* Section 2: Where It Began */}
-      <section className="border-t border-black/6 bg-[#f7f5f2]">
-        <Reveal className="page-shell page-section grid items-center gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-14">
-          <div className="media-frame aspect-[5/4] bg-white">
-            <Image
-              src="/agency-partnerships/story-team.jpg"
-              alt="EarlyJobs team working together on recruitment"
-              fill
-              sizes="(min-width: 1024px) 34rem, 100vw"
-              className="object-cover object-center"
-            />
-          </div>
-          <div>
-            <h2 className="max-w-[18ch] text-[2rem] leading-[1.1] font-semibold tracking-[-0.04em] sm:text-[2.75rem]">
-              We Saw the Gaps Because We Were Part of the Industry.
-            </h2>
-            <div className="mt-6 space-y-4 text-[15px] leading-7 text-neutral-600 sm:text-base">
-              <p>
-                Our journey began with firsthand experience in recruitment. We understood the daily
-                realities: companies needed people, candidates needed opportunities, and recruiters
-                worked to connect the two.
-              </p>
-              <p>But we kept seeing the same gaps.</p>
-              <p>
-                Talented women found it difficult to return to work after career breaks. Recruiters
-                needed more flexible ways to build their careers. Businesses struggled to reach
-                candidates beyond established hiring hubs. And young job seekers often lacked the
-                tools to understand how prepared they were for interviews.
-              </p>
-              <p>
-                These weren&apos;t isolated challenges. They were connected problems within the
-                hiring ecosystem.
-              </p>
-              <p>We started asking ourselves a different question:</p>
-              <p className="text-lg leading-8 font-medium text-neutral-950">
-                What if recruitment could work better for everyone involved?
-              </p>
-              <p>
-                What if recruiters could access opportunities without being limited by location?
-                What if local entrepreneurs could build recruitment businesses in their own
-                communities? What if technology could help candidates prepare and help hiring teams
-                execute more effectively?
-              </p>
-              <p className="font-semibold text-neutral-950">
-                Those questions shaped the EarlyJobs we began building.
-              </p>
-            </div>
-          </div>
-        </Reveal>
-      </section>
+      {/* Founder origin — Victaman call, webinar, 33 women, mission */}
+      <FounderOrigin />
 
-      {/* Section 3: How Our Thinking Evolved */}
+      {/* How Our Thinking Evolved */}
       <section className="page-shell page-section">
         <Reveal>
         <h2 className="max-w-3xl text-[2rem] leading-[1.1] font-semibold tracking-[-0.04em] sm:text-[2.75rem]">
@@ -262,11 +209,11 @@ export function BeliefStoryPage() {
         </div>
       </section>
 
-      {/* Section 5: What We Believe */}
+      {/* What We Believe */}
       <section className="page-shell page-section">
         <Reveal>
         <h2 className="mx-auto max-w-3xl text-center text-[2rem] leading-[1.1] font-semibold tracking-[-0.04em] sm:text-[2.75rem]">
-          Talent Is Everywhere. Opportunity Should Be Too.
+          What We Believe
         </h2>
         </Reveal>
         <div className="reveal-stagger mt-12 grid gap-8 sm:mt-14 sm:grid-cols-2 sm:gap-10">
@@ -294,133 +241,9 @@ export function BeliefStoryPage() {
         </Reveal>
       </section>
 
-      {/* Section 6: The Network Behind the Work */}
-      <section className="border-t border-black/6 bg-[#f7f5f2]">
-        <Reveal className="page-shell page-section grid items-center gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-14">
-          <div>
-            <h2 className="max-w-[16ch] text-[2rem] leading-[1.1] font-semibold tracking-[-0.04em] sm:text-[2.75rem]">
-              Built by People. Strengthened by Technology.
-            </h2>
-            <div className="mt-6 space-y-4 text-[15px] leading-7 text-neutral-600 sm:text-base">
-              <p>
-                Every recruiter brings more than the ability to fill a role. They bring
-                relationships, local understanding and access to communities that might otherwise
-                remain beyond an employer&apos;s reach.
-              </p>
-              <p>
-                Every franchise partner brings local ownership and the ability to build recruitment
-                operations closer to the talent they serve.
-              </p>
-              <p>
-                Every employer brings a hiring challenge that helps us understand where the system
-                can work better.
-              </p>
-              <p>
-                Technology connects these capabilities, helping coordinate workflows and make
-                recruitment more efficient.
-              </p>
-              <p>
-                As the network grows, we can build stronger connections between businesses,
-                recruiters and candidates.
-              </p>
-              <p className="font-semibold text-neutral-950">
-                That is the infrastructure we&apos;re working towards: people who understand hiring,
-                technology that supports them, and execution focused on meaningful outcomes.
-              </p>
-            </div>
-          </div>
-          <div className="media-frame aspect-[5/4] bg-white">
-            <Image
-              src="/freelance-recruiters/women-team.jpg"
-              alt="EarlyJobs recruiter partners collaborating in person"
-              fill
-              sizes="(min-width: 1024px) 34rem, 100vw"
-              className="object-cover object-center"
-            />
-          </div>
-        </Reveal>
-      </section>
+      <MissionBeliefClose />
 
-      {/* Founder note — between network and looking ahead */}
-      <section className="bg-[#eef4fb]">
-        <Reveal className="page-shell page-section grid items-center gap-8 sm:gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16">
-          <div>
-            <div className="media-frame aspect-[4/5] bg-white">
-              <Image
-                src="/about_us_imgs/Saurav-Kumar.jpg"
-                alt="Saurav Kumar, Founder and CEO of EarlyJobs"
-                fill
-                sizes="(min-width: 1024px) 28rem, 100vw"
-                className="object-cover object-top"
-              />
-            </div>
-            <div className="mt-5">
-              <p className="text-[15px] font-semibold tracking-[-0.02em] text-neutral-950">
-                Saurav Kumar
-              </p>
-              <p className="mt-1 text-[13px] text-neutral-500">Founder &amp; CEO, EarlyJobs</p>
-            </div>
-          </div>
-
-          <div className="rounded-[22px] border border-black/6 bg-white/80 px-6 py-8 sm:px-8 sm:py-10">
-            <p className="text-[11px] font-semibold tracking-[0.16em] text-neutral-500 uppercase">
-              A Note from Our Founder
-            </p>
-            <div className="mt-5 flex gap-4">
-              <span
-                aria-hidden
-                className="mt-1 flex size-9 shrink-0 items-center justify-center rounded-full bg-[#eef4fb] text-brand"
-              >
-                <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current">
-                  <path d="M7.2 18c1.9 0 3.4-1.5 3.4-3.4S9.1 11.2 7.2 11.2c-.2 0-.4 0-.6.1C7.4 8.6 9.5 7 12.1 6.5l-.5-2C7.6 5.2 4 8.4 4 13.1 4 15.8 5.5 18 7.2 18Zm9.4 0c1.9 0 3.4-1.5 3.4-3.4s-1.5-3.4-3.4-3.4c-.2 0-.4 0-.6.1.8-2.7 2.9-4.3 5.5-4.8l-.5-2c-3.9.7-7.5 3.9-7.5 8.6 0 2.7 1.5 4.9 3.1 4.9Z" />
-                </svg>
-              </span>
-              <div className="min-w-0">
-                <h2 className="max-w-[18ch] text-[1.75rem] leading-[1.15] font-semibold tracking-[-0.035em] sm:text-[2.2rem]">
-                  We saw the problem firsthand. We decided to build a better way.
-                </h2>
-                <div className="mt-6 space-y-4 text-[15px] leading-7 text-neutral-600 sm:text-base">
-                  {founderMessage.map((paragraph) => (
-                    <p key={paragraph}>{paragraph}</p>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </Reveal>
-      </section>
-
-      {/* Section 7: Looking Ahead */}
-      <section className="page-shell page-section !max-w-3xl">
-        <Reveal>
-        <h2 className="text-[2rem] leading-[1.1] font-semibold tracking-[-0.04em] sm:text-[2.75rem]">
-          Built in India. Growing With Every Connection.
-        </h2>
-        <div className="mt-6 space-y-4 text-[15px] leading-7 text-neutral-600 sm:text-base">
-          <p>
-            Our journey began with recruitment challenges we experienced firsthand. Our ambition is
-            to build a hiring ecosystem that can serve diverse workforce needs, from professional
-            recruitment to global hiring support and frontline workforce hiring.
-          </p>
-          <p>
-            We&apos;re still learning, improving and building. We know that meaningful progress
-            comes from understanding employers, supporting recruiters and continuously improving how
-            people connect with opportunities.
-          </p>
-          <p>
-            For us, the future isn&apos;t about adding more tools for the sake of it. It&apos;s
-            about making the hiring process more connected, accessible and effective.
-          </p>
-          <p>
-            We&apos;re building towards a future where businesses can reach talent beyond
-            conventional channels, recruiters can build careers with greater flexibility, and
-            technology helps people do their best work.
-          </p>
-        </div>
-        </Reveal>
-      </section>
-
-      {/* Section 8: Final CTA */}
+      {/* Final CTA */}
       <section className="page-shell page-section !max-w-5xl !pt-0">
         <Reveal>
         <div className="relative overflow-hidden rounded-[28px]">
