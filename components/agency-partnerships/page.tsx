@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import { CompanyLogosGrid } from "@/components/company-logos-grid";
 
 const network = [
   {
@@ -35,24 +36,24 @@ const steps = [
     n: "01",
     title: "Connect",
     body: "Tell us about your business, specialisations and ambitions.",
-    image: "/agency-partnerships/process-photo.jpg",
-    alt: "Connect with EarlyJobs",
+    image: "/agency-partnerships/step-connect-v2.webp",
+    alt: "Partners shaking hands to begin an agency collaboration",
   },
   {
     id: "collaborate",
     n: "02",
     title: "Collaborate",
     body: "Explore suitable mandates and partners that complement your capabilities.",
-    image: "/agency-partnerships/partnership-handshake.jpg",
-    alt: "Collaborate on hiring mandates",
+    image: "/agency-partnerships/step-collaborate.webp",
+    alt: "Recruiters collaborating over hiring mandates and screen data",
   },
   {
     id: "deliver",
     n: "03",
     title: "Deliver",
     body: "Work together to source talent and move hiring forward, with clear responsibilities and agreed commercial terms.",
-    image: "/agency-partnerships/story-team.jpg",
-    alt: "Deliver hiring outcomes together",
+    image: "/agency-partnerships/step-deliver-v2.webp",
+    alt: "Team finalizing a successful candidate delivery in a meeting",
   },
 ] as const;
 
@@ -61,13 +62,6 @@ const exploreOptions = [
   "Freelance recruiter network",
   "Multi-city hiring",
   "Other",
-] as const;
-
-/** Design-shell leftovers from the shared layout — no matching partnership copy. */
-const unmatchedVoices = [
-  { brand: "Placeholder", quote: "No matching partnership copy for this design block.", person: "Design leftover" },
-  { brand: "Placeholder", quote: "Video-style carousel has no consultancy partnership content.", person: "Design leftover" },
-  { brand: "Placeholder", quote: "Keep structure; replace only when verified partner voices exist.", person: "Design leftover" },
 ] as const;
 
 const unmatchedGrowth = [
@@ -146,7 +140,6 @@ const unmatchedFaqs = [
 export function AgencyPartnershipsPage() {
   const [sent, setSent] = useState(false);
   const [activeStage, setActiveStage] = useState<(typeof stages)[number]["id"]>("connect");
-  const [carousel, setCarousel] = useState(1);
   const [growthIndex, setGrowthIndex] = useState(0);
   const [whyIndex, setWhyIndex] = useState(0);
   const [faqIndex, setFaqIndex] = useState(0);
@@ -181,9 +174,6 @@ export function AgencyPartnershipsPage() {
     setSent(true);
   };
 
-  const carouselPrev = () =>
-    setCarousel((i) => (i - 1 + unmatchedVoices.length) % unmatchedVoices.length);
-  const carouselNext = () => setCarousel((i) => (i + 1) % unmatchedVoices.length);
   const growthPrev = () =>
     setGrowthIndex((i) => (i - 1 + unmatchedGrowth.length) % unmatchedGrowth.length);
   const growthNext = () => setGrowthIndex((i) => (i + 1) % unmatchedGrowth.length);
@@ -382,13 +372,13 @@ export function AgencyPartnershipsPage() {
                   }}
                   className="grid scroll-mt-28 items-center gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-12"
                 >
-                  <div className="relative overflow-hidden rounded-[22px] bg-[#1a1a1a]">
+                  <div className="overflow-hidden rounded-[20px] bg-[#1a1a1a]">
                     <Image
                       src={step.image}
                       alt={step.alt}
-                      width={620}
-                      height={480}
-                      className="h-auto w-full object-cover"
+                      width={1200}
+                      height={900}
+                      className="aspect-[4/3] h-auto w-full object-cover object-center"
                       sizes="(min-width: 1024px) 34rem, 90vw"
                     />
                   </div>
@@ -415,83 +405,10 @@ export function AgencyPartnershipsPage() {
         </div>
       </section>
 
-      {/* UNMATCHED — voices carousel */}
-      <section className="overflow-hidden bg-red-500 py-16 sm:py-24">
-        <p className="mx-auto mb-6 w-full max-w-[1120px] px-5 text-[12px] font-bold tracking-wide text-white uppercase sm:px-8">
-          Unmatched · video-style voices carousel (no partnership copy)
-        </p>
-        <div className="mx-auto w-full max-w-[1120px] px-5 text-center sm:px-8">
-          <p className="inline-flex items-center gap-2 text-[13px] text-white/80">
-            <span aria-hidden className="h-2 w-2 rounded-[3px] bg-white" />
-            Client voices
-          </p>
-          <h2 className="mt-4 text-[2rem] leading-[1.1] font-medium tracking-[-0.04em] text-white sm:text-[2.75rem]">
-            Design leftover — no consultancy partner quotes provided.
-          </h2>
-        </div>
-
-        <div className="relative mt-12 sm:mt-14">
-          <div className="flex items-start justify-center gap-5 overflow-hidden px-5 sm:gap-6 sm:px-8">
-            {[-1, 0, 1].map((offset) => {
-              const i =
-                (carousel + offset + unmatchedVoices.length * 10) % unmatchedVoices.length;
-              const card = unmatchedVoices[i]!;
-              const active = offset === 0;
-              return (
-                <article
-                  key={`${card.brand}-${offset}-${i}`}
-                  className={`w-[min(86vw,34rem)] shrink-0 transition-opacity duration-500 ${
-                    active ? "opacity-100" : "pointer-events-none opacity-40 max-sm:hidden"
-                  }`}
-                  aria-hidden={!active}
-                >
-                  <div
-                    className={`relative aspect-[16/10] overflow-hidden rounded-[18px] ${
-                      active ? "bg-[#141414]" : "bg-[#b0b0b0]"
-                    }`}
-                  >
-                    <div className="absolute top-4 left-4 flex items-center gap-2 text-white">
-                      <span
-                        aria-hidden
-                        className="flex h-6 w-6 items-center justify-center rounded-full bg-white/95 text-[10px] font-semibold text-neutral-950"
-                      >
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      <span className="text-sm font-medium tracking-[-0.01em]">{card.brand}</span>
-                    </div>
-                  </div>
-                  <div className="mt-5 text-left">
-                    <p className="text-[15px] leading-6 text-white sm:text-base">{card.quote}</p>
-                    <p className="mt-2 text-sm text-white/70">{card.person}</p>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-          <div className="mt-10 flex items-center justify-center gap-4">
-            <button
-              type="button"
-              onClick={carouselPrev}
-              aria-label="Previous"
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-white/40 text-white hover:bg-white/10"
-            >
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
-                <path d="M8.5 3.5 5 7l3.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-            <button
-              type="button"
-              onClick={carouselNext}
-              aria-label="Next"
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-white/40 text-white hover:bg-white/10"
-            >
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
-                <path d="M5.5 3.5 9 7l-3.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </section>
+      <CompanyLogosGrid
+        title="Brands already hiring through the EarlyJobs network."
+        body="Partner consultancies can explore mandates across companies already connected to EarlyJobs."
+      />
 
       {/* UNMATCHED — 3-tab solutions */}
       <section className="scroll-mt-24 bg-red-500 py-16 sm:py-24">

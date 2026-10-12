@@ -54,20 +54,25 @@ export function BeliefStoryPage() {
       <section className="mx-auto w-full max-w-6xl px-5 pt-16 pb-8 sm:px-8 sm:pt-24">
         <p className="text-[11px] font-semibold tracking-[0.16em] text-brand uppercase">Our Story</p>
         <div className="mt-6 grid items-start gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-8">
-          <h1 className="max-w-[14ch] text-[2.4rem] leading-[1.05] font-semibold tracking-[-0.045em] sm:text-5xl">
-            We Started by Seeing Talent the World Was Overlooking.
-          </h1>
+          <div>
+            <h1 className="max-w-[14ch] text-[2.4rem] leading-[1.05] font-semibold tracking-[-0.045em] sm:text-5xl">
+              We Started by Seeing Talent the World Was Overlooking.
+            </h1>
+            <p className="mt-5 max-w-md text-sm leading-6 text-neutral-500 sm:text-base sm:leading-7">
+              India doesn&apos;t lack talent. It lacks enough ways to connect that talent with
+              opportunity.
+            </p>
+          </div>
           <div>
             <Image
-              src="/story/hero-connect-coral.png"
-              alt="A recruiter on a call, connected to someone at a laptop"
-              width={682}
-              height={498}
+              src="/story/hero-partnership-handshake.jpg"
+              alt="Two professional women shaking hands across a desk in a bright office, symbolizing a successful recruitment partnership."
+              width={1024}
+              height={682}
               priority
-              className="ml-auto h-auto w-full max-w-xl"
+              className="ml-auto h-auto w-full max-w-xl rounded-[22px]"
             />
             <div className="mt-4 ml-auto max-w-md space-y-4 text-sm leading-6 text-neutral-500">
-              <p>India doesn&apos;t lack talent. It lacks enough ways to connect that talent with opportunity.</p>
               <p>
                 We saw capable women stepping away from their careers because of marriage, motherhood
                 or relocation. We saw young people searching for their first opportunity. And we saw

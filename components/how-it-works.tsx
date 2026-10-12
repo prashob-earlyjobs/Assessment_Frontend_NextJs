@@ -196,7 +196,7 @@ export function HowItWorks() {
           ))}
         </ol>
 
-        <div className="rounded-md border border-black/10 px-6 py-6">
+        <div className="hidden rounded-md border border-black/10 px-6 py-6 lg:block">
           <p className="text-[13px] text-neutral-500">The network</p>
           <div className="mt-5">
             <Flow steps={chain} active={new Set(step.active)} />

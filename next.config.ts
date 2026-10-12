@@ -15,6 +15,14 @@ const nextConfig: NextConfig = {
         hostname: "storage.googleapis.com",
         pathname: "/earlyjobs_datas/**",
       },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+      {
+        protocol: "https",
+        hostname: "earlyjobs-company-logo.s3.ap-south-1.amazonaws.com",
+      },
     ],
   },
 };
