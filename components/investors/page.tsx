@@ -7,37 +7,43 @@ const ink = "text-[#14352c]";
 const audienceRoles = [
   {
     name: "Shankar Gaur",
-    title: "Non-Executive Director",
+    title: "Non-Executive Director & Angel Investor",
     body: "30+ years of leadership experience, including expertise in scaling job marketplaces and high-growth startups.",
     image: "/images/shankar-gaur.jpg",
     linkedInUrl: "https://www.linkedin.com/in/shankargaur/",
   },
   {
     name: "Sridhar Sampathirao",
-    title: "Advisor",
+    title: "Angel Investor",
     body: "Angel investor and operator with experience building and scaling businesses across consulting and high-growth environments.",
     image: "/images/sridhar-sampathirao.jpg",
     linkedInUrl: "https://www.linkedin.com/in/sridharsampathirao/",
   },
   {
     name: "Ratan Saha",
-    title: "Advisor",
+    title: "Angel Investor",
     body: "Supports EarlyJobs with strategic guidance across growth, partnerships, and hiring network expansion.",
     image: "/images/ratan-saha.jpg",
     linkedInUrl: "https://www.linkedin.com/in/ratan-saha-47a2b8171/",
   },
   {
     name: "Vishaal Pamulapati",
-    title: "Advisor",
+    title: "Angel Investor",
     body: "Supports EarlyJobs with strategic guidance across growth, partnerships, and hiring network expansion.",
     image: "/images/vishaal-pamulapati.jpg",
     linkedInUrl: "https://www.linkedin.com/in/vishaal-pamulapati-4a392537/",
   },
   {
-    name: "Joe Emmanual Jacob",
-    title: "Advisor",
-    body: "25+ years of experience, including Corporate HR and Facility Management and Business Development.",
-    image: "/images/joe-emmanual-jacob.jpg",
+    name: "NJ Jacob",
+    title: "Angel Investor",
+    body: "MD of JTechno Associates.",
+    placeholder: true,
+    linkedInUrl: "https://www.linkedin.com/in/jacob-nj-87240831/",
+  },
+  {
+    name: "Power Tech Enterprises",
+    prefix: "&",
+    centered: true,
   },
 ] as const;
 
@@ -120,28 +126,60 @@ export function InvestorsPage() {
         </div>
 
         <div className="page-shell pb-16 sm:pb-20">
-          <ul className="reveal-stagger grid grid-cols-1 divide-y divide-[#e6e6e4] border border-[#e6e6e4] bg-white sm:grid-cols-2 sm:divide-x lg:grid-cols-3 xl:grid-cols-5 xl:divide-y-0">
+          <ul className="reveal-stagger grid grid-cols-1 divide-y divide-[#e6e6e4] border border-[#e6e6e4] bg-white sm:grid-cols-2 sm:divide-x lg:grid-cols-3 xl:grid-cols-6 xl:divide-y-0">
             {audienceRoles.map((person) => (
               <Reveal
                 as="li"
                 key={person.name}
-                className="bg-white p-5 transition-colors duration-300 hover:bg-[#fafaf9] sm:p-6"
+                className={`bg-white p-5 transition-colors duration-300 hover:bg-[#fafaf9] sm:p-6 ${
+                  "centered" in person && person.centered
+                    ? "flex items-center justify-center text-center"
+                    : ""
+                }`}
               >
-                <div className="media-frame aspect-[4/5] !rounded-none bg-[#f3f4f3]">
-                  <Image
-                    src={person.image}
-                    alt={person.name}
-                    fill
-                    sizes="(min-width: 1280px) 14rem, (min-width: 1024px) 20rem, (min-width: 640px) 40vw, 100vw"
-                    className="object-cover object-top"
-                  />
-                </div>
-                <div className="mt-5 flex items-start justify-between gap-3">
-                  <div className="min-w-0">
+                {"image" in person && person.image ? (
+                  <div className="media-frame aspect-[4/5] !rounded-none bg-[#f3f4f3]">
+                    <Image
+                      src={person.image}
+                      alt={person.name}
+                      fill
+                      sizes="(min-width: 1280px) 14rem, (min-width: 1024px) 20rem, (min-width: 640px) 40vw, 100vw"
+                      className="object-cover object-top"
+                    />
+                  </div>
+                ) : "placeholder" in person && person.placeholder ? (
+                  <div className="media-frame aspect-[4/5] !rounded-none bg-[#f3f4f3]">
+                    <span
+                      aria-hidden
+                      className="absolute inset-0 grid place-items-center text-[2.25rem] font-medium tracking-[-0.04em] text-[#14352c]/35"
+                    >
+                      {person.name
+                        .split(" ")
+                        .map((part) => part[0])
+                        .join("")}
+                    </span>
+                  </div>
+                ) : null}
+                <div
+                  className={`flex gap-3 ${
+                    "centered" in person && person.centered
+                      ? "w-full items-center justify-center text-center"
+                      : `items-start justify-between ${
+                          ("image" in person && person.image) ||
+                          ("placeholder" in person && person.placeholder)
+                            ? "mt-5"
+                            : ""
+                        }`
+                  }`}
+                >
+                  <div className={`min-w-0 ${"centered" in person && person.centered ? "text-center" : ""}`}>
                     <h3 className={`text-[1.15rem] font-semibold tracking-[-0.02em] ${ink}`}>
+                      {"prefix" in person && person.prefix ? `${person.prefix} ` : ""}
                       {person.name}
                     </h3>
-                    <p className="mt-1 text-[13px] font-medium text-brand">{person.title}</p>
+                    {"title" in person && person.title ? (
+                      <p className="mt-1 text-[13px] font-medium text-brand">{person.title}</p>
+                    ) : null}
                   </div>
                   {"linkedInUrl" in person && person.linkedInUrl ? (
                     <a
@@ -157,7 +195,9 @@ export function InvestorsPage() {
                     </a>
                   ) : null}
                 </div>
-                <p className="mt-2 text-[14px] leading-6 text-[#5a5a5a]">{person.body}</p>
+                {"body" in person && person.body ? (
+                  <p className="mt-2 text-[14px] leading-6 text-[#5a5a5a]">{person.body}</p>
+                ) : null}
               </Reveal>
             ))}
           </ul>
