@@ -2,6 +2,7 @@
 
 import React from "react";
 import { FaLinkedin } from "react-icons/fa";
+import { Reveal } from "@/components/ui/reveal";
 
 type Director = {
   id: string;
@@ -57,98 +58,70 @@ const directors: Director[] = [
     biography:
       "Non-Executive Director at EarlyJobs with 30+ years of leadership experience, including expertise in scaling job marketplaces and high-growth startups.",
   },
-  {
-    id: "6",
-    name: "Sridhar Sampathirao",
-    designation: "Advisor",
-    imageUrl: "/images/sridhar-sampathirao.jpg",
-    linkedInUrl: "https://www.linkedin.com/in/sridharsampathirao/",
-    biography:
-      "Advisor and angel investor with experience building and scaling businesses across consulting and high-growth environments. Supports EarlyJobs with strategic guidance.",
-  },
-  {
-    id: "7",
-    name: "Ratan Saha",
-    designation: "Advisor",
-    imageUrl: "/images/ratan-saha.jpg",
-    linkedInUrl: "https://www.linkedin.com/in/ratan-saha-47a2b8171/",
-    biography:
-      "Advisor supporting EarlyJobs with strategic guidance across growth, partnerships, and hiring network expansion.",
-  },
-  {
-    id: "8",
-    name: "Vishaal Pamulapati",
-    designation: "Advisor",
-    imageUrl: "/images/vishaal-pamulapati.jpg",
-    linkedInUrl: "https://www.linkedin.com/in/vishaal-pamulapati-4a392537/",
-    biography:
-      "Advisor supporting EarlyJobs with strategic guidance across growth, partnerships, and hiring network expansion.",
-  },
 ];
 
 const TeamPage: React.FC = () => {
   return (
-    <>
-      <div className="min-h-screen bg-gray-50">
-        <div className="px-4 sm:px-6 pt-10 sm:pt-14 pb-4 max-w-7xl mx-auto text-center">
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">
+    <main className="min-h-screen bg-[#f7f5f2] text-neutral-950">
+      <section className="page-shell page-section !pb-8 text-center sm:!pb-10">
+        <Reveal>
+          <h1 className="text-3xl font-bold tracking-[-0.03em] text-neutral-950 sm:text-4xl">
             Our Directors
           </h1>
-          <p className="mt-3 text-gray-600 text-base sm:text-lg max-w-2xl mx-auto">
+          <p className="mx-auto mt-3 max-w-2xl text-base text-neutral-600 sm:text-lg">
             Meet the leadership guiding EarlyJobs&apos; mission to transform hiring across India.
           </p>
-        </div>
+        </Reveal>
+      </section>
 
-        <div className="px-3 sm:px-6 py-8 sm:py-12 max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-10">
-            {directors.map((member) => (
-              <div
-                key={member.id}
-                className="flex flex-col sm:flex-row gap-4 sm:gap-6 md:gap-8 items-start bg-white rounded-xl border border-gray-200 p-4 sm:p-6 shadow-sm"
-              >
-                <div className="flex-shrink-0 w-full sm:w-[180px] md:w-[200px] aspect-square max-w-[160px] sm:max-w-[180px] md:max-w-[200px] mx-auto sm:mx-0">
-                  <img
-                    src={member.imageUrl}
-                    alt={member.name}
-                    draggable="false"
-                    className="w-full h-full object-cover rounded-xl select-none bg-gray-100"
-                    onError={(e) => {
-                      e.currentTarget.src = "/images/company_placeholder.png";
-                    }}
-                  />
-                </div>
-                <div className="flex-1 flex flex-col w-full min-w-0">
-                  <div className="flex items-start gap-2 sm:gap-3 mb-2">
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-1 leading-tight">
-                        {member.name}
-                      </h3>
-                      <p className="text-sm sm:text-base font-medium text-[#EB6A4D] mb-1">
-                        {member.designation}
-                      </p>
-                    </div>
-                    {member.linkedInUrl && (
-                      <a
-                        href={member.linkedInUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-[#0077b5] hover:text-[#005885] transition-colors flex-shrink-0 mt-1"
-                        aria-label={`${member.name}'s LinkedIn profile`}
-                      >
-                        <FaLinkedin className="text-xl sm:text-2xl" />
-                      </a>
-                    )}
-                  </div>
-                  <p className="text-sm text-gray-700 leading-relaxed">
-                    {member.biography}
-                  </p>
-                </div>
+      <section className="page-shell page-section !pt-0">
+        <ul className="reveal-stagger grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 lg:gap-10">
+          {directors.map((member) => (
+            <Reveal
+              as="li"
+              key={member.id}
+              className="flex flex-col items-start gap-4 border border-black/10 bg-white p-4 sm:flex-row sm:gap-6 sm:p-6 md:gap-8"
+            >
+              <div className="media-frame mx-auto aspect-square w-full max-w-[160px] shrink-0 !rounded-xl sm:mx-0 sm:max-w-[180px] md:max-w-[200px]">
+                <img
+                  src={member.imageUrl}
+                  alt={member.name}
+                  draggable="false"
+                  className="h-full w-full select-none object-cover"
+                  onError={(e) => {
+                    e.currentTarget.src = "/images/company_placeholder.png";
+                  }}
+                />
               </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </>
+              <div className="flex min-w-0 w-full flex-1 flex-col">
+                <div className="mb-2 flex items-start gap-2 sm:gap-3">
+                  <div className="min-w-0 flex-1">
+                    <h3 className="mb-1 text-lg leading-tight font-bold tracking-[-0.02em] text-neutral-950 sm:text-xl">
+                      {member.name}
+                    </h3>
+                    <p className="mb-1 text-sm font-medium text-brand sm:text-base">
+                      {member.designation}
+                    </p>
+                  </div>
+                  {member.linkedInUrl && (
+                    <a
+                      href={member.linkedInUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-1 shrink-0 text-[#0077b5] transition-colors hover:text-[#005885]"
+                      aria-label={`${member.name}'s LinkedIn profile`}
+                    >
+                      <FaLinkedin className="text-xl sm:text-2xl" />
+                    </a>
+                  )}
+                </div>
+                <p className="text-sm leading-relaxed text-neutral-600">{member.biography}</p>
+              </div>
+            </Reveal>
+          ))}
+        </ul>
+      </section>
+    </main>
   );
 };
 

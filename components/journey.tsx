@@ -74,7 +74,7 @@ function JourneyMark({ kind }: { kind: (typeof journeys)[number]["mark"] }) {
 export function Journey() {
   return (
     <JourneyMotion>
-      <div className="mx-auto flex w-full max-w-6xl flex-col px-5 py-12 sm:px-8 sm:py-16">
+      <div className="page-shell page-section flex flex-col">
         <h2 className="max-w-2xl text-[2rem] font-semibold leading-[1.08] tracking-[-0.04em] text-neutral-950 sm:text-[2.75rem]">
           One Network.
           <br />

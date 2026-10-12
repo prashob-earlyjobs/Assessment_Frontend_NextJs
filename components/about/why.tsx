@@ -1,13 +1,14 @@
 import { AboutPath } from "@/components/about/path";
 import { AboutSection, AboutTitle } from "@/components/about/section";
+import { Reveal } from "@/components/ui/reveal";
 
 const steps = ["Recruiters", "AI", "Employers", "Professionals", "Successful Careers"] as const;
 
 export function AboutWhy() {
   return (
     <AboutSection id="why">
-      <div className="grid items-start gap-12 lg:grid-cols-[minmax(0,1fr)_16rem]">
-        <div>
+      <div className="grid items-start gap-10 sm:gap-12 lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-16">
+        <Reveal>
           <AboutTitle>Hiring Has Become Fragmented.</AboutTitle>
           <div className="mt-8 max-w-xl space-y-3 text-sm leading-6 text-neutral-600">
             <p>Recruiters search for opportunities.</p>
@@ -22,8 +23,10 @@ export function AboutWhy() {
             <p>Every new recruiter expands opportunities.</p>
             <p>Every employer creates careers.</p>
           </div>
-        </div>
-        <AboutPath steps={steps} />
+        </Reveal>
+        <Reveal delay={80}>
+          <AboutPath steps={steps} />
+        </Reveal>
       </div>
     </AboutSection>
   );

@@ -187,7 +187,7 @@ export function NewsroomPage() {
 
   return (
     <main className="bg-[#f7f8fa] text-[#1f2431]">
-      <section className="mx-auto w-full max-w-6xl px-5 pt-12 pb-20 sm:px-8 sm:pt-16 sm:pb-28">
+      <section className="page-shell page-section !pt-12 sm:!pt-16">
         <h1 className="text-[2rem] leading-[1.2] font-light text-brand sm:text-[2.25rem]">
           Discover what&apos;s new with EarlyJobs
         </h1>

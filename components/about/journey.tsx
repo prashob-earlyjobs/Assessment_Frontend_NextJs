@@ -1,5 +1,6 @@
 import { AboutJourneyMotion } from "@/components/about/motion";
 import { AboutSection, AboutTitle } from "@/components/about/section";
+import { Reveal } from "@/components/ui/reveal";
 
 const marks = [
   {
@@ -24,7 +25,9 @@ export function AboutJourney() {
   return (
     <AboutSection id="journey">
       <AboutJourneyMotion>
-        <AboutTitle>From One Belief to a Growing Hiring Network.</AboutTitle>
+        <Reveal>
+          <AboutTitle>From One Belief to a Growing Hiring Network.</AboutTitle>
+        </Reveal>
         <ol className="relative mt-12 max-w-2xl space-y-10 pl-8">
           <span aria-hidden className="absolute top-1 bottom-1 left-[3px] w-px bg-brand/25" />
           <span
