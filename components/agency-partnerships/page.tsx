@@ -4,20 +4,19 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { toast } from "sonner";
-import { companyFacts } from "@/data/company-facts";
 
 const network = [
   {
-    title: "EarlyJobs — Recruiter Network",
-    body: "We connect employers with a distributed network of recruiters who execute hiring mandates across industries and geographies. Our network also creates flexible professional opportunities for recruiters, including women returning to work and professionals outside major metros.",
+    title: "Recruitment consultancies",
+    body: "Bring your industry expertise, client relationships and hiring experience.",
   },
   {
-    title: "Huntlo AI — AI Hiring Infrastructure",
-    body: "Huntlo helps recruitment teams use AI to streamline candidate sourcing, outreach, screening, scheduling and follow-ups. It reduces repetitive work so recruiters can focus on conversations, judgment and hiring outcomes.",
+    title: "Freelance recruiters",
+    body: "Extend candidate discovery through a network of independent recruiting professionals.",
   },
   {
-    title: "GigKaro — Frontline Workforce Hiring",
-    body: "GigKaro focuses on frontline workforce hiring across categories such as delivery, warehousing, logistics, technical trades and manufacturing. It extends our hiring execution capabilities to the people who keep India's economy moving.",
+    title: "District franchise partners",
+    body: "Explore local hiring reach through partners who understand their markets.",
   },
   {
     title: "EarlyJobs",
@@ -28,38 +27,19 @@ const network = [
 const steps = [
   {
     n: "01",
-    title: "A Distributed Recruiter Network",
-    body: "Reach talent through recruiters who understand their industries, communities and local markets.",
+    title: "Connect",
+    body: "Tell us about your business, specialisations and ambitions.",
   },
   {
     n: "02",
-    title: "Technology That Enables Execution",
-    body: "Use AI and recruitment workflows to support sourcing, engagement, screening and coordination.",
+    title: "Collaborate",
+    body: "Explore suitable mandates and partners that complement your capabilities.",
   },
   {
     n: "03",
-    title: "Outcome-Oriented Hiring",
-    body: "Focus on completed hiring outcomes rather than simply generating applications or providing software.",
+    title: "Deliver",
+    body: "Work together to source talent and move hiring forward, with clear responsibilities and agreed commercial terms.",
   },
-  {
-    n: "04",
-    title: "Reach Beyond Major Cities",
-    body: "Build access to talent across diverse locations, including Tier 2 and Tier 3 cities.",
-  },
-  {
-    n: "05",
-    title: "Human Expertise at the Center",
-    body: "Combine technology with recruiter judgment, candidate relationships and local knowledge.",
-  },
-] as const;
-
-const impactMetrics = [
-  companyFacts.recruiters,
-  companyFacts.companies,
-  companyFacts.interviews,
-  companyFacts.joinings,
-  companyFacts.collegePartners,
-  companyFacts.hiringPartners,
 ] as const;
 
 const exploreOptions = [
@@ -164,33 +144,30 @@ export function AgencyPartnershipsPage() {
         />
         <div className="relative mx-auto flex min-h-[88vh] w-full max-w-6xl flex-col justify-end px-5 pb-16 pt-28 sm:px-8 sm:pb-20">
           <p className="text-[11px] font-semibold tracking-[0.18em] text-white/70 uppercase">
-            About EarlyJobs
+            For Recruitment Consultancies
           </p>
           <h1 className="mt-4 max-w-3xl text-[2.4rem] font-semibold leading-[1.02] tracking-[-0.045em] text-white sm:text-[3.5rem]">
-            Building the Infrastructure Behind Modern Hiring.
+            You&apos;ve built the relationships. Let&apos;s build what&apos;s next.
           </h1>
           <p className="mt-5 max-w-2xl text-sm leading-6 text-white/75 sm:text-base sm:leading-7">
-            EarlyJobs is building a recruiter-first hiring network that combines distributed human
-            expertise, AI-powered hiring infrastructure and local execution to help companies hire
-            across India and beyond.
+            Great recruitment businesses are built on trust, expertise and the ability to find the
+            right people.
           </p>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-white/75 sm:text-base sm:leading-7">
-            We bring employers, recruiters, technology and talent together in one connected hiring
-            ecosystem.
-          </p>
-          <p className="mt-4 max-w-2xl text-sm font-semibold leading-6 text-white sm:text-base sm:leading-7">
-            We don&apos;t just help companies find candidates. We help execute hiring.
+            EarlyJobs helps recruitment consultancies extend their reach through a connected network
+            of hiring opportunities, freelance recruiters and district partners—so you can explore
+            more ways to grow without building everything alone.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/employers" className={`${pill} bg-brand text-white hover:bg-[#d85c42]`}>
-              For Employers
-            </Link>
-            <Link
-              href="/become-a-recruiter"
+            <a href="#partnership-form" className={`${pill} bg-brand text-white hover:bg-[#d85c42]`}>
+              Become a Hiring Partner
+            </a>
+            <a
+              href="#how-we-work"
               className={`${pill} border border-white/30 bg-white/5 text-white hover:bg-white/10`}
             >
-              Become a Recruiter
-            </Link>
+              How It Works
+            </a>
           </div>
         </div>
       </section>
@@ -198,14 +175,13 @@ export function AgencyPartnershipsPage() {
       {/* STORY */}
       <section id="story" className="scroll-mt-24 border-t border-black/5">
         <div className="mx-auto w-full max-w-6xl px-5 py-16 sm:px-8 sm:py-24">
-          <SectionTag>What We Do</SectionTag>
+          <SectionTag>The Story</SectionTag>
           <div className="mt-5 grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-end">
             <h2 className="max-w-2xl text-[2rem] font-semibold leading-[1.05] tracking-[-0.045em] sm:text-[2.75rem]">
-              Hiring is more than posting a job and waiting for applications.
+              Your next opportunity shouldn&apos;t stop at your network.
             </h2>
             <p className="max-w-md text-sm leading-6 text-neutral-600 sm:text-base sm:leading-7">
-              It requires finding relevant talent, building conversations, screening candidates,
-              coordinating interviews and converting hiring demand into successful joinings.
+              A new client. A bigger mandate. A role in a city you don&apos;t cover.
             </p>
           </div>
           <div className="mt-10 relative aspect-[16/10] w-full overflow-hidden sm:aspect-[2/1]">
@@ -219,12 +195,12 @@ export function AgencyPartnershipsPage() {
           </div>
           <div className="mx-auto mt-10 max-w-2xl space-y-4 text-sm leading-6 text-neutral-600 sm:text-base sm:leading-7">
             <p>
-              EarlyJobs brings these activities together through a distributed recruiter network
-              supported by technology and structured hiring execution.
+              Growth brings opportunity—but it also brings new demands on your time, team and
+              resources.
             </p>
             <p>
-              Our model is designed for companies that need to hire efficiently across multiple
-              roles, locations and workforce categories.
+              What if you could work alongside a wider network of recruitment professionals, access
+              complementary sourcing capacity and collaborate on suitable hiring requirements?
             </p>
             <p className="font-semibold text-neutral-950">That&apos;s the idea behind EarlyJobs.</p>
             <p>
@@ -247,9 +223,9 @@ export function AgencyPartnershipsPage() {
             />
           </div>
           <div className="text-center">
-            <SectionTag>How Our Hiring Ecosystem Works</SectionTag>
+            <SectionTag>The Network</SectionTag>
             <h2 className="mx-auto mt-5 max-w-2xl text-[2rem] font-semibold leading-[1.05] tracking-[-0.045em] sm:text-[2.75rem]">
-              How Our Hiring Ecosystem Works
+              Different strengths. One shared purpose.
             </h2>
           </div>
           <ul className="mt-14 grid gap-0 border-t border-black/10 sm:grid-cols-2 lg:grid-cols-4">
@@ -269,8 +245,8 @@ export function AgencyPartnershipsPage() {
             ))}
           </ul>
           <p className="mx-auto mt-12 max-w-2xl text-center text-sm font-medium leading-6 text-neutral-700 sm:text-base">
-            Together, these capabilities address different parts of the hiring lifecycle while
-            supporting one larger vision.
+            Every partner brings something different. Better collaboration brings those strengths
+            together.
           </p>
         </div>
       </section>
@@ -278,11 +254,11 @@ export function AgencyPartnershipsPage() {
       {/* HOW WE WORK */}
       <section id="how-we-work" className="scroll-mt-24 border-t border-black/5">
         <div className="mx-auto w-full max-w-6xl px-5 py-16 sm:px-8 sm:py-24">
-          <SectionTag>Why EarlyJobs Is Different</SectionTag>
+          <SectionTag>How We Work Together</SectionTag>
           <div className="mt-5 grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-start lg:gap-14">
             <div>
               <h2 className="max-w-xl text-[2rem] font-semibold leading-[1.05] tracking-[-0.045em] sm:text-[2.75rem]">
-                Why EarlyJobs Is Different
+                Built around the way recruitment really works.
               </h2>
               <ol className="mt-10 space-y-8">
                 {steps.map((step) => (
@@ -319,103 +295,29 @@ export function AgencyPartnershipsPage() {
         </div>
       </section>
 
-      {/* IMPACT */}
-      <section id="impact" className="scroll-mt-24 border-t border-black/5 bg-white">
-        <div className="mx-auto w-full max-w-6xl px-5 py-16 sm:px-8 sm:py-24">
-          <SectionTag>Our Impact</SectionTag>
-          <div className="mt-5 grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-end">
-            <h2 className="max-w-2xl text-[2rem] font-semibold leading-[1.05] tracking-[-0.045em] sm:text-[2.75rem]">
-              Our Impact
-            </h2>
-            <p className="max-w-md text-sm leading-6 text-neutral-600 sm:text-base sm:leading-7">
-              We believe the strength of a hiring network should be measured by the opportunities it
-              creates and the hiring outcomes it delivers.
-            </p>
-          </div>
-          <p className="mt-8 max-w-2xl text-sm leading-6 text-neutral-600 sm:text-base sm:leading-7">
-            Our network brings together recruiters, employers, candidates, colleges and hiring
-            partners to create more connected recruitment opportunities.
-          </p>
-          <ul className="mt-12 grid grid-cols-2 gap-0 border-t border-black/10 sm:grid-cols-3">
-            {impactMetrics.map((item) => (
-              <li
-                key={item.label}
-                className="border-b border-r border-black/10 px-4 py-8 last:border-r-0 sm:px-6 [&:nth-child(2n)]:border-r-0 sm:[&:nth-child(2n)]:border-r sm:[&:nth-child(3n)]:border-r-0"
-              >
-                <p className="text-[2rem] font-semibold tracking-[-0.04em] text-neutral-950 sm:text-[2.4rem]">
-                  {item.value}
-                </p>
-                <p className="mt-2 text-sm text-neutral-600">{item.label}</p>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-6 text-[12px] tracking-[0.04em] text-neutral-400 uppercase">
-            {companyFacts.updatedLabel}
-          </p>
-        </div>
-      </section>
-
-      {/* MISSION & VISION */}
-      <section id="mission" className="scroll-mt-24 border-t border-black/5">
-        <div className="mx-auto w-full max-w-6xl px-5 py-16 sm:px-8 sm:py-24">
-          <ul className="grid gap-0 border-t border-black/10 lg:grid-cols-2">
-            <li className="border-b border-black/10 px-0 py-10 lg:border-r lg:border-b-0 lg:px-8 lg:py-12 lg:pl-0">
-              <SectionTag>Our Mission</SectionTag>
-              <h2 className="mt-5 text-[1.75rem] font-semibold leading-[1.1] tracking-[-0.04em] sm:text-[2.25rem]">
-                Our Mission
-              </h2>
-              <p className="mt-5 max-w-md text-sm leading-6 text-neutral-600 sm:text-base sm:leading-7">
-                To connect employers, recruiters and talent through technology-enabled hiring
-                execution that creates better opportunities and better outcomes.
-              </p>
-            </li>
-            <li className="border-b border-black/10 px-0 py-10 lg:border-b-0 lg:px-8 lg:py-12 lg:pr-0">
-              <SectionTag>Our Vision</SectionTag>
-              <h2 className="mt-5 text-[1.75rem] font-semibold leading-[1.1] tracking-[-0.04em] sm:text-[2.25rem]">
-                Our Vision
-              </h2>
-              <p className="mt-5 max-w-md text-sm leading-6 text-neutral-600 sm:text-base sm:leading-7">
-                To build a trusted, globally relevant hiring network that combines human expertise, AI
-                and distributed execution to make hiring more accessible and scalable.
-              </p>
-            </li>
-          </ul>
-        </div>
-      </section>
-
       {/* FINAL CTA */}
       <section id="grow" className="scroll-mt-24 relative overflow-hidden bg-[#0A0F10]">
         <div className="relative min-h-[28rem] sm:min-h-[32rem]">
           <div className="relative mx-auto flex min-h-[28rem] w-full max-w-6xl flex-col justify-between px-5 py-16 sm:min-h-[32rem] sm:px-8 sm:py-20">
             <div>
               <h2 className="max-w-3xl text-[2rem] font-semibold leading-[1.05] tracking-[-0.045em] text-white sm:text-[2.75rem]">
-                Built Around People. Designed to Scale.
+                You&apos;ve built a business worth growing. You don&apos;t have to grow it alone.
               </h2>
               <p className="mt-5 max-w-xl text-sm leading-6 text-white/75 sm:text-base sm:leading-7">
-                We believe the future of hiring will not be defined by technology alone. It will be
-                shaped by how effectively technology connects people, expands access and helps
-                organizations make better hiring decisions.
-              </p>
-              <p className="mt-4 max-w-xl text-sm font-semibold leading-6 text-white sm:text-base sm:leading-7">
-                EarlyJobs is building that connection.
+                Bring your experience. Expand your connections. Discover what&apos;s possible when
+                recruitment businesses work together.
               </p>
             </div>
             <div className="mt-10 flex flex-wrap gap-3">
-              <Link href="/story" className={`${pill} bg-brand text-white hover:bg-[#d85c42]`}>
-                Explore Our Story
-              </Link>
-              <Link
-                href="/employers"
+              <a href="#partnership-form" className={`${pill} bg-brand text-white hover:bg-[#d85c42]`}>
+                Become an EarlyJobs Hiring Partner
+              </a>
+              <a
+                href="mailto:info@earlyjobs.in?subject=Recruitment%20consultancy%20partnership"
                 className={`${pill} border border-white/30 bg-white/5 text-white hover:bg-white/10`}
               >
-                Start Hiring
-              </Link>
-              <Link
-                href="/become-a-recruiter"
-                className={`${pill} border border-white/30 bg-white/5 text-white hover:bg-white/10`}
-              >
-                Become a Recruiter
-              </Link>
+                Talk to Our Team
+              </a>
             </div>
           </div>
         </div>
