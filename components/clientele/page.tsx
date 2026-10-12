@@ -29,32 +29,32 @@ const steps = [
     n: "01",
     title: "Tell us what you need",
     body: "Share your hiring goals, role requirements, locations, timelines and business context.",
-    image: "/clientele/step-01.jpg",
-    alt: "Share a hiring requirement",
+    image: "/clientele/step-need.jpg",
+    alt: "Hiring managers discussing role requirements and business goals in a meeting",
   },
   {
     id: "approach",
     n: "02",
     title: "Build the right hiring approach",
     body: "We identify the relevant service, recruiting capabilities and delivery model for your requirements—whether corporate, global or frontline hiring.",
-    image: "/clientele/step-02.jpg",
-    alt: "Building a hiring approach",
+    image: "/clientele/step-approach.jpg",
+    alt: "Recruitment team planning a hiring approach around a laptop and notes",
   },
   {
     id: "talent",
     n: "03",
     title: "Reach the right talent",
     body: "Our recruitment teams and network partners work to source, engage and assess candidates against your requirements, supported by available recruitment technology.",
-    image: "/clientele/step-03.jpg",
-    alt: "Reaching the right talent",
+    image: "/clientele/step-talent.jpg",
+    alt: "Recruiter engaging with a candidate during a talent conversation",
   },
   {
     id: "outcome",
     n: "04",
     title: "Move towards successful hiring",
     body: "We coordinate the recruitment process with your team, from candidate submissions and interviews through the agreed hiring milestones.",
-    image: "/clientele/step-01.jpg",
-    alt: "Moving towards successful hiring",
+    image: "/clientele/step-outcome.jpg",
+    alt: "Team celebrating a successful hire with a handshake in the office",
   },
 ] as const;
 
@@ -82,6 +82,8 @@ const growthStages = [
     statLabel: "Specialist corporate hiring services",
     href: "/it-recruitment",
     cta: "Explore Corporate Hiring",
+    image: "/clientele/solution-corporate.jpg",
+    imageAlt: "Professionals collaborating in a modern office meeting about corporate hiring",
   },
   {
     id: "global",
@@ -95,6 +97,8 @@ const growthStages = [
     statLabel: "Priority markets: US & UAE",
     href: "/gcc",
     cta: "Explore Global Hiring",
+    image: "/clientele/solution-global.jpg",
+    imageAlt: "Diverse professionals collaborating in an international business meeting",
   },
   {
     id: "gigkaro",
@@ -109,6 +113,8 @@ const growthStages = [
     statLabel: "Frontline hiring network",
     href: "https://gigkaro.in",
     cta: "Hire Frontline Talent",
+    image: "/clientele/solution-gigkaro.jpg",
+    imageAlt: "Warehouse workers coordinating frontline operations with a tablet and pallet jack",
   },
 ] as const;
 
@@ -237,18 +243,22 @@ const customerStories = [
     title: "How to build a more effective recruitment process.",
     date: "Corporate Hiring",
     featured: true,
+    image: "/clientele/insight-recruitment.jpg",
+    imageAlt: "Recruiter taking interview notes across from a candidate in a bright office",
   },
   {
     title: "What to consider when building teams across markets.",
     date: "Global Hiring",
-    image: "/clientele/story-decagon.jpg",
     featured: false,
+    image: "/clientele/insight-markets.jpg",
+    imageAlt: "International team meeting around a conference table to coordinate across markets",
   },
   {
     title: "How to plan and scale frontline hiring across locations.",
     date: "Frontline Workforce",
-    image: "/clientele/story-basis.jpg",
     featured: false,
+    image: "/clientele/insight-frontline.jpg",
+    imageAlt: "Operations team working together in a logistics warehouse",
   },
 ] as const;
 
@@ -284,7 +294,6 @@ const faqs = [
 ] as const;
 
 export function CompanyTieUpsPage() {
-  const [index, setIndex] = useState(0);
   const [growthIndex, setGrowthIndex] = useState(0);
   const [whyIndex, setWhyIndex] = useState(0);
   const [faqIndex, setFaqIndex] = useState(0);
@@ -302,7 +311,7 @@ export function CompanyTieUpsPage() {
     context: "",
   });
   const [activeStage, setActiveStage] = useState<(typeof stages)[number]["id"]>("need");
-  const item = brandQuotes[index] ?? brandQuotes[0];
+  const item = brandQuotes[0]!;
   const growth = growthStages[growthIndex] ?? growthStages[0];
   const stepRefs = useRef<Record<string, HTMLElement | null>>({});
 
@@ -328,8 +337,6 @@ export function CompanyTieUpsPage() {
     setEnquirySent(true);
   };
 
-  const prev = () => setIndex((i) => (i - 1 + brandQuotes.length) % brandQuotes.length);
-  const next = () => setIndex((i) => (i + 1) % brandQuotes.length);
   const growthPrev = () => setGrowthIndex((i) => (i - 1 + growthStages.length) % growthStages.length);
   const growthNext = () => setGrowthIndex((i) => (i + 1) % growthStages.length);
 
@@ -406,10 +413,7 @@ export function CompanyTieUpsPage() {
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-[1120px] bg-red-500 px-5 py-6 pb-16 sm:px-8 sm:pb-24">
-        <p className="mb-4 text-[12px] font-bold tracking-wide text-white uppercase">
-          Design leftover · client story carousel + terradot asset
-        </p>
+      <section className="mx-auto w-full max-w-[1120px] px-5 py-6 pb-16 sm:px-8 sm:pb-24">
         <div className="grid gap-4 lg:grid-cols-2 lg:gap-5">
           <blockquote className="flex min-h-[340px] flex-col justify-between rounded-[22px] bg-[#f2f2f2] p-8 sm:min-h-[400px] sm:p-10">
             <p className="max-w-lg text-[1.45rem] leading-[1.35] font-medium tracking-[-0.03em] text-neutral-950 sm:text-[1.75rem]">
@@ -439,47 +443,22 @@ export function CompanyTieUpsPage() {
                 to understand what the business needs before building the right hiring approach.
               </p>
             </div>
-            <div className="relative mt-8 flex items-center justify-between gap-4">
+            <div className="relative mt-8">
               <p className="text-lg font-semibold tracking-[-0.02em]">{item.brand}</p>
-              <div className="flex gap-2.5">
-                <button
-                  type="button"
-                  onClick={prev}
-                  aria-label="Previous story"
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/50 bg-black/25 text-white backdrop-blur-sm transition-colors hover:bg-white/10"
-                >
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
-                    <path d="M8.5 3.5 5 7l3.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  onClick={next}
-                  aria-label="Next story"
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/50 bg-black/25 text-white backdrop-blur-sm transition-colors hover:bg-white/10"
-                >
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
-                    <path d="M5.5 3.5 9 7l-3.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </button>
-              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="bg-red-500 text-white">
+      <section id="how-we-hire" className="scroll-mt-24 bg-[#f4f4f4] text-neutral-950">
         <div className="mx-auto w-full max-w-[1120px] px-5 py-16 sm:px-8 sm:py-24">
-          <p className="mb-6 text-[12px] font-bold tracking-wide text-white uppercase">
-            Design leftover · process media (Paraform step crops)
-          </p>
           <div className="grid gap-8 lg:grid-cols-[7.5rem_minmax(0,1fr)] lg:gap-10">
-            <p className="pt-1 text-[13px] text-white/55">One connected approach</p>
+            <p className="pt-1 text-[13px] text-neutral-500">One connected approach</p>
             <div className="max-w-3xl">
               <h2 className="text-[1.85rem] leading-[1.15] font-medium tracking-[-0.035em] sm:text-[2.45rem]">
                 Tell us what you need. We&apos;ll help you build the way to get there.
               </h2>
-              <p className="mt-4 max-w-2xl text-[15px] leading-7 text-white/55 sm:text-base">
+              <p className="mt-4 max-w-2xl text-[15px] leading-7 text-neutral-600 sm:text-base">
                 You shouldn&apos;t have to coordinate multiple disconnected vendors just to find the
                 people your business needs. We start by understanding your roles, locations,
                 timelines and expectations—then bring together the right recruitment expertise,
@@ -490,7 +469,7 @@ export function CompanyTieUpsPage() {
 
           <div className="mt-14 grid gap-10 lg:mt-20 lg:grid-cols-[7.5rem_minmax(0,1fr)] lg:gap-10">
             <nav aria-label="Hiring process stages" className="hidden lg:block">
-              <ul className="sticky top-28 divide-y divide-white/15 border-y border-white/15">
+              <ul className="sticky top-28 divide-y divide-black/10 border-y border-black/10">
                 {stages.map((stage) => {
                   const active = activeStage === stage.id;
                   return (
@@ -498,13 +477,13 @@ export function CompanyTieUpsPage() {
                       <a
                         href={`#how-${stage.id}`}
                         className={`flex items-center justify-between py-3.5 text-[15px] transition-colors ${
-                          active ? "text-white" : "text-white/40 hover:text-white/70"
+                          active ? "text-neutral-950" : "text-neutral-400 hover:text-neutral-700"
                         }`}
                       >
                         <span>{stage.label}</span>
                         <span
                           aria-hidden
-                          className={`h-1.5 w-1.5 rounded-full ${active ? "bg-white" : "bg-white/25"}`}
+                          className={`h-1.5 w-1.5 rounded-full ${active ? "bg-neutral-950" : "bg-black/20"}`}
                         />
                       </a>
                     </li>
@@ -523,22 +502,22 @@ export function CompanyTieUpsPage() {
                   }}
                   className="grid scroll-mt-28 items-center gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-12"
                 >
-                  <div className="relative overflow-hidden rounded-[22px] bg-[#1a1a1a]">
+                  <div className="overflow-hidden rounded-[22px] bg-neutral-200">
                     <Image
                       src={step.image}
                       alt={step.alt}
-                      width={620}
-                      height={step.id === "talent" ? 580 : 480}
-                      className="h-auto w-full object-cover"
+                      width={1200}
+                      height={800}
+                      className="aspect-[3/2] h-auto w-full object-cover object-center"
                       sizes="(min-width: 1024px) 34rem, 90vw"
                     />
                   </div>
                   <div className="max-w-md">
-                    <p className="text-sm text-white/40">{step.n}</p>
+                    <p className="text-sm text-neutral-400">{step.n}</p>
                     <h3 className="mt-3 text-[1.7rem] leading-[1.15] font-medium tracking-[-0.03em] sm:text-[2.1rem]">
                       {step.title}
                     </h3>
-                    <p className="mt-4 text-[15px] leading-7 text-white/55 sm:text-base">{step.body}</p>
+                    <p className="mt-4 text-[15px] leading-7 text-neutral-600 sm:text-base">{step.body}</p>
                   </div>
                 </article>
               ))}
@@ -548,7 +527,7 @@ export function CompanyTieUpsPage() {
           <div className="mt-14 lg:pl-[calc(7.5rem+2.5rem)]">
             <Link
               href="/employers"
-              className="inline-flex h-11 items-center justify-center rounded-full bg-white px-5 text-[13px] font-medium text-neutral-950 transition-colors hover:bg-white/90"
+              className="inline-flex h-11 items-center justify-center rounded-full bg-neutral-950 px-5 text-[13px] font-medium text-white transition-colors hover:bg-neutral-800"
             >
               Discuss Your Hiring Requirements
             </Link>
@@ -561,10 +540,7 @@ export function CompanyTieUpsPage() {
         body="Good partnerships are measured by the work we do together—clear communication, consistent execution and shared accountability."
       />
 
-      <section id="solutions" className="scroll-mt-24 bg-red-500 py-16 sm:py-24">
-        <p className="mx-auto mb-6 w-full max-w-[1120px] px-5 text-[12px] font-bold tracking-wide text-white uppercase sm:px-8">
-          Design leftover · 3-tab growth UI + shared photo + fake stats
-        </p>
+      <section id="solutions" className="scroll-mt-24 bg-white py-16 sm:py-24">
         <div className="mx-auto w-full max-w-[1120px] px-5 sm:px-8">
           <p className="text-[11px] font-semibold tracking-[0.16em] text-neutral-500 uppercase">
             One partner. Different hiring needs.
@@ -585,7 +561,7 @@ export function CompanyTieUpsPage() {
                   key={stage.id}
                   type="button"
                   onClick={() => setGrowthIndex(i)}
-                  className={`inline-flex h-9 items-center rounded-full px-4 text-[13px] font-medium transition-colors ${
+                  className={`inline-flex h-9 cursor-pointer items-center rounded-full px-4 text-[13px] font-medium transition-colors ${
                     i === growthIndex
                       ? "bg-neutral-950 text-white"
                       : "bg-transparent text-neutral-700 hover:bg-black/5"
@@ -609,7 +585,7 @@ export function CompanyTieUpsPage() {
                 type="button"
                 onClick={growthPrev}
                 aria-label="Previous hiring solution"
-                className="flex h-8 w-8 items-center justify-center rounded-full border border-black/10 text-neutral-700 hover:bg-white"
+                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-black/10 text-neutral-700 hover:bg-neutral-50"
               >
                 <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden>
                   <path d="M8.5 3.5 5 7l3.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -619,7 +595,7 @@ export function CompanyTieUpsPage() {
                 type="button"
                 onClick={growthNext}
                 aria-label="Next hiring solution"
-                className="flex h-8 w-8 items-center justify-center rounded-full border border-black/10 text-neutral-700 hover:bg-white"
+                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-black/10 text-neutral-700 hover:bg-neutral-50"
               >
                 <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden>
                   <path d="M5.5 3.5 9 7l-3.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -628,9 +604,9 @@ export function CompanyTieUpsPage() {
             </div>
           </div>
 
-          <div className="mt-8 grid gap-4 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,0.7fr)]">
-            <div className="grid overflow-hidden rounded-[22px] bg-[#ebebeb] sm:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
-              <div className="flex flex-col justify-between p-7 sm:p-8">
+          <div className="mt-8 grid gap-4 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,0.7fr)] lg:items-stretch">
+            <div className="grid min-h-[420px] overflow-hidden rounded-[22px] bg-[#ebebeb] sm:min-h-[440px] sm:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
+              <div className="flex min-h-0 flex-col justify-between p-7 sm:p-8">
                 <div>
                   <p className="text-sm text-neutral-500">{growth.label}</p>
                   <h3 className="mt-3 max-w-xs text-[1.7rem] leading-[1.15] font-medium tracking-[-0.03em] text-neutral-950 sm:text-[2rem]">
@@ -648,12 +624,14 @@ export function CompanyTieUpsPage() {
                     </span>
                   </Link>
                 </div>
-                <p className="mt-10 max-w-xs text-sm leading-6 text-neutral-600">{growth.blurb}</p>
+                <p className="mt-10 max-w-xs text-sm leading-6 text-neutral-600 line-clamp-5">
+                  {growth.blurb}
+                </p>
               </div>
-              <div className="relative min-h-[240px] sm:min-h-full">
+              <div className="relative min-h-[240px] sm:min-h-0">
                 <Image
-                  src="/clientele/growth-photo.jpg"
-                  alt=""
+                  src={growth.image}
+                  alt={growth.imageAlt}
                   fill
                   className="object-cover object-center"
                   sizes="(min-width: 1024px) 22rem, 90vw"
@@ -661,7 +639,7 @@ export function CompanyTieUpsPage() {
               </div>
             </div>
 
-            <aside className="flex min-h-[280px] flex-col justify-between rounded-[22px] bg-[#171717] p-7 text-white sm:p-8">
+            <aside className="flex min-h-[420px] flex-col justify-between rounded-[22px] bg-[#171717] p-7 text-white sm:min-h-[440px] sm:p-8">
               <div>
                 <p className="text-lg font-semibold tracking-[-0.02em]">{growth.brand}</p>
                 <p className="mt-5 text-[15px] leading-6 text-white/70">{growth.brandBody}</p>
@@ -675,13 +653,10 @@ export function CompanyTieUpsPage() {
         </div>
       </section>
 
-      <section className="bg-red-500 py-16 sm:py-24">
-        <p className="mx-auto mb-6 w-full max-w-[1120px] px-5 text-[12px] font-bold tracking-wide text-white uppercase sm:px-8">
-          Design leftover · why side card / why-bg asset
-        </p>
+      <section className="bg-[#fff1ed] py-16 sm:py-24">
         <div className="mx-auto grid w-full max-w-[1120px] gap-12 px-5 sm:px-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16">
           <div>
-            <p className="text-[11px] font-semibold tracking-[0.16em] text-neutral-500 uppercase">
+            <p className="text-[11px] font-semibold tracking-[0.16em] text-brand uppercase">
               What makes the difference
             </p>
             <h2 className="mt-4 max-w-md text-[2rem] leading-[1.1] font-medium tracking-[-0.04em] text-neutral-950 sm:text-[2.5rem]">
@@ -762,16 +737,13 @@ export function CompanyTieUpsPage() {
         </div>
       </section>
 
-      <section className="bg-red-500 py-16 sm:py-24">
-        <p className="mx-auto mb-6 w-full max-w-[1120px] px-5 text-[12px] font-bold tracking-wide text-white uppercase sm:px-8">
-          Design leftover · insights cards (decagon / basis assets)
-        </p>
+      <section className="bg-[#f7f7f7] py-16 sm:py-24">
         <div className="mx-auto w-full max-w-[1120px] px-5 sm:px-8">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <h2 className="text-[2rem] leading-[1.1] font-medium tracking-[-0.04em] text-neutral-950 sm:text-[2.5rem]">
                 Better hiring starts with better questions.
-        </h2>
+              </h2>
               <p className="mt-3 max-w-xl text-[15px] leading-7 text-neutral-600">
                 Explore practical perspectives on talent acquisition, recruitment strategy,
                 workforce planning and the changing world of work.
@@ -786,33 +758,42 @@ export function CompanyTieUpsPage() {
           </div>
 
           <div className="mt-10 grid gap-4 lg:grid-cols-2">
-            <article className="flex min-h-[360px] flex-col justify-between rounded-[22px] bg-[#e9e9e9] p-7 sm:min-h-[420px] sm:p-8">
-              <div>
-                <p className="text-sm text-neutral-500">Hiring Insights</p>
-                <h3 className="mt-4 max-w-md text-[1.55rem] leading-[1.2] font-medium tracking-[-0.03em] text-neutral-950 sm:text-[1.85rem]">
-                  {customerStories[0]!.title}
-                </h3>
+            <article className="grid overflow-hidden rounded-[22px] bg-[#e9e9e9] sm:min-h-[420px] sm:grid-rows-[1fr_auto]">
+              <div className="flex flex-col justify-between p-7 sm:p-8">
+                <div>
+                  <p className="text-sm text-neutral-500">Hiring Insights</p>
+                  <h3 className="mt-4 max-w-md text-[1.55rem] leading-[1.2] font-medium tracking-[-0.03em] text-neutral-950 sm:text-[1.85rem]">
+                    {customerStories[0]!.title}
+                  </h3>
+                </div>
+                <div className="mt-10 flex items-end justify-between gap-4">
+                  <p className="text-sm text-neutral-500">{customerStories[0]!.date}</p>
+                  <Link
+                    href="/blogs"
+                    aria-label="Explore corporate hiring insights"
+                    className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-950 text-white"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+                      <path d="M4 10 10 4M5.5 4H10v4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </Link>
+                </div>
               </div>
-              <div className="mt-10 flex items-end justify-between gap-4">
-                <p className="text-sm text-neutral-500">{customerStories[0]!.date}</p>
-                <Link
-                  href="/blogs"
-                  aria-label="Explore corporate hiring insights"
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-950 text-white"
-                >
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
-                    <path d="M4 10 10 4M5.5 4H10v4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </Link>
+              <div className="relative aspect-[4/3] min-h-[180px] overflow-hidden sm:aspect-[16/10]">
+                <Image
+                  src={customerStories[0]!.image}
+                  alt={customerStories[0]!.imageAlt}
+                  fill
+                  loading="lazy"
+                  className="object-cover object-center"
+                  sizes="(min-width: 1024px) 34rem, 90vw"
+                />
               </div>
             </article>
 
             <div className="grid gap-4">
               {customerStories
-                .filter(
-                  (story): story is (typeof customerStories)[number] & { image: string } =>
-                    "image" in story && typeof story.image === "string",
-                )
+                .filter((story) => !story.featured)
                 .map((story) => (
                 <article
                   key={story.title}
@@ -838,11 +819,12 @@ export function CompanyTieUpsPage() {
                     </div>
                     <p className="mt-6 text-sm text-neutral-500">{story.date}</p>
                   </div>
-                  <div className="relative min-h-[140px] overflow-hidden rounded-[16px]">
+                  <div className="relative aspect-[4/3] min-h-[140px] overflow-hidden rounded-[16px]">
                     <Image
                       src={story.image}
-                      alt=""
+                      alt={story.imageAlt}
                       fill
+                      loading="lazy"
                       className="object-cover object-center"
                       sizes="(min-width: 1024px) 16rem, 90vw"
                     />
@@ -1025,16 +1007,13 @@ export function CompanyTieUpsPage() {
       </section>
 
       <section id="enquiry" className="bg-white px-5 pb-16 sm:px-8 sm:pb-24">
-        <div className="relative mx-auto w-full max-w-[1120px] overflow-hidden rounded-[28px] ring-4 ring-red-600">
-          <p className="absolute top-4 left-4 z-20 rounded bg-red-700 px-2 py-1 text-[11px] font-bold tracking-wide text-white uppercase">
-            Design leftover · cta-bg asset
-          </p>
-          <div className="relative flex min-h-[280px] items-center justify-center bg-red-500 px-5 py-14 sm:min-h-[320px] sm:px-10 sm:py-16">
+        <div className="relative mx-auto w-full max-w-[1120px] overflow-hidden rounded-[28px]">
+          <div className="relative flex min-h-[280px] items-center justify-center px-5 py-14 sm:min-h-[320px] sm:px-10 sm:py-16">
             <Image
               src="/clientele/cta-bg.jpg"
               alt=""
               fill
-              className="object-cover object-center opacity-40"
+              className="object-cover object-center"
               sizes="(min-width: 1120px) 1120px, 100vw"
             />
             <div
