@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import { CompanyLogosGrid } from "@/components/company-logos-grid";
 
 const brandQuotes = [
   {
@@ -12,27 +13,6 @@ const brandQuotes = [
     role: "Trust built through delivery",
     brand: "EarlyJobs",
     brandImage: "/clientele/terradot-bg.jpg",
-  },
-] as const;
-
-const videoTestimonials = [
-  {
-    brand: "Communication",
-    quote: "Clear communication throughout the hiring process.",
-    person: "Service principle",
-    href: "/employers",
-  },
-  {
-    brand: "Alignment",
-    quote: "Recruitment aligned with your role requirements.",
-    person: "Service principle",
-    href: "/employers",
-  },
-  {
-    brand: "Delivery",
-    quote: "Delivery focused on relevant candidates and agreed outcomes.",
-    person: "Service principle",
-    href: "/employers",
   },
 ] as const;
 
@@ -305,7 +285,6 @@ const faqs = [
 
 export function CompanyTieUpsPage() {
   const [index, setIndex] = useState(0);
-  const [carousel, setCarousel] = useState(1);
   const [growthIndex, setGrowthIndex] = useState(0);
   const [whyIndex, setWhyIndex] = useState(0);
   const [faqIndex, setFaqIndex] = useState(0);
@@ -351,9 +330,6 @@ export function CompanyTieUpsPage() {
 
   const prev = () => setIndex((i) => (i - 1 + brandQuotes.length) % brandQuotes.length);
   const next = () => setIndex((i) => (i + 1) % brandQuotes.length);
-  const carouselPrev = () =>
-    setCarousel((i) => (i - 1 + videoTestimonials.length) % videoTestimonials.length);
-  const carouselNext = () => setCarousel((i) => (i + 1) % videoTestimonials.length);
   const growthPrev = () => setGrowthIndex((i) => (i - 1 + growthStages.length) % growthStages.length);
   const growthNext = () => setGrowthIndex((i) => (i + 1) % growthStages.length);
 
@@ -403,12 +379,12 @@ export function CompanyTieUpsPage() {
             >
               Tell Us What You Need
             </Link>
-            <Link
+          <Link
               href="#solutions"
               className="inline-flex h-10 items-center justify-center rounded-full border border-black/10 px-5 text-[13px] font-medium text-neutral-950 transition-colors hover:bg-neutral-50"
-            >
+          >
               Explore Our Hiring Solutions
-            </Link>
+          </Link>
           </div>
           <p className="mt-5 text-[12px] leading-5 text-neutral-500">
             Corporate &amp; professional hiring · Global recruitment · Frontline workforce hiring
@@ -580,129 +556,10 @@ export function CompanyTieUpsPage() {
         </div>
       </section>
 
-      <section className="overflow-hidden bg-red-500 py-16 sm:py-24">
-        <p className="mx-auto mb-6 w-full max-w-[1120px] px-5 text-[12px] font-bold tracking-wide text-white uppercase sm:px-8">
-          Design leftover · video-style voices carousel (empty frames)
-        </p>
-        <div className="mx-auto w-full max-w-[1120px] px-5 text-center sm:px-8">
-          <p className="inline-flex items-center gap-2 text-[13px] text-[#6b7cff]">
-            <span aria-hidden className="h-2 w-2 rounded-[3px] bg-[#6b7cff]" />
-            Client voices
-          </p>
-          <h2 className="mt-4 text-[2rem] leading-[1.1] font-medium tracking-[-0.04em] text-neutral-950 sm:text-[2.75rem]">
-            Good partnerships are measured by the work we do together.
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-[15px] leading-7 text-neutral-600">
-            Every hiring partnership starts with understanding the business. The strongest ones grow
-            through communication, consistent execution and shared accountability.
-          </p>
-        </div>
-
-        <div className="relative mt-12 sm:mt-14">
-          <div className="flex items-start justify-center gap-5 overflow-hidden px-5 sm:gap-6 sm:px-8">
-            {[-1, 0, 1].map((offset) => {
-              const i =
-                (carousel + offset + videoTestimonials.length * 10) % videoTestimonials.length;
-              const card = videoTestimonials[i]!;
-              const active = offset === 0;
-              return (
-                <article
-                  key={`${card.brand}-${offset}`}
-                  className={`w-[min(86vw,34rem)] shrink-0 transition-opacity duration-500 ${
-                    active ? "opacity-100" : "pointer-events-none opacity-40 max-sm:hidden"
-                  }`}
-                  aria-hidden={!active}
-                >
-                  {active ? (
-                    <div className="relative aspect-[16/10] overflow-hidden rounded-[18px] bg-[#141414]">
-                      <div className="absolute top-4 left-4 flex items-center gap-2 text-white">
-                        <span
-                          aria-hidden
-                          className="flex h-6 w-6 items-center justify-center rounded-full bg-white/95 text-[10px] font-semibold text-neutral-950"
-                        >
-                          {String(i + 1).padStart(2, "0")}
-                        </span>
-                        <span className="text-sm font-medium tracking-[-0.01em]">{card.brand}</span>
-                      </div>
-                    </div>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => setCarousel(i)}
-                      className="relative aspect-[16/10] w-full overflow-hidden rounded-[18px] bg-[#b0b0b0] text-left"
-                      aria-label={`Show ${card.brand} principle`}
-                    >
-                      <div className="absolute top-4 left-4 flex items-center gap-2 text-white">
-                        <span
-                          aria-hidden
-                          className="flex h-6 w-6 items-center justify-center rounded-full bg-white/95 text-[10px] font-semibold text-neutral-950"
-                        >
-                          {String(i + 1).padStart(2, "0")}
-                        </span>
-                        <span className="text-sm font-medium tracking-[-0.01em]">{card.brand}</span>
-                      </div>
-                    </button>
-                  )}
-
-                  <div className="mt-5 flex flex-col gap-5 sm:mt-6 sm:flex-row sm:items-end sm:justify-between sm:gap-8">
-                    <div className="min-w-0 text-left">
-                      <p
-                        className={`text-[15px] leading-6 tracking-[-0.01em] sm:text-base ${
-                          active ? "text-neutral-700" : "text-neutral-500"
-                        }`}
-                      >
-                        {card.quote}
-                      </p>
-                      <p className="mt-2 text-sm text-neutral-400">{card.person}</p>
-                    </div>
-                    <Link
-                      href={card.href}
-                      tabIndex={active ? 0 : -1}
-                      className={`inline-flex h-10 shrink-0 items-center justify-center rounded-full px-4 text-[13px] font-medium text-white transition-colors ${
-                        active ? "bg-neutral-950 hover:bg-neutral-800" : "bg-[#9a9a9a]"
-                      }`}
-                    >
-                      Tell Us What You Need
-                    </Link>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-
-          <div className="mt-10 flex items-center justify-center gap-4">
-            <button
-              type="button"
-              onClick={carouselPrev}
-              aria-label="Previous principle"
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-black/10 text-neutral-700 hover:bg-white"
-            >
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
-                <path d="M8.5 3.5 5 7l3.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-            <div className="flex h-2 w-14 items-center rounded-full bg-black/10 p-0.5" aria-hidden>
-              <span
-                className="h-1 rounded-full bg-neutral-950 transition-all duration-300"
-                style={{
-                  width: `${100 / videoTestimonials.length}%`,
-                  marginLeft: `${(carousel * 100) / videoTestimonials.length}%`,
-                }}
-              />
-            </div>
-            <button
-              type="button"
-              onClick={carouselNext}
-              aria-label="Next principle"
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-black/10 text-neutral-700 hover:bg-white"
-            >
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
-                <path d="M5.5 3.5 9 7l-3.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </section>
+      <CompanyLogosGrid
+        title="Brands already hiring through EarlyJobs."
+        body="Good partnerships are measured by the work we do together—clear communication, consistent execution and shared accountability."
+      />
 
       <section id="solutions" className="scroll-mt-24 bg-red-500 py-16 sm:py-24">
         <p className="mx-auto mb-6 w-full max-w-[1120px] px-5 text-[12px] font-bold tracking-wide text-white uppercase sm:px-8">
@@ -888,9 +745,9 @@ export function CompanyTieUpsPage() {
                     <li key={line} className="flex items-center gap-2 text-sm text-neutral-700">
                       <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-brand" />
                       {line}
-                    </li>
-                  ))}
-                </ul>
+              </li>
+            ))}
+          </ul>
                 <Link
                   href="https://www.huntlo.ai"
                   target="_blank"
@@ -914,7 +771,7 @@ export function CompanyTieUpsPage() {
             <div>
               <h2 className="text-[2rem] leading-[1.1] font-medium tracking-[-0.04em] text-neutral-950 sm:text-[2.5rem]">
                 Better hiring starts with better questions.
-              </h2>
+        </h2>
               <p className="mt-3 max-w-xl text-[15px] leading-7 text-neutral-600">
                 Explore practical perspectives on talent acquisition, recruitment strategy,
                 workforce planning and the changing world of work.
@@ -1081,9 +938,9 @@ export function CompanyTieUpsPage() {
                               className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand"
                             />
                             {item}
-                          </li>
-                        ))}
-                      </ul>
+              </li>
+            ))}
+          </ul>
                     </div>
                   ) : null}
                   <div className="mt-auto pt-7">
@@ -1156,9 +1013,9 @@ export function CompanyTieUpsPage() {
                 <li key={item.title} className="border-t border-white/10 pt-5 first:border-t-0 first:pt-0">
                   <p className="text-[1.05rem] font-medium tracking-[-0.02em]">{item.title}</p>
                   <p className="mt-2 text-[14px] leading-6 text-white/55">{item.body}</p>
-                </li>
-              ))}
-            </ul>
+              </li>
+            ))}
+          </ul>
             <p className="mt-8 text-[13px] leading-6 text-white/40">
               Huntlo&apos;s product capabilities stay distinct from the recruitment services
               delivered by EarlyJobs and GigKaro.

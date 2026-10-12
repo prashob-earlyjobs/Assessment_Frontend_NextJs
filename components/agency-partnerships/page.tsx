@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import { CompanyLogosGrid } from "@/components/company-logos-grid";
 
 const network = [
   {
@@ -35,24 +36,24 @@ const steps = [
     n: "01",
     title: "Connect",
     body: "Tell us about your business, specialisations and ambitions.",
-    image: "/agency-partnerships/process-photo.jpg",
-    alt: "Connect with EarlyJobs",
+    image: "/agency-partnerships/step-connect-v2.webp",
+    alt: "Partners shaking hands to begin an agency collaboration",
   },
   {
     id: "collaborate",
     n: "02",
     title: "Collaborate",
     body: "Explore suitable mandates and partners that complement your capabilities.",
-    image: "/agency-partnerships/partnership-handshake.jpg",
-    alt: "Collaborate on hiring mandates",
+    image: "/agency-partnerships/step-collaborate.webp",
+    alt: "Recruiters collaborating over hiring mandates and screen data",
   },
   {
     id: "deliver",
     n: "03",
     title: "Deliver",
     body: "Work together to source talent and move hiring forward, with clear responsibilities and agreed commercial terms.",
-    image: "/agency-partnerships/story-team.jpg",
-    alt: "Deliver hiring outcomes together",
+    image: "/agency-partnerships/step-deliver-v2.webp",
+    alt: "Team finalizing a successful candidate delivery in a meeting",
   },
 ] as const;
 
@@ -63,92 +64,28 @@ const exploreOptions = [
   "Other",
 ] as const;
 
-/** Design-shell leftovers from the shared layout — no matching partnership copy. */
-const unmatchedVoices = [
-  { brand: "Placeholder", quote: "No matching partnership copy for this design block.", person: "Design leftover" },
-  { brand: "Placeholder", quote: "Video-style carousel has no consultancy partnership content.", person: "Design leftover" },
-  { brand: "Placeholder", quote: "Keep structure; replace only when verified partner voices exist.", person: "Design leftover" },
-] as const;
-
-const unmatchedGrowth = [
+const faqs = [
   {
-    id: "a",
-    label: "Tab A",
-    title: "No matching partnership solution tabs.",
-    blurb: "This 3-tab growth UI has no consultancy partnership content.",
-    brand: "Unused",
-    brandBody: "Design leftover · shared photo + fake stats pattern.",
-    stat: "—",
-    statLabel: "Unmatched",
+    q: "Who is this partnership for?",
+    a: "Recruitment consultancies and agencies that want to extend their reach through EarlyJobs' network of hiring opportunities, freelance recruiters and district partners—without rebuilding everything alone.",
   },
   {
-    id: "b",
-    label: "Tab B",
-    title: "Partnership brief has no 3-tab catalog.",
-    blurb: "Network section above carries the partnership content instead.",
-    brand: "Unused",
-    brandBody: "Design leftover.",
-    stat: "—",
-    statLabel: "Unmatched",
+    q: "How does the partnership work?",
+    a: "We start by understanding your specialisations and ambitions, explore mandates and partners that fit your strengths, then collaborate on delivery with clear responsibilities and agreed commercial terms.",
   },
   {
-    id: "c",
-    label: "Tab C",
-    title: "Do not invent tab copy here.",
-    blurb: "Marked red until a redesign maps real partnership offerings.",
-    brand: "Unused",
-    brandBody: "Design leftover.",
-    stat: "—",
-    statLabel: "Unmatched",
-  },
-] as const;
-
-const unmatchedWhy = [
-  {
-    n: "01",
-    title: "No matching “why” accordion copy",
-    body: "Partnership brief has no why-EarlyJobs accordion. Network section covers partner roles instead.",
+    q: "What kinds of opportunities can partners access?",
+    a: "Depending on fit and capacity, partners can explore hiring mandates, freelance recruiter collaboration, multi-city hiring support and other ways to grow through the EarlyJobs network.",
   },
   {
-    n: "02",
-    title: "Side card / why-bg is design leftover",
-    body: "Visual shell only — no Huntlo or hiring-why content in the consultancy partnership brief.",
-  },
-] as const;
-
-const unmatchedInsights = [
-  {
-    title: "No matching insights cards in partnership brief.",
-    date: "Unmatched",
-    featured: true,
-  },
-  {
-    title: "Design leftover · insight image slot",
-    date: "Unmatched",
-    image: "/clientele/story-decagon.jpg",
-    featured: false,
-  },
-  {
-    title: "Design leftover · insight image slot",
-    date: "Unmatched",
-    image: "/clientele/story-basis.jpg",
-    featured: false,
-  },
-] as const;
-
-const unmatchedFaqs = [
-  {
-    q: "No matching FAQ in partnership brief",
-    a: "This FAQ accordion is a design leftover from the shared shell. Partnership content does not include Q&As.",
+    q: "How do we get started?",
+    a: "Share a few details about your consultancy through the partnership form. Our team will review your information and get in touch to explore whether there's a good fit for collaboration.",
   },
 ] as const;
 
 export function AgencyPartnershipsPage() {
   const [sent, setSent] = useState(false);
   const [activeStage, setActiveStage] = useState<(typeof stages)[number]["id"]>("connect");
-  const [carousel, setCarousel] = useState(1);
-  const [growthIndex, setGrowthIndex] = useState(0);
-  const [whyIndex, setWhyIndex] = useState(0);
   const [faqIndex, setFaqIndex] = useState(0);
   const [form, setForm] = useState({
     name: "",
@@ -160,7 +97,6 @@ export function AgencyPartnershipsPage() {
     explore: "",
   });
   const stepRefs = useRef<Record<string, HTMLElement | null>>({});
-  const growth = unmatchedGrowth[growthIndex] ?? unmatchedGrowth[0];
 
   const update = (field: keyof typeof form, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -180,13 +116,6 @@ export function AgencyPartnershipsPage() {
     window.location.href = `mailto:info@earlyjobs.in?subject=${encodeURIComponent("Recruitment consultancy partnership")}&body=${encodeURIComponent(lines.join("\n"))}`;
     setSent(true);
   };
-
-  const carouselPrev = () =>
-    setCarousel((i) => (i - 1 + unmatchedVoices.length) % unmatchedVoices.length);
-  const carouselNext = () => setCarousel((i) => (i + 1) % unmatchedVoices.length);
-  const growthPrev = () =>
-    setGrowthIndex((i) => (i - 1 + unmatchedGrowth.length) % unmatchedGrowth.length);
-  const growthNext = () => setGrowthIndex((i) => (i + 1) % unmatchedGrowth.length);
 
   useEffect(() => {
     const nodes = steps
@@ -382,13 +311,13 @@ export function AgencyPartnershipsPage() {
                   }}
                   className="grid scroll-mt-28 items-center gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-12"
                 >
-                  <div className="relative overflow-hidden rounded-[22px] bg-[#1a1a1a]">
+                  <div className="overflow-hidden rounded-[20px] bg-[#1a1a1a]">
                     <Image
                       src={step.image}
                       alt={step.alt}
-                      width={620}
-                      height={480}
-                      className="h-auto w-full object-cover"
+                      width={1200}
+                      height={900}
+                      className="aspect-[4/3] h-auto w-full object-cover object-center"
                       sizes="(min-width: 1024px) 34rem, 90vw"
                     />
                   </div>
@@ -415,305 +344,36 @@ export function AgencyPartnershipsPage() {
         </div>
       </section>
 
-      {/* UNMATCHED — voices carousel */}
-      <section className="overflow-hidden bg-red-500 py-16 sm:py-24">
-        <p className="mx-auto mb-6 w-full max-w-[1120px] px-5 text-[12px] font-bold tracking-wide text-white uppercase sm:px-8">
-          Unmatched · video-style voices carousel (no partnership copy)
-        </p>
-        <div className="mx-auto w-full max-w-[1120px] px-5 text-center sm:px-8">
-          <p className="inline-flex items-center gap-2 text-[13px] text-white/80">
-            <span aria-hidden className="h-2 w-2 rounded-[3px] bg-white" />
-            Client voices
-          </p>
-          <h2 className="mt-4 text-[2rem] leading-[1.1] font-medium tracking-[-0.04em] text-white sm:text-[2.75rem]">
-            Design leftover — no consultancy partner quotes provided.
-          </h2>
-        </div>
+      <CompanyLogosGrid
+        title="Brands already hiring through the EarlyJobs network."
+        body="Partner consultancies can explore mandates across companies already connected to EarlyJobs."
+      />
 
-        <div className="relative mt-12 sm:mt-14">
-          <div className="flex items-start justify-center gap-5 overflow-hidden px-5 sm:gap-6 sm:px-8">
-            {[-1, 0, 1].map((offset) => {
-              const i =
-                (carousel + offset + unmatchedVoices.length * 10) % unmatchedVoices.length;
-              const card = unmatchedVoices[i]!;
-              const active = offset === 0;
-              return (
-                <article
-                  key={`${card.brand}-${offset}-${i}`}
-                  className={`w-[min(86vw,34rem)] shrink-0 transition-opacity duration-500 ${
-                    active ? "opacity-100" : "pointer-events-none opacity-40 max-sm:hidden"
-                  }`}
-                  aria-hidden={!active}
-                >
-                  <div
-                    className={`relative aspect-[16/10] overflow-hidden rounded-[18px] ${
-                      active ? "bg-[#141414]" : "bg-[#b0b0b0]"
-                    }`}
-                  >
-                    <div className="absolute top-4 left-4 flex items-center gap-2 text-white">
-                      <span
-                        aria-hidden
-                        className="flex h-6 w-6 items-center justify-center rounded-full bg-white/95 text-[10px] font-semibold text-neutral-950"
-                      >
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      <span className="text-sm font-medium tracking-[-0.01em]">{card.brand}</span>
-                    </div>
-                  </div>
-                  <div className="mt-5 text-left">
-                    <p className="text-[15px] leading-6 text-white sm:text-base">{card.quote}</p>
-                    <p className="mt-2 text-sm text-white/70">{card.person}</p>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-          <div className="mt-10 flex items-center justify-center gap-4">
-            <button
-              type="button"
-              onClick={carouselPrev}
-              aria-label="Previous"
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-white/40 text-white hover:bg-white/10"
-            >
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
-                <path d="M8.5 3.5 5 7l3.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-            <button
-              type="button"
-              onClick={carouselNext}
-              aria-label="Next"
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-white/40 text-white hover:bg-white/10"
-            >
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
-                <path d="M5.5 3.5 9 7l-3.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* UNMATCHED — 3-tab solutions */}
-      <section className="scroll-mt-24 bg-red-500 py-16 sm:py-24">
-        <p className="mx-auto mb-6 w-full max-w-[1120px] px-5 text-[12px] font-bold tracking-wide text-white uppercase sm:px-8">
-          Unmatched · 3-tab growth UI (no partnership copy — network section used instead)
-        </p>
-        <div className="mx-auto w-full max-w-[1120px] px-5 sm:px-8">
-          <div className="mt-2 flex flex-wrap items-center justify-between gap-4">
-            <div className="flex flex-wrap gap-2">
-              {unmatchedGrowth.map((stage, i) => (
-                <button
-                  key={stage.id}
-                  type="button"
-                  onClick={() => setGrowthIndex(i)}
-                  className={`inline-flex h-9 items-center rounded-full px-4 text-[13px] font-medium transition-colors ${
-                    i === growthIndex
-                      ? "bg-neutral-950 text-white"
-                      : "bg-white/20 text-white hover:bg-white/30"
-                  }`}
-                >
-                  {stage.label}
-                </button>
-              ))}
-            </div>
-            <div className="flex items-center gap-3">
-              <button
-                type="button"
-                onClick={growthPrev}
-                aria-label="Previous"
-                className="flex h-8 w-8 items-center justify-center rounded-full border border-white/40 text-white hover:bg-white/10"
-              >
-                <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden>
-                  <path d="M8.5 3.5 5 7l3.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-              <button
-                type="button"
-                onClick={growthNext}
-                aria-label="Next"
-                className="flex h-8 w-8 items-center justify-center rounded-full border border-white/40 text-white hover:bg-white/10"
-              >
-                <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden>
-                  <path d="M5.5 3.5 9 7l-3.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          <div className="mt-8 grid gap-4 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,0.7fr)]">
-            <div className="grid overflow-hidden rounded-[22px] bg-white sm:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
-              <div className="flex flex-col justify-between p-7 sm:p-8">
-                <div>
-                  <p className="text-sm text-neutral-500">{growth.label}</p>
-                  <h3 className="mt-3 max-w-xs text-[1.7rem] leading-[1.15] font-medium tracking-[-0.03em] text-neutral-950 sm:text-[2rem]">
-                    {growth.title}
-                  </h3>
-                </div>
-                <p className="mt-10 max-w-xs text-sm leading-6 text-neutral-600">{growth.blurb}</p>
-              </div>
-              <div className="relative min-h-[240px] bg-red-600 sm:min-h-full">
-                <Image
-                  src="/clientele/growth-photo.jpg"
-                  alt=""
-                  fill
-                  className="object-cover object-center opacity-50"
-                  sizes="(min-width: 1024px) 22rem, 90vw"
-                />
-              </div>
-            </div>
-            <aside className="flex min-h-[280px] flex-col justify-between rounded-[22px] bg-[#171717] p-7 text-white sm:p-8">
-              <div>
-                <p className="text-lg font-semibold tracking-[-0.02em]">{growth.brand}</p>
-                <p className="mt-5 text-[15px] leading-6 text-white/70">{growth.brandBody}</p>
-              </div>
-              <div>
-                <p className="text-[3.5rem] leading-none font-medium tracking-[-0.05em]">{growth.stat}</p>
-                <p className="mt-2 text-sm text-white/55">{growth.statLabel}</p>
-              </div>
-            </aside>
-          </div>
-        </div>
-      </section>
-
-      {/* UNMATCHED — why accordion */}
-      <section className="bg-red-500 py-16 sm:py-24">
-        <p className="mx-auto mb-6 w-full max-w-[1120px] px-5 text-[12px] font-bold tracking-wide text-white uppercase sm:px-8">
-          Unmatched · why accordion + side card (no partnership copy)
-        </p>
-        <div className="mx-auto grid w-full max-w-[1120px] gap-12 px-5 sm:px-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16">
-          <div>
-            <h2 className="max-w-md text-[2rem] leading-[1.1] font-medium tracking-[-0.04em] text-white sm:text-[2.5rem]">
-              Design leftover — no why-EarlyJobs accordion in brief.
-            </h2>
-            <ul className="mt-10 divide-y divide-white/20 border-y border-white/20">
-              {unmatchedWhy.map((feature, i) => {
-                const open = whyIndex === i;
-                return (
-                  <li key={feature.n}>
-                    <button
-                      type="button"
-                      onClick={() => setWhyIndex(i)}
-                      className="flex w-full items-start justify-between gap-6 py-5 text-left"
-                      aria-expanded={open}
-                    >
-                      <div className="min-w-0">
-                        <p className="text-[1.05rem] font-medium tracking-[-0.02em] text-white sm:text-[1.15rem]">
-                          {feature.title}
-                        </p>
-                        {open ? (
-                          <p className="mt-3 max-w-md text-[15px] leading-7 text-white/80">
-                            {feature.body}
-                          </p>
-                        ) : null}
-                      </div>
-                      <span className="shrink-0 pt-0.5 text-sm text-white/60">{feature.n}</span>
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-
-          <div className="relative min-h-[360px] overflow-hidden rounded-[22px] ring-4 ring-red-700 sm:min-h-[420px]">
-            <Image
-              src="/clientele/why-bg.jpg"
-              alt=""
-              fill
-              className="object-cover object-center opacity-50"
-              sizes="(min-width: 1024px) 34rem, 90vw"
-            />
-            <div className="absolute inset-0 flex items-center justify-center p-5 sm:p-8">
-              <div className="w-full max-w-md rounded-[18px] bg-white p-5 sm:p-6">
-                <p className="text-[11px] font-semibold tracking-[0.14em] text-red-600 uppercase">
-                  Unmatched side card
-                </p>
-                <h3 className="mt-3 text-[1.35rem] leading-snug font-medium tracking-[-0.03em] text-neutral-950">
-                  No matching partnership side-card content.
-                </h3>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* UNMATCHED — insights */}
-      <section className="bg-red-500 py-16 sm:py-24">
-        <p className="mx-auto mb-6 w-full max-w-[1120px] px-5 text-[12px] font-bold tracking-wide text-white uppercase sm:px-8">
-          Unmatched · insights cards (no partnership copy)
-        </p>
-        <div className="mx-auto w-full max-w-[1120px] px-5 sm:px-8">
-          <h2 className="text-[2rem] leading-[1.1] font-medium tracking-[-0.04em] text-white sm:text-[2.5rem]">
-            Design leftover — no insights section in brief.
-          </h2>
-          <div className="mt-10 grid gap-4 lg:grid-cols-2">
-            <article className="flex min-h-[280px] flex-col justify-between rounded-[22px] bg-white/15 p-7 sm:p-8">
-              <h3 className="max-w-md text-[1.55rem] leading-[1.2] font-medium tracking-[-0.03em] text-white">
-                {unmatchedInsights[0]!.title}
-              </h3>
-              <p className="mt-10 text-sm text-white/70">{unmatchedInsights[0]!.date}</p>
-            </article>
-            <div className="grid gap-4">
-              {unmatchedInsights
-                .filter(
-                  (story): story is (typeof unmatchedInsights)[number] & { image: string } =>
-                    "image" in story && typeof story.image === "string",
-                )
-                .map((story) => (
-                  <article
-                    key={story.title}
-                    className="grid gap-4 rounded-[22px] bg-white p-5 sm:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] sm:p-6"
-                  >
-                    <div>
-                      <h3 className="text-[1.05rem] leading-snug font-medium tracking-[-0.02em] text-neutral-950">
-                        {story.title}
-                      </h3>
-                      <p className="mt-6 text-sm text-neutral-500">{story.date}</p>
-                    </div>
-                    <div className="relative min-h-[120px] overflow-hidden rounded-[16px] bg-red-200">
-                      <Image
-                        src={story.image}
-                        alt=""
-                        fill
-                        className="object-cover object-center opacity-60"
-                        sizes="(min-width: 1024px) 16rem, 90vw"
-                      />
-                    </div>
-                  </article>
-                ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* UNMATCHED — FAQ */}
-      <section className="bg-red-500 py-16 sm:py-24">
-        <p className="mx-auto mb-6 w-full max-w-3xl px-5 text-[12px] font-bold tracking-wide text-white uppercase sm:px-8">
-          Unmatched · FAQ accordion (no partnership copy)
-        </p>
+      <section id="faq" className="scroll-mt-24 bg-white py-16 sm:py-24">
         <div className="mx-auto w-full max-w-3xl px-5 sm:px-8">
-          <h2 className="text-center text-[2rem] leading-[1.1] font-medium tracking-[-0.04em] text-white sm:text-[2.5rem]">
+          <h2 className="text-center text-[2rem] leading-[1.1] font-medium tracking-[-0.04em] text-neutral-950 sm:text-[2.5rem]">
             Frequently asked questions
           </h2>
-          <ul className="mt-10 divide-y divide-white/20 border-y border-white/20">
-            {unmatchedFaqs.map((faq, i) => {
+          <ul className="mt-10 divide-y divide-black/10 border-y border-black/10">
+            {faqs.map((faq, i) => {
               const open = faqIndex === i;
               return (
                 <li key={faq.q}>
                   <button
                     type="button"
                     onClick={() => setFaqIndex(open ? -1 : i)}
-                    className="flex w-full items-start justify-between gap-6 py-5 text-left"
+                    className="flex w-full cursor-pointer items-start justify-between gap-6 py-5 text-left"
                     aria-expanded={open}
                   >
                     <div className="min-w-0">
-                      <p className="text-[1.05rem] font-medium tracking-[-0.02em] text-white">
+                      <p className="text-[1.05rem] font-medium tracking-[-0.02em] text-neutral-950">
                         {faq.q}
                       </p>
                       {open ? (
-                        <p className="mt-3 text-[15px] leading-7 text-white/80">{faq.a}</p>
+                        <p className="mt-3 text-[15px] leading-7 text-neutral-600">{faq.a}</p>
                       ) : null}
                     </div>
-                    <span aria-hidden className="mt-1 text-xl leading-none text-white/60">
+                    <span aria-hidden className="mt-1 text-xl leading-none text-neutral-400">
                       {open ? "–" : "+"}
                     </span>
                   </button>

@@ -112,18 +112,15 @@ const stories: Story[] = [
 
 type StoryId = Story["id"];
 
-function ReviewAvatar({ name, image }: { name: string; image?: string }) {
+function ReviewAvatar({ image }: { name: string; image?: string }) {
   const [failed, setFailed] = useState(false);
-  const initials = name
-    .split(" ")
-    .map((part) => part[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
   const showImage = Boolean(image) && !failed;
 
   return (
-    <span className="relative flex size-9 shrink-0 items-center justify-center overflow-hidden bg-brand text-[11px] font-semibold tracking-wide text-white" aria-hidden>
+    <span
+      className="relative flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-brand text-white"
+      aria-hidden
+    >
       {showImage ? (
         <Image
           src={image!}
@@ -134,7 +131,15 @@ function ReviewAvatar({ name, image }: { name: string; image?: string }) {
           onError={() => setFailed(true)}
         />
       ) : (
-        initials
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <circle cx="12" cy="8" r="3.5" fill="currentColor" />
+          <path
+            d="M5.5 18.5c1.6-3.1 4-4.7 6.5-4.7s4.9 1.6 6.5 4.7"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+        </svg>
       )}
     </span>
   );
