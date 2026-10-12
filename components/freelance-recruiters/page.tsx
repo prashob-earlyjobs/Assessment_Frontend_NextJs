@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Reveal } from "@/components/ui/reveal";
 
 const applyHref = "/become-a-recruiter/apply";
 const contactHref = "mailto:info@earlyjobs.in?subject=Freelance%20recruiter%20inquiry";
@@ -204,8 +205,8 @@ export function FreelanceRecruitersPage() {
   return (
     <main className="relative bg-white text-neutral-950">
       <section>
-        <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-5 pt-14 pb-10 sm:px-8 sm:pt-20 lg:grid-cols-[minmax(0,1.15fr)_minmax(16rem,22rem)] lg:gap-16">
-          <div>
+        <div className="page-shell page-section grid items-center gap-8 !pb-10 sm:gap-10 sm:!pt-20 lg:grid-cols-[minmax(0,1.15fr)_minmax(16rem,22rem)] lg:gap-16">
+          <Reveal>
             <p className="text-[12px] font-semibold tracking-[0.18em] text-brand uppercase">
               Your Recruiting Career, Your Way
             </p>
@@ -234,8 +235,8 @@ export function FreelanceRecruitersPage() {
               For experienced recruiters, aspiring talent professionals and women ready to restart
               their careers.
             </p>
-          </div>
-          <div className="relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-[28px] lg:max-w-none">
+          </Reveal>
+          <Reveal delay={80} className="media-frame mx-auto aspect-[4/5] w-full max-w-sm lg:max-w-none">
             <Image
               src="/freelance-recruiters/hero-culture.jpg"
               alt=""
@@ -244,7 +245,7 @@ export function FreelanceRecruitersPage() {
               className="object-cover object-center"
               sizes="(min-width: 1024px) 22rem, 20rem"
             />
-          </div>
+          </Reveal>
         </div>
         <div className="border-y border-black/5">
           <ul className="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-center gap-x-10 gap-y-3 px-5 py-6 text-[13px] font-medium tracking-[0.04em] text-neutral-400 uppercase sm:justify-between">
@@ -256,8 +257,8 @@ export function FreelanceRecruitersPage() {
       </section>
 
       <section id="story" className="scroll-mt-24">
-        <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-5 py-16 sm:px-8 sm:py-24 lg:grid-cols-2 lg:gap-16">
-          <div className="relative aspect-[5/4] overflow-hidden rounded-[24px]">
+        <div className="page-shell page-section grid items-center gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-16">
+          <Reveal className="media-frame aspect-[5/4]">
             <Image
               src="/freelance-recruiters/story-culture.jpg"
               alt=""
@@ -265,8 +266,8 @@ export function FreelanceRecruitersPage() {
               className="object-cover"
               sizes="(min-width: 1024px) 32rem, 100vw"
             />
-          </div>
-          <div>
+          </Reveal>
+          <Reveal delay={80}>
             <p className="text-[12px] font-semibold tracking-[0.18em] text-brand uppercase">
               A Different Way to Work
             </p>
@@ -304,12 +305,12 @@ export function FreelanceRecruitersPage() {
             <Link href={applyHref} className={`${btn} mt-8`}>
               Find Your Place in Our Network
             </Link>
-          </div>
+          </Reveal>
         </div>
       </section>
 
       <section id="helps" className="scroll-mt-24">
-        <div className="mx-auto w-full max-w-6xl px-5 pb-8 sm:px-8">
+        <div className="page-shell page-section !pb-8">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-[12px] font-semibold tracking-[0.18em] text-brand uppercase">
               More Than a Job. A Network.
@@ -395,7 +396,7 @@ export function FreelanceRecruitersPage() {
       </section>
 
       <section id="who" className="scroll-mt-24">
-        <div className="mx-auto w-full max-w-6xl px-5 py-16 sm:px-8 sm:py-20">
+        <div className="page-shell page-section">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-[12px] font-semibold tracking-[0.18em] text-brand uppercase">
               There&apos;s More Than One Way to Start
@@ -421,7 +422,7 @@ export function FreelanceRecruitersPage() {
       </section>
 
       <section id="how-it-works" className="scroll-mt-24 bg-[#f7f8fc]">
-        <div className="mx-auto w-full max-w-6xl px-5 py-16 sm:px-8 sm:py-20">
+        <div className="page-shell page-section">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-[12px] font-semibold tracking-[0.18em] text-brand uppercase">
               Simple, Structured, Recruiter-First
@@ -496,7 +497,7 @@ export function FreelanceRecruitersPage() {
       </section>
 
       <section id="opportunities" className="scroll-mt-24">
-        <div className="mx-auto w-full max-w-6xl px-5 pb-8 sm:px-8">
+        <div className="page-shell page-section !pb-8">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <p className="text-[12px] font-semibold tracking-[0.18em] text-brand uppercase">
@@ -515,22 +516,22 @@ export function FreelanceRecruitersPage() {
             Explore recruitment requirements across industries and functions, depending on the
             opportunities available through EarlyJobs.
           </p>
-          <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="reveal-stagger mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {industries.map((item) => (
-              <li key={item.title}>
-                <div className="relative aspect-[16/10] overflow-hidden rounded-[18px]">
+              <Reveal as="li" key={item.title}>
+                <div className="media-frame aspect-[16/10]">
                   <Image src={item.image} alt="" fill className="object-cover" sizes="20rem" />
                 </div>
                 <h3 className="mt-4 text-base font-semibold tracking-[-0.02em]">{item.title}</h3>
                 <p className="mt-1 text-sm leading-6 text-neutral-500">{item.body}</p>
-              </li>
+              </Reveal>
             ))}
           </ul>
         </div>
       </section>
 
       <section id="why" className="scroll-mt-24">
-        <div className="mx-auto w-full max-w-6xl px-5 py-16 sm:px-8">
+        <div className="page-shell page-section">
           <p className="text-[12px] font-semibold tracking-[0.18em] text-brand uppercase">
             Built Around People Who Hire
           </p>
@@ -578,7 +579,7 @@ export function FreelanceRecruitersPage() {
       </section>
 
       <section id="cta" className="scroll-mt-24">
-        <div className="mx-auto w-full max-w-3xl px-5 py-16 text-center sm:px-8 sm:py-24">
+        <div className="page-shell page-section max-w-3xl text-center">
           <p className="text-[12px] font-semibold tracking-[0.18em] text-brand uppercase">
             Your Next Chapter Starts Here
           </p>

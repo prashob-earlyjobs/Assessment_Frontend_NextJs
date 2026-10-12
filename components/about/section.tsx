@@ -12,8 +12,11 @@ export function AboutSection({
   border?: boolean;
 }) {
   return (
-    <section id={id} className={`scroll-mt-24 ${border ? "border-t border-black/10" : ""} ${className}`}>
-      <div className="mx-auto w-full max-w-6xl px-5 py-16 sm:px-8 sm:py-24">{children}</div>
+    <section
+      id={id}
+      className={`scroll-mt-24 ${border ? "border-t border-black/10" : ""} ${className}`}
+    >
+      <div className="page-shell page-section">{children}</div>
     </section>
   );
 }

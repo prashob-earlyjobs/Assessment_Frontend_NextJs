@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useId, useState, type FormEvent, type ReactNode } from "react";
+import { Reveal } from "@/components/ui/reveal";
 import {
   earlyJobsContact,
   enquiryTopics,
@@ -197,56 +198,61 @@ export function ContactPage() {
     <main className="bg-white text-neutral-950">
       {/* Hero + form — mockup two-column */}
       <section className="bg-[#eef4fb]">
-        <div className="mx-auto grid w-full max-w-[1120px] gap-10 px-5 py-14 sm:px-8 sm:py-20 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-start lg:gap-14 lg:py-24">
+        <div className="page-shell page-section grid gap-8 sm:gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-start lg:gap-14">
           <div>
-            <h1 className="text-[2.6rem] leading-[1.05] font-medium tracking-[-0.045em] sm:text-[3.4rem]">
-              Contact Us
-            </h1>
-            <p className="mt-4 max-w-md text-[15px] leading-7 text-neutral-600 sm:text-base">
-              Email, call, or complete the form to learn how EarlyJobs can support your hiring or
-              partnership goals.
-            </p>
+            <Reveal>
+              <h1 className="text-[2.6rem] leading-[1.05] font-medium tracking-[-0.045em] sm:text-[3.4rem]">
+                Contact Us
+              </h1>
+              <p className="mt-4 max-w-md text-[15px] leading-7 text-neutral-600 sm:text-base">
+                Email, call, or complete the form to learn how EarlyJobs can support your hiring or
+                partnership goals.
+              </p>
 
-            <div className="mt-8 space-y-2 text-[15px]">
-              <p>
-                <a
-                  href={`mailto:${earlyJobsContact.email}`}
-                  className="font-medium text-brand hover:underline"
-                >
-                  {earlyJobsContact.email}
-                </a>
-              </p>
-              <p>
-                <a
-                  href={`tel:${earlyJobsContact.phoneTel}`}
-                  className="font-medium text-neutral-950 hover:underline"
-                >
-                  {earlyJobsContact.phoneDisplay}
-                </a>
-              </p>
-              <p>
-                <a href="#support" className="font-medium text-neutral-950 hover:underline">
-                  Customer Support
-                </a>
-              </p>
-            </div>
+              <div className="mt-8 space-y-2 text-[15px]">
+                <p>
+                  <a
+                    href={`mailto:${earlyJobsContact.email}`}
+                    className="font-medium text-brand transition-opacity hover:underline hover:opacity-90"
+                  >
+                    {earlyJobsContact.email}
+                  </a>
+                </p>
+                <p>
+                  <a
+                    href={`tel:${earlyJobsContact.phoneTel}`}
+                    className="font-medium text-neutral-950 transition-opacity hover:underline hover:opacity-90"
+                  >
+                    {earlyJobsContact.phoneDisplay}
+                  </a>
+                </p>
+                <p>
+                  <a
+                    href="#support"
+                    className="font-medium text-neutral-950 transition-opacity hover:underline hover:opacity-90"
+                  >
+                    Customer Support
+                  </a>
+                </p>
+              </div>
+            </Reveal>
 
             <div
               id="support"
-              className="mt-12 grid scroll-mt-28 gap-8 sm:grid-cols-3 sm:gap-6"
+              className="reveal-stagger mt-12 grid scroll-mt-28 gap-8 sm:grid-cols-3 sm:gap-10"
             >
               {supportBlocks.map((block) => (
-                <div key={block.title}>
+                <Reveal key={block.title}>
                   <h2 className="text-[15px] font-semibold tracking-[-0.02em] text-neutral-950">
                     {block.title}
                   </h2>
                   <p className="mt-2 text-[13px] leading-6 text-neutral-600">{block.body}</p>
-                </div>
+                </Reveal>
               ))}
             </div>
 
-            <div className="mt-10 grid gap-4 border-t border-black/8 pt-8 sm:grid-cols-2">
-              <div className="space-y-1 leading-snug">
+            <div className="reveal-stagger mt-10 grid gap-4 border-t border-black/8 pt-8 sm:grid-cols-2 sm:gap-8">
+              <Reveal className="space-y-1 leading-snug transition-opacity duration-300 hover:opacity-90">
                 <a
                   href={gigKaroContact.site}
                   target="_blank"
@@ -278,8 +284,8 @@ export function ContactPage() {
                 >
                   {gigKaroContact.phoneDisplay}
                 </a>
-              </div>
-              <div className="space-y-1 leading-snug">
+              </Reveal>
+              <Reveal className="space-y-1 leading-snug transition-opacity duration-300 hover:opacity-90">
                 <a
                   href={huntloContact.site}
                   target="_blank"
@@ -308,14 +314,15 @@ export function ContactPage() {
                 >
                   {huntloContact.phoneDisplay}
                 </a>
-              </div>
+              </Reveal>
             </div>
           </div>
 
-          <div
-            id="enquiry"
-            className="scroll-mt-28 rounded-[22px] border border-black/8 bg-white p-6 shadow-[0_18px_50px_rgba(0,0,0,0.08)] sm:p-8"
-          >
+          <Reveal>
+            <div
+              id="enquiry"
+              className="scroll-mt-28 rounded-[22px] border border-black/8 bg-white p-6 shadow-[0_18px_50px_rgba(0,0,0,0.08)] transition-shadow duration-300 hover:shadow-[0_20px_56px_rgba(0,0,0,0.1)] sm:p-8"
+            >
             {sent ? (
               <div className="flex min-h-[360px] flex-col justify-center text-center">
                 <h2 className="text-[1.5rem] font-medium tracking-[-0.03em]">Almost done</h2>
@@ -516,54 +523,57 @@ export function ContactPage() {
                 </p>
               </form>
             )}
-          </div>
+            </div>
+          </Reveal>
         </div>
       </section>
 
       {/* Location + map — mockup two-column */}
-      <section className="bg-white py-16 sm:py-24">
-        <div className="mx-auto grid w-full max-w-[1120px] items-center gap-10 px-5 sm:px-8 lg:grid-cols-2 lg:gap-14">
-          <div className="relative min-h-[320px] overflow-hidden rounded-[22px] bg-[#f4f4f4] sm:min-h-[400px]">
-            <iframe
-              title="EarlyJobs office location"
-              src={earlyJobsContact.mapsEmbed}
-              className="absolute inset-0 h-full w-full border-0"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              allowFullScreen
-            />
-            <div className="absolute bottom-4 left-4 right-4 rounded-[16px] bg-white p-4 shadow-[0_12px_40px_rgba(0,0,0,0.12)] sm:right-auto sm:max-w-xs">
-              <div className="flex items-start gap-3">
-                <Image
-                  src="/images/logo.png"
-                  alt=""
-                  width={40}
-                  height={28}
-                  className="mt-0.5 h-7 w-auto object-contain"
-                />
-                <div className="min-w-0">
-                  <p className="text-[13px] font-semibold text-neutral-950">EarlyJobs</p>
-                  <p className="mt-0.5 text-[11px] leading-4 text-neutral-500">
-                    Recruiter-first hiring network
-                  </p>
+      <section className="bg-white">
+        <div className="page-shell page-section grid items-center gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-14">
+          <Reveal>
+            <div className="media-frame aspect-[4/3] !rounded-[22px]">
+              <iframe
+                title="EarlyJobs office location"
+                src={earlyJobsContact.mapsEmbed}
+                className="absolute inset-0 h-full w-full border-0"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+              />
+              <div className="absolute bottom-4 left-4 right-4 z-10 rounded-[16px] bg-white p-4 shadow-[0_12px_40px_rgba(0,0,0,0.12)] sm:right-auto sm:max-w-xs">
+                <div className="flex items-start gap-3">
+                  <Image
+                    src="/images/logo.png"
+                    alt=""
+                    width={40}
+                    height={28}
+                    className="mt-0.5 h-7 w-auto object-contain"
+                  />
+                  <div className="min-w-0">
+                    <p className="text-[13px] font-semibold text-neutral-950">EarlyJobs</p>
+                    <p className="mt-0.5 text-[11px] leading-4 text-neutral-500">
+                      Recruiter-first hiring network
+                    </p>
+                  </div>
                 </div>
+                <p className="mt-3 text-[12px] leading-5 text-neutral-600">
+                  {earlyJobsContact.addressShort}
+                </p>
+                <a
+                  href={earlyJobsContact.mapsLink}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-3 inline-flex items-center gap-1 text-[12px] font-medium text-brand transition-opacity hover:underline hover:opacity-90"
+                >
+                  Open Google Maps
+                  <span aria-hidden>→</span>
+                </a>
               </div>
-              <p className="mt-3 text-[12px] leading-5 text-neutral-600">
-                {earlyJobsContact.addressShort}
-              </p>
-              <a
-                href={earlyJobsContact.mapsLink}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-3 inline-flex items-center gap-1 text-[12px] font-medium text-brand hover:underline"
-              >
-                Open Google Maps
-                <span aria-hidden>→</span>
-              </a>
             </div>
-          </div>
+          </Reveal>
 
-          <div>
+          <Reveal>
             <p className="text-[11px] font-semibold tracking-[0.16em] text-neutral-500 uppercase">
               Our Location
             </p>
@@ -584,14 +594,14 @@ export function ContactPage() {
                 Karnataka 560095
               </p>
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
 
       {/* FAQ — mockup two-column with email field */}
-      <section className="border-t border-black/8 bg-white py-16 sm:py-24">
-        <div className="mx-auto grid w-full max-w-[1120px] gap-10 px-5 sm:px-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
-          <div>
+      <section className="border-t border-black/8 bg-white">
+        <div className="page-shell page-section grid gap-8 sm:gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
+          <Reveal>
             <p className="text-[11px] font-semibold tracking-[0.16em] text-neutral-500 uppercase">
               FAQ
             </p>
@@ -616,95 +626,99 @@ export function ContactPage() {
               />
               <button
                 type="submit"
-                className="inline-flex h-9 shrink-0 cursor-pointer items-center justify-center rounded-full bg-brand px-4 text-[12px] font-medium text-white hover:bg-[#d85c42]"
+                className="inline-flex h-9 shrink-0 cursor-pointer items-center justify-center rounded-full bg-brand px-4 text-[12px] font-medium text-white transition-colors hover:bg-[#d85c42]"
               >
                 Submit
               </button>
             </form>
-          </div>
+          </Reveal>
 
-          <ul className="divide-y divide-black/10 border-y border-black/10">
-            {faqs.map((faq, i) => {
-              const open = faqIndex === i;
-              const panelId = `faq-panel-${i}`;
-              const buttonId = `faq-button-${i}`;
-              return (
-                <li key={faq.q}>
-                  <button
-                    id={buttonId}
-                    type="button"
-                    onClick={() => setFaqIndex(open ? -1 : i)}
-                    className="flex w-full cursor-pointer items-start justify-between gap-6 py-5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/30 focus-visible:ring-offset-2"
-                    aria-expanded={open}
-                    aria-controls={panelId}
-                  >
-                    <span className="min-w-0 text-[1.05rem] font-medium tracking-[-0.02em] text-neutral-950">
-                      {faq.q}
-                    </span>
-                    <span
-                      aria-hidden
-                      className={`mt-1 flex size-6 shrink-0 items-center justify-center text-neutral-400 transition-transform duration-200 ${
-                        open ? "rotate-180" : ""
+          <Reveal>
+            <ul className="divide-y divide-black/10 border-y border-black/10">
+              {faqs.map((faq, i) => {
+                const open = faqIndex === i;
+                const panelId = `faq-panel-${i}`;
+                const buttonId = `faq-button-${i}`;
+                return (
+                  <li key={faq.q}>
+                    <button
+                      id={buttonId}
+                      type="button"
+                      onClick={() => setFaqIndex(open ? -1 : i)}
+                      className="flex w-full cursor-pointer items-start justify-between gap-6 py-5 text-left transition-colors duration-200 hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/30 focus-visible:ring-offset-2"
+                      aria-expanded={open}
+                      aria-controls={panelId}
+                    >
+                      <span className="min-w-0 text-[1.05rem] font-medium tracking-[-0.02em] text-neutral-950">
+                        {faq.q}
+                      </span>
+                      <span
+                        aria-hidden
+                        className={`mt-1 flex size-6 shrink-0 items-center justify-center text-neutral-400 transition-transform duration-200 ${
+                          open ? "rotate-180" : ""
+                        }`}
+                      >
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                          <path
+                            d="M3 5L7 9L11 5"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </span>
+                    </button>
+                    <div
+                      id={panelId}
+                      role="region"
+                      aria-labelledby={buttonId}
+                      className={`grid transition-[grid-template-rows] duration-300 ease-out ${
+                        open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
                       }`}
                     >
-                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                        <path
-                          d="M3 5L7 9L11 5"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </span>
-                  </button>
-                  <div
-                    id={panelId}
-                    role="region"
-                    aria-labelledby={buttonId}
-                    className={`grid transition-[grid-template-rows] duration-300 ease-out ${
-                      open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-                    }`}
-                  >
-                    <div className="overflow-hidden">
-                      <p className="pb-5 text-[15px] leading-7 text-neutral-600">{faq.a}</p>
+                      <div className="overflow-hidden">
+                        <p className="pb-5 text-[15px] leading-7 text-neutral-600">{faq.a}</p>
+                      </div>
                     </div>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
+                  </li>
+                );
+              })}
+            </ul>
+          </Reveal>
         </div>
       </section>
 
       {/* CTA — NYC night gradient */}
-      <section className="px-5 pb-16 sm:px-8 sm:pb-24">
-        <div className="relative mx-auto flex min-h-[280px] w-full max-w-[1120px] items-center justify-center overflow-hidden rounded-[28px] bg-[linear-gradient(145deg,#070b14_0%,#101a2e_42%,#1a2740_72%,#0c121f_100%)] px-5 py-14 sm:min-h-[320px] sm:px-10">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(234,106,78,0.18),transparent_55%),radial-gradient(ellipse_at_bottom_left,rgba(59,130,246,0.12),transparent_50%)]"
-          />
-          <div className="relative z-10 mx-auto max-w-2xl text-center text-white">
-            <h2 className="text-[1.85rem] leading-[1.15] font-medium tracking-[-0.035em] sm:text-[2.4rem]">
-              Ready to hire smarter with EarlyJobs?
-            </h2>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <a
-                href="#enquiry"
-                className="inline-flex h-11 items-center justify-center rounded-full bg-white px-6 text-[13px] font-medium text-neutral-950 hover:bg-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
-              >
-                Get Started
-              </a>
-              <Link
-                href="/clientele"
-                className="inline-flex h-11 items-center justify-center gap-1.5 rounded-full border border-white/40 px-6 text-[13px] font-medium text-white hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
-              >
-                Learn more
-                <span aria-hidden>→</span>
-              </Link>
+      <section className="page-shell page-section !pt-0">
+        <Reveal>
+          <div className="relative flex min-h-[280px] w-full items-center justify-center overflow-hidden rounded-[28px] bg-[linear-gradient(145deg,#070b14_0%,#101a2e_42%,#1a2740_72%,#0c121f_100%)] px-5 py-14 sm:min-h-[320px] sm:px-10">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(234,106,78,0.18),transparent_55%),radial-gradient(ellipse_at_bottom_left,rgba(59,130,246,0.12),transparent_50%)]"
+            />
+            <div className="relative z-10 mx-auto max-w-2xl text-center text-white">
+              <h2 className="text-[1.85rem] leading-[1.15] font-medium tracking-[-0.035em] sm:text-[2.4rem]">
+                Ready to hire smarter with EarlyJobs?
+              </h2>
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+                <a
+                  href="#enquiry"
+                  className="inline-flex h-11 items-center justify-center rounded-full bg-white px-6 text-[13px] font-medium text-neutral-950 transition-colors hover:bg-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+                >
+                  Get Started
+                </a>
+                <Link
+                  href="/clientele"
+                  className="inline-flex h-11 items-center justify-center gap-1.5 rounded-full border border-white/40 px-6 text-[13px] font-medium text-white transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+                >
+                  Learn more
+                  <span aria-hidden>→</span>
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
+        </Reveal>
       </section>
     </main>
   );

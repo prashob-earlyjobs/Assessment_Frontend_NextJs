@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { CompanyLogosGrid } from "@/components/company-logos-grid";
+import { Reveal } from "@/components/ui/reveal";
 
 const brandQuotes = [
   {
@@ -319,8 +320,8 @@ export function CompanyTieUpsPage() {
 
   return (
     <main className="bg-white text-neutral-950">
-      <section className="mx-auto grid w-full max-w-[1120px] items-center gap-10 px-5 py-14 sm:px-8 sm:py-20 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-14">
-        <div className="max-w-xl">
+      <section className="page-shell page-section grid items-center gap-8 sm:gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-14">
+        <Reveal className="max-w-xl">
           <p className="text-[11px] font-semibold tracking-[0.16em] text-neutral-500 uppercase">
             Your hiring partner
           </p>
@@ -341,19 +342,19 @@ export function CompanyTieUpsPage() {
             >
               Tell Us What You Need
             </Link>
-          <Link
+            <Link
               href="#solutions"
               className="inline-flex h-10 items-center justify-center rounded-full border border-black/10 px-5 text-[13px] font-medium text-neutral-950 transition-colors hover:bg-neutral-50"
-          >
+            >
               Explore Our Hiring Solutions
-          </Link>
+            </Link>
           </div>
           <p className="mt-5 text-[12px] leading-5 text-neutral-500">
             Corporate &amp; professional hiring · Global recruitment · Frontline workforce hiring
           </p>
-        </div>
+        </Reveal>
 
-        <div className="relative mx-auto aspect-[8/7] w-full max-w-[520px] overflow-hidden rounded-[18px] bg-neutral-200 lg:mx-0 lg:max-w-none">
+        <Reveal delay={80} className="media-frame mx-auto aspect-[8/7] w-full max-w-[520px] bg-neutral-200 lg:mx-0 lg:max-w-none">
           <Image
             src="/clientele/hero-team-meeting.jpg"
             alt="Diverse business team meeting in a modern office"
@@ -362,10 +363,10 @@ export function CompanyTieUpsPage() {
             sizes="(min-width: 1024px) 34rem, 90vw"
             className="object-cover object-center"
           />
-        </div>
+        </Reveal>
       </section>
 
-      <section className="mx-auto w-full max-w-[1120px] px-5 py-6 pb-16 sm:px-8 sm:pb-24">
+      <section className="page-shell page-section !pt-0">
         <div className="grid gap-4 lg:grid-cols-2 lg:gap-5">
           <blockquote className="flex min-h-[340px] flex-col justify-between rounded-[22px] bg-[#f2f2f2] p-8 sm:min-h-[400px] sm:p-10">
             <p className="max-w-lg text-[1.45rem] leading-[1.35] font-medium tracking-[-0.03em] text-neutral-950 sm:text-[1.75rem]">
@@ -403,7 +404,7 @@ export function CompanyTieUpsPage() {
       </section>
 
       <section id="how-we-hire" className="scroll-mt-24 bg-[#f4f4f4] text-neutral-950">
-        <div className="mx-auto w-full max-w-[1120px] px-5 py-16 sm:px-8 sm:py-24">
+        <div className="page-shell page-section">
           <div className="grid gap-8 lg:grid-cols-[7.5rem_minmax(0,1fr)] lg:gap-10">
             <p className="pt-1 text-[13px] text-neutral-500">One connected approach</p>
             <div className="max-w-3xl">

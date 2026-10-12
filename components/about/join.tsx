@@ -1,4 +1,5 @@
 import { GhostLink, SolidLink } from "@/components/home/primitives";
+import { Reveal } from "@/components/ui/reveal";
 
 const dots = [
   { x: "8%", y: "18%", delay: "0s" },
@@ -32,22 +33,24 @@ export function AboutJoin() {
           </span>
         ))}
       </div>
-      <div className="relative mx-auto flex w-full max-w-3xl flex-col items-center px-5 py-24 text-center sm:px-8 sm:py-32">
-        <h2 className="text-[2.25rem] font-semibold leading-[1.05] tracking-[-0.045em] text-neutral-950 sm:text-[3.25rem]">
-          The Future of Hiring Will Be Built Together.
-        </h2>
-        <p className="mt-5 max-w-xl text-sm leading-6 text-neutral-600">
-          Whether you&apos;re discovering your first opportunity, building your recruiting career, or
-          growing a world-class team, you&apos;re part of something bigger than a hiring platform.
-        </p>
-        <p className="mt-3 max-w-xl text-sm leading-6 text-neutral-600">
-          You&apos;re part of a network built on trust, expertise, and opportunity.
-        </p>
-        <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row">
-          <SolidLink href="/jobs">Find Jobs</SolidLink>
-          <GhostLink href="/become-a-recruiter">Become a Recruiter</GhostLink>
-          <GhostLink href="/sign-in">Start Hiring</GhostLink>
-        </div>
+      <div className="page-shell page-section relative flex max-w-3xl flex-col items-center text-center !py-24 sm:!py-32">
+        <Reveal>
+          <h2 className="text-[2.25rem] font-semibold leading-[1.05] tracking-[-0.045em] text-neutral-950 sm:text-[3.25rem]">
+            The Future of Hiring Will Be Built Together.
+          </h2>
+          <p className="mt-5 max-w-xl text-sm leading-6 text-neutral-600">
+            Whether you&apos;re discovering your first opportunity, building your recruiting career, or
+            growing a world-class team, you&apos;re part of something bigger than a hiring platform.
+          </p>
+          <p className="mt-3 max-w-xl text-sm leading-6 text-neutral-600">
+            You&apos;re part of a network built on trust, expertise, and opportunity.
+          </p>
+          <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row">
+            <SolidLink href="/jobs">Find Jobs</SolidLink>
+            <GhostLink href="/become-a-recruiter">Become a Recruiter</GhostLink>
+            <GhostLink href="/sign-in">Start Hiring</GhostLink>
+          </div>
+        </Reveal>
       </div>
     </section>
   );

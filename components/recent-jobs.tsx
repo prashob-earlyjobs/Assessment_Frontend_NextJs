@@ -33,7 +33,7 @@ export function RecentJobs() {
 
   return (
     <section id="section-2" className="snap-section border-t border-black/10 bg-[#fafafa]">
-      <div className="mx-auto flex w-full max-w-6xl flex-col px-5 py-12 sm:px-8 sm:py-16">
+      <div className="page-shell page-section flex flex-col">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h2 className="max-w-2xl text-[2rem] font-semibold leading-[1.08] tracking-[-0.04em] text-neutral-950 sm:text-[2.75rem]">

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { CompanyLogosGrid } from "@/components/company-logos-grid";
+import { Reveal } from "@/components/ui/reveal";
 
 const network = [
   {
@@ -106,8 +107,8 @@ export function AgencyPartnershipsPage() {
   return (
     <main className="bg-white text-neutral-950">
       {/* 1. HERO — matches */}
-      <section className="mx-auto grid w-full max-w-[1120px] items-center gap-10 px-5 py-14 sm:px-8 sm:py-20 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-14">
-        <div className="max-w-xl">
+      <section className="page-shell page-section grid items-center gap-8 sm:gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-14">
+        <Reveal className="max-w-xl">
           <p className="text-[11px] font-semibold tracking-[0.16em] text-neutral-500 uppercase">
             For recruitment consultancies
           </p>
@@ -135,9 +136,9 @@ export function AgencyPartnershipsPage() {
               How It Works
             </Link>
           </div>
-        </div>
+        </Reveal>
 
-        <div className="relative mx-auto aspect-[8/7] w-full max-w-[520px] overflow-hidden rounded-[18px] lg:mx-0 lg:max-w-none">
+        <Reveal delay={80} className="media-frame mx-auto aspect-[8/7] w-full max-w-[520px] lg:mx-0 lg:max-w-none">
           <Image
             src="/agency-partnerships/hero-lounge.jpg"
             alt="Recruitment consultancy partnership"
@@ -146,11 +147,11 @@ export function AgencyPartnershipsPage() {
             sizes="(min-width: 1024px) 34rem, 90vw"
             className="object-cover object-center"
           />
-        </div>
+        </Reveal>
       </section>
 
       {/* 2. THE STORY — matches (two-column design shell) */}
-      <section className="mx-auto w-full max-w-[1120px] px-5 pb-16 sm:px-8 sm:pb-24">
+      <section className="page-shell page-section !pt-0">
         <div className="grid gap-4 lg:grid-cols-2 lg:gap-5">
           <div className="flex min-h-[340px] flex-col justify-between rounded-[22px] bg-[#f2f2f2] p-8 sm:min-h-[400px] sm:p-10">
             <div>
@@ -196,20 +197,20 @@ export function AgencyPartnershipsPage() {
       </section>
 
       {/* 3. THE NETWORK — surplus (added under current flow) */}
-      <section className="bg-[#f4f4f4] py-16 sm:py-24">
-        <div className="mx-auto w-full max-w-[1120px] px-5 sm:px-8">
-          <div className="max-w-2xl">
+      <section className="bg-[#f4f4f4]">
+        <div className="page-shell page-section">
+          <Reveal className="max-w-2xl">
             <p className="text-[11px] font-semibold tracking-[0.16em] text-neutral-500 uppercase">
               The network
             </p>
             <h2 className="mt-4 text-[2rem] leading-[1.1] font-medium tracking-[-0.04em] text-neutral-950 sm:text-[2.5rem]">
               Different strengths. One shared purpose.
             </h2>
-          </div>
+          </Reveal>
 
-          <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <ul className="reveal-stagger mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {network.map((item, i) => (
-              <li key={item.title} className="rounded-[22px] bg-white p-6 sm:p-7">
+              <Reveal as="li" key={item.title} className="rounded-[22px] bg-white p-6 sm:p-7">
                 <p className="text-[12px] font-semibold tracking-[0.12em] text-neutral-400">
                   {String(i + 1).padStart(2, "0")}
                 </p>
@@ -217,7 +218,7 @@ export function AgencyPartnershipsPage() {
                   {item.title}
                 </h3>
                 <p className="mt-3 text-[14px] leading-6 text-neutral-600">{item.body}</p>
-              </li>
+              </Reveal>
             ))}
           </ul>
 
@@ -230,7 +231,7 @@ export function AgencyPartnershipsPage() {
 
       {/* 4. HOW WE WORK — matches */}
       <section id="how-we-work" className="scroll-mt-24 bg-[#f4f4f4] text-neutral-950">
-        <div className="mx-auto w-full max-w-[1120px] px-5 py-16 sm:px-8 sm:py-24">
+        <div className="page-shell page-section">
           <div className="grid gap-8 lg:grid-cols-[7.5rem_minmax(0,1fr)] lg:gap-10">
             <p className="pt-1 text-[13px] text-neutral-500">How we work together</p>
             <div className="max-w-3xl">
@@ -275,13 +276,12 @@ export function AgencyPartnershipsPage() {
                   }}
                   className="grid scroll-mt-28 items-center gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-12"
                 >
-                  <div className="overflow-hidden rounded-[20px] bg-neutral-200">
+                  <div className="media-frame aspect-[4/3] bg-neutral-200">
                     <Image
                       src={step.image}
                       alt={step.alt}
-                      width={1200}
-                      height={900}
-                      className="aspect-[4/3] h-auto w-full object-cover object-center"
+                      fill
+                      className="object-cover object-center"
                       sizes="(min-width: 1024px) 34rem, 90vw"
                     />
                   </div>
@@ -349,8 +349,8 @@ export function AgencyPartnershipsPage() {
       </section>
 
       {/* 5 + 6. FINAL CTA + PARTNERSHIP FORM — matches */}
-      <section id="partnership-form" className="scroll-mt-24 bg-white px-5 py-16 sm:px-8 sm:py-24">
-        <div className="relative mx-auto w-full max-w-[1120px] overflow-hidden rounded-[28px]">
+      <section id="partnership-form" className="page-shell page-section scroll-mt-24">
+        <div className="relative overflow-hidden rounded-[28px]">
           <div className="relative flex min-h-[280px] items-center justify-center px-5 py-14 sm:min-h-[320px] sm:px-10 sm:py-16">
             <Image
               src="/agency-partnerships/cta-photo.jpg"

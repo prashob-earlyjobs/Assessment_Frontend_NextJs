@@ -173,7 +173,7 @@ export function Navbar({
           : "border-b border-transparent bg-transparent",
       )}
     >
-      <div className="mx-auto flex h-14 w-full max-w-6xl min-w-0 items-center justify-between gap-3 px-5 sm:h-16 sm:px-8 lg:grid lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:items-center">
+      <div className="mx-auto flex h-[4.9rem] w-full max-w-6xl min-w-0 items-center justify-between gap-3 px-5 sm:h-[5.6rem] sm:px-8 lg:grid lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:items-center">
         <Logo inverted={overHero} />
 
         <DesktopNav links={links} pathname={pathname} inverted={overHero} />

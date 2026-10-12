@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Reveal } from "@/components/ui/reveal";
 
 const milestones = [
   {
@@ -93,11 +94,12 @@ export function BeliefStoryPage() {
   return (
     <main className="bg-white text-neutral-950">
       {/* Section 1: Hero */}
-      <section className="mx-auto w-full max-w-6xl px-5 pt-16 pb-12 sm:px-8 sm:pt-24 sm:pb-16">
+      <section className="page-shell page-section !pt-16 sm:!pt-24 !pb-12 sm:!pb-16">
+        <Reveal>
         <p className="text-[11px] font-semibold tracking-[0.16em] text-brand uppercase">
           Our Story
         </p>
-        <div className="mt-6 grid items-end gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-14">
+        <div className="mt-6 grid items-end gap-8 sm:gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-14">
           <div>
             <h1 className="max-w-[16ch] text-[2.5rem] leading-[1.05] font-semibold tracking-[-0.045em] sm:text-[3.5rem]">
               We&apos;re Building a Better Way to Hire.
@@ -118,7 +120,7 @@ export function BeliefStoryPage() {
               <p className="font-semibold text-neutral-950">That belief became EarlyJobs.</p>
             </div>
           </div>
-          <div className="relative aspect-[4/3] overflow-hidden rounded-[22px] bg-[#f4f4f4]">
+          <div className="media-frame aspect-[4/3]">
             <Image
               src="/story/hero-partnership-handshake.jpg"
               alt="Recruiters and professionals collaborating across a desk"
@@ -129,12 +131,13 @@ export function BeliefStoryPage() {
             />
           </div>
         </div>
+        </Reveal>
       </section>
 
       {/* Section 2: Where It Began */}
       <section className="border-t border-black/6 bg-[#f7f5f2]">
-        <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-5 py-16 sm:px-8 sm:py-24 lg:grid-cols-2 lg:gap-14">
-          <div className="relative aspect-[5/4] overflow-hidden rounded-[22px] bg-white">
+        <Reveal className="page-shell page-section grid items-center gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-14">
+          <div className="media-frame aspect-[5/4] bg-white">
             <Image
               src="/agency-partnerships/story-team.jpg"
               alt="EarlyJobs team working together on recruitment"
@@ -179,18 +182,20 @@ export function BeliefStoryPage() {
               </p>
             </div>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* Section 3: How Our Thinking Evolved */}
-      <section className="mx-auto w-full max-w-6xl px-5 py-16 sm:px-8 sm:py-24">
+      <section className="page-shell page-section">
+        <Reveal>
         <h2 className="max-w-3xl text-[2rem] leading-[1.1] font-semibold tracking-[-0.04em] sm:text-[2.75rem]">
           One Problem Led Us to a Bigger Opportunity.
         </h2>
-        <ul className="mt-12 grid gap-8 sm:grid-cols-2">
+        </Reveal>
+        <ul className="reveal-stagger mt-12 grid gap-8 sm:grid-cols-2">
           {milestones.map((item) => (
-            <li key={item.n} className="min-w-0">
-              <div className="relative aspect-[16/10] overflow-hidden rounded-[18px] bg-[#f4f4f4]">
+            <Reveal as="li" key={item.n} className="min-w-0">
+              <div className="media-frame aspect-[16/10]">
                 <Image
                   src={item.image}
                   alt={item.alt}
@@ -204,17 +209,20 @@ export function BeliefStoryPage() {
               </p>
               <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em]">{item.title}</h3>
               <p className="mt-3 text-[15px] leading-7 text-neutral-600">{item.body}</p>
-            </li>
+            </Reveal>
           ))}
         </ul>
+        <Reveal>
         <p className="mt-10 max-w-3xl text-[15px] leading-7 text-neutral-600 sm:text-base">
           Each step expanded our understanding of what a better hiring system could look like.
         </p>
+        </Reveal>
       </section>
 
       {/* Section 4: What We're Building Today */}
       <section className="border-t border-black/6 bg-[#f7f5f2]">
-        <div className="mx-auto w-full max-w-6xl px-5 py-16 sm:px-8 sm:py-24">
+        <div className="page-shell page-section">
+          <Reveal>
           <h2 className="max-w-3xl text-[2rem] leading-[1.1] font-semibold tracking-[-0.04em] sm:text-[2.75rem]">
             A Connected Hiring Ecosystem.
           </h2>
@@ -223,10 +231,11 @@ export function BeliefStoryPage() {
             It should bring together the right people, technology and execution for the challenge at
             hand.
           </p>
-          <ul className="mt-12 grid gap-5 lg:grid-cols-3">
+          </Reveal>
+          <ul className="reveal-stagger mt-12 grid gap-5 sm:gap-6 lg:grid-cols-3">
             {ecosystem.map((item) => (
-              <li key={item.name} className="overflow-hidden rounded-[22px] bg-white">
-                <div className="relative aspect-[16/10]">
+              <Reveal as="li" key={item.name} className="overflow-hidden rounded-[20px] bg-white sm:rounded-[22px] transition-transform duration-500 hover:-translate-y-0.5">
+                <div className="media-frame aspect-[16/10] !rounded-none">
                   <Image
                     src={item.image}
                     alt={item.alt}
@@ -242,44 +251,52 @@ export function BeliefStoryPage() {
                   <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em]">{item.title}</h3>
                   <p className="mt-3 text-sm leading-6 text-neutral-600">{item.body}</p>
                 </div>
-              </li>
+              </Reveal>
             ))}
           </ul>
+          <Reveal>
           <p className="mt-10 max-w-3xl text-base font-semibold tracking-[-0.02em]">
             Different capabilities. One larger ambition: a better-connected way to hire.
           </p>
+          </Reveal>
         </div>
       </section>
 
       {/* Section 5: What We Believe */}
-      <section className="mx-auto w-full max-w-6xl px-5 py-16 sm:px-8 sm:py-24">
+      <section className="page-shell page-section">
+        <Reveal>
         <h2 className="mx-auto max-w-3xl text-center text-[2rem] leading-[1.1] font-semibold tracking-[-0.04em] sm:text-[2.75rem]">
           Talent Is Everywhere. Opportunity Should Be Too.
         </h2>
-        <div className="mt-14 grid gap-10 sm:grid-cols-2">
+        </Reveal>
+        <div className="reveal-stagger mt-12 grid gap-8 sm:mt-14 sm:grid-cols-2 sm:gap-10">
           {beliefs.map((belief) => (
-            <article key={belief.title} className="min-w-0">
-              <Image
-                src={belief.image}
-                alt={belief.alt}
-                width={974}
-                height={802}
-                className="h-auto w-full"
-              />
+            <Reveal as="article" key={belief.title} className="min-w-0">
+              <div className="media-frame aspect-[5/4]">
+                <Image
+                  src={belief.image}
+                  alt={belief.alt}
+                  fill
+                  sizes="(min-width: 640px) 28rem, 100vw"
+                  className="object-cover object-center"
+                />
+              </div>
               <h3 className="mt-5 text-xl font-semibold tracking-[-0.03em]">{belief.title}</h3>
               <p className="mt-3 text-[15px] leading-7 text-neutral-600">{belief.body}</p>
-            </article>
+            </Reveal>
           ))}
         </div>
+        <Reveal>
         <p className="mx-auto mt-12 max-w-2xl text-center text-[15px] leading-7 text-neutral-600">
           These beliefs shape the decisions we make, the products we build and the ecosystem
           we&apos;re working to grow.
         </p>
+        </Reveal>
       </section>
 
       {/* Section 6: The Network Behind the Work */}
       <section className="border-t border-black/6 bg-[#f7f5f2]">
-        <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-5 py-16 sm:px-8 sm:py-24 lg:grid-cols-2 lg:gap-14">
+        <Reveal className="page-shell page-section grid items-center gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-14">
           <div>
             <h2 className="max-w-[16ch] text-[2rem] leading-[1.1] font-semibold tracking-[-0.04em] sm:text-[2.75rem]">
               Built by People. Strengthened by Technology.
@@ -312,7 +329,7 @@ export function BeliefStoryPage() {
               </p>
             </div>
           </div>
-          <div className="relative aspect-[5/4] overflow-hidden rounded-[22px] bg-white">
+          <div className="media-frame aspect-[5/4] bg-white">
             <Image
               src="/freelance-recruiters/women-team.jpg"
               alt="EarlyJobs recruiter partners collaborating in person"
@@ -321,14 +338,14 @@ export function BeliefStoryPage() {
               className="object-cover object-center"
             />
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* Founder note — between network and looking ahead */}
       <section className="bg-[#eef4fb]">
-        <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-5 py-16 sm:px-8 sm:py-24 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16">
+        <Reveal className="page-shell page-section grid items-center gap-8 sm:gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16">
           <div>
-            <div className="relative aspect-[4/5] overflow-hidden rounded-[22px] bg-white">
+            <div className="media-frame aspect-[4/5] bg-white">
               <Image
                 src="/about_us_imgs/Saurav-Kumar.jpg"
                 alt="Saurav Kumar, Founder and CEO of EarlyJobs"
@@ -370,11 +387,12 @@ export function BeliefStoryPage() {
               </div>
             </div>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* Section 7: Looking Ahead */}
-      <section className="mx-auto w-full max-w-3xl px-5 py-16 sm:px-8 sm:py-24">
+      <section className="page-shell page-section !max-w-3xl">
+        <Reveal>
         <h2 className="text-[2rem] leading-[1.1] font-semibold tracking-[-0.04em] sm:text-[2.75rem]">
           Built in India. Growing With Every Connection.
         </h2>
@@ -399,10 +417,12 @@ export function BeliefStoryPage() {
             technology helps people do their best work.
           </p>
         </div>
+        </Reveal>
       </section>
 
       {/* Section 8: Final CTA */}
-      <section className="mx-auto w-full max-w-5xl px-5 pb-16 sm:px-8 sm:pb-24">
+      <section className="page-shell page-section !max-w-5xl !pt-0">
+        <Reveal>
         <div className="relative overflow-hidden rounded-[28px]">
           <Image
             src="/story/cta-bg-coral.png"
@@ -448,6 +468,7 @@ export function BeliefStoryPage() {
             </Link>
           </div>
         </div>
+        </Reveal>
       </section>
     </main>
   );
