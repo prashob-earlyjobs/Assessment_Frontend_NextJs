@@ -21,6 +21,7 @@ const routes = [
   "/blogs",
   "/resources",
   "/agency-onboarding",
+  "/contact-us",
   "/it-recruitment",
   "/finance-and-accounting-recruitment",
   "/sales-marketing-services",

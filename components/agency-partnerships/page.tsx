@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CompanyLogosGrid } from "@/components/company-logos-grid";
 
 const network = [
@@ -57,13 +57,6 @@ const steps = [
   },
 ] as const;
 
-const exploreOptions = [
-  "Hiring mandates",
-  "Freelance recruiter network",
-  "Multi-city hiring",
-  "Other",
-] as const;
-
 const faqs = [
   {
     q: "Who is this partnership for?",
@@ -79,43 +72,14 @@ const faqs = [
   },
   {
     q: "How do we get started?",
-    a: "Share a few details about your consultancy through the partnership form. Our team will review your information and get in touch to explore whether there's a good fit for collaboration.",
+    a: "Contact our team through the Contact Us page. We'll review your consultancy details and get in touch to explore whether there's a good fit for collaboration.",
   },
 ] as const;
 
 export function AgencyPartnershipsPage() {
-  const [sent, setSent] = useState(false);
   const [activeStage, setActiveStage] = useState<(typeof stages)[number]["id"]>("connect");
   const [faqIndex, setFaqIndex] = useState(0);
-  const [form, setForm] = useState({
-    name: "",
-    consultancy: "",
-    email: "",
-    phone: "",
-    specialisation: "",
-    regions: "",
-    explore: "",
-  });
   const stepRefs = useRef<Record<string, HTMLElement | null>>({});
-
-  const update = (field: keyof typeof form, value: string) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    const lines = [
-      `Name: ${form.name}`,
-      `Consultancy / Agency Name: ${form.consultancy}`,
-      `Work Email: ${form.email}`,
-      `Phone Number: ${form.phone}`,
-      `Primary Recruitment Specialisation: ${form.specialisation}`,
-      `City / Regions Served: ${form.regions}`,
-      `What would you like to explore?: ${form.explore}`,
-    ];
-    window.location.href = `mailto:info@earlyjobs.in?subject=${encodeURIComponent("Recruitment consultancy partnership")}&body=${encodeURIComponent(lines.join("\n"))}`;
-    setSent(true);
-  };
 
   useEffect(() => {
     const nodes = steps
@@ -159,7 +123,7 @@ export function AgencyPartnershipsPage() {
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link
-              href="#partnership-form"
+              href="/contact-us"
               className="inline-flex h-10 items-center justify-center rounded-full bg-neutral-950 px-5 text-[13px] font-medium text-white transition-colors hover:bg-neutral-800"
             >
               Become a Hiring Partner
@@ -335,7 +299,7 @@ export function AgencyPartnershipsPage() {
 
           <div className="mt-14 lg:pl-[calc(7.5rem+2.5rem)]">
             <Link
-              href="#partnership-form"
+              href="/contact-us"
               className="inline-flex h-11 items-center justify-center rounded-full bg-neutral-950 px-5 text-[13px] font-medium text-white transition-colors hover:bg-neutral-800"
             >
               Let&apos;s Explore a Partnership
@@ -408,147 +372,20 @@ export function AgencyPartnershipsPage() {
                 recruitment businesses work together.
               </p>
               <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-                <a
-                  href="#partnership-fields"
+                <Link
+                  href="/contact-us"
                   className="inline-flex h-11 items-center justify-center rounded-full bg-neutral-950 px-6 text-[13px] font-medium text-white hover:bg-neutral-800"
                 >
                   Become an EarlyJobs Hiring Partner
-                </a>
-                <a
-                  href="mailto:info@earlyjobs.in?subject=Recruitment%20consultancy%20partnership"
+                </Link>
+                <Link
+                  href="/contact-us"
                   className="inline-flex h-11 items-center justify-center rounded-full border border-black/10 bg-white px-6 text-[13px] font-medium text-neutral-950 hover:bg-neutral-50"
                 >
-                  Talk to Our Team
-                </a>
+                  Contact Us
+                </Link>
               </div>
             </div>
-          </div>
-
-          <div
-            id="partnership-fields"
-            className="scroll-mt-24 border-t border-black/8 bg-white px-5 py-10 sm:px-10 sm:py-12"
-          >
-            {sent ? (
-              <div className="mx-auto max-w-xl text-center">
-                <h3 className="text-[1.5rem] font-medium tracking-[-0.03em] text-neutral-950">
-                  Thank you for sharing your details.
-                </h3>
-                <p className="mt-3 text-[15px] leading-7 text-neutral-600">
-                  Our team will review your information and get in touch to explore whether
-                  there&apos;s a good fit for collaboration.
-                </p>
-              </div>
-            ) : (
-              <form onSubmit={onSubmit} className="mx-auto max-w-3xl">
-                <div className="max-w-xl">
-                  <h3 className="text-[1.35rem] font-medium tracking-[-0.03em] text-neutral-950 sm:text-[1.5rem]">
-                    Let&apos;s get to know your business.
-                  </h3>
-                  <p className="mt-2 text-[15px] leading-7 text-neutral-600">
-                    Share a few details. We&apos;ll explore whether there&apos;s a good fit for
-                    collaboration.
-                  </p>
-                </div>
-
-                <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                  <label className="block text-left">
-                    <span className="text-[12px] font-medium text-neutral-500">Name</span>
-                    <input
-                      required
-                      value={form.name}
-                      onChange={(e) => update("name", e.target.value)}
-                      className="mt-1.5 h-11 w-full rounded-xl border border-black/10 bg-[#fafafa] px-3.5 text-sm text-neutral-950 outline-none focus:border-black/25"
-                    />
-                  </label>
-                  <label className="block text-left">
-                    <span className="text-[12px] font-medium text-neutral-500">
-                      Consultancy / Agency Name
-                    </span>
-                    <input
-                      required
-                      value={form.consultancy}
-                      onChange={(e) => update("consultancy", e.target.value)}
-                      className="mt-1.5 h-11 w-full rounded-xl border border-black/10 bg-[#fafafa] px-3.5 text-sm text-neutral-950 outline-none focus:border-black/25"
-                    />
-                  </label>
-                  <label className="block text-left">
-                    <span className="text-[12px] font-medium text-neutral-500">Work Email</span>
-                    <input
-                      type="email"
-                      required
-                      value={form.email}
-                      onChange={(e) => update("email", e.target.value)}
-                      className="mt-1.5 h-11 w-full rounded-xl border border-black/10 bg-[#fafafa] px-3.5 text-sm text-neutral-950 outline-none focus:border-black/25"
-                    />
-                  </label>
-                  <label className="block text-left">
-                    <span className="text-[12px] font-medium text-neutral-500">Phone Number</span>
-                    <input
-                      type="tel"
-                      required
-                      value={form.phone}
-                      onChange={(e) => update("phone", e.target.value)}
-                      className="mt-1.5 h-11 w-full rounded-xl border border-black/10 bg-[#fafafa] px-3.5 text-sm text-neutral-950 outline-none focus:border-black/25"
-                    />
-                  </label>
-                  <label className="block text-left sm:col-span-2">
-                    <span className="text-[12px] font-medium text-neutral-500">
-                      Primary Recruitment Specialisation
-                    </span>
-                    <input
-                      required
-                      value={form.specialisation}
-                      onChange={(e) => update("specialisation", e.target.value)}
-                      className="mt-1.5 h-11 w-full rounded-xl border border-black/10 bg-[#fafafa] px-3.5 text-sm text-neutral-950 outline-none focus:border-black/25"
-                    />
-                  </label>
-                  <label className="block text-left sm:col-span-2">
-                    <span className="text-[12px] font-medium text-neutral-500">
-                      City / Regions Served
-                    </span>
-                    <input
-                      required
-                      value={form.regions}
-                      onChange={(e) => update("regions", e.target.value)}
-                      className="mt-1.5 h-11 w-full rounded-xl border border-black/10 bg-[#fafafa] px-3.5 text-sm text-neutral-950 outline-none focus:border-black/25"
-                    />
-                  </label>
-                  <label className="block text-left sm:col-span-2">
-                    <span className="text-[12px] font-medium text-neutral-500">
-                      What would you like to explore?
-                    </span>
-                    <select
-                      required
-                      value={form.explore}
-                      onChange={(e) => update("explore", e.target.value)}
-                      className="mt-1.5 h-11 w-full rounded-xl border border-black/10 bg-[#fafafa] px-3.5 text-sm text-neutral-950 outline-none focus:border-black/25"
-                    >
-                      <option value="" disabled>
-                        Select an option
-                      </option>
-                      {exploreOptions.map((option) => (
-                        <option key={option} value={option}>
-                          {option}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                </div>
-
-                <div className="mt-8 flex flex-wrap items-center gap-3">
-                  <button
-                    type="submit"
-                    className="inline-flex h-11 items-center justify-center rounded-full bg-neutral-950 px-6 text-[13px] font-medium text-white hover:bg-neutral-800"
-                  >
-                    Start the Conversation
-                  </button>
-                  <p className="max-w-md text-[12px] leading-5 text-neutral-500">
-                    Partnerships and hiring opportunities are subject to suitability, availability
-                    and mutually agreed terms.
-                  </p>
-                </div>
-              </form>
-            )}
           </div>
         </div>
       </section>
