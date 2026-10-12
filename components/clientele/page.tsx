@@ -398,17 +398,14 @@ export function CompanyTieUpsPage() {
           </p>
         </div>
 
-        <div className="relative mx-auto aspect-[8/7] w-full max-w-[520px] overflow-hidden rounded-[18px] bg-red-500 ring-4 ring-red-600 lg:mx-0 lg:max-w-none">
-          <span className="absolute top-3 left-3 z-20 rounded bg-red-700 px-2 py-1 text-[11px] font-bold tracking-wide text-white uppercase">
-            Design leftover · hero asset
-          </span>
+        <div className="relative mx-auto aspect-[8/7] w-full max-w-[520px] overflow-hidden rounded-[18px] bg-neutral-200 lg:mx-0 lg:max-w-none">
           <Image
-            src="/clientele/hero-recruiter.jpg"
-            alt="Hiring partner reviewing candidates"
+            src="/clientele/hero-team-meeting.jpg"
+            alt="Diverse business team meeting in a modern office"
             fill
             priority
             sizes="(min-width: 1024px) 34rem, 90vw"
-            className="object-cover object-[center_20%] opacity-50"
+            className="object-cover object-center"
           />
         </div>
       </section>
