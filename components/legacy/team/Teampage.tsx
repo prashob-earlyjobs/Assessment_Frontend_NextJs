@@ -82,7 +82,7 @@ const directors: Director[] = [
     id: "8",
     name: "Vishaal Pamulapati",
     designation: "Advisor",
-    imageUrl: "/images/vishaal-pamulapati.jpg",
+    imageUrl: "/images/vishaal-pamulapati-2.jpg",
     linkedInUrl: "https://www.linkedin.com/in/vishaal-pamulapati-4a392537/",
     biography:
       "Advisor supporting EarlyJobs with strategic guidance across growth, partnerships, and hiring network expansion.",

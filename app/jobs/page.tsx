@@ -43,7 +43,7 @@ export default async function JobsPage({
   const jobs = result?.jobs ?? [];
 
   return (
-    <main className="lg:h-[calc(100dvh-4rem)]">
+    <main className="lg:h-[calc(100dvh-var(--header-h))]">
       <JobsNavProvider>
         <JobFilters filters={filters} />
         <OpenRoles total={result ? result.totalResults : null}>
