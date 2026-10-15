@@ -117,7 +117,12 @@ export function Navbar({
   const overHero = isHome && !solid;
 
   useEffect(() => {
-    const headerOffset = () => (window.matchMedia("(min-width: 640px)").matches ? 64 : 56);
+    const headerOffset = () => {
+      const raw = getComputedStyle(document.documentElement).getPropertyValue("--header-h").trim();
+      const value = Number.parseFloat(raw);
+      if (!Number.isFinite(value)) return 0;
+      return raw.endsWith("rem") ? value * 16 : value;
+    };
 
     const onScroll = () => {
       if (pathname === "/") {
@@ -173,7 +178,7 @@ export function Navbar({
           : "border-b border-transparent bg-transparent",
       )}
     >
-      <div className="mx-auto flex h-[4.9rem] w-full max-w-6xl min-w-0 items-center justify-between gap-3 px-5 sm:h-[5.6rem] sm:px-8 lg:grid lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:items-center">
+      <div className="mx-auto flex h-[var(--header-h)] w-full max-w-6xl min-w-0 items-center justify-between gap-3 px-5 sm:px-8 lg:grid lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:items-center">
         <Logo inverted={overHero} />
 
         <DesktopNav links={links} pathname={pathname} inverted={overHero} />
@@ -258,7 +263,7 @@ export function Navbar({
         </div>
     </header>
     {/* Home hero paints under the fixed nav; other pages need the reserved offset. */}
-    {!isHome ? <div className="h-14 shrink-0 sm:h-16" aria-hidden /> : null}
+    {!isHome ? <div className="h-[var(--header-h)] shrink-0" aria-hidden /> : null}
     </>
   );
 }
