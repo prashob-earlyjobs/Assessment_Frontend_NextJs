@@ -30,7 +30,7 @@ const audienceRoles = [
     name: "Vishaal Pamulapati",
     title: "Angel Investor",
     body: "Supports EarlyJobs with strategic guidance across growth, partnerships, and hiring network expansion.",
-    image: "/images/vishaal-pamulapati.jpg",
+    image: "/images/vishaal-pamulapati-2.jpg",
     linkedInUrl: "https://www.linkedin.com/in/vishaal-pamulapati-4a392537/",
   },
   {
