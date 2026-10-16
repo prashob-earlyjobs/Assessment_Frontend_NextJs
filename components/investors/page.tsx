@@ -42,7 +42,6 @@ const audienceRoles = [
   },
   {
     name: "Power Tech Enterprises",
-    prefix: "&",
     centered: true,
   },
 ] as const;
