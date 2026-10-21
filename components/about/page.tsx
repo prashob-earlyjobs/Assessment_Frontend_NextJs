@@ -6,8 +6,6 @@ import { useState, type ChangeEvent, type FormEvent } from "react";
 import { toast } from "sonner";
 import { Reveal } from "@/components/ui/reveal";
 import { companyFacts } from "@/data/company-facts";
-import { formatStat, formatSummaryStat, type DashboardStats } from "@/lib/dashboard";
-import { useDashboardStats } from "@/lib/use-dashboard-stats";
 
 const network = [
   {
@@ -56,22 +54,14 @@ const steps = [
   },
 ] as const;
 
-function impactMetricsFromDashboard(stats: DashboardStats) {
-  return [
-    { value: formatStat(stats.recruiters), label: companyFacts.recruiters.label },
-    { value: formatStat(stats.companies), label: companyFacts.companies.label },
-    { value: formatSummaryStat(stats.interviews), label: companyFacts.interviews.label },
-    { value: formatSummaryStat(stats.joinings), label: companyFacts.joinings.label },
-    {
-      value: formatSummaryStat(stats.collegePartners),
-      label: companyFacts.collegePartners.label,
-    },
-    {
-      value: formatSummaryStat(stats.hiringPartners),
-      label: companyFacts.hiringPartners.label,
-    },
-  ] as const;
-}
+const impactMetrics = [
+  companyFacts.recruiters,
+  companyFacts.companies,
+  companyFacts.interviews,
+  companyFacts.joinings,
+  companyFacts.collegePartners,
+  companyFacts.hiringPartners,
+] as const;
 
 const exploreOptions = [
   "Hiring mandates",
@@ -117,8 +107,6 @@ function SectionTag({ children }: { children: string }) {
 export function AboutPage() {
   const [form, setForm] = useState<FormState>(initialForm);
   const [submitting, setSubmitting] = useState(false);
-  const dashboard = useDashboardStats();
-  const impactMetrics = impactMetricsFromDashboard(dashboard);
 
   const set =
     (key: keyof FormState) =>

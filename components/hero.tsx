@@ -4,12 +4,9 @@ import Image from "next/image";
 import { Search, ChevronDown } from "lucide-react";
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import { AnimatedStat } from "@/components/animated-stat";
 import { HeroMotion } from "@/components/home/motion";
-import {
-  fallbackDashboardStats,
-  formatStat,
-  type DashboardStats,
-} from "@/lib/dashboard";
+import { companyFacts, publishedNetworkStats } from "@/data/company-facts";
 import { jobsPageHref } from "@/lib/public-jobs";
 
 const clientLogos = Array.from({ length: 22 }, (_, index) => ({
@@ -53,52 +50,12 @@ const typingPhrases = [
   "Marketing Intern",
 ] as const;
 
-const statMeta = [
-  { key: "jobs" as const, label: "Jobs Openings", icon: "/v2/icons/hjobs.png" },
-  { key: "recruiters" as const, label: "Recruiters", icon: "/v2/icons/hCandidates.png" },
-  { key: "companies" as const, label: "Companies", icon: "/v2/icons/hCompanies.png" },
+const statIcons = [
+  "/v2/icons/hCandidates.png",
+  "/v2/icons/hCompanies.png",
+  "/v2/icons/hjobs.png",
+  "/v2/icons/hCandidates.png",
 ] as const;
-
-function useCountUp(target: number, duration = 2700) {
-  const [value, setValue] = useState(0);
-
-  useEffect(() => {
-    if (target <= 0) {
-      setValue(0);
-      return;
-    }
-
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) {
-      setValue(target);
-      return;
-    }
-
-    let frame = 0;
-    const start = performance.now();
-
-    const tick = (now: number) => {
-      const progress = Math.min(1, (now - start) / duration);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setValue(Math.round(target * eased));
-      if (progress < 1) frame = requestAnimationFrame(tick);
-    };
-
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [target, duration]);
-
-  return value;
-}
-
-function StatValue({ target }: { target: number }) {
-  const value = useCountUp(target);
-  return (
-    <span className="text-xl font-bold text-white tabular-nums sm:text-2xl md:text-3xl lg:text-4xl">
-      {formatStat(value).replace(/\+$/, "")}+
-    </span>
-  );
-}
 
 function useTypingPlaceholder(phrases: readonly string[], enabled: boolean) {
   const [text, setText] = useState("");
@@ -307,29 +264,6 @@ function LogoCarousel({
 }
 
 export function Hero() {
-  const [dashboard, setDashboard] = useState<DashboardStats>(fallbackDashboardStats);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    fetch("/api/dashboard")
-      .then(async (response) => {
-        if (!response.ok) throw new Error("dashboard failed");
-        return (await response.json()) as { success?: boolean; data?: DashboardStats };
-      })
-      .then((body) => {
-        if (cancelled || !body.success || !body.data) return;
-        setDashboard(body.data);
-      })
-      .catch(() => {
-        /* keep fallback */
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
   return (
     <HeroMotion>
       <div className="absolute inset-0">
@@ -369,18 +303,22 @@ export function Hero() {
           </p>
 
           <div className="mt-2 flex flex-wrap justify-center gap-2 pt-1 sm:mt-4 sm:gap-4 sm:pt-2 md:mt-8 md:gap-6 lg:mt-12 lg:gap-10 xl:gap-16">
-            {statMeta.map((stat) => (
+            {publishedNetworkStats.map((stat, index) => (
               <div key={stat.label} className="flex items-center gap-2 sm:gap-3">
                 <div className="relative h-8 w-8 shrink-0 sm:h-10 sm:w-10 md:h-12 md:w-12">
-                  <Image src={stat.icon} alt="" fill className="object-contain" />
+                  <Image src={statIcons[index] ?? statIcons[0]} alt="" fill className="object-contain" />
                 </div>
                 <div>
-                  <StatValue target={dashboard[stat.key]} />
+                  <AnimatedStat
+                    value={stat.value}
+                    className="text-xl font-bold text-white tabular-nums sm:text-2xl md:text-3xl lg:text-4xl"
+                  />
                   <p className="text-xs text-white/70 sm:text-sm md:text-base">{stat.label}</p>
                 </div>
               </div>
             ))}
           </div>
+          <p className="text-center text-xs text-white/60">{companyFacts.updatedLabel}</p>
         </div>
       </div>
 

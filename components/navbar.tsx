@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { trackEvent } from "@/lib/track-event";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 export type NavbarLink = {
@@ -210,6 +211,13 @@ export function Navbar({
           </a>
           <Link
             href={ctaHref}
+            onClick={() =>
+              trackEvent("cta_click", {
+                cta_id: "nav_primary",
+                audience: "recruiter",
+                location: "header",
+              })
+            }
             className="inline-flex h-9 items-center rounded-full bg-brand px-3.5 text-[13px] font-medium text-white transition-colors hover:bg-[#d85c42] sm:px-4"
           >
             {ctaLabel}

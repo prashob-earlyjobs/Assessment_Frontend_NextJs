@@ -18,6 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.earlyjobs.ai"),
   title: "EarlyJobs",
   description: "The recruiter-first hiring network for recruiters, employers, and job seekers.",
 };

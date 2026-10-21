@@ -294,9 +294,12 @@ export function SiteFooter() {
             >
               Sales & Marketing Recruitment
             </Link>
-            <span className="mt-4 text-base font-normal leading-5 text-gray-400 lg:mt-6">
+            <Link
+              href="/global-recruitment"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
               Global Recruitment
-            </span>
+            </Link>
             <Link
               href="/hr-executive-recruitment-services"
               className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"

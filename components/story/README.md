@@ -1,6 +1,6 @@
 # Our Story — placeholders to verify before launch
 
-Route: `/about-us/our-story`  
+Route: `/story` (`/about-us/our-story` 301s here)  
 Shared metrics: `data/company-facts.ts` (also used by Newsroom)
 
 ## Stats rendered as "—"
