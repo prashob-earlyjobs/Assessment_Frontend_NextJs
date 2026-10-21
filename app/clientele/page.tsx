@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { CompanyTieUpsPage } from "@/components/clientele/page";
 import { JsonLd } from "@/components/json-ld";
 import { pageMetadata } from "@/lib/page-metadata";
+import { getPublicCompanies } from "@/lib/public-companies";
 import schema from "@/schema/clientele.jsonld.json";
 
 export const metadata: Metadata = pageMetadata({
@@ -20,11 +21,12 @@ export const metadata: Metadata = pageMetadata({
   twitterCard: "summary",
 });
 
-export default function Page() {
+export default async function Page() {
+  const companies = await getPublicCompanies().catch(() => []);
   return (
     <>
       <JsonLd data={schema} />
-      <CompanyTieUpsPage />
+      <CompanyTieUpsPage companies={companies} />
     </>
   );
 }

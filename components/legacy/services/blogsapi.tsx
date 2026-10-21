@@ -1,6 +1,6 @@
 import { toast } from "sonner";
 
-const BACKEND_URL_2_0 = process.env.NEXT_PUBLIC_BACKEND_URL_2_0 || 'http://localhost:5001/api';
+const BACKEND_URL_2_0 = process.env.NEXT_PUBLIC_BACKEND_URL_2_0 || 'https://portal-bd-prod.earlyjobs.ai/api';
 
 // Types
 export type BlogStatus = 'draft' | 'published' | 'archived';

@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { blogService, Blog } from "@/components/legacy/services/blogsapi";
+import type { PublicBlogList } from "@/lib/public-blogs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -13,18 +15,23 @@ import Navbar from "../components/pages/navbar";
 import Header from "../components/pages/header";
 import Footer from "../components/pages/footer";
 
-function BlogsContent() {
+function BlogsContent({ initial }: { initial?: PublicBlogList | null }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [blogs, setBlogs] = useState<Blog[]>([]);
-  const [loading, setLoading] = useState(true);
+  const skipFirstFetch = useRef(Boolean(initial?.blogs));
+  const [blogs, setBlogs] = useState<Blog[]>((initial?.blogs as Blog[] | undefined) ?? []);
+  const [loading, setLoading] = useState(!initial?.blogs);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [totalResults, setTotalResults] = useState(0);
+  const [totalPages, setTotalPages] = useState(initial?.pagination.totalPages ?? 1);
+  const [totalResults, setTotalResults] = useState(initial?.pagination.totalResults ?? 0);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTag, setSelectedTag] = useState("");
-  const [allTags, setAllTags] = useState<string[]>([]);
+  const [allTags, setAllTags] = useState<string[]>(() => {
+    const tags = new Set<string>();
+    initial?.blogs.forEach((blog) => blog.tags?.forEach((tag) => tags.add(tag)));
+    return Array.from(tags);
+  });
   const itemsPerPage = 12;
 
   useEffect(() => {
@@ -38,6 +45,10 @@ function BlogsContent() {
   }, [searchParams]);
 
   useEffect(() => {
+    if (skipFirstFetch.current) {
+      skipFirstFetch.current = false;
+      return;
+    }
     fetchBlogs();
   }, [currentPage, selectedTag, searchTerm]);
 
@@ -230,10 +241,9 @@ function BlogsContent() {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-12">
                   {blogs.map((blog) => (
-                    <Card
+                      <Card
                       key={blog._id}
-                      className="group cursor-pointer overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-2 border-gray-100 hover:border-orange-200"
-                      onClick={() => router.push(`/blogs/${blog.slug}`)}
+                      className="group relative cursor-pointer overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-2 border-gray-100 hover:border-orange-200"
                     >
                       {/* Featured Image */}
                       {blog.featuredImage && (
@@ -264,7 +274,9 @@ function BlogsContent() {
 
                         {/* Title */}
                         <h2 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-orange-600 transition-colors">
-                          {blog.title}
+                          <Link href={`/blogs/${blog.slug}`} className="after:absolute after:inset-0">
+                            {blog.title}
+                          </Link>
                         </h2>
 
                         {/* Excerpt */}
@@ -368,14 +380,14 @@ function BlogsContent() {
   );
 }
 
-export default function BlogsPage() {
+export default function BlogsPage({ initial }: { initial?: PublicBlogList | null }) {
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-orange-500" />
       </div>
     }>
-      <BlogsContent />
+      <BlogsContent initial={initial} />
     </Suspense>
   );
 }

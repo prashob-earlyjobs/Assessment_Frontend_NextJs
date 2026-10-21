@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { CompanyLogosGrid } from "@/components/company-logos-grid";
+import type { PublicCompany } from "@/lib/public-companies";
 import { Reveal } from "@/components/ui/reveal";
 
 const brandQuotes = [
@@ -284,7 +285,7 @@ const faqs = [
   },
 ] as const;
 
-export function CompanyTieUpsPage() {
+export function CompanyTieUpsPage({ companies = [] }: { companies?: PublicCompany[] }) {
   const [growthIndex, setGrowthIndex] = useState(0);
   const [whyIndex, setWhyIndex] = useState(0);
   const [faqIndex, setFaqIndex] = useState(0);
@@ -491,6 +492,7 @@ export function CompanyTieUpsPage() {
       <CompanyLogosGrid
         title="Brands already hiring through EarlyJobs."
         body="Good partnerships are measured by the work we do together—clear communication, consistent execution and shared accountability."
+        companies={companies}
       />
 
       <section id="solutions" className="scroll-mt-24 bg-white py-16 sm:py-24">
