@@ -3,7 +3,14 @@ import React from 'react';
 import { Users, DollarSign, Building, Briefcase } from 'lucide-react';
 import './ProblemSolution.css';
 
-const ProblemSolution = () => {
+const ProblemSolution = ({ stats }) => {
+  const cards = [
+    { icon: DollarSign, value: stats?.companies, label: "Companies" },
+    { icon: Building, value: stats?.joinings, label: "Joinings" },
+    { icon: Users, value: stats?.recruiters, label: "Recruiters" },
+    { icon: Briefcase, value: stats?.interviews, label: "Interviews" },
+  ].filter((card) => card.value);
+
   return (
     <section className="section problem-section" id="problem">
       <div className="container">
@@ -16,29 +23,16 @@ const ProblemSolution = () => {
         </div>
 
         <div className="stats-grid">
-          <div className="stat-card">
-            <DollarSign className="stat-icon" />
-            <h3 className="stat-number">266+</h3>
-            <p className="stat-label">Companies</p>
-          </div>
-          
-          <div className="stat-card" style={{ animationDelay: "100ms" }}>
-            <Building className="stat-icon" />
-            <h3 className="stat-number">5,500+</h3>
-            <p className="stat-label">Joinings</p>
-          </div>
-          
-          <div className="stat-card" style={{ animationDelay: "200ms" }}>
-            <Users className="stat-icon" />
-            <h3 className="stat-number">3,449+</h3>
-            <p className="stat-label">Recruiters</p>
-          </div>
-          
-          <div className="stat-card" style={{ animationDelay: "300ms" }}>
-            <Briefcase className="stat-icon" />
-            <h3 className="stat-number">72,000+</h3>
-            <p className="stat-label">Interviews</p>
-          </div>
+          {cards.map((card, index) => {
+            const Icon = card.icon;
+            return (
+              <div key={card.label} className="stat-card" style={{ animationDelay: `${index * 100}ms` }}>
+                <Icon className="stat-icon" />
+                <h3 className="stat-number">{card.value}</h3>
+                <p className="stat-label">{card.label}</p>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

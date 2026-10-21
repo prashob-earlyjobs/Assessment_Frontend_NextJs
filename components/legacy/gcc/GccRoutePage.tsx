@@ -17,19 +17,20 @@ export function createGccMetadata(content: GccPageContent): Metadata {
       type: "website",
       images: [
         {
-          url: "/images/og-services.jpg",
-          width: 1200,
-          height: 630,
+          url: "/images/logo.png",
+          width: 1000,
+          height: 650,
           alt: content.meta.title,
         },
       ],
     },
     twitter: {
-      card: "summary_large_image",
+      card: "summary",
       title: content.meta.title,
       description: content.meta.description,
-      images: ["/images/og-services.jpg"],
+      images: ["/images/logo.png"],
     },
+    robots: { index: true, follow: true },
     alternates: {
       canonical: url,
     },

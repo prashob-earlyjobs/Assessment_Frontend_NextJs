@@ -81,6 +81,50 @@ export function formatStat(value: number) {
   return `${value.toLocaleString("en-IN")}+`;
 }
 
+export type NetworkMetric = { value: string; label: string };
+
+export type PublicNetworkStats = {
+  recruiters: string;
+  companies: string;
+  interviews: string;
+  joinings: string;
+  collegePartners: string;
+  hiringPartners: string;
+};
+
+/** Live public counts from the portal dashboard. */
+export async function getPublicNetworkStats(): Promise<PublicNetworkStats | null> {
+  try {
+    const dashboard = await getDashboard();
+    return {
+      recruiters: formatStat(dashboard.recruiters),
+      companies: formatStat(dashboard.companies),
+      interviews: formatSummaryStat(dashboard.interviews),
+      joinings: formatSummaryStat(dashboard.joinings),
+      collegePartners: formatSummaryStat(dashboard.collegePartners),
+      hiringPartners: formatSummaryStat(dashboard.hiringPartners),
+    };
+  } catch {
+    return null;
+  }
+}
+
+/** Live recruiter, company, interview, and joining counts from the portal dashboard. */
+export async function getNetworkMetrics(): Promise<NetworkMetric[] | null> {
+  const stats = await getPublicNetworkStats();
+  if (!stats) return null;
+  return [
+    { value: stats.recruiters, label: "Recruiters" },
+    { value: stats.companies, label: "Companies" },
+    { value: stats.interviews, label: "Interviews" },
+    { value: stats.joinings, label: "Joinings" },
+  ];
+}
+
+export function networkStatsSentence(stats: PublicNetworkStats) {
+  return `EarlyJobs reports ${stats.recruiters} recruiters, ${stats.companies} companies, ${stats.interviews} interviews, ${stats.joinings} successful joinings, ${stats.collegePartners} college partners and ${stats.hiringPartners} hiring partners.`;
+}
+
 /** Normalize API summary strings like "72000+" → "72,000+". */
 export function formatSummaryStat(value: string) {
   const trimmed = value.trim();

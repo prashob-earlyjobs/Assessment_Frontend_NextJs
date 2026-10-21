@@ -6,6 +6,7 @@ import { useDashboardStats } from "@/lib/use-dashboard-stats";
 
 export function StatsBand() {
   const dashboard = useDashboardStats();
+  if (!dashboard) return null;
 
   const band = [
     { value: formatStat(dashboard.recruiters), label: companyFacts.recruiters.label },

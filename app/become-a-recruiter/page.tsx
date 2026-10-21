@@ -1,4 +1,5 @@
 import { FreelanceRecruitersPage } from "@/components/freelance-recruiters/page";
+import { getNetworkMetrics } from "@/lib/dashboard";
 import { JsonLd } from "@/components/json-ld";
 import { pageMetadata } from "@/lib/page-metadata";
 import recruiterJsonLd from "@/schema/become-a-recruiter.jsonld.json";
@@ -18,11 +19,12 @@ export const metadata = pageMetadata({
     "Explore the recruiter programme and submit an application. Commercial terms follow the applicable agreement.",
 });
 
-export default function BecomeARecruiterPage() {
+export default async function BecomeARecruiterPage() {
+  const metrics = await getNetworkMetrics();
   return (
     <>
       <JsonLd data={recruiterJsonLd} />
-      <FreelanceRecruitersPage />
+      <FreelanceRecruitersPage metrics={metrics} />
     </>
   );
 }

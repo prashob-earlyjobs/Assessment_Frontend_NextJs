@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { NetworkMetricList } from "@/components/network-metric-list";
 import { Reveal } from "@/components/ui/reveal";
 import { earlyJobsContact } from "@/lib/contact";
 import { trackEvent } from "@/lib/track-event";
@@ -211,7 +212,11 @@ function Mark() {
   );
 }
 
-export function FreelanceRecruitersPage() {
+export function FreelanceRecruitersPage({
+  metrics = null,
+}: {
+  metrics?: { value: string; label: string }[] | null;
+}) {
   return (
     <main className="relative bg-white text-neutral-950">
       <section>
@@ -228,6 +233,7 @@ export function FreelanceRecruitersPage() {
               understand the onboarding process, and apply to participate in relevant hiring
               requirements.
             </p>
+            <NetworkMetricList metrics={metrics} />
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href={applyHref}

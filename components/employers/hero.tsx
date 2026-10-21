@@ -2,7 +2,6 @@
 
 import { GhostLink, SolidLink } from "@/components/home/primitives";
 import { HeroMotion } from "@/components/employers/motion";
-import { companyFacts } from "@/data/company-facts";
 
 const path = [
   "Employer",
@@ -14,13 +13,11 @@ const path = [
   "Joining",
 ] as const;
 
-export function EmployerHero() {
-  const metrics = [
-    { value: companyFacts.companies.value, label: companyFacts.companies.label },
-    { value: companyFacts.recruiters.value, label: companyFacts.recruiters.label },
-    { value: companyFacts.joinings.value, label: companyFacts.joinings.label },
-    { value: companyFacts.interviews.value, label: companyFacts.interviews.label },
-  ] as const;
+export function EmployerHero({
+  metrics,
+}: {
+  metrics: { value: string; label: string }[];
+}) {
 
   return (
     <section className="relative">

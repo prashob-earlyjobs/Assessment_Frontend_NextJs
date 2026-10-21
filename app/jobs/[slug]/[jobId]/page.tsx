@@ -2,8 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { ApplyJob } from "@/components/jobs/apply-job";
+import { JsonLd } from "@/components/json-ld";
 import { CompanyLogo } from "@/components/jobs/company-logo";
+import { jobPostingSchema } from "@/lib/job-posting";
 import { jobHref, jobSlug } from "@/lib/job-path";
+import { pageMetadata } from "@/lib/page-metadata";
 import { getPublicJob, jobsPageHref } from "@/lib/public-jobs";
 
 function LinkedInIcon() {
@@ -57,8 +60,17 @@ function sanitizeHtml(html: string) {
     .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, "")
     .replace(/<style[\s\S]*?>[\s\S]*?<\/style>/gi, "")
     .replace(/<iframe[\s\S]*?>[\s\S]*?<\/iframe>/gi, "")
+    .replace(/<h1(\s|>)/gi, "<h2$1")
+    .replace(/<\/h1>/gi, "</h2>")
     .replace(/\son\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, "")
     .replace(/javascript:/gi, "");
+}
+
+function plainText(html: string) {
+  return html
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 export async function generateMetadata({
@@ -68,8 +80,25 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { jobId } = await params;
   const job = await getPublicJob(jobId);
-  if (!job) return { title: "Job | EarlyJobs" };
-  return { title: `${job.title} | EarlyJobs` };
+  if (!job) return { title: { absolute: "Job | EarlyJobs" }, robots: { index: false, follow: false } };
+  const text = plainText(job.description);
+  const description = text
+    ? text.slice(0, 160).trim()
+    : `${job.title}${job.company ? ` at ${job.company}` : ""}${job.location ? ` in ${job.location}` : ""}.`;
+  return pageMetadata({
+    path: jobHref(job),
+    title: `${job.title} | EarlyJobs`,
+    description,
+    ogTitle: job.title,
+    ogDescription: description,
+    image: job.logoUrl || "/images/logo.png",
+    imageAlt: job.company || job.title,
+    twitterTitle: job.title,
+    twitterDescription: description,
+    twitterCard: job.logoUrl ? "summary_large_image" : "summary",
+    index: job.isActive,
+    follow: true,
+  });
 }
 
 export default async function JobPage({ params }: { params: Promise<{ slug: string; jobId: string }> }) {
@@ -80,12 +109,15 @@ export default async function JobPage({ params }: { params: Promise<{ slug: stri
   const canonical = jobSlug(job);
   if (slug !== canonical) redirect(`/jobs/${canonical}/${job.jobId}`);
 
+  const descriptionHtml = job.description ? sanitizeHtml(job.description) : "";
+  const posting = jobPostingSchema(job, descriptionHtml);
   const chips = [job.location, job.type, job.mode, job.experience, job.openings, job.category, job.hiringNeed, job.shift].filter(
     Boolean,
   );
 
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
+      {posting ? <JsonLd data={posting} /> : null}
       <Link href="/jobs" className="cursor-pointer text-[13px] font-medium text-brand">
         All roles
       </Link>
@@ -118,7 +150,7 @@ export default async function JobPage({ params }: { params: Promise<{ slug: stri
         {job.description ? (
           <div
             className="mt-5 text-[14px] leading-relaxed text-neutral-800 [&_h1]:mt-4 [&_h1]:text-[18px] [&_h1]:font-medium [&_h2]:mt-4 [&_h2]:text-[16px] [&_h2]:font-medium [&_li]:ml-5 [&_li]:list-disc [&_p]:mt-2 [&_ul]:mt-2"
-            dangerouslySetInnerHTML={{ __html: sanitizeHtml(job.description) }}
+            dangerouslySetInnerHTML={{ __html: descriptionHtml }}
           />
         ) : null}
         {job.keywords.length ? (

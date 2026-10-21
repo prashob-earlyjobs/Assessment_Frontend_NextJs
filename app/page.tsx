@@ -12,6 +12,7 @@ import { SuccessStories } from "@/components/success-stories";
 import { WhyEarlyJobs } from "@/components/why-earlyjobs";
 import { announcements } from "@/data/newsroom-announcements";
 import { pageMetadata } from "@/lib/page-metadata";
+import { getNetworkMetrics } from "@/lib/dashboard";
 import homeJsonLd from "@/schema/home.jsonld.json";
 
 export const metadata = pageMetadata({
@@ -29,11 +30,12 @@ export const metadata = pageMetadata({
     "Recruiter-led hiring and AI-assisted recruitment workflows for employers, recruiters, and job seekers.",
 });
 
-export default function Home() {
+export default async function Home() {
+  const stats = (await getNetworkMetrics()) ?? [];
   return (
     <main className="relative">
       <JsonLd data={homeJsonLd} />
-      <Hero />
+      <Hero stats={stats} />
       <section className="border-t border-black/10 bg-white">
         <div className="page-shell page-section">
           <h2 className="text-[2rem] font-semibold leading-[1.05] tracking-[-0.045em] text-neutral-950 sm:text-[2.75rem]">

@@ -1,4 +1,5 @@
 import type { JobListing } from "@/components/jobs/listing";
+import { jobHref } from "@/lib/job-path";
 
 const JOBS_ENDPOINT = "https://portal-bd-prod.earlyjobs.ai/api/public/jobs";
 const PAGE_SIZE = 20;
@@ -260,6 +261,10 @@ export type PublicJobDetail = {
   updates: "linkedin" | "instagram";
   isActive: boolean;
   isExternal: boolean;
+  datePosted: string;
+  minSalary: number | null;
+  maxSalary: number | null;
+  salaryMode: string;
   related: RelatedJob[];
 };
 
@@ -300,6 +305,7 @@ type PublicJobRecord = {
   shift_timings?: string;
   isActive?: boolean;
   isExternal?: boolean;
+  created_at?: string;
   related_jobs?: {
     title?: string;
     company_name?: string;
@@ -404,6 +410,10 @@ export async function getPublicJob(jobId: string): Promise<PublicJobDetail | nul
     updates: job.commission_type === "percentage" ? "linkedin" : "instagram",
     isActive: job.isActive !== false,
     isExternal: job.isExternal === true,
+    datePosted: job.created_at || "",
+    minSalary: typeof job.min_salary === "number" ? job.min_salary : null,
+    maxSalary: typeof job.max_salary === "number" ? job.max_salary : null,
+    salaryMode: job.salary_mode || "",
     related: relatedJobs(job.related_jobs),
   };
 }
@@ -430,4 +440,46 @@ export async function getPublishedJobs(page = 1, filters?: JobQuery): Promise<Pu
     totalPages: body.totalPages,
     totalResults: body.totalResults,
   };
+}
+
+export async function listPublishedJobPaths(): Promise<{ path: string; lastModified?: Date }[]> {
+  const paths: { path: string; lastModified?: Date }[] = [];
+  try {
+    let page = 1;
+    let totalPages = 1;
+    while (page <= totalPages && page <= 20) {
+      const url = new URL(JOBS_ENDPOINT);
+      url.searchParams.set("status", "published");
+      url.searchParams.set("page", String(page));
+      url.searchParams.set("pageSize", "100");
+      url.searchParams.set("limit", "100");
+      const response = await fetch(url, {
+        headers: { Accept: "*/*" },
+        next: { revalidate: 3600 },
+      });
+      if (!response.ok) break;
+      const body = (await response.json()) as JobsResponse & {
+        data?: { jobs?: PublicJob[] };
+      };
+      totalPages = body.totalPages || 1;
+      for (const job of body.data?.jobs ?? []) {
+        if (!job.jobId || !job.title) continue;
+        const lastModified = job.createdAt ? new Date(job.createdAt) : undefined;
+        paths.push({
+          path: jobHref({
+            title: job.title,
+            location: job.location || "",
+            minExperience: job.minExperience ?? 0,
+            maxExperience: job.maxExperience ?? job.minExperience ?? 0,
+            jobId: job.jobId,
+          }),
+          lastModified: lastModified && !Number.isNaN(lastModified.getTime()) ? lastModified : undefined,
+        });
+      }
+      page += 1;
+    }
+  } catch {
+    return paths;
+  }
+  return paths;
 }

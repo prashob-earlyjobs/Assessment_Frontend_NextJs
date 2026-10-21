@@ -1,4 +1,6 @@
 import type { MetadataRoute } from "next";
+import { listPublishedBlogPaths } from "@/lib/public-blogs";
+import { listPublishedJobPaths } from "@/lib/public-jobs";
 
 export const revalidate = 3600;
 
@@ -14,14 +16,12 @@ const routes = [
   "/investor-relations",
   "/clientele",
   "/employers",
-  "/recruiters",
   "/become-a-recruiter",
   "/agency-partnerships",
   "/franchise",
   "/internship",
   "/jobs",
   "/blogs",
-  "/resources",
   "/contact-us",
   "/it-recruitment",
   "/finance-and-accounting-recruitment",
@@ -41,13 +41,18 @@ const routes = [
   "/terms-and-conditions",
 ] as const;
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date();
-
-  return routes.map((path, index) => ({
+function entry(path: string, lastModified?: Date): MetadataRoute.Sitemap[number] {
+  return {
     url: `${baseUrl}${path === "/" ? "" : path}`,
-    lastModified: now,
-    changeFrequency: index === 0 ? "daily" : "weekly",
-    priority: index === 0 ? 1 : 0.8,
-  }));
+    ...(lastModified ? { lastModified } : {}),
+  };
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const [jobs, blogs] = await Promise.all([listPublishedJobPaths(), listPublishedBlogPaths()]);
+  return [
+    ...routes.map((path) => entry(path)),
+    ...blogs.map((blog) => entry(blog.path, blog.lastModified)),
+    ...jobs.map((job) => entry(job.path, job.lastModified)),
+  ];
 }
