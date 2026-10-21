@@ -277,7 +277,7 @@ export function BeliefStoryPage() {
                 Become a Recruiter
               </Link>
               <Link
-                href="/agency-onboarding"
+                href="/agency-partnerships"
                 className="inline-flex h-11 items-center justify-center rounded-lg bg-white px-5 text-sm font-medium text-neutral-950 hover:bg-white/90"
               >
                 Partner With Us

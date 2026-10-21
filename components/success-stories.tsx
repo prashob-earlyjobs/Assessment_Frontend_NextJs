@@ -26,7 +26,7 @@ const stories: Story[] = [
     id: "seekers",
     label: "Job Seekers",
     title: "A profile, then a conversation.",
-    body: "Professionals stop sending applications into silence. One profile reaches recruiters who are already working on roles that fit, and the next step is an interview instead of another form.",
+    body: "Explore job opportunities and connect with relevant hiring opportunities.",
     reviews: [
       {
         quote: "One recruiter reached out with a role that actually matched — interview the same week.",
@@ -54,7 +54,7 @@ const stories: Story[] = [
     id: "recruiters",
     label: "Recruiters",
     title: "Mandates you can actually close.",
-    body: "Recruiters work verified hiring requirements, place people they believe in, and see earnings tied to joinings. Milestones show up as placements, not as activity.",
+    body: "Explore opportunities to work on recruitment mandates through the EarlyJobs network. Commercial terms are governed by the applicable recruiter programme or mandate agreement.",
     reviews: [
       {
         title: "Career Revival",
@@ -83,7 +83,7 @@ const stories: Story[] = [
     id: "employers",
     label: "Employers",
     title: "A shorter path to the right person.",
-    body: "Teams spend less time screening and more time meeting recruiter-reviewed candidates. Hiring time drops. Quality holds. Joinings stick.",
+    body: "Get recruitment support for your hiring requirements. Our recruitment process focuses on candidate sourcing, coordination, and hiring execution.",
     reviews: [
       {
         title: "Trusted Partnership",
@@ -279,12 +279,9 @@ export function SuccessStories() {
         </aside>
       </div>
 
+      {/* TODO(content): replace these first-name quotes with three verified stories (photo, full name, role, city, LinkedIn, consent). */}
       <p className="mt-12 text-sm text-neutral-500">
-        <span className="tracking-[0.15em] text-brand" aria-hidden>
-          ★★★★★
-        </span>
-        <span className="sr-only">5 stars. </span> Trusted by recruiters, employers, and
-        professionals building the future of hiring.
+        Trusted by recruiters, employers, and professionals building the future of hiring.
       </p>
     </Frame>
   );

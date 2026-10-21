@@ -191,7 +191,7 @@ const solutionCatalog = [
     body: "Work with EarlyJobs through suitable consultancy partnerships, company tie-ups and recruitment network collaborations. Depending on the mandate, delivery can involve specialist consultancies, independent recruiters and district franchise partners.",
     listLabel: null,
     items: [] as string[],
-    href: "/agency-onboarding",
+    href: "/agency-partnerships",
     cta: "Become a Hiring Partner",
   },
 ] as const;

@@ -67,7 +67,7 @@ export function RoleRowsShimmer() {
 
 export function JobsLoading() {
   return (
-    <main className="lg:h-[calc(100dvh-4rem)]">
+    <main className="lg:h-[calc(100dvh-var(--header-h))]">
       <aside aria-hidden className={`${filtersPanelClass} max-lg:hidden lg:block`}>
         <Shimmer className="h-4 w-16" />
         <Shimmer className="mt-5 h-2.5 w-32" />

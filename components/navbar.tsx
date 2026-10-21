@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { trackEvent } from "@/lib/track-event";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 export type NavbarLink = {
@@ -117,7 +118,12 @@ export function Navbar({
   const overHero = isHome && !solid;
 
   useEffect(() => {
-    const headerOffset = () => (window.matchMedia("(min-width: 640px)").matches ? 64 : 56);
+    const headerOffset = () => {
+      const raw = getComputedStyle(document.documentElement).getPropertyValue("--header-h").trim();
+      const value = Number.parseFloat(raw);
+      if (!Number.isFinite(value)) return 0;
+      return raw.endsWith("rem") ? value * 16 : value;
+    };
 
     const onScroll = () => {
       if (pathname === "/") {
@@ -173,7 +179,7 @@ export function Navbar({
           : "border-b border-transparent bg-transparent",
       )}
     >
-      <div className="mx-auto flex h-[4.9rem] w-full max-w-6xl min-w-0 items-center justify-between gap-3 px-5 sm:h-[5.6rem] sm:px-8 lg:grid lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:items-center">
+      <div className="mx-auto flex h-[var(--header-h)] w-full max-w-6xl min-w-0 items-center justify-between gap-3 px-5 sm:px-8 lg:grid lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:items-center">
         <Logo inverted={overHero} />
 
         <DesktopNav links={links} pathname={pathname} inverted={overHero} />
@@ -183,28 +189,29 @@ export function Navbar({
             href="https://www.huntlo.ai/"
             target="_blank"
             rel="noreferrer"
-            className="huntlo-btn hidden lg:inline-flex shrink-0"
+            onClick={() =>
+              trackEvent("cta_click", {
+                cta_id: "nav_huntlo",
+                audience: "employer",
+                location: "header",
+              })
+            }
+            className={`hidden items-center gap-1 text-[13px] font-medium lg:inline-flex ${
+              overHero ? "text-white/80 hover:text-white" : "text-neutral-600 hover:text-neutral-950"
+            }`}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              className="huntlo-btn-badge"
-              src="/icons/huntlo-favicon.png"
-              alt=""
-              width={20}
-              height={20}
-            />
-            <span className="huntlo-btn-wrapper">
-              <span className="huntlo-btn-label">
-                <AiSparkIcon />
-                Try Huntlo
-              </span>
-              {Array.from({ length: 12 }, (_, i) => (
-                <span key={i} className={`huntlo-circle huntlo-circle-${i + 1}`} aria-hidden />
-              ))}
-            </span>
+            Huntlo AI for recruiting teams
+            <span aria-hidden>↗</span>
           </a>
           <Link
             href={ctaHref}
+            onClick={() =>
+              trackEvent("cta_click", {
+                cta_id: "nav_primary",
+                audience: "recruiter",
+                location: "header",
+              })
+            }
             className="inline-flex h-9 items-center rounded-full bg-brand px-3.5 text-[13px] font-medium text-white transition-colors hover:bg-[#d85c42] sm:px-4"
           >
             {ctaLabel}
@@ -251,14 +258,14 @@ export function Navbar({
                 rel="noreferrer"
                 className="rounded-lg px-3 py-2.5 text-sm font-medium text-neutral-700"
               >
-                Try Huntlo
+                Huntlo AI for recruiting teams ↗
               </a>
             </div>
           </nav>
         </div>
     </header>
     {/* Home hero paints under the fixed nav; other pages need the reserved offset. */}
-    {!isHome ? <div className="h-14 shrink-0 sm:h-16" aria-hidden /> : null}
+    {!isHome ? <div className="h-[var(--header-h)] shrink-0" aria-hidden /> : null}
     </>
   );
 }
@@ -410,34 +417,6 @@ function Logo({ inverted = false }: { inverted?: boolean }) {
         className={cx("h-8 w-auto sm:h-10", inverted && "brightness-0 invert")}
       />
     </Link>
-  );
-}
-
-function AiSparkIcon() {
-  return (
-    <svg
-      className="huntlo-btn-ai"
-      width="14"
-      height="14"
-      viewBox="0 0 16 16"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M8 1.2l1.05 3.55L12.6 5.8 9.05 7.25 8 10.8 6.95 7.25 3.4 5.8l3.55-1.05L8 1.2z"
-        fill="currentColor"
-      />
-      <path
-        d="M12.6 9.2l.55 1.85 1.85.55-1.85.55-.55 1.85-.55-1.85-1.85-.55 1.85-.55.55-1.85z"
-        fill="currentColor"
-        opacity="0.85"
-      />
-      <path
-        d="M3.2 9.8l.42 1.4 1.4.42-1.4.42-.42 1.4-.42-1.4-1.4-.42 1.4-.42.42-1.4z"
-        fill="currentColor"
-        opacity="0.7"
-      />
-    </svg>
   );
 }
 
