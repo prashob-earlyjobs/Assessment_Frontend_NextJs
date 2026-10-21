@@ -182,14 +182,18 @@ function formatCardDate(date: string) {
   return parsed.toLocaleDateString("en-US", { month: "long", year: "numeric" });
 }
 
-export function NewsroomPage() {
+export function NewsroomPage({
+  heading = "EarlyJobs Newsroom",
+}: {
+  heading?: string;
+}) {
   const [lead, ...side] = featured;
 
   return (
     <main className="bg-[#f7f8fa] text-[#1f2431]">
       <section className="page-shell page-section !pt-12 sm:!pt-16">
-        <h1 className="text-[2rem] leading-[1.2] font-light text-brand sm:text-[2.25rem]">
-          Discover what&apos;s new with EarlyJobs
+          <h1 className="text-[2rem] leading-[1.2] font-light text-brand sm:text-[2.25rem]">
+          {heading}
         </h1>
 
         <div className="mt-9 flex items-center gap-3">
@@ -299,7 +303,7 @@ export function NewsroomPage() {
             </a>
           </section>
 
-          <section>
+          <section id="press-releases">
             <h2 className="pb-2.5 text-[22px] leading-[1.2] font-bold tracking-[0.2px] text-[#1f2431]">
               Press Release
             </h2>

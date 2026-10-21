@@ -10,6 +10,7 @@ const routes = [
   "/story",
   "/team",
   "/newsroom",
+  "/press-release",
   "/investor-relations",
   "/clientele",
   "/employers",

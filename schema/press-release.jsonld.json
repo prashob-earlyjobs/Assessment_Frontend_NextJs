@@ -1,0 +1,40 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": "https://www.earlyjobs.ai/press-release#webpage",
+      "url": "https://www.earlyjobs.ai/press-release",
+      "name": "EarlyJobs Press Releases | Official Company Announcements",
+      "description": "Read official EarlyJobs press releases and company announcements published through our official communication channels.",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/press-release#breadcrumb"
+      },
+      "dateModified": "2026-10-21"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/press-release#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "EarlyJobs Press Releases",
+          "item": "https://www.earlyjobs.ai/press-release"
+        }
+      ]
+    }
+  ]
+}
