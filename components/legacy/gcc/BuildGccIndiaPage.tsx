@@ -124,8 +124,8 @@ const SUCCESS_FRAMEWORK = ["Discover", "Design", "Deploy", "Deliver", "Scale"];
 const FAQS = [
   ["What is a Global Capability Center?", "A GCC is an in-country operating center that supports engineering, product, finance, operations, or shared services for a global enterprise."],
   ["Why should companies build a GCC in India?", "India offers deep talent pools, strong digital infrastructure, mature startup ecosystems, and proven global delivery capability."],
-  ["How long does it take to hire a GCC team?", "Timelines depend on function, city, and hiring volume, but the right hiring strategy and recruiter deployment significantly reduce delays."],
-  ["Which city is best for a GCC?", "It depends on your business goals, talent needs, hiring volume, and cost model. Bengaluru, Hyderabad, Pune, Chennai, and NCR each offer different advantages."],
+  ["How long does it take to hire a GCC team?", "Timelines depend on function, city, seniority, and hiring volume. A hiring plan and recruiter support can help the process stay organized."],
+  ["Which city is best for a GCC?", "City choice depends on the business goals, talent needs, and hiring volume. EarlyJobs does not rank cities or provide real-estate advice."],
   ["Can EarlyJobs support greenfield GCC launches?", "Yes. EarlyJobs supports greenfield GCC launches from hiring strategy and workforce planning to recruiter deployment and execution."],
   ["How do recruiter pods work?", "Recruiter pods are dedicated hiring teams aligned to your functions, geography, and hiring goals, giving you more structure and accountability."],
   ["Can you support engineering and leadership hiring?", "Yes. We support both specialist engineering hiring and leadership hiring as part of broader GCC build-out."],
@@ -168,14 +168,10 @@ export default function BuildGccIndiaPage() {
                   Build Your Global Capability Center in India with Confidence
                 </h1>
                 <p className="mt-5 text-lg font-medium leading-relaxed text-slate-700 sm:text-xl">
-                  Whether you&apos;re launching your first Global Capability Center or expanding an existing operation,
-                  EarlyJobs helps you build high-performing teams through strategic hiring, recruiter networks, and
-                  Human + AI recruitment operations.
+                  EarlyJobs helps enterprises planning or expanding an India Global Capability Center align hiring strategy, talent planning, and recruitment execution with their business goals.
                 </p>
                 <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-600">
-                  India has become the world&apos;s leading destination for Global Capability Centers, but success depends
-                  on more than choosing a city. It depends on building the right hiring strategy, attracting
-                  exceptional talent, and creating a scalable recruitment engine from day one.
+                  This support covers recruitment execution. It does not include legal incorporation, tax, or real-estate advice.
                 </p>
                 <div className="mt-8 flex flex-wrap gap-4">
                   <a
@@ -469,11 +465,9 @@ export default function BuildGccIndiaPage() {
                   className={`h-5 w-5 shrink-0 text-slate-500 transition ${openFaq === index ? "rotate-180" : ""}`}
                 />
               </button>
-              {openFaq === index && (
-                <div className="border-t border-slate-200 px-5 py-4 text-sm leading-relaxed text-slate-600">
+              <div hidden={openFaq !== index} className="border-t border-slate-200 px-5 py-4 text-sm leading-relaxed text-slate-600">
                   {answer}
                 </div>
-              )}
             </div>
           ))}
         </div>

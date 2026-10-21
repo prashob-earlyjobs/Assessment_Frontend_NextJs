@@ -1,0 +1,40 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": "https://www.earlyjobs.ai/blogs#webpage",
+      "url": "https://www.earlyjobs.ai/blogs",
+      "name": "Recruitment Insights, Hiring Guides & Career Advice | EarlyJobs",
+      "description": "Explore practical recruitment insights, hiring guides, and career advice from EarlyJobs for employers, recruiters, and job seekers.",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/blogs#breadcrumb"
+      },
+      "dateModified": "2026-10-21"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/blogs#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Recruitment Insights, Hiring Guides & Career Advice",
+          "item": "https://www.earlyjobs.ai/blogs"
+        }
+      ]
+    }
+  ]
+}

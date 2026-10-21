@@ -206,8 +206,7 @@ const Hero = () => {
               Build Your Own <span>Recruitment Business</span> with EarlyJobs
             </h1>
             <p className="hero-description">
-              Join India's fastest-growing HRTech platform and launch a high-ROI
-              franchise in your city
+              Explore a recruitment franchise with EarlyJobs. Investment, support, and commercial terms are confirmed in the applicable franchise agreement. Outcomes vary and are not guaranteed.
             </p>
             <div className="hero-cta">
               <button onClick={handleApplyNow} className="btn-primary">

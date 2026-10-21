@@ -5,11 +5,11 @@ const EarningModel = () => {
   return (
     <section id="earnings" className="earnings-section">
       <div className="earnings-container">
-        <h2 className="earnings-heading">Real Earnings. Real Opportunity.</h2>
+        <h2 className="earnings-heading">Commercial terms</h2>
 
         <div className="earnings-grid">
           <div className="earnings-card">
-            <h3 className="earnings-card-title">You Earn When Hires Happen</h3>
+            <h3 className="earnings-card-title">Agreed in the franchise agreement</h3>
 
             <div className="earnings-item-container">
               <div className="earnings-item">
@@ -19,7 +19,7 @@ const EarningModel = () => {
                     Standard industry placement
                   </p>
                 </div>
-                <span className="earnings-item-value">70% commission</span>
+                <span className="earnings-item-value">Subject to agreement</span>
               </div>
 
               <div className="earnings-item">
@@ -29,7 +29,7 @@ const EarningModel = () => {
                     Premium placement model
                   </p>
                 </div>
-                <span className="earnings-item-value">50% commission</span>
+                <span className="earnings-item-value">Subject to agreement</span>
               </div>
 
               <div className="earnings-item">
@@ -39,7 +39,7 @@ const EarningModel = () => {
                     For bringing new clients
                   </p>
                 </div>
-                <span className="earnings-item-value">2% bonus</span>
+                <span className="earnings-item-value">Subject to agreement</span>
               </div>
 
               {/* <div className="earnings-item">
@@ -56,13 +56,13 @@ const EarningModel = () => {
             <div className="earnings-dark-card">
               <div className="earnings-dark-header">
                 <h3 className="earnings-dark-title">
-                  Estimated Monthly Income
+                  Income is not guaranteed
                 </h3>
-                <span className="earnings-dark-value">₹2–2.5 Lakhs</span>
+                <span className="earnings-dark-value">Varies</span>
               </div>
 
               <p className="earnings-dark-subtitle">
-                Based on average franchise activity after 6 months
+                Results depend on the business, location, effort, and market conditions
               </p>
 
               <div className="earnings-feature-list">
@@ -70,28 +70,28 @@ const EarningModel = () => {
                   <div className="earnings-feature-icon-wrapper">
                     <span className="earnings-feature-icon">✓</span>
                   </div>
-                  <span>15-20 placements per month*</span>
+                  <span>Placement volume is not guaranteed</span>
                 </div>
                 <div className="earnings-feature-item">
                   <div className="earnings-feature-icon-wrapper">
                     <span className="earnings-feature-icon">✓</span>
                   </div>
-                  <span>20+ assessments conducted</span>
+                  <span>Activity depends on available mandates</span>
                 </div>
                 <div className="earnings-feature-item">
                   <div className="earnings-feature-icon-wrapper">
                     <span className="earnings-feature-icon">✓</span>
                   </div>
-                  <span>5+ active client relationships</span>
+                  <span>Client relationships are not guaranteed</span>
                 </div>
               </div>
             </div>
 
             <div className="earnings-gradient-card">
               <h3 className="earnings-gradient-title">
-                Break-even in just 8-12 months ✅
+                Payback period is not guaranteed
               </h3>
-              <p>Quick return on your franchise investment</p>
+              <p>EarlyJobs does not promise a return on investment</p>
             </div>
           </div>
         </div>

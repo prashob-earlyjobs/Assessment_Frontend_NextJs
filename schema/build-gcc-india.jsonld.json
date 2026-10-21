@@ -1,0 +1,124 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.earlyjobs.ai/build-gcc-india#webpage",
+      "url": "https://www.earlyjobs.ai/build-gcc-india",
+      "name": "Build a GCC in India | Hiring Strategy & Expansion | EarlyJobs",
+      "description": "EarlyJobs helps enterprises planning or expanding an India Global Capability Center align hiring strategy, talent planning, and recruitment execution with their business goals.",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/build-gcc-india#breadcrumb"
+      },
+      "dateModified": "2026-10-21"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/build-gcc-india#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Build a GCC in India",
+          "item": "https://www.earlyjobs.ai/build-gcc-india"
+        }
+      ]
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.earlyjobs.ai/build-gcc-india#service",
+      "name": "GCC hiring strategy and recruitment execution in India",
+      "description": "EarlyJobs helps enterprises planning or expanding an India Global Capability Center align hiring strategy, talent planning, and recruitment execution with their business goals.",
+      "provider": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "India"
+      },
+      "url": "https://www.earlyjobs.ai/build-gcc-india"
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.earlyjobs.ai/build-gcc-india#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is a Global Capability Center?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A GCC is an in-country operating center that supports engineering, product, finance, operations, or shared services for a global enterprise."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why should companies build a GCC in India?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "India offers deep talent pools, strong digital infrastructure, mature startup ecosystems, and proven global delivery capability."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How long does it take to hire a GCC team?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Timelines depend on function, city, seniority, and hiring volume. A hiring plan and recruiter support can help the process stay organized."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which city is best for a GCC?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "City choice depends on the business goals, talent needs, and hiring volume. EarlyJobs does not rank cities or provide real-estate advice."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can EarlyJobs support greenfield GCC launches?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. EarlyJobs supports greenfield GCC launches from hiring strategy and workforce planning to recruiter deployment and execution."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do recruiter pods work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Recruiter pods are dedicated hiring teams aligned to your functions, geography, and hiring goals, giving you more structure and accountability."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can you support engineering and leadership hiring?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. We support both specialist engineering hiring and leadership hiring as part of broader GCC build-out."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you help with workforce planning?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Workforce planning, hiring roadmap design, and talent mapping are central to our India expansion support."
+          }
+        }
+      ]
+    }
+  ]
+}

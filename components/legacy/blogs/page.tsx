@@ -131,10 +131,10 @@ function BlogsContent() {
           {/* Header Section */}
           <div className="text-center mb-12">
             <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-              Our <span className="text-orange-500">Blog</span>
+              Recruitment Insights, Hiring Guides & Career Advice
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Expert tips, insights, and success stories to help you navigate your career journey
+              Explore practical recruitment insights, hiring guides, and career advice from EarlyJobs for employers, recruiters, and job seekers.
             </p>
           </div>
 

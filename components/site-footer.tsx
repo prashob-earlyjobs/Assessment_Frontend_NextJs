@@ -330,7 +330,7 @@ export function SiteFooter() {
               className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
             >
               <Building className="mr-2 inline-block h-5 w-5" />
-              Company Tie-Ups
+              Hiring Partners
             </Link>
             <Link
               href="/franchise"
