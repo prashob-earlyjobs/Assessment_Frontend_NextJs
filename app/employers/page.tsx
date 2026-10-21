@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { JsonLd } from "@/components/json-ld";
 import { pageMetadata } from "@/lib/page-metadata";
+import { getPublicNetworkStats } from "@/lib/dashboard";
 import schema from "@/schema/employers.jsonld.json";
 import { EmployerFaq } from "@/components/employers/faq";
 import { EmployerHero } from "@/components/employers/hero";
@@ -27,7 +28,16 @@ export const metadata: Metadata = pageMetadata({
   twitterCard: "summary",
 });
 
-export default function EmployersPage() {
+export default async function EmployersPage() {
+  const stats = await getPublicNetworkStats();
+  const metrics = stats
+    ? [
+        { value: stats.companies, label: "Companies" },
+        { value: stats.recruiters, label: "Recruiters" },
+        { value: stats.joinings, label: "Joinings" },
+        { value: stats.interviews, label: "Interviews" },
+      ]
+    : [];
   return (
     <main className="relative bg-white">
       <div
@@ -40,7 +50,7 @@ export default function EmployersPage() {
       />
       <div className="relative">
         <JsonLd data={schema} />
-        <EmployerHero />
+        <EmployerHero metrics={metrics} />
         <WhyHiringChanged />
         <EmployerHowItWorks />
         <WhyCompaniesChoose />

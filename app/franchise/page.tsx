@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Franchise from "@/components/legacy/franchise/franchise";
 import { JsonLd } from "@/components/json-ld";
+import { getPublicNetworkStats } from "@/lib/dashboard";
 import { pageMetadata } from "@/lib/page-metadata";
 import schema from "@/schema/franchise.jsonld.json";
 
@@ -20,11 +21,12 @@ export const metadata: Metadata = pageMetadata({
   twitterCard: "summary",
 });
 
-export default function Page() {
+export default async function Page() {
+  const stats = await getPublicNetworkStats();
   return (
     <>
       <JsonLd data={schema} />
-      <Franchise />
+      <Franchise stats={stats} />
     </>
   );
 }

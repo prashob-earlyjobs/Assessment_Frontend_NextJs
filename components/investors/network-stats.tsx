@@ -1,10 +1,14 @@
-"use client";
+import { formatStat, formatSummaryStat, getDashboard } from "@/lib/dashboard";
 
-import { formatStat, formatSummaryStat } from "@/lib/dashboard";
-import { useDashboardStats } from "@/lib/use-dashboard-stats";
+export async function NetworkStatsCopy() {
+  let dashboard: Awaited<ReturnType<typeof getDashboard>> | null = null;
+  try {
+    dashboard = await getDashboard();
+  } catch {
+    dashboard = null;
+  }
 
-export function NetworkStatsCopy() {
-  const dashboard = useDashboardStats();
+  if (!dashboard) return null;
 
   return (
     <p className="mt-5 max-w-xl text-[15px] leading-7 text-[#3a3a3a] sm:text-base">

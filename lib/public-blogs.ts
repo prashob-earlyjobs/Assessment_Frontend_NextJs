@@ -81,3 +81,29 @@ export async function getPublishedBlogBySlug(
     return "unavailable";
   }
 }
+
+export async function listPublishedBlogPaths(): Promise<{ path: string; lastModified?: Date }[]> {
+  const paths: { path: string; lastModified?: Date }[] = [];
+  try {
+    let page = 1;
+    let totalPages = 1;
+    while (page <= totalPages && page <= 10) {
+      const list = await getPublishedBlogs({ page });
+      if (!list) break;
+      totalPages = Math.max(list.pagination?.totalPages || 1, Math.ceil((list.pagination?.totalResults || list.blogs.length) / 12));
+      for (const blog of list.blogs) {
+        if (!blog.slug || (blog.status && blog.status !== "published")) continue;
+        const raw = blog.updatedAt || blog.publishedAt || blog.createdAt;
+        const lastModified = raw ? new Date(raw) : undefined;
+        paths.push({
+          path: `/blogs/${blog.slug}`,
+          lastModified: lastModified && !Number.isNaN(lastModified.getTime()) ? lastModified : undefined,
+        });
+      }
+      page += 1;
+    }
+  } catch {
+    return paths;
+  }
+  return paths;
+}

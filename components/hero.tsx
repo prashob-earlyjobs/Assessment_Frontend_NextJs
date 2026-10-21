@@ -7,7 +7,7 @@ import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatedStat } from "@/components/animated-stat";
 import { HeroMotion } from "@/components/home/motion";
-import { companyFacts, publishedNetworkStats } from "@/data/company-facts";
+import { companyFacts } from "@/data/company-facts";
 import { jobsPageHref } from "@/lib/public-jobs";
 import { trackEvent } from "@/lib/track-event";
 
@@ -282,7 +282,11 @@ function LogoCarousel() {
   );
 }
 
-export function Hero() {
+export function Hero({
+  stats,
+}: {
+  stats: { value: string; label: string }[];
+}) {
   const [audience, setAudience] = useState<(typeof audiences)[number]["id"]>("job");
   const active = audiences.find((item) => item.id === audience) ?? audiences[0];
 
@@ -366,7 +370,7 @@ export function Hero() {
           </p>
 
           <div className="mt-2 flex flex-wrap justify-center gap-2 pt-1 sm:mt-4 sm:gap-4 sm:pt-2 md:mt-8 md:gap-6 lg:mt-12 lg:gap-10 xl:gap-16">
-            {publishedNetworkStats.map((stat, index) => (
+            {stats.map((stat, index) => (
               <div key={stat.label} className="flex items-center gap-2 sm:gap-3">
                 <div className="relative h-8 w-8 shrink-0 sm:h-10 sm:w-10 md:h-12 md:w-12">
                   <Image src={statIcons[index] ?? statIcons[0]} alt="" fill className="object-contain" />

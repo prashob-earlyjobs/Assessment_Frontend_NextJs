@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Reveal } from "@/components/ui/reveal";
-import { companyFacts, networkStatsSentence } from "@/data/company-facts";
+import { companyFacts } from "@/data/company-facts";
 
 const network = [
   {
@@ -41,10 +41,6 @@ const aboutFaqs = [
     q: "Does EarlyJobs hire outside major cities?",
     a: "Yes. The network is designed to reach talent across locations, including Tier 2 and Tier 3 cities, through recruiters who understand their local markets.",
   },
-  {
-    q: "How big is the EarlyJobs network?",
-    a: networkStatsSentence,
-  },
 ] as const;
 
 /** TODO(content): leadership names, photos, LinkedIn links and milestone years must come from the founders. Render nothing until that copy exists. */
@@ -80,15 +76,6 @@ const steps = [
   },
 ] as const;
 
-const impactMetrics = [
-  companyFacts.recruiters,
-  companyFacts.companies,
-  companyFacts.interviews,
-  companyFacts.joinings,
-  companyFacts.collegePartners,
-  companyFacts.hiringPartners,
-] as const;
-
 const pill =
   "inline-flex h-11 items-center justify-center rounded-[6px] px-5 text-[13px] font-medium transition-[border-radius,background-color] duration-500 ease-in-out hover:rounded-[22px]";
 
@@ -100,7 +87,16 @@ function SectionTag({ children }: { children: string }) {
   );
 }
 
-export function AboutPage() {
+export function AboutPage({
+  metrics,
+  networkSentence,
+}: {
+  metrics: { value: string; label: string }[];
+  networkSentence: string | null;
+}) {
+  const faqs = networkSentence
+    ? [...aboutFaqs, { q: "How big is the EarlyJobs network?", a: networkSentence }]
+    : [...aboutFaqs];
   return (
     <main className="relative bg-[#f7f5f2] text-neutral-950">
       {/* HERO */}
@@ -312,7 +308,7 @@ export function AboutPage() {
             </p>
           </Reveal>
           <ul className="reveal-stagger mt-12 grid grid-cols-2 gap-0 border-t border-black/10 sm:grid-cols-3">
-            {impactMetrics.map((item) => (
+            {metrics.map((item) => (
               <Reveal
                 as="li"
                 key={item.label}
@@ -414,7 +410,7 @@ export function AboutPage() {
             FAQ
           </h2>
           <div className="mt-8 divide-y divide-black/10 border-t border-black/10">
-            {aboutFaqs.map((item) => (
+            {faqs.map((item) => (
               <details key={item.q} className="group py-5">
                 <summary className="cursor-pointer list-none text-base font-semibold marker:content-none [&::-webkit-details-marker]:hidden">
                   {item.q}
