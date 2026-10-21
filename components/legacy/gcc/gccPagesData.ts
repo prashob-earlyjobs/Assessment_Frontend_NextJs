@@ -934,9 +934,9 @@ export const indiaGccHiringServices: GccPageContent = {
   slug: "india-gcc-hiring-services",
   variant: "pan-india",
   meta: {
-    title: "India GCC Hiring Services | EarlyJobs.ai",
+    title: "India GCC Hiring Services | Build Your Talent Team | EarlyJobs",
     description:
-      "Pan-India GCC hiring services with dedicated recruiter pods, multi-city execution, and Human + AI recruitment operations for enterprise Global Capability Centers.",
+      "Build your India Global Capability Center team with structured hiring support, recruiter networks and AI-assisted recruitment workflows from EarlyJobs.",
     keywords: [
       "India GCC hiring services",
       "GCC hiring India",
@@ -947,13 +947,13 @@ export const indiaGccHiringServices: GccPageContent = {
   },
   hero: {
     eyebrow: "India GCC Hiring Services",
-    headline: "Pan-India GCC Hiring Services Built for Enterprise Scale",
+    headline: "India GCC Hiring Services for Global Businesses",
     subheadline:
-      "Execute hiring across India's talent hubs with dedicated recruiter pods, nationwide networks, and Human + AI recruitment operations designed for Global Capability Centers.",
+      "EarlyJobs helps employers translate GCC workforce requirements into structured recruitment priorities, candidate sourcing and hiring execution.",
     paragraph:
-      "EarlyJobs delivers end-to-end GCC hiring services across Bengaluru, Hyderabad, Pune, Chennai, NCR, and beyond—helping enterprises hire engineering, product, leadership, and business talent with speed, structure, and visibility.",
-    primaryCta: "Book India GCC Hiring Consultation",
-    secondaryCta: "Download India Hiring Services Guide",
+      "This support covers recruitment execution. It does not include legal incorporation, tax, or real-estate advice, and it does not rank cities.",
+    primaryCta: "Discuss Your GCC Hiring Plan",
+    secondaryCta: "Explore GCC Hiring Solutions",
     trustBar: [
       "Pan-India Coverage",
       "Multi-City Hiring",
@@ -986,7 +986,7 @@ export const indiaGccHiringServices: GccPageContent = {
     rows: [
       { traditional: "City-by-city agencies", enterprise: "One pan-India hiring partner" },
       { traditional: "Inconsistent processes", enterprise: "Standardized recruitment operations" },
-      { traditional: "Local-only visibility", enterprise: "Unified hiring dashboards" },
+      { traditional: "Local-only visibility", enterprise: "Reporting only when it is part of the agreed service" },
       { traditional: "Separate recruiter teams", enterprise: "Coordinated recruiter network" },
       { traditional: "Reactive city hiring", enterprise: "National workforce planning" },
     ],
@@ -1035,7 +1035,7 @@ export const indiaGccHiringServices: GccPageContent = {
   differentiators: {
     heading: "Why Enterprises Choose EarlyJobs for India Hiring",
     items: [
-      "400+ Recruiter Network",
+      "3,449+ Recruiters",
       "Human + AI Hiring Infrastructure",
       "Multi-City Execution",
       "Dedicated Hiring Pods",
@@ -1046,7 +1046,7 @@ export const indiaGccHiringServices: GccPageContent = {
   outcomes: {
     heading: "Business Outcomes",
     items: [
-      "Faster Multi-City Hiring",
+      "Structured multi-city hiring",
       "Reduced Vendor Complexity",
       "Improved Hiring Visibility",
       "Higher Offer Acceptance",
@@ -1087,9 +1087,9 @@ export const indiaGccHiringServices: GccPageContent = {
   finalCta: {
     heading: "Ready to Scale Hiring Across India?",
     paragraph:
-      "Partner with EarlyJobs for pan-India GCC hiring services that combine recruiter networks, Human + AI operations, and enterprise-grade execution.",
-    primaryCta: "Book India GCC Hiring Consultation",
-    secondaryCta: "Download India Hiring Services Guide",
+      "EarlyJobs can discuss India GCC hiring for the roles in scope. This support covers recruitment execution.",
+    primaryCta: "Discuss Your GCC Hiring Plan",
+    secondaryCta: "Explore GCC Hiring Solutions",
   },
 };
 

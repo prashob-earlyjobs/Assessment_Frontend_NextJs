@@ -138,11 +138,11 @@ const SUCCESS = [
 
 const FAQS = [
   ["What is offshore capability center hiring?", "It is the structured hiring execution required to build and scale offshore capability centers across engineering, product, finance, shared services, and leadership teams."],
-  ["How is it different from regular recruitment?", "Offshore hiring requires operational governance, multi-stakeholder coordination, dashboards, recruiter capacity planning, and scalable execution beyond standard recruitment."],
+  ["How is it different from regular recruitment?", "Offshore capability center hiring is recruitment execution for the roles in scope. EarlyJobs does not provide legal, tax, or incorporation advice."],
   ["How does EarlyJobs support offshore expansion?", "EarlyJobs operationalizes hiring with recruiter pods, AI-assisted workflows, governance, and nationwide execution support."],
   ["Can you hire engineering teams?", "Yes. Engineering hiring is a core capability, including backend, frontend, cloud, DevOps, AI, ML, cybersecurity, and QA."],
   ["Can you support multiple cities?", "Yes. We support offshore hiring across multiple Indian cities through a distributed recruiter network and centralized coordination."],
-  ["Do you provide hiring analytics?", "Yes. We provide hiring dashboards, recruiter performance tracking, funnel visibility, and leadership reporting."],
+  ["Do you provide hiring analytics?", "Reporting is included only when it is part of the agreed service. EarlyJobs does not claim a standard hiring dashboard on this page."],
   ["How quickly can hiring begin?", "Hiring can begin quickly once discovery, hiring strategy, and recruiter deployment are aligned with your expansion plan."],
   ["Can you support leadership hiring?", "Yes. We support leadership and specialized hiring alongside high-volume and business-critical offshore roles."],
   ["What industries do you specialize in?", "We support offshore hiring for technology, product, finance, operations, customer success, and shared services functions across sectors."],
@@ -177,30 +177,27 @@ export default function OffshoreCapabilityCenterHiringPage() {
                 Offshore Capability Center Hiring
               </p>
               <h1 className="text-3xl font-bold leading-[1.12] sm:text-4xl lg:text-5xl">
-                Offshore Capability Center Hiring Built for Enterprise Scale
+                Build Your Offshore Capability Center with the Right Talent
               </h1>
               <p className="mt-5 text-lg font-medium leading-relaxed text-slate-200 sm:text-xl">
-                From engineering and product to finance, shared services, and leadership hiring, EarlyJobs helps
-                Global Capability Centers build scalable hiring operations through Human + AI recruitment infrastructure.
+                EarlyJobs helps businesses organize hiring priorities and connect recruitment execution with the capabilities they want to build.
               </p>
               <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-400">
-                Whether you&apos;re setting up a new offshore capability center or expanding an existing team, we provide
-                dedicated recruiter pods, AI-assisted recruitment workflows, and nationwide hiring expertise to
-                accelerate growth without compromising quality.
+                This support covers recruitment. It does not include legal incorporation, tax, or real-estate advice, and it does not claim offices outside India.
               </p>
               <div className="mt-8 flex flex-wrap gap-4">
                 <a
                   href="tel:+918217527926"
                   className="inline-flex items-center gap-2 rounded-xl bg-[#F08504] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-orange-600"
                 >
-                  Book Offshore Hiring Consultation
+                  Discuss Your Capability Center Hiring Plan
                   <ArrowRight className="h-4 w-4" />
                 </a>
                 <a
-                  href="mailto:info@earlyjobs.in"
+                  href="/india-gcc-hiring-services"
                   className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/5 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10"
                 >
-                  Download Offshore Hiring Playbook
+                  Explore India GCC Hiring Services
                 </a>
               </div>
             </div>
@@ -393,8 +390,7 @@ export default function OffshoreCapabilityCenterHiringPage() {
               Offshore hiring needs governance, not just recruitment activity.
             </h2>
             <p className="mt-5 text-base leading-relaxed text-slate-600">
-              EarlyJobs brings weekly reviews, dashboards, SLA tracking, interview metrics, offer funnel visibility,
-              leadership reporting, and recruiter performance reviews to enterprise offshore delivery.
+              Reviews and reporting are included only when they are part of the agreed service. EarlyJobs does not claim a standard dashboard or service level on this page.
             </p>
           </div>
           <div className="rounded-[2rem] border border-slate-200 bg-gradient-to-br from-slate-50 to-[#1e3a8a]/5 p-8">
@@ -446,11 +442,9 @@ export default function OffshoreCapabilityCenterHiringPage() {
                   className={`h-5 w-5 shrink-0 text-slate-500 transition ${openFaq === index ? "rotate-180" : ""}`}
                 />
               </button>
-              {openFaq === index && (
-                <div className="border-t border-slate-200 px-5 py-4 text-sm leading-relaxed text-slate-600">
+              <div hidden={openFaq !== index} className="border-t border-slate-200 px-5 py-4 text-sm leading-relaxed text-slate-600">
                   {answer}
                 </div>
-              )}
             </div>
           ))}
         </div>

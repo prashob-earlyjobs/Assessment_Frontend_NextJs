@@ -25,8 +25,8 @@ const NAV_LINKS = [
 const MARQUEE_ITEMS = [
   "No registration fee",
   "Live recruitment work, from day one",
-  "Performance-based stipend up to ₹10,000",
-  "PPO opportunities worth ₹4–6 LPA",
+  "Stipend terms are confirmed before you join",
+  "A later role is not guaranteed",
   "Built for Tier 2 & Tier 3 India",
 ];
 
@@ -43,7 +43,7 @@ const JOURNEY_STEPS = [
   { title: "Offer letter", description: "Receive your official offer letter over email." },
   { title: "Training begins", description: "Your reporting manager walks you through the process, step by step." },
   { title: "Start hiring", description: "Get portal access and start connecting candidates to live roles." },
-  { title: "Grow & earn", description: "Every successful joining builds your stipend, skills, and career." },
+  { title: "Grow & earn", description: "What you work on, and any stipend, is confirmed before you join." },
 ];
 
 const CAREER_STEPS = [
@@ -78,14 +78,14 @@ const CAREER_STEPS = [
 
 const STIPEND_ROWS = [
   { range: "0–4", amount: "Nil" },
-  { range: "5–8", amount: "₹3,000" },
-  { range: "9–12", amount: "₹5,000" },
-  { range: "13–15", amount: "₹7,500" },
-  { range: "16+", amount: "₹10,000", highlight: true },
+  { range: "5–8", amount: "Confirmed in writing" },
+  { range: "9–12", amount: "Confirmed in writing" },
+  { range: "13–15", amount: "Confirmed in writing" },
+  { range: "16+", amount: "Confirmed in writing", highlight: true },
 ];
 
 const TOP_PERKS = [
-  "PPO opportunities (₹4–6 LPA)",
+  "A later role is not guaranteed",
   "Freelance recruiter opportunities",
   "Full-time roles with EarlyJobs or partner companies",
   "Best Performer Awards & recognition",
@@ -102,7 +102,7 @@ const TESTIMONIALS = [
     name: "Rohit Meena",
     place: "Kota, Rajasthan",
     quote:
-      "My college never taught us how hiring actually works. Here I learned sourcing, screening, and closing — real skills I now put on my resume with proof, not just a certificate.",
+      "The internship description is the work that is confirmed for the cohort. A certificate is provided only when it is part of the written terms.",
   },
   {
     name: "Ayesha Khatoon",
@@ -120,7 +120,7 @@ const TESTIMONIALS = [
     name: "Vikram Nair",
     place: "Kannur, Kerala",
     quote:
-      "The stipend structure is exactly as explained, no confusion. I crossed 9 joinings in month two and got paid on time. It made the effort feel respected.",
+      "Joinings and payment are not guaranteed. Terms are confirmed in writing before the internship starts.",
   },
   {
     name: "Divya Reddy",
@@ -157,7 +157,7 @@ const FAQS = [
   },
   {
     q: "How does the stipend work?",
-    a: "Your stipend is performance-based, tied to the number of successful candidate joinings you achieve each month — from Nil at 0–4 joinings up to ₹10,000 plus a Best Performer Award at 16 or more.",
+    a: "Stipend terms, if any, are confirmed in writing before you join. EarlyJobs does not promise a stipend, award, or number of joinings on this page.",
   },
   {
     q: "Is English mandatory?",
@@ -349,12 +349,9 @@ export default function InternshipLanding() {
         <div className="ij-container">
           <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-10 lg:gap-14 items-center">
             <div className="order-2 lg:order-1 space-y-6">
-              <span className="ij-eyebrow">100% Remote · No Registration Fee</span>
+              <span className="ij-eyebrow">Remote internship</span>
               <h1 className="ij-display text-4xl sm:text-5xl lg:text-[3.4rem] leading-[1.1] text-[var(--ij-navy)]">
-                Talent is everywhere.{" "}
-                <em className="text-[var(--ij-orange)] italic font-[family-name:var(--ij-display)]">
-                  Opportunity is not.
-                </em>
+                Start Building Practical Work Experience
               </h1>
               <p className="text-base sm:text-lg text-[var(--ij-ink-soft)] max-w-xl leading-relaxed">
                 A 3-month remote HR Recruitment Internship for students & freshers from Tier 2 and Tier 3 India — where you don&apos;t just learn recruitment, you actually do it.
@@ -368,7 +365,7 @@ export default function InternshipLanding() {
                 </button>
               </div>
               <div className="flex flex-wrap gap-x-5 gap-y-2 pt-2">
-                {["Work from home", "Zero fees, ever", "Certificate on completion"].map((item) => (
+                {["Work from home", "No fee is stated on this page", "Completion terms are confirmed in writing"].map((item) => (
                   <span key={item} className="inline-flex items-center gap-2 text-sm text-[var(--ij-ink)]">
                     <span className="w-5 h-5 rounded-full bg-[var(--ij-orange-soft)] text-[var(--ij-orange)] inline-flex items-center justify-center">
                       <Check className="w-3.5 h-3.5" />
@@ -384,8 +381,8 @@ export default function InternshipLanding() {
                 <div className="grid grid-cols-2 gap-5">
                   {[
                     { label: "Duration", value: "3 Months" },
-                    { label: "Top Performer Stipend", value: "₹10,000" },
-                    { label: "PPO Potential", value: "4–6 LPA" },
+                    { label: "Stipend", value: "Confirmed in writing" },
+                    { label: "Later role", value: "Not guaranteed" },
                     { label: "Mode", value: "Remote" },
                   ].map((stat) => (
                     <div key={stat.label}>
@@ -452,7 +449,7 @@ export default function InternshipLanding() {
               Not just an internship. A real working experience.
             </h2>
             <p className="text-[var(--ij-ink-soft)] text-base sm:text-lg leading-relaxed">
-              This is a 3-month remote internship where you work on real hiring tasks — sourcing candidates, screening resumes, and closing positions — under the guidance of a reporting manager. This is where learning meets execution. A remote HR internship for students who want real exposure, not just a certificate.
+              This is a 3-month remote internship where you work on real hiring tasks — sourcing candidates, screening resumes, and closing positions — under the guidance of a reporting manager. This is where learning meets execution. A certificate is not promised on this page.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -478,7 +475,7 @@ export default function InternshipLanding() {
                 items: [
                   "Hands-on training on recruitment & communication",
                   "Real exposure to hiring systems and tools",
-                  "Certificate on successful completion",
+                  "Completion terms are confirmed in writing",
                 ],
               },
             ].map((card) => (
@@ -569,7 +566,7 @@ export default function InternshipLanding() {
               Stipend & rewards, no surprises.
             </h2>
             <p className="text-[var(--ij-ink-soft)] text-base sm:text-lg">
-              Your stipend is entirely performance-based and tied to successful candidate joinings — fully transparent from day one.
+              Any stipend is confirmed in writing before you join. EarlyJobs does not promise pay on this page.
             </p>
           </div>
           <div className="grid lg:grid-cols-2 gap-5">

@@ -500,9 +500,7 @@ const GccPage = ({ content }: GccPageProps) => {
                 <span className="font-semibold text-slate-900">{faq.question}</span>
                 <ChevronDown className={`h-5 w-5 shrink-0 text-slate-500 transition ${openFaq === index ? "rotate-180" : ""}`} />
               </button>
-              {openFaq === index && (
-                <div className="border-t border-slate-200 px-5 py-4 text-sm leading-relaxed text-slate-600">{faq.answer}</div>
-              )}
+              <div hidden={openFaq !== index} className="border-t border-slate-200 px-5 py-4 text-sm leading-relaxed text-slate-600">{faq.answer}</div>
             </div>
           ))}
         </div>

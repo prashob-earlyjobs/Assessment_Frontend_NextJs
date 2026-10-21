@@ -1,0 +1,40 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.earlyjobs.ai/investor-relations#webpage",
+      "url": "https://www.earlyjobs.ai/investor-relations",
+      "name": "Investor Relations | EarlyJobs",
+      "description": "Learn about EarlyJobs, its recruitment infrastructure model, technology-enabled hiring approach and business direction through approved company information.",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/investor-relations#breadcrumb"
+      },
+      "dateModified": "2026-10-21"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/investor-relations#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Investor Relations",
+          "item": "https://www.earlyjobs.ai/investor-relations"
+        }
+      ]
+    }
+  ]
+}

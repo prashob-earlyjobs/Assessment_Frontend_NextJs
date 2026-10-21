@@ -1,4 +1,6 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { JsonLd } from "@/components/json-ld";
 import { JobFilters } from "@/components/jobs/filters";
 import { JobsNavProvider } from "@/components/jobs/jobs-nav";
 import { JobListingCard } from "@/components/jobs/listing";
@@ -12,6 +14,25 @@ import {
   type JobQuery,
   type PublishedJobsPage,
 } from "@/lib/public-jobs";
+
+import { pageMetadata } from "@/lib/page-metadata";
+import schema from "@/schema/jobs.jsonld.json";
+
+export const metadata: Metadata = pageMetadata({
+  path: "/jobs",
+  title: "Latest Jobs and Career Opportunities | EarlyJobs",
+  description:
+    "Explore job opportunities on EarlyJobs. Review role requirements, location, experience and application instructions for available vacancies.",
+  ogTitle: "Latest Jobs and Career Opportunities",
+  ogDescription:
+    "Job listings come from the EarlyJobs feed. Review each vacancy before applying.",
+  image: "/images/logo.png",
+  imageAlt: "EarlyJobs logo",
+  twitterTitle: "Latest Jobs and Career Opportunities",
+  twitterDescription:
+    "Job listings come from the EarlyJobs feed. Review each vacancy before applying.",
+  twitterCard: "summary",
+});
 
 export default async function JobsPage({
   searchParams,
@@ -44,6 +65,7 @@ export default async function JobsPage({
 
   return (
     <main className="lg:h-[calc(100dvh-var(--header-h))]">
+      <JsonLd data={schema} />
       <JobsNavProvider>
         <JobFilters filters={filters} />
         <OpenRoles total={result ? result.totalResults : null}>

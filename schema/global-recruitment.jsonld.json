@@ -1,0 +1,54 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.earlyjobs.ai/global-recruitment#webpage",
+      "url": "https://www.earlyjobs.ai/global-recruitment",
+      "name": "Global Recruitment Services | International Hiring | EarlyJobs",
+      "description": "Explore global recruitment support from EarlyJobs for businesses hiring across markets. Align role requirements, candidate sourcing and recruitment execution.",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/global-recruitment#breadcrumb"
+      },
+      "dateModified": "2026-10-21"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/global-recruitment#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Global Recruitment Services",
+          "item": "https://www.earlyjobs.ai/global-recruitment"
+        }
+      ]
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.earlyjobs.ai/global-recruitment#service",
+      "name": "Global recruitment support",
+      "description": "Explore global recruitment support from EarlyJobs for businesses hiring across markets. Align role requirements, candidate sourcing and recruitment execution.",
+      "provider": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "India"
+      },
+      "url": "https://www.earlyjobs.ai/global-recruitment"
+    }
+  ]
+}

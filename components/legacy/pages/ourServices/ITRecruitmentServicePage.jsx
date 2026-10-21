@@ -11,24 +11,24 @@ import Faqs from "../../Servicesfooter/Faqs";
 import './style.css';
 
 const heroSectionData = {
-    subheading: 'HIRE THE TOP GLOBAL IT TALENT',
-    heading: 'Success begins with our strategic IT consulting, We bring innovation to your doorsteps',
+    subheading: 'IT RECRUITMENT',
+    heading: 'IT Recruitment Services for Growing Technology Teams',
     list: [
         {
-            text: 'IT Consultants Are Specialized'
+            text: 'Recruitment support for technology roles you define'
         },
         {
-            text: 'Cost-Effectiveness of Technology Consulting'
+            text: 'Technical assessments are used only when agreed'
         },
         {
-            text: 'You No Longer Have to Manage Your IT Department Hiring Directly'
+            text: 'Hiring outcomes are not guaranteed'
         },
     ]
 }
 
 const section2Data = {
     heading: 'IT Talents Recruitment Made Easier',
-    text: 'Through our IT placement consultancy, we provide exceptional hiring solutions encompassing a wide range of services. With over several years of hiring experience, our recruitment consultants are well-equipped to connect you with the most suitable candidates. Count on Earlyjobs staffing solutions and rigorous screening procedures to acquire invaluable assets that will significantly contribute to your organization’s success.',
+    text: 'EarlyJobs helps employers define technology hiring requirements and connect them with recruiter-led sourcing. Technical assessments are used only when they are part of the agreed process.',
     image: '/services_imgs/features-summary.svg'
 }
 
@@ -45,12 +45,12 @@ const section3Data = [
     },
     {
         heading: 'Employee Stability',
-        text: 'Our IT recruitment services align candidates precisely with business requirements, resulting in longer tenures compared to traditional hiring.',
+        text: 'Tenure depends on the role, the employer, and the candidate. EarlyJobs does not promise longer tenure.',
         icon: <FaGripLinesVertical className='service-page-s3-item-icon'/>
     },
     {
-        heading: 'Replacement Commitment',
-        text: 'Being the foremost IT recruitment agency, our unwavering commitment is to provide our clients with highly skilled IT professionals candidates with replacement guarantee.',
+        heading: 'Replacement terms',
+        text: 'Replacement or guarantee terms apply only when they are written into the applicable agreement. EarlyJobs does not promise a replacement on this page.',
         icon: <FaPaintBrush className='service-page-s3-item-icon'/>
     },
 ]
@@ -58,11 +58,11 @@ const section3Data = [
 const section4HighlightData = [
     {
         heading: 'Access to specialized expertise and guidance',
-        text: 'IT job consultancies have a deep understanding of the IT industry and the specific skills and qualifications required for different IT roles. They can provide valuable insights and expertise in identifying and assessing suitable candidates for IT positions. They can provide insights into the current job market, salary benchmarks, and trends in the IT industry. They also help companies in creating effective job descriptions, conducting salary negotiations, and making informed hiring decisions.'
+        text: 'EarlyJobs can discuss the technology hiring requirement with you. Salary figures and technical assessments are used only when they are part of the agreed process.'
     },
     {
         heading: 'Time and cost savings',
-        text: 'Hiring for IT positions can be a time-consuming and costly process. Job consultancies can help streamline the hiring process by sourcing and shortlisting qualified candidates, conducting initial assessments, and handling administrative tasks. This saves companies time and resources in the hiring process.'
+        text: 'Recruiters work from the role requirements you share. EarlyJobs does not publish a standard fee or a time saving on this page.'
     },
     {
         heading: 'Extensive network and database',
@@ -70,11 +70,11 @@ const section4HighlightData = [
     },
     {
         heading: 'Reduced risk of hiring mistakes',
-        text: "IT job consultancies have expertise in assessing candidates skills, qualifications, and experience in IT profiles. They conduct thorough screening and interviews to ensure that only the most suitable candidates are shortlisted for job openings. This reduces the risk of hiring mistakes and increases the chances of finding the right candidate for the role."
+        text: 'Candidate review focuses on the requirements you share. EarlyJobs does not promise that a shortlist removes hiring risk.'
     },
     {
         heading: 'Support during the on-boarding process',
-        text: 'IT job consultancies provide support during the onboarding process, ensuring a smooth transition for the selected candidate. They assist with paperwork, background checks, and coordination with HR departments, ensuring that the new IT professional can seamlessly integrate into the company. This helps companies in minimizing disruptions and maximizing productivity.'
+        text: 'EarlyJobs can support coordination after an offer when that support is part of the agreed process. Background checks are used only when they are part of that process.'
     },
     {
         heading: "Understanding the company's needs and requirements",
@@ -86,14 +86,14 @@ const section4HighlightData = [
     },
     {
         heading: 'Assessing candidates skills and qualifications',
-        text: "IT job consultancies have expertise in assessing candidates' skills, qualifications, and experience in IT recruitment services. They conduct technical assessments, review resumes and portfolios, and conduct interviews to evaluate candidates' abilities and match them with suitable job openings."
+        text: "Candidate review focuses on the technology requirements you share. Technical assessments are used only when they are part of the agreed process."
     },
 ]
 
 const servicePageAccordianData = [
     {
         label: 'How does EarlyJobs match candidates with job opportunities?',
-        content: 'EarlyJobs uses a combination of advanced algorithms and personalized assessments to match candidates with job opportunities that align with their skills, experience, and career goals. Our team also conducts thorough interviews to ensure a good fit.'
+        content: 'Candidate review focuses on the technology requirements you share. Specific checks are used only when they are part of the agreed process.'
     },
     {
         label: 'What industries does EarlyJobs specialize in?',
@@ -105,11 +105,11 @@ const servicePageAccordianData = [
     },
     {
         label: 'How does EarlyJobs ensure the quality of candidates?',
-        content: 'EarlyJobs ensures the quality of candidates through a rigorous screening process that includes background checks, skills assessments, and in-depth interviews. We also consider cultural fit to ensure candidates will thrive in their new roles.'
+        content: 'Candidate review focuses on the role requirements shared by the employer. Background checks are used only when they are part of the agreed process.'
     },
     {
         label: 'Is there a fee for candidates to use EarlyJobs services?',
-        content: 'No, EarlyJobs does not charge candidates for using our recruitment services. Our fees are covered by the employers seeking to hire through our platform, allowing us to offer our services to job seekers at no cost.'
+        content: 'Recruitment fees are agreed with the employer under the applicable commercial terms.'
     },
 ];
 

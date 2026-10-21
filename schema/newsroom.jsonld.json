@@ -1,0 +1,40 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": "https://www.earlyjobs.ai/newsroom#webpage",
+      "url": "https://www.earlyjobs.ai/newsroom",
+      "name": "EarlyJobs Newsroom | Company News and Updates",
+      "description": "Read company announcements, business updates and published news about EarlyJobs and its recruitment ecosystem.",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/newsroom#breadcrumb"
+      },
+      "dateModified": "2026-10-21"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/newsroom#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "EarlyJobs Newsroom",
+          "item": "https://www.earlyjobs.ai/newsroom"
+        }
+      ]
+    }
+  ]
+}

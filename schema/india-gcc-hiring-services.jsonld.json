@@ -1,0 +1,92 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.earlyjobs.ai/india-gcc-hiring-services#webpage",
+      "url": "https://www.earlyjobs.ai/india-gcc-hiring-services",
+      "name": "India GCC Hiring Services | Build Your Talent Team | EarlyJobs",
+      "description": "Build your India Global Capability Center team with structured hiring support, recruiter networks and AI-assisted recruitment workflows from EarlyJobs.",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/india-gcc-hiring-services#breadcrumb"
+      },
+      "dateModified": "2026-10-21"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/india-gcc-hiring-services#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "India GCC Hiring Services",
+          "item": "https://www.earlyjobs.ai/india-gcc-hiring-services"
+        }
+      ]
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.earlyjobs.ai/india-gcc-hiring-services#service",
+      "name": "India GCC hiring services",
+      "description": "Build your India Global Capability Center team with structured hiring support, recruiter networks and AI-assisted recruitment workflows from EarlyJobs.",
+      "provider": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "India"
+      },
+      "url": "https://www.earlyjobs.ai/india-gcc-hiring-services"
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.earlyjobs.ai/india-gcc-hiring-services#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Do you support hiring across multiple Indian cities?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Multi-city GCC hiring is a core part of our India hiring services delivery model."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can you hire engineering teams in Bengaluru and Hyderabad simultaneously?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. We deploy recruiter pods and coordinate hiring across multiple talent hubs in parallel."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is this different from using local agencies in each city?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EarlyJobs provides unified processes, visibility, governance, and a single accountable partner—not fragmented local vendors."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you support both greenfield and expansion hiring?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. We support new GCC launches and expansion hiring across India."
+          }
+        }
+      ]
+    }
+  ]
+}
