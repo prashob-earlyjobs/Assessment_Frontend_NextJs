@@ -4,39 +4,39 @@ import { AgencyPartnershipLeadForm } from "@/components/agency-partnerships/lead
 
 const cards = [
   {
-    title: "Verified mandates",
-    body: "Work on real hiring requirements from trusted employers.",
+    title: "Share Your Expertise",
+    body: "Tell us about your agency's recruitment focus and the roles you specialise in.",
   },
   {
-    title: "More cities, more categories",
-    body: "Take on roles beyond your current client base.",
+    title: "Discuss Hiring Requirements",
+    body: "Explore whether your agency's capabilities align with relevant recruitment needs.",
   },
   {
-    title: "Technology that saves time",
-    body: "AI-assisted sourcing, screening and scheduling through Huntlo AI.",
+    title: "Understand the Working Arrangement",
+    body: "Review the applicable onboarding requirements and commercial terms before proceeding.",
   },
   {
-    title: "Zero candidate fees",
-    body: "Candidates are never charged. It is part of the partnership agreement.",
+    title: "How to get started",
+    body: "Submit a partnership enquiry with accurate agency details. The information can be reviewed to assess whether there is a suitable basis for collaboration.",
   },
 ] as const;
 
 const steps = [
-  "Apply in 2 minutes.",
-  "We verify your agency.",
-  "Complete onboarding.",
-  "Receive mandates in your categories.",
-  "Earn on successful placements.",
+  "Share your agency's recruitment focus.",
+  "Tell us the roles you specialise in.",
+  "Explore whether your capabilities align with relevant needs.",
+  "Review the applicable onboarding requirements.",
+  "Review commercial terms before proceeding.",
 ] as const;
 
 const faqs = [
   {
-    q: "Who can partner with EarlyJobs as an agency?",
-    a: "Recruitment agencies and consultancies that hire in one or more categories, such as IT, BPO, banking, insurance, retail or healthcare. Partnerships are subject to suitability, availability and mutually agreed terms.",
+    q: "Who can enquire about a partnership?",
+    a: "We welcome enquiries from recruitment agencies interested in sharing their hiring specialisations, industry experience, and operating capabilities.",
   },
   {
-    q: "Can agencies charge candidates a fee?",
-    a: "No. Agencies must agree not to charge candidates any fee at any stage of the hiring process. Violations can lead to legal action.",
+    q: "Does submitting an enquiry guarantee a partnership?",
+    a: "Submitting an enquiry does not guarantee partnership approval, mandate allocation, or business outcomes.",
   },
 ] as const;
 
@@ -46,20 +46,20 @@ export function AgencyPartnershipsPage() {
       <section className="page-shell page-section grid items-center gap-8 lg:grid-cols-2 lg:gap-14">
         <div>
           <h1 className="text-[2.4rem] leading-[1.05] font-medium tracking-[-0.045em] sm:text-[3.2rem]">
-            Partner with EarlyJobs. Work more mandates, with no candidate fees.
+            Recruitment Agency Partnerships with EarlyJobs
           </h1>
           <p className="mt-6 max-w-xl text-[15px] leading-7 text-neutral-600">
-            Recruitment agencies and consultancies get verified hiring mandates from employers
-            across India, without building every client relationship from scratch.
+            Explore opportunities to collaborate with EarlyJobs on recruitment requirements. We
+            welcome enquiries from recruitment agencies interested in sharing their hiring
+            specialisations, industry experience, and operating capabilities.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <a
               href="#apply"
               className="inline-flex h-11 items-center justify-center rounded-full bg-neutral-950 px-5 text-sm font-medium text-white hover:bg-neutral-800"
             >
-              Apply to partner
+              Enquire About a Partnership
             </a>
-            {/* TODO(content): "Download the partner overview" omitted — no overview file was supplied. */}
           </div>
         </div>
         <div className="media-frame relative aspect-[8/7] w-full">
@@ -77,7 +77,7 @@ export function AgencyPartnershipsPage() {
       <section className="border-t border-black/10">
         <div className="page-shell page-section">
           <h2 className="text-[2rem] font-semibold tracking-[-0.04em] sm:text-[2.5rem]">
-            Why agencies partner with EarlyJobs
+            Explore a potential partnership
           </h2>
           <ul className="mt-10 grid gap-6 sm:grid-cols-2">
             {cards.map((card) => (
@@ -108,15 +108,14 @@ export function AgencyPartnershipsPage() {
         <div className="page-shell page-section max-w-3xl">
           <h2 className="text-[2rem] font-semibold tracking-[-0.04em]">Who we partner with</h2>
           <p className="mt-4 text-sm leading-7 text-neutral-600">
-            Recruitment agencies and consultancies that hire in one or more categories, such as IT,
-            BPO, banking, insurance, retail or healthcare.
+            We welcome enquiries from recruitment agencies interested in sharing their hiring
+            specialisations, industry experience, and operating capabilities.
           </p>
-          <h2 className="mt-12 text-[2rem] font-semibold tracking-[-0.04em]">
-            What we expect (zero candidate fee)
-          </h2>
+          <h2 className="mt-12 text-[2rem] font-semibold tracking-[-0.04em]">Important information</h2>
           <p className="mt-4 text-sm leading-7 text-neutral-600">
-            Agencies must agree not to charge candidates any fee at any stage of the hiring process.
-            Violations can lead to legal action.
+            Submitting an enquiry does not guarantee partnership approval, mandate allocation, or
+            business outcomes. Review the applicable onboarding requirements and commercial terms
+            before proceeding.
           </p>
         </div>
       </section>
@@ -124,8 +123,6 @@ export function AgencyPartnershipsPage() {
       <section className="border-t border-black/10 bg-[#f7f5f2]">
         <div className="page-shell page-section max-w-3xl">
           <h2 className="text-[2rem] font-semibold tracking-[-0.04em]">FAQ</h2>
-          {/* TODO(content): skipped "What does onboarding involve?" — answer contained an unconfirmed document list. */}
-          {/* TODO(content): skipped "How do agencies earn through EarlyJobs?" — answer contained an unconfirmed commission structure and payout cycle. */}
           <div className="mt-6 divide-y divide-black/10">
             {faqs.map((item) => (
               <details key={item.q} className="py-4">
@@ -140,10 +137,12 @@ export function AgencyPartnershipsPage() {
       <section id="apply" className="scroll-mt-24 border-t border-black/10">
         <div className="page-shell page-section grid gap-10 lg:grid-cols-2">
           <div>
-            <h2 className="text-[2rem] font-semibold tracking-[-0.04em]">Apply</h2>
+            <h2 className="text-[2rem] font-semibold tracking-[-0.04em]">How to get started</h2>
             <p className="mt-4 text-sm leading-7 text-neutral-600">
-              Tell us about your agency. Partnerships are subject to suitability, availability and
-              mutually agreed terms.
+              Submit a partnership enquiry with accurate agency details. The information can be
+              reviewed to assess whether there is a suitable basis for collaboration. Submitting an
+              enquiry does not guarantee partnership approval, mandate allocation, or business
+              outcomes.
             </p>
             <p className="mt-4 text-sm">
               Already invited?{" "}
@@ -153,7 +152,6 @@ export function AgencyPartnershipsPage() {
               .
             </p>
           </div>
-          {/* TODO(content): success line omitted the unconfirmed "[X] working days" reply window. */}
           <AgencyPartnershipLeadForm />
         </div>
       </section>

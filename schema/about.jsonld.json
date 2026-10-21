@@ -81,7 +81,7 @@
           "name": "What is EarlyJobs?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "EarlyJobs is a recruiter-first hiring network that combines a distributed recruiter network, AI-powered hiring infrastructure and local execution to help companies hire across India and beyond."
+            "text": "EarlyJobs is a recruitment platform built around recruiter-led execution and AI-assisted hiring workflows. We connect employers, recruiters, and job seekers to support the recruitment process from candidate sourcing to hiring."
           }
         },
         {
@@ -97,7 +97,7 @@
           "name": "How are EarlyJobs, Huntlo AI and GigKaro related?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "EarlyJobs is the recruiter network. Huntlo AI is the AI hiring infrastructure used by recruitment teams, and GigKaro focuses on frontline workforce hiring such as delivery, warehousing and logistics."
+            "text": "Together, these businesses address different parts of the hiring landscape through recruitment execution and technology."
           }
         },
         {

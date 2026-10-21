@@ -14,7 +14,7 @@
         "@type": "ImageObject",
         "url": "https://www.earlyjobs.ai/images/logo.png"
       },
-      "description": "EarlyJobs is a recruiter-first hiring network that connects employers, freelance recruiters and job seekers through AI-assisted, recruiter-led hiring across India.",
+      "description": "EarlyJobs connects employers, recruiters, and job seekers through recruiter-led hiring and AI-assisted recruitment workflows.",
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "2nd Floor, Regent Insignia, Obeya Tulip, Mahakavi Vemana Rd, KHB Block, 4th Block, Koramangala",
@@ -145,7 +145,7 @@
           "name": "How do recruiters earn on EarlyJobs?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Recruiters earn a commission on successful placements against verified mandates. Earnings depend on the mandate and are not guaranteed."
+            "text": "Commercial terms are governed by the applicable recruiter programme or mandate agreement. Payment arrangements are subject to the applicable commercial terms."
           }
         },
         {
@@ -153,7 +153,7 @@
           "name": "How are EarlyJobs, Huntlo AI and GigKaro related?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "EarlyJobs is the recruiter network, Huntlo AI is the AI hiring infrastructure, and GigKaro handles frontline workforce hiring."
+            "text": "Together, these businesses address different parts of the hiring landscape through recruitment execution and technology."
           }
         }
       ]

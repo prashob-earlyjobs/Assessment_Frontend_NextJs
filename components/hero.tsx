@@ -20,22 +20,25 @@ const clientLogos = Array.from({ length: 22 }, (_, index) => ({
 const audiences = [
   {
     id: "hiring",
-    label: "I'm hiring",
-    cta: "Share a hiring need",
+    label: "For Employers",
+    body: "Get recruitment support for your hiring requirements.",
+    cta: "Explore Hiring Solutions",
     href: "/employers",
     audience: "employer",
   },
   {
     id: "recruiter",
-    label: "I'm a recruiter",
-    cta: "Start earning as a recruiter",
+    label: "For Recruiters",
+    body: "Explore opportunities to work on recruitment mandates through the EarlyJobs network.",
+    cta: "Become a Recruiter",
     href: "/become-a-recruiter",
     audience: "recruiter",
   },
   {
     id: "job",
-    label: "I'm looking for a job",
-    cta: "Create your profile",
+    label: "For Job Seekers",
+    body: "Explore job opportunities and connect with relevant hiring opportunities.",
+    cta: "Explore Jobs",
     href: "/jobs",
     audience: "job_seeker",
   },
@@ -307,8 +310,10 @@ export function Hero() {
           </h1>
 
           <p className="mx-auto max-w-3xl px-2 text-center text-sm text-white/80 sm:px-6 sm:text-base md:text-lg lg:text-xl">
-            Employers hire faster. Recruiters earn on verified mandates. Job seekers get discovered,
-            not ignored.
+            EarlyJobs connects employers, recruiters, and job seekers through recruiter-led hiring
+            and AI-assisted recruitment workflows. We bring people, technology, and recruitment
+            execution together to help businesses find relevant talent and move hiring requirements
+            forward. A network of recruiters working across relevant hiring requirements. {active.body}
           </p>
 
           <div className="flex flex-wrap justify-center gap-2" role="tablist" aria-label="Who is this for">
@@ -350,15 +355,15 @@ export function Hero() {
           </div>
 
           <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 px-2 text-sm text-white/70">
-            <span>Built for recruiters</span>
+            <span>For employers</span>
             <span aria-hidden className="text-white/35">
               ·
             </span>
-            <span>Trusted by employers</span>
+            <span>For recruiters</span>
             <span aria-hidden className="text-white/35">
               ·
             </span>
-            <span>Loved by job seekers</span>
+            <span>For job seekers</span>
           </p>
 
           <div className="mt-2 flex flex-wrap justify-center gap-2 pt-1 sm:mt-4 sm:gap-4 sm:pt-2 md:mt-8 md:gap-6 lg:mt-12 lg:gap-10 xl:gap-16">

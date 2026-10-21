@@ -7,13 +7,15 @@ export const metadata = pageMetadata({
   path: "/about",
   title: "About EarlyJobs | Recruiter-First Hiring Network, India",
   description:
-    "EarlyJobs is a Bengaluru-based hiring network: 3,449+ recruiters, 266+ companies and 5,500+ joinings delivered through recruiter-led, AI-assisted hiring.",
-  ogTitle: "About EarlyJobs | Building the Infrastructure Behind Modern Hiring",
-  ogDescription: "A recruiter-first hiring network: 3,449+ recruiters, 266+ companies, 5,500+ joinings.",
+    "EarlyJobs is a recruitment platform built around recruiter-led execution and AI-assisted hiring workflows.",
+  ogTitle: "About EarlyJobs | Building Better Hiring Through People and Technology",
+  ogDescription:
+    "A recruitment platform that connects employers, recruiters, and job seekers from sourcing to hiring.",
   image: "/og/about.jpg",
   imageAlt: "EarlyJobs team and network statistics",
   twitterTitle: "About EarlyJobs",
-  twitterDescription: "Recruiter-first hiring network with AI infrastructure and local execution.",
+  twitterDescription:
+    "Recruiter-led hiring and AI-assisted workflows for employers, recruiters, and job seekers.",
 });
 
 export default function AboutPage() {

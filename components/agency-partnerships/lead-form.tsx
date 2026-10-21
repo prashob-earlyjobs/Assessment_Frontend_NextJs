@@ -127,7 +127,7 @@ export function AgencyPartnershipLeadForm() {
         disabled={submitting}
         className="inline-flex h-11 items-center justify-center rounded-full bg-neutral-950 px-5 text-sm font-medium text-white hover:bg-neutral-800 disabled:opacity-60"
       >
-        {submitting ? "Sending…" : "Apply to partner"}
+        {submitting ? "Sending…" : "Enquire About a Partnership"}
       </button>
       <p className="text-[12px] leading-5 text-neutral-500">
         Partnerships are subject to suitability, availability and mutually agreed terms.

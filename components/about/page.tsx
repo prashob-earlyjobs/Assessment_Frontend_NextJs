@@ -7,28 +7,27 @@ import { companyFacts, networkStatsSentence } from "@/data/company-facts";
 
 const network = [
   {
-    title: "EarlyJobs — Recruiter Network",
-    body: "We connect employers with a distributed network of recruiters who execute hiring mandates across industries and geographies. Our network also creates flexible professional opportunities for recruiters, including women returning to work and professionals outside major metros.",
+    title: "EarlyJobs — Recruiter-Led Hiring",
+    body: "Recruitment services and a recruiter network that connect employers, recruiters, and job seekers.",
   },
   {
-    title: "Huntlo AI — AI Hiring Infrastructure",
-    body: "Huntlo helps recruitment teams use AI to streamline candidate sourcing, outreach, screening, scheduling and follow-ups. It reduces repetitive work so recruiters can focus on conversations, judgment and hiring outcomes.",
+    title: "Huntlo AI — AI Recruiting Tools",
+    body: "AI-powered recruiting tools designed to support sourcing, candidate outreach, and recruitment workflows.",
   },
   {
-    title: "GigKaro — Frontline Workforce Hiring",
-    body: "GigKaro focuses on frontline workforce hiring across categories such as delivery, warehousing, logistics, technical trades and manufacturing. It extends our hiring execution capabilities to the people who keep India's economy moving.",
+    title: "GigKaro — Frontline and Gig Hiring",
+    body: "A specialised hiring platform focused on frontline and gig-worker recruitment.",
   },
-  // TODO(content): A-01 — do not publish "Local Execution Partners" until /franchise confirms college partners and on-ground hiring drives. Live placeholder kept.
   {
-    title: "EarlyJobs",
-    body: "Connect the network and support recruitment delivery with technology.",
+    title: "Hiring Across Different Workforce Needs",
+    body: "Through our recruitment services and specialised hiring initiatives, we support businesses with different talent requirements.",
   },
 ] as const;
 
 const aboutFaqs = [
   {
     q: "What is EarlyJobs?",
-    a: "EarlyJobs is a recruiter-first hiring network that combines a distributed recruiter network, AI-powered hiring infrastructure and local execution to help companies hire across India and beyond.",
+    a: "EarlyJobs is a recruitment platform built around recruiter-led execution and AI-assisted hiring workflows. We connect employers, recruiters, and job seekers to support the recruitment process from candidate sourcing to hiring.",
   },
   {
     q: "Who runs EarlyJobs?",
@@ -36,7 +35,7 @@ const aboutFaqs = [
   },
   {
     q: "How are EarlyJobs, Huntlo AI and GigKaro related?",
-    a: "EarlyJobs is the recruiter network. Huntlo AI is the AI hiring infrastructure used by recruitment teams, and GigKaro focuses on frontline workforce hiring such as delivery, warehousing and logistics.",
+    a: "Together, these businesses address different parts of the hiring landscape through recruitment execution and technology.",
   },
   {
     q: "Does EarlyJobs hire outside major cities?",
@@ -123,13 +122,12 @@ export function AboutPage() {
             About EarlyJobs
           </p>
           <h1 className="mt-4 max-w-3xl text-[2.88rem] font-semibold leading-[1.02] tracking-[-0.045em] text-white sm:text-[4.2rem]">
-            About EarlyJobs: Building the Infrastructure Behind Modern Hiring
+            Building Better Hiring Through People and Technology
           </h1>
           <p className="mt-5 max-w-2xl text-sm leading-6 text-white/85 sm:text-base sm:leading-7">
-            EarlyJobs is a Bengaluru-based, recruiter-first hiring network. We combine a distributed
-            recruiter network, AI-powered hiring infrastructure and local execution so companies can
-            hire across India and beyond. We don&apos;t just help companies find candidates. We help
-            execute hiring.
+            EarlyJobs is a recruitment platform built around recruiter-led execution and AI-assisted
+            hiring workflows. We connect employers, recruiters, and job seekers to support the
+            recruitment process from candidate sourcing to hiring.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <a href="#lets-talk" className={`${pill} bg-brand text-white hover:bg-[#d85c42]`}>
@@ -152,11 +150,11 @@ export function AboutPage() {
             <SectionTag>What We Do</SectionTag>
             <div className="mt-5 grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-end">
               <h2 className="max-w-2xl text-[2rem] font-semibold leading-[1.05] tracking-[-0.045em] sm:text-[2.75rem]">
-                Hiring is more than posting a job and waiting for applications.
+                What we do
               </h2>
               <p className="max-w-md text-sm leading-6 text-neutral-600 sm:text-base sm:leading-7">
-                It requires finding relevant talent, building conversations, screening candidates,
-                coordinating interviews and converting hiring demand into successful joinings.
+                Recruitment support for employers, a platform for recruiters, AI-assisted workflows,
+                and hiring for different workforce needs.
               </p>
             </div>
           </Reveal>
@@ -173,16 +171,26 @@ export function AboutPage() {
           </Reveal>
           <Reveal delay={120} className="mx-auto mt-10 max-w-2xl space-y-4 text-sm leading-6 text-neutral-600 sm:text-base sm:leading-7">
             <p>
-              EarlyJobs brings these activities together through a distributed recruiter network
-              supported by technology and structured hiring execution.
+              <span className="font-semibold text-neutral-950">Recruitment Solutions for Employers. </span>
+              We help employers address recruitment requirements through candidate sourcing, recruiter
+              collaboration, and hiring coordination.
             </p>
             <p>
-              Our model is designed for companies that need to hire efficiently across multiple
-              roles, locations and workforce categories.
+              <span className="font-semibold text-neutral-950">Recruiter Network. </span>
+              We provide a platform for recruiters to explore relevant hiring requirements and
+              participate in recruitment activities.
             </p>
-            <p className="font-semibold text-neutral-950">That&apos;s the idea behind EarlyJobs.</p>
             <p>
-              You bring your expertise. Together, we create more ways to get the right people hired.
+              <span className="font-semibold text-neutral-950">AI-Assisted Recruitment. </span>
+              We use technology to support recruitment workflows, including candidate discovery and
+              matching, helping recruiters organise and progress their hiring activities.
+            </p>
+            <p>
+              <span className="font-semibold text-neutral-950">Our approach. </span>
+              We believe effective hiring requires more than access to candidate profiles. It requires
+              understanding the role, identifying relevant candidates, maintaining communication, and
+              coordinating the hiring process. EarlyJobs combines human recruitment expertise with
+              technology to support this work.
             </p>
           </Reveal>
         </div>
@@ -205,7 +213,7 @@ export function AboutPage() {
           <Reveal delay={60} className="text-center">
             <SectionTag>How Our Hiring Ecosystem Works</SectionTag>
             <h2 className="mx-auto mt-5 max-w-2xl text-[2rem] font-semibold leading-[1.05] tracking-[-0.045em] sm:text-[2.75rem]">
-              How Our Hiring Ecosystem Works
+              Different Solutions for Different Hiring Needs
             </h2>
           </Reveal>
           <ul className="reveal-stagger mt-14 grid gap-0 border-t border-black/10 sm:grid-cols-2 lg:grid-cols-4">
@@ -227,8 +235,8 @@ export function AboutPage() {
           </ul>
           <Reveal delay={100}>
             <p className="mx-auto mt-12 max-w-2xl text-center text-sm font-medium leading-6 text-neutral-700 sm:text-base">
-              Together, these capabilities address different parts of the hiring lifecycle while
-              supporting one larger vision.
+              Together, these businesses address different parts of the hiring landscape through
+              recruitment execution and technology.
             </p>
           </Reveal>
         </div>
@@ -418,7 +426,6 @@ export function AboutPage() {
         </div>
       </section>
 
-      {/* TODO(content): response-time SLA ("within [X] working days") omitted until a real number is supplied. */}
       <section id="lets-talk" className="scroll-mt-24 border-t border-black/5 bg-white">
         <div className="page-shell page-section">
           <SectionTag>Let&apos;s talk</SectionTag>
@@ -427,6 +434,7 @@ export function AboutPage() {
           </h2>
           <p className="mt-4 max-w-xl text-sm leading-6 text-neutral-600 sm:text-base sm:leading-7">
             Employers, agencies, investors and press: tell us what you&apos;re exploring.
+            Applications are reviewed through the applicable onboarding process.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link href="/employers" className={`${pill} bg-brand text-white hover:bg-[#d85c42]`}>

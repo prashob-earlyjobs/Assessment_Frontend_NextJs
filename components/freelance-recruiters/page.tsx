@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Reveal } from "@/components/ui/reveal";
-import { companyFacts } from "@/data/company-facts";
 import { earlyJobsContact } from "@/lib/contact";
 import { trackEvent } from "@/lib/track-event";
 
@@ -21,77 +20,12 @@ const btn =
 const btnGhost =
   "inline-flex h-11 items-center justify-center rounded-full border border-neutral-300 bg-white px-6 text-sm font-medium text-neutral-950 transition-colors hover:bg-neutral-50";
 
-// TODO(content): "No joining fee" omitted until confirmed.
-const trust = ["Paid per placement", "Flexible hours"] as const;
+const trust = ["Subject to programme terms", "Income is not guaranteed"] as const;
 
-type EarningRow = { role: string; commission: string; time: string };
-type RecruiterStory = { result: string; name: string; city: string; category: string; since: string };
-type ExtraFaq = { q: string; a: string };
-
-/** Renders only when founders supply confirmed commission figures. */
-function EarningsTable({ rows }: { rows: readonly EarningRow[] }) {
-  if (rows.length === 0) return null;
-  return (
-    <table className="mt-6 w-full text-left text-sm">
-      <caption className="mb-3 text-left text-base font-semibold">What can you earn?</caption>
-      <thead>
-        <tr>
-          <th className="py-2 pr-4">Role type</th>
-          <th className="py-2 pr-4">Typical commission</th>
-          <th className="py-2">Typical time to placement</th>
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map((row) => (
-          <tr key={row.role}>
-            <td className="py-2 pr-4">{row.role}</td>
-            <td className="py-2 pr-4">{row.commission}</td>
-            <td className="py-2">{row.time}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-}
-
-/** Renders only when real recruiter stories are supplied. */
-function RecruiterStories({ stories }: { stories: readonly RecruiterStory[] }) {
-  if (stories.length === 0) return null;
-  return (
-    <section>
-      <h2>Recruiters like you</h2>
-      <ul>
-        {stories.map((story) => (
-          <li key={story.name}>
-            {story.result} — {story.name}, {story.city}, recruiting for {story.category} since {story.since}
-          </li>
-        ))}
-      </ul>
-    </section>
-  );
-}
-
-/** Renders only FAQ answers that contain no unconfirmed claims. */
-function ExtraRecruiterFaqs({ items }: { items: readonly ExtraFaq[] }) {
-  if (items.length === 0) return null;
-  return (
-    <div>
-      {items.map((item) => (
-        <details key={item.q}>
-          <summary>{item.q}</summary>
-          <p>{item.a}</p>
-        </details>
-      ))}
-    </div>
-  );
-}
-
-// TODO(content): earnings rows omitted — commission amounts, timelines, TDS and payout cycle are unconfirmed.
-const earningRows: EarningRow[] = [];
-// TODO(content): recruiter stories omitted — names, cities, results and consent were not supplied.
-const recruiterStories: RecruiterStory[] = [];
-// TODO(content): extra FAQs omitted until confirmed — "Is it free to join?", "When and how do I get paid?", "Is freelance recruiting legitimate?" (claims token), "What tools and training do I get?".
-const extraFaqs: ExtraFaq[] = [];
+const commercialTerms = [
+  "Commercial terms are governed by the applicable recruiter programme or mandate agreement.",
+  "Payment arrangements are subject to the applicable commercial terms.",
+] as const;
 
 const helps = [
   {
@@ -105,8 +39,8 @@ const helps = [
     tone: "bg-[#D9D6FF]",
   },
   {
-    title: "Earn through successful placements",
-    body: "Receive commission for eligible successful placements according to the applicable terms. Your earnings depend on your placements, role economics and the programme's conditions.",
+    title: "Commercial arrangements",
+    body: "Commercial terms are governed by the applicable recruiter programme or mandate agreement. Payment arrangements are subject to the applicable commercial terms.",
     tone: "bg-[#F7C1E0]",
   },
   {
@@ -144,40 +78,40 @@ const how = [
   {
     n: "01",
     title: "Apply to join",
-    body: "Share your background, experience and interest in freelance recruitment.",
+    body: "Submit your details through the recruiter application form.",
     tone: "bg-[#FFE7A3]",
   },
   {
     n: "02",
-    title: "Get onboarded",
-    body: "Understand the recruitment process, expectations, tools and programme terms applicable to you.",
+    title: "Application review",
+    body: "Your application can be reviewed against the applicable onboarding requirements.",
     tone: "bg-[#D9D6FF]",
   },
   {
     n: "03",
-    title: "Explore hiring requirements",
-    body: "Review the mandates made available to you and understand the role, eligibility criteria and placement terms.",
+    title: "Complete onboarding",
+    body: "Follow the onboarding process and understand the working arrangements before participating.",
     tone: "bg-[#F7C1E0]",
   },
   {
     n: "04",
-    title: "Source and engage talent",
-    body: "Identify relevant candidates, assess their suitability and coordinate the next steps in the hiring process.",
+    title: "Explore relevant hiring requirements",
+    body: "Recruiter participation depends on suitable mandates and applicable programme terms.",
     tone: "bg-[#B7F0DE]",
   },
   {
     n: "05",
-    title: "Earn on successful placements",
-    body: "When an eligible placement is completed under the agreed terms, earn the applicable recruitment commission.",
+    title: "Support the hiring process",
+    body: "Work on candidate sourcing, screening coordination, and recruitment activities for relevant requirements.",
     tone: "bg-[#D6E4FF]",
   },
 ] as const;
 
 const earnings = [
-  "The number and type of mandates you work on.",
-  "Your ability to source and engage relevant candidates.",
-  "Successful placements and applicable commission terms.",
-  "Employer hiring timelines and recruitment requirements.",
+  "Commercial terms are governed by the applicable recruiter programme or mandate agreement.",
+  "Payment arrangements are subject to the applicable commercial terms.",
+  "Applying does not guarantee acceptance, mandate allocation, placements, or income.",
+  "Recruiter participation depends on suitable mandates and applicable programme terms.",
 ] as const;
 
 const industries = [
@@ -250,7 +184,7 @@ const faqs = [
   },
   {
     q: "How do freelance recruiters earn?",
-    a: "Eligible commissions are paid for successful placements according to the applicable mandate and agreed commercial terms. Earnings depend on results and are not guaranteed.",
+    a: "Commercial terms are governed by the applicable recruiter programme or mandate agreement. Payment arrangements are subject to the applicable commercial terms.",
   },
   {
     q: "Will EarlyJobs provide hiring requirements?",
@@ -287,12 +221,12 @@ export function FreelanceRecruitersPage() {
               Your Recruiting Career, Your Way
             </p>
             <h1 className="mt-4 max-w-xl text-[2.6rem] font-semibold leading-[1.05] tracking-[-0.04em] sm:text-[3.4rem]">
-              Become a Freelance Recruiter. Earn Per Placement,{" "}
-              <span className="text-brand">On Your Terms.</span>
+              Build Your Recruitment Journey with <span className="text-brand">EarlyJobs</span>
             </h1>
             <p className="mt-5 max-w-lg text-[15px] leading-7 text-neutral-500">
-              Work on verified hiring mandates from anywhere. Join {companyFacts.recruiters.value}{" "}
-              recruiters in the EarlyJobs network.
+              Put your recruitment skills to work with EarlyJobs. Explore the recruiter programme,
+              understand the onboarding process, and apply to participate in relevant hiring
+              requirements.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
@@ -306,7 +240,7 @@ export function FreelanceRecruitersPage() {
                 }
                 className={btn}
               >
-                Apply in minutes
+                Apply to Become a Recruiter
               </Link>
               <a href={whatsappHref} onClick={() => onWhatsapp("recruiter_whatsapp_hero")} className={btnGhost}>
                 Chat on WhatsApp
@@ -463,8 +397,9 @@ export function FreelanceRecruitersPage() {
               Restart Your Career with EarlyJobs
             </Link>
             <p className="mt-4 text-[12px] leading-5 text-neutral-400">
-              Flexible work does not mean guaranteed income or unrestricted hours. Opportunities,
-              workload and earnings depend on available mandates and individual performance.
+              Recruitment opportunities, mandate availability, eligibility, and commercial
+              arrangements are subject to the applicable programme terms. Applying does not guarantee
+              acceptance, mandate allocation, placements, or income.
             </p>
           </div>
         </div>
@@ -477,8 +412,13 @@ export function FreelanceRecruitersPage() {
               There&apos;s More Than One Way to Start
             </p>
             <h2 className="mt-3 text-[2.1rem] font-semibold leading-[1.08] tracking-[-0.04em] sm:text-[2.7rem]">
-              Your background could be your <span className="text-brand">starting point.</span>
+              Who can <span className="text-brand">apply?</span>
             </h2>
+            <p className="mt-4 text-[15px] leading-7 text-neutral-500">
+              People interested in recruitment and talent acquisition can explore the programme and
+              submit an application. Relevant recruitment experience and role specialisation can
+              help establish suitability for particular hiring requirements.
+            </p>
           </div>
           <ul className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {who.map((item) => (
@@ -503,8 +443,7 @@ export function FreelanceRecruitersPage() {
               Simple, Structured, Recruiter-First
             </p>
             <h2 className="mt-3 text-[2.1rem] font-semibold leading-[1.08] tracking-[-0.04em] sm:text-[2.7rem]">
-              From your first application to your next{" "}
-              <span className="text-brand">placement.</span>
+              How it <span className="text-brand">works</span>
             </h2>
           </div>
           <ol className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
@@ -533,34 +472,26 @@ export function FreelanceRecruitersPage() {
               Your Work. Your Results.
             </p>
             <h2 className="mt-3 max-w-lg text-[2.1rem] font-semibold leading-[1.08] tracking-[-0.04em] sm:text-[2.7rem]">
-              Turn your recruiting skills into earning{" "}
-              <span className="text-brand">opportunities.</span>
+              Commercial <span className="text-brand">terms</span>
             </h2>
             <div className="mt-5 space-y-3 text-[15px] leading-7 text-neutral-500">
+              {commercialTerms.map((item) => (
+                <p key={item}>{item}</p>
+              ))}
               <p>
-                Freelance recruitment creates the opportunity to earn by helping employers find the
-                people they need.
-              </p>
-              <p>
-                The commission for each successful placement depends on the applicable mandate,
-                agreed commercial terms and placement outcome.
-              </p>
-              <p>
-                As you build experience, strengthen your candidate network and improve your sourcing
-                approach, you can work towards building a more consistent freelance recruitment
-                practice.
+                Recruitment opportunities, mandate availability, eligibility, and commercial
+                arrangements are subject to the applicable programme terms.
               </p>
             </div>
             <Link href={applyHref} className={`${btn} mt-8`}>
-              Become a Freelance Recruiter
+              Apply to Become a Recruiter
             </Link>
             <p className="mt-4 max-w-lg text-[12px] leading-5 text-neutral-400">
-              Earnings are performance-based and are not guaranteed.
+              Applying does not guarantee acceptance, mandate allocation, placements, or income.
             </p>
-            <EarningsTable rows={earningRows} />
           </div>
           <div className="rounded-[22px] bg-[#f7f8fc] p-7 sm:p-8">
-            <h3 className="text-lg font-semibold tracking-[-0.02em]">What shapes your earnings?</h3>
+            <h3 className="text-lg font-semibold tracking-[-0.02em]">Important information</h3>
             <ul className="mt-5 space-y-3">
               {earnings.map((item) => (
                 <li key={item} className="text-[15px] leading-7 text-neutral-600">
@@ -637,7 +568,6 @@ export function FreelanceRecruitersPage() {
             </h2>
           </div>
           <div className="divide-y divide-black/10">
-            <ExtraRecruiterFaqs items={extraFaqs} />
             {faqs.map((item) => (
               <details key={item.q} className="group py-5">
                 <summary className="cursor-pointer list-none text-sm font-semibold marker:content-none [&::-webkit-details-marker]:hidden">
@@ -670,7 +600,7 @@ export function FreelanceRecruitersPage() {
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link href={applyHref} className={btn}>
-              Apply in minutes
+              Apply to Become a Recruiter
             </Link>
             <a href={whatsappHref} onClick={() => onWhatsapp("recruiter_whatsapp_footer")} className={btnGhost}>
               Chat with a recruiter on WhatsApp
@@ -704,8 +634,6 @@ export function FreelanceRecruitersPage() {
             </a>
             .
           </p>
-          {/* TODO(content): four recruiter-guide blog posts were not in the repo, so they are not linked. */}
-          <RecruiterStories stories={recruiterStories} />
           <p className="mt-8 text-sm text-neutral-400">EarlyJobs — Helping recruiters reach further.</p>
         </div>
       </section>

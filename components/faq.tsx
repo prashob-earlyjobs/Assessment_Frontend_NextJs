@@ -108,11 +108,11 @@ const questions = [
   },
   {
     q: "How do recruiters earn on EarlyJobs?",
-    a: "Recruiters earn a commission on successful placements against verified mandates. Earnings depend on the mandate and are not guaranteed.",
+    a: "Commercial terms are governed by the applicable recruiter programme or mandate agreement. Payment arrangements are subject to the applicable commercial terms.",
   },
   {
     q: "How are EarlyJobs, Huntlo AI and GigKaro related?",
-    a: "EarlyJobs is the recruiter network, Huntlo AI is the AI hiring infrastructure, and GigKaro handles frontline workforce hiring.",
+    a: "Together, these businesses address different parts of the hiring landscape through recruitment execution and technology.",
   },
   // TODO(content): skipped until confirmed — "Is EarlyJobs free for job seekers?" answer contained an unconfirmed fee claim.
   // TODO(content): skipped until confirmed — "Which cities does EarlyJobs cover?" needs a confirmed city list.

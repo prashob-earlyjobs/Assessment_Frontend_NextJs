@@ -5,13 +5,15 @@ export const metadata = pageMetadata({
   path: "/become-a-recruiter/apply",
   title: "Apply to Join as a Freelance Recruiter | EarlyJobs",
   description:
-    "Complete your EarlyJobs freelance recruiter application. It takes a few minutes and our team responds after review.",
-  ogTitle: "Apply to Join EarlyJobs as a Freelance Recruiter",
-  ogDescription: "A few minutes to apply. Our team reviews every application.",
+    "Complete the EarlyJobs recruiter application with accurate information about your background and recruitment interests.",
+  ogTitle: "Apply to Become a Recruiter | EarlyJobs",
+  ogDescription:
+    "Your details will be used as described in the EarlyJobs Privacy Policy. Applications are reviewed through the applicable onboarding process.",
   image: "/og/become-a-recruiter.jpg",
   imageAlt: "EarlyJobs freelance recruiter application",
   twitterTitle: "Apply to Join EarlyJobs",
-  twitterDescription: "A few minutes to apply. Our team reviews every application.",
+  twitterDescription:
+    "Applications are reviewed through the applicable onboarding process.",
   index: false,
   follow: true,
 });

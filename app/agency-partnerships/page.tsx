@@ -7,13 +7,15 @@ export const metadata = pageMetadata({
   path: "/agency-partnerships",
   title: "Recruitment Agency Tie-Up & Partnership | EarlyJobs",
   description:
-    "Recruitment agencies: get verified hiring mandates, work across cities and grow with EarlyJobs. Zero candidate fees. Apply to partner today.",
-  ogTitle: "Partner with EarlyJobs | Recruitment Agency Tie-Up",
-  ogDescription: "Get verified hiring mandates. Work across cities. Zero candidate fees.",
+    "Explore opportunities to collaborate with EarlyJobs on recruitment requirements. Share your agency's hiring specialisations and operating capabilities.",
+  ogTitle: "Recruitment Agency Partnerships with EarlyJobs",
+  ogDescription:
+    "Enquiries from recruitment agencies interested in sharing hiring specialisations, industry experience, and operating capabilities.",
   image: "/og/agency-partnerships.jpg",
   imageAlt: "Recruitment agencies partnering with EarlyJobs",
   twitterTitle: "Partner with EarlyJobs",
-  twitterDescription: "Verified hiring mandates for recruitment agencies. Zero candidate fees.",
+  twitterDescription:
+    "Explore a potential recruitment partnership. An enquiry does not guarantee approval or mandate allocation.",
 });
 
 export default function Page() {

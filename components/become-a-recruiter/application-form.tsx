@@ -341,10 +341,11 @@ export function RecruiterApplicationForm() {
         <p className="text-sm font-medium text-brand">Application</p>
         <h1 className="mt-2 text-[2rem] font-semibold leading-[1.1] tracking-[-0.045em] text-neutral-950 sm:text-[2.75rem]">
         <BackLink />
-          Apply to Join EarlyJobs as a Freelance Recruiter
+          Apply to Become a Recruiter
         </h1>
         <p className="mt-3 max-w-xl text-sm leading-6 text-neutral-600">
-          Tell us about yourself. You can move through five short steps—start with the essentials.
+          Interested in working on recruitment requirements through EarlyJobs? Complete the
+          application form with accurate information about your background and recruitment interests.
         </p>
       </header>
 
@@ -432,14 +433,13 @@ export function RecruiterApplicationForm() {
           Back
         </button>
         <div className="text-right">
-          {/* TODO(content): "No joining fee" and the reply-time promise were omitted until confirmed. */}
           {isLast ? (
             <p className="mb-3 max-w-xs text-right text-[12px] leading-5 text-neutral-500">
-              Your details are used only for your application.{" "}
+              Your details will be used as described in the EarlyJobs{" "}
               <Link href="/privacy-policy" className="underline">
                 Privacy Policy
               </Link>
-              .
+              . Please review your information before submitting your application.
             </p>
           ) : null}
           <button
@@ -448,7 +448,7 @@ export function RecruiterApplicationForm() {
             disabled={submitting}
             className={`${button} bg-brand text-white hover:bg-[#d85c42] disabled:cursor-wait disabled:opacity-70`}
           >
-            {isLast ? (submitting ? "Submitting…" : "Submit application") : "Continue"}
+            {isLast ? (submitting ? "Submitting…" : "Submit Application") : "Continue"}
           </button>
         </div>
       </div>

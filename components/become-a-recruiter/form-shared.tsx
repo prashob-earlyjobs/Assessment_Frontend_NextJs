@@ -12,7 +12,7 @@ export const roles = [
   {
     value: "Freelance Recruiter (Remote)",
     label: "Freelance Recruiter",
-    hint: "Remote · work verified mandates and earn on placements",
+    hint: "Remote · explore relevant hiring requirements",
   },
 ] as const;
 

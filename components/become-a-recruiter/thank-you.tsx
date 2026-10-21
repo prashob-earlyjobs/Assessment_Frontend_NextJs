@@ -28,12 +28,11 @@ export function RecruiterThankYou() {
       <h1 className="text-[2.2rem] font-semibold leading-[1.1] tracking-[-0.04em] text-neutral-950">
         Application received.
       </h1>
-      {/* TODO(content): review window "[X] working days" omitted until a real SLA is supplied. */}
       <h2 className="mt-8 text-lg font-semibold">What happens next</h2>
       <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm leading-6 text-neutral-700">
-        <li>We review your application.</li>
-        <li>You receive onboarding details on WhatsApp and email.</li>
-        <li>Start exploring mandates once onboarded.</li>
+        <li>Applications are reviewed through the applicable onboarding process.</li>
+        <li>Next steps follow the applicable programme terms.</li>
+        <li>Hiring requirements are explored only when a suitable mandate is available.</li>
       </ol>
       <h2 className="mt-10 text-lg font-semibold">While you wait</h2>
       <div className="mt-4 flex flex-wrap gap-3">

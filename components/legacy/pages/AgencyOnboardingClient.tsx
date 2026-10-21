@@ -549,7 +549,10 @@ export default function AgencyOnboardingClient() {
         <div className="mb-6 text-center">
           <h1 className="text-3xl font-bold text-slate-900">Agency Onboarding</h1>
           <p className="text-sm text-slate-600 mt-2">
-            Fill in your agency details. Fields marked with * are required.
+            Complete your recruitment agency onboarding with EarlyJobs. Provide accurate information
+            in the required fields so your agency details can be reviewed as part of the onboarding
+            process. Please ensure the information you submit is current and accurate. Review the
+            applicable terms and privacy information before submitting your details.
           </p>
         </div>
 

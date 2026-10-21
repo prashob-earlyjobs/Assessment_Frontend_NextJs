@@ -52,18 +52,18 @@
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "Who can partner with EarlyJobs as an agency?",
+          "name": "Who can enquire about a partnership?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Recruitment agencies and consultancies that hire in one or more categories, such as IT, BPO, banking, insurance, retail or healthcare. Partnerships are subject to suitability, availability and mutually agreed terms."
+            "text": "We welcome enquiries from recruitment agencies interested in sharing their hiring specialisations, industry experience, and operating capabilities."
           }
         },
         {
           "@type": "Question",
-          "name": "Can agencies charge candidates a fee?",
+          "name": "Does submitting an enquiry guarantee a partnership?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "No. Agencies must agree not to charge candidates any fee at any stage of the hiring process. Violations can lead to legal action."
+            "text": "Submitting an enquiry does not guarantee partnership approval, mandate allocation, or business outcomes."
           }
         }
       ]

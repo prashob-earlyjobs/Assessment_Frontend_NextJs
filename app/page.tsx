@@ -18,14 +18,15 @@ export const metadata = pageMetadata({
   path: "/",
   title: "EarlyJobs | Recruiter-First Hiring Network in India",
   description:
-    "EarlyJobs links verified employers, freelance recruiters and job seekers in one AI-assisted hiring network. Hire faster, earn per placement, get found.",
+    "EarlyJobs connects employers, recruiters, and job seekers through recruiter-led hiring and AI-assisted recruitment workflows.",
   ogTitle: "EarlyJobs | The Recruiter-First Hiring Network",
   ogDescription:
-    "One network where employers hire faster, recruiters earn per placement and job seekers get discovered.",
+    "Recruiter-led hiring and AI-assisted recruitment workflows for employers, recruiters, and job seekers.",
   image: "/og/home.jpg",
   imageAlt: "EarlyJobs network diagram connecting employers, recruiters and job seekers",
   twitterTitle: "EarlyJobs | The Recruiter-First Hiring Network",
-  twitterDescription: "Employers hire faster, recruiters earn per placement, job seekers get discovered.",
+  twitterDescription:
+    "Recruiter-led hiring and AI-assisted recruitment workflows for employers, recruiters, and job seekers.",
 });
 
 export default function Home() {
@@ -39,10 +40,10 @@ export default function Home() {
             What is EarlyJobs?
           </h2>
           <p className="mt-5 max-w-3xl text-sm leading-7 text-neutral-700 sm:text-base">
-            EarlyJobs is a recruiter-first hiring network based in Bengaluru. Employers share a
-            hiring need once, verified freelance recruiters work on it with AI-assisted matching,
-            and candidates reach interviews faster. It is not a job portal or an agency: recruiters
-            work independently inside the network.
+            EarlyJobs connects employers, recruiters, and job seekers through recruiter-led hiring
+            and AI-assisted recruitment workflows. We bring people, technology, and recruitment
+            execution together to help businesses find relevant talent and move hiring requirements
+            forward.
           </p>
         </div>
       </section>
