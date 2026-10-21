@@ -153,14 +153,14 @@ const SUCCESS_FRAMEWORK = ["Discover", "Design", "Deploy", "Deliver", "Optimize"
 
 const FAQS = [
   ["What makes a good GCC recruitment partner?", "A strong GCC recruitment partner delivers dedicated hiring teams, process visibility, domain expertise, and scalable execution instead of just sending resumes."],
-  ["How is EarlyJobs different from recruitment agencies?", "EarlyJobs builds hiring infrastructure through recruiter pods, operations, AI workflows, dashboards, and governance. Traditional agencies typically focus only on vacancy filling."],
+  ["How is EarlyJobs different from recruitment agencies?", "EarlyJobs supports GCC hiring through recruiter coordination, recruitment operations, and AI-assisted workflows. Scope is agreed for each engagement."],
   ["Do you provide dedicated recruiters?", "Yes. We deploy dedicated recruiter pods aligned to your functions, business units, and hiring priorities."],
   ["Can you support engineering hiring?", "Yes. Engineering hiring is one of our core strengths, from software teams to specialized technology roles."],
   ["Can you hire leadership roles?", "Yes. We support leadership hiring alongside high-volume and specialist hiring requirements."],
   ["How do recruiter pods work?", "Recruiter pods are structured teams that operate as an extension of your talent acquisition function with clear ownership, coordination, and reporting."],
   ["Can you hire across multiple cities?", "Yes. Our nationwide recruiter network supports multi-city GCC hiring across India."],
   ["How quickly can hiring begin?", "Hiring can begin quickly after discovery, planning, and recruiter pod deployment are aligned to your priorities."],
-  ["How do you measure hiring performance?", "We use hiring dashboards, funnel reporting, recruiter productivity metrics, and offer-to-join performance to measure outcomes."],
+  ["How do you measure hiring performance?", "Hiring activity can be reviewed against the measures agreed for the engagement. Specific reports are included only when they are part of the agreed service."],
   ["Do you support confidential hiring?", "Yes. We support confidential, leadership, and strategic hiring with the required discretion and governance."],
 ];
 
@@ -189,8 +189,7 @@ export default function GccRecruitmentPartnerPage() {
                 Your GCC Needs More Than a Recruitment Agency. It Needs a Hiring Partner.
               </h1>
               <p className="mt-5 text-lg font-medium leading-relaxed text-slate-200 sm:text-xl">
-                Scale your Global Capability Center with a dedicated recruitment partner that combines nationwide
-                recruiter networks, Human + AI hiring operations, and enterprise-grade recruitment execution.
+                EarlyJobs works with Global Capability Centers as a recruitment partner for dedicated hiring support, recruiter coordination, and AI-assisted recruitment workflows.
               </p>
               <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-400">
                 Whether you&apos;re hiring your first engineering team or expanding across multiple business functions,
@@ -501,11 +500,9 @@ export default function GccRecruitmentPartnerPage() {
                   className={`h-5 w-5 shrink-0 text-slate-500 transition ${openFaq === index ? "rotate-180" : ""}`}
                 />
               </button>
-              {openFaq === index && (
-                <div className="border-t border-slate-200 px-5 py-4 text-sm leading-relaxed text-slate-600">
+              <div hidden={openFaq !== index} className="border-t border-slate-200 px-5 py-4 text-sm leading-relaxed text-slate-600">
                   {answer}
                 </div>
-              )}
             </div>
           ))}
         </div>

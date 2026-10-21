@@ -13,24 +13,24 @@ import { useEffect } from "react";
 import { metaConstants } from "../../../utils/metaConstants";
 
 const heroSectionData = {
-    subheading: 'ENGAGE WITH THE BEST JOB CONSULTANCY FIRM',
-    heading: 'Our firm uses artificial intelligence to ease your accounting & finance hiring problems.',
+    subheading: 'FINANCE AND ACCOUNTING RECRUITMENT',
+    heading: 'Finance & Accounting Recruitment That Fits Your Business',
     list: [
         {
-            text: 'Experience with Top 10 Accounting Companies Hirings'
+            text: 'Recruitment support for finance and accounting roles'
         },
         {
-            text: 'Trust and Accuracy in Accounts & Finanace Hirings'
+            text: 'Role-based screening for accounts and finance hiring'
         },
         {
-            text: 'Ready to Transform Your Accounts and Finance Department'
+            text: 'Hiring support for accounts and finance teams'
         },
     ]
 }
 
 const section2Data = {
     heading: 'Our Hiring Experience, Turning Vision Into Reality.',
-    text: 'We take a consultative approach to hiring, meaning that we place value on long-term relationships that last far beyond the first placement. We work with businesses of all sizes, across industries to find their next great Finance & Accounting hire. partnering with us can bring numerous benefits in hiring accounts and finance openings, including expertise, time-savings, access to a wider candidate pool, cost savings, faster hiring, and expert support.',
+    text: 'EarlyJobs helps employers hire finance and accounting professionals for roles such as accounting, audit, taxation, financial planning and analysis, and related functions. Scope, timelines, and commercial terms are agreed for each hiring requirement.',
     image: '/services_imgs/features-summary.svg'
 }
 
@@ -52,12 +52,12 @@ const section3Data = [
     },
     {
         heading: 'Reduced hiring costs',
-        text: 'In-house recruitment can be costly, with expenses such as advertising job vacancies, conducting background checks, and onboarding new hires. Earlyjobs often have a fixed fee or a percentage-based fee structure, which can help in reducing overall hiring costs.',
+        text: 'Commercial terms are agreed with the employer for the hiring requirement. EarlyJobs does not publish a standard fee on this page.',
         icon: <FaPaintBrush className='service-page-s3-item-icon'/>
     },
     {
         heading: 'Faster hiring process',
-        text: 'We have established processes and resources in place to accelerate the hiring process. They can help streamline the recruitment process, from sourcing candidates to conducting interviews, resulting in faster and more efficient hires.',
+        text: 'Recruiters work from the role requirements you share. Timelines depend on the role, location, and candidate availability.',
         icon: <FaStopwatch className='service-page-s3-item-icon'/>
     },
     {
@@ -101,11 +101,11 @@ const servicePageAccordianData = [
     },
     {
         label: 'How does EarlyJobs ensure the quality of candidates?',
-        content: 'EarlyJobs ensures the quality of candidates through a rigorous screening process that includes background checks, skills assessments, and in-depth interviews. We also consider cultural fit to ensure candidates will thrive in their new roles.'
+        content: 'Candidate review focuses on the role requirements shared by the employer. Specific checks or assessments are used only when they are part of the agreed process.'
     },
     {
         label: 'Is there a fee for candidates to use EarlyJobs services?',
-        content: 'No, EarlyJobs does not charge candidates for using our recruitment services. Our fees are covered by the employers seeking to hire through our platform, allowing us to offer our services to job seekers at no cost.'
+        content: 'Recruitment fees are agreed with the employer under the applicable commercial terms.'
     },
 ];
 

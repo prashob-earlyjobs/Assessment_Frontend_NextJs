@@ -8,21 +8,21 @@ const Testimonials = () => {
 
   const testimonials = [
     {
-      quote: "I earned back my investment in 4 months. The EarlyJobs model works perfectly for someone without prior HR experience like me.",
-      name: "Priya Sharma",
-      location: "Delhi",
+      quote: "Earnings are not guaranteed. Results depend on the business, location, effort, and market conditions.",
+      name: "EarlyJobs",
+      location: "Programme terms",
       avatar: "https://via.placeholder.com/100x100"
     },
     {
-      quote: "EarlyJobs gave me the platform to start my own agency. The training and support has been exceptional throughout the journey.",
-      name: "Rajat Verma",
-      location: "Bangalore",
+      quote: "Training and support are described in the applicable franchise agreement. Acceptance is not guaranteed.",
+      name: "EarlyJobs",
+      location: "Programme terms",
       avatar: "https://via.placeholder.com/100x100"
     },
     {
-      quote: "I'm proud to support women in my city through hiring. Our franchise is now making ₹5L+ monthly after just 8 months.",
-      name: "Shalini Patel",
-      location: "Pune",
+      quote: "EarlyJobs does not promise a specific income, placement volume, or payback period.",
+      name: "EarlyJobs",
+      location: "Programme terms",
       avatar: "https://via.placeholder.com/100x100"
     }
   ];
@@ -38,7 +38,7 @@ const Testimonials = () => {
   return (
     <section id="testimonials" className="testimonials-section">
       <div className="testimonials-container">
-        <h2 className="testimonials-heading">Our Partners Are Growing Fast</h2>
+        <h2 className="testimonials-heading">Before you apply</h2>
         
         <div className="testimonials-slider">
           <div className="testimonials-card">

@@ -108,16 +108,16 @@ const LimitedOffer = () => {
                 <div className="offer-header">
                   <AlarmClock className="w-6 h-6" />
                   <h3 className="offer-title">
-                    Launch Offer for Franchise India Expo Visitors 🎉
+                    Franchise enquiries
                   </h3>
                 </div>
 
                
                 <div className="benefits-list">
                   {[
-                    "Marketing & branding support from HQ",
-                    "Dedicated success manager for 6 months",
-                    "₹1 lakh + GST for the first 20 franchises",
+                    "Marketing and branding support is discussed during onboarding.",
+                    "Support arrangements are set out in the franchise agreement.",
+                    "Investment terms are confirmed before any agreement is signed.",
                   ].map((benefit, idx) => (
                     <div className="benefit-item" key={idx}>
                       <div className="check-icon-container">
@@ -129,7 +129,7 @@ const LimitedOffer = () => {
                 </div>
 
                 <p className="offer-deadline">
-                  Act fast — Offer valid till August 31, 2025 ⏳
+                  A promotional fee that ended on 31 August 2025 is no longer available.
                 </p>
               </div>
 

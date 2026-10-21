@@ -1,0 +1,100 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.earlyjobs.ai/franchise#webpage",
+      "url": "https://www.earlyjobs.ai/franchise",
+      "name": "Start a Recruitment Franchise with EarlyJobs | Investment & Support",
+      "description": "Explore a recruitment franchise with EarlyJobs. Investment, support, and commercial terms are confirmed in the applicable franchise agreement. Outcomes vary and are not guaranteed.",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/franchise#breadcrumb"
+      },
+      "dateModified": "2026-10-21"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/franchise#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Start a Recruitment Franchise with EarlyJobs",
+          "item": "https://www.earlyjobs.ai/franchise"
+        }
+      ]
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.earlyjobs.ai/franchise#service",
+      "name": "Recruitment franchise",
+      "description": "Explore a recruitment franchise with EarlyJobs. Investment, support, and commercial terms are confirmed in the applicable franchise agreement. Outcomes vary and are not guaranteed.",
+      "provider": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "India"
+      },
+      "url": "https://www.earlyjobs.ai/franchise"
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.earlyjobs.ai/franchise#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Do I need HR experience?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No, prior HR experience is not required. We provide comprehensive training on recruitment, operations, and sales processes. Our step-by-step training program covers everything you need to know to run a successful EarlyJobs franchise."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How much can I earn?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Earnings are not guaranteed. Results depend on the business, location, effort, and market conditions. EarlyJobs does not promise a specific income."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the franchise fee?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Investment and commercial terms are set out in the applicable franchise agreement. A promotional fee that ended on 31 August 2025 is no longer available."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need an office?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A physical office space of 200-400 sq ft is preferred for Tier 1 cities to establish a professional brand presence. In Tier 2/3 cities, you can start with a home office setup and scale as your business grows."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What support is provided?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We provide comprehensive support including technology platform access, job leads, training modules, marketing materials, and more."
+          }
+        }
+      ]
+    }
+  ]
+}

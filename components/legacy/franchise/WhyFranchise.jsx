@@ -7,8 +7,8 @@ const WhyFranchise = () => {
   const franchiseReasons = [
     {
       icon: <Briefcase className="reason-icon" />,
-      title: "Proven Model",
-      description: "Built-in success — 200+ recruiters onboarded, 75+ clients"
+      title: "Recruitment network",
+      description: "Explore the EarlyJobs recruiter network and hiring requirements"
     },
     {
       icon: <Brain className="reason-icon" />,
@@ -17,13 +17,13 @@ const WhyFranchise = () => {
     },
     {
       icon: <DollarSign className="reason-icon" />,
-      title: "Low Setup, High ROI",
-      description: "Start with just ₹2L Fee + minimal infra"
+      title: "Investment terms",
+      description: "Fees and setup requirements are confirmed in the franchise agreement"
     },
     {
       icon: <TrendingUp className="reason-icon" />,
-      title: "Recurring Monthly Income",
-      description: "Earn from placements, assessments & partnerships"
+      title: "Commercial terms",
+      description: "Income is not guaranteed and depends on the applicable agreement"
     },
     {
       icon: <Users className="reason-icon" />,

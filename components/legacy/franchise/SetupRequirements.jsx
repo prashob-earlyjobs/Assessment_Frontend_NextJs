@@ -22,7 +22,7 @@ const SetupRequirements = () => {
     {
       icon: <Check className="setup-icon" />,
       title: "Franchise Fee",
-      description: "₹2Lakh + GST",
+      description: "Set out in the franchise agreement",
     },
   ];
 
@@ -57,20 +57,20 @@ const SetupRequirements = () => {
               <tbody>
                 <tr>
                   <td>Franchise Fee</td>
-                  <td>₹2,00,000*</td>
+                  <td>Set out in the franchise agreement</td>
                 </tr>
                 <tr>
                   <td>Office Setup & Equipment</td>
-                  <td>₹1,00,000 - ₹2,00,000</td>
+                  <td>Depends on the local setup</td>
                 </tr>
 
                 <tr>
                   <td>Working Capital (5-6 months runway)</td>
-                  <td>4,00,000 - 5,00,000</td>
+                  <td>Depends on the business plan</td>
                 </tr>
                 <tr>
                   <td>Total Setup Investment</td>
-                  <td>₹7,00,000 - ₹9,00,000</td>
+                  <td>Confirmed before an agreement is signed</td>
                 </tr>
               </tbody>
             </table>

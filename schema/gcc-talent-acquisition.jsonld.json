@@ -1,0 +1,132 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.earlyjobs.ai/gcc-talent-acquisition#webpage",
+      "url": "https://www.earlyjobs.ai/gcc-talent-acquisition",
+      "name": "GCC Talent Acquisition Strategy & Operations | EarlyJobs",
+      "description": "EarlyJobs supports Global Capability Centers with talent acquisition planning and recruitment execution, including sourcing, screening coordination, and recruiter-led hiring.",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/gcc-talent-acquisition#breadcrumb"
+      },
+      "dateModified": "2026-10-21"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/gcc-talent-acquisition#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "GCC Talent Acquisition Strategy & Operations",
+          "item": "https://www.earlyjobs.ai/gcc-talent-acquisition"
+        }
+      ]
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.earlyjobs.ai/gcc-talent-acquisition#service",
+      "name": "GCC talent acquisition",
+      "description": "EarlyJobs supports Global Capability Centers with talent acquisition planning and recruitment execution, including sourcing, screening coordination, and recruiter-led hiring.",
+      "provider": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "India"
+      },
+      "url": "https://www.earlyjobs.ai/gcc-talent-acquisition"
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.earlyjobs.ai/gcc-talent-acquisition#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is Talent Acquisition for GCCs?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Talent Acquisition for GCCs is the strategic function of building long-term talent pipelines, workforce plans, employer brand, and hiring operationsânot just filling current openings."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is Talent Acquisition different from recruitment?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Recruitment is reactive vacancy filling. Talent Acquisition is proactive workforce building supported by planning, branding, analytics, and ongoing talent engagement."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why does employer branding matter?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Strong employer branding improves offer acceptance, talent quality, candidate trust, and hiring velocityâespecially for engineering and specialist roles."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do recruiter networks improve hiring?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Recruiter networks improve reach, sourcing speed, market coverage, and access to hard-to-find talent across multiple locations."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can EarlyJobs support workforce planning?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Workforce planning is a core part of our Talent Acquisition infrastructure support."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you help with talent intelligence?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. We support talent intelligence through market mapping, role prioritization, hiring signals, and better decision-making inputs."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can you support engineering leadership hiring?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. We support leadership hiring alongside engineering and specialist talent acquisition needs."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do you improve candidate experience?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Candidate communication follows the process agreed for the role. EarlyJobs does not promise a specific response time on this page."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can you build long-term talent pipelines?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. EarlyJobs helps GCCs build repeatable, long-term talent pipelines through recruiter networks, employer branding, and AI-enabled hiring operations."
+          }
+        }
+      ]
+    }
+  ]
+}

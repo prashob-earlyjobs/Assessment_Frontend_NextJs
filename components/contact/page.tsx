@@ -202,11 +202,10 @@ export function ContactPage() {
           <div>
             <Reveal>
               <h1 className="text-[2.6rem] leading-[1.05] font-medium tracking-[-0.045em] sm:text-[3.4rem]">
-                Contact Us
+                Contact EarlyJobs
               </h1>
               <p className="mt-4 max-w-md text-[15px] leading-7 text-neutral-600 sm:text-base">
-                Email, call, or complete the form to learn how EarlyJobs can support your hiring or
-                partnership goals.
+                Contact EarlyJobs to discuss hiring requirements, recruitment partnerships, or general enquiries. Share the role, location, and timeline, and the team will review the enquiry.
               </p>
 
               <div className="mt-8 space-y-2 text-[15px]">

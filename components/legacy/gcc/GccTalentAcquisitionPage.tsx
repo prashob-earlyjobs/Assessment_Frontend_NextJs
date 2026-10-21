@@ -127,7 +127,7 @@ const FAQS = [
   ["Can EarlyJobs support workforce planning?", "Yes. Workforce planning is a core part of our Talent Acquisition infrastructure support."],
   ["Do you help with talent intelligence?", "Yes. We support talent intelligence through market mapping, role prioritization, hiring signals, and better decision-making inputs."],
   ["Can you support engineering leadership hiring?", "Yes. We support leadership hiring alongside engineering and specialist talent acquisition needs."],
-  ["How do you improve candidate experience?", "We improve candidate experience through structured communication, faster coordination, greater transparency, and better offer/joining support."],
+  ["How do you improve candidate experience?", "Candidate communication follows the process agreed for the role. EarlyJobs does not promise a specific response time on this page."],
   ["Can you build long-term talent pipelines?", "Yes. EarlyJobs helps GCCs build repeatable, long-term talent pipelines through recruiter networks, employer branding, and AI-enabled hiring operations."],
 ];
 
@@ -155,8 +155,7 @@ export default function GccTalentAcquisitionPage() {
                 Modern Talent Acquisition for Global Capability Centers
               </h1>
               <p className="mt-5 text-lg font-medium leading-relaxed text-slate-700 sm:text-xl">
-                Build a scalable Talent Acquisition function that combines Human expertise, AI-powered hiring
-                workflows, recruiter networks, and structured recruitment operations to help your GCC grow faster.
+                EarlyJobs supports Global Capability Centers with talent acquisition planning and recruitment execution, including sourcing, screening coordination, and recruiter-led hiring.
               </p>
               <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-600">
                 EarlyJobs partners with Global Capability Centers to design and execute modern talent acquisition
@@ -437,11 +436,9 @@ export default function GccTalentAcquisitionPage() {
                   className={`h-5 w-5 shrink-0 text-slate-500 transition ${openFaq === index ? "rotate-180" : ""}`}
                 />
               </button>
-              {openFaq === index && (
-                <div className="border-t border-slate-200 px-5 py-4 text-sm leading-relaxed text-slate-600">
+              <div hidden={openFaq !== index} className="border-t border-slate-200 px-5 py-4 text-sm leading-relaxed text-slate-600">
                   {answer}
                 </div>
-              )}
             </div>
           ))}
         </div>
