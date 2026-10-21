@@ -37,7 +37,7 @@ const section2Data = {
 const section3Data = [
     {
         heading: 'Expertise',
-        text: 'We have specialized knowledge and expertise in hiring for specific industries, such as finance and accounting. They understand the qualifications, skills, and experience needed for these roles and can effectively screen and shortlist candidates accordingly.',
+        text: 'EarlyJobs has specialised knowledge of finance and accounting roles. The team reviews qualifications, skills, and experience against the requirements you share.',
         icon: <FaRocket className='service-page-s3-item-icon'/>
     },
     {
@@ -47,7 +47,7 @@ const section3Data = [
     },
     {
         heading: 'Access to a wider pool of candidates',
-        text: 'We have an extensive network and database of qualified candidates. They can tap into this pool to find suitable candidates for your accounts and finance openings, including those who may not be actively looking for a job but are open to new opportunities.',
+        text: 'EarlyJobs can search a wider set of finance and accounting candidates, including people who are not actively applying but are open to a relevant role.',
         icon: <FaGripLinesVertical className='service-page-s3-item-icon'/>
     },
     {
@@ -62,7 +62,7 @@ const section3Data = [
     },
     {
         heading: 'Expert advice and support',
-        text: 'We can provide valuable advice and guidance throughout the hiring process. They can offer insights on market trends, salary benchmarks, and candidate expectations, helping you make informed decisions and attract top talent.',
+        text: 'EarlyJobs can discuss market context and the hiring requirement with you. Salary figures and assessments are used only when they are part of the agreed process.',
         icon: <FaUserNurse className='service-page-s3-item-icon'/>
     },
 ]
@@ -124,13 +124,10 @@ const FinanceAccountingServicePage = () => {
                 <div className='service-page-s4-content'>
                     <h2 className="service-page-s4-heading">WELCOME TO OUR ACCOUNTS & FINANCE RECRUITMENT SERVICES</h2>
                     <p className="service-page-s4-text">
-                        At Earlyjobs, we understand the critical role that skilled accounting and finance professionals play in driving financial success. Our recruitment services are designed to help you find the perfect candidates who will strengthen your financial team and contribute to your business growth.
+                        EarlyJobs helps employers hire finance and accounting professionals. Recruitment support covers the role requirements you share, including accounting, audit, taxation, and financial planning and analysis.
                         <br />
                         <br />
-                        At our company, we pride ourselves on being experts in the recruitment and placement of talented accounting and finance professionals. Through our extensive network of industry contacts and our deep understanding of the qualifications and skill sets required for success in the financial world, we are able to identify and attract the absolute best candidates for your business needs.
-                        <br />
-                        <br />
-                        Our team of recruitment specialists focuses on your unique requirements and applies their expertise to find the candidates who possess the technical expertise, analytical skills, and financial acumen necessary to not just meet, but exceed your expectations in today’s fast-paced and highly competitive business landscape.
+                        The team reviews candidates against those requirements. Scope, timelines, and commercial terms are agreed for each hiring requirement.
                     </p>
                     <h2 className="service-page-s4-heading">YOUR PATH TO BUILDING A HIGH-PERFORMING FINANCE TEAM</h2>
                     <p className="service-page-s4-text">
@@ -142,10 +139,10 @@ const FinanceAccountingServicePage = () => {
                     <h2 className="service-page-s4-heading">WHY CHOOSE OUR ACCOUNTS & FINANCE RECRUITMENT SERVICES</h2>
                     <Highlights section4HighlightData={section4HighlightData} />
                     <h1 className="service-page-s4-subheading">Ready to Transform Your Accounts and Finance Department?</h1>
-                    <p className="service-page-s4-text">Welcome to Earlyjobs, the leading executive recruitment firm specializing in connecting exceptional talent with organizations dignified for greatness. With an unparalleled track record and an strong commitment to excellence, we, the best placement consultancy are here to transform your executive hiring process and elevate your business to new heights.</p>
+                    <p className="service-page-s4-text">EarlyJobs supports accounts and finance hiring for the roles you need to fill. Share the role, location, and timeline, and the team will review the requirement. This page covers finance and accounting recruitment. It does not describe executive search.</p>
                 </div>
                 <div className='service-page-s4-consultancy-con'>
-                    <img src="/services_imgs/Finance-Recruitment-Services.png" draggable={false} alt="it-recruitment-service" className="service-page-s4-image"/>
+                    <img src="/services_imgs/Finance-Recruitment-Services.png" draggable={false} alt="Finance and accounting recruitment" className="service-page-s4-image"/>
                     <div className='service-page-s4-consultancy-content'>
                         {/* <div className='service-page-s4-consultancy-heading-con'>
                             <ConsultationForm />

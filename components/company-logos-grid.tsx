@@ -10,15 +10,17 @@ type CompanyLogosGridProps = {
   eyebrow?: string;
   title: string;
   body: string;
+  companies?: PublicCompany[];
 };
 
 export function CompanyLogosGrid({
   eyebrow = "Hiring companies",
   title,
   body,
+  companies: initialCompanies = [],
 }: CompanyLogosGridProps) {
   const sectionRef = useRef<HTMLElement>(null);
-  const [companies, setCompanies] = useState<PublicCompany[]>([]);
+  const [companies, setCompanies] = useState<PublicCompany[]>(initialCompanies);
   const [expanded, setExpanded] = useState(false);
 
   const toggleExpanded = () => {
@@ -35,6 +37,7 @@ export function CompanyLogosGrid({
   };
 
   useEffect(() => {
+    if (initialCompanies.length > 0) return;
     let cancelled = false;
 
     fetch("/api/companies")
@@ -53,7 +56,7 @@ export function CompanyLogosGrid({
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [initialCompanies.length]);
 
   const visible = expanded ? companies : companies.slice(0, INITIAL_COUNT);
   const canExpand = companies.length > INITIAL_COUNT;
@@ -78,15 +81,16 @@ export function CompanyLogosGrid({
           <>
             <ul className="mt-14 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 sm:gap-x-8 sm:gap-y-12 md:grid-cols-5 md:gap-x-10 md:gap-y-14">
               {visible.map((company) => (
-                <li key={company.id} className="flex items-center justify-center">
+                <li key={company.id} className="flex flex-col items-center justify-center gap-2">
                   <Image
                     src={company.logo_url}
-                    alt={company.name}
+                    alt=""
                     width={180}
                     height={140}
                     unoptimized
                     className="h-16 w-full max-w-[11rem] object-contain opacity-90 grayscale transition-all duration-300 hover:opacity-100 hover:grayscale-0 sm:h-20 md:h-24"
                   />
+                  <p className="text-center text-[12px] leading-4 text-neutral-600">{company.name}</p>
                 </li>
               ))}
             </ul>

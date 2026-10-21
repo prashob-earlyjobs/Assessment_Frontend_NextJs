@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import BlogsPage from "@/components/legacy/blogs/page";
 import { JsonLd } from "@/components/json-ld";
+import { getPublishedBlogs } from "@/lib/public-blogs";
 import { pageMetadata } from "@/lib/page-metadata";
 import blogsSchema from "@/schema/blogs.jsonld.json";
 
@@ -20,11 +21,23 @@ export const metadata: Metadata = pageMetadata({
   twitterCard: "summary",
 });
 
-export default function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string; tag?: string; search?: string }>;
+}) {
+  const query = await searchParams;
+  const page = Math.max(1, Number(query.page) || 1);
+  const initial = await getPublishedBlogs({
+    page,
+    tag: query.tag,
+    search: query.search,
+  });
+
   return (
     <>
       <JsonLd data={blogsSchema} />
-      <BlogsPage />
+      <BlogsPage initial={initial} />
     </>
   );
 }
