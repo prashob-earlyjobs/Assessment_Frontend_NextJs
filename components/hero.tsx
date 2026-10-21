@@ -283,7 +283,7 @@ function LogoCarousel() {
 }
 
 export function Hero() {
-  const [audience, setAudience] = useState<(typeof audiences)[number]["id"]>("hiring");
+  const [audience, setAudience] = useState<(typeof audiences)[number]["id"]>("job");
   const active = audiences.find((item) => item.id === audience) ?? audiences[0];
 
   return (
@@ -310,10 +310,9 @@ export function Hero() {
           </h1>
 
           <p className="mx-auto max-w-3xl px-2 text-center text-sm text-white/80 sm:px-6 sm:text-base md:text-lg lg:text-xl">
-            EarlyJobs connects employers, recruiters, and job seekers through recruiter-led hiring
-            and AI-assisted recruitment workflows. We bring people, technology, and recruitment
-            execution together to help businesses find relevant talent and move hiring requirements
-            forward. A network of recruiters working across relevant hiring requirements. {active.body}
+            EarlyJobs connects employers, recruiters, and job seekers.
+            <br />
+            Recruiter-led hiring and AI-assisted recruitment workflows.
           </p>
 
           <div className="flex flex-wrap justify-center gap-2" role="tablist" aria-label="Who is this for">

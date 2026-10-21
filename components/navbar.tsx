@@ -185,24 +185,6 @@ export function Navbar({
         <DesktopNav links={links} pathname={pathname} inverted={overHero} />
 
         <div className="flex min-w-0 items-center justify-end gap-1.5 sm:gap-2">
-          <a
-            href="https://www.huntlo.ai/"
-            target="_blank"
-            rel="noreferrer"
-            onClick={() =>
-              trackEvent("cta_click", {
-                cta_id: "nav_huntlo",
-                audience: "employer",
-                location: "header",
-              })
-            }
-            className={`hidden items-center gap-1 text-[13px] font-medium lg:inline-flex ${
-              overHero ? "text-white/80 hover:text-white" : "text-neutral-600 hover:text-neutral-950"
-            }`}
-          >
-            Huntlo AI for recruiting teams
-            <span aria-hidden>↗</span>
-          </a>
           <Link
             href={ctaHref}
             onClick={() =>
@@ -251,16 +233,6 @@ export function Navbar({
                 </li>
               ))}
             </ul>
-            <div className="mt-2 flex flex-col gap-1 border-t border-black/[0.06] pt-2">
-              <a
-                href="https://www.huntlo.ai/"
-                target="_blank"
-                rel="noreferrer"
-                className="rounded-lg px-3 py-2.5 text-sm font-medium text-neutral-700"
-              >
-                Huntlo AI for recruiting teams ↗
-              </a>
-            </div>
           </nav>
         </div>
     </header>
