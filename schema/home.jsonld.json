@@ -38,10 +38,10 @@
         "value": "U78300KA2025PTC198732"
       },
       "sameAs": [
-        "https://www.facebook.com/earlyjobsofficial",
+        "https://www.facebook.com/earlyjobs",
         "https://www.instagram.com/earlyjobs.ai",
         "https://www.linkedin.com/company/earlyjobs",
-        "https://www.youtube.com/@EarlyJobsAI"
+        "https://www.youtube.com/@earlyjobs"
       ],
       "areaServed": {
         "@type": "Country",
@@ -166,11 +166,6 @@
       "url": "https://play.google.com/store/apps/details?id=com.victaman.earlyjobs",
       "publisher": {
         "@id": "https://www.earlyjobs.ai/#organization"
-      },
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "INR"
       }
     },
     {
@@ -181,11 +176,6 @@
       "url": "https://apps.apple.com/in/app/earlyjobs-ai/id6754554572",
       "publisher": {
         "@id": "https://www.earlyjobs.ai/#organization"
-      },
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "INR"
       }
     }
   ]
