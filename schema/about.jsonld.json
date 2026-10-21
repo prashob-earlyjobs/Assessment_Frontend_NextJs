@@ -1,0 +1,122 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "AboutPage",
+      "@id": "https://www.earlyjobs.ai/about#webpage",
+      "url": "https://www.earlyjobs.ai/about",
+      "name": "About EarlyJobs | Recruiter-First Hiring Network, India",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/about#breadcrumb"
+      },
+      "dateModified": "2026-10-21"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "About",
+          "item": "https://www.earlyjobs.ai/about"
+        }
+      ],
+      "@id": "https://www.earlyjobs.ai/about#breadcrumb"
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://www.earlyjobs.ai/#organization",
+      "name": "EarlyJobs",
+      "legalName": "Victa EarlyJobs Technologies Private Limited",
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "Recruiters in network",
+          "value": "3,449+"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "Companies",
+          "value": "266+"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "Interviews facilitated",
+          "value": "72,000+"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "Successful joinings",
+          "value": "5,500+"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "College partners",
+          "value": "430+"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "Hiring partners",
+          "value": "20+"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is EarlyJobs?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EarlyJobs is a recruiter-first hiring network that combines a distributed recruiter network, AI-powered hiring infrastructure and local execution to help companies hire across India and beyond."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Who runs EarlyJobs?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EarlyJobs is operated by Victa EarlyJobs Technologies Private Limited, based in Koramangala, Bengaluru, Karnataka."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How are EarlyJobs, Huntlo AI and GigKaro related?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EarlyJobs is the recruiter network. Huntlo AI is the AI hiring infrastructure used by recruitment teams, and GigKaro focuses on frontline workforce hiring such as delivery, warehousing and logistics."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does EarlyJobs hire outside major cities?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. The network is designed to reach talent across locations, including Tier 2 and Tier 3 cities, through recruiters who understand their local markets."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How big is the EarlyJobs network?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "As of October 2026, EarlyJobs reports 3,449+ recruiters, 266+ companies, 72,000+ interviews, 5,500+ successful joinings, 430+ college partners and 20+ hiring partners."
+          }
+        }
+      ]
+    }
+  ]
+}

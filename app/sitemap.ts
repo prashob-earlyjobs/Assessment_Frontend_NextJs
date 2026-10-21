@@ -15,6 +15,7 @@ const routes = [
   "/employers",
   "/recruiters",
   "/become-a-recruiter",
+  "/agency-partnerships",
   "/franchise",
   "/internship",
   "/jobs",

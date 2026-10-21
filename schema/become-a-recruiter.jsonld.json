@@ -1,0 +1,130 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.earlyjobs.ai/become-a-recruiter#webpage",
+      "url": "https://www.earlyjobs.ai/become-a-recruiter",
+      "name": "Freelance Recruiter in India | Work From Home | EarlyJobs",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/become-a-recruiter#breadcrumb"
+      },
+      "primaryImageOfPage": {
+        "@type": "ImageObject",
+        "url": "https://www.earlyjobs.ai/freelance-recruiters/hero-culture.jpg"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "For Recruiters",
+          "item": "https://www.earlyjobs.ai/recruiters"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Become a Freelance Recruiter",
+          "item": "https://www.earlyjobs.ai/become-a-recruiter"
+        }
+      ],
+      "@id": "https://www.earlyjobs.ai/become-a-recruiter#breadcrumb"
+    },
+    {
+      "@type": "Service",
+      "name": "Freelance recruiter programme",
+      "serviceType": "Freelance recruitment partner programme",
+      "provider": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "India"
+      },
+      "audience": {
+        "@type": "Audience",
+        "audienceType": "Recruiters, HR professionals and career-break returnees"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is a freelance recruiter at EarlyJobs?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A freelance recruiter works independently on recruitment requirements made available through EarlyJobs, helping identify and engage suitable candidates in line with the agreed process."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I work from home?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The model is designed to offer flexibility in where you work. Specific requirements, communication expectations and deadlines depend on the mandate and programme terms."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can women returning after a career break apply?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Women looking to return to recruitment or explore flexible professional opportunities are welcome to apply, subject to the programme's onboarding and role requirements."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need previous recruitment experience?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Relevant recruitment or HR experience can be helpful. Applicants without prior experience should confirm the current eligibility criteria and whether an appropriate training or entry-level pathway is available."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do freelance recruiters earn?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Eligible commissions are paid for successful placements according to the applicable mandate and agreed commercial terms. Earnings depend on results and are not guaranteed."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Will EarlyJobs provide hiring requirements?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EarlyJobs connects recruiters with available hiring opportunities through its network. Access to specific mandates depends on availability, suitability and the applicable onboarding process."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I choose my working hours?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Freelance recruitment offers greater flexibility than many traditional office roles, but recruiters must still meet agreed deadlines, candidate communication expectations and hiring timelines."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I get started?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Complete the application form. The team can review your details and share the relevant onboarding process and next steps."
+          }
+        }
+      ]
+    }
+  ]
+}

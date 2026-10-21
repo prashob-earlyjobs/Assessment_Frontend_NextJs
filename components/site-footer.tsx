@@ -319,7 +319,7 @@ export function SiteFooter() {
               Tools & Tie-Ups
             </h3>
             <Link
-              href="/agency-onboarding"
+              href="/agency-partnerships"
               className="mt-4 bg-transparent p-0 text-left text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
             >
               <Rocket className="mr-2 inline-block h-5 w-5" />
@@ -340,7 +340,7 @@ export function SiteFooter() {
               Franchise With Us
             </Link>
             <Link
-              href="/recruiter"
+              href="/become-a-recruiter"
               className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
             >
               <Users className="mr-2 inline-block h-5 w-5" />

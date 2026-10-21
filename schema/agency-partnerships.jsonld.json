@@ -1,0 +1,72 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.earlyjobs.ai/agency-partnerships#webpage",
+      "url": "https://www.earlyjobs.ai/agency-partnerships",
+      "name": "Recruitment Agency Tie-Up & Partnership | EarlyJobs",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/agency-partnerships#breadcrumb"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Agency Partnerships",
+          "item": "https://www.earlyjobs.ai/agency-partnerships"
+        }
+      ],
+      "@id": "https://www.earlyjobs.ai/agency-partnerships#breadcrumb"
+    },
+    {
+      "@type": "Service",
+      "name": "Recruitment agency partnership programme",
+      "serviceType": "Recruitment agency and consultancy partnership",
+      "provider": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "India"
+      },
+      "audience": {
+        "@type": "BusinessAudience",
+        "audienceType": "Recruitment agencies and consultancies"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Who can partner with EarlyJobs as an agency?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Recruitment agencies and consultancies that hire in one or more categories, such as IT, BPO, banking, insurance, retail or healthcare. Partnerships are subject to suitability, availability and mutually agreed terms."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can agencies charge candidates a fee?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Agencies must agree not to charge candidates any fee at any stage of the hiring process. Violations can lead to legal action."
+          }
+        }
+      ]
+    }
+  ]
+}

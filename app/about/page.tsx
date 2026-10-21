@@ -1,5 +1,7 @@
 import { AboutPage as AboutContent } from "@/components/about/page";
+import { JsonLd } from "@/components/json-ld";
 import { pageMetadata } from "@/lib/page-metadata";
+import aboutJsonLd from "@/schema/about.jsonld.json";
 
 export const metadata = pageMetadata({
   path: "/about",
@@ -15,5 +17,10 @@ export const metadata = pageMetadata({
 });
 
 export default function AboutPage() {
-  return <AboutContent />;
+  return (
+    <>
+      <JsonLd data={aboutJsonLd} />
+      <AboutContent />
+    </>
+  );
 }

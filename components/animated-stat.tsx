@@ -18,17 +18,11 @@ export function AnimatedStat({
   useEffect(() => {
     const match = value.match(/^([\d,]+)(\+)?$/);
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!match || reduce) {
-      setText(value);
-      return;
-    }
+    if (!match || reduce) return;
 
     const target = Number(match[1].replace(/,/g, ""));
     const suffix = match[2] ?? "";
-    if (!Number.isFinite(target)) {
-      setText(value);
-      return;
-    }
+    if (!Number.isFinite(target)) return;
 
     let frame = 0;
     const start = performance.now();
@@ -42,8 +36,10 @@ export function AnimatedStat({
       if (progress < 1) frame = requestAnimationFrame(tick);
     };
 
-    setText(`0${suffix}`);
-    frame = requestAnimationFrame(tick);
+    frame = requestAnimationFrame(() => {
+      setText(`0${suffix}`);
+      frame = requestAnimationFrame(tick);
+    });
     return () => cancelAnimationFrame(frame);
   }, [value]);
 

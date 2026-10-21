@@ -1,21 +1,97 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { Reveal } from "@/components/ui/reveal";
+import { companyFacts } from "@/data/company-facts";
+import { earlyJobsContact } from "@/lib/contact";
+import { trackEvent } from "@/lib/track-event";
 
 const applyHref = "/become-a-recruiter/apply";
-const contactHref = "mailto:info@earlyjobs.in?subject=Freelance%20recruiter%20inquiry";
+const whatsappHref =
+  "https://wa.me/918217527926?text=Hi%20EarlyJobs%2C%20I'd%20like%20to%20join%20as%20a%20freelance%20recruiter";
+const callHref = `tel:${earlyJobsContact.phoneTel}`;
+
+function onWhatsapp(ctaId: string) {
+  trackEvent("whatsapp_click", { cta_id: ctaId, audience: "recruiter", location: "become_a_recruiter" });
+}
 
 const btn =
   "inline-flex h-11 items-center justify-center rounded-full bg-brand px-6 text-sm font-medium text-white transition-colors hover:bg-[#d85c42]";
 const btnGhost =
   "inline-flex h-11 items-center justify-center rounded-full border border-neutral-300 bg-white px-6 text-sm font-medium text-neutral-950 transition-colors hover:bg-neutral-50";
 
-const trust = [
-  "Flexible Work",
-  "Real Hiring Opportunities",
-  "Performance-Based Earnings",
-  "A Network That Supports You",
-] as const;
+// TODO(content): "No joining fee" omitted until confirmed.
+const trust = ["Paid per placement", "Flexible hours"] as const;
+
+type EarningRow = { role: string; commission: string; time: string };
+type RecruiterStory = { result: string; name: string; city: string; category: string; since: string };
+type ExtraFaq = { q: string; a: string };
+
+/** Renders only when founders supply confirmed commission figures. */
+function EarningsTable({ rows }: { rows: readonly EarningRow[] }) {
+  if (rows.length === 0) return null;
+  return (
+    <table className="mt-6 w-full text-left text-sm">
+      <caption className="mb-3 text-left text-base font-semibold">What can you earn?</caption>
+      <thead>
+        <tr>
+          <th className="py-2 pr-4">Role type</th>
+          <th className="py-2 pr-4">Typical commission</th>
+          <th className="py-2">Typical time to placement</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((row) => (
+          <tr key={row.role}>
+            <td className="py-2 pr-4">{row.role}</td>
+            <td className="py-2 pr-4">{row.commission}</td>
+            <td className="py-2">{row.time}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
+/** Renders only when real recruiter stories are supplied. */
+function RecruiterStories({ stories }: { stories: readonly RecruiterStory[] }) {
+  if (stories.length === 0) return null;
+  return (
+    <section>
+      <h2>Recruiters like you</h2>
+      <ul>
+        {stories.map((story) => (
+          <li key={story.name}>
+            {story.result} — {story.name}, {story.city}, recruiting for {story.category} since {story.since}
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+/** Renders only FAQ answers that contain no unconfirmed claims. */
+function ExtraRecruiterFaqs({ items }: { items: readonly ExtraFaq[] }) {
+  if (items.length === 0) return null;
+  return (
+    <div>
+      {items.map((item) => (
+        <details key={item.q}>
+          <summary>{item.q}</summary>
+          <p>{item.a}</p>
+        </details>
+      ))}
+    </div>
+  );
+}
+
+// TODO(content): earnings rows omitted — commission amounts, timelines, TDS and payout cycle are unconfirmed.
+const earningRows: EarningRow[] = [];
+// TODO(content): recruiter stories omitted — names, cities, results and consent were not supplied.
+const recruiterStories: RecruiterStory[] = [];
+// TODO(content): extra FAQs omitted until confirmed — "Is it free to join?", "When and how do I get paid?", "Is freelance recruiting legitimate?" (claims token), "What tools and training do I get?".
+const extraFaqs: ExtraFaq[] = [];
 
 const helps = [
   {
@@ -211,24 +287,29 @@ export function FreelanceRecruitersPage() {
               Your Recruiting Career, Your Way
             </p>
             <h1 className="mt-4 max-w-xl text-[2.6rem] font-semibold leading-[1.05] tracking-[-0.04em] sm:text-[3.4rem]">
-              Build a Career in Recruitment.{" "}
+              Become a Freelance Recruiter. Earn Per Placement,{" "}
               <span className="text-brand">On Your Terms.</span>
             </h1>
             <p className="mt-5 max-w-lg text-[15px] leading-7 text-neutral-500">
-              You don&apos;t need a corporate office to build a meaningful career. You need the right
-              opportunities, the freedom to work your way, and a network that helps you move forward.
-            </p>
-            <p className="mt-3 max-w-lg text-[15px] leading-7 text-neutral-500">
-              With EarlyJobs, work on hiring requirements from companies, connect the right talent
-              with the right opportunities, and earn commissions on successful placements — with the
-              flexibility to work from wherever life takes you.
+              Work on verified hiring mandates from anywhere. Join {companyFacts.recruiters.value}{" "}
+              recruiters in the EarlyJobs network.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link href={applyHref} className={btn}>
-                Become a Freelance Recruiter
+              <Link
+                href={applyHref}
+                onClick={() =>
+                  trackEvent("cta_click", {
+                    cta_id: "recruiter_apply_hero",
+                    audience: "recruiter",
+                    location: "hero",
+                  })
+                }
+                className={btn}
+              >
+                Apply in minutes
               </Link>
-              <a href="#how-it-works" className={btnGhost}>
-                How It Works
+              <a href={whatsappHref} onClick={() => onWhatsapp("recruiter_whatsapp_hero")} className={btnGhost}>
+                Chat on WhatsApp
               </a>
             </div>
             <p className="mt-5 max-w-md text-sm leading-6 text-neutral-400">
@@ -239,7 +320,7 @@ export function FreelanceRecruitersPage() {
           <Reveal delay={80} className="media-frame mx-auto aspect-[4/5] w-full max-w-sm lg:max-w-none">
             <Image
               src="/freelance-recruiters/hero-culture.jpg"
-              alt=""
+              alt="Freelance recruiters working together on EarlyJobs"
               fill
               priority
               className="object-cover object-center"
@@ -332,9 +413,6 @@ export function FreelanceRecruitersPage() {
                 <Mark />
                 <h3 className="text-lg font-semibold tracking-[-0.02em]">{item.title}</h3>
                 <p className="mt-3 text-sm leading-6 text-neutral-700">{item.body}</p>
-                <Link href={applyHref} className="mt-6 inline-flex text-sm font-medium text-brand">
-                  Learn more &gt;
-                </Link>
               </li>
             ))}
           </ul>
@@ -344,9 +422,6 @@ export function FreelanceRecruitersPage() {
                 <Mark />
                 <h3 className="text-lg font-semibold tracking-[-0.02em]">{item.title}</h3>
                 <p className="mt-3 text-sm leading-6 text-neutral-700">{item.body}</p>
-                <Link href={applyHref} className="mt-6 inline-flex text-sm font-medium text-brand">
-                  Learn more &gt;
-                </Link>
               </li>
             ))}
           </ul>
@@ -482,6 +557,7 @@ export function FreelanceRecruitersPage() {
             <p className="mt-4 max-w-lg text-[12px] leading-5 text-neutral-400">
               Earnings are performance-based and are not guaranteed.
             </p>
+            <EarningsTable rows={earningRows} />
           </div>
           <div className="rounded-[22px] bg-[#f7f8fc] p-7 sm:p-8">
             <h3 className="text-lg font-semibold tracking-[-0.02em]">What shapes your earnings?</h3>
@@ -561,6 +637,7 @@ export function FreelanceRecruitersPage() {
             </h2>
           </div>
           <div className="divide-y divide-black/10">
+            <ExtraRecruiterFaqs items={extraFaqs} />
             {faqs.map((item) => (
               <details key={item.q} className="group py-5">
                 <summary className="cursor-pointer list-none text-sm font-semibold marker:content-none [&::-webkit-details-marker]:hidden">
@@ -593,15 +670,57 @@ export function FreelanceRecruitersPage() {
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link href={applyHref} className={btn}>
-              Become a Freelance Recruiter
+              Apply in minutes
             </Link>
-            <a href={contactHref} className={btnGhost}>
-              Talk to Our Team
+            <a href={whatsappHref} onClick={() => onWhatsapp("recruiter_whatsapp_footer")} className={btnGhost}>
+              Chat with a recruiter on WhatsApp
             </a>
           </div>
+          <p className="mt-4 text-sm text-neutral-500">
+            Prefer to talk?{" "}
+            <a href={callHref} className="underline">
+              Call {earlyJobsContact.phoneDisplay}
+            </a>
+          </p>
+          <p className="mt-6 text-sm leading-6 text-neutral-500">
+            See how the network works for{" "}
+            <Link href="/recruiters" className="underline">
+              recruiters
+            </Link>{" "}
+            and browse open{" "}
+            <Link href="/jobs" className="underline">
+              jobs
+            </Link>
+            . Get the EarlyJobs app on{" "}
+            <a
+              href="https://play.google.com/store/apps/details?id=com.victaman.earlyjobs"
+              className="underline"
+            >
+              Google Play
+            </a>{" "}
+            or the{" "}
+            <a href="https://apps.apple.com/in/app/earlyjobs-ai/id6754554572" className="underline">
+              App Store
+            </a>
+            .
+          </p>
+          {/* TODO(content): four recruiter-guide blog posts were not in the repo, so they are not linked. */}
+          <RecruiterStories stories={recruiterStories} />
           <p className="mt-8 text-sm text-neutral-400">EarlyJobs — Helping recruiters reach further.</p>
         </div>
       </section>
+      <div className="fixed inset-x-0 bottom-0 z-40 flex gap-2 border-t border-black/10 bg-white p-3 sm:hidden">
+        <Link href={applyHref} className={`${btn} flex-1`}>
+          Apply
+        </Link>
+        <a
+          href={whatsappHref}
+          onClick={() => onWhatsapp("recruiter_whatsapp_sticky")}
+          className={`${btnGhost} flex-1`}
+        >
+          WhatsApp
+        </a>
+      </div>
     </main>
   );
 }

@@ -1,5 +1,7 @@
 import { FreelanceRecruitersPage } from "@/components/freelance-recruiters/page";
+import { JsonLd } from "@/components/json-ld";
 import { pageMetadata } from "@/lib/page-metadata";
+import recruiterJsonLd from "@/schema/become-a-recruiter.jsonld.json";
 
 export const metadata = pageMetadata({
   path: "/become-a-recruiter",
@@ -15,5 +17,10 @@ export const metadata = pageMetadata({
 });
 
 export default function BecomeARecruiterPage() {
-  return <FreelanceRecruitersPage />;
+  return (
+    <>
+      <JsonLd data={recruiterJsonLd} />
+      <FreelanceRecruitersPage />
+    </>
+  );
 }

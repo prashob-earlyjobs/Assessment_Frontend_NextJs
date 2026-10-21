@@ -657,6 +657,7 @@ export default function AgencyOnboardingClient() {
                 </div>
 
                 <div className="space-y-1.5">
+                  {/* TODO(legal): AO-02 — counsel has not signed off on collecting Aadhaar. Do not change the field, validation, or payload until that review lands. */}
                   <Label className="text-sm font-semibold text-slate-800">
                     Owner / Director: Aadhaar *
                   </Label>
@@ -778,15 +779,17 @@ export default function AgencyOnboardingClient() {
               </div>
 
               <CardDescription className="text-xs text-slate-500">
-                Preview companyAddress format: <span className="font-medium">line1, city, state, pincode</span>
+                Address: {"{line 1}"}, {"{city}"}, {"{state}"} {"{pincode}"}
               </CardDescription>
             </CardContent>
           </Card>
 
           <Card className="border border-slate-200 shadow-sm">
             <CardHeader className="pb-4">
-              <CardTitle className="text-xl">Currently hiring for</CardTitle>
-              <CardDescription>3 reference rows (company + coordinator contact).</CardDescription>
+              <CardTitle className="text-xl">Client references</CardTitle>
+              <CardDescription>
+                Three companies you currently hire for. We may contact the coordinator to confirm.
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-5">
               {formState.hiringReferences.map((ref, idx) => {

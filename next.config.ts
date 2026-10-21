@@ -3,9 +3,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   async redirects() {
     return [
-      { source: "/about-us", destination: "/about", permanent: true },
-      { source: "/about-us/our-story", destination: "/story", permanent: true },
-      { source: "/teams", destination: "/team", permanent: true },
+      { source: "/about-us", destination: "/about", statusCode: 301 },
+      { source: "/about-us/our-story", destination: "/story", statusCode: 301 },
+      { source: "/teams", destination: "/team", statusCode: 301 },
       // Provisional until later batches confirm the targets:
       // { source: "/press-release", destination: "/newsroom", permanent: true },
       // { source: "/recruiter", destination: "/become-a-recruiter", permanent: true },

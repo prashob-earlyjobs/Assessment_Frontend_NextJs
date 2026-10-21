@@ -279,12 +279,9 @@ export function SuccessStories() {
         </aside>
       </div>
 
+      {/* TODO(content): replace these first-name quotes with three verified stories (photo, full name, role, city, LinkedIn, consent). */}
       <p className="mt-12 text-sm text-neutral-500">
-        <span className="tracking-[0.15em] text-brand" aria-hidden>
-          ★★★★★
-        </span>
-        <span className="sr-only">5 stars. </span> Trusted by recruiters, employers, and
-        professionals building the future of hiring.
+        Trusted by recruiters, employers, and professionals building the future of hiring.
       </p>
     </Frame>
   );

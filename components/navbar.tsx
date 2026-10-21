@@ -189,25 +189,19 @@ export function Navbar({
             href="https://www.huntlo.ai/"
             target="_blank"
             rel="noreferrer"
-            className="huntlo-btn hidden lg:inline-flex shrink-0"
+            onClick={() =>
+              trackEvent("cta_click", {
+                cta_id: "nav_huntlo",
+                audience: "employer",
+                location: "header",
+              })
+            }
+            className={`hidden items-center gap-1 text-[13px] font-medium lg:inline-flex ${
+              overHero ? "text-white/80 hover:text-white" : "text-neutral-600 hover:text-neutral-950"
+            }`}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              className="huntlo-btn-badge"
-              src="/icons/huntlo-favicon.png"
-              alt=""
-              width={20}
-              height={20}
-            />
-            <span className="huntlo-btn-wrapper">
-              <span className="huntlo-btn-label">
-                <AiSparkIcon />
-                Try Huntlo
-              </span>
-              {Array.from({ length: 12 }, (_, i) => (
-                <span key={i} className={`huntlo-circle huntlo-circle-${i + 1}`} aria-hidden />
-              ))}
-            </span>
+            Huntlo AI for recruiting teams
+            <span aria-hidden>↗</span>
           </a>
           <Link
             href={ctaHref}
@@ -264,7 +258,7 @@ export function Navbar({
                 rel="noreferrer"
                 className="rounded-lg px-3 py-2.5 text-sm font-medium text-neutral-700"
               >
-                Try Huntlo
+                Huntlo AI for recruiting teams ↗
               </a>
             </div>
           </nav>
@@ -423,34 +417,6 @@ function Logo({ inverted = false }: { inverted?: boolean }) {
         className={cx("h-8 w-auto sm:h-10", inverted && "brightness-0 invert")}
       />
     </Link>
-  );
-}
-
-function AiSparkIcon() {
-  return (
-    <svg
-      className="huntlo-btn-ai"
-      width="14"
-      height="14"
-      viewBox="0 0 16 16"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M8 1.2l1.05 3.55L12.6 5.8 9.05 7.25 8 10.8 6.95 7.25 3.4 5.8l3.55-1.05L8 1.2z"
-        fill="currentColor"
-      />
-      <path
-        d="M12.6 9.2l.55 1.85 1.85.55-1.85.55-.55 1.85-.55-1.85-1.85-.55 1.85-.55.55-1.85z"
-        fill="currentColor"
-        opacity="0.85"
-      />
-      <path
-        d="M3.2 9.8l.42 1.4 1.4.42-1.4.42-.42 1.4-.42-1.4-1.4-.42 1.4-.42.42-1.4z"
-        fill="currentColor"
-        opacity="0.7"
-      />
-    </svg>
   );
 }
 

@@ -2,10 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, type ChangeEvent, type FormEvent } from "react";
-import { toast } from "sonner";
 import { Reveal } from "@/components/ui/reveal";
-import { companyFacts } from "@/data/company-facts";
+import { companyFacts, networkStatsSentence } from "@/data/company-facts";
 
 const network = [
   {
@@ -20,11 +18,40 @@ const network = [
     title: "GigKaro — Frontline Workforce Hiring",
     body: "GigKaro focuses on frontline workforce hiring across categories such as delivery, warehousing, logistics, technical trades and manufacturing. It extends our hiring execution capabilities to the people who keep India's economy moving.",
   },
+  // TODO(content): A-01 — do not publish "Local Execution Partners" until /franchise confirms college partners and on-ground hiring drives. Live placeholder kept.
   {
     title: "EarlyJobs",
     body: "Connect the network and support recruitment delivery with technology.",
   },
 ] as const;
+
+const aboutFaqs = [
+  {
+    q: "What is EarlyJobs?",
+    a: "EarlyJobs is a recruiter-first hiring network that combines a distributed recruiter network, AI-powered hiring infrastructure and local execution to help companies hire across India and beyond.",
+  },
+  {
+    q: "Who runs EarlyJobs?",
+    a: "EarlyJobs is operated by Victa EarlyJobs Technologies Private Limited, based in Koramangala, Bengaluru, Karnataka.",
+  },
+  {
+    q: "How are EarlyJobs, Huntlo AI and GigKaro related?",
+    a: "EarlyJobs is the recruiter network. Huntlo AI is the AI hiring infrastructure used by recruitment teams, and GigKaro focuses on frontline workforce hiring such as delivery, warehousing and logistics.",
+  },
+  {
+    q: "Does EarlyJobs hire outside major cities?",
+    a: "Yes. The network is designed to reach talent across locations, including Tier 2 and Tier 3 cities, through recruiters who understand their local markets.",
+  },
+  {
+    q: "How big is the EarlyJobs network?",
+    a: networkStatsSentence,
+  },
+] as const;
+
+/** TODO(content): leadership names, photos, LinkedIn links and milestone years must come from the founders. Render nothing until that copy exists. */
+function AboutLeadershipScaffold() {
+  return null;
+}
 
 const steps = [
   {
@@ -63,38 +90,8 @@ const impactMetrics = [
   companyFacts.hiringPartners,
 ] as const;
 
-const exploreOptions = [
-  "Hiring mandates",
-  "Freelance recruiter network",
-  "Multi-city hiring",
-  "Other",
-] as const;
-
 const pill =
   "inline-flex h-11 items-center justify-center rounded-[6px] px-5 text-[13px] font-medium transition-[border-radius,background-color] duration-500 ease-in-out hover:rounded-[22px]";
-
-const fieldClass =
-  "h-11 w-full border border-black/10 bg-white px-3 text-sm text-neutral-950 outline-none transition-colors placeholder:text-neutral-400 focus:border-brand";
-
-type FormState = {
-  name: string;
-  consultancy: string;
-  email: string;
-  phone: string;
-  specialisation: string;
-  regions: string;
-  explore: string;
-};
-
-const initialForm: FormState = {
-  name: "",
-  consultancy: "",
-  email: "",
-  phone: "",
-  specialisation: "",
-  regions: "",
-  explore: "",
-};
 
 function SectionTag({ children }: { children: string }) {
   return (
@@ -105,55 +102,13 @@ function SectionTag({ children }: { children: string }) {
 }
 
 export function AboutPage() {
-  const [form, setForm] = useState<FormState>(initialForm);
-  const [submitting, setSubmitting] = useState(false);
-
-  const set =
-    (key: keyof FormState) =>
-    (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-      setForm((prev) => ({ ...prev, [key]: e.target.value }));
-    };
-
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    if (
-      !form.name.trim() ||
-      !form.consultancy.trim() ||
-      !form.email.trim() ||
-      !form.phone.trim() ||
-      !form.specialisation.trim() ||
-      !form.regions.trim() ||
-      !form.explore
-    ) {
-      toast.error("Please fill in all fields.");
-      return;
-    }
-
-    setSubmitting(true);
-    const subject = encodeURIComponent("Recruitment consultancy partnership inquiry");
-    const body = encodeURIComponent(
-      [
-        `Name: ${form.name.trim()}`,
-        `Consultancy / Agency Name: ${form.consultancy.trim()}`,
-        `Work Email: ${form.email.trim()}`,
-        `Phone Number: ${form.phone.trim()}`,
-        `Primary Recruitment Specialisation: ${form.specialisation.trim()}`,
-        `City / Regions Served: ${form.regions.trim()}`,
-        `What would you like to explore?: ${form.explore}`,
-      ].join("\n"),
-    );
-    window.location.href = `mailto:info@earlyjobs.in?subject=${subject}&body=${body}`;
-    toast.success("Opening your email client to start the conversation.");
-    setSubmitting(false);
-  };
-
   return (
     <main className="relative bg-[#f7f5f2] text-neutral-950">
       {/* HERO */}
       <section className="relative min-h-[88vh] overflow-hidden bg-[#0A0F10]">
         <Image
           src="/agency-partnerships/hero-lounge.jpg"
-          alt=""
+          alt="EarlyJobs team in a Bengaluru meeting space"
           fill
           priority
           className="object-cover object-[62%_center]"
@@ -168,33 +123,23 @@ export function AboutPage() {
             About EarlyJobs
           </p>
           <h1 className="mt-4 max-w-3xl text-[2.88rem] font-semibold leading-[1.02] tracking-[-0.045em] text-white sm:text-[4.2rem]">
-            Building the Infrastructure Behind Modern Hiring.
+            About EarlyJobs: Building the Infrastructure Behind Modern Hiring
           </h1>
-          <p className="mt-5 max-w-2xl text-lg font-medium leading-8 tracking-[-0.02em] text-white sm:text-xl">
-            We&apos;re Building a Better Way to Hire. Not another job portal. Not another recruitment
-            agency.
-          </p>
-          <p className="mt-5 max-w-2xl text-sm leading-6 text-white/75 sm:text-base sm:leading-7">
-            EarlyJobs is building a recruiter-first hiring network that combines distributed human
-            expertise, AI-powered hiring infrastructure and local execution to help companies hire
-            across India and beyond.
-          </p>
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-white/75 sm:text-base sm:leading-7">
-            We bring employers, recruiters, technology and talent together in one connected hiring
-            ecosystem.
-          </p>
-          <p className="mt-4 max-w-2xl text-sm font-semibold leading-6 text-white sm:text-base sm:leading-7">
-            We don&apos;t just help companies find candidates. We help execute hiring.
+          <p className="mt-5 max-w-2xl text-sm leading-6 text-white/85 sm:text-base sm:leading-7">
+            EarlyJobs is a Bengaluru-based, recruiter-first hiring network. We combine a distributed
+            recruiter network, AI-powered hiring infrastructure and local execution so companies can
+            hire across India and beyond. We don&apos;t just help companies find candidates. We help
+            execute hiring.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/employers" className={`${pill} bg-brand text-white hover:bg-[#d85c42]`}>
-              For Employers
-            </Link>
+            <a href="#lets-talk" className={`${pill} bg-brand text-white hover:bg-[#d85c42]`}>
+              Talk to our team
+            </a>
             <Link
-              href="/become-a-recruiter"
+              href="/story"
               className={`${pill} border border-white/30 bg-white/5 text-white hover:bg-white/10`}
             >
-              Become a Recruiter
+              Read our story
             </Link>
           </div>
         </div>
@@ -219,7 +164,7 @@ export function AboutPage() {
             <div className="media-frame aspect-[16/10] w-full !rounded-none sm:aspect-[2/1]">
               <Image
                 src="/agency-partnerships/story-team.jpg"
-                alt=""
+                alt="EarlyJobs colleagues collaborating on a hiring plan"
                 fill
                 className="object-cover object-center"
                 sizes="(min-width: 1024px) 72rem, 100vw"
@@ -250,7 +195,7 @@ export function AboutPage() {
             <div className="media-frame mb-14 aspect-[16/10] w-full !rounded-none sm:aspect-[21/9]">
               <Image
                 src="/agency-partnerships/partnership-handshake.jpg"
-                alt=""
+                alt="Handshake between EarlyJobs and a hiring partner"
                 fill
                 className="object-cover object-center"
                 sizes="(min-width: 1024px) 72rem, 100vw"
@@ -317,21 +262,21 @@ export function AboutPage() {
                   ))}
                 </ol>
                 <a
-                  href="#partnership-form"
+                  href="#lets-talk"
                   className={`${pill} mt-10 bg-brand text-white hover:bg-[#d85c42]`}
                 >
-                  Let&apos;s Explore a Partnership
+                  Let&apos;s talk
                 </a>
               </div>
             </Reveal>
             <Reveal delay={100}>
               <div className="media-frame aspect-[4/5] !rounded-none">
                 <Image
-                  src="/agency-partnerships/partnership-handshake.jpg"
-                  alt=""
-                  fill
-                  className="object-cover object-center"
-                  sizes="(min-width: 1024px) 28rem, 100vw"
+                src="/about/people.jpg"
+                alt="People working together in the EarlyJobs network"
+                fill
+                className="object-cover object-center"
+                sizes="(min-width: 1024px) 28rem, 100vw"
                 />
               </div>
             </Reveal>
@@ -452,148 +397,57 @@ export function AboutPage() {
         </div>
       </section>
 
-      {/* PARTNERSHIP FORM */}
-      <section id="partnership-form" className="scroll-mt-24 border-t border-black/5 bg-white">
-        <div className="page-shell page-section">
-          <div className="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16">
-            <Reveal>
-              <div>
-                <SectionTag>Partnership</SectionTag>
-                <h2 className="mt-5 max-w-md text-[2rem] font-semibold leading-[1.05] tracking-[-0.045em] sm:text-[2.75rem]">
-                  Let&apos;s get to know your business.
-                </h2>
-                <p className="mt-4 max-w-sm text-sm leading-6 text-neutral-600 sm:text-base sm:leading-7">
-                  Share a few details. We&apos;ll explore whether there&apos;s a good fit for
-                  collaboration.
-                </p>
-              </div>
-            </Reveal>
+      <AboutLeadershipScaffold />
 
-            <Reveal delay={80}>
-              <form onSubmit={onSubmit} className="space-y-4 border border-black/10 bg-[#f7f5f2] p-5 sm:p-8">
-                <div>
-                  <label htmlFor="name" className="text-[12px] font-medium text-neutral-700">
-                    Name
-                  </label>
-                  <input
-                    id="name"
-                    name="name"
-                    value={form.name}
-                    onChange={set("name")}
-                    className={`mt-1.5 ${fieldClass}`}
-                    autoComplete="name"
-                    required
-                  />
-                </div>
-                <div>
-                  <label htmlFor="consultancy" className="text-[12px] font-medium text-neutral-700">
-                    Consultancy / Agency Name
-                  </label>
-                  <input
-                    id="consultancy"
-                    name="consultancy"
-                    value={form.consultancy}
-                    onChange={set("consultancy")}
-                    className={`mt-1.5 ${fieldClass}`}
-                    required
-                  />
-                </div>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <label htmlFor="email" className="text-[12px] font-medium text-neutral-700">
-                      Work Email
-                    </label>
-                    <input
-                      id="email"
-                      name="email"
-                      type="email"
-                      value={form.email}
-                      onChange={set("email")}
-                      className={`mt-1.5 ${fieldClass}`}
-                      autoComplete="email"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="phone" className="text-[12px] font-medium text-neutral-700">
-                      Phone Number
-                    </label>
-                    <input
-                      id="phone"
-                      name="phone"
-                      type="tel"
-                      value={form.phone}
-                      onChange={set("phone")}
-                      className={`mt-1.5 ${fieldClass}`}
-                      autoComplete="tel"
-                      required
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label htmlFor="specialisation" className="text-[12px] font-medium text-neutral-700">
-                    Primary Recruitment Specialisation
-                  </label>
-                  <input
-                    id="specialisation"
-                    name="specialisation"
-                    value={form.specialisation}
-                    onChange={set("specialisation")}
-                    className={`mt-1.5 ${fieldClass}`}
-                    required
-                  />
-                </div>
-                <div>
-                  <label htmlFor="regions" className="text-[12px] font-medium text-neutral-700">
-                    City / Regions Served
-                  </label>
-                  <input
-                    id="regions"
-                    name="regions"
-                    value={form.regions}
-                    onChange={set("regions")}
-                    className={`mt-1.5 ${fieldClass}`}
-                    required
-                  />
-                </div>
-                <div>
-                  <label htmlFor="explore" className="text-[12px] font-medium text-neutral-700">
-                    What would you like to explore?
-                  </label>
-                  <select
-                    id="explore"
-                    name="explore"
-                    value={form.explore}
-                    onChange={set("explore")}
-                    className={`mt-1.5 ${fieldClass}`}
-                    required
-                  >
-                    <option value="" disabled>
-                      Select an option
-                    </option>
-                    {exploreOptions.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className={`${pill} mt-2 w-full bg-brand text-white hover:bg-[#d85c42] disabled:opacity-60`}
-                >
-                  {submitting ? "Opening…" : "Start the Conversation"}
-                </button>
-                <p className="pt-1 text-[12px] leading-5 text-neutral-500">
-                  Partnerships and hiring opportunities are subject to suitability, availability and
-                  mutually agreed terms.
-                </p>
-              </form>
-            </Reveal>
+      <section id="faq" className="scroll-mt-24 border-t border-black/5 bg-white">
+        <div className="page-shell page-section">
+          <SectionTag>FAQ</SectionTag>
+          <h2 className="mt-5 text-[2rem] font-semibold leading-[1.05] tracking-[-0.045em] sm:text-[2.75rem]">
+            FAQ
+          </h2>
+          <div className="mt-8 divide-y divide-black/10 border-t border-black/10">
+            {aboutFaqs.map((item) => (
+              <details key={item.q} className="group py-5">
+                <summary className="cursor-pointer list-none text-base font-semibold marker:content-none [&::-webkit-details-marker]:hidden">
+                  {item.q}
+                </summary>
+                <p className="mt-3 max-w-3xl text-sm leading-6 text-neutral-600">{item.a}</p>
+              </details>
+            ))}
           </div>
         </div>
       </section>
+
+      {/* TODO(content): response-time SLA ("within [X] working days") omitted until a real number is supplied. */}
+      <section id="lets-talk" className="scroll-mt-24 border-t border-black/5 bg-white">
+        <div className="page-shell page-section">
+          <SectionTag>Let&apos;s talk</SectionTag>
+          <h2 className="mt-5 max-w-xl text-[2rem] font-semibold leading-[1.05] tracking-[-0.045em] sm:text-[2.75rem]">
+            Let&apos;s talk
+          </h2>
+          <p className="mt-4 max-w-xl text-sm leading-6 text-neutral-600 sm:text-base sm:leading-7">
+            Employers, agencies, investors and press: tell us what you&apos;re exploring.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link href="/employers" className={`${pill} bg-brand text-white hover:bg-[#d85c42]`}>
+              Start hiring
+            </Link>
+            <Link
+              href="/agency-partnerships"
+              className={`${pill} border border-black/10 bg-white text-neutral-950 hover:bg-neutral-50`}
+            >
+              Partner as an agency
+            </Link>
+            <Link
+              href="/investor-relations"
+              className={`${pill} border border-black/10 bg-white text-neutral-950 hover:bg-neutral-50`}
+            >
+              Investor relations
+            </Link>
+          </div>
+        </div>
+      </section>
+
 
       <div className="border-t border-black/5 bg-[#f7f5f2] py-8 text-center">
         <Link href="/" className="text-[13px] font-medium text-brand hover:text-[#d85c42]">

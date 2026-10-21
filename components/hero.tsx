@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Search, ChevronDown } from "lucide-react";
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
@@ -8,11 +9,37 @@ import { AnimatedStat } from "@/components/animated-stat";
 import { HeroMotion } from "@/components/home/motion";
 import { companyFacts, publishedNetworkStats } from "@/data/company-facts";
 import { jobsPageHref } from "@/lib/public-jobs";
+import { trackEvent } from "@/lib/track-event";
 
+// TODO(content): replace these alts with the company name for each EJ_V2 logo. Names are not in the repo.
 const clientLogos = Array.from({ length: 22 }, (_, index) => ({
   src: `https://storage.googleapis.com/earlyjobs_datas/EJ_V2/${index + 1}.png`,
-  alt: `Client ${index + 1}`,
+  alt: `EarlyJobs hiring partner logo ${index + 1}`,
 }));
+
+const audiences = [
+  {
+    id: "hiring",
+    label: "I'm hiring",
+    cta: "Share a hiring need",
+    href: "/employers",
+    audience: "employer",
+  },
+  {
+    id: "recruiter",
+    label: "I'm a recruiter",
+    cta: "Start earning as a recruiter",
+    href: "/become-a-recruiter",
+    audience: "recruiter",
+  },
+  {
+    id: "job",
+    label: "I'm looking for a job",
+    cta: "Create your profile",
+    href: "/jobs",
+    audience: "job_seeker",
+  },
+] as const;
 
 const cities = [
   "Remote",
@@ -224,26 +251,15 @@ function HeroSearch() {
   );
 }
 
-function LogoCarousel({
-  reverse = false,
-  className = "",
-}: {
-  reverse?: boolean;
-  className?: string;
-}) {
-  const logos = reverse ? clientLogos : [...clientLogos, ...clientLogos];
+function LogoCarousel() {
   return (
-    <div className={`relative z-10 overflow-hidden ${className}`}>
+    <div className="relative z-10 overflow-hidden pb-3 sm:pb-4">
       <div className="mx-auto max-w-[90rem] px-2 sm:px-4 lg:px-8">
-        <div className="relative flex h-12 items-center overflow-hidden sm:h-14 md:h-16">
-          <div
-            className={`flex w-max gap-4 sm:gap-6 md:gap-8 lg:gap-12 ${
-              reverse ? "carousel-horizontal-top" : "carousel-horizontal"
-            }`}
-          >
-            {logos.map((logo, idx) => (
+        <div className="logo-marquee relative flex h-12 items-center overflow-hidden sm:h-14 md:h-16">
+          <div className="logo-set flex w-max gap-4 sm:gap-6 md:gap-8 lg:gap-12">
+            {clientLogos.map((logo) => (
               <div
-                key={`${reverse ? "top" : "bot"}-${idx}`}
+                key={logo.src}
                 className="flex h-14 w-20 shrink-0 items-center justify-center sm:h-20 sm:w-28 md:h-28 md:w-36"
               >
                 <Image
@@ -264,6 +280,9 @@ function LogoCarousel({
 }
 
 export function Hero() {
+  const [audience, setAudience] = useState<(typeof audiences)[number]["id"]>("hiring");
+  const active = audiences.find((item) => item.id === audience) ?? audiences[0];
+
   return (
     <HeroMotion>
       <div className="absolute inset-0">
@@ -280,15 +299,55 @@ export function Hero() {
 
       <div className="relative z-10 mx-auto flex min-h-0 w-full max-w-7xl flex-1 flex-col justify-center px-4 py-4 sm:px-6 sm:py-8 md:py-12 lg:px-8 lg:py-16 xl:py-20">
         <div className="space-y-3 sm:space-y-6 md:space-y-8 lg:space-y-10 xl:space-y-12">
+          <p className="text-center text-[11px] font-semibold tracking-[0.16em] text-white/70 uppercase">
+            The recruiter-first hiring network
+          </p>
           <h1 className="px-2 text-center text-3xl leading-tight font-bold text-white sm:px-4 sm:text-4xl md:text-5xl xl:text-6xl">
-            Find Jobs. Get Discovered by Recruiters.
+            The Recruiter-First Hiring Network
           </h1>
 
           <p className="mx-auto max-w-3xl px-2 text-center text-sm text-white/80 sm:px-6 sm:text-base md:text-lg lg:text-xl">
-            A Growing Network of Women Recruiters, Built for the Future of Hiring.
+            Employers hire faster. Recruiters earn on verified mandates. Job seekers get discovered,
+            not ignored.
           </p>
 
-          <HeroSearch />
+          <div className="flex flex-wrap justify-center gap-2" role="tablist" aria-label="Who is this for">
+            {audiences.map((item) => {
+              const selected = item.id === audience;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={selected}
+                  onClick={() => setAudience(item.id)}
+                  className={`rounded-full px-4 py-2 text-sm font-medium ${
+                    selected ? "bg-white text-neutral-950" : "bg-white/10 text-white hover:bg-white/20"
+                  }`}
+                >
+                  {item.label}
+                </button>
+              );
+            })}
+          </div>
+
+          {audience === "job" ? <HeroSearch /> : null}
+
+          <div className="flex justify-center">
+            <Link
+              href={active.href}
+              onClick={() =>
+                trackEvent("cta_click", {
+                  cta_id: `home_hero_${active.id}`,
+                  audience: active.audience,
+                  location: "hero",
+                })
+              }
+              className="inline-flex h-12 items-center justify-center rounded-full bg-[#ea6a4e] px-6 text-sm font-medium text-white hover:bg-[#ea6a4e]/90"
+            >
+              {active.cta}
+            </Link>
+          </div>
 
           <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 px-2 text-sm text-white/70">
             <span>Built for recruiters</span>
@@ -322,8 +381,7 @@ export function Hero() {
         </div>
       </div>
 
-      <LogoCarousel reverse className="hidden lg:block" />
-      <LogoCarousel className="shrink-0 pb-3 sm:pb-4" />
+      <LogoCarousel />
     </HeroMotion>
   );
 }
