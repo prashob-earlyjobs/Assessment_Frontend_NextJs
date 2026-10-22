@@ -285,13 +285,48 @@ const faqs = [
   },
 ] as const;
 
-export function CompanyTieUpsPage({ companies = [] }: { companies?: PublicCompany[] }) {
+type PageHero = {
+  eyebrow: string;
+  titleLead: string;
+  titleMuted: string;
+  intro: string;
+  primaryHref: string;
+  primaryLabel: string;
+  secondaryHref: string;
+  secondaryLabel: string;
+  chips: string;
+};
+
+export function CompanyTieUpsPage({
+  companies = [],
+  metrics = [],
+  hero,
+  faqs: faqsOverride,
+}: {
+  companies?: PublicCompany[];
+  metrics?: { value: string; label: string }[];
+  hero?: PageHero;
+  faqs?: readonly { q: string; a: string }[];
+}) {
   const [growthIndex, setGrowthIndex] = useState(0);
   const [whyIndex, setWhyIndex] = useState(0);
   const [faqIndex, setFaqIndex] = useState(0);
   const [activeStage, setActiveStage] = useState<(typeof stages)[number]["id"]>("need");
   const item = brandQuotes[0]!;
   const growth = growthStages[growthIndex] ?? growthStages[0];
+  const faqItems = faqsOverride ?? faqs;
+  const eyebrow = hero?.eyebrow ?? "Your hiring partner";
+  const titleLead = hero?.titleLead ?? "The right people.";
+  const titleMuted = hero?.titleMuted ?? "Wherever your business needs them.";
+  const intro =
+    hero?.intro ??
+    "EarlyJobs brings recruitment expertise, a connected hiring network and intelligent technology together to help you hire across India, access global hiring support and build frontline workforces through GigKaro. One partner for the people your business needs to move forward.";
+  const primaryHref = hero?.primaryHref ?? "/contact-us";
+  const primaryLabel = hero?.primaryLabel ?? "Tell Us What You Need";
+  const secondaryHref = hero?.secondaryHref ?? "#solutions";
+  const secondaryLabel = hero?.secondaryLabel ?? "Explore Our Hiring Solutions";
+  const chips =
+    hero?.chips ?? "Corporate & professional hiring · Global recruitment · Frontline workforce hiring";
   const stepRefs = useRef<Record<string, HTMLElement | null>>({});
 
   const growthPrev = () => setGrowthIndex((i) => (i - 1 + growthStages.length) % growthStages.length);
@@ -324,35 +359,39 @@ export function CompanyTieUpsPage({ companies = [] }: { companies?: PublicCompan
       <section className="page-shell page-section grid items-center gap-8 sm:gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-14">
         <Reveal className="max-w-xl">
           <p className="text-[11px] font-semibold tracking-[0.16em] text-neutral-500 uppercase">
-            Your hiring partner
+            {eyebrow}
           </p>
           <h1 className="mt-4 text-[2.4rem] leading-[1.05] font-medium tracking-[-0.045em] sm:text-[3.2rem]">
-            The right people.{" "}
-            <span className="text-neutral-400">Wherever your business needs them.</span>
+            {titleLead} <span className="text-neutral-400">{titleMuted}</span>
           </h1>
-          <p className="mt-6 max-w-lg text-[15px] leading-7 text-neutral-600 sm:text-base">
-            EarlyJobs brings recruitment expertise, a connected hiring network and intelligent
-            technology together to help you hire across India, access global hiring support and
-            build frontline workforces through GigKaro. One partner for the people your business
-            needs to move forward.
-          </p>
+          <p className="mt-6 max-w-lg text-[15px] leading-7 text-neutral-600 sm:text-base">{intro}</p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link
-              href="/contact-us"
+              href={primaryHref}
               className="inline-flex h-10 items-center justify-center rounded-full bg-neutral-950 px-5 text-[13px] font-medium text-white transition-colors hover:bg-neutral-800"
             >
-              Tell Us What You Need
+              {primaryLabel}
             </Link>
             <Link
-              href="#solutions"
+              href={secondaryHref}
               className="inline-flex h-10 items-center justify-center rounded-full border border-black/10 px-5 text-[13px] font-medium text-neutral-950 transition-colors hover:bg-neutral-50"
             >
-              Explore Our Hiring Solutions
+              {secondaryLabel}
             </Link>
           </div>
-          <p className="mt-5 text-[12px] leading-5 text-neutral-500">
-            Corporate &amp; professional hiring · Global recruitment · Frontline workforce hiring
-          </p>
+          {metrics.length > 0 ? (
+            <ul className="mt-8 grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-4">
+              {metrics.map((metric) => (
+                <li key={metric.label}>
+                  <p className="text-[1.65rem] leading-none font-medium tracking-[-0.04em] text-neutral-950 tabular-nums">
+                    {metric.value}
+                  </p>
+                  <p className="mt-2 text-[13px] leading-5 text-neutral-500">{metric.label}</p>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          <p className="mt-5 text-[12px] leading-5 text-neutral-500">{chips}</p>
         </Reveal>
 
         <Reveal delay={80} className="media-frame mx-auto aspect-[8/7] w-full max-w-[520px] bg-neutral-200 lg:mx-0 lg:max-w-none">
@@ -797,7 +836,7 @@ export function CompanyTieUpsPage({ companies = [] }: { companies?: PublicCompan
             Frequently asked questions
           </h2>
           <ul className="mt-10 divide-y divide-black/10 border-y border-black/10">
-            {faqs.map((faq, i) => {
+            {faqItems.map((faq, i) => {
               const open = faqIndex === i;
               return (
                 <li key={faq.q}>
@@ -989,10 +1028,10 @@ export function CompanyTieUpsPage({ companies = [] }: { companies?: PublicCompan
               </p>
               <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
                 <Link
-                  href="/contact-us"
+                  href={primaryHref}
                   className="inline-flex h-11 items-center justify-center rounded-full bg-neutral-950 px-6 text-[13px] font-medium text-white hover:bg-neutral-800"
                 >
-                  Discuss My Hiring Needs
+                  {hero ? primaryLabel : "Discuss My Hiring Needs"}
                 </Link>
                 <Link
                   href="/contact-us"

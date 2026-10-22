@@ -1,16 +1,33 @@
 import type { Metadata } from "next";
+import { CompanyTieUpsPage } from "@/components/clientele/page";
 import { JsonLd } from "@/components/json-ld";
 import { pageMetadata } from "@/lib/page-metadata";
 import { getPublicNetworkStats } from "@/lib/dashboard";
+import { getPublicCompanies } from "@/lib/public-companies";
 import schema from "@/schema/employers.jsonld.json";
-import { EmployerFaq } from "@/components/employers/faq";
-import { EmployerHero } from "@/components/employers/hero";
-import { EmployerHowItWorks } from "@/components/employers/how-it-works";
-import { Industries } from "@/components/employers/industries";
-import { HiringSolutions } from "@/components/employers/solutions";
-import { EmployerStories } from "@/components/employers/stories";
-import { WhyCompaniesChoose } from "@/components/employers/why-choose";
-import { WhyHiringChanged } from "@/components/employers/why-hiring";
+
+const employerFaqs = [
+  {
+    q: "Is EarlyJobs a recruitment agency?",
+    a: "No. EarlyJobs is The Recruiter-First Hiring Network, connecting employers with independent recruiters supported by AI-powered hiring infrastructure.",
+  },
+  {
+    q: "Can we hire for multiple roles?",
+    a: "Yes. The network supports hiring across functions, industries, and geographies.",
+  },
+  {
+    q: "How quickly can we receive candidates?",
+    a: "Recruiters begin working once hiring requirements are shared, with qualified shortlists delivered based on role complexity.",
+  },
+  {
+    q: "Do recruiters specialize in industries?",
+    a: "Yes. Recruiters participate across domains such as technology, BFSI, healthcare, manufacturing, retail, executive search, and more.",
+  },
+  {
+    q: "Can startups use EarlyJobs?",
+    a: "Absolutely. From early-stage startups to global enterprises, the network is designed to support different hiring needs.",
+  },
+] as const;
 
 export const metadata: Metadata = pageMetadata({
   path: "/employers",
@@ -29,7 +46,10 @@ export const metadata: Metadata = pageMetadata({
 });
 
 export default async function EmployersPage() {
-  const stats = await getPublicNetworkStats();
+  const [stats, companies] = await Promise.all([
+    getPublicNetworkStats(),
+    getPublicCompanies().catch(() => []),
+  ]);
   const metrics = stats
     ? [
         { value: stats.companies, label: "Companies" },
@@ -38,27 +58,27 @@ export default async function EmployersPage() {
         { value: stats.interviews, label: "Interviews" },
       ]
     : [];
+
   return (
-    <main className="relative bg-white">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse at 12% 0%, rgba(96,140,190,0.12), transparent 32%), radial-gradient(ellipse at 92% 12%, rgba(96,140,190,0.08), transparent 26%)",
+    <>
+      <JsonLd data={schema} />
+      <CompanyTieUpsPage
+        companies={companies}
+        metrics={metrics}
+        faqs={employerFaqs}
+        hero={{
+          eyebrow: "For employers",
+          titleLead: "Hire Better. Hire Faster.",
+          titleMuted: "Hire Through Recruiters.",
+          intro:
+            "EarlyJobs connects employers with experienced recruiters and AI-assisted recruitment workflows to support role-based hiring across India. Hiring should begin with the right recruiters, whether you need one role or an entire team.",
+          primaryHref: "/sign-in",
+          primaryLabel: "Start Hiring",
+          secondaryHref: "#solutions",
+          secondaryLabel: "Explore Our Hiring Solutions",
+          chips: "Recruiter-led sourcing · AI-assisted matching · Hiring across India",
         }}
       />
-      <div className="relative">
-        <JsonLd data={schema} />
-        <EmployerHero metrics={metrics} />
-        <WhyHiringChanged />
-        <EmployerHowItWorks />
-        <WhyCompaniesChoose />
-        <HiringSolutions />
-        <Industries />
-        <EmployerStories />
-        <EmployerFaq />
-      </div>
-    </main>
+    </>
   );
 }
