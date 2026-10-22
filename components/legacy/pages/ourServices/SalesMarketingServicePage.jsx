@@ -14,7 +14,7 @@ import { metaConstants } from "../../../utils/metaConstants";
 
 const heroSectionData = {
     subheading: 'YOUR PATH TO EXCEPTIONAL TALENT',
-    heading: 'We stands as a trusted partner in navigating the intricacies of hiring within the dynamic sales and marketing industry.',
+    heading: 'We stand as a trusted partner in navigating the intricacies of hiring within the dynamic sales and marketing industry.',
     list: [
         {
             text: '10K+ Readily Available Candidates for Sales & Marketing jobs'

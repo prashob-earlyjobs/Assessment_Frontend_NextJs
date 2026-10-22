@@ -123,9 +123,9 @@ const HrExecutiveServicePage = () => {
             </section>
             <section className='service-page-s4-con'>
                 <div className='service-page-s4-content'>
-                    <h1 className="service-page-s4-subheading">HR & Executive Recruitment Experts</h1>
+                    <h2 className="service-page-s4-subheading">HR & Executive Recruitment Experts</h2>
                     <p className="service-page-s4-text">
-                        Earlyjobs takes a strategic approach to attracting, developing and managing a global workforce. Our aims to enable all people to create the career they want by being trusted partners in their professional and personal growth. We provide expertise and resources designed to help colleagues thrive at the firm and in their life outside it.
+                        Earlyjobs takes a strategic approach to attracting, developing and managing a global workforce. The aim is to enable all people to create the career they want by being trusted partners in their professional and personal growth. We provide expertise and resources designed to help colleagues thrive at the firm and in their life outside it.
                         <br />
                         <br />
                         Our placement consultancy and services specializes in sourcing and placing highly skilled HR & executives, including EA, Customer Support, D2C, Executive Head etc.

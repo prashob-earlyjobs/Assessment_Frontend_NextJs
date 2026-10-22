@@ -127,13 +127,13 @@ const ITRecruitmentServicePage = () => {
                 <div className='service-page-s4-content'>
                     <h2 className="service-page-s4-heading">WELCOME TO EARLYJOBS CONSULTANCY - YOUR IT RECRUITMENT PARTNER</h2>
                     <p className="service-page-s4-text">Are you searching for top talent in the world of Information Technology? Look no further than Earlyjobs, your trusted partner for IT recruitment solutions.</p>
-                    <h1 className="service-page-s4-subheading">Our Expertise</h1>
+                    <h2 className="service-page-s4-subheading">Our Expertise</h2>
                     <p className="service-page-s4-text">At Earlyjobs, we specialize in identifying and connecting your business with the best IT professionals available. With years of experience in the IT recruitment industry, our team of experts possesses a deep understanding of the evolving tech landscape. We are well-equipped to find the right candidates for your organization, whether you’re seeking developers, engineers, project managers, or IT support staff.</p>
-                    <h1 className="service-page-s4-subheading">Tailored IT Recruitment Solutions</h1>
+                    <h2 className="service-page-s4-subheading">Tailored IT Recruitment Solutions</h2>
                     <p className="service-page-s4-text">We understand that every organization is unique, and your IT recruitment services needs are no exception. That’s why we offer tailored recruitment solutions to match your company’s culture, values, and objectives. Our consultants work closely with you to create customized recruitment strategies that ensure a perfect fit between your business and the candidates we present.</p>
                     <h2 className="service-page-s4-heading">KEY HIGHLIGHTS OF CHOOSE OUR IT RECRUITMENT SERVICES.</h2>
                     <Highlights section4HighlightData={section4HighlightData} />
-                    <h1 className="service-page-s4-subheading">Let's Work Together</h1>
+                    <h2 className="service-page-s4-subheading">Let's Work Together</h2>
                     <p className="service-page-s4-text">Partner with EarlyJobs for your IT recruitment services needs, and let us help you build a dynamic and high-performing IT team that drives your business forward. Contact us today to discuss your requirements and take the first step towards a brighter IT future.</p>
                 </div>
                 <div className='service-page-s4-consultancy-con'>

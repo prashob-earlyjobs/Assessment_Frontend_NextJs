@@ -13,7 +13,7 @@ import React from 'react';
 
 const heroSectionData = {
     subheading: 'STRENGTHENING YOUR LEADERSHIP PIPELINE',
-    heading: 'We serves as a networking bridge between job searchers and hiring organizations in numerous industries',
+    heading: 'We serve as a networking bridge between job searchers and hiring organizations in numerous industries',
     list: [
         {
             text: 'Proven track record of C-level professionals hirings'
@@ -157,7 +157,7 @@ const TopExecutiveServicePage = () => {
                 <div className='service-page-s4-content'>
                     <h2 className="service-page-s4-subheading">Top Executive Recruitment Experts</h2>
                     <p className="service-page-s4-text">
-                        Welcome to Earlyjobs, the leading executive recruitment firm specializing in connecting exceptional talent with organizations dignified for greatness. With an unparalleled track record and an strong commitment to excellence, we, the best placement consultancy are here to transform your executive hiring process and elevate your business to new heights.
+                        Welcome to Earlyjobs, the leading executive recruitment firm specializing in connecting exceptional talent with organizations dignified for greatness. With an unparalleled track record and a strong commitment to excellence, we, the best placement consultancy are here to transform your executive hiring process and elevate your business to new heights.
                         <br />
                         <br />
                         Are you searching for best Placement consultancy services to lead your business towards success? Look no further! Our placement consultancy and services specializes in sourcing and placing highly skilled C-suite executives, including Chief Financial Officers (CFOs), Chief Executive Officers (CEOs), Chief Operating Officers (COOs), and Chief Information Officers (CIOs).

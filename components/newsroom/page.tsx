@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 
 type NewsItem = {
   id: string;
@@ -184,10 +185,13 @@ function formatCardDate(date: string) {
 
 export function NewsroomPage({
   heading = "EarlyJobs Newsroom",
+  scope = "all",
 }: {
   heading?: string;
+  scope?: "all" | "press";
 }) {
-  const [lead, ...side] = featured;
+  const featuredItems = scope === "press" ? pressReleases.slice(0, 3) : featured;
+  const [lead, ...side] = featuredItems;
 
   return (
     <main className="bg-[#f7f8fa] text-[#1f2431]">
@@ -274,8 +278,17 @@ export function NewsroomPage({
         <div className="mt-16 grid gap-12 lg:mt-20 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
           <section>
             <h2 className="pb-2.5 text-[22px] leading-[1.2] font-bold tracking-[0.2px] text-[#1f2431]">
-              In The News
+              {scope === "press" ? "Coverage" : "In The News"}
             </h2>
+            {scope === "press" ? (
+              <p className="py-3 text-sm leading-6 text-[#1f2431]/70">
+                Third-party coverage is listed in the{" "}
+                <Link href="/newsroom" className="text-brand underline">
+                  newsroom
+                </Link>
+                . This page lists official press releases only.
+              </p>
+            ) : (
             <ul>
               {inTheNews.map((item) => (
                 <li key={item.id} className="border-b border-[#c4c4c4]/20 py-3">
@@ -295,12 +308,15 @@ export function NewsroomPage({
                 </li>
               ))}
             </ul>
+            )}
+            {scope === "all" ? (
             <a
               href="mailto:info@earlyjobs.in?subject=Media%20coverage"
               className="mt-4 inline-block text-sm text-brand underline"
             >
               Share coverage
             </a>
+            ) : null}
           </section>
 
           <section id="press-releases">

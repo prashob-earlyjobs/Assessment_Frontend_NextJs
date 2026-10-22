@@ -22,7 +22,7 @@ export default function Page() {
   return (
     <>
       <JsonLd data={schema} />
-      <NewsroomPage heading="EarlyJobs Press Releases" />
+      <NewsroomPage heading="EarlyJobs Press Releases" scope="press" />
     </>
   );
 }

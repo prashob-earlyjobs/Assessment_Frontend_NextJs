@@ -138,7 +138,7 @@ const FinanceAccountingServicePage = () => {
                     </p>
                     <h2 className="service-page-s4-heading">WHY CHOOSE OUR ACCOUNTS & FINANCE RECRUITMENT SERVICES</h2>
                     <Highlights section4HighlightData={section4HighlightData} />
-                    <h1 className="service-page-s4-subheading">Ready to Transform Your Accounts and Finance Department?</h1>
+                    <h2 className="service-page-s4-subheading">Ready to Transform Your Accounts and Finance Department?</h2>
                     <p className="service-page-s4-text">EarlyJobs supports accounts and finance hiring for the roles you need to fill. Share the role, location, and timeline, and the team will review the requirement. This page covers finance and accounting recruitment. It does not describe executive search.</p>
                 </div>
                 <div className='service-page-s4-consultancy-con'>
