@@ -13,7 +13,8 @@ const dashboardHeaders = {
 export type DashboardStats = {
   jobs: number;
   recruiters: number;
-  companies: number;
+  /** Number, or a preformatted API string that already includes "+". */
+  companies: number | string;
   /** Preformatted strings from API summary (already include "+"). */
   interviews: string;
   joinings: string;
@@ -47,7 +48,7 @@ type DashboardJob = {
 type DashboardResponse = {
   success?: boolean;
   data?: {
-    companies?: number;
+    companies?: number | string;
     totalVacancies?: number;
     totalRecruiters?: number;
     summary?: {
@@ -77,8 +78,14 @@ export const fallbackDashboard: DashboardPayload = {
   recentJobs: [],
 };
 
-export function formatStat(value: number) {
+function withPlus(value: number) {
   return `${value.toLocaleString("en-IN")}+`;
+}
+
+/** One trailing plus. API values such as "200+" are not given a second one. */
+export function formatStat(value: number | string) {
+  if (typeof value === "string") return formatSummaryStat(value);
+  return withPlus(value);
 }
 
 export type NetworkMetric = { value: string; label: string };
@@ -125,15 +132,15 @@ export function networkStatsSentence(stats: PublicNetworkStats) {
   return `EarlyJobs reports ${stats.recruiters} recruiters, ${stats.companies} companies, ${stats.interviews} interviews, ${stats.joinings} successful joinings, ${stats.collegePartners} college partners and ${stats.hiringPartners} hiring partners.`;
 }
 
-/** Normalize API summary strings like "72000+" → "72,000+". */
+/** Normalize API summary strings like "72000+" or "200++" to "72,000+" / "200+". */
 export function formatSummaryStat(value: string) {
   const trimmed = value.trim();
-  const match = trimmed.match(/^([\d,]+)\+?$/);
+  const match = trimmed.match(/^([\d,]+)\+*$/);
   if (!match?.[1]) return trimmed;
   const digits = match[1].replace(/,/g, "");
   const num = Number(digits);
   if (!Number.isFinite(num)) return trimmed;
-  return formatStat(num);
+  return withPlus(num);
 }
 
 function trimNumber(value: number) {
