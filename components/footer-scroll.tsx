@@ -17,17 +17,17 @@ export function FooterScroll() {
         <p className="animate-[text-scroll_14s_linear_infinite] whitespace-nowrap py-6 text-center text-3xl font-semibold leading-10 tracking-[3px] text-white sm:py-10 sm:text-5xl sm:leading-[60px]">
           Hire your ideal team.{" "}
           <span className="bg-gradient-to-r from-[#fc2e04] to-[#EE4C8E] bg-clip-text pl-5 text-3xl font-semibold leading-10 text-transparent sm:text-5xl sm:leading-[60px]">
-            10X Quicker.
+            Through recruiters.
           </span>{" "}
           <span className="px-13 text-white"> | </span>
           Hire your ideal team.{" "}
           <span className="bg-gradient-to-r from-[#fc2e04] to-[#EE4C8E] bg-clip-text pl-5 text-3xl font-semibold leading-10 text-transparent sm:text-5xl sm:leading-[60px]">
-            10X Quicker.
+            Through recruiters.
           </span>{" "}
           <span className="px-13 text-white"> | </span>
           Hire your ideal team.{" "}
           <span className="bg-gradient-to-r from-[#fc2e04] to-[#EE4C8E] bg-clip-text pl-5 text-3xl font-semibold leading-10 text-transparent sm:text-5xl sm:leading-[60px]">
-            10X Quicker.
+            Through recruiters.
           </span>{" "}
           <span className="px-13 text-white"> | </span>
         </p>

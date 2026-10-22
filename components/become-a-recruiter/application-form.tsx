@@ -73,6 +73,22 @@ function BackLink() {
   );
 }
 
+function ApplyHeading() {
+  return (
+    <header>
+      <p className="text-sm font-medium text-brand">Application</p>
+      <h1 className="mt-2 text-[2rem] font-semibold leading-[1.1] tracking-[-0.045em] text-neutral-950 sm:text-[2.75rem]">
+        <BackLink />
+        Apply to Become a Recruiter
+      </h1>
+      <p className="mt-3 max-w-xl text-sm leading-6 text-neutral-600">
+        Interested in working on recruitment requirements through EarlyJobs? Complete the
+        application form with accurate information about your background and recruitment interests.
+      </p>
+    </header>
+  );
+}
+
 const button =
   "inline-flex h-11 items-center justify-center rounded-[6px] px-4 text-[13px] font-medium transition-[border-radius,background-color] duration-500 ease-in-out hover:rounded-[22px]";
 
@@ -300,7 +316,8 @@ export function RecruiterApplicationForm() {
   if (!hydrated) {
     return (
       <div className="w-full max-w-3xl">
-        <div className="h-40 animate-pulse rounded-[18px] bg-neutral-100" />
+        <ApplyHeading />
+        <div className="mt-10 h-40 animate-pulse rounded-[18px] bg-neutral-100" />
       </div>
     );
   }
@@ -337,17 +354,7 @@ export function RecruiterApplicationForm() {
         trackEvent("form_start", { form_id: "recruiter_apply", location: "apply" });
       }}
     >
-      <header>
-        <p className="text-sm font-medium text-brand">Application</p>
-        <h1 className="mt-2 text-[2rem] font-semibold leading-[1.1] tracking-[-0.045em] text-neutral-950 sm:text-[2.75rem]">
-        <BackLink />
-          Apply to Become a Recruiter
-        </h1>
-        <p className="mt-3 max-w-xl text-sm leading-6 text-neutral-600">
-          Interested in working on recruitment requirements through EarlyJobs? Complete the
-          application form with accurate information about your background and recruitment interests.
-        </p>
-      </header>
+      <ApplyHeading />
 
       <ol className="mt-10 grid gap-3 sm:grid-cols-5">
         {steps.map((item, index) => {

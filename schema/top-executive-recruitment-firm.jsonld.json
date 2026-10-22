@@ -1,0 +1,34 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.earlyjobs.ai/top-executive-recruitment-firm#webpage",
+      "url": "https://www.earlyjobs.ai/top-executive-recruitment-firm",
+      "name": "Executive Recruitment | EarlyJobs",
+      "description": "Executive recruitment services from EarlyJobs for senior leadership roles.",
+      "isPartOf": { "@id": "https://www.earlyjobs.ai/#website" },
+      "about": { "@id": "https://www.earlyjobs.ai/top-executive-recruitment-firm#service" },
+      "breadcrumb": { "@id": "https://www.earlyjobs.ai/top-executive-recruitment-firm#breadcrumb" },
+      "dateModified": "2026-10-22"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/top-executive-recruitment-firm#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.earlyjobs.ai/" },
+        { "@type": "ListItem", "position": 2, "name": "Executive Recruitment", "item": "https://www.earlyjobs.ai/top-executive-recruitment-firm" }
+      ]
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.earlyjobs.ai/top-executive-recruitment-firm#service",
+      "name": "Executive recruitment",
+      "serviceType": "Executive recruitment",
+      "description": "Executive recruitment services from EarlyJobs for senior leadership roles.",
+      "provider": { "@id": "https://www.earlyjobs.ai/#organization" },
+      "areaServed": { "@type": "Country", "name": "India" },
+      "url": "https://www.earlyjobs.ai/top-executive-recruitment-firm"
+    }
+  ]
+}

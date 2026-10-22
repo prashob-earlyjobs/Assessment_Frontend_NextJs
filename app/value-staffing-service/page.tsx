@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/json-ld";
 import ValueStaffingServicesPage from "@/components/legacy/pages/ourServices/ValueStaffingServicesPage";
 import { pageMetadata } from "@/lib/page-metadata";
+import schema from "@/schema/value-staffing-service.jsonld.json";
 
 export const metadata: Metadata = pageMetadata({
   path: "/value-staffing-service",
@@ -16,5 +18,10 @@ export const metadata: Metadata = pageMetadata({
 });
 
 export default function Page() {
-  return <ValueStaffingServicesPage />;
+  return (
+    <>
+      <JsonLd data={schema} />
+      <ValueStaffingServicesPage />
+    </>
+  );
 }

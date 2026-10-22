@@ -620,7 +620,7 @@ export function FreelanceRecruitersPage({
           </p>
           <p className="mt-6 text-sm leading-6 text-neutral-500">
             See how the network works for{" "}
-            <Link href="/recruiters" className="underline">
+            <Link href="/become-a-recruiter" className="underline">
               recruiters
             </Link>{" "}
             and browse open{" "}
