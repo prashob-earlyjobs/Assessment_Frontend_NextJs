@@ -155,7 +155,7 @@ const TopExecutiveServicePage = () => {
             </section>
             <section className='service-page-s4-con'>
                 <div className='service-page-s4-content'>
-                    <h1 className="service-page-s4-subheading">Top Executive Recruitment Experts</h1>
+                    <h2 className="service-page-s4-subheading">Top Executive Recruitment Experts</h2>
                     <p className="service-page-s4-text">
                         Welcome to Earlyjobs, the leading executive recruitment firm specializing in connecting exceptional talent with organizations dignified for greatness. With an unparalleled track record and an strong commitment to excellence, we, the best placement consultancy are here to transform your executive hiring process and elevate your business to new heights.
                         <br />

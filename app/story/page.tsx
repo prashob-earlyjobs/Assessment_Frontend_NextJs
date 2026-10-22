@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/json-ld";
 import { BeliefStoryPage } from "@/components/story/belief-page";
 import { pageMetadata } from "@/lib/page-metadata";
+import schema from "@/schema/story.jsonld.json";
 
 export const metadata: Metadata = pageMetadata({
   path: "/story",
@@ -19,5 +21,10 @@ export const metadata: Metadata = pageMetadata({
 });
 
 export default function Page() {
-  return <BeliefStoryPage />;
+  return (
+    <>
+      <JsonLd data={schema} />
+      <BeliefStoryPage />
+    </>
+  );
 }

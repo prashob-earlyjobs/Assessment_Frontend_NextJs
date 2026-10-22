@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/json-ld";
 import TermsAndConditions from "@/components/legacy/pages/TermsAndConditions";
 import { pageMetadata } from "@/lib/page-metadata";
+import schema from "@/schema/terms-and-conditions.jsonld.json";
 
 export const metadata: Metadata = pageMetadata({
   path: "/terms-and-conditions",
@@ -17,5 +19,10 @@ export const metadata: Metadata = pageMetadata({
 });
 
 export default function Page() {
-  return <TermsAndConditions />;
+  return (
+    <>
+      <JsonLd data={schema} />
+      <TermsAndConditions />
+    </>
+  );
 }

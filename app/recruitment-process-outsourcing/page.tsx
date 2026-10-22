@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/json-ld";
 import RecruitmentProcessOutsourcingPage from "@/components/legacy/pages/ourServices/RecruitmentProcessOutsourcingPage";
 import { pageMetadata } from "@/lib/page-metadata";
+import schema from "@/schema/recruitment-process-outsourcing.jsonld.json";
 
 export const metadata: Metadata = pageMetadata({
   path: "/recruitment-process-outsourcing",
@@ -16,5 +18,10 @@ export const metadata: Metadata = pageMetadata({
 });
 
 export default function Page() {
-  return <RecruitmentProcessOutsourcingPage />;
+  return (
+    <>
+      <JsonLd data={schema} />
+      <RecruitmentProcessOutsourcingPage />
+    </>
+  );
 }

@@ -13,7 +13,7 @@ export type NavbarLink = {
 
 export const defaultNavbarLinks: NavbarLink[] = [
   { label: "Find Jobs", href: "/jobs" },
-  { label: "For Recruiters", href: "/recruiters" },
+  { label: "For Recruiters", href: "/become-a-recruiter" },
   { label: "For Employers", href: "/employers" },
   { label: "About", href: "/about" },
 ];

@@ -1,0 +1,34 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.earlyjobs.ai/recruitment-process-outsourcing#webpage",
+      "url": "https://www.earlyjobs.ai/recruitment-process-outsourcing",
+      "name": "Recruitment Process Outsourcing | EarlyJobs",
+      "description": "Recruitment process outsourcing from EarlyJobs for employers that want hiring support across open roles.",
+      "isPartOf": { "@id": "https://www.earlyjobs.ai/#website" },
+      "about": { "@id": "https://www.earlyjobs.ai/recruitment-process-outsourcing#service" },
+      "breadcrumb": { "@id": "https://www.earlyjobs.ai/recruitment-process-outsourcing#breadcrumb" },
+      "dateModified": "2026-10-22"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/recruitment-process-outsourcing#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.earlyjobs.ai/" },
+        { "@type": "ListItem", "position": 2, "name": "Recruitment Process Outsourcing", "item": "https://www.earlyjobs.ai/recruitment-process-outsourcing" }
+      ]
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.earlyjobs.ai/recruitment-process-outsourcing#service",
+      "name": "Recruitment process outsourcing",
+      "serviceType": "Recruitment process outsourcing",
+      "description": "Recruitment process outsourcing from EarlyJobs for employers that want hiring support across open roles.",
+      "provider": { "@id": "https://www.earlyjobs.ai/#organization" },
+      "areaServed": { "@type": "Country", "name": "India" },
+      "url": "https://www.earlyjobs.ai/recruitment-process-outsourcing"
+    }
+  ]
+}

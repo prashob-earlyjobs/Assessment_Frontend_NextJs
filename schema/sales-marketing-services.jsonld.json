@@ -1,0 +1,34 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.earlyjobs.ai/sales-marketing-services#webpage",
+      "url": "https://www.earlyjobs.ai/sales-marketing-services",
+      "name": "Sales and Marketing Recruitment | EarlyJobs",
+      "description": "Sales and marketing recruitment services from EarlyJobs.",
+      "isPartOf": { "@id": "https://www.earlyjobs.ai/#website" },
+      "about": { "@id": "https://www.earlyjobs.ai/sales-marketing-services#service" },
+      "breadcrumb": { "@id": "https://www.earlyjobs.ai/sales-marketing-services#breadcrumb" },
+      "dateModified": "2026-10-22"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/sales-marketing-services#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.earlyjobs.ai/" },
+        { "@type": "ListItem", "position": 2, "name": "Sales and Marketing Recruitment", "item": "https://www.earlyjobs.ai/sales-marketing-services" }
+      ]
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.earlyjobs.ai/sales-marketing-services#service",
+      "name": "Sales and marketing recruitment",
+      "serviceType": "Sales and marketing recruitment",
+      "description": "Sales and marketing recruitment services from EarlyJobs.",
+      "provider": { "@id": "https://www.earlyjobs.ai/#organization" },
+      "areaServed": { "@type": "Country", "name": "India" },
+      "url": "https://www.earlyjobs.ai/sales-marketing-services"
+    }
+  ]
+}

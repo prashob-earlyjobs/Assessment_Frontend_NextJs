@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/json-ld";
 import PrivacyPolicy from "@/components/legacy/pages/PrivacyPolicy";
 import { pageMetadata } from "@/lib/page-metadata";
+import schema from "@/schema/privacy-policy.jsonld.json";
 
 export const metadata: Metadata = pageMetadata({
   path: "/privacy-policy",
@@ -17,5 +19,10 @@ export const metadata: Metadata = pageMetadata({
 });
 
 export default function Page() {
-  return <PrivacyPolicy />;
+  return (
+    <>
+      <JsonLd data={schema} />
+      <PrivacyPolicy />
+    </>
+  );
 }

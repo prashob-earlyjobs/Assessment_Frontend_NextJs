@@ -271,7 +271,7 @@ const Recruiter = () => {
             </div>  
             <div className="landing-page-screen-3-container">
                 <div className="landing-page-s3-content">
-                    <h1 className="landing-page-s3-heading">OUR SUCCESS</h1>
+                    <h2 className="landing-page-s3-heading">OUR SUCCESS</h2>
                     <ul className="landing-page-s3-card-con">
                         { successMetrics.map((metric, index) => (
                             <li key={index} className="landing-page-s3-card">
@@ -296,7 +296,7 @@ const Recruiter = () => {
             </div> */}
           <div className="landing-page-screen-5-container">
                 <div className="landing-page-s5-content">
-                    <h1 className="landing-page-s5-heading">Empowering Women with Flexible Career Opportunities</h1>
+                    <h2 className="landing-page-s5-heading">Empowering Women with Flexible Career Opportunities</h2>
                     <hr className="landing-page-s5-hr" />
                     <p className="landing-page-s5-desc">
                         EarlyJobs is dedicated to empowering women from Tier 2 cities and villages by providing access to real-world internship opportunities and flexible freelance HR recruiter roles.
@@ -325,7 +325,7 @@ const Recruiter = () => {
                 </div>
             </div>
             <div className="landing-page-screen-8-container">
-                <h1 className="landing-page-s8-heading">The problem that job platforms cannot solve, EarlyJobs solves</h1>
+                <h2 className="landing-page-s8-heading">The problem that job platforms cannot solve, EarlyJobs solves</h2>
                 <p className="landing-page-s8-desc">No pre and post hiring hustle required, we take care of everything. Want to know more?</p>
                 <p onClick={()=>router.push("/apply-as-a-recruiter")} className="landing-page-s8-btn cursor-pointer">Apply as a recruiter</p>
             </div>
@@ -359,7 +359,7 @@ const Recruiter = () => {
                 ))}
             </div>
             <div className="landing-page-screen-7-container">
-                <h1 className="landing-page-s7-heading">FAQs</h1>
+                <h2 className="landing-page-s7-heading">FAQs</h2>
                 <div className="landing-page-s7-accordion-consultation-con">
                     <div className="landing-page-s7-accordion-con">
                         { accordionData.map((accordion, index) => (
