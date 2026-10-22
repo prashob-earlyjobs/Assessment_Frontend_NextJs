@@ -34,6 +34,12 @@
     color: #EB6A4D;
 }
 
+.service-page-heading-plain {
+    text-transform: none;
+    letter-spacing: 0;
+    line-height: 1.4;
+}
+
 .service-page-hero-heading {
     color: #000000;
     font-family: "Inter", Sans-serif;

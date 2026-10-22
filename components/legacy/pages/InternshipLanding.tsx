@@ -8,7 +8,6 @@ import { submitEnquiry } from "../services/servicesapis";
 import {
   Check,
   ArrowRight,
-  Star,
   Mail,
 } from "lucide-react";
 
@@ -18,7 +17,6 @@ const NAV_LINKS = [
   { label: "The Program", href: "#solution" },
   { label: "Career Path", href: "#career" },
   { label: "Stipend", href: "#stipend" },
-  { label: "Stories", href: "#stories" },
   { label: "FAQs", href: "#faq" },
 ];
 
@@ -86,48 +84,9 @@ const STIPEND_ROWS = [
 
 const TOP_PERKS = [
   "A later role is not guaranteed",
-  "Freelance recruiter opportunities",
-  "Full-time roles with EarlyJobs or partner companies",
-  "Best Performer Awards & recognition",
-];
-
-const TESTIMONIALS = [
-  {
-    name: "Priya Sahu",
-    place: "Bilaspur, Chhattisgarh",
-    quote:
-      "I used to freeze during interviews. After three months of talking to candidates every single day, I finally sound confident on calls — even with my own placement interviews.",
-  },
-  {
-    name: "Rohit Meena",
-    place: "Kota, Rajasthan",
-    quote:
-      "The internship description is the work that is confirmed for the cohort. A certificate is provided only when it is part of the written terms.",
-  },
-  {
-    name: "Ayesha Khatoon",
-    place: "Muzaffarpur, Bihar",
-    quote:
-      "Being able to work from home mattered a lot for my family. I didn't have to move cities to get real corporate exposure, and my manager was always just a call away.",
-  },
-  {
-    name: "Sneha Patil",
-    place: "Nashik, Maharashtra",
-    quote:
-      "I closed my first candidate joining in week three and it honestly felt bigger than any exam result. That's the moment I stopped feeling like 'just a student.'",
-  },
-  {
-    name: "Vikram Nair",
-    place: "Kannur, Kerala",
-    quote:
-      "Joinings and payment are not guaranteed. Terms are confirmed in writing before the internship starts.",
-  },
-  {
-    name: "Divya Reddy",
-    place: "Warangal, Telangana",
-    quote:
-      "As a woman from a small town, flexible, respected remote work is rare to find. This internship gave me that, plus a LinkedIn profile that actually gets recruiter replies now.",
-  },
+  "A stipend is confirmed in writing, if one applies",
+  "Awards are not promised on this page",
+  "A full-time role is not offered on this page",
 ];
 
 const FAQS = [
@@ -530,6 +489,9 @@ export default function InternshipLanding() {
           <div className="text-center max-w-2xl mx-auto mb-12">
             <span className="ij-eyebrow ij-eyebrow-light">Learn · Grow · Lead</span>
             <h2 className="ij-display text-3xl sm:text-4xl text-white mt-3">Growth that actually matters.</h2>
+            <p className="mt-4 text-sm text-white/70">
+              These titles describe possible later work. A promotion or a later role is not promised.
+            </p>
           </div>
           <div className="grid lg:grid-cols-3 gap-5 lg:gap-4 items-stretch">
             {CAREER_STEPS.map((step, i) => (
@@ -599,7 +561,7 @@ export default function InternshipLanding() {
               </table>
             </div>
             <div className="ij-card">
-              <h3 className="font-semibold text-[var(--ij-navy)] mb-4">Top performers also get</h3>
+              <h3 className="font-semibold text-[var(--ij-navy)] mb-4">What this page does not promise</h3>
               <ul className="space-y-3">
                 {TOP_PERKS.map((perk) => (
                   <li key={perk} className="flex gap-2.5 text-[var(--ij-ink-soft)]">
@@ -657,44 +619,8 @@ export default function InternshipLanding() {
           </div>
           <div className="ij-dark-card text-center py-5">
             <p className="text-lg sm:text-xl font-semibold text-white">
-              No registration fee. No hidden charges. Ever.
+              No registration fee is charged to join this internship.
             </p>
-          </div>
-        </div>
-      </RevealSection>
-
-      {/* Stories */}
-      <RevealSection id="stories" className="ij-section bg-[var(--ij-cream)]">
-        <div className="ij-container">
-          <div className="text-center max-w-2xl mx-auto mb-4">
-            <span className="ij-eyebrow">In Their Words</span>
-            <h2 className="ij-display text-3xl sm:text-4xl text-[var(--ij-navy)] mt-3">
-              Real interns. Real confidence. Real growth.
-            </h2>
-          </div>
-          <p className="text-center text-xs text-[var(--ij-ink-soft)] mb-10 max-w-xl mx-auto">
-            Illustrative stories reflecting common intern experiences. Verified quotes will replace these as they are collected with consent.
-          </p>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {TESTIMONIALS.map((t) => (
-              <div key={t.name} className="ij-card flex flex-col">
-                <div className="flex gap-0.5 mb-3 text-[var(--ij-orange)]">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-current" />
-                  ))}
-                </div>
-                <p className="text-sm text-[var(--ij-ink)] leading-relaxed flex-1 mb-5">&ldquo;{t.quote}&rdquo;</p>
-                <div className="flex items-center gap-3">
-                  <span className="w-10 h-10 rounded-full bg-[var(--ij-orange-soft)] text-[var(--ij-orange-deep)] font-bold inline-flex items-center justify-center">
-                    {t.name.charAt(0)}
-                  </span>
-                  <div>
-                    <p className="font-semibold text-sm text-[var(--ij-navy)]">{t.name}</p>
-                    <p className="text-xs text-[var(--ij-ink-soft)]">{t.place}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </RevealSection>
@@ -786,7 +712,7 @@ export default function InternshipLanding() {
             </p>
             <ul className="space-y-3">
               {[
-                "No registration fee, ever",
+                "No registration fee to join",
                 "100% remote, work from anywhere",
                 "Real hiring experience from week one",
               ].map((item) => (

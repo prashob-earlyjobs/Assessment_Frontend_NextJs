@@ -1074,7 +1074,7 @@ export default function AgencyOnboardingClient() {
                 <div className="space-y-1">
                   <p className="text-sm text-slate-800 font-medium">
                     I agree that we will not charge any fees from candidates at any stage of the hiring process. I
-                    understand that if EarlyJobs discovers any violation of this agreement, Earlyjobs reserve the
+                    understand that if EarlyJobs discovers any violation of this agreement, EarlyJobs reserves the
                     right to take appropriate legal action against the responsible party.
                   </p>
                 </div>

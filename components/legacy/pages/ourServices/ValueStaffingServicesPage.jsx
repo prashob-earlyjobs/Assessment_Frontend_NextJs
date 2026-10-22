@@ -109,7 +109,7 @@ const ValueStaffingServicesPage = () => {
                     </p> 
                     <h2 className="service-page-s4-heading">Value Staffing Services Process</h2>
                     <p className="service-page-s4-text">EarlyJobs is sensitive to the fact that in addition to Value Staffing, organizations also need value added services not just limited to employee engagement, performance management, talent pipeline management etc. In such cases, we bring in a dedicated team for them; they operate out of the customer’s office/ location and do everything for that client – for the line managers, HR team, finance team, legal team and all the temp staff of EarlyJobs working there; they bring in higher efficiency in staffing and a significant increase in productivity.</p>
-                    <h2 className="service-page-s4-heading">EarlyJobs HR Advantages</h2>
+                    <h2 className="service-page-s4-heading service-page-heading-plain">EarlyJobs HR advantages</h2>
                     <p className="service-page-s4-text">
                     Rigorous management of compliance and risks :
                     <br/>

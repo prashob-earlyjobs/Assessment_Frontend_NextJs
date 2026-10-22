@@ -6,7 +6,7 @@ function HeroSection({heroSectionData}) {
   return (
     <section className='service-page-hero '>
         <div className='service-page-hero-content'>
-            <h3 className="service-page-hero-subheading">{heroSectionData.subheading}</h3>
+            <p className={heroSectionData.plainSubheading ? "service-page-hero-subheading service-page-heading-plain" : "service-page-hero-subheading"}>{heroSectionData.subheading}</p>
             <h1 className="service-page-hero-heading">{heroSectionData.heading}</h1>
             <ul className="service-page-hero-list">
                 {heroSectionData.list.map((item, index) => (

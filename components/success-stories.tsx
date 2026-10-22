@@ -102,7 +102,7 @@ const stories: Story[] = [
       {
         title: "Appreciation Note",
         quote:
-          "I would like to sincerely thank you for the excellent support and guidance you provide throughout the process. i truly appreciate your efforts and the opportunity given by you and Earlyjobs.",
+          "I would like to sincerely thank you for the excellent support and guidance you provide throughout the process. i truly appreciate your efforts and the opportunity given by you and EarlyJobs.",
         name: "Frankfinn Aviation Services Private Limited",
         role: "Happy Client",
       },

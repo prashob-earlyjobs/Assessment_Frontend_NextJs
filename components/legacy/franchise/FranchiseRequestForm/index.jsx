@@ -65,11 +65,11 @@ const RequestForm = ({ isFranchise }) => {
         message: `
           <html>
             <body>
-              <p>Hi Earlyjobs Team,</p>
+              <p>Hi EarlyJobs Team,</p>
               <p>We have received a request for free consultation from <strong>${formData.name}</strong> with email id <strong>${formData.email}</strong> and contact number <strong>${formData.contact}</strong>.</p>
               <p>They are looking for <strong>${isFranchise ? "Franchise" : formData.lookingFor}</strong>.</p>
               <p>District: <strong>${formData.district}</strong></p>
-              <p>Regards,<br>earlyjobs.in team<br>Victaman Enterprises</p>
+              <p>Regards,<br>EarlyJobs team<br>Victaman Enterprises</p>
             </body>
           </html>
         `,
