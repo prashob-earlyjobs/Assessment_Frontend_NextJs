@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { AppToaster } from "@/components/app-toaster";
+import { GoogleAnalyticsPageView } from "@/components/google-analytics";
 import { SiteChrome } from "@/components/site-chrome";
 import "./globals.css";
 
@@ -26,7 +27,22 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-WJSYDMB1J3" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              window.gtag = gtag;
+              gtag('js', new Date());
+              gtag('config', 'G-WJSYDMB1J3');
+            `,
+          }}
+        />
+      </head>
       <body className="flex min-h-full min-w-0 flex-col overflow-x-clip font-sans">
+        <GoogleAnalyticsPageView />
         <SiteChrome>{children}</SiteChrome>
         <AppToaster />
       </body>
