@@ -136,7 +136,7 @@ const Recruiter = () => {
         },
         { 
             title: 'Better Conversion Rate', 
-            desc: 'Get Access to 100+ Earlyjobs Clients, share your candidates for multiple roles to increase conversion rate', 
+            desc: 'Get Access to 100+ EarlyJobs Clients, share your candidates for multiple roles to increase conversion rate', 
             imageUrl: '/money_matters/conversion-rate.png'
         },
         { 

@@ -11,7 +11,8 @@ import Faqs from "../../Servicesfooter/Faqs";
 import './style.css';
 
 const heroSectionData = {
-    subheading: 'IT RECRUITMENT',
+    subheading: 'IT recruitment',
+    plainSubheading: true,
     heading: 'IT Recruitment Services for Growing Technology Teams',
     list: [
         {
@@ -27,7 +28,7 @@ const heroSectionData = {
 }
 
 const section2Data = {
-    heading: 'IT Talents Recruitment Made Easier',
+    heading: 'Technology hiring for the roles you define',
     text: 'EarlyJobs helps employers define technology hiring requirements and connect them with recruiter-led sourcing. Technical assessments are used only when they are part of the agreed process.',
     image: '/services_imgs/features-summary.svg'
 }
@@ -35,12 +36,12 @@ const section2Data = {
 const section3Data = [
     {
         heading: 'Domain Specific Talent',
-        text: 'We specialize in impactful IT recruitment, matching businesses with candidates who create lasting results across diverse industries.',
+        text: 'Recruiters can work on technology roles across the industries you hire for. Results depend on the role.',
         icon: <FaRocket className='service-page-s3-item-icon'/>
     },
     {
         heading: 'Time-saving',
-        text: 'Recruitment agencies save time and find ideal candidates, making "time is money" more relevant than ever for businesses.',
+        text: 'Recruiters work from the role you share. EarlyJobs does not publish a time saving on this page.',
         icon: <FaUserClock className='service-page-s3-item-icon'/>
     },
     {
@@ -66,7 +67,7 @@ const section4HighlightData = [
     },
     {
         heading: 'Extensive network and database',
-        text: 'IT job consultancies have access to a wide network of qualified IT professionals. They have a database of potential candidates and can tap into their network to find suitable candidates for specific IT roles. This saves companies the effort of searching for qualified candidates on their own.'
+        text: 'Recruiters source candidates for the technology role you share. EarlyJobs does not publish a candidate-database size on this page.'
     },
     {
         heading: 'Reduced risk of hiring mistakes',
@@ -78,11 +79,11 @@ const section4HighlightData = [
     },
     {
         heading: "Understanding the company's needs and requirements",
-        text: 'A job consultancy specializes in understanding the specific needs and requirements of IT companies when it comes to hiring IT professionals. They work closely with companies to identify the skills and qualifications necessary for different IT roles within the organization.'
+        text: 'EarlyJobs starts from the skills, qualifications, and role requirements you share.'
     },
     {
         heading: 'Sourcing the right candidates',
-        text: 'Job consultancies have extensive networks and databases of qualified IT professionals. They use their resources to source the right candidates for IT positions in companies. This includes reaching out to their network, advertising job openings, and conducting thorough screening and interviews to shortlist the most suitable candidates.'
+        text: 'Sourcing follows the role you share. Screening and interviews are used only when they are part of the agreed process.'
     },
     {
         heading: 'Assessing candidates skills and qualifications',
@@ -125,16 +126,16 @@ const ITRecruitmentServicePage = () => {
             </section>
             <section className='service-page-s4-con'>
                 <div className='service-page-s4-content'>
-                    <h2 className="service-page-s4-heading">WELCOME TO EARLYJOBS CONSULTANCY - YOUR IT RECRUITMENT PARTNER</h2>
-                    <p className="service-page-s4-text">Are you searching for top talent in the world of Information Technology? Look no further than Earlyjobs, your trusted partner for IT recruitment solutions.</p>
-                    <h2 className="service-page-s4-subheading">Our Expertise</h2>
-                    <p className="service-page-s4-text">At Earlyjobs, we specialize in identifying and connecting your business with the best IT professionals available. With years of experience in the IT recruitment industry, our team of experts possesses a deep understanding of the evolving tech landscape. We are well-equipped to find the right candidates for your organization, whether you’re seeking developers, engineers, project managers, or IT support staff.</p>
-                    <h2 className="service-page-s4-subheading">Tailored IT Recruitment Solutions</h2>
-                    <p className="service-page-s4-text">We understand that every organization is unique, and your IT recruitment services needs are no exception. That’s why we offer tailored recruitment solutions to match your company’s culture, values, and objectives. Our consultants work closely with you to create customized recruitment strategies that ensure a perfect fit between your business and the candidates we present.</p>
-                    <h2 className="service-page-s4-heading">KEY HIGHLIGHTS OF CHOOSE OUR IT RECRUITMENT SERVICES.</h2>
+                    <h2 className="service-page-s4-heading service-page-heading-plain">IT recruitment with EarlyJobs</h2>
+                    <p className="service-page-s4-text">EarlyJobs helps employers hire for information technology roles. Share the role, and recruiters work from those requirements.</p>
+                    <h2 className="service-page-s4-subheading">Our expertise</h2>
+                    <p className="service-page-s4-text">Recruiters source for the technology roles you define. Those roles can include developers, engineers, project managers, or IT support staff. Hiring outcomes are not guaranteed.</p>
+                    <h2 className="service-page-s4-subheading">Tailored IT recruitment solutions</h2>
+                    <p className="service-page-s4-text">The approach follows the role, locations, and process you agree. Technical assessments are used only when they are part of that process.</p>
+                    <h2 className="service-page-s4-heading service-page-heading-plain">Key Highlights of Our IT Recruitment Services</h2>
                     <Highlights section4HighlightData={section4HighlightData} />
                     <h2 className="service-page-s4-subheading">Let's Work Together</h2>
-                    <p className="service-page-s4-text">Partner with EarlyJobs for your IT recruitment services needs, and let us help you build a dynamic and high-performing IT team that drives your business forward. Contact us today to discuss your requirements and take the first step towards a brighter IT future.</p>
+                    <p className="service-page-s4-text">Contact EarlyJobs to discuss the technology roles you need to hire. The next step is a conversation about the role, location, and timeline.</p>
                 </div>
                 <div className='service-page-s4-consultancy-con'>
                     <img src="/services_imgs/it-recruitment-services.webp" draggable={false} alt="it-recruitment-service" className="service-page-s4-image"/>
