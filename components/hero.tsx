@@ -1,21 +1,48 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Search, ChevronDown } from "lucide-react";
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import { AnimatedStat } from "@/components/animated-stat";
 import { HeroMotion } from "@/components/home/motion";
-import {
-  fallbackDashboardStats,
-  formatStat,
-  type DashboardStats,
-} from "@/lib/dashboard";
+import { companyFacts } from "@/data/company-facts";
 import { jobsPageHref } from "@/lib/public-jobs";
+import { trackEvent } from "@/lib/track-event";
 
+// TODO(content): replace these alts with the company name for each EJ_V2 logo. Names are not in the repo.
 const clientLogos = Array.from({ length: 22 }, (_, index) => ({
   src: `https://storage.googleapis.com/earlyjobs_datas/EJ_V2/${index + 1}.png`,
-  alt: `Client ${index + 1}`,
+  alt: `EarlyJobs hiring partner logo ${index + 1}`,
 }));
+
+const audiences = [
+  {
+    id: "hiring",
+    label: "For Employers",
+    body: "Get recruitment support for your hiring requirements.",
+    cta: "Explore Hiring Solutions",
+    href: "/employers",
+    audience: "employer",
+  },
+  {
+    id: "recruiter",
+    label: "For Recruiters",
+    body: "Explore opportunities to work on recruitment mandates through the EarlyJobs network.",
+    cta: "Become a Recruiter",
+    href: "/become-a-recruiter",
+    audience: "recruiter",
+  },
+  {
+    id: "job",
+    label: "For Job Seekers",
+    body: "Explore job opportunities and connect with relevant hiring opportunities.",
+    cta: "Explore Jobs",
+    href: "/jobs",
+    audience: "job_seeker",
+  },
+] as const;
 
 const cities = [
   "Remote",
@@ -53,52 +80,12 @@ const typingPhrases = [
   "Marketing Intern",
 ] as const;
 
-const statMeta = [
-  { key: "jobs" as const, label: "Jobs Openings", icon: "/v2/icons/hjobs.png" },
-  { key: "recruiters" as const, label: "Recruiters", icon: "/v2/icons/hCandidates.png" },
-  { key: "companies" as const, label: "Companies", icon: "/v2/icons/hCompanies.png" },
+const statIcons = [
+  "/v2/icons/hCandidates.png",
+  "/v2/icons/hCompanies.png",
+  "/v2/icons/hjobs.png",
+  "/v2/icons/hCandidates.png",
 ] as const;
-
-function useCountUp(target: number, duration = 2700) {
-  const [value, setValue] = useState(0);
-
-  useEffect(() => {
-    if (target <= 0) {
-      setValue(0);
-      return;
-    }
-
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) {
-      setValue(target);
-      return;
-    }
-
-    let frame = 0;
-    const start = performance.now();
-
-    const tick = (now: number) => {
-      const progress = Math.min(1, (now - start) / duration);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setValue(Math.round(target * eased));
-      if (progress < 1) frame = requestAnimationFrame(tick);
-    };
-
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [target, duration]);
-
-  return value;
-}
-
-function StatValue({ target }: { target: number }) {
-  const value = useCountUp(target);
-  return (
-    <span className="text-xl font-bold text-white tabular-nums sm:text-2xl md:text-3xl lg:text-4xl">
-      {formatStat(value).replace(/\+$/, "")}+
-    </span>
-  );
-}
 
 function useTypingPlaceholder(phrases: readonly string[], enabled: boolean) {
   const [text, setText] = useState("");
@@ -267,26 +254,15 @@ function HeroSearch() {
   );
 }
 
-function LogoCarousel({
-  reverse = false,
-  className = "",
-}: {
-  reverse?: boolean;
-  className?: string;
-}) {
-  const logos = reverse ? clientLogos : [...clientLogos, ...clientLogos];
+function LogoCarousel() {
   return (
-    <div className={`relative z-10 overflow-hidden ${className}`}>
+    <div className="relative z-10 overflow-hidden pb-3 sm:pb-4">
       <div className="mx-auto max-w-[90rem] px-2 sm:px-4 lg:px-8">
-        <div className="relative flex h-12 items-center overflow-hidden sm:h-14 md:h-16">
-          <div
-            className={`flex w-max gap-4 sm:gap-6 md:gap-8 lg:gap-12 ${
-              reverse ? "carousel-horizontal-top" : "carousel-horizontal"
-            }`}
-          >
-            {logos.map((logo, idx) => (
+        <div className="logo-marquee relative flex h-12 items-center overflow-hidden sm:h-14 md:h-16">
+          <div className="logo-set flex w-max gap-4 sm:gap-6 md:gap-8 lg:gap-12">
+            {clientLogos.map((logo) => (
               <div
-                key={`${reverse ? "top" : "bot"}-${idx}`}
+                key={logo.src}
                 className="flex h-14 w-20 shrink-0 items-center justify-center sm:h-20 sm:w-28 md:h-28 md:w-36"
               >
                 <Image
@@ -306,29 +282,13 @@ function LogoCarousel({
   );
 }
 
-export function Hero() {
-  const [dashboard, setDashboard] = useState<DashboardStats>(fallbackDashboardStats);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    fetch("/api/dashboard")
-      .then(async (response) => {
-        if (!response.ok) throw new Error("dashboard failed");
-        return (await response.json()) as { success?: boolean; data?: DashboardStats };
-      })
-      .then((body) => {
-        if (cancelled || !body.success || !body.data) return;
-        setDashboard(body.data);
-      })
-      .catch(() => {
-        /* keep fallback */
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+export function Hero({
+  stats,
+}: {
+  stats: { value: string; label: string }[];
+}) {
+  const [audience, setAudience] = useState<(typeof audiences)[number]["id"]>("job");
+  const active = audiences.find((item) => item.id === audience) ?? audiences[0];
 
   return (
     <HeroMotion>
@@ -346,46 +306,90 @@ export function Hero() {
 
       <div className="relative z-10 mx-auto flex min-h-0 w-full max-w-7xl flex-1 flex-col justify-center px-4 py-4 sm:px-6 sm:py-8 md:py-12 lg:px-8 lg:py-16 xl:py-20">
         <div className="space-y-3 sm:space-y-6 md:space-y-8 lg:space-y-10 xl:space-y-12">
+          <p className="text-center text-[11px] font-semibold tracking-[0.16em] text-white/70 uppercase">
+            The recruiter-first hiring network
+          </p>
           <h1 className="px-2 text-center text-3xl leading-tight font-bold text-white sm:px-4 sm:text-4xl md:text-5xl xl:text-6xl">
-            Find Jobs. Get Discovered by Recruiters.
+            The Recruiter-First Hiring Network
           </h1>
 
           <p className="mx-auto max-w-3xl px-2 text-center text-sm text-white/80 sm:px-6 sm:text-base md:text-lg lg:text-xl">
-            A Growing Network of Women Recruiters, Built for the Future of Hiring.
+            EarlyJobs connects employers, recruiters, and job seekers.
+            <br />
+            Recruiter-led hiring and AI-assisted recruitment workflows.
           </p>
 
-          <HeroSearch />
+          <div className="flex flex-wrap justify-center gap-2" role="tablist" aria-label="Who is this for">
+            {audiences.map((item) => {
+              const selected = item.id === audience;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={selected}
+                  onClick={() => setAudience(item.id)}
+                  className={`rounded-full px-4 py-2 text-sm font-medium ${
+                    selected ? "bg-white text-neutral-950" : "bg-white/10 text-white hover:bg-white/20"
+                  }`}
+                >
+                  {item.label}
+                </button>
+              );
+            })}
+          </div>
+
+          {audience === "job" ? <HeroSearch /> : null}
+
+          <div className="flex justify-center">
+            <Link
+              href={active.href}
+              onClick={() =>
+                trackEvent("cta_click", {
+                  cta_id: `home_hero_${active.id}`,
+                  audience: active.audience,
+                  location: "hero",
+                })
+              }
+              className="inline-flex h-12 items-center justify-center rounded-full bg-[#ea6a4e] px-6 text-sm font-medium text-white hover:bg-[#ea6a4e]/90"
+            >
+              {active.cta}
+            </Link>
+          </div>
 
           <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 px-2 text-sm text-white/70">
-            <span>Built for recruiters</span>
+            <span>For employers</span>
             <span aria-hidden className="text-white/35">
               ·
             </span>
-            <span>Trusted by employers</span>
+            <span>For recruiters</span>
             <span aria-hidden className="text-white/35">
               ·
             </span>
-            <span>Loved by job seekers</span>
+            <span>For job seekers</span>
           </p>
 
           <div className="mt-2 flex flex-wrap justify-center gap-2 pt-1 sm:mt-4 sm:gap-4 sm:pt-2 md:mt-8 md:gap-6 lg:mt-12 lg:gap-10 xl:gap-16">
-            {statMeta.map((stat) => (
+            {stats.map((stat, index) => (
               <div key={stat.label} className="flex items-center gap-2 sm:gap-3">
                 <div className="relative h-8 w-8 shrink-0 sm:h-10 sm:w-10 md:h-12 md:w-12">
-                  <Image src={stat.icon} alt="" fill className="object-contain" />
+                  <Image src={statIcons[index] ?? statIcons[0]} alt="" fill className="object-contain" />
                 </div>
                 <div>
-                  <StatValue target={dashboard[stat.key]} />
+                  <AnimatedStat
+                    value={stat.value}
+                    className="text-xl font-bold text-white tabular-nums sm:text-2xl md:text-3xl lg:text-4xl"
+                  />
                   <p className="text-xs text-white/70 sm:text-sm md:text-base">{stat.label}</p>
                 </div>
               </div>
             ))}
           </div>
+          <p className="text-center text-xs text-white/60">{companyFacts.updatedLabel}</p>
         </div>
       </div>
 
-      <LogoCarousel reverse className="hidden lg:block" />
-      <LogoCarousel className="shrink-0 pb-3 sm:pb-4" />
+      <LogoCarousel />
     </HeroMotion>
   );
 }

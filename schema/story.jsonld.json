@@ -1,0 +1,24 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "AboutPage",
+      "@id": "https://www.earlyjobs.ai/story#webpage",
+      "url": "https://www.earlyjobs.ai/story",
+      "name": "Our Story | EarlyJobs",
+      "description": "We're building a better way to hire—connecting people, networks and technology across EarlyJobs, Huntlo AI and GigKaro.",
+      "isPartOf": { "@id": "https://www.earlyjobs.ai/#website" },
+      "about": { "@id": "https://www.earlyjobs.ai/#organization" },
+      "breadcrumb": { "@id": "https://www.earlyjobs.ai/story#breadcrumb" },
+      "dateModified": "2026-10-22"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/story#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.earlyjobs.ai/" },
+        { "@type": "ListItem", "position": 2, "name": "Our Story", "item": "https://www.earlyjobs.ai/story" }
+      ]
+    }
+  ]
+}

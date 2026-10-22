@@ -11,12 +11,12 @@ const FAQ = () => {
     {
       question: "How much can I earn?",
       answer:
-        "Franchise earnings vary based on location and performance but typically range between ₹3-6.5 lakhs per month after 6-9 months of operation...",
+        "Earnings are not guaranteed. Results depend on the business, location, effort, and market conditions. EarlyJobs does not promise a specific income.",
     },
     {
       question: "What is the franchise fee?",
       answer:
-        "The standard franchise fee is ₹2 lakhs + GST. However, under our current limited-time offer, we're offering a 50% off with a reduced fee of just ₹1 lakh for the first 20 sign-ups.",
+        "Investment and commercial terms are set out in the applicable franchise agreement. A promotional fee that ended on 31 August 2025 is no longer available.",
     },
     {
       question: "Do I need an office?",

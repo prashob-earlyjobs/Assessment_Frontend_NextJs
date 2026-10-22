@@ -1,20 +1,31 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { NetworkMetricList } from "@/components/network-metric-list";
 import { Reveal } from "@/components/ui/reveal";
+import { earlyJobsContact } from "@/lib/contact";
+import { trackEvent } from "@/lib/track-event";
 
 const applyHref = "/become-a-recruiter/apply";
-const contactHref = "mailto:info@earlyjobs.in?subject=Freelance%20recruiter%20inquiry";
+const whatsappHref =
+  "https://wa.me/918217527926?text=Hi%20EarlyJobs%2C%20I'd%20like%20to%20join%20as%20a%20freelance%20recruiter";
+const callHref = `tel:${earlyJobsContact.phoneTel}`;
+
+function onWhatsapp(ctaId: string) {
+  trackEvent("whatsapp_click", { cta_id: ctaId, audience: "recruiter", location: "become_a_recruiter" });
+}
 
 const btn =
   "inline-flex h-11 items-center justify-center rounded-full bg-brand px-6 text-sm font-medium text-white transition-colors hover:bg-[#d85c42]";
 const btnGhost =
   "inline-flex h-11 items-center justify-center rounded-full border border-neutral-300 bg-white px-6 text-sm font-medium text-neutral-950 transition-colors hover:bg-neutral-50";
 
-const trust = [
-  "Flexible Work",
-  "Real Hiring Opportunities",
-  "Performance-Based Earnings",
-  "A Network That Supports You",
+const trust = ["Subject to programme terms", "Income is not guaranteed"] as const;
+
+const commercialTerms = [
+  "Commercial terms are governed by the applicable recruiter programme or mandate agreement.",
+  "Payment arrangements are subject to the applicable commercial terms.",
 ] as const;
 
 const helps = [
@@ -29,8 +40,8 @@ const helps = [
     tone: "bg-[#D9D6FF]",
   },
   {
-    title: "Earn through successful placements",
-    body: "Receive commission for eligible successful placements according to the applicable terms. Your earnings depend on your placements, role economics and the programme's conditions.",
+    title: "Commercial arrangements",
+    body: "Commercial terms are governed by the applicable recruiter programme or mandate agreement. Payment arrangements are subject to the applicable commercial terms.",
     tone: "bg-[#F7C1E0]",
   },
   {
@@ -68,40 +79,40 @@ const how = [
   {
     n: "01",
     title: "Apply to join",
-    body: "Share your background, experience and interest in freelance recruitment.",
+    body: "Submit your details through the recruiter application form.",
     tone: "bg-[#FFE7A3]",
   },
   {
     n: "02",
-    title: "Get onboarded",
-    body: "Understand the recruitment process, expectations, tools and programme terms applicable to you.",
+    title: "Application review",
+    body: "Your application can be reviewed against the applicable onboarding requirements.",
     tone: "bg-[#D9D6FF]",
   },
   {
     n: "03",
-    title: "Explore hiring requirements",
-    body: "Review the mandates made available to you and understand the role, eligibility criteria and placement terms.",
+    title: "Complete onboarding",
+    body: "Follow the onboarding process and understand the working arrangements before participating.",
     tone: "bg-[#F7C1E0]",
   },
   {
     n: "04",
-    title: "Source and engage talent",
-    body: "Identify relevant candidates, assess their suitability and coordinate the next steps in the hiring process.",
+    title: "Explore relevant hiring requirements",
+    body: "Recruiter participation depends on suitable mandates and applicable programme terms.",
     tone: "bg-[#B7F0DE]",
   },
   {
     n: "05",
-    title: "Earn on successful placements",
-    body: "When an eligible placement is completed under the agreed terms, earn the applicable recruitment commission.",
+    title: "Support the hiring process",
+    body: "Work on candidate sourcing, screening coordination, and recruitment activities for relevant requirements.",
     tone: "bg-[#D6E4FF]",
   },
 ] as const;
 
 const earnings = [
-  "The number and type of mandates you work on.",
-  "Your ability to source and engage relevant candidates.",
-  "Successful placements and applicable commission terms.",
-  "Employer hiring timelines and recruitment requirements.",
+  "Commercial terms are governed by the applicable recruiter programme or mandate agreement.",
+  "Payment arrangements are subject to the applicable commercial terms.",
+  "Applying does not guarantee acceptance, mandate allocation, placements, or income.",
+  "Recruiter participation depends on suitable mandates and applicable programme terms.",
 ] as const;
 
 const industries = [
@@ -174,7 +185,7 @@ const faqs = [
   },
   {
     q: "How do freelance recruiters earn?",
-    a: "Eligible commissions are paid for successful placements according to the applicable mandate and agreed commercial terms. Earnings depend on results and are not guaranteed.",
+    a: "Commercial terms are governed by the applicable recruiter programme or mandate agreement. Payment arrangements are subject to the applicable commercial terms.",
   },
   {
     q: "Will EarlyJobs provide hiring requirements?",
@@ -201,7 +212,11 @@ function Mark() {
   );
 }
 
-export function FreelanceRecruitersPage() {
+export function FreelanceRecruitersPage({
+  metrics = null,
+}: {
+  metrics?: { value: string; label: string }[] | null;
+}) {
   return (
     <main className="relative bg-white text-neutral-950">
       <section>
@@ -211,24 +226,30 @@ export function FreelanceRecruitersPage() {
               Your Recruiting Career, Your Way
             </p>
             <h1 className="mt-4 max-w-xl text-[2.6rem] font-semibold leading-[1.05] tracking-[-0.04em] sm:text-[3.4rem]">
-              Build a Career in Recruitment.{" "}
-              <span className="text-brand">On Your Terms.</span>
+              Build Your Recruitment Journey with <span className="text-brand">EarlyJobs</span>
             </h1>
             <p className="mt-5 max-w-lg text-[15px] leading-7 text-neutral-500">
-              You don&apos;t need a corporate office to build a meaningful career. You need the right
-              opportunities, the freedom to work your way, and a network that helps you move forward.
+              Put your recruitment skills to work with EarlyJobs. Explore the recruiter programme,
+              understand the onboarding process, and apply to participate in relevant hiring
+              requirements.
             </p>
-            <p className="mt-3 max-w-lg text-[15px] leading-7 text-neutral-500">
-              With EarlyJobs, work on hiring requirements from companies, connect the right talent
-              with the right opportunities, and earn commissions on successful placements — with the
-              flexibility to work from wherever life takes you.
-            </p>
+            <NetworkMetricList metrics={metrics} />
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link href={applyHref} className={btn}>
-                Become a Freelance Recruiter
+              <Link
+                href={applyHref}
+                onClick={() =>
+                  trackEvent("cta_click", {
+                    cta_id: "recruiter_apply_hero",
+                    audience: "recruiter",
+                    location: "hero",
+                  })
+                }
+                className={btn}
+              >
+                Apply to Become a Recruiter
               </Link>
-              <a href="#how-it-works" className={btnGhost}>
-                How It Works
+              <a href={whatsappHref} onClick={() => onWhatsapp("recruiter_whatsapp_hero")} className={btnGhost}>
+                Chat on WhatsApp
               </a>
             </div>
             <p className="mt-5 max-w-md text-sm leading-6 text-neutral-400">
@@ -239,7 +260,7 @@ export function FreelanceRecruitersPage() {
           <Reveal delay={80} className="media-frame mx-auto aspect-[4/5] w-full max-w-sm lg:max-w-none">
             <Image
               src="/freelance-recruiters/hero-culture.jpg"
-              alt=""
+              alt="Freelance recruiters working together on EarlyJobs"
               fill
               priority
               className="object-cover object-center"
@@ -332,9 +353,6 @@ export function FreelanceRecruitersPage() {
                 <Mark />
                 <h3 className="text-lg font-semibold tracking-[-0.02em]">{item.title}</h3>
                 <p className="mt-3 text-sm leading-6 text-neutral-700">{item.body}</p>
-                <Link href={applyHref} className="mt-6 inline-flex text-sm font-medium text-brand">
-                  Learn more &gt;
-                </Link>
               </li>
             ))}
           </ul>
@@ -344,9 +362,6 @@ export function FreelanceRecruitersPage() {
                 <Mark />
                 <h3 className="text-lg font-semibold tracking-[-0.02em]">{item.title}</h3>
                 <p className="mt-3 text-sm leading-6 text-neutral-700">{item.body}</p>
-                <Link href={applyHref} className="mt-6 inline-flex text-sm font-medium text-brand">
-                  Learn more &gt;
-                </Link>
               </li>
             ))}
           </ul>
@@ -388,8 +403,9 @@ export function FreelanceRecruitersPage() {
               Restart Your Career with EarlyJobs
             </Link>
             <p className="mt-4 text-[12px] leading-5 text-neutral-400">
-              Flexible work does not mean guaranteed income or unrestricted hours. Opportunities,
-              workload and earnings depend on available mandates and individual performance.
+              Recruitment opportunities, mandate availability, eligibility, and commercial
+              arrangements are subject to the applicable programme terms. Applying does not guarantee
+              acceptance, mandate allocation, placements, or income.
             </p>
           </div>
         </div>
@@ -402,8 +418,13 @@ export function FreelanceRecruitersPage() {
               There&apos;s More Than One Way to Start
             </p>
             <h2 className="mt-3 text-[2.1rem] font-semibold leading-[1.08] tracking-[-0.04em] sm:text-[2.7rem]">
-              Your background could be your <span className="text-brand">starting point.</span>
+              Who can <span className="text-brand">apply?</span>
             </h2>
+            <p className="mt-4 text-[15px] leading-7 text-neutral-500">
+              People interested in recruitment and talent acquisition can explore the programme and
+              submit an application. Relevant recruitment experience and role specialisation can
+              help establish suitability for particular hiring requirements.
+            </p>
           </div>
           <ul className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {who.map((item) => (
@@ -428,8 +449,7 @@ export function FreelanceRecruitersPage() {
               Simple, Structured, Recruiter-First
             </p>
             <h2 className="mt-3 text-[2.1rem] font-semibold leading-[1.08] tracking-[-0.04em] sm:text-[2.7rem]">
-              From your first application to your next{" "}
-              <span className="text-brand">placement.</span>
+              How it <span className="text-brand">works</span>
             </h2>
           </div>
           <ol className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
@@ -458,33 +478,26 @@ export function FreelanceRecruitersPage() {
               Your Work. Your Results.
             </p>
             <h2 className="mt-3 max-w-lg text-[2.1rem] font-semibold leading-[1.08] tracking-[-0.04em] sm:text-[2.7rem]">
-              Turn your recruiting skills into earning{" "}
-              <span className="text-brand">opportunities.</span>
+              Commercial <span className="text-brand">terms</span>
             </h2>
             <div className="mt-5 space-y-3 text-[15px] leading-7 text-neutral-500">
+              {commercialTerms.map((item) => (
+                <p key={item}>{item}</p>
+              ))}
               <p>
-                Freelance recruitment creates the opportunity to earn by helping employers find the
-                people they need.
-              </p>
-              <p>
-                The commission for each successful placement depends on the applicable mandate,
-                agreed commercial terms and placement outcome.
-              </p>
-              <p>
-                As you build experience, strengthen your candidate network and improve your sourcing
-                approach, you can work towards building a more consistent freelance recruitment
-                practice.
+                Recruitment opportunities, mandate availability, eligibility, and commercial
+                arrangements are subject to the applicable programme terms.
               </p>
             </div>
             <Link href={applyHref} className={`${btn} mt-8`}>
-              Become a Freelance Recruiter
+              Apply to Become a Recruiter
             </Link>
             <p className="mt-4 max-w-lg text-[12px] leading-5 text-neutral-400">
-              Earnings are performance-based and are not guaranteed.
+              Applying does not guarantee acceptance, mandate allocation, placements, or income.
             </p>
           </div>
           <div className="rounded-[22px] bg-[#f7f8fc] p-7 sm:p-8">
-            <h3 className="text-lg font-semibold tracking-[-0.02em]">What shapes your earnings?</h3>
+            <h3 className="text-lg font-semibold tracking-[-0.02em]">Important information</h3>
             <ul className="mt-5 space-y-3">
               {earnings.map((item) => (
                 <li key={item} className="text-[15px] leading-7 text-neutral-600">
@@ -593,15 +606,55 @@ export function FreelanceRecruitersPage() {
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link href={applyHref} className={btn}>
-              Become a Freelance Recruiter
+              Apply to Become a Recruiter
             </Link>
-            <a href={contactHref} className={btnGhost}>
-              Talk to Our Team
+            <a href={whatsappHref} onClick={() => onWhatsapp("recruiter_whatsapp_footer")} className={btnGhost}>
+              Chat with a recruiter on WhatsApp
             </a>
           </div>
+          <p className="mt-4 text-sm text-neutral-500">
+            Prefer to talk?{" "}
+            <a href={callHref} className="underline">
+              Call {earlyJobsContact.phoneDisplay}
+            </a>
+          </p>
+          <p className="mt-6 text-sm leading-6 text-neutral-500">
+            See how the network works for{" "}
+            <Link href="/become-a-recruiter" className="underline">
+              recruiters
+            </Link>{" "}
+            and browse open{" "}
+            <Link href="/jobs" className="underline">
+              jobs
+            </Link>
+            . Get the EarlyJobs app on{" "}
+            <a
+              href="https://play.google.com/store/apps/details?id=com.victaman.earlyjobs"
+              className="underline"
+            >
+              Google Play
+            </a>{" "}
+            or the{" "}
+            <a href="https://apps.apple.com/in/app/earlyjobs-ai/id6754554572" className="underline">
+              App Store
+            </a>
+            .
+          </p>
           <p className="mt-8 text-sm text-neutral-400">EarlyJobs — Helping recruiters reach further.</p>
         </div>
       </section>
+      <div className="fixed inset-x-0 bottom-0 z-40 flex gap-2 border-t border-black/10 bg-white p-3 sm:hidden">
+        <Link href={applyHref} className={`${btn} flex-1`}>
+          Apply
+        </Link>
+        <a
+          href={whatsappHref}
+          onClick={() => onWhatsapp("recruiter_whatsapp_sticky")}
+          className={`${btnGhost} flex-1`}
+        >
+          WhatsApp
+        </a>
+      </div>
     </main>
   );
 }

@@ -19,7 +19,7 @@ export function CTABlock() {
             Find a job →
           </Link>
           <Link
-            href="/recruiter"
+            href="/become-a-recruiter"
             className="inline-flex h-12 items-center justify-center border border-white px-5 text-[13px] font-medium text-white transition-colors hover:border-[#F97316] hover:bg-[#F97316]"
           >
             Become a recruiter →

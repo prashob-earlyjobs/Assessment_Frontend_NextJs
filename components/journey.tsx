@@ -23,7 +23,7 @@ const journeys = [
       "AI-assisted recruiting",
     ],
     cta: "Become a Recruiter",
-    href: "/recruiters",
+    href: "/become-a-recruiter",
     mark: "recruiter",
   },
   {

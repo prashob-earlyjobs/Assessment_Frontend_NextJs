@@ -8,7 +8,7 @@ function HowWeHelpSection({section2Data}) {
             <p className="service-page-s2-text">{section2Data.text}</p>
         </div>
         <div className='service-page-s2-image-con'>
-            <img src={section2Data.image} draggable={false} alt="it-recruitment-service" className="service-page-s2-image"/>
+            <img src={section2Data.image} draggable={false} alt="Illustration for this recruitment service" className="service-page-s2-image"/>
         </div>
     </section>
   )

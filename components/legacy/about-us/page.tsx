@@ -25,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: 'About EarlyJobs | Empowering Recruitment & Talent Opportunities',
       description: 'Discover EarlyJobs’ mission to bridge talent and opportunity through innovative recruitment solutions, remote work, and internships.',
-      url: `${baseUrl}/about-us`,
+      url: `${baseUrl}/about`,
       type: 'website',
       images: [
         {
@@ -43,7 +43,7 @@ export async function generateMetadata(): Promise<Metadata> {
       images: [`/images/logo.png`],
     },
     alternates: {
-      canonical: `${baseUrl}/about-us`,
+      canonical: `${baseUrl}/about`,
     },
   };
 }

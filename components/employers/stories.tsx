@@ -4,16 +4,16 @@ import { employerCard, EmployerSection } from "@/components/employers/section";
 
 const stories = [
   {
-    role: "Startup Founder",
-    quote: "Reduced hiring time by connecting with specialized recruiters.",
+    role: "One role",
+    quote: "Share the role, location, and timeline. Recruiters work from that hiring requirement.",
   },
   {
-    role: "HR Manager",
-    quote: "Improved candidate quality without increasing hiring costs.",
+    role: "Candidate review",
+    quote: "Candidate review follows the requirements and the process agreed for the role.",
   },
   {
-    role: "Enterprise TA Lead",
-    quote: "Scaled hiring across multiple functions with recruiter-led coordination.",
+    role: "More than one function",
+    quote: "Hiring across more than one function can be discussed for the same engagement.",
   },
 ] as const;
 
@@ -26,9 +26,7 @@ export function EmployerStories() {
         {stories.map((story) => (
           <li key={story.role} className={`story-card ${employerCard}`}>
             <p className="text-sm font-medium text-[#608cbe]">{story.role}</p>
-            <blockquote className="mt-3 text-base leading-7 tracking-[-0.02em] text-neutral-950">
-              “{story.quote}”
-            </blockquote>
+            <p className="mt-3 text-base leading-7 tracking-[-0.02em] text-neutral-950">{story.quote}</p>
           </li>
         ))}
       </ul>

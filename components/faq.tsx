@@ -106,6 +106,16 @@ const questions = [
     q: "Why is AI part of EarlyJobs?",
     a: "AI removes repetitive tasks such as matching and screening. People continue making hiring decisions.",
   },
+  {
+    q: "How do recruiters earn on EarlyJobs?",
+    a: "Commercial terms are governed by the applicable recruiter programme or mandate agreement. Payment arrangements are subject to the applicable commercial terms.",
+  },
+  {
+    q: "How are EarlyJobs, Huntlo AI and GigKaro related?",
+    a: "Together, these businesses address different parts of the hiring landscape through recruitment execution and technology.",
+  },
+  // TODO(content): skipped until confirmed — "Is EarlyJobs free for job seekers?" answer contained an unconfirmed fee claim.
+  // TODO(content): skipped until confirmed — "Which cities does EarlyJobs cover?" needs a confirmed city list.
 ] as const;
 
 export function Faq() {

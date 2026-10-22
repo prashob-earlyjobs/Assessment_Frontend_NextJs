@@ -1,0 +1,182 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://www.earlyjobs.ai/#organization",
+      "name": "EarlyJobs",
+      "legalName": "Victa EarlyJobs Technologies Private Limited",
+      "alternateName": [
+        "EarlyJobs.ai"
+      ],
+      "url": "https://www.earlyjobs.ai/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.earlyjobs.ai/images/logo.png"
+      },
+      "description": "EarlyJobs connects employers, recruiters, and job seekers through recruiter-led hiring and AI-assisted recruitment workflows.",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "2nd Floor, Regent Insignia, Obeya Tulip, Mahakavi Vemana Rd, KHB Block, 4th Block, Koramangala",
+        "addressLocality": "Bengaluru",
+        "addressRegion": "Karnataka",
+        "postalCode": "560095",
+        "addressCountry": "IN"
+      },
+      "contactPoint": [
+        {
+          "@type": "ContactPoint",
+          "contactType": "customer support",
+          "telephone": "+91-82175-27926",
+          "email": "info@earlyjobs.in",
+          "areaServed": "IN"
+        }
+      ],
+      "identifier": {
+        "@type": "PropertyValue",
+        "propertyID": "CIN",
+        "value": "U78300KA2025PTC198732"
+      },
+      "sameAs": [
+        "https://www.facebook.com/earlyjobs",
+        "https://www.instagram.com/earlyjobs.ai",
+        "https://www.linkedin.com/company/earlyjobs",
+        "https://www.youtube.com/@earlyjobs"
+      ],
+      "areaServed": {
+        "@type": "Country",
+        "name": "India"
+      },
+      "knowsAbout": [
+        "Freelance recruitment",
+        "Recruitment process outsourcing",
+        "AI-assisted hiring",
+        "GCC hiring",
+        "Frontline workforce hiring"
+      ],
+      "brand": [
+        {
+          "@type": "Brand",
+          "name": "Huntlo AI",
+          "url": "https://www.huntlo.ai"
+        },
+        {
+          "@type": "Brand",
+          "name": "GigKaro",
+          "url": "https://gigkaro.in"
+        }
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.earlyjobs.ai/#website",
+      "url": "https://www.earlyjobs.ai/",
+      "name": "EarlyJobs",
+      "publisher": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "inLanguage": "en-IN"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.earlyjobs.ai/#webpage",
+      "url": "https://www.earlyjobs.ai/",
+      "name": "EarlyJobs | Recruiter-First Hiring Network in India",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is EarlyJobs a Job Portal?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. EarlyJobs is The Recruiter-First Hiring Network where recruiters, employers, and professionals connect through AI-powered hiring infrastructure."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is EarlyJobs a Recruitment Agency?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Recruiters work independently while employers access recruiter-led hiring through the network."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is EarlyJobs different from LinkedIn or Naukri?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Traditional platforms focus on listings or networking. EarlyJobs focuses on recruiter-guided hiring journeys and better hiring outcomes."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is EarlyJobs only for Recruiters?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. EarlyJobs is designed for recruiters, employers, job seekers, recruitment agencies, and hiring partners. Recruiters simply sit at the center of the ecosystem."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can freshers use EarlyJobs?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Students, graduates, experienced professionals, and career changers can all build profiles and discover opportunities."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why is AI part of EarlyJobs?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "AI removes repetitive tasks such as matching and screening. People continue making hiring decisions."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do recruiters earn on EarlyJobs?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Commercial terms are governed by the applicable recruiter programme or mandate agreement. Payment arrangements are subject to the applicable commercial terms."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How are EarlyJobs, Huntlo AI and GigKaro related?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Together, these businesses address different parts of the hiring landscape through recruitment execution and technology."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "MobileApplication",
+      "name": "EarlyJobs.ai (Android)",
+      "operatingSystem": "ANDROID",
+      "applicationCategory": "BusinessApplication",
+      "url": "https://play.google.com/store/apps/details?id=com.victaman.earlyjobs",
+      "publisher": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      }
+    },
+    {
+      "@type": "MobileApplication",
+      "name": "EarlyJobs.ai (iOS)",
+      "operatingSystem": "IOS",
+      "applicationCategory": "BusinessApplication",
+      "url": "https://apps.apple.com/in/app/earlyjobs-ai/id6754554572",
+      "publisher": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      }
+    }
+  ]
+}

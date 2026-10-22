@@ -3,42 +3,36 @@ import React from 'react';
 import { Users, DollarSign, Building, Briefcase } from 'lucide-react';
 import './ProblemSolution.css';
 
-const ProblemSolution = () => {
+const ProblemSolution = ({ stats }) => {
+  const cards = [
+    { icon: DollarSign, value: stats?.companies, label: "Companies" },
+    { icon: Building, value: stats?.joinings, label: "Joinings" },
+    { icon: Users, value: stats?.recruiters, label: "Recruiters" },
+    { icon: Briefcase, value: stats?.interviews, label: "Interviews" },
+  ].filter((card) => card.value);
+
   return (
     <section className="section problem-section" id="problem">
       <div className="container">
-        <h2 className="section-heading">Hiring is Broken. We're Fixing It.</h2>
+        <h2 className="section-heading">Explore a recruitment franchise</h2>
         
         <div className="problem-description">
           <p className="problem-text">
-            Startups and enterprises struggle with costly, slow hiring. At the same time, thousands of HR professionals, especially women, want flexible work opportunities. EarlyJobs bridges this gap with a tech-powered freelance recruiter model — and now you can run your own recruitment hub under our brand.
+            EarlyJobs offers a recruitment franchise for people who want to explore running a local recruitment business. Investment, support, and commercial terms are confirmed in the applicable franchise agreement. Outcomes vary and are not guaranteed.
           </p>
         </div>
 
         <div className="stats-grid">
-          <div className="stat-card">
-            <DollarSign className="stat-icon" />
-            <h3 className="stat-number">₹50,000 Cr+</h3>
-            <p className="stat-label">Recruitment Industry</p>
-          </div>
-          
-          <div className="stat-card" style={{ animationDelay: "100ms" }}>
-            <Building className="stat-icon" />
-            <h3 className="stat-number">1,700+</h3>
-            <p className="stat-label">Hires Done in 18 Months</p>
-          </div>
-          
-          <div className="stat-card" style={{ animationDelay: "200ms" }}>
-            <Users className="stat-icon" />
-            <h3 className="stat-number">90%</h3>
-            <p className="stat-label">of Recruiters are Women</p>
-          </div>
-          
-          <div className="stat-card" style={{ animationDelay: "300ms" }}>
-            <Briefcase className="stat-icon" />
-            <h3 className="stat-number">75+</h3>
-            <p className="stat-label">Top Companies Served</p>
-          </div>
+          {cards.map((card, index) => {
+            const Icon = card.icon;
+            return (
+              <div key={card.label} className="stat-card" style={{ animationDelay: `${index * 100}ms` }}>
+                <Icon className="stat-icon" />
+                <h3 className="stat-number">{card.value}</h3>
+                <p className="stat-label">{card.label}</p>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

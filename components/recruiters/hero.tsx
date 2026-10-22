@@ -9,12 +9,14 @@ import { useDashboardStats } from "@/lib/use-dashboard-stats";
 
 export function RecruiterHero() {
   const dashboard = useDashboardStats();
-  const metrics = [
-    { value: formatStat(dashboard.recruiters), label: "Recruiters" },
-    { value: formatStat(dashboard.companies), label: "Employers" },
-    { value: formatSummaryStat(dashboard.joinings), label: "Successful Placements" },
-    { value: formatSummaryStat(dashboard.interviews), label: "Interviews Facilitated" },
-  ] as const;
+  const metrics = dashboard
+    ? [
+        { value: formatStat(dashboard.recruiters), label: "Recruiters" },
+        { value: formatStat(dashboard.companies), label: "Employers" },
+        { value: formatSummaryStat(dashboard.joinings), label: "Successful Placements" },
+        { value: formatSummaryStat(dashboard.interviews), label: "Interviews Facilitated" },
+      ]
+    : [];
 
   return (
     <section className="relative">

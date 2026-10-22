@@ -51,7 +51,7 @@ const HeroCopy = ({ content, light }: { content: GccPageContent; light?: boolean
         <ArrowRight className="h-4 w-4" />
       </a>
       <a
-        href="mailto:info@earlyjobs.in"
+        href={content.hero.secondaryCta.startsWith("Explore") ? "/gcc-hiring-solutions" : "mailto:info@earlyjobs.in"}
         className={`inline-flex items-center gap-2 rounded-xl border px-6 py-3 text-sm font-semibold transition ${
           light
             ? "border-slate-300 bg-white text-slate-800 hover:bg-slate-50"

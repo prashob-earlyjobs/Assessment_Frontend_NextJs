@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { trackEvent } from "@/lib/track-event";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 export type NavbarLink = {
@@ -12,7 +13,7 @@ export type NavbarLink = {
 
 export const defaultNavbarLinks: NavbarLink[] = [
   { label: "Find Jobs", href: "/jobs" },
-  { label: "For Recruiters", href: "/recruiters" },
+  { label: "For Recruiters", href: "/become-a-recruiter" },
   { label: "For Employers", href: "/employers" },
   { label: "About", href: "/about" },
 ];
@@ -184,32 +185,15 @@ export function Navbar({
         <DesktopNav links={links} pathname={pathname} inverted={overHero} />
 
         <div className="flex min-w-0 items-center justify-end gap-1.5 sm:gap-2">
-          <a
-            href="https://www.huntlo.ai/"
-            target="_blank"
-            rel="noreferrer"
-            className="huntlo-btn hidden lg:inline-flex shrink-0"
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              className="huntlo-btn-badge"
-              src="/icons/huntlo-favicon.png"
-              alt=""
-              width={20}
-              height={20}
-            />
-            <span className="huntlo-btn-wrapper">
-              <span className="huntlo-btn-label">
-                <AiSparkIcon />
-                Try Huntlo
-              </span>
-              {Array.from({ length: 12 }, (_, i) => (
-                <span key={i} className={`huntlo-circle huntlo-circle-${i + 1}`} aria-hidden />
-              ))}
-            </span>
-          </a>
           <Link
             href={ctaHref}
+            onClick={() =>
+              trackEvent("cta_click", {
+                cta_id: "nav_primary",
+                audience: "recruiter",
+                location: "header",
+              })
+            }
             className="inline-flex h-9 items-center rounded-full bg-brand px-3.5 text-[13px] font-medium text-white transition-colors hover:bg-[#d85c42] sm:px-4"
           >
             {ctaLabel}
@@ -249,16 +233,6 @@ export function Navbar({
                 </li>
               ))}
             </ul>
-            <div className="mt-2 flex flex-col gap-1 border-t border-black/[0.06] pt-2">
-              <a
-                href="https://www.huntlo.ai/"
-                target="_blank"
-                rel="noreferrer"
-                className="rounded-lg px-3 py-2.5 text-sm font-medium text-neutral-700"
-              >
-                Try Huntlo
-              </a>
-            </div>
           </nav>
         </div>
     </header>
@@ -415,34 +389,6 @@ function Logo({ inverted = false }: { inverted?: boolean }) {
         className={cx("h-8 w-auto sm:h-10", inverted && "brightness-0 invert")}
       />
     </Link>
-  );
-}
-
-function AiSparkIcon() {
-  return (
-    <svg
-      className="huntlo-btn-ai"
-      width="14"
-      height="14"
-      viewBox="0 0 16 16"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M8 1.2l1.05 3.55L12.6 5.8 9.05 7.25 8 10.8 6.95 7.25 3.4 5.8l3.55-1.05L8 1.2z"
-        fill="currentColor"
-      />
-      <path
-        d="M12.6 9.2l.55 1.85 1.85.55-1.85.55-.55 1.85-.55-1.85-1.85-.55 1.85-.55.55-1.85z"
-        fill="currentColor"
-        opacity="0.85"
-      />
-      <path
-        d="M3.2 9.8l.42 1.4 1.4.42-1.4.42-.42 1.4-.42-1.4-1.4-.42 1.4-.42.42-1.4z"
-        fill="currentColor"
-        opacity="0.7"
-      />
-    </svg>
   );
 }
 

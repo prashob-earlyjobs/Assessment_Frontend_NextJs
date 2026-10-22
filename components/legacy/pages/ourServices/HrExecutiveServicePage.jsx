@@ -11,24 +11,24 @@ import Faqs from "../../Servicesfooter/Faqs";
 import './style.css';
 
 const heroSectionData = {
-    subheading: 'POWER UP YOUR BUSINESS WITH OUR HIRING CONSULTING SERVICES',
-    heading: 'Conduct research on the industry, market trends, and the competitive landscape to gain insights into the talent pool.',
+    subheading: 'HR EXECUTIVE RECRUITMENT',
+    heading: 'HR Executive Recruitment for People-Centred Businesses',
     list: [
         {
-            text: 'Reduce 40% on you job board spend and increase productivity'
+            text: 'Recruitment support for HR and people-operations roles'
         },
         {
-            text: '150+ top companies trust on Earlyjobs'
+            text: 'Role requirements are agreed before sourcing starts'
         },
         {
-            text: 'Let our experts take your business to the next level'
+            text: 'Outcomes are not guaranteed'
         },
     ]
 }
 
 const section2Data = {
     heading: "Finding the right HR executive recruitment talent to drive your organization's success is crucial in today's competitive business landscape.",
-    text: 'At Earlyjobs, we specialize in HR and Executive Recruitment services that ensure you have the best professionals leading your team. Our experienced team of recruiters is dedicated to helping you build a high-performing workforce.',
+    text: 'EarlyJobs helps employers connect HR hiring requirements with recruiter-led sourcing. Scope, timelines, and commercial terms are agreed for each requirement.',
     image: '/services_imgs/features-summary.svg'
 }
 
@@ -45,7 +45,7 @@ const section3Data = [
     },
     {
         heading: 'Candidate Screening and Assessment',
-        text: 'Our thorough screening and assessment processes ensure that every candidate presented to you has been rigorously evaluated for skills, experience, and cultural fit.',
+        text: 'Candidate review focuses on the role requirements you share. Assessments are used only when they are part of the agreed process.',
         icon: <FaGripLinesVertical className='service-page-s3-item-icon'/>
     },
     {
@@ -79,18 +79,18 @@ const section4HighlightData = [
     },
     {
         heading: 'Time and Cost Efficiency',
-        text: 'Recruiting can be a time-consuming and costly process. HR consultancies streamline the hiring process, reducing time-to-fill roles and minimizing recruitment expenses. They also ensure that candidates are thoroughly vetted, reducing the risk of costly hiring mistakes.'
+        text: 'Timelines and commercial terms are agreed for the requirement. EarlyJobs does not promise a shorter time to fill or a lower hiring cost.'
     },
     {
         heading: 'Confidentiality and Compliance',
-        text: 'Confidentiality is paramount, especially when recruiting for executive positions or sensitive roles. HR consultancies understand the importance of discretion and adhere to strict confidentiality protocols. They also stay up-to-date with labor laws and regulations, ensuring that the hiring process remains compliant.'
+        text: 'Confidentiality follows the process agreed for the role. EarlyJobs does not provide legal advice on this page.'
     },
 ]
 
 const servicePageAccordianData = [
     {
         label: 'How does EarlyJobs match candidates with job opportunities?',
-        content: 'EarlyJobs uses a combination of advanced algorithms and personalized assessments to match candidates with job opportunities that align with their skills, experience, and career goals. Our team also conducts thorough interviews to ensure a good fit.'
+        content: 'Candidate review focuses on the role requirements shared by the employer. Specific checks or assessments are used only when they are part of the agreed process.'
     },
     {
         label: 'What industries does EarlyJobs specialize in?',
@@ -102,11 +102,11 @@ const servicePageAccordianData = [
     },
     {
         label: 'How does EarlyJobs ensure the quality of candidates?',
-        content: 'EarlyJobs ensures the quality of candidates through a rigorous screening process that includes background checks, skills assessments, and in-depth interviews. We also consider cultural fit to ensure candidates will thrive in their new roles.'
+        content: 'Candidate review focuses on the role requirements shared by the employer. Background checks are used only when they are part of the agreed process.'
     },
     {
         label: 'Is there a fee for candidates to use EarlyJobs services?',
-        content: 'No, EarlyJobs does not charge candidates for using our recruitment services. Our fees are covered by the employers seeking to hire through our platform, allowing us to offer our services to job seekers at no cost.'
+        content: 'Recruitment fees are agreed with the employer under the applicable commercial terms.'
     },
 ];
 
@@ -123,9 +123,9 @@ const HrExecutiveServicePage = () => {
             </section>
             <section className='service-page-s4-con'>
                 <div className='service-page-s4-content'>
-                    <h1 className="service-page-s4-subheading">HR & Executive Recruitment Experts</h1>
+                    <h2 className="service-page-s4-subheading">HR & Executive Recruitment Experts</h2>
                     <p className="service-page-s4-text">
-                        Earlyjobs takes a strategic approach to attracting, developing and managing a global workforce. Our aims to enable all people to create the career they want by being trusted partners in their professional and personal growth. We provide expertise and resources designed to help colleagues thrive at the firm and in their life outside it.
+                        Earlyjobs takes a strategic approach to attracting, developing and managing a global workforce. The aim is to enable all people to create the career they want by being trusted partners in their professional and personal growth. We provide expertise and resources designed to help colleagues thrive at the firm and in their life outside it.
                         <br />
                         <br />
                         Our placement consultancy and services specializes in sourcing and placing highly skilled HR & executives, including EA, Customer Support, D2C, Executive Head etc.

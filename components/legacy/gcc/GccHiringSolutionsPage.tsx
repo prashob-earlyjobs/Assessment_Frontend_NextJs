@@ -149,7 +149,7 @@ const SUCCESS_STORY = [
   },
   {
     title: "Outcome",
-    description: "Faster hiring, improved visibility, and scalable recruitment execution.",
+    description: "Structured hiring, clearer visibility, and recruitment execution agreed for the engagement.",
   },
 ];
 
@@ -167,7 +167,7 @@ const FAQS = [
   {
     question: "How is EarlyJobs different from recruitment agencies?",
     answer:
-      "EarlyJobs is a hiring infrastructure partner—not a resume vendor. We combine recruiter pods, nationwide networks, AI-assisted operations, and hiring analytics to deliver predictable outcomes.",
+      "EarlyJobs supports GCC hiring through recruiter coordination and AI-assisted recruitment workflows. Scope is agreed for each engagement.",
   },
   {
     question: "What roles can you hire?",
@@ -177,7 +177,7 @@ const FAQS = [
   {
     question: "How do recruiter pods work?",
     answer:
-      "Dedicated recruiter pods are aligned to your GCC functions and hiring priorities, operating as an extension of your talent team with structured workflows, SLAs, and reporting.",
+      "Recruiter support can be aligned to the functions and hiring priorities in the engagement. Service levels and reporting are included only when they are part of the agreed scope.",
   },
   {
     question: "Can you support leadership hiring?",
@@ -186,7 +186,7 @@ const FAQS = [
   {
     question: "Do you provide hiring analytics?",
     answer:
-      "Yes. Hiring dashboards, funnel metrics, recruiter performance, offer acceptance rates, and leadership reporting are core to our recruitment operations model.",
+      "Reporting is included only when it is part of the agreed service. EarlyJobs does not claim a standard hiring dashboard on this page.",
   },
   {
     question: "Can you scale across multiple cities?",
@@ -200,7 +200,7 @@ const FAQS = [
   {
     question: "What is Human + AI hiring infrastructure?",
     answer:
-      "It combines human recruiter expertise with AI-assisted sourcing, screening, coordination, and analytics—delivering faster, more consistent hiring without sacrificing quality.",
+      "It combines recruiter expertise with AI-assisted sourcing and coordination. Timelines and candidate quality depend on the role and the agreed process.",
   },
   {
     question: "Can EarlyJobs support volume and campus hiring?",
@@ -214,7 +214,7 @@ const FAQS = [
   {
     question: "Can you replace multiple recruitment vendors?",
     answer:
-      "Yes. EarlyJobs consolidates hiring execution under one partner—reducing vendor complexity while improving visibility and coordination.",
+      "EarlyJobs can be engaged as a recruitment partner for the roles in scope. Replacing other vendors is a decision for the employer.",
   },
   {
     question: "What industries do you specialize in?",
@@ -224,7 +224,7 @@ const FAQS = [
   {
     question: "How do you measure hiring success?",
     answer:
-      "We track time-to-hire, hiring velocity, offer-to-join ratio, recruiter productivity, candidate experience, and cost-per-hire through structured reporting.",
+      "Hiring activity can be reviewed against the measures agreed for the engagement. EarlyJobs does not publish a standard success formula on this page.",
   },
 ];
 
@@ -263,8 +263,7 @@ const GccHiringSolutionsPage = () => {
                   GCC Hiring Solutions Built for High-Growth Global Capability Centers
                 </h1>
                 <p className="mt-5 text-lg font-medium leading-relaxed text-slate-700 sm:text-xl">
-                  Build and scale your Global Capability Center in India through a Human + AI hiring infrastructure
-                  designed to deliver engineering, product, leadership, and business talent faster.
+                  EarlyJobs helps Global Capability Centers hire technology, engineering, product, finance, operations, and leadership talent through recruiter-led and AI-assisted recruitment.
                 </p>
                 <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-600">
                   Whether you&apos;re establishing your first GCC or expanding an existing capability center, EarlyJobs
@@ -637,11 +636,9 @@ const GccHiringSolutionsPage = () => {
                   className={`h-5 w-5 shrink-0 text-slate-500 transition ${openFaq === index ? "rotate-180" : ""}`}
                 />
               </button>
-              {openFaq === index && (
-                <div className="border-t border-slate-200 px-5 py-4 text-sm leading-relaxed text-slate-600">
+              <div hidden={openFaq !== index} className="border-t border-slate-200 px-5 py-4 text-sm leading-relaxed text-slate-600">
                   {faq.answer}
                 </div>
-              )}
             </div>
           ))}
         </div>

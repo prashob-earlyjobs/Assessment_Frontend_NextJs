@@ -14,7 +14,7 @@ import { metaConstants } from "../../../utils/metaConstants";
 
 const heroSectionData = {
     subheading: 'YOUR PATH TO EXCEPTIONAL TALENT',
-    heading: 'We stands as a trusted partner in navigating the intricacies of hiring within the dynamic sales and marketing industry.',
+    heading: 'We stand as a trusted partner in navigating the intricacies of hiring within the dynamic sales and marketing industry.',
     list: [
         {
             text: '10K+ Readily Available Candidates for Sales & Marketing jobs'
@@ -132,12 +132,12 @@ const SalesMarketingServicePage = () => {
             <HeroSection heroSectionData={heroSectionData} />
             <HowWeHelpSection section2Data={section2Data} />
             <section className='service-page-s3-con'>
-                <h1 className='service-page-s3-heading'>Our Sales and Marketing Recruitment Services Include:</h1>
+                <h2 className='service-page-s3-heading'>Our Sales and Marketing Recruitment Services Include:</h2>
                 <RecruitingProcess section3Data={section3Data} />
             </section>
             <section className='service-page-s4-con'>
                 <div className='service-page-s4-content'>
-                    <h1 className="service-page-s4-subheading">Recruitment Always The Right Choice</h1>
+                    <h2 className="service-page-s4-subheading">Recruitment Always The Right Choice</h2>
                     <p className="service-page-s4-text">
                         Earlyjobs plays a crucial role in sales and marketing recruitment services by acting as a strategic partner for organizations seeking to build high-performing sales and marketing teams.
                         <br />

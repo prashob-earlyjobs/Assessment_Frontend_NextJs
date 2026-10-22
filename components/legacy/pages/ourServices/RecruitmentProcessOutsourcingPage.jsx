@@ -148,7 +148,7 @@ const RecruitmentProcessOutsourcingPage = () => {
                     </p>
                     <h2 className="service-page-s4-heading">Scope of Work</h2>
                     <Highlights section4HighlightData={section4HighlightData} />
-                    <h1 className="service-page-s4-subheading">Ready to Transform Your Recruitment Process?</h1>
+                    <h2 className="service-page-s4-subheading">Ready to Transform Your Recruitment Process?</h2>
                     <p className="service-page-s4-text">Welcome to EarlyJobs, the leading RPO firm dedicated to streamlining your recruitment process and connecting you with exceptional talent. With an unmatched track record and a strong commitment to excellence, we are here to enhance your hiring strategy and elevate your business to new heights.</p>
 
                 </div>

@@ -1,0 +1,72 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.earlyjobs.ai/agency-partnerships#webpage",
+      "url": "https://www.earlyjobs.ai/agency-partnerships",
+      "name": "Recruitment Agency Tie-Up & Partnership | EarlyJobs",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/agency-partnerships#breadcrumb"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Agency Partnerships",
+          "item": "https://www.earlyjobs.ai/agency-partnerships"
+        }
+      ],
+      "@id": "https://www.earlyjobs.ai/agency-partnerships#breadcrumb"
+    },
+    {
+      "@type": "Service",
+      "name": "Recruitment agency partnership programme",
+      "serviceType": "Recruitment agency and consultancy partnership",
+      "provider": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "India"
+      },
+      "audience": {
+        "@type": "BusinessAudience",
+        "audienceType": "Recruitment agencies and consultancies"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Who can enquire about a partnership?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We welcome enquiries from recruitment agencies interested in sharing their hiring specialisations, industry experience, and operating capabilities."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does submitting an enquiry guarantee a partnership?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Submitting an enquiry does not guarantee partnership approval, mandate allocation, or business outcomes."
+          }
+        }
+      ]
+    }
+  ]
+}

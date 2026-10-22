@@ -11,7 +11,7 @@ export function OpenRoles({ total, children }: { total: number | null; children:
   return (
     <div role="region" aria-busy={isPending} aria-label="Open roles" className={rolesPanelClass}>
       <div className="flex items-center justify-between px-1.5">
-        <p className="text-[15px] font-semibold tracking-[-0.03em] text-neutral-950">Open roles</p>
+        <h1 className="text-[15px] font-semibold tracking-[-0.03em] text-neutral-950">Open roles</h1>
         {isPending ? (
           <Shimmer className="h-3 w-16 rounded-full" />
         ) : total !== null ? (

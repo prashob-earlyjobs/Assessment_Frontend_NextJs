@@ -2,8 +2,6 @@
 
 import { GhostLink, SolidLink } from "@/components/home/primitives";
 import { HeroMotion } from "@/components/employers/motion";
-import { formatStat, formatSummaryStat } from "@/lib/dashboard";
-import { useDashboardStats } from "@/lib/use-dashboard-stats";
 
 const path = [
   "Employer",
@@ -15,14 +13,11 @@ const path = [
   "Joining",
 ] as const;
 
-export function EmployerHero() {
-  const dashboard = useDashboardStats();
-  const metrics = [
-    { value: formatStat(dashboard.companies), label: "Hiring Companies" },
-    { value: formatStat(dashboard.recruiters), label: "Recruiters" },
-    { value: formatSummaryStat(dashboard.joinings), label: "Successful Placements" },
-    { value: formatSummaryStat(dashboard.interviews), label: "Interviews" },
-  ] as const;
+export function EmployerHero({
+  metrics,
+}: {
+  metrics: { value: string; label: string }[];
+}) {
 
   return (
     <section className="relative">
@@ -33,16 +28,14 @@ export function EmployerHero() {
             Hire Better. Hire Faster. Hire Through Recruiters.
           </h1>
           <p className="mt-5 max-w-xl text-base leading-7 text-neutral-800">
-            Access experienced recruiters, AI-powered talent matching, and a trusted hiring network
-            to reduce hiring time and improve candidate quality.
+            EarlyJobs connects employers with experienced recruiters and AI-assisted recruitment workflows to support role-based hiring across India.
           </p>
           <div className="mt-5 max-w-xl space-y-3 text-sm leading-6 text-neutral-600">
             <p>Hiring shouldn&apos;t begin with hundreds of applications.</p>
             <p>It should begin with the right recruiters.</p>
             <p>
               EarlyJobs connects your hiring team with experienced recruiters who understand your
-              industry, supported by AI-powered matching that helps identify stronger candidates
-              faster.
+              industry, supported by AI-assisted matching that helps identify candidates for the role.
             </p>
             <p>
               Whether you&apos;re hiring one role or building an entire team, we help you spend less

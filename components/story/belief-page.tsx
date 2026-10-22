@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
+import { NetworkMetricList } from "@/components/network-metric-list";
 import { FounderOrigin, MissionBeliefClose } from "@/components/story/founder-origin";
 import { Reveal } from "@/components/ui/reveal";
+import { getNetworkMetrics } from "@/lib/dashboard";
 
 const milestones = [
   {
@@ -85,7 +87,8 @@ const beliefs = [
   },
 ] as const;
 
-export function BeliefStoryPage() {
+export async function BeliefStoryPage() {
+  const metrics = await getNetworkMetrics();
   return (
     <main className="bg-white text-neutral-950">
       {/* Section 1: Hero */}
@@ -178,6 +181,7 @@ export function BeliefStoryPage() {
             It should bring together the right people, technology and execution for the challenge at
             hand.
           </p>
+          <NetworkMetricList metrics={metrics} />
           </Reveal>
           <ul className="reveal-stagger mt-12 grid gap-5 sm:gap-6 lg:grid-cols-3">
             {ecosystem.map((item) => (
@@ -277,7 +281,7 @@ export function BeliefStoryPage() {
                 Become a Recruiter
               </Link>
               <Link
-                href="/agency-onboarding"
+                href="/agency-partnerships"
                 className="inline-flex h-11 items-center justify-center rounded-lg bg-white px-5 text-sm font-medium text-neutral-950 hover:bg-white/90"
               >
                 Partner With Us

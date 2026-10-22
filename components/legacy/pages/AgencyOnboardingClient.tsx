@@ -549,7 +549,10 @@ export default function AgencyOnboardingClient() {
         <div className="mb-6 text-center">
           <h1 className="text-3xl font-bold text-slate-900">Agency Onboarding</h1>
           <p className="text-sm text-slate-600 mt-2">
-            Fill in your agency details. Fields marked with * are required.
+            Complete your recruitment agency onboarding with EarlyJobs. Provide accurate information
+            in the required fields so your agency details can be reviewed as part of the onboarding
+            process. Please ensure the information you submit is current and accurate. Review the
+            applicable terms and privacy information before submitting your details.
           </p>
         </div>
 
@@ -657,6 +660,7 @@ export default function AgencyOnboardingClient() {
                 </div>
 
                 <div className="space-y-1.5">
+                  {/* TODO(legal): AO-02 — counsel has not signed off on collecting Aadhaar. Do not change the field, validation, or payload until that review lands. */}
                   <Label className="text-sm font-semibold text-slate-800">
                     Owner / Director: Aadhaar *
                   </Label>
@@ -778,15 +782,17 @@ export default function AgencyOnboardingClient() {
               </div>
 
               <CardDescription className="text-xs text-slate-500">
-                Preview companyAddress format: <span className="font-medium">line1, city, state, pincode</span>
+                Address: {"{line 1}"}, {"{city}"}, {"{state}"} {"{pincode}"}
               </CardDescription>
             </CardContent>
           </Card>
 
           <Card className="border border-slate-200 shadow-sm">
             <CardHeader className="pb-4">
-              <CardTitle className="text-xl">Currently hiring for</CardTitle>
-              <CardDescription>3 reference rows (company + coordinator contact).</CardDescription>
+              <CardTitle className="text-xl">Client references</CardTitle>
+              <CardDescription>
+                Three companies you currently hire for. We may contact the coordinator to confirm.
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-5">
               {formState.hiringReferences.map((ref, idx) => {

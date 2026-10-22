@@ -123,7 +123,7 @@ const ValueStaffingServicesPage = () => {
                         <li>Transparent work processes using technology that lead to a huge reduction in queries from employees and line managers.</li> 
                         <li>Quick resolution of queries, if any, and thus, preventing the wastage of your precious time.</li>
                     </p>
-                    <h1 className="service-page-s4-subheading">Ready to Transform Your Workforce with Value Staffing?</h1>
+                    <h2 className="service-page-s4-subheading">Ready to Transform Your Workforce with Value Staffing?</h2>
                     <p className="service-page-s4-text">Welcome to EarlyJobs, your premier partner in Value Staffing Services dedicated to optimizing your workforce and connecting you with top talent. With an unparalleled track record and a steadfast commitment to quality, we are here to enhance your staffing strategy and propel your business to new heights.</p>
                 </div>
                 <div className='service-page-s4-consultancy-con'>

@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { fallbackDashboardStats, type DashboardStats } from "@/lib/dashboard";
+import type { DashboardStats } from "@/lib/dashboard";
 
-/** Shared client fetch for `/api/dashboard` metrics. */
+/** Shared client fetch for `/api/dashboard` metrics. Starts empty so pages do not paint the fixed fallback counts. */
 export function useDashboardStats() {
-  const [dashboard, setDashboard] = useState<DashboardStats>(fallbackDashboardStats);
+  const [dashboard, setDashboard] = useState<DashboardStats | null>(null);
 
   useEffect(() => {
     let cancelled = false;

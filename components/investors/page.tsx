@@ -42,7 +42,6 @@ const audienceRoles = [
   },
   {
     name: "Power Tech Enterprises",
-    prefix: "&",
     centered: true,
   },
 ] as const;
@@ -59,11 +58,12 @@ export function InvestorsPage() {
             <h1
               className={`text-[3.1rem] leading-[1.02] font-medium tracking-[-0.04em] sm:text-[4.6rem] ${ink}`}
             >
-              Our Mission
+              EarlyJobs: Building Infrastructure for Hiring
             </h1>
             <p className="max-w-md text-[1.15rem] leading-8 text-[#2c2c2c] lg:justify-self-end">
-              To empower individuals and organizations by bridging the gap between talent and
-              opportunity.
+              EarlyJobs is building a recruitment ecosystem that brings together human execution, a
+              connected recruiter network and AI-assisted hiring workflows. This page does not
+              publish financial projections, fundraising targets, or private reports.
             </p>
           </div>
         </Reveal>

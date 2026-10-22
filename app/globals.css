@@ -133,6 +133,24 @@ html.snap-release:has(.snap-section) {
   width: fit-content;
 }
 
+@keyframes logo-set-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+.logo-set {
+  animation: logo-set-scroll 60s linear infinite;
+  width: fit-content;
+}
+
+.logo-set:hover {
+  animation-play-state: paused;
+}
+
 .carousel-horizontal-top {
   animation: scroll-horizontal-top 60s linear infinite;
   width: fit-content;
@@ -645,6 +663,7 @@ html.snap-release:has(.snap-section) {
   .logo-track-right,
   .carousel-horizontal,
   .carousel-horizontal-top,
+  .logo-set,
   .review-track,
   .node-float,
   .shimmer,

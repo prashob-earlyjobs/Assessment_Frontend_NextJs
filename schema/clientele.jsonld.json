@@ -1,0 +1,102 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.earlyjobs.ai/clientele#webpage",
+      "url": "https://www.earlyjobs.ai/clientele",
+      "name": "Our Hiring Partners & Client Network | EarlyJobs",
+      "description": "EarlyJobs brings recruitment expertise, a connected hiring network and intelligent technology together to help you hire across India, access global hiring support and build frontline workforces through GigKaro.",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/clientele#breadcrumb"
+      },
+      "dateModified": "2026-10-21"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/clientele#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Our Hiring Partners & Client Network",
+          "item": "https://www.earlyjobs.ai/clientele"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.earlyjobs.ai/clientele#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What hiring services does EarlyJobs offer?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EarlyJobs offers recruitment services across IT, finance, sales and marketing, HR, executive hiring, global recruitment, GCC talent acquisition and Recruitment Process Outsourcing. GigKaro focuses on frontline and gig workforce hiring."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can EarlyJobs support hiring across multiple Indian cities?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We can explore multi-location hiring through the relevant recruitment teams and network partners, subject to role requirements, local coverage and delivery capacity."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does EarlyJobs support international recruitment?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EarlyJobs is building global recruitment capabilities, including hiring support for the US and UAE. The markets, roles and delivery model available depend on the specific requirement."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is GigKaro?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "GigKaro is the EarlyJobs brand focused on frontline and gig workforce hiring, including delivery executives, drivers, packers, movers and other operational roles."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does Huntlo fit into the hiring process?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Huntlo is an AI recruiting agent that supports talent sourcing and outreach. It complements EarlyJobs' recruitment execution rather than replacing the people and processes needed to deliver hiring outcomes."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can recruitment consultancies and agencies partner with EarlyJobs?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Recruitment consultancies and agencies can express interest in suitable hiring collaborations. The scope, responsibilities and commercial terms are agreed for the relevant partnership or mandate."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do we get started?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Tell us about your hiring requirements, locations, roles and expected timelines. Our team can assess the requirement and discuss a suitable service and delivery approach."
+          }
+        }
+      ]
+    }
+  ]
+}

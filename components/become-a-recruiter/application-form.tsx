@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { trackEvent } from "@/lib/track-event";
 import { PersonalDetailsStep } from "@/components/become-a-recruiter/personal-details";
 import { QualificationDetailsStep } from "@/components/become-a-recruiter/qualification-details";
 import { AboutDetailsStep } from "@/components/become-a-recruiter/about-details";
@@ -71,11 +73,35 @@ function BackLink() {
   );
 }
 
+function ApplyHeading() {
+  return (
+    <header>
+      <p className="text-sm font-medium text-brand">Application</p>
+      <h1 className="mt-2 text-[2rem] font-semibold leading-[1.1] tracking-[-0.045em] text-neutral-950 sm:text-[2.75rem]">
+        <BackLink />
+        Apply to Become a Recruiter
+      </h1>
+      <p className="mt-3 max-w-xl text-sm leading-6 text-neutral-600">
+        Interested in working on recruitment requirements through EarlyJobs? Complete the
+        application form with accurate information about your background and recruitment interests.
+      </p>
+    </header>
+  );
+}
+
 const button =
   "inline-flex h-11 items-center justify-center rounded-[6px] px-4 text-[13px] font-medium transition-[border-radius,background-color] duration-500 ease-in-out hover:rounded-[22px]";
 
 export function RecruiterApplicationForm() {
+  const router = useRouter();
+  const started = useRef(false);
   const [hydrated, setHydrated] = useState(false);
+  const [attribution, setAttribution] = useState({
+    utm_source: "",
+    utm_medium: "",
+    utm_campaign: "",
+    referrer: "",
+  });
   const [current, setCurrent] = useState(0);
   const [uploadSessionId, setUploadSessionId] = useState(() => String(Date.now()));
   const [personal, setPersonal] = useState<PersonalDetails>(emptyPersonalDetails);
@@ -105,6 +131,13 @@ export function RecruiterApplicationForm() {
       setReferences(draft.references);
       setIdentification(draft.identification);
     }
+    const params = new URLSearchParams(window.location.search);
+    setAttribution({
+      utm_source: params.get("utm_source") ?? "",
+      utm_medium: params.get("utm_medium") ?? "",
+      utm_campaign: params.get("utm_campaign") ?? "",
+      referrer: document.referrer,
+    });
     setHydrated(true);
   }, []);
 
@@ -236,6 +269,7 @@ export function RecruiterApplicationForm() {
     if (submitting) return;
     if (!validateCurrent()) return;
     if (!isLast) {
+      trackEvent("form_step_complete", { form_id: "recruiter_apply", step: current + 1 });
       setCurrent((value) => value + 1);
       return;
     }
@@ -253,6 +287,7 @@ export function RecruiterApplicationForm() {
           about,
           references,
           identification,
+          attribution,
         }),
       });
 
@@ -263,7 +298,12 @@ export function RecruiterApplicationForm() {
 
       clearRecruiterApplicationDraft();
       toast.success("Application submitted successfully", { id: toastId });
-      setSubmitted(true);
+      const next = new URLSearchParams();
+      if (attribution.utm_source) next.set("utm_source", attribution.utm_source);
+      if (attribution.utm_medium) next.set("utm_medium", attribution.utm_medium);
+      if (attribution.utm_campaign) next.set("utm_campaign", attribution.utm_campaign);
+      const query = next.toString();
+      router.push(`/become-a-recruiter/apply/thank-you${query ? `?${query}` : ""}`);
       resetForm();
     } catch (error) {
       const message = error instanceof Error ? error.message : "Failed to submit application";
@@ -276,7 +316,8 @@ export function RecruiterApplicationForm() {
   if (!hydrated) {
     return (
       <div className="w-full max-w-3xl">
-        <div className="h-40 animate-pulse rounded-[18px] bg-neutral-100" />
+        <ApplyHeading />
+        <div className="mt-10 h-40 animate-pulse rounded-[18px] bg-neutral-100" />
       </div>
     );
   }
@@ -305,17 +346,15 @@ export function RecruiterApplicationForm() {
   }
 
   return (
-    <div className="w-full max-w-3xl">
-      <header>
-        <p className="text-sm font-medium text-brand">Application</p>
-        <h1 className="mt-2 text-[2rem] font-semibold leading-[1.1] tracking-[-0.045em] text-neutral-950 sm:text-[2.75rem]">
-        <BackLink />
-          Become a Recruiter
-        </h1>
-        <p className="mt-3 max-w-xl text-sm leading-6 text-neutral-600">
-          Tell us about yourself. You can move through five short steps—start with the essentials.
-        </p>
-      </header>
+    <div
+      className="w-full max-w-3xl"
+      onFocusCapture={() => {
+        if (started.current) return;
+        started.current = true;
+        trackEvent("form_start", { form_id: "recruiter_apply", location: "apply" });
+      }}
+    >
+      <ApplyHeading />
 
       <ol className="mt-10 grid gap-3 sm:grid-cols-5">
         {steps.map((item, index) => {
@@ -400,15 +439,30 @@ export function RecruiterApplicationForm() {
         >
           Back
         </button>
-        <button
-          type="button"
-          onClick={() => void onContinue()}
-          disabled={submitting}
-          className={`${button} bg-brand text-white hover:bg-[#d85c42] disabled:cursor-wait disabled:opacity-70`}
-        >
-          {isLast ? (submitting ? "Submitting…" : "Submit application") : "Continue"}
-        </button>
+        <div className="text-right">
+          {isLast ? (
+            <p className="mb-3 max-w-xs text-right text-[12px] leading-5 text-neutral-500">
+              Your details will be used as described in the EarlyJobs{" "}
+              <Link href="/privacy-policy" className="underline">
+                Privacy Policy
+              </Link>
+              . Please review your information before submitting your application.
+            </p>
+          ) : null}
+          <button
+            type="button"
+            onClick={() => void onContinue()}
+            disabled={submitting}
+            className={`${button} bg-brand text-white hover:bg-[#d85c42] disabled:cursor-wait disabled:opacity-70`}
+          >
+            {isLast ? (submitting ? "Submitting…" : "Submit Application") : "Continue"}
+          </button>
+        </div>
       </div>
+      <input type="hidden" name="utm_source" value={attribution.utm_source} />
+      <input type="hidden" name="utm_medium" value={attribution.utm_medium} />
+      <input type="hidden" name="utm_campaign" value={attribution.utm_campaign} />
+      <input type="hidden" name="referrer" value={attribution.referrer} />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { blogService, Blog } from "@/components/legacy/services/blogsapi";
 import { Button } from "@/components/ui/button";
@@ -19,23 +20,26 @@ import {
 import Navbar from "../../components/pages/navbar";
 import Header from "../../components/pages/header";
 import Footer from "../../components/pages/footer";
+import type { PublicBlog } from "@/lib/public-blogs";
 import { toast } from "sonner";
 
-export default function BlogDetailPage() {
+export default function BlogDetailPage({ initialBlog = null }: { initialBlog?: PublicBlog | null }) {
   const params = useParams();
   const router = useRouter();
   const slug = params?.slug as string;
-  const [blog, setBlog] = useState<Blog | null>(null);
+  const [blog, setBlog] = useState<Blog | null>((initialBlog as Blog | null) ?? null);
   const [relatedBlogs, setRelatedBlogs] = useState<Blog[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!initialBlog);
   const [error, setError] = useState<string | null>(null);
   const [liking, setLiking] = useState(false);
 
   useEffect(() => {
-    if (slug) {
-      fetchBlog();
+    if (initialBlog?.tags && initialBlog.tags.length > 0) {
+      fetchRelatedBlogs(initialBlog.tags[0], initialBlog._id);
     }
-  }, [slug]);
+    if (initialBlog || !slug) return;
+    fetchBlog();
+  }, [slug, initialBlog]);
 
   const fetchBlog = async () => {
     try {
@@ -285,8 +289,7 @@ export default function BlogDetailPage() {
                 {relatedBlogs.map((relatedBlog) => (
                   <Card
                     key={relatedBlog._id}
-                    className="cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-2 border-gray-100 hover:border-orange-200"
-                    onClick={() => router.push(`/blogs/${relatedBlog.slug}`)}
+                    className="relative cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-2 border-gray-100 hover:border-orange-200"
                   >
                     {relatedBlog.featuredImage && (
                       <div className="relative w-full h-32 overflow-hidden bg-gray-200">
@@ -299,7 +302,9 @@ export default function BlogDetailPage() {
                     )}
                     <CardContent className="p-4">
                       <h3 className="font-bold text-gray-900 mb-2 line-clamp-2 hover:text-orange-600 transition-colors">
-                        {relatedBlog.title}
+                        <Link href={`/blogs/${relatedBlog.slug}`} className="after:absolute after:inset-0">
+                          {relatedBlog.title}
+                        </Link>
                       </h3>
                       {relatedBlog.excerpt && (
                         <p className="text-sm text-gray-600 line-clamp-2">

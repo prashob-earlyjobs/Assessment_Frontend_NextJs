@@ -1,0 +1,100 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.earlyjobs.ai/employers#webpage",
+      "url": "https://www.earlyjobs.ai/employers",
+      "name": "Recruitment Solutions for Employers | Hire Through EarlyJobs",
+      "description": "EarlyJobs connects employers with experienced recruiters and AI-assisted recruitment workflows to support role-based hiring across India.",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/employers#breadcrumb"
+      },
+      "dateModified": "2026-10-21"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/employers#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Recruitment Solutions for Employers",
+          "item": "https://www.earlyjobs.ai/employers"
+        }
+      ]
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.earlyjobs.ai/employers#service",
+      "name": "Recruitment solutions for employers",
+      "description": "EarlyJobs connects employers with experienced recruiters and AI-assisted recruitment workflows to support role-based hiring across India.",
+      "provider": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "India"
+      },
+      "url": "https://www.earlyjobs.ai/employers"
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.earlyjobs.ai/employers#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is EarlyJobs a recruitment agency?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. EarlyJobs is The Recruiter-First Hiring Network, connecting employers with independent recruiters supported by AI-powered hiring infrastructure."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can we hire for multiple roles?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. The network supports hiring across functions, industries, and geographies."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How quickly can we receive candidates?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Recruiters begin working once hiring requirements are shared, with qualified shortlists delivered based on role complexity."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do recruiters specialize in industries?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Recruiters participate across domains such as technology, BFSI, healthcare, manufacturing, retail, executive search, and more."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can startups use EarlyJobs?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Absolutely. From early-stage startups to global enterprises, the network is designed to support different hiring needs."
+          }
+        }
+      ]
+    }
+  ]
+}

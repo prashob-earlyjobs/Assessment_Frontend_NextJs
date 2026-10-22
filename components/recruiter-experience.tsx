@@ -41,6 +41,9 @@ export function RecruiterExperience() {
             you access to verified opportunities, flexible work, and AI-powered tools that help you
             place better candidates.
           </p>
+          <p className="mt-3 max-w-xl text-sm leading-6 text-neutral-600">
+            A growing network of women recruiters is part of how this hiring network works.
+          </p>
         </div>
         <Flow steps={path} />
       </div>

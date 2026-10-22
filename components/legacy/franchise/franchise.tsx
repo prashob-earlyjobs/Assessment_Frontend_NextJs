@@ -1,5 +1,6 @@
 "use client";
 import React from 'react';
+import type { PublicNetworkStats } from "@/lib/dashboard";
 import Header from '../components/pages/header';
 import Footer from '../components/pages/footer';
 import Hero from "./Hero";
@@ -14,7 +15,7 @@ import LimitedOffer from "./LimitedOffer";
 import FAQ from "./FAQ";
 
 
-const Franchise = () => {
+const Franchise = ({ stats }: { stats: PublicNetworkStats | null }) => {
   
   
   return (
@@ -22,7 +23,7 @@ const Franchise = () => {
       <Navbar />
       <Header />
       <Hero />
-      <ProblemSolution />
+      <ProblemSolution stats={stats} />
       <WhyFranchise />
       <EarningModel />
       <SetupRequirements />
