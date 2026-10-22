@@ -125,12 +125,12 @@ const HrExecutiveServicePage = () => {
                 <div className='service-page-s4-content'>
                     <h2 className="service-page-s4-subheading">HR & Executive Recruitment Experts</h2>
                     <p className="service-page-s4-text">
-                        Earlyjobs takes a strategic approach to attracting, developing and managing a global workforce. The aim is to enable all people to create the career they want by being trusted partners in their professional and personal growth. We provide expertise and resources designed to help colleagues thrive at the firm and in their life outside it.
+                        EarlyJobs takes a strategic approach to attracting, developing and managing a global workforce. The aim is to enable all people to create the career they want by being trusted partners in their professional and personal growth. We provide expertise and resources designed to help colleagues thrive at the firm and in their life outside it.
                         <br />
                         <br />
                         Our placement consultancy and services specializes in sourcing and placing highly skilled HR & executives, including EA, Customer Support, D2C, Executive Head etc.
                     </p>
-                    <h2 className="service-page-s4-heading">THE STRATEGIC ROLE OF HR AND EXECUTIVE RECRUITMENT BY EARLYJOBS</h2>
+                    <h2 className="service-page-s4-heading service-page-heading-plain">The strategic role of HR and executive recruitment by EarlyJobs</h2>
                     <p className="service-page-s4-text">In today’s highly competitive business landscape, organizations recognize that their most valuable assets are their people. To thrive and stay ahead of the competition, it’s essential to attract, retain, and develop top talent. This is where HR and executive recruitment consultancies play a pivotal role.</p>
                     
                     <h3 className="service-page-s4-small-heading">Understanding HR and Executive Recruitment Consultancies</h3>

@@ -24,7 +24,7 @@ export function EcosystemSvg() {
         <Connector x1={320} y1={48} x2={320} y2={72} progress={scrollYProgress} range={[0, 0.15]} />
         <Node x={230} y={76} w={180} h={36} label="HIRING MANDATES" />
         <Connector x1={320} y1={112} x2={320} y2={148} progress={scrollYProgress} range={[0.1, 0.25]} />
-        <Node x={200} y={152} w={240} h={64} label="EARLYJOBS" sub="AI + NETWORK" accent />
+        <Node x={200} y={152} w={240} h={64} label="EarlyJobs" sub="AI + NETWORK" accent />
         <Connector x1={240} y1={216} x2={120} y2={260} progress={scrollYProgress} range={[0.25, 0.4]} />
         <Connector x1={320} y1={216} x2={320} y2={260} progress={scrollYProgress} range={[0.25, 0.4]} />
         <Connector x1={400} y1={216} x2={500} y2={260} progress={scrollYProgress} range={[0.25, 0.4]} />

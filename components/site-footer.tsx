@@ -1,7 +1,6 @@
 "use client";
 
 import { Building, GraduationCap, HardHat, MapPin, Rocket, Users } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { AiFillInstagram } from "react-icons/ai";
 import { FaFacebook, FaLinkedin, FaYoutube } from "react-icons/fa";
@@ -88,7 +87,7 @@ export function SiteFooter() {
           <div className="flex h-full flex-col">
             <Link href="/" className="mb-5">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/images/logo.png" alt="earlyjobs" className="h-[90px] w-[130px]" />
+              <img src="/images/logo.png" alt="EarlyJobs" className="h-[90px] w-[130px]" />
             </Link>
             <div className="mb-5 flex items-start">
               <SlLocationPin className="mr-2.5 shrink-0 text-2xl text-gray-400" />
@@ -141,7 +140,9 @@ export function SiteFooter() {
                     title={item.name}
                   >
                     {item.image ? (
-                      <Image
+                      // SVG is served directly. The image optimizer rejects this file type.
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
                         src={item.image}
                         alt=""
                         width={20}

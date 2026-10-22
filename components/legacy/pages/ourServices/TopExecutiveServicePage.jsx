@@ -29,14 +29,14 @@ const heroSectionData = {
 
 const section2Data = {
     heading: 'Hire the Top Executive Recruitment’ talent that propels your organization to new heights',
-    text: 'Earlyjobs specializes in top executive hiring for a wide range of industries. While their expertise extends to multiple industries, they may have varying degrees of specialization and experience in different sectors. Some of the industries that Earlyjobs commonly works with for top executive roles like CEO, COO, CFO, CTO, and CMO include:',
+    text: 'EarlyJobs specializes in top executive hiring for a wide range of industries. While their expertise extends to multiple industries, they may have varying degrees of specialization and experience in different sectors. Some of the industries that EarlyJobs commonly works with for top executive roles like CEO, COO, CFO, CTO, and CMO include:',
     image: '/services_imgs/features-summary.svg'
 }
 
 const section3Data = [
     {
         heading: 'Technology and IT',
-        text: 'Earlyjobs has extensive experience in recruiting top executives for technology companies, including Chief Technology Officers (CTOs) and Chief Information Officers (CIOs).',
+        text: 'EarlyJobs has extensive experience in recruiting top executives for technology companies, including Chief Technology Officers (CTOs) and Chief Information Officers (CIOs).',
         icon: <FaRocket className='service-page-s3-item-icon'/>
     },
     {
@@ -46,7 +46,7 @@ const section3Data = [
     },
     {
         heading: 'Healthcare and Life Sciences',
-        text: 'Earlyjobs has a strong track record of recruiting executives for healthcare organizations, including CEOs, COOs, and other senior-level roles within the healthcare and life sciences industry.',
+        text: 'EarlyJobs has a strong track record of recruiting executives for healthcare organizations, including CEOs, COOs, and other senior-level roles within the healthcare and life sciences industry.',
         icon: <FaGripLinesVertical className='service-page-s3-item-icon'/>
     },
     {
@@ -56,7 +56,7 @@ const section3Data = [
     },
     {
         heading: 'Manufacturing and Industrial',
-        text: 'Earlyjobs has experience in executive recruitment within the manufacturing and industrial sectors, including roles like CEOs, COOs, and CFOs specializing in these industries.',
+        text: 'EarlyJobs has experience in executive recruitment within the manufacturing and industrial sectors, including roles like CEOs, COOs, and CFOs specializing in these industries.',
         icon: <FaStar className='service-page-s3-item-icon'/>
     },
 ]
@@ -87,35 +87,35 @@ const section4Highlight1Data = [
 const section4Highlight2Data = [
     {
         heading: 'Client consultation',
-        text: 'Earlyjobs initiates the process by having in-depth discussions with the client to understand their executive hiring needs, organizational culture, and specific requirements for the role.'
+        text: 'EarlyJobs initiates the process by having in-depth discussions with the client to understand their executive hiring needs, organizational culture, and specific requirements for the role.'
     },
     {
         heading: 'Position definition',
-        text: "Based on the client consultation, Earlyjobs works closely with the client to establish a detailed position profile. This includes outlining the responsibilities, qualifications, desired attributes, and goals for the executive role."
+        text: "Based on the client consultation, EarlyJobs works closely with the client to establish a detailed position profile. This includes outlining the responsibilities, qualifications, desired attributes, and goals for the executive role."
     },
     {
         heading: 'Candidate search and sourcing',
-        text: 'Earlyjobs utilizes their extensive network, industry connections, and targeted searches to identify and source potential executive candidates. They may employ various approaches, such as direct contact, networking, and referrals.'
+        text: 'EarlyJobs utilizes their extensive network, industry connections, and targeted searches to identify and source potential executive candidates. They may employ various approaches, such as direct contact, networking, and referrals.'
     },
     {
         heading: 'Candidate assessment',
-        text: 'Once potential candidates are identified, Earlyjobs conducts thorough assessments to evaluate their qualifications, experience, leadership abilities, cultural fit, and potential for success in the executive role. These assessments may include interviews, psychometric evaluations, reference checks, and sometimes even executive-level simulations or assessments.'
+        text: 'Once potential candidates are identified, EarlyJobs conducts thorough assessments to evaluate their qualifications, experience, leadership abilities, cultural fit, and potential for success in the executive role. These assessments may include interviews, psychometric evaluations, reference checks, and sometimes even executive-level simulations or assessments.'
     },
     {
         heading: 'Presentation of candidate shortlist',
-        text: 'Earlyjobs presents a shortlist of well-qualified candidates to the client, providing comprehensive profiles and evaluations for each candidate. They facilitate discussions and assist in the interview process.'
+        text: 'EarlyJobs presents a shortlist of well-qualified candidates to the client, providing comprehensive profiles and evaluations for each candidate. They facilitate discussions and assist in the interview process.'
     },
     {
         heading: 'Evaluation and selection',
-        text: 'After the client conducts interviews and evaluates the shortlisted candidates, Earlyjobs supports the client in making an informed selection. They provide guidance, address any concerns, and facilitate the decision-making process.'
+        text: 'After the client conducts interviews and evaluates the shortlisted candidates, EarlyJobs supports the client in making an informed selection. They provide guidance, address any concerns, and facilitate the decision-making process.'
     },
     {
         heading: 'Offer and negotiation',
-        text: 'Earlyjobs assists in extending an offer to the selected candidate and supports the negotiation process, ensuring a mutually beneficial agreement.'
+        text: 'EarlyJobs assists in extending an offer to the selected candidate and supports the negotiation process, ensuring a mutually beneficial agreement.'
     },
     {
         heading: 'Onboarding and integration',
-        text: 'Following the successful acceptance of an offer, Earlyjobs can provide support and guidance to the selected executive during the onboarding and integration process, ensuring a smooth transition into the new role and organization.'
+        text: 'Following the successful acceptance of an offer, EarlyJobs can provide support and guidance to the selected executive during the onboarding and integration process, ensuring a smooth transition into the new role and organization.'
     }
 ]
 
@@ -157,7 +157,7 @@ const TopExecutiveServicePage = () => {
                 <div className='service-page-s4-content'>
                     <h2 className="service-page-s4-subheading">Top Executive Recruitment Experts</h2>
                     <p className="service-page-s4-text">
-                        Welcome to Earlyjobs, the leading executive recruitment firm specializing in connecting exceptional talent with organizations dignified for greatness. With an unparalleled track record and a strong commitment to excellence, we, the best placement consultancy are here to transform your executive hiring process and elevate your business to new heights.
+                        Welcome to EarlyJobs, the leading executive recruitment firm specializing in connecting exceptional talent with organizations dignified for greatness. With an unparalleled track record and a strong commitment to excellence, we, the best placement consultancy are here to transform your executive hiring process and elevate your business to new heights.
                         <br />
                         <br />
                         Are you searching for best Placement consultancy services to lead your business towards success? Look no further! Our placement consultancy and services specializes in sourcing and placing highly skilled C-suite executives, including Chief Financial Officers (CFOs), Chief Executive Officers (CEOs), Chief Operating Officers (COOs), and Chief Information Officers (CIOs).
@@ -165,11 +165,11 @@ const TopExecutiveServicePage = () => {
                     <h2 className="service-page-s4-heading">BENEFITS OF PARTNERING WITH OUR TOP EXECUTIVE RECRUITMENT FIRM</h2>
                     <p className="service-page-s4-text">With our expertise and extensive network, we can help you find the perfect executive candidates to drive your business to new heights. You can explore us to know the benefits of partnering with our top executive recruitment firm, Why do you choose us, What process we follow and more.</p>
                     <Highlights section4HighlightData={section4Highlight1Data} />
-                    <p className="service-page-s4-text">As for the benefits offered by Earlyjobs specifically, it would be best to directly contact for information regarding our unique value proposition and how they can help meet your specific hiring needs.</p>
+                    <p className="service-page-s4-text">As for the benefits offered by EarlyJobs specifically, it would be best to directly contact for information regarding our unique value proposition and how they can help meet your specific hiring needs.</p>
                     <h2 className="service-page-s4-heading">PROCESS FOR EXECUTIVE HIRING</h2>
-                    <p className="service-page-s4-text">The process for executive hiring at Earlyjobs typically involves the following steps:</p>
+                    <p className="service-page-s4-text">The process for executive hiring at EarlyJobs typically involves the following steps:</p>
                     <Highlights section4HighlightData={section4Highlight2Data} />
-                    <p className="service-page-s4-text">It’s important to note that the executive hiring process may be tailored to the specific needs of each client and the seniority of the role. Earlyjobs strives to provide a customized and comprehensive approach to executive hiring that aligns with each client’s requirements.</p>
+                    <p className="service-page-s4-text">It’s important to note that the executive hiring process may be tailored to the specific needs of each client and the seniority of the role. EarlyJobs strives to provide a customized and comprehensive approach to executive hiring that aligns with each client’s requirements.</p>
                 </div>
                 <div className='service-page-s4-consultancy-con'>
                     <img src="/services_imgs/top-executive-recruitment-firm.webp" draggable={false} alt="it-recruitment-service" className="service-page-s4-image"/>

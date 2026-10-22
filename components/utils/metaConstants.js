@@ -1,6 +1,6 @@
 export const metaConstants = {
-    title: "Earlyjobs-India's No.1 Portal for remote HR recruiters",
-    description: "Anyone looking for the HR Recruiter job or internship and wanting to work from home can join Earlyjobs.",
+    title: "EarlyJobs-India's No.1 Portal for remote HR recruiters",
+    description: "Anyone looking for the HR Recruiter job or internship and wanting to work from home can join EarlyJobs.",
     keywords: "earlyjobs,early jobs, earlycareer, early career, internships for students, part-time jobs India, entry-level jobs, freshers job opportunities, online internships, remote internships, summer internships 2024, student job portal, job listings for graduates, skill development jobs, flexible jobs for students, work-from-home jobs, career starter jobs, part-time work for teens, college internships, startup jobs India, apprenticeship opportunities, job search for freshers, early career jobs, resume building tips, interview preparation resources, job fairs in India, networking for students, job placement assistance, freelance opportunities for students, professional internships, virtual internships 2024, career guidance for students, skill-based jobs, jobs in tech for freshers, internships in marketing, internships in finance, part-time jobs near me, job application tips, startup internships, jobs in education for students, short-term jobs India, opportunities for young professionals, job listings for high school students.",
     applyAsARecruiter: {
         title: "Apply as a recruiter - Recruiter Job - earlyjobs.in",

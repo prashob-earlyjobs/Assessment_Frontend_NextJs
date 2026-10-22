@@ -9,60 +9,59 @@ import HowWeHelpSection from "../../Servicesfooter/HowWeHelpSection";
 import Highlights from "../../Servicesfooter/Highlights";
 import Faqs from "../../Servicesfooter/Faqs";
 import './style.css';
-import { useEffect } from "react";
-import { metaConstants } from "../../../utils/metaConstants";
 
 const heroSectionData = {
-    subheading: 'ENGAGE WITH THE BEST RPO FIRM',
-    heading: 'Our firm uses artificial intelligence to streamline your recruitment process outsourcing needs.',
+    subheading: 'Recruitment process outsourcing',
+    plainSubheading: true,
+    heading: 'Recruitment process outsourcing for the hiring plan you share.',
     list: [
         {
-            text: 'Experience with Top Industry Leaders Across Sectors'
+            text: 'The work follows the roles, locations, and process you agree'
         },
         {
-            text: 'Trust and Accuracy in Recruitment and Workforce Solutions'
+            text: 'Sourcing and screening use the qualifications you specify'
         },
         {
-            text: 'Ready to Transform Your Talent Acquisition Strategy'
+            text: 'Hiring outcomes are not guaranteed'
         },
     ]
 }
 
 const section2Data = {
-    heading: 'Our RPO Experience, Turning Vision Into Reality.',
-    text: 'We take a consultative approach to recruitment process outsourcing, ensuring that we build long-term partnerships that extend beyond the initial hire. We work with businesses of all sizes and across industries to provide end-to-end recruitment solutions. Partnering with us delivers numerous benefits in talent acquisition, including expertise, time-savings, access to a broader talent pool, cost efficiency, faster hiring, and expert support.',
+    heading: 'Recruitment support shaped around your hiring plan',
+    text: 'EarlyJobs can manage the recruitment activities that are part of an agreed recruitment process outsourcing engagement. Scope and commercial terms are confirmed in the applicable agreement.',
     image: '/services_imgs/features-summary.svg'
 }
 
 const section3Data = [
     {
         heading: 'Expertise',
-        text: 'We bring specialized knowledge in RPO, understanding the specific hiring requirements for various industries. This allows us to effectively manage recruitment processes, ensuring that only the best candidates are shortlisted.',
+        text: 'Recruiters work from the hiring requirements you share. A shortlist is not guaranteed.',
         icon: <FaRocket className='service-page-s3-item-icon'/>
     },
     {
         heading: 'Time-saving',
-        text: 'Outsourcing recruitment to us frees up your team’s time by streamlining the entire hiring process—from sourcing and screening candidates to onboarding. This allows your business to focus on its core operations.',
+        text: 'EarlyJobs can take on the recruitment activities included in the agreement. EarlyJobs does not publish a time saving on this page.',
         icon: <FaUserClock className='service-page-s3-item-icon'/>
     },
     {
         heading: 'Access to a wider pool of candidates',
-        text: 'With an extensive network and candidate database, we can access a wide talent pool, including passive candidates who aren’t actively job-hunting but open to new opportunities, ensuring we find the right fit for your needs.',
+        text: 'Sourcing follows the roles you share. EarlyJobs does not publish a candidate-database size on this page.',
         icon: <FaGripLinesVertical className='service-page-s3-item-icon'/>
     },
     {
         heading: 'Reduced hiring costs',
-        text: 'By outsourcing the recruitment process, we help reduce your overall hiring costs through a structured pricing model, such as fixed or percentage-based fees. This eliminates hidden costs associated with in-house recruitment.',
+        text: 'Commercial terms are confirmed in the applicable agreement. EarlyJobs does not publish a fee or a cost saving on this page.',
         icon: <FaPaintBrush className='service-page-s3-item-icon'/>
     },
     {
         heading: 'Faster hiring process',
-        text: 'Our established processes, coupled with AI-driven tools, enable us to accelerate the hiring process, from sourcing to placement, helping you onboard top talent faster and more efficiently.',
+        text: 'Recruiters begin from the hiring plan you share. EarlyJobs does not promise a faster hiring cycle on this page.',
         icon: <FaStopwatch className='service-page-s3-item-icon'/>
     },
     {
         heading: 'Expert advice and support',
-        text: 'We provide strategic advice throughout the hiring journey, offering insights into market trends, salary expectations, and candidate preferences, helping you make informed recruitment decisions.',
+        text: 'Market or salary discussion happens only when it is part of the agreed process.',
         icon: <FaUserNurse className='service-page-s3-item-icon'/>
     },
 ]
@@ -71,26 +70,26 @@ const section3Data = [
 const section4HighlightData = [
     {
         heading: 'E2E',
-        text: 'EarlyJobs manages the entire recruitment process end-to-end, becoming your dedicated recruiting team for long-term hiring solutions.'
+        text: 'End-to-end recruitment support applies only when that scope is written into the agreement.'
     },
     {
         heading: 'Focused RPO',
-        text: 'With EarlyJobs, client satisfaction is key. We measure success by placements and the positive impact on your finance functions. We are dedicated to exceptional service, seamless recruitment, and meeting your specific needs.'
+        text: 'EarlyJobs works from the hiring requirement you share. Outcomes depend on the role and the process you agree.'
     },
     {
         heading: 'Limited RPO',
-        text: 'EarlyJobs manages the entire recruitment process, focusing on short-term hiring goals while ensuring that your team is equipped with the right talent to drive success.'
+        text: 'A shorter engagement follows the roles and timeline you agree. Hiring outcomes are not guaranteed.'
     },
     {
         heading: 'Components',
-        text: 'EarlyJobs offers dedicated recruiters and scalable resources, manages process and compliance, provides strategic reporting and analysis, and utilizes an Applicant Tracking System.'
+        text: 'Recruiters, reporting, and systems are included only when they are part of the agreed engagement.'
     },
 ]
 
 const servicePageAccordianData = [
     {
         label: 'How does EarlyJobs match candidates with job opportunities?',
-        content: 'EarlyJobs uses a combination of advanced algorithms and personalized assessments to match candidates with job opportunities that align with their skills, experience, and career goals. Our team also conducts thorough interviews to ensure a good fit.'
+        content: 'Candidate review focuses on the requirements you share. Specific checks are used only when they are part of the agreed process.'
     },
     {
         label: 'What industries does EarlyJobs specialize in?',
@@ -102,11 +101,11 @@ const servicePageAccordianData = [
     },
     {
         label: 'How does EarlyJobs ensure the quality of candidates?',
-        content: 'EarlyJobs ensures the quality of candidates through a rigorous screening process that includes background checks, skills assessments, and in-depth interviews. We also consider cultural fit to ensure candidates will thrive in their new roles.'
+        content: 'Candidate review focuses on the role requirements shared by the employer. Background checks are used only when they are part of the agreed process.'
     },
     {
         label: 'Is there a fee for candidates to use EarlyJobs services?',
-        content: 'No, EarlyJobs does not charge candidates for using our recruitment services. Our fees are covered by the employers seeking to hire through our platform, allowing us to offer our services to job seekers at no cost.'
+        content: 'Recruitment fees are agreed with the employer under the applicable commercial terms.'
     },
 ];
 
@@ -123,37 +122,28 @@ const RecruitmentProcessOutsourcingPage = () => {
             </section>
             <section className='service-page-s4-con'>
                 <div className='service-page-s4-content'>
-                    <h2 className="service-page-s4-heading">WELCOME TO OUR Recruitment Process Outsourcing</h2>
+                    <h2 className="service-page-s4-heading service-page-heading-plain">How EarlyJobs supports recruitment process outsourcing</h2>
                     <p className="service-page-s4-text">
-                    Earlyjobs understands the significance of onboarding a set of people as per a recruitment plan and what it takes to make it happen. A number of activities have to happen in harmony with one another, and continuous monitoring is required to ensure that the harmony is maintained, an aspect we emphasize on; being a pioneer among the staffing companies in India.
+                    EarlyJobs can manage the recruitment activities that are part of an agreed recruitment process outsourcing engagement. The work follows the hiring plan, roles, and process you share.
                         <br />
                         <br />
-                        At Earlyjobs, we pride ourselves on being experts in managing the recruitment and placement of talent across various industries. Through our vast network of contacts and deep understanding of the qualifications, skills, and strategies required for success, we can identify and attract the best talent to meet your business needs.
+                        Sourcing and screening use the qualifications you specify. EarlyJobs does not promise a particular shortlist size or hiring outcome.
                         <br />
                         <br />
-                        Our RPO team focuses on your unique requirements, applying their expertise to manage the entire recruitment process efficiently, from sourcing and screening to onboarding. We ensure that the candidates we select not only meet but exceed your expectations in today’s fast-paced and competitive business landscape.
+                        Where onboarding support is part of the agreement, the team can coordinate that step with you. Commercial terms are confirmed in the applicable agreement.
                     </p>
-                    <h2 className="service-page-s4-heading">EarlyJobs HR Advantages</h2>
+                    <h2 className="service-page-s4-heading service-page-heading-plain">EarlyJobs HR advantages</h2>
                     <p className="service-page-s4-text">
-                        Matches your compliance requirements fully without taking any short-cuts unlike some other staffing companies in India.
-                        <br />
-                        <br />
-                        A team of expert consultants who have the experience in designing and executing some of the largest RPO programs in India will make sure that the client has a good plan and executes it rigorously.
-                        <br /> 
-                        <br /> 
-                        EarlyJobs HR Team follows standardization and process rigour to ensure that the outcomes are up to your satisfaction levels and that best practices are put in to ensure that. 
-                        <br/> 
-                        <br/> 
-                        Our client’s brand gets strengthened by the experience that the EarlyJobs HR Team delivers to the applicants
+                        The engagement follows the hiring plan you share. Compliance support, reporting, and applicant communication are included only when they are written into the agreement.
                     </p>
-                    <h2 className="service-page-s4-heading">Scope of Work</h2>
+                    <h2 className="service-page-s4-heading service-page-heading-plain">Scope of work</h2>
                     <Highlights section4HighlightData={section4HighlightData} />
-                    <h2 className="service-page-s4-subheading">Ready to Transform Your Recruitment Process?</h2>
-                    <p className="service-page-s4-text">Welcome to EarlyJobs, the leading RPO firm dedicated to streamlining your recruitment process and connecting you with exceptional talent. With an unmatched track record and a strong commitment to excellence, we are here to enhance your hiring strategy and elevate your business to new heights.</p>
+                    <h2 className="service-page-s4-subheading">Discuss your hiring plan</h2>
+                    <p className="service-page-s4-text">Contact EarlyJobs to discuss a recruitment process outsourcing engagement. Scope and commercial terms are confirmed in the applicable agreement.</p>
 
                 </div>
                 <div className='service-page-s4-consultancy-con'>
-                    <img src="/services_imgs/Finance-Recruitment-Services.png" draggable={false} alt="it-recruitment-service" className="service-page-s4-image"/>
+                    <img src="/services_imgs/Finance-Recruitment-Services.png" draggable={false} alt="Recruitment process outsourcing" className="service-page-s4-image"/>
                     <div className='service-page-s4-consultancy-content'>
                         {/* <div className='service-page-s4-consultancy-heading-con'>
                             <ConsultationForm />

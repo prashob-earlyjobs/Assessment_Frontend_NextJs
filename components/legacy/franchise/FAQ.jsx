@@ -16,7 +16,7 @@ const FAQ = () => {
     {
       question: "What is the franchise fee?",
       answer:
-        "Investment and commercial terms are set out in the applicable franchise agreement. A promotional fee that ended on 31 August 2025 is no longer available.",
+        "Investment and commercial terms are set out in the applicable franchise agreement. Contact the EarlyJobs team for the current terms.",
     },
     {
       question: "Do I need an office?",
