@@ -31,17 +31,17 @@ const employerFaqs = [
 
 export const metadata: Metadata = pageMetadata({
   path: "/employers",
-  title: "Recruitment Solutions for Employers | Hire Through EarlyJobs",
+  title: "Recruitment Services for Employers in India | EarlyJobs",
   description:
-    "EarlyJobs connects employers with experienced recruiters and AI-assisted recruitment workflows to support role-based hiring across India.",
-  ogTitle: "Recruitment Solutions for Employers",
+    "Connect with experienced recruiters through EarlyJobs. Access recruiter-led hiring, AI-assisted candidate matching and recruitment support for businesses across India.",
+  ogTitle: "Recruitment Services for Employers | EarlyJobs",
   ogDescription:
-    "Employers can work with experienced recruiters and AI-assisted recruitment workflows for role-based hiring across India.",
+    "Hire through EarlyJobs' recruiter-first network. Connect with specialized recruiters, access AI-assisted candidate matching and move qualified candidates through your hiring process.",
   image: "/images/logo.png",
-  imageAlt: "EarlyJobs logo",
-  twitterTitle: "Recruitment Solutions for Employers",
+  imageAlt: "EarlyJobs recruiter-first hiring network for employers",
+  twitterTitle: "Recruitment Services for Employers | EarlyJobs",
   twitterDescription:
-    "Employers can work with experienced recruiters and AI-assisted recruitment workflows for role-based hiring across India.",
+    "Connect with experienced recruiters and AI-assisted hiring workflows to find relevant talent through EarlyJobs.",
   twitterCard: "summary",
 });
 
