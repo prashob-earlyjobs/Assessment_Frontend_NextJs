@@ -2,21 +2,75 @@
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "Organization",
+      "@id": "https://www.earlyjobs.ai/#organization",
+      "name": "EarlyJobs",
+      "url": "https://www.earlyjobs.ai/",
+      "description": "EarlyJobs is a recruiter-first hiring network connecting employers, recruiters and job seekers through recruiter-led hiring and AI-assisted recruitment workflows.",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "REPLACE_WITH_ABSOLUTE_EARLYJOBS_LOGO_URL"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/company/earlyjobs/"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.earlyjobs.ai/#website",
+      "url": "https://www.earlyjobs.ai/",
+      "name": "EarlyJobs",
+      "publisher": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "inLanguage": "en-IN"
+    },
+    {
       "@type": "WebPage",
       "@id": "https://www.earlyjobs.ai/internship#webpage",
       "url": "https://www.earlyjobs.ai/internship",
-      "name": "Internship Opportunities | Explore Careers at EarlyJobs",
-      "description": "Explore internship opportunities and early-career learning at EarlyJobs. Review available roles, responsibilities and application requirements.",
+      "name": "Remote HR Recruitment Internship for Freshers | EarlyJobs",
+      "description": "Explore EarlyJobs' remote HR recruitment internship for students and freshers in India, with hands-on recruitment experience, performance-based stipends and potential pre-placement offer opportunities.",
       "isPartOf": {
         "@id": "https://www.earlyjobs.ai/#website"
       },
-      "about": {
+      "publisher": {
         "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/internship#internship-program"
+      },
+      "mainEntity": {
+        "@id": "https://www.earlyjobs.ai/internship#internship-program"
       },
       "breadcrumb": {
         "@id": "https://www.earlyjobs.ai/internship#breadcrumb"
       },
-      "dateModified": "2026-10-21"
+      "inLanguage": "en-IN"
+    },
+    {
+      "@type": "EducationalOccupationalProgram",
+      "@id": "https://www.earlyjobs.ai/internship#internship-program",
+      "name": "EarlyJobs HR Recruitment Internship Program",
+      "description": "A practical recruitment internship designed to help students and freshers gain hands-on experience with candidate sourcing, recruitment coordination and live hiring requirements.",
+      "url": "https://www.earlyjobs.ai/internship",
+      "provider": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "educationalProgramMode": "online",
+      "timeToComplete": "P3M",
+      "occupationalCategory": "Human Resources and Recruitment",
+      "programPrerequisites": "For students and freshers interested in recruitment and talent acquisition. Eligibility requirements should be confirmed on the program page.",
+      "offers": {
+        "@type": "Offer",
+        "description": "Performance-based stipend of up to INR 10000, subject to the published internship terms.",
+        "priceCurrency": "INR",
+        "eligibleRegion": {
+          "@type": "Country",
+          "name": "India"
+        },
+        "url": "https://www.earlyjobs.ai/internship"
+      }
     },
     {
       "@type": "BreadcrumbList",
@@ -31,94 +85,8 @@
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "Internship Opportunities",
+          "name": "Internship",
           "item": "https://www.earlyjobs.ai/internship"
-        }
-      ]
-    },
-    {
-      "@type": "FAQPage",
-      "@id": "https://www.earlyjobs.ai/internship#faq",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Is this internship work from home?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. This is a fully remote, work-from-home internship. You can work from anywhere in India as long as you have a laptop, stable internet, and a working mobile SIM."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What are the working timings?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "You're expected to be available and responsive between 9 AM and 6 PM, with daily reporting to your manager. Exact task hours are flexible within that window."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is there any registration fee or payment required?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. There is zero registration fee and no hidden charges at any stage of the internship. If anyone asks you to pay to join EarlyJobs, please report it to us directly."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What do I need to start?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "A working laptop, a stable internet connection, a mobile SIM for calls, and a LinkedIn profile (we'll help you optimize this as part of onboarding)."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Will the company provide a SIM card or laptop?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No, you'll need to bring your own working mobile SIM and laptop. This keeps the program remote-friendly and lets you start immediately without waiting for equipment."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Which job roles will I be hiring for?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "You'll work on live recruitment requirements across various roles that EarlyJobs and its partner companies are hiring for at the time â your reporting manager assigns these during onboarding."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How does the stipend work?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Stipend terms, if any, are confirmed in writing before you join. EarlyJobs does not promise a stipend, award, or number of joinings on this page."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is English mandatory?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Clear, comfortable communication in English or Hindi is helpful since you'll be speaking with candidates daily, but you don't need to be fluent â we help you build confidence as you go."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What are my responsibilities?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "You'll source and screen candidates, schedule interviews, follow up with them through the hiring process, and report your progress daily to your reporting manager."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can students apply?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes â this program is designed for current students as well as recent freshers. You don't need prior HR or recruitment experience to apply."
-          }
         }
       ]
     }

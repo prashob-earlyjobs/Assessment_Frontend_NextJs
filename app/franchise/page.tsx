@@ -7,17 +7,17 @@ import schema from "@/schema/franchise.jsonld.json";
 
 export const metadata: Metadata = pageMetadata({
   path: "/franchise",
-  title: "Start a Recruitment Franchise with EarlyJobs | Investment & Support",
+  title: "Recruitment Franchise in India | Start an EarlyJobs Franchise",
   description:
-    "Explore a recruitment franchise with EarlyJobs. Investment, support, and commercial terms are confirmed in the applicable franchise agreement. Outcomes vary and are not guaranteed.",
-  ogTitle: "Start a Recruitment Franchise with EarlyJobs",
+    "Start your own recruitment franchise with EarlyJobs. Explore franchise investment, training, recruitment business support and opportunities to build a local hiring network across India.",
+  ogTitle: "Start a Recruitment Franchise in India | EarlyJobs",
   ogDescription:
-    "Investment, support, and commercial terms are confirmed in the applicable franchise agreement. Outcomes vary and are not guaranteed.",
+    "Build a local recruitment business with EarlyJobs. Learn about franchise investment, training, hiring operations and support for growing your recruitment network.",
   image: "/images/logo.png",
-  imageAlt: "EarlyJobs logo",
-  twitterTitle: "Start a Recruitment Franchise with EarlyJobs",
+  imageAlt: "EarlyJobs recruitment franchise business opportunity",
+  twitterTitle: "Recruitment Franchise in India | EarlyJobs",
   twitterDescription:
-    "Investment, support, and commercial terms are confirmed in the applicable franchise agreement. Outcomes vary and are not guaranteed.",
+    "Explore the EarlyJobs recruitment franchise opportunity, investment requirements, training and business support.",
   twitterCard: "summary",
 });
 

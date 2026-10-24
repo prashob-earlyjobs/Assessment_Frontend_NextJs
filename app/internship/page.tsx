@@ -6,15 +6,15 @@ import schema from "@/schema/internship.jsonld.json";
 
 export const metadata: Metadata = pageMetadata({
   path: "/internship",
-  title: "Internship Opportunities | Explore Careers at EarlyJobs",
+  title: "Remote HR Recruitment Internship for Freshers | EarlyJobs",
   description:
-    "Explore internship opportunities and early-career learning at EarlyJobs. Review available roles, responsibilities and application requirements. Stipend, certificate, and later-role terms are confirmed in writing. They are not promised on this page.",
-  ogTitle: "Internship Opportunities | Explore Careers at EarlyJobs",
+    "Start your career with EarlyJobs' 3-month remote HR recruitment internship for students and freshers in India. Gain hands-on hiring experience, earn performance-based stipends up to ₹10,000 and explore PPO opportunities.",
+  ogTitle: "Remote HR Recruitment Internship for Freshers | EarlyJobs",
   ogDescription:
-    "Review the EarlyJobs internship. Stipend, certificate, and a later role are confirmed in writing and are not promised on this page.",
+    "Get real recruitment experience from home with EarlyJobs. A 3-month internship for students and freshers featuring live hiring tasks, performance-based stipends and potential PPO opportunities.",
   image: "/images/logo.png",
-  imageAlt: "EarlyJobs logo",
-  twitterTitle: "Internship Opportunities | Explore Careers at EarlyJobs",
+  imageAlt: "EarlyJobs remote HR recruitment internship for students and freshers",
+  twitterTitle: "Remote HR Recruitment Internship for Freshers | EarlyJobs",
   twitterDescription:
     "Review the EarlyJobs internship. Stipend, certificate, and a later role are confirmed in writing and are not promised on this page.",
   twitterCard: "summary",
