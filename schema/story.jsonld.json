@@ -2,22 +2,105 @@
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "AboutPage",
+      "@type": "WebPage",
       "@id": "https://www.earlyjobs.ai/story#webpage",
       "url": "https://www.earlyjobs.ai/story",
-      "name": "Our Story | EarlyJobs",
-      "description": "We're building a better way to hire—connecting people, networks and technology across EarlyJobs, Huntlo AI and GigKaro.",
-      "isPartOf": { "@id": "https://www.earlyjobs.ai/#website" },
-      "about": { "@id": "https://www.earlyjobs.ai/#organization" },
-      "breadcrumb": { "@id": "https://www.earlyjobs.ai/story#breadcrumb" },
-      "dateModified": "2026-10-22"
+      "name": "Our Story | Saurav Kumar & the Journey of EarlyJobs",
+      "description": "Discover how Saurav Kumar founded EarlyJobs after seeing talented women face barriers to returning to recruitment, and how the mission grew into a connected hiring ecosystem.",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": [
+        {
+          "@id": "https://www.earlyjobs.ai/#organization"
+        },
+        {
+          "@id": "https://www.earlyjobs.ai/team#saurav-kumar"
+        }
+      ],
+      "mainEntity": {
+        "@id": "https://www.earlyjobs.ai/story#founder-story"
+      },
+      "publisher": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/story#breadcrumb"
+      },
+      "inLanguage": "en-IN"
+    },
+    {
+      "@type": "Article",
+      "@id": "https://www.earlyjobs.ai/story#founder-story",
+      "headline": "The EarlyJobs Story: From a Simple Idea to a Connected Hiring Network",
+      "description": "The story of how Saurav Kumar and the EarlyJobs team developed a recruiter-first hiring network after seeing the barriers talented women faced when returning to recruitment careers.",
+      "url": "https://www.earlyjobs.ai/story",
+      "mainEntityOfPage": {
+        "@id": "https://www.earlyjobs.ai/story#webpage"
+      },
+      "author": {
+        "@id": "https://www.earlyjobs.ai/team#saurav-kumar"
+      },
+      "publisher": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://www.earlyjobs.ai/about_us_imgs/Saurav-Kumar.jpg"
+      },
+      "about": [
+        {
+          "@id": "https://www.earlyjobs.ai/#organization"
+        },
+        {
+          "@id": "https://www.earlyjobs.ai/team#saurav-kumar"
+        },
+        {
+          "@type": "Thing",
+          "name": "Women returning to recruitment careers"
+        },
+        {
+          "@type": "Thing",
+          "name": "Flexible recruitment opportunities"
+        },
+        {
+          "@type": "Thing",
+          "name": "Recruiter-first hiring network"
+        }
+      ],
+      "inLanguage": "en-IN"
+    },
+    {
+      "@type": "Person",
+      "@id": "https://www.earlyjobs.ai/team#saurav-kumar",
+      "name": "Saurav Kumar",
+      "url": "https://www.earlyjobs.ai/team",
+      "jobTitle": "Founder & CEO",
+      "description": "Saurav Kumar is the Founder and CEO of EarlyJobs. The story on this page describes starting EarlyJobs after women recruiters asked for remote work that could fit their lives.",
+      "image": "https://www.earlyjobs.ai/about_us_imgs/Saurav-Kumar.jpg",
+      "worksFor": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/in/mesauravkumar"
+      ]
     },
     {
       "@type": "BreadcrumbList",
       "@id": "https://www.earlyjobs.ai/story#breadcrumb",
       "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.earlyjobs.ai/" },
-        { "@type": "ListItem", "position": 2, "name": "Our Story", "item": "https://www.earlyjobs.ai/story" }
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Our Story",
+          "item": "https://www.earlyjobs.ai/story"
+        }
       ]
     }
   ]
