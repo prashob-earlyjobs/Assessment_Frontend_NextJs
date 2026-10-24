@@ -4,18 +4,24 @@ import TopExecutiveServicePage from "@/components/legacy/pages/ourServices/TopEx
 import { pageMetadata } from "@/lib/page-metadata";
 import schema from "@/schema/top-executive-recruitment-firm.jsonld.json";
 
-export const metadata: Metadata = pageMetadata({
-  path: "/top-executive-recruitment-firm",
-  title: "Executive Recruitment | EarlyJobs",
-  description: "Executive recruitment services from EarlyJobs for senior leadership roles.",
-  ogTitle: "Executive Recruitment | EarlyJobs",
-  ogDescription: "Executive recruitment services from EarlyJobs for senior leadership roles.",
-  image: "/images/logo.png",
-  imageAlt: "EarlyJobs logo",
-  twitterTitle: "Executive Recruitment | EarlyJobs",
-  twitterDescription: "Executive recruitment services from EarlyJobs for senior leadership roles.",
-  twitterCard: "summary",
-});
+export const metadata: Metadata = {
+  ...pageMetadata({
+    path: "/top-executive-recruitment-firm",
+    title: "Executive Recruitment Firm in India | EarlyJobs",
+    description:
+      "Hire senior leaders with EarlyJobs. Discover executive recruitment services for CEO, COO, CFO, CTO and other leadership roles across industries in India.",
+    ogTitle: "Executive Search & Leadership Recruitment | EarlyJobs",
+    ogDescription:
+      "Build your leadership team with EarlyJobs. Get recruitment support for CEO, COO, CFO, CTO and other senior executive positions across India.",
+    image: "/images/logo.png",
+    imageAlt: "Executive recruitment and leadership hiring services by EarlyJobs",
+    twitterTitle: "Executive Search & Leadership Recruitment | EarlyJobs",
+    twitterDescription:
+      "Find senior leaders for CEO, COO, CFO, CTO and other executive roles with recruitment support from EarlyJobs.",
+    twitterCard: "summary",
+  }),
+  other: { language: "en-IN" },
+};
 
 export default function Page() {
   return (
