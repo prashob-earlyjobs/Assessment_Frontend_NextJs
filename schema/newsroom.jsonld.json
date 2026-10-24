@@ -2,13 +2,41 @@
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "Organization",
+      "@id": "https://www.earlyjobs.ai/#organization",
+      "name": "EarlyJobs",
+      "url": "https://www.earlyjobs.ai/",
+      "description": "EarlyJobs is a recruiter-first hiring network connecting employers, freelance recruiters, recruitment agencies, hiring partners and job seekers through recruiter-led hiring and AI-assisted recruitment infrastructure.",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "REPLACE_WITH_ABSOLUTE_EARLYJOBS_LOGO_URL"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/company/earlyjobs/",
+        "https://www.facebook.com/earlyjobs.in"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.earlyjobs.ai/#website",
+      "url": "https://www.earlyjobs.ai/",
+      "name": "EarlyJobs",
+      "publisher": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "inLanguage": "en-IN"
+    },
+    {
       "@type": "CollectionPage",
       "@id": "https://www.earlyjobs.ai/newsroom#webpage",
       "url": "https://www.earlyjobs.ai/newsroom",
-      "name": "EarlyJobs Newsroom | Company News and Updates",
-      "description": "Read company announcements, business updates and published news about EarlyJobs and its recruitment ecosystem.",
+      "name": "EarlyJobs Newsroom | Company News, Press & Updates",
+      "description": "Explore the EarlyJobs newsroom for company announcements, recruitment industry insights, hiring milestones, partnerships and updates on the recruiter-first hiring network.",
       "isPartOf": {
         "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "publisher": {
+        "@id": "https://www.earlyjobs.ai/#organization"
       },
       "about": {
         "@id": "https://www.earlyjobs.ai/#organization"
@@ -16,7 +44,19 @@
       "breadcrumb": {
         "@id": "https://www.earlyjobs.ai/newsroom#breadcrumb"
       },
-      "dateModified": "2026-10-21"
+      "inLanguage": "en-IN",
+      "mainEntity": {
+        "@id": "https://www.earlyjobs.ai/newsroom#news-collection"
+      }
+    },
+    {
+      "@type": "ItemList",
+      "@id": "https://www.earlyjobs.ai/newsroom#news-collection",
+      "name": "EarlyJobs Newsroom Updates",
+      "description": "A collection of company announcements, partnerships, business milestones and relevant recruitment industry updates published by EarlyJobs.",
+      "itemListOrder": "https://schema.org/ItemListOrderDescending",
+      "numberOfItems": 0,
+      "itemListElement": []
     },
     {
       "@type": "BreadcrumbList",
@@ -31,7 +71,7 @@
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "EarlyJobs Newsroom",
+          "name": "Newsroom",
           "item": "https://www.earlyjobs.ai/newsroom"
         }
       ]
