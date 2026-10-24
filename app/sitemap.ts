@@ -30,7 +30,6 @@ const routes = [
   "/top-executive-recruitment-firm",
   "/global-recruitment",
   "/recruitment-process-outsourcing",
-  "/value-staffing-service",
   "/gcc-hiring-solutions",
   "/gcc-recruitment-partner",
   "/gcc-talent-acquisition",
