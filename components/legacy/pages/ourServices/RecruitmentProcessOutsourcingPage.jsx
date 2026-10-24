@@ -113,13 +113,13 @@ const RecruitmentProcessOutsourcingPage = () => {
 
    
 
-    return (
+    return (    
         <div className="service-page-container">
             <HeroSection heroSectionData={heroSectionData} />
             <HowWeHelpSection section2Data={section2Data} />
             <section className='service-page-s3-con'>
                 <RecruitingProcess section3Data={section3Data} />
-            </section>
+            </section>  
             <section className='service-page-s4-con'>
                 <div className='service-page-s4-content'>
                     <h2 className="service-page-s4-heading service-page-heading-plain">How EarlyJobs supports recruitment process outsourcing</h2>
