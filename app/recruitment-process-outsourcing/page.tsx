@@ -4,18 +4,24 @@ import RecruitmentProcessOutsourcingPage from "@/components/legacy/pages/ourServ
 import { pageMetadata } from "@/lib/page-metadata";
 import schema from "@/schema/recruitment-process-outsourcing.jsonld.json";
 
-export const metadata: Metadata = pageMetadata({
-  path: "/recruitment-process-outsourcing",
-  title: "Recruitment Process Outsourcing | EarlyJobs",
-  description: "Recruitment process outsourcing from EarlyJobs for employers that want hiring support across open roles.",
-  ogTitle: "Recruitment Process Outsourcing | EarlyJobs",
-  ogDescription: "Recruitment process outsourcing from EarlyJobs for employers that want hiring support across open roles.",
-  image: "/images/logo.png",
-  imageAlt: "EarlyJobs logo",
-  twitterTitle: "Recruitment Process Outsourcing | EarlyJobs",
-  twitterDescription: "Recruitment process outsourcing from EarlyJobs.",
-  twitterCard: "summary",
-});
+export const metadata: Metadata = {
+  ...pageMetadata({
+    path: "/recruitment-process-outsourcing",
+    title: "Recruitment Process Outsourcing (RPO) Services in India | EarlyJobs",
+    description:
+      "Simplify hiring with EarlyJobs recruitment process outsourcing (RPO) services. Access recruiter-led sourcing, candidate screening and hiring coordination for businesses across India.",
+    ogTitle: "Recruitment Process Outsourcing (RPO) Services | EarlyJobs",
+    ogDescription:
+      "Scale your hiring with EarlyJobs RPO services. Streamline candidate sourcing, screening and recruitment coordination through a recruiter-led, technology-enabled approach.",
+    image: "/images/logo.png",
+    imageAlt: "EarlyJobs recruitment process outsourcing and hiring services",
+    twitterTitle: "Recruitment Process Outsourcing (RPO) Services | EarlyJobs",
+    twitterDescription:
+      "Improve recruitment execution with recruiter-led sourcing, candidate screening and hiring coordination from EarlyJobs.",
+    twitterCard: "summary",
+  }),
+  other: { language: "en-IN" },
+};
 
 export default function Page() {
   return (
