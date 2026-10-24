@@ -6,17 +6,17 @@ import schema from "@/schema/offshore-capability-center-hiring.jsonld.json";
 
 export const metadata: Metadata = pageMetadata({
   path: "/offshore-capability-center-hiring",
-  title: "Offshore Capability Center Hiring | EarlyJobs",
+  title: "Offshore Capability Center Hiring in India | EarlyJobs",
   description:
-    "Plan offshore capability center hiring with structured recruitment support, recruiter networks and AI-assisted workflows aligned with your operating model.",
-  ogTitle: "Offshore Capability Center Hiring",
+    "Build and scale your offshore capability center in India with EarlyJobs. Access dedicated recruiter pods, AI-assisted sourcing and enterprise hiring across engineering, product, finance and leadership.",
+  ogTitle: "Offshore Capability Center Hiring in India | EarlyJobs",
   ogDescription:
-    "Recruitment support for an offshore capability center. This page does not provide legal, tax, or incorporation advice.",
+    "Scale offshore capability center hiring with EarlyJobs. Combine dedicated recruiter pods, human expertise and AI-assisted recruitment operations to build high-performing teams in India.",
   image: "/images/logo.png",
-  imageAlt: "EarlyJobs logo",
-  twitterTitle: "Offshore Capability Center Hiring",
+  imageAlt: "EarlyJobs offshore capability center hiring and recruitment services",
+  twitterTitle: "Offshore Capability Center Hiring in India | EarlyJobs",
   twitterDescription:
-    "Recruitment support for an offshore capability center. This page does not provide legal, tax, or incorporation advice.",
+    "Build and scale your offshore capability center in India with dedicated recruiter pods, human expertise and AI-assisted recruitment operations.",
   twitterCard: "summary",
 });
 
