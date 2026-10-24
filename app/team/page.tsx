@@ -4,18 +4,27 @@ import TeamPage from "@/components/legacy/pages/Teampage";
 import { pageMetadata } from "@/lib/page-metadata";
 import { getTeamMembers, type TeamMember } from "@/lib/teams";
 
-export const metadata: Metadata = pageMetadata({
-  path: "/team",
-  title: "Our Team | EarlyJobs",
-  description: "Meet the leadership guiding EarlyJobs' mission to transform hiring across India.",
-  ogTitle: "Our Team | EarlyJobs",
-  ogDescription: "Meet the leadership guiding EarlyJobs' mission to transform hiring across India.",
-  image: "/images/logo.png",
-  imageAlt: "EarlyJobs logo",
-  twitterTitle: "Our Team | EarlyJobs",
-  twitterDescription: "Meet the leadership guiding EarlyJobs.",
-  twitterCard: "summary",
-});
+const TITLE = "Meet the EarlyJobs Leadership Team | Founders & Directors";
+const DESCRIPTION =
+  "Meet Saurav Kumar, Founder and CEO of EarlyJobs, alongside the founders, directors and technology leaders building a recruiter-first hiring network across India.";
+
+export const metadata: Metadata = {
+  ...pageMetadata({
+    path: "/team",
+    title: TITLE,
+    description: DESCRIPTION,
+    ogTitle: TITLE,
+    ogDescription:
+      "Discover the people behind EarlyJobs. Meet founder and CEO Saurav Kumar, our directors and technology leadership team building a recruiter-first hiring network.",
+    image: "/images/logo.png",
+    imageAlt: "EarlyJobs founders and leadership team",
+    twitterTitle: TITLE,
+    twitterDescription:
+      "Meet Saurav Kumar and the leadership team building EarlyJobs' recruiter-first hiring network.",
+    twitterCard: "summary",
+  }),
+  other: { language: "en-IN" },
+};
 
 export default async function Page() {
   const members = await getTeamMembers();
@@ -32,13 +41,24 @@ function absoluteUrl(url: string) {
   return `https://www.earlyjobs.ai${url.startsWith("/") ? url : `/${url}`}`;
 }
 
+function personId(name: string) {
+  const slug = name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  return `https://www.earlyjobs.ai/team#${slug}`;
+}
+
 function teamSchema(members: TeamMember[]) {
   const people = members.flatMap((member) => {
     if (!member.name) return [];
+    const id = personId(member.name);
     return [
       {
         "@type": "Person",
+        "@id": id,
         name: member.name,
+        url: id,
         ...(member.designation ? { jobTitle: member.designation } : {}),
         ...(member.imageUrl ? { image: absoluteUrl(member.imageUrl) } : {}),
         ...(member.linkedInUrl ? { sameAs: [member.linkedInUrl] } : {}),
@@ -55,14 +75,32 @@ function teamSchema(members: TeamMember[]) {
         "@type": "WebPage",
         "@id": "https://www.earlyjobs.ai/team#webpage",
         url: "https://www.earlyjobs.ai/team",
-        name: "Our Team | EarlyJobs",
-        description: "Meet the leadership guiding EarlyJobs' mission to transform hiring across India.",
+        name: TITLE,
+        description: DESCRIPTION,
         isPartOf: { "@id": "https://www.earlyjobs.ai/#website" },
         about: { "@id": "https://www.earlyjobs.ai/#organization" },
+        ...(people.length ? { mainEntity: { "@id": "https://www.earlyjobs.ai/team#leadership-team" } } : {}),
+        publisher: { "@id": "https://www.earlyjobs.ai/#organization" },
         breadcrumb: { "@id": "https://www.earlyjobs.ai/team#breadcrumb" },
-        dateModified: "2026-10-22",
-        ...(people.length ? { mainEntity: people } : {}),
+        inLanguage: "en-IN",
       },
+      ...people,
+      ...(people.length
+        ? [
+            {
+              "@type": "ItemList",
+              "@id": "https://www.earlyjobs.ai/team#leadership-team",
+              name: "EarlyJobs Leadership Team",
+              numberOfItems: people.length,
+              itemListOrder: "https://schema.org/ItemListOrderAscending",
+              itemListElement: people.map((person, index) => ({
+                "@type": "ListItem",
+                position: index + 1,
+                item: { "@id": person["@id"] },
+              })),
+            },
+          ]
+        : []),
       {
         "@type": "BreadcrumbList",
         "@id": "https://www.earlyjobs.ai/team#breadcrumb",
