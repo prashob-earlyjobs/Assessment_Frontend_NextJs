@@ -6,14 +6,14 @@ import schema from "@/schema/it-recruitment.jsonld.json";
 
 export const metadata: Metadata = pageMetadata({
   path: "/it-recruitment",
-  title: "IT Recruitment Services | Technology Hiring | EarlyJobs",
+  title: "IT Recruitment Services in India | EarlyJobs",
   description:
-    "Hire technology professionals through EarlyJobs. Align technical role requirements, relevant candidate profiles and recruiter-led hiring execution.",
-  ogTitle: "IT Recruitment Services | Technology Hiring",
+    "Hire skilled IT professionals with EarlyJobs. Access recruiter-led hiring for software developers, engineers, cloud, DevOps, cybersecurity, QA and technology leadership roles across India.",
+  ogTitle: "IT Recruitment Services in India | EarlyJobs",
   ogDescription:
-    "EarlyJobs helps employers define technology hiring requirements. Technical assessments are used only when agreed.",
+    "Build your technology team with EarlyJobs. Connect with qualified IT talent through recruiter-led sourcing, candidate screening and hiring coordination across India.",
   image: "/images/logo.png",
-  imageAlt: "EarlyJobs logo",
+  imageAlt: "EarlyJobs IT recruitment services for technology teams",
   twitterTitle: "IT Recruitment Services | Technology Hiring",
   twitterDescription:
     "EarlyJobs helps employers define technology hiring requirements. Technical assessments are used only when agreed.",

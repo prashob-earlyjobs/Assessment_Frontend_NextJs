@@ -2,21 +2,75 @@
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "Organization",
+      "@id": "https://www.earlyjobs.ai/#organization",
+      "name": "EarlyJobs",
+      "url": "https://www.earlyjobs.ai/",
+      "description": "EarlyJobs is a recruiter-first hiring network connecting employers, freelance recruiters, recruitment agencies, hiring partners and job seekers through recruiter-led hiring and AI-assisted recruitment workflows.",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "REPLACE_WITH_ABSOLUTE_EARLYJOBS_LOGO_URL"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/company/earlyjobs/"
+      ],
+      "founder": {
+        "@type": "Person",
+        "@id": "https://www.earlyjobs.ai/team#saurav-kumar",
+        "name": "Saurav Kumar",
+        "jobTitle": "Founder and CEO",
+        "url": "https://www.linkedin.com/in/mesauravkumar/"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.earlyjobs.ai/#website",
+      "url": "https://www.earlyjobs.ai/",
+      "name": "EarlyJobs",
+      "publisher": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "inLanguage": "en-IN"
+    },
+    {
       "@type": "WebPage",
       "@id": "https://www.earlyjobs.ai/investor-relations#webpage",
       "url": "https://www.earlyjobs.ai/investor-relations",
-      "name": "Investor Relations | EarlyJobs",
-      "description": "Learn about EarlyJobs, its recruitment infrastructure model, technology-enabled hiring approach and business direction through approved company information.",
+      "name": "Investor Relations | EarlyJobs Company Overview",
+      "description": "Explore EarlyJobs' company overview, recruiter-first hiring network, business milestones, leadership and investor-related information.",
       "isPartOf": {
         "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "publisher": {
+        "@id": "https://www.earlyjobs.ai/#organization"
       },
       "about": {
         "@id": "https://www.earlyjobs.ai/#organization"
       },
+      "mainEntity": {
+        "@id": "https://www.earlyjobs.ai/investor-relations#organization-overview"
+      },
       "breadcrumb": {
         "@id": "https://www.earlyjobs.ai/investor-relations#breadcrumb"
       },
-      "dateModified": "2026-10-21"
+      "inLanguage": "en-IN"
+    },
+    {
+      "@type": "AboutPage",
+      "@id": "https://www.earlyjobs.ai/investor-relations#organization-overview",
+      "url": "https://www.earlyjobs.ai/investor-relations",
+      "name": "EarlyJobs Investor and Company Overview",
+      "description": "Company information about EarlyJobs, its recruiter-first hiring network, business model, leadership and hiring ecosystem.",
+      "about": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "mainEntity": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "inLanguage": "en-IN"
     },
     {
       "@type": "BreadcrumbList",

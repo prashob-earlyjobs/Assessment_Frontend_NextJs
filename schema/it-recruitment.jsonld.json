@@ -2,21 +2,109 @@
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "Organization",
+      "@id": "https://www.earlyjobs.ai/#organization",
+      "name": "EarlyJobs",
+      "legalName": "Victa EarlyJobs Technologies Private Limited",
+      "url": "https://www.earlyjobs.ai/",
+      "description": "EarlyJobs is a recruiter-first hiring network connecting employers, recruiters and job seekers through recruiter-led hiring and AI-assisted recruitment workflows.",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "REPLACE_WITH_ABSOLUTE_EARLYJOBS_LOGO_URL"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/company/earlyjobs/",
+        "https://www.facebook.com/earlyjobs.in"
+      ],
+      "founder": {
+        "@type": "Person",
+        "@id": "https://www.earlyjobs.ai/team#saurav-kumar",
+        "name": "Saurav Kumar",
+        "jobTitle": "Founder and CEO",
+        "url": "https://www.linkedin.com/in/mesauravkumar/"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.earlyjobs.ai/#website",
+      "url": "https://www.earlyjobs.ai/",
+      "name": "EarlyJobs",
+      "publisher": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "inLanguage": "en-IN"
+    },
+    {
       "@type": "WebPage",
       "@id": "https://www.earlyjobs.ai/it-recruitment#webpage",
       "url": "https://www.earlyjobs.ai/it-recruitment",
-      "name": "IT Recruitment Services | Technology Hiring | EarlyJobs",
-      "description": "Hire technology professionals through EarlyJobs. Align technical role requirements, relevant candidate profiles and recruiter-led hiring execution.",
+      "name": "IT Recruitment Services in India | EarlyJobs",
+      "description": "Hire skilled IT professionals with EarlyJobs through recruiter-led sourcing, candidate screening and hiring support for software development, engineering and other technology roles across India.",
       "isPartOf": {
         "@id": "https://www.earlyjobs.ai/#website"
       },
-      "about": {
+      "publisher": {
         "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/it-recruitment#service"
+      },
+      "mainEntity": {
+        "@id": "https://www.earlyjobs.ai/it-recruitment#service"
       },
       "breadcrumb": {
         "@id": "https://www.earlyjobs.ai/it-recruitment#breadcrumb"
       },
-      "dateModified": "2026-10-21"
+      "inLanguage": "en-IN"
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.earlyjobs.ai/it-recruitment#service",
+      "name": "IT Recruitment Services",
+      "alternateName": [
+        "IT Hiring Services in India",
+        "Technology Recruitment Services",
+        "Technical Talent Acquisition"
+      ],
+      "url": "https://www.earlyjobs.ai/it-recruitment",
+      "description": "EarlyJobs helps businesses recruit technology professionals through recruiter-led talent sourcing, candidate screening, technical hiring coordination and recruitment support for roles across the IT industry.",
+      "serviceType": [
+        "IT recruitment",
+        "Software developer recruitment",
+        "Software engineer recruitment",
+        "Cloud and DevOps recruitment",
+        "Cybersecurity recruitment",
+        "Quality assurance recruitment",
+        "IT support recruitment",
+        "Technology leadership recruitment"
+      ],
+      "category": "Recruitment Services",
+      "provider": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "India"
+      },
+      "audience": {
+        "@type": "BusinessAudience",
+        "audienceType": [
+          "Companies hiring IT professionals",
+          "Technology startups",
+          "Enterprise hiring teams",
+          "IT services companies",
+          "Human resources teams",
+          "Talent acquisition leaders"
+        ]
+      },
+      "availableChannel": {
+        "@type": "ServiceChannel",
+        "serviceUrl": "https://www.earlyjobs.ai/it-recruitment",
+        "availableLanguage": [
+          "English"
+        ]
+      },
+      "termsOfService": "https://www.earlyjobs.ai/terms-and-conditions"
     },
     {
       "@type": "BreadcrumbList",
@@ -31,67 +119,58 @@
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "IT Recruitment Services",
+          "name": "IT Recruitment",
           "item": "https://www.earlyjobs.ai/it-recruitment"
         }
       ]
     },
     {
-      "@type": "Service",
-      "@id": "https://www.earlyjobs.ai/it-recruitment#service",
-      "name": "IT recruitment",
-      "description": "Hire technology professionals through EarlyJobs. Align technical role requirements, relevant candidate profiles and recruiter-led hiring execution.",
-      "provider": {
-        "@id": "https://www.earlyjobs.ai/#organization"
-      },
-      "areaServed": {
-        "@type": "Country",
-        "name": "India"
-      },
-      "url": "https://www.earlyjobs.ai/it-recruitment"
-    },
-    {
       "@type": "FAQPage",
       "@id": "https://www.earlyjobs.ai/it-recruitment#faq",
+      "url": "https://www.earlyjobs.ai/it-recruitment",
+      "name": "IT Recruitment Services FAQs",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/it-recruitment#webpage"
+      },
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "How does EarlyJobs match candidates with job opportunities?",
+          "name": "How does EarlyJobs match candidates with IT job opportunities?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Candidate review focuses on the technology requirements you share. Specific checks are used only when they are part of the agreed process."
+            "text": "EarlyJobs uses recruiter-led candidate sourcing, role requirements and screening processes to identify IT professionals whose skills and experience align with an employer's hiring needs."
           }
         },
         {
           "@type": "Question",
-          "name": "What industries does EarlyJobs specialize in?",
+          "name": "What types of IT professionals can EarlyJobs help businesses hire?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "EarlyJobs specializes in a wide range of industries including technology, BPO, finance, marketing, engineering, and more. Our diverse network allows us to cater to various sectors and provide specialized recruitment services."
+            "text": "EarlyJobs supports recruitment for technology roles such as developers, engineers, project managers and IT support professionals, depending on the hiring requirements."
           }
         },
         {
           "@type": "Question",
-          "name": "What is the process for employers to start working with EarlyJobs?",
+          "name": "How can an employer get started with EarlyJobs IT recruitment services?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Employers can start working with EarlyJobs by contacting our team through our website or directly reaching out to our sales department. We will discuss your hiring needs, provide a customized recruitment plan, and begin sourcing and screening candidates."
+            "text": "Employers can contact EarlyJobs to discuss their open positions, required skills, hiring priorities and recruitment needs so that the team can determine an appropriate hiring approach."
           }
         },
         {
           "@type": "Question",
-          "name": "How does EarlyJobs ensure the quality of candidates?",
+          "name": "How does EarlyJobs assess IT candidates?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Candidate review focuses on the role requirements shared by the employer. Background checks are used only when they are part of the agreed process."
+            "text": "Candidate assessment can include reviewing relevant experience, qualifications and technical skills, along with screening and interviews appropriate to the role and the agreed recruitment process."
           }
         },
         {
           "@type": "Question",
-          "name": "Is there a fee for candidates to use EarlyJobs services?",
+          "name": "Do candidates pay to use EarlyJobs recruitment services?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Recruitment fees are agreed with the employer under the applicable commercial terms."
+            "text": "EarlyJobs states that candidates do not pay to use its recruitment services. Recruitment fees are covered by employers seeking to hire through its services."
           }
         }
       ]

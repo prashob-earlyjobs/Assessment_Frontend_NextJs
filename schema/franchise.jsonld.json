@@ -2,21 +2,243 @@
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "Organization",
+      "@id": "https://www.earlyjobs.ai/#organization",
+      "name": "EarlyJobs",
+      "legalName": "Victa EarlyJobs Technologies Private Limited",
+      "url": "https://www.earlyjobs.ai/",
+      "description": "EarlyJobs is a recruiter-first hiring network connecting employers, recruitment professionals, recruitment agencies, franchise partners and job seekers through recruiter-led hiring and AI-assisted recruitment workflows.",
+      "email": "info@earlyjobs.in",
+      "telephone": "+91-8217527926",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "REPLACE_WITH_ABSOLUTE_LOGO_URL"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "53, HustleHub, 5th Cross Road, near Sony World Signal, 4th Block, Koramangala",
+        "addressLocality": "Bengaluru",
+        "addressRegion": "Karnataka",
+        "postalCode": "560034",
+        "addressCountry": "IN"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/company/earlyjobs/"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.earlyjobs.ai/#website",
+      "url": "https://www.earlyjobs.ai/",
+      "name": "EarlyJobs",
+      "publisher": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "inLanguage": "en-IN"
+    },
+    {
       "@type": "WebPage",
       "@id": "https://www.earlyjobs.ai/franchise#webpage",
       "url": "https://www.earlyjobs.ai/franchise",
-      "name": "Start a Recruitment Franchise with EarlyJobs | Investment & Support",
-      "description": "Explore a recruitment franchise with EarlyJobs. Investment, support, and commercial terms are confirmed in the applicable franchise agreement. Outcomes vary and are not guaranteed.",
+      "name": "Recruitment Franchise in India | Start an EarlyJobs Franchise",
+      "description": "Explore the EarlyJobs recruitment franchise opportunity, including franchise onboarding, recruitment training, local hiring operations and business support.",
       "isPartOf": {
         "@id": "https://www.earlyjobs.ai/#website"
       },
-      "about": {
+      "publisher": {
         "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/franchise#franchise-opportunity"
+      },
+      "mainEntity": {
+        "@id": "https://www.earlyjobs.ai/franchise#franchise-opportunity"
       },
       "breadcrumb": {
         "@id": "https://www.earlyjobs.ai/franchise#breadcrumb"
       },
-      "dateModified": "2026-10-21"
+      "hasPart": [
+        {
+          "@id": "https://www.earlyjobs.ai/franchise#application-process"
+        },
+        {
+          "@id": "https://www.earlyjobs.ai/franchise#faq"
+        }
+      ],
+      "inLanguage": "en-IN"
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.earlyjobs.ai/franchise#franchise-opportunity",
+      "name": "EarlyJobs Recruitment Franchise Opportunity",
+      "alternateName": [
+        "EarlyJobs HR Franchise",
+        "Recruitment Business Franchise",
+        "Recruitment Franchise in India"
+      ],
+      "url": "https://www.earlyjobs.ai/franchise",
+      "description": "A franchise opportunity for entrepreneurs interested in building a local recruitment business under the EarlyJobs brand, with onboarding, recruitment training, operational guidance and hiring-network support according to the franchise agreement.",
+      "serviceType": [
+        "Recruitment franchise",
+        "Recruitment business development",
+        "Recruitment operations training",
+        "Local employer relationship development",
+        "Recruitment network development"
+      ],
+      "provider": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "India"
+      },
+      "audience": {
+        "@type": "BusinessAudience",
+        "audienceType": [
+          "Aspiring entrepreneurs",
+          "Recruitment professionals",
+          "HR professionals",
+          "Local business owners",
+          "Entrepreneurs in Tier 2 and Tier 3 cities"
+        ]
+      },
+      "hasOfferCatalog": {
+        "@id": "https://www.earlyjobs.ai/franchise#offer-catalog"
+      }
+    },
+    {
+      "@type": "OfferCatalog",
+      "@id": "https://www.earlyjobs.ai/franchise#offer-catalog",
+      "name": "EarlyJobs Franchise Support and Resources",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Franchise Onboarding",
+            "description": "Application review, discussions, documentation and onboarding for approved franchise partners."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Recruitment Training",
+            "description": "Training in recruitment processes and related business operations, as included in the franchise programme."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Recruitment Operations Support",
+            "description": "Guidance on recruitment workflows and local hiring operations under the applicable franchise agreement."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Local Business Development Support",
+            "description": "Guidance to help franchise partners develop relationships with local employers and grow their recruitment business."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Marketing and Brand Resources",
+            "description": "Access to applicable brand and marketing resources, subject to the franchise agreement and programme terms."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "HowTo",
+      "@id": "https://www.earlyjobs.ai/franchise#application-process",
+      "name": "How to Start an EarlyJobs Recruitment Franchise",
+      "description": "The application and onboarding process for prospective EarlyJobs franchise partners.",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "name": "Submit Your Interest",
+          "text": "Complete the franchise application form to express interest in the opportunity."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "name": "Application Review and Discussion",
+          "text": "EarlyJobs reviews the application and discusses the opportunity and prospective partner's requirements."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "name": "Agreement and Documentation",
+          "text": "Review and complete the applicable franchise documentation and agreement."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 4,
+          "name": "Onboarding and Training",
+          "text": "Complete the onboarding and recruitment training included in the franchise programme."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 5,
+          "name": "Franchise Launch",
+          "text": "Prepare to launch local recruitment operations in accordance with the agreed plan."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 6,
+          "name": "Ongoing Support and Growth",
+          "text": "Use the applicable operational guidance and support to develop the local recruitment business."
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.earlyjobs.ai/franchise#faq",
+      "url": "https://www.earlyjobs.ai/franchise",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/franchise#webpage"
+      },
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Do I need HR experience to start an EarlyJobs franchise?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Prior HR experience is not required according to the EarlyJobs franchise page. The programme provides training covering recruitment, operations and sales processes."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the investment required to start an EarlyJobs franchise?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The investment depends on the applicable franchise fee, office or home-office setup, equipment and working capital. Prospective partners should confirm the current fee and total investment directly with EarlyJobs before making a decision."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I apply for an EarlyJobs recruitment franchise?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Submit the franchise interest form on the EarlyJobs website. The application is reviewed, followed by a discussion, documentation, onboarding and training for approved partners."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What support does EarlyJobs provide to franchise partners?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The franchise programme describes support for recruitment training, operations, launch and business development. The specific scope of support is subject to the applicable franchise agreement."
+          }
+        }
+      ],
+      "inLanguage": "en-IN"
     },
     {
       "@type": "BreadcrumbList",
@@ -31,68 +253,8 @@
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "Start a Recruitment Franchise with EarlyJobs",
+          "name": "Recruitment Franchise",
           "item": "https://www.earlyjobs.ai/franchise"
-        }
-      ]
-    },
-    {
-      "@type": "Service",
-      "@id": "https://www.earlyjobs.ai/franchise#service",
-      "name": "Recruitment franchise",
-      "description": "Explore a recruitment franchise with EarlyJobs. Investment, support, and commercial terms are confirmed in the applicable franchise agreement. Outcomes vary and are not guaranteed.",
-      "provider": {
-        "@id": "https://www.earlyjobs.ai/#organization"
-      },
-      "areaServed": {
-        "@type": "Country",
-        "name": "India"
-      },
-      "url": "https://www.earlyjobs.ai/franchise"
-    },
-    {
-      "@type": "FAQPage",
-      "@id": "https://www.earlyjobs.ai/franchise#faq",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Do I need HR experience?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No, prior HR experience is not required. We provide comprehensive training on recruitment, operations, and sales processes. Our step-by-step training program covers everything you need to know to run a successful EarlyJobs franchise."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How much can I earn?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Earnings are not guaranteed. Results depend on the business, location, effort, and market conditions. EarlyJobs does not promise a specific income."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What is the franchise fee?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Investment and commercial terms are set out in the applicable franchise agreement. Contact the EarlyJobs team for the current terms."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Do I need an office?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "A physical office space of 200-400 sq ft is preferred for Tier 1 cities to establish a professional brand presence. In Tier 2/3 cities, you can start with a home office setup and scale as your business grows."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What support is provided?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "We provide comprehensive support including technology platform access, job leads, training modules, marketing materials, and more."
-          }
         }
       ]
     }
