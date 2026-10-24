@@ -5,30 +5,77 @@
       "@type": "WebPage",
       "@id": "https://www.earlyjobs.ai/top-executive-recruitment-firm#webpage",
       "url": "https://www.earlyjobs.ai/top-executive-recruitment-firm",
-      "name": "Executive Recruitment | EarlyJobs",
-      "description": "Executive recruitment services from EarlyJobs for senior leadership roles.",
-      "isPartOf": { "@id": "https://www.earlyjobs.ai/#website" },
-      "about": { "@id": "https://www.earlyjobs.ai/top-executive-recruitment-firm#service" },
-      "breadcrumb": { "@id": "https://www.earlyjobs.ai/top-executive-recruitment-firm#breadcrumb" },
-      "dateModified": "2026-10-22"
+      "name": "Executive Recruitment Firm in India | EarlyJobs",
+      "description": "Explore executive recruitment services from EarlyJobs for CEO, COO, CFO, CTO and other senior leadership roles across industries in India.",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/top-executive-recruitment-firm#service"
+      },
+      "publisher": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/top-executive-recruitment-firm#breadcrumb"
+      },
+      "inLanguage": "en-IN"
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.earlyjobs.ai/top-executive-recruitment-firm#service",
+      "name": "Executive Recruitment Services",
+      "alternateName": [
+        "Executive Hiring Services",
+        "Leadership Recruitment",
+        "Senior Management Recruitment",
+        "C-Suite Recruitment"
+      ],
+      "serviceType": [
+        "Executive Recruitment",
+        "Leadership Recruitment",
+        "Senior Management Recruitment",
+        "Executive Candidate Sourcing",
+        "C-Suite Hiring"
+      ],
+      "url": "https://www.earlyjobs.ai/top-executive-recruitment-firm",
+      "description": "Recruitment services for businesses seeking senior leaders, including CEO, COO, CFO, CTO and other executive positions. Candidate sourcing, screening, evaluation and hiring coordination depend on the agreed recruitment engagement.",
+      "provider": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "India"
+      },
+      "audience": {
+        "@type": "BusinessAudience",
+        "audienceType": [
+          "Employers",
+          "Founders",
+          "Human Resources Leaders",
+          "Talent Acquisition Teams",
+          "Enterprise Hiring Teams"
+        ]
+      },
+      "category": "Executive recruitment and leadership hiring"
     },
     {
       "@type": "BreadcrumbList",
       "@id": "https://www.earlyjobs.ai/top-executive-recruitment-firm#breadcrumb",
       "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.earlyjobs.ai/" },
-        { "@type": "ListItem", "position": 2, "name": "Executive Recruitment", "item": "https://www.earlyjobs.ai/top-executive-recruitment-firm" }
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Executive Recruitment",
+          "item": "https://www.earlyjobs.ai/top-executive-recruitment-firm"
+        }
       ]
-    },
-    {
-      "@type": "Service",
-      "@id": "https://www.earlyjobs.ai/top-executive-recruitment-firm#service",
-      "name": "Executive recruitment",
-      "serviceType": "Executive recruitment",
-      "description": "Executive recruitment services from EarlyJobs for senior leadership roles.",
-      "provider": { "@id": "https://www.earlyjobs.ai/#organization" },
-      "areaServed": { "@type": "Country", "name": "India" },
-      "url": "https://www.earlyjobs.ai/top-executive-recruitment-firm"
     }
   ]
 }
