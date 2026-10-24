@@ -2,21 +2,210 @@
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "Organization",
+      "@id": "https://www.earlyjobs.ai/#organization",
+      "name": "EarlyJobs",
+      "url": "https://www.earlyjobs.ai/",
+      "description": "EarlyJobs is a recruiter-first hiring network connecting employers, recruiters and recruitment partners through human expertise, distributed recruiter networks and AI-assisted hiring workflows.",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "REPLACE_WITH_OFFICIAL_EARLYJOBS_LOGO_URL"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/company/earlyjobs/",
+        "https://www.facebook.com/earlyjobs.in"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.earlyjobs.ai/#website",
+      "url": "https://www.earlyjobs.ai/",
+      "name": "EarlyJobs",
+      "publisher": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "inLanguage": "en-IN"
+    },
+    {
       "@type": "WebPage",
       "@id": "https://www.earlyjobs.ai/offshore-capability-center-hiring#webpage",
       "url": "https://www.earlyjobs.ai/offshore-capability-center-hiring",
-      "name": "Offshore Capability Center Hiring | EarlyJobs",
-      "description": "Plan offshore capability center hiring with structured recruitment support, recruiter networks and AI-assisted workflows aligned with your operating model.",
+      "name": "Offshore Capability Center Hiring in India | EarlyJobs",
+      "description": "Build and scale offshore capability centers in India with recruiter-led hiring, dedicated recruiter pods, AI-assisted sourcing and structured recruitment operations from EarlyJobs.",
       "isPartOf": {
         "@id": "https://www.earlyjobs.ai/#website"
       },
       "about": {
+        "@id": "https://www.earlyjobs.ai/offshore-capability-center-hiring#service"
+      },
+      "mainEntity": {
+        "@id": "https://www.earlyjobs.ai/offshore-capability-center-hiring#service"
+      },
+      "publisher": {
         "@id": "https://www.earlyjobs.ai/#organization"
       },
       "breadcrumb": {
         "@id": "https://www.earlyjobs.ai/offshore-capability-center-hiring#breadcrumb"
       },
-      "dateModified": "2026-10-21"
+      "inLanguage": "en-IN"
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.earlyjobs.ai/offshore-capability-center-hiring#service",
+      "name": "Offshore Capability Center Hiring Services",
+      "alternateName": [
+        "Offshore Hiring Services in India",
+        "Global Capability Center Hiring",
+        "GCC Recruitment Services"
+      ],
+      "serviceType": [
+        "Offshore Capability Center Recruitment",
+        "Global Capability Center Hiring",
+        "Engineering Recruitment",
+        "Product and Technology Hiring",
+        "Leadership Recruitment",
+        "Finance and Shared Services Recruitment",
+        "Recruitment Operations",
+        "Multi-City Recruitment",
+        "Campus and Volume Hiring"
+      ],
+      "url": "https://www.earlyjobs.ai/offshore-capability-center-hiring",
+      "description": "EarlyJobs supports businesses establishing or expanding offshore capability centers through hiring strategy, talent mapping, dedicated recruiter pods, candidate sourcing and screening, interview coordination, offer management and recruitment analytics, depending on the agreed engagement.",
+      "provider": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "India"
+      },
+      "audience": {
+        "@type": "BusinessAudience",
+        "audienceType": [
+          "Global Capability Centers",
+          "Multinational Companies",
+          "Enterprise Hiring Teams",
+          "Global Employers Expanding into India",
+          "Chief Human Resources Officers",
+          "Talent Acquisition Leaders",
+          "GCC Directors",
+          "Engineering and Technology Leaders",
+          "Human Resources Leaders"
+        ]
+      },
+      "category": "Enterprise recruitment and offshore capability center hiring",
+      "availableChannel": {
+        "@type": "ServiceChannel",
+        "serviceUrl": "https://www.earlyjobs.ai/offshore-capability-center-hiring",
+        "serviceType": "Online business consultation and recruitment enquiries"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Offshore Capability Center Hiring Services",
+        "itemListElement": [
+          {
+            "@type": "OfferCatalog",
+            "name": "Technology and Engineering Hiring",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Engineering and Software Recruitment"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "AI, Machine Learning and Data Hiring"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Cloud, DevOps and Cybersecurity Recruitment"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Product and Technology Leadership Hiring"
+                }
+              }
+            ]
+          },
+          {
+            "@type": "OfferCatalog",
+            "name": "Business and Enterprise Hiring",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Finance and Shared Services Recruitment"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Leadership and Executive Recruitment"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Campus and Graduate Hiring"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "High-Volume and Multi-Location Recruitment"
+                }
+              }
+            ]
+          },
+          {
+            "@type": "OfferCatalog",
+            "name": "Recruitment Operations and Governance",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Dedicated Recruiter Pods"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Interview Coordination and Offer Management"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Recruitment Analytics and Hiring Dashboards"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Hiring Process Governance and Reporting"
+                }
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "@type": "BreadcrumbList",
@@ -33,98 +222,6 @@
           "position": 2,
           "name": "Offshore Capability Center Hiring",
           "item": "https://www.earlyjobs.ai/offshore-capability-center-hiring"
-        }
-      ]
-    },
-    {
-      "@type": "Service",
-      "@id": "https://www.earlyjobs.ai/offshore-capability-center-hiring#service",
-      "name": "Offshore capability center hiring",
-      "description": "Plan offshore capability center hiring with structured recruitment support, recruiter networks and AI-assisted workflows aligned with your operating model.",
-      "provider": {
-        "@id": "https://www.earlyjobs.ai/#organization"
-      },
-      "areaServed": {
-        "@type": "Country",
-        "name": "India"
-      },
-      "url": "https://www.earlyjobs.ai/offshore-capability-center-hiring"
-    },
-    {
-      "@type": "FAQPage",
-      "@id": "https://www.earlyjobs.ai/offshore-capability-center-hiring#faq",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "What is offshore capability center hiring?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "It is the structured hiring execution required to build and scale offshore capability centers across engineering, product, finance, shared services, and leadership teams."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How is it different from regular recruitment?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Offshore capability center hiring is recruitment execution for the roles in scope. EarlyJobs does not provide legal, tax, or incorporation advice."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How does EarlyJobs support offshore expansion?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "EarlyJobs operationalizes hiring with recruiter pods, AI-assisted workflows, governance, and nationwide execution support."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can you hire engineering teams?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. Engineering hiring is a core capability, including backend, frontend, cloud, DevOps, AI, ML, cybersecurity, and QA."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can you support multiple cities?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. We support offshore hiring across multiple Indian cities through a distributed recruiter network and centralized coordination."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Do you provide hiring analytics?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Reporting is included only when it is part of the agreed service. EarlyJobs does not claim a standard hiring dashboard on this page."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How quickly can hiring begin?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Hiring can begin quickly once discovery, hiring strategy, and recruiter deployment are aligned with your expansion plan."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can you support leadership hiring?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. We support leadership and specialized hiring alongside high-volume and business-critical offshore roles."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What industries do you specialize in?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "We support offshore hiring for technology, product, finance, operations, customer success, and shared services functions across sectors."
-          }
         }
       ]
     }
