@@ -6,17 +6,17 @@ import schema from "@/schema/investor-relations.jsonld.json";
 
 export const metadata: Metadata = pageMetadata({
   path: "/investor-relations",
-  title: "Investor Relations | EarlyJobs",
+  title: "Investor Relations | EarlyJobs Company Overview",
   description:
-    "Learn about EarlyJobs, its recruitment infrastructure model, technology-enabled hiring approach and business direction through approved company information.",
-  ogTitle: "Investor Relations | EarlyJobs",
+    "Explore EarlyJobs investor relations, company overview, recruiter network, hiring milestones, leadership team and angel investor community building a recruiter-first hiring network.",
+  ogTitle: "nvestor Relations | EarlyJobs Company Overview",
   ogDescription:
-    "EarlyJobs is building a recruitment ecosystem of human execution, a recruiter network, and AI-assisted hiring workflows.",
+    "Discover EarlyJobs' recruiter-first hiring network, business overview, hiring milestones, leadership team and angel investor community",
   image: "/images/logo.png",
-  imageAlt: "EarlyJobs logo",
-  twitterTitle: "Investor Relations | EarlyJobs",
+  imageAlt: "EarlyJobs investor relations and leadership overview",
+  twitterTitle: "nvestor Relations | EarlyJobs Company Overview",
   twitterDescription:
-    "EarlyJobs is building a recruitment ecosystem of human execution, a recruiter network, and AI-assisted hiring workflows.",
+    "Explore EarlyJobs' business overview, recruiter network, company milestones and leadership supporting its hiring ecosystem.",
   twitterCard: "summary",
 });
 
