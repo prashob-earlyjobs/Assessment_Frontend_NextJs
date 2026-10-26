@@ -7,17 +7,19 @@ import aboutJsonLd from "@/schema/about.jsonld.json";
 
 export const metadata = pageMetadata({
   path: "/about",
-  title: "About EarlyJobs | Recruiter-First Hiring Network, India",
+  title: "About EarlyJobs | Recruiter-First Hiring Network",
   description:
-    "EarlyJobs is a recruitment platform built around recruiter-led execution and AI-assisted hiring workflows.",
-  ogTitle: "About EarlyJobs | Building Better Hiring Through People and Technology",
+    "Learn about EarlyJobs, a recruiter-first hiring network connecting employers, recruiters and job seekers through human expertise, AI-assisted recruitment and distributed hiring execution.",
+  ogTitle: "About EarlyJobs | Building a Better Hiring Network",
   ogDescription:
-    "A recruitment platform that connects employers, recruiters, and job seekers from sourcing to hiring.",
-  image: "/og/about.jpg",
-  imageAlt: "EarlyJobs team and network statistics",
-  twitterTitle: "About EarlyJobs",
+    "Discover how EarlyJobs connects employers, recruiters and job seekers through a recruiter-first network, AI-assisted hiring workflows and a broader hiring ecosystem.",
+  image: "/images/logo.png",
+  imageAlt: "EarlyJobs recruiter-first hiring network connecting people and technology",
+  twitterTitle: "About EarlyJobs | Recruiter-First Hiring Network",
   twitterDescription:
-    "Recruiter-led hiring and AI-assisted workflows for employers, recruiters, and job seekers.",
+    "Discover EarlyJobs' mission to connect people, recruiters and employers through human expertise and AI-assisted hiring.",
+  twitterCard: "summary",
+    
 });
 
 export default async function AboutPage() {

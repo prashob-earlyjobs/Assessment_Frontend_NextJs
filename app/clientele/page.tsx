@@ -9,15 +9,15 @@ export const metadata: Metadata = pageMetadata({
   path: "/clientele",
   title: "Our Hiring Partners & Client Network | EarlyJobs",
   description:
-    "EarlyJobs brings recruitment expertise, a connected hiring network and intelligent technology together to help you hire across India, access global hiring support and build frontline workforces through GigKaro.",
-  ogTitle: "Our Hiring Partners & Client Network",
+    "Explore companies that work with EarlyJobs for recruitment and hiring support. Discover our hiring network, corporate recruitment services, GCC hiring solutions and frontline workforce capabilities.",
+  ogTitle: "Our Hiring Partners & Client Network | EarlyJobs",
   ogDescription:
-    "Recruitment expertise, a connected hiring network, and frontline hiring through GigKaro.",
+    "See the companies and hiring solutions connected with EarlyJobs. Explore recruiter-led corporate hiring, international recruitment support, GCC talent acquisition and GigKaro frontline hiring.",
   image: "/images/logo.png",
   imageAlt: "EarlyJobs logo",
-  twitterTitle: "Our Hiring Partners & Client Network",
+  twitterTitle: "Our Hiring Partners & Client Network | EarlyJobs",
   twitterDescription:
-    "Recruitment expertise, a connected hiring network, and frontline hiring through GigKaro.",
+    "Explore EarlyJobs' hiring network, recruitment services and solutions for businesses.",
   twitterCard: "summary",
 });
 

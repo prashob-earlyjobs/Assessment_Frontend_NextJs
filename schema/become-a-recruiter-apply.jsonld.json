@@ -1,0 +1,62 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.earlyjobs.ai/become-a-recruiter/apply#webpage",
+      "url": "https://www.earlyjobs.ai/become-a-recruiter/apply",
+      "name": "Freelance Recruiter Application Form | EarlyJobs",
+      "description": "Apply to join the EarlyJobs recruiter network. Submit your professional background, recruitment experience and hiring interests for review and onboarding.",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/become-a-recruiter/apply#breadcrumb"
+      },
+      "mainEntity": {
+        "@id": "https://www.earlyjobs.ai/become-a-recruiter/apply#application"
+      },
+      "inLanguage": "en-IN"
+    },
+    {
+      "@type": "WebApplication",
+      "@id": "https://www.earlyjobs.ai/become-a-recruiter/apply#application",
+      "name": "EarlyJobs Recruiter Application",
+      "url": "https://www.earlyjobs.ai/become-a-recruiter/apply",
+      "description": "An online application form for people interested in joining the EarlyJobs recruiter network.",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Any",
+      "provider": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "inLanguage": "en-IN"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/become-a-recruiter/apply#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Become a Recruiter",
+          "item": "https://www.earlyjobs.ai/become-a-recruiter"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Apply",
+          "item": "https://www.earlyjobs.ai/become-a-recruiter/apply"
+        }
+      ]
+    }
+  ]
+}
