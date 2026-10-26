@@ -12,7 +12,27 @@ const PrivacyPolicy = () => (
     <div className="space-y-8 text-gray-700">
       <section>
         <p>
-          At <span className="font-semibold text-orange-500">EarlyJobs</span>, we value your privacy and are committed to protecting your personal information. This Privacy Policy describes how we collect, use, disclose, and safeguard your information when you visit our website or use our services.
+          At <span className="font-semibold text-orange-500">EarlyJobs</span>, we value your privacy and are committed to protecting your personal information. This Privacy Policy describes how we collect, use, disclose, and safeguard your information when you visit our website, use the EarlyJobs mobile application on Google Play, or use our services.
+        </p>
+      </section>
+      <section>
+        <h2 className="text-xl font-semibold mb-2 text-gray-800">Who this policy covers</h2>
+        <p>
+          This Privacy Policy applies to the <span className="font-semibold">EarlyJobs</span> website at{" "}
+          <a href="https://www.earlyjobs.ai" className="text-orange-600 underline">
+            https://www.earlyjobs.ai
+          </a>{" "}
+          and to the <span className="font-semibold">EarlyJobs</span> mobile app listed on Google Play (package name{" "}
+          <span className="font-medium text-gray-800">com.victaman.earlyjobs</span>).
+        </p>
+        <p className="mt-3">
+          EarlyJobs is operated by <span className="font-semibold">Victa EarlyJobs Technologies Private Limited</span>{" "}
+          (CIN U78300KA2025PTC198732). That company is the legal entity responsible for this app, this website, and
+          this Privacy Policy.
+        </p>
+        <p className="mt-3">
+          Registered office: 2nd Floor, Regent Insignia, Obeya Tulip, Mahakavi Vemana Rd, KHB Block, 4th Block,
+          Koramangala, Bengaluru, Karnataka 560095, India.
         </p>
       </section>
       <section>
@@ -83,7 +103,20 @@ const PrivacyPolicy = () => (
       <section>
         <h2 className="text-xl font-semibold mb-2 text-gray-800">9. Contact Us</h2>
         <p>
-          If you have any questions, concerns, or requests regarding this Privacy Policy, please contact us at <a href="mailto:support@earlyjobs.ai" className="text-orange-600 underline">support@earlyjobs.ai</a>.
+          If you have any questions, concerns, or requests regarding this Privacy Policy, contact Victa EarlyJobs
+          Technologies Private Limited at{" "}
+          <a href="mailto:info@earlyjobs.in" className="text-orange-600 underline">
+            info@earlyjobs.in
+          </a>
+          ,{" "}
+          <a href="mailto:support@earlyjobs.ai" className="text-orange-600 underline">
+            support@earlyjobs.ai
+          </a>
+          , or{" "}
+          <a href="tel:+918217527926" className="text-orange-600 underline">
+            +91 82175 27926
+          </a>
+          .
         </p>
       </section>
     </div>
