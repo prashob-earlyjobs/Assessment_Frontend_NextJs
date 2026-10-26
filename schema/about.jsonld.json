@@ -2,86 +2,105 @@
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "Organization",
+      "@id": "https://www.earlyjobs.ai/#organization",
+      "name": "EarlyJobs",
+      "legalName": "Victa EarlyJobs Technologies Private Limited",
+      "url": "https://www.earlyjobs.ai/",
+      "description": "EarlyJobs is a recruiter-first hiring network connecting employers, recruiters and job seekers through recruiter-led hiring and AI-assisted recruitment workflows.",
+      "email": "info@earlyjobs.in",
+      "telephone": "+91-8217527926",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "2nd Floor, Regent Insignia, Obeya Tulip, Mahakavi Vemana Road, KHB Block, 4th Block, Koramangala",
+        "addressLocality": "Bengaluru",
+        "addressRegion": "Karnataka",
+        "postalCode": "560095",
+        "addressCountry": "IN"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/company/earlyjobs/"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.earlyjobs.ai/#website",
+      "url": "https://www.earlyjobs.ai/",
+      "name": "EarlyJobs",
+      "publisher": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "inLanguage": "en-IN"
+    },
+    {
       "@type": "AboutPage",
       "@id": "https://www.earlyjobs.ai/about#webpage",
       "url": "https://www.earlyjobs.ai/about",
-      "name": "About EarlyJobs | Recruiter-First Hiring Network, India",
+      "name": "About EarlyJobs | Recruiter-First Hiring Network",
+      "description": "Learn about EarlyJobs, its recruiter-first hiring model, mission, vision and ecosystem connecting employers, recruiters and job seekers through human expertise and AI-assisted recruitment.",
       "isPartOf": {
         "@id": "https://www.earlyjobs.ai/#website"
       },
       "about": {
         "@id": "https://www.earlyjobs.ai/#organization"
       },
+      "mainEntity": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
       "breadcrumb": {
         "@id": "https://www.earlyjobs.ai/about#breadcrumb"
       },
-      "dateModified": "2026-10-21"
+      "inLanguage": "en-IN"
     },
     {
-      "@type": "BreadcrumbList",
+      "@type": "ItemList",
+      "@id": "https://www.earlyjobs.ai/about#hiring-ecosystem",
+      "name": "The EarlyJobs Hiring Ecosystem",
+      "description": "Different hiring capabilities supporting recruitment execution, recruiting technology and frontline workforce hiring.",
       "itemListElement": [
         {
           "@type": "ListItem",
           "position": 1,
-          "name": "Home",
-          "item": "https://www.earlyjobs.ai/"
+          "item": {
+            "@type": "Organization",
+            "name": "EarlyJobs",
+            "url": "https://www.earlyjobs.ai/",
+            "description": "Recruiter-led hiring and a recruitment network connecting employers, recruiters and job seekers."
+          }
         },
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "About",
-          "item": "https://www.earlyjobs.ai/about"
-        }
-      ],
-      "@id": "https://www.earlyjobs.ai/about#breadcrumb"
-    },
-    {
-      "@type": "Organization",
-      "@id": "https://www.earlyjobs.ai/#organization",
-      "name": "EarlyJobs",
-      "legalName": "Victa EarlyJobs Technologies Private Limited",
-      "additionalProperty": [
-        {
-          "@type": "PropertyValue",
-          "name": "Recruiters in network",
-          "value": "3,449+"
+          "item": {
+            "@type": "Brand",
+            "name": "Huntlo AI",
+            "url": "https://www.huntlo.ai/",
+            "description": "AI recruiting infrastructure supporting sourcing, candidate outreach and recruitment workflows."
+          }
         },
         {
-          "@type": "PropertyValue",
-          "name": "Companies",
-          "value": "266+"
-        },
-        {
-          "@type": "PropertyValue",
-          "name": "Interviews facilitated",
-          "value": "72,000+"
-        },
-        {
-          "@type": "PropertyValue",
-          "name": "Successful joinings",
-          "value": "5,500+"
-        },
-        {
-          "@type": "PropertyValue",
-          "name": "College partners",
-          "value": "430+"
-        },
-        {
-          "@type": "PropertyValue",
-          "name": "Hiring partners",
-          "value": "20+"
+          "@type": "ListItem",
+          "position": 3,
+          "item": {
+            "@type": "Brand",
+            "name": "GigKaro",
+            "url": "https://gigkaro.in/",
+            "description": "A specialised hiring initiative focused on frontline and gig-worker recruitment."
+          }
         }
       ]
     },
     {
       "@type": "FAQPage",
+      "@id": "https://www.earlyjobs.ai/about#faq",
+      "url": "https://www.earlyjobs.ai/about",
       "mainEntity": [
         {
           "@type": "Question",
           "name": "What is EarlyJobs?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "EarlyJobs is a recruitment platform built around recruiter-led execution and AI-assisted hiring workflows. We connect employers, recruiters, and job seekers to support the recruitment process from candidate sourcing to hiring."
+            "text": "EarlyJobs is a recruiter-first hiring network connecting employers, recruiters and job seekers through recruiter-led execution and AI-assisted hiring workflows."
           }
         },
         {
@@ -97,7 +116,7 @@
           "name": "How are EarlyJobs, Huntlo AI and GigKaro related?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Together, these businesses address different parts of the hiring landscape through recruitment execution and technology."
+            "text": "EarlyJobs provides the recruiter-first hiring network, Huntlo AI provides recruiting technology, and GigKaro focuses on frontline and gig-worker hiring."
           }
         },
         {
@@ -105,7 +124,7 @@
           "name": "Does EarlyJobs hire outside major cities?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes. The network is designed to reach talent across locations, including Tier 2 and Tier 3 cities, through recruiters who understand their local markets."
+            "text": "Yes. EarlyJobs' distributed recruiter network is designed to reach talent across locations, including Tier 2 and Tier 3 cities."
           }
         },
         {
@@ -113,8 +132,26 @@
           "name": "How big is the EarlyJobs network?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "As of October 2026, EarlyJobs reports 3,449+ recruiters, 266+ companies, 72,000+ interviews, 5,500+ successful joinings, 430+ college partners and 20+ hiring partners."
+            "text": "EarlyJobs reports more than 3,000 recruiters, 200 companies, 70,000 interviews, 5,000 joinings, 400 college partners and 20 hiring partners. These figures should be read with the update date shown on the page."
           }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/about#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "About EarlyJobs",
+          "item": "https://www.earlyjobs.ai/about"
         }
       ]
     }

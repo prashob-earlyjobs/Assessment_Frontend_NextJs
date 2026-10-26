@@ -2,63 +2,130 @@
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "Organization",
+      "@id": "https://www.earlyjobs.ai/#organization",
+      "name": "EarlyJobs",
+      "legalName": "Victa EarlyJobs Technologies Private Limited",
+      "url": "https://www.earlyjobs.ai/",
+      "description": "EarlyJobs is a recruiter-first hiring network connecting employers, recruiters and job seekers through recruiter-led hiring and AI-assisted recruitment workflows.",
+      "email": "info@earlyjobs.in",
+      "telephone": "+91-82175-27926",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "2nd Floor, Regent Insignia, Obeya Tulip, Mahakavi Vemana Road, KHB Block, 4th Block, Koramangala",
+        "addressLocality": "Bengaluru",
+        "addressRegion": "Karnataka",
+        "postalCode": "560095",
+        "addressCountry": "IN"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/company/earlyjobs/"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.earlyjobs.ai/#website",
+      "url": "https://www.earlyjobs.ai/",
+      "name": "EarlyJobs",
+      "publisher": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "inLanguage": "en-IN"
+    },
+    {
       "@type": "WebPage",
       "@id": "https://www.earlyjobs.ai/become-a-recruiter#webpage",
       "url": "https://www.earlyjobs.ai/become-a-recruiter",
-      "name": "Freelance Recruiter in India | Work From Home | EarlyJobs",
+      "name": "Become a Freelance Recruiter in India | EarlyJobs",
+      "description": "Explore freelance recruitment opportunities with EarlyJobs, understand the application and onboarding process, and learn how recruiter participation and commercial terms work.",
       "isPartOf": {
         "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "mainEntity": {
+        "@id": "https://www.earlyjobs.ai/become-a-recruiter#recruiter-program"
       },
       "breadcrumb": {
         "@id": "https://www.earlyjobs.ai/become-a-recruiter#breadcrumb"
       },
-      "primaryImageOfPage": {
-        "@type": "ImageObject",
-        "url": "https://www.earlyjobs.ai/freelance-recruiters/hero-culture.jpg"
-      }
-    },
-    {
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://www.earlyjobs.ai/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "For Recruiters",
-          "item": "https://www.earlyjobs.ai/recruiters"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": "Become a Freelance Recruiter",
-          "item": "https://www.earlyjobs.ai/become-a-recruiter"
-        }
-      ],
-      "@id": "https://www.earlyjobs.ai/become-a-recruiter#breadcrumb"
+      "inLanguage": "en-IN"
     },
     {
       "@type": "Service",
-      "name": "Freelance recruiter programme",
-      "serviceType": "Freelance recruitment partner programme",
+      "@id": "https://www.earlyjobs.ai/become-a-recruiter#recruiter-program",
+      "name": "Freelance Recruiter Programme",
+      "serviceType": "Freelance recruitment opportunities and recruiter network participation",
+      "url": "https://www.earlyjobs.ai/become-a-recruiter",
+      "description": "An opportunity to apply to participate in EarlyJobs' recruiter network, explore suitable hiring requirements and undertake recruitment activities under applicable onboarding and mandate terms. Participation, mandate availability, placements and earnings are not guaranteed.",
       "provider": {
         "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "audience": {
+        "@type": "Audience",
+        "audienceType": "Experienced recruiters, HR professionals, independent recruitment consultants, aspiring recruiters and women returning to work"
       },
       "areaServed": {
         "@type": "Country",
         "name": "India"
       },
-      "audience": {
-        "@type": "Audience",
-        "audienceType": "Recruiters, HR professionals and career-break returnees"
-      }
+      "availableChannel": {
+        "@type": "ServiceChannel",
+        "serviceUrl": "https://www.earlyjobs.ai/become-a-recruiter",
+        "availableLanguage": [
+          "English"
+        ]
+      },
+      "category": [
+        "Freelance recruitment",
+        "Remote recruitment opportunities",
+        "Recruiter network",
+        "Recruitment career development"
+      ]
+    },
+    {
+      "@type": "HowTo",
+      "@id": "https://www.earlyjobs.ai/become-a-recruiter#application-process",
+      "name": "How to Apply to Become an EarlyJobs Recruiter",
+      "description": "The application process for people interested in participating in the EarlyJobs recruiter network.",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "name": "Apply to join",
+          "text": "Submit your details through the EarlyJobs recruiter application form."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "name": "Application review",
+          "text": "Your application may be reviewed against the applicable onboarding requirements."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "name": "Complete onboarding",
+          "text": "Follow the onboarding process and review the applicable working arrangements and programme terms."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 4,
+          "name": "Explore relevant hiring requirements",
+          "text": "Review suitable hiring mandates made available to you, subject to availability and programme terms."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 5,
+          "name": "Participate in recruitment",
+          "text": "Undertake agreed recruitment activities for relevant requirements under the applicable mandate terms."
+        }
+      ]
     },
     {
       "@type": "FAQPage",
+      "@id": "https://www.earlyjobs.ai/become-a-recruiter#faq",
+      "url": "https://www.earlyjobs.ai/become-a-recruiter",
       "mainEntity": [
         {
           "@type": "Question",
@@ -70,10 +137,10 @@
         },
         {
           "@type": "Question",
-          "name": "Can I work from home?",
+          "name": "Can I work from home as an EarlyJobs recruiter?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The model is designed to offer flexibility in where you work. Specific requirements, communication expectations and deadlines depend on the mandate and programme terms."
+            "text": "The recruiter programme is designed to offer flexibility in where you work. Specific requirements, communication expectations and deadlines depend on the mandate and programme terms."
           }
         },
         {
@@ -81,7 +148,7 @@
           "name": "Can women returning after a career break apply?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes. Women looking to return to recruitment or explore flexible professional opportunities are welcome to apply, subject to the programme's onboarding and role requirements."
+            "text": "Yes. Women looking to return to recruitment or explore flexible professional opportunities can apply, subject to the programme's onboarding and role requirements."
           }
         },
         {
@@ -89,15 +156,15 @@
           "name": "Do I need previous recruitment experience?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Relevant recruitment or HR experience can be helpful. Applicants without prior experience should confirm the current eligibility criteria and whether an appropriate training or entry-level pathway is available."
+            "text": "Relevant recruitment or HR experience can help establish suitability for particular hiring requirements. Applicants without prior experience should check the current eligibility criteria and whether a suitable entry-level pathway is available."
           }
         },
         {
           "@type": "Question",
-          "name": "How do freelance recruiters earn?",
+          "name": "How do freelance recruiters earn with EarlyJobs?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Commercial terms are governed by the applicable recruiter programme or mandate agreement. Payment arrangements are subject to the applicable commercial terms."
+            "text": "Commercial terms and payment arrangements are governed by the applicable recruiter programme or mandate agreement. Placements and earnings are not guaranteed."
           }
         },
         {
@@ -113,16 +180,34 @@
           "name": "Can I choose my working hours?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Freelance recruitment offers greater flexibility than many traditional office roles, but recruiters must still meet agreed deadlines, candidate communication expectations and hiring timelines."
+            "text": "Freelance recruitment offers flexibility, but recruiters are expected to meet agreed deadlines, candidate communication expectations and hiring timelines."
           }
         },
         {
           "@type": "Question",
-          "name": "How do I get started?",
+          "name": "How do I get started as an EarlyJobs recruiter?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Complete the application form. The team can review your details and share the relevant onboarding process and next steps."
+            "text": "Complete the recruiter application form. The EarlyJobs team can review your details and share the relevant onboarding process and next steps."
           }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/become-a-recruiter#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Become a Recruiter",
+          "item": "https://www.earlyjobs.ai/become-a-recruiter"
         }
       ]
     }

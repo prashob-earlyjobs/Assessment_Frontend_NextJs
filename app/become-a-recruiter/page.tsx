@@ -6,17 +6,18 @@ import recruiterJsonLd from "@/schema/become-a-recruiter.jsonld.json";
 
 export const metadata = pageMetadata({
   path: "/become-a-recruiter",
-  title: "Freelance Recruiter in India | Work From Home | EarlyJobs",
+  title: "Become a Freelance Recruiter in India | EarlyJobs",
   description:
-    "Explore the EarlyJobs recruiter programme, understand the onboarding process, and apply to participate in relevant hiring requirements.",
-  ogTitle: "Build Your Recruitment Journey with EarlyJobs",
+    "Become a freelance recruiter with EarlyJobs. Explore flexible recruitment opportunities, hiring mandates, recruiter support and performance-based earnings from successful placements.",
+  ogTitle: "Become a Freelance Recruiter in India | EarlyJobs",
   ogDescription:
-    "Apply to participate in relevant hiring requirements. Acceptance, mandates, and income are not guaranteed.",
-  image: "/og/become-a-recruiter.jpg",
+    "Build your recruitment career with EarlyJobs. Explore flexible freelance recruiting opportunities, available hiring mandates and performance-based commissions under applicable programme terms.",
+  image: "/images/logo.png",
   imageAlt: "Freelance recruiters working together on EarlyJobs",
   twitterTitle: "Become a Freelance Recruiter | EarlyJobs",
   twitterDescription:
-    "Explore the recruiter programme and submit an application. Commercial terms follow the applicable agreement.",
+    "Explore flexible freelance recruitment opportunities with EarlyJobs and earn performance-based commissions on eligible placements.",
+  twitterCard: "summary",
 });
 
 export default async function BecomeARecruiterPage() {

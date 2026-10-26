@@ -6,17 +6,17 @@ import schema from "@/schema/contact-us.jsonld.json";
 
 export const metadata: Metadata = pageMetadata({
   path: "/contact-us",
-  title: "Contact EarlyJobs | Hiring & Recruitment Partnerships",
+  title: "Contact EarlyJobs | Hiring & Recruitment Enquiries",
   description:
-    "Contact EarlyJobs to discuss hiring requirements, recruitment partnerships, or general enquiries. Share the role, location, and timeline, and the team will review the enquiry.",
-  ogTitle: "Contact EarlyJobs | Hiring & Recruitment Partnerships",
+    "Contact EarlyJobs for recruitment services, employer hiring requirements, recruiter partnerships and general enquiries. Reach our team by phone, email or contact form.",
+  ogTitle: "Contact EarlyJobs | Hiring & Recruitment Enquiries",
   ogDescription:
-    "Discuss hiring requirements, recruitment partnerships, or general enquiries with EarlyJobs.",
+    "Connect with EarlyJobs for hiring support, recruitment services, recruiter and agency partnerships, and other business enquiries.",
   image: "/images/logo.png",
   imageAlt: "EarlyJobs logo",
-  twitterTitle: "Contact EarlyJobs | Hiring & Recruitment Partnerships",
+  twitterTitle: "Contact EarlyJobs | Hiring & Recruitment Enquiries",
   twitterDescription:
-    "Discuss hiring requirements, recruitment partnerships, or general enquiries with EarlyJobs.",
+    "Contact EarlyJobs for recruitment, hiring, partnerships and general enquiries.",
   twitterCard: "summary",
 });
 

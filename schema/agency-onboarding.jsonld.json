@@ -1,0 +1,71 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://www.earlyjobs.ai/#organization",
+      "name": "EarlyJobs",
+      "legalName": "Victa EarlyJobs Technologies Private Limited",
+      "url": "https://www.earlyjobs.ai/",
+      "description": "EarlyJobs connects employers, recruiters and job seekers through a recruiter-first hiring network and AI-assisted recruitment workflows.",
+      "email": "info@earlyjobs.in",
+      "telephone": "+91-8217527926",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "2nd Floor, Regent Insignia, Obeya Tulip, Mahakavi Vemana Road, KHB Block, 4th Block, Koramangala",
+        "addressLocality": "Bengaluru",
+        "addressRegion": "Karnataka",
+        "postalCode": "560095",
+        "addressCountry": "IN"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/company/earlyjobs/"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.earlyjobs.ai/#website",
+      "url": "https://www.earlyjobs.ai/",
+      "name": "EarlyJobs",
+      "publisher": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "inLanguage": "en-IN"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.earlyjobs.ai/agency-onboarding#webpage",
+      "url": "https://www.earlyjobs.ai/agency-onboarding",
+      "name": "Recruitment Agency Onboarding Form | EarlyJobs",
+      "description": "Complete your recruitment agency onboarding with EarlyJobs by submitting agency details, owner information, client references, recruitment specialisations and required business information for review.",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/agency-onboarding#breadcrumb"
+      },
+      "inLanguage": "en-IN"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/agency-onboarding#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Agency Onboarding",
+          "item": "https://www.earlyjobs.ai/agency-onboarding"
+        }
+      ]
+    }
+  ]
+}
