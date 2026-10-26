@@ -2,33 +2,211 @@
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "WebPage",
-      "@id": "https://www.earlyjobs.ai/sales-marketing-services#webpage",
-      "url": "https://www.earlyjobs.ai/sales-marketing-services",
-      "name": "Sales and Marketing Recruitment | EarlyJobs",
-      "description": "Sales and marketing recruitment services from EarlyJobs.",
-      "isPartOf": { "@id": "https://www.earlyjobs.ai/#website" },
-      "about": { "@id": "https://www.earlyjobs.ai/sales-marketing-services#service" },
-      "breadcrumb": { "@id": "https://www.earlyjobs.ai/sales-marketing-services#breadcrumb" },
-      "dateModified": "2026-10-22"
-    },
-    {
-      "@type": "BreadcrumbList",
-      "@id": "https://www.earlyjobs.ai/sales-marketing-services#breadcrumb",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.earlyjobs.ai/" },
-        { "@type": "ListItem", "position": 2, "name": "Sales and Marketing Recruitment", "item": "https://www.earlyjobs.ai/sales-marketing-services" }
+      "@type": "Organization",
+      "@id": "https://www.earlyjobs.ai/#organization",
+      "name": "EarlyJobs",
+      "legalName": "Victa EarlyJobs Technologies Private Limited",
+      "url": "https://www.earlyjobs.ai/",
+      "description": "EarlyJobs connects employers, recruiters and job seekers through recruiter-led hiring and AI-assisted recruitment workflows.",
+      "email": "info@earlyjobs.in",
+      "telephone": "+91-82175-27926",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "2nd Floor, Regent Insignia, Obeya Tulip, Mahakavi Vemana Road, KHB Block, 4th Block, Koramangala",
+        "addressLocality": "Bengaluru",
+        "addressRegion": "Karnataka",
+        "postalCode": "560095",
+        "addressCountry": "IN"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/company/earlyjobs/"
       ]
     },
     {
+      "@type": "WebSite",
+      "@id": "https://www.earlyjobs.ai/#website",
+      "url": "https://www.earlyjobs.ai/",
+      "name": "EarlyJobs",
+      "publisher": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "inLanguage": "en-IN"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.earlyjobs.ai/sales-marketing-recruitment#webpage",
+      "url": "https://www.earlyjobs.ai/sales-marketing-recruitment",
+      "name": "Sales & Marketing Recruitment Services in India | EarlyJobs",
+      "description": "Recruitment services for sales, business development, marketing and sales and marketing leadership roles, supported by recruiter-led sourcing and candidate screening.",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "mainEntity": {
+        "@id": "https://www.earlyjobs.ai/sales-marketing-recruitment#service"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/sales-marketing-recruitment#breadcrumb"
+      },
+      "inLanguage": "en-IN"
+    },
+    {
       "@type": "Service",
-      "@id": "https://www.earlyjobs.ai/sales-marketing-services#service",
-      "name": "Sales and marketing recruitment",
-      "serviceType": "Sales and marketing recruitment",
-      "description": "Sales and marketing recruitment services from EarlyJobs.",
-      "provider": { "@id": "https://www.earlyjobs.ai/#organization" },
-      "areaServed": { "@type": "Country", "name": "India" },
-      "url": "https://www.earlyjobs.ai/sales-marketing-services"
+      "@id": "https://www.earlyjobs.ai/sales-marketing-recruitment#service",
+      "name": "Sales & Marketing Recruitment Services",
+      "serviceType": [
+        "Sales recruitment",
+        "Marketing recruitment",
+        "Business development recruitment",
+        "Sales leadership recruitment",
+        "Marketing executive search"
+      ],
+      "url": "https://www.earlyjobs.ai/sales-marketing-recruitment",
+      "description": "Recruiter-led sourcing, candidate screening and hiring support for organizations recruiting sales, business development, marketing and related leadership professionals.",
+      "provider": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "India"
+      },
+      "audience": {
+        "@type": "BusinessAudience",
+        "audienceType": "Employers, startups, small and medium-sized businesses, and enterprises hiring sales and marketing professionals"
+      },
+      "availableChannel": {
+        "@type": "ServiceChannel",
+        "serviceUrl": "https://www.earlyjobs.ai/contact-us",
+        "servicePhone": {
+          "@type": "ContactPoint",
+          "telephone": "+91-82175-27926",
+          "contactType": "sales enquiries",
+          "email": "info@earlyjobs.in",
+          "areaServed": "IN",
+          "availableLanguage": [
+            "English"
+          ]
+        }
+      },
+      "category": [
+        "Sales executive recruitment",
+        "Business development hiring",
+        "Account management recruitment",
+        "Digital marketing recruitment",
+        "Marketing management recruitment",
+        "Sales management recruitment",
+        "Sales and marketing executive search"
+      ]
+    },
+    {
+      "@type": "ItemList",
+      "@id": "https://www.earlyjobs.ai/sales-marketing-recruitment#roles",
+      "name": "Sales and Marketing Roles",
+      "itemListOrder": "https://schema.org/ItemListUnordered",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Sales Executives and Sales Representatives"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Business Development Executives and Managers"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Account Managers"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "Digital Marketing Specialists"
+        },
+        {
+          "@type": "ListItem",
+          "position": 5,
+          "name": "Marketing Managers"
+        },
+        {
+          "@type": "ListItem",
+          "position": 6,
+          "name": "Sales Managers and Directors"
+        },
+        {
+          "@type": "ListItem",
+          "position": 7,
+          "name": "Sales and Marketing Leadership"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.earlyjobs.ai/sales-marketing-recruitment#faq",
+      "url": "https://www.earlyjobs.ai/sales-marketing-recruitment",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What sales and marketing roles can EarlyJobs help recruit?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EarlyJobs supports recruitment for sales representatives, sales executives, account managers, business development professionals, digital marketing specialists, marketing managers and sales and marketing leadership roles, depending on the hiring requirement."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does EarlyJobs source sales and marketing candidates?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EarlyJobs uses recruiter-led sourcing through professional networks and relevant candidate search channels. The sourcing approach is tailored to the role requirements, experience level and employer's hiring needs."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can EarlyJobs recruit sales and marketing leaders?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EarlyJobs can support executive search for eligible sales and marketing leadership requirements, subject to the role scope and agreed recruitment engagement."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How can an employer start working with EarlyJobs?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Employers can contact EarlyJobs to discuss their open positions, role requirements, experience expectations and hiring timelines. The team can then discuss a suitable recruitment approach."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do candidates pay EarlyJobs recruitment fees?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EarlyJobs states that candidates do not pay fees to use its recruitment services. Recruitment fees are covered by employers under the applicable commercial arrangements."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/sales-marketing-recruitment#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Sales & Marketing Recruitment",
+          "item": "https://www.earlyjobs.ai/sales-marketing-recruitment"
+        }
+      ]
     }
   ]
 }

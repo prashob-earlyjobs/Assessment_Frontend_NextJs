@@ -3,15 +3,15 @@ import { pageMetadata } from "@/lib/page-metadata";
 
 export const metadata = pageMetadata({
   path: "/agency-onboarding",
-  title: "Agency Onboarding Form | EarlyJobs",
+  title: "Recruitment Agency Onboarding Form | EarlyJobs",
   description:
-    "Complete your agency onboarding with EarlyJobs. For invited recruitment agencies and consultancies only.",
-  ogTitle: "Agency Onboarding Form | EarlyJobs",
-  ogDescription: "For invited recruitment agencies and consultancies only.",
-  image: "/og/agency-onboarding.jpg",
-  imageAlt: "EarlyJobs agency onboarding",
-  twitterTitle: "Agency Onboarding Form | EarlyJobs",
-  twitterDescription: "For invited recruitment agencies only.",
+    "Complete your recruitment agency onboarding with EarlyJobs. Submit your agency details, recruitment specialisations, client references and required business information for review.",
+  ogTitle: "Recruitment Agency Onboarding | EarlyJobs",
+  ogDescription: "Register your recruitment agency with EarlyJobs. Provide your business details, hiring expertise and client references for onboarding review.",
+  image: "/images/logo.png",
+  imageAlt: "Recruitment agency onboarding with EarlyJobs",
+  twitterTitle: "Recruitment Agency Onboarding | EarlyJobs",
+  twitterDescription: "Submit your recruitment agency information and specialisations for EarlyJobs onboarding review.",
   twitterCard: "summary",
   index: false,
   follow: true,
