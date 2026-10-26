@@ -38,24 +38,6 @@ export default async function AboutPage() {
 
   const schema = structuredClone(aboutJsonLd);
   for (const node of schema["@graph"]) {
-    if (node["@type"] === "Organization" && Array.isArray(node.additionalProperty)) {
-      if (!stats) {
-        delete node.additionalProperty;
-      } else {
-        const values: Record<string, string> = {
-          "Recruiters in network": stats.recruiters,
-          Companies: stats.companies,
-          "Interviews facilitated": stats.interviews,
-          "Successful joinings": stats.joinings,
-          "College partners": stats.collegePartners,
-          "Hiring partners": stats.hiringPartners,
-        };
-        for (const prop of node.additionalProperty) {
-          const next = values[prop.name];
-          if (next) prop.value = next;
-        }
-      }
-    }
     if (node["@type"] === "FAQPage" && Array.isArray(node.mainEntity)) {
       node.mainEntity = node.mainEntity.flatMap((question) => {
         if (question.name !== "How big is the EarlyJobs network?") return [question];
