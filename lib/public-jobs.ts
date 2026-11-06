@@ -442,8 +442,37 @@ export async function getPublishedJobs(page = 1, filters?: JobQuery): Promise<Pu
   };
 }
 
+/** The public list does not include isActive. Closed jobs are noindex, so confirm each one. */
+async function publishedJobIsClosed(jobId: string): Promise<boolean> {
+  try {
+    const response = await fetch(`${JOBS_ENDPOINT}/${jobId}`, {
+      headers: { Accept: "*/*" },
+      next: { revalidate: 3600 },
+    });
+    if (!response.ok) return false;
+    const body = (await response.json()) as { data?: { isActive?: boolean } };
+    return body.data?.isActive === false;
+  } catch {
+    return false;
+  }
+}
+
+async function mapPool<T, R>(items: T[], limit: number, worker: (item: T) => Promise<R>) {
+  const results = new Array<R>(items.length);
+  let cursor = 0;
+  async function run() {
+    while (cursor < items.length) {
+      const index = cursor;
+      cursor += 1;
+      results[index] = await worker(items[index]);
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, () => run()));
+  return results;
+}
+
 export async function listPublishedJobPaths(): Promise<{ path: string; lastModified?: Date }[]> {
-  const paths: { path: string; lastModified?: Date }[] = [];
+  const paths: { path: string; lastModified?: Date; jobId: string }[] = [];
   try {
     let page = 1;
     let totalPages = 1;
@@ -466,6 +495,7 @@ export async function listPublishedJobPaths(): Promise<{ path: string; lastModif
         if (!job.jobId || !job.title) continue;
         const lastModified = job.createdAt ? new Date(job.createdAt) : undefined;
         paths.push({
+          jobId: job.jobId,
           path: jobHref({
             title: job.title,
             location: job.location || "",
@@ -478,8 +508,9 @@ export async function listPublishedJobPaths(): Promise<{ path: string; lastModif
       }
       page += 1;
     }
+    const closed = await mapPool(paths, 24, (job) => publishedJobIsClosed(job.jobId));
+    return paths.filter((_, index) => !closed[index]).map(({ path, lastModified }) => ({ path, lastModified }));
   } catch {
-    return paths;
+    return paths.map(({ path, lastModified }) => ({ path, lastModified }));
   }
-  return paths;
 }

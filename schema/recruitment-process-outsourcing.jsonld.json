@@ -1,7 +1,6 @@
 {
   "@context": "https://schema.org",
   "@graph": [
-   
     {
       "@type": "WebPage",
       "@id": "https://www.earlyjobs.ai/recruitment-process-outsourcing#webpage",
@@ -73,6 +72,53 @@
           "position": 2,
           "name": "Recruitment Process Outsourcing",
           "item": "https://www.earlyjobs.ai/recruitment-process-outsourcing"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.earlyjobs.ai/recruitment-process-outsourcing#faq",
+      "url": "https://www.earlyjobs.ai/recruitment-process-outsourcing",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does EarlyJobs match candidates with job opportunities?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Candidate review focuses on the requirements you share. Specific checks are used only when they are part of the agreed process."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What industries does EarlyJobs specialize in?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EarlyJobs specializes in a wide range of industries including technology, BPO, finance, marketing, engineering, and more. Our diverse network allows us to cater to various sectors and provide specialized recruitment services."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the process for employers to start working with EarlyJobs?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Employers can start working with EarlyJobs by contacting our team through our website or directly reaching out to our sales department. We will discuss your hiring needs, provide a customized recruitment plan, and begin sourcing and screening candidates."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does EarlyJobs ensure the quality of candidates?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Candidate review focuses on the role requirements shared by the employer. Background checks are used only when they are part of the agreed process."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is there a fee for candidates to use EarlyJobs services?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Recruitment fees are agreed with the employer under the applicable commercial terms."
+          }
         }
       ]
     }

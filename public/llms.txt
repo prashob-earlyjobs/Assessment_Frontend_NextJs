@@ -1,0 +1,51 @@
+# EarlyJobs
+
+> EarlyJobs connects employers, recruiters, and job seekers through recruiter-led hiring and AI-assisted recruitment workflows.
+
+EarlyJobs is operated by Victa EarlyJobs Technologies Private Limited, Koramangala, Bengaluru, India. Contact: info@earlyjobs.in, +91-82175-27926. Related brands named on the site are Huntlo AI (https://www.huntlo.ai) and GigKaro (https://gigkaro.in). Individual vacancies and articles are separate pages. The full URL list is https://www.earlyjobs.ai/sitemap.xml.
+
+## Jobs
+
+- [Open roles](https://www.earlyjobs.ai/jobs): Current vacancies. Each open role has its own page under /jobs with the title, company, location, and description.
+- [HR recruitment internship](https://www.earlyjobs.ai/internship): Remote HR recruitment internship for students and freshers in India.
+
+## Employers
+
+- [For employers](https://www.earlyjobs.ai/employers): Recruiter-led hiring for businesses in India.
+- [IT recruitment](https://www.earlyjobs.ai/it-recruitment): Hiring for software, engineering, cloud, DevOps, cybersecurity, QA, and technology roles.
+- [Finance and accounting recruitment](https://www.earlyjobs.ai/finance-and-accounting-recruitment): Hiring for finance and accounting roles.
+- [Sales and marketing recruitment](https://www.earlyjobs.ai/sales-marketing-recruitment): Hiring for sales, business development, and marketing roles.
+- [HR and executive recruitment](https://www.earlyjobs.ai/hr-executive-recruitment-services): Hiring for HR and executive roles.
+- [Executive recruitment](https://www.earlyjobs.ai/top-executive-recruitment-firm): Leadership and executive search.
+- [Global recruitment](https://www.earlyjobs.ai/global-recruitment): Recruitment support for hiring outside India.
+- [Recruitment process outsourcing](https://www.earlyjobs.ai/recruitment-process-outsourcing): Recruiter-led sourcing, screening, and hiring coordination.
+- [Hiring partners](https://www.earlyjobs.ai/clientele): Companies that work with EarlyJobs.
+
+## GCC hiring
+
+- [GCC hiring solutions](https://www.earlyjobs.ai/gcc-hiring-solutions): Recruitment for Global Capability Centers in India.
+- [Build a GCC in India](https://www.earlyjobs.ai/build-gcc-india): Hiring support for companies setting up a GCC.
+- [GCC recruitment partner](https://www.earlyjobs.ai/gcc-recruitment-partner): Dedicated recruitment support for GCC teams.
+- [GCC talent acquisition](https://www.earlyjobs.ai/gcc-talent-acquisition): Talent acquisition for GCC workforce planning.
+- [India GCC hiring](https://www.earlyjobs.ai/india-gcc-hiring-services): Multi-city GCC hiring in India.
+- [Offshore capability center hiring](https://www.earlyjobs.ai/offshore-capability-center-hiring): Hiring for offshore capability centers.
+
+## Recruiters and partners
+
+- [Become a recruiter](https://www.earlyjobs.ai/become-a-recruiter): Freelance recruiter programme.
+- [Agency partnerships](https://www.earlyjobs.ai/agency-partnerships): Partnership enquiries for recruitment agencies.
+- [Franchise](https://www.earlyjobs.ai/franchise): EarlyJobs recruitment franchise in India.
+- [Franchise locations](https://www.earlyjobs.ai/franchise/locations): District franchise pages, also listed in the sitemap.
+
+## Company
+
+- [About](https://www.earlyjobs.ai/about): What EarlyJobs is and who operates it.
+- [Story](https://www.earlyjobs.ai/story): How EarlyJobs describes its history.
+- [Team](https://www.earlyjobs.ai/team): People at EarlyJobs.
+- [Newsroom](https://www.earlyjobs.ai/newsroom): Company announcements.
+- [Press release](https://www.earlyjobs.ai/press-release): Press material.
+- [Investor relations](https://www.earlyjobs.ai/investor-relations): Investor information.
+- [Contact](https://www.earlyjobs.ai/contact-us): Enquiry form and office address.
+- [Blogs](https://www.earlyjobs.ai/blogs): Recruitment and hiring articles. Each article is a page under /blogs.
+- [Privacy policy](https://www.earlyjobs.ai/privacy-policy): How EarlyJobs handles personal information.
+- [Terms and conditions](https://www.earlyjobs.ai/terms-and-conditions): Terms for using the site.

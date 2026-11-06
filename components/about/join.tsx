@@ -48,7 +48,7 @@ export function AboutJoin() {
           <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row">
             <SolidLink href="/jobs">Find Jobs</SolidLink>
             <GhostLink href="/become-a-recruiter">Become a Recruiter</GhostLink>
-            <GhostLink href="/sign-in">Start Hiring</GhostLink>
+            <GhostLink href="/contact-us">Start Hiring</GhostLink>
           </div>
         </Reveal>
       </div>

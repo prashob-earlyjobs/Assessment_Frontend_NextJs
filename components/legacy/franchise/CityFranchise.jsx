@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { motion } from "framer-motion"
 import { useState, useEffect } from "react"
 import {
@@ -24,8 +25,6 @@ import {
     Headphones,
     User,
 } from "lucide-react"
-
-const BACKEND_URL_2_0 = process.env.NEXT_PUBLIC_BACKEND_URL_2_0 || "http://localhost:5001/api"
 
 const Card = ({ className = "", children, ...props }) => (
     <motion.div
@@ -102,7 +101,13 @@ const Popup = ({ message, type, onClose }) => {
     )
 }
 
-const CityFranchise = ({ data }) => {
+/**
+ * @param {{
+ *   data: { name: string, heroTitle?: string, heroSubtitle?: string, heroDescription?: string, heroImage?: string, state?: string, hub?: string, aboutText?: string, theme?: { primary?: string, gradient?: string }, contactInfo?: { phone?: string, email?: string, address?: string }, companyBenefits?: string[] },
+ *   stats?: { joinings?: string, companies?: string, collegePartners?: string } | null,
+ * }} props
+ */
+const CityFranchise = ({ data, stats = null }) => {
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -117,24 +122,8 @@ const CityFranchise = ({ data }) => {
     const [error, setError] = useState(null)
     const [showPopup, setShowPopup] = useState(null)
     const [openIndex, setOpenIndex] = useState(0)
-    const [dashboardSummary, setDashboardSummary] = useState(null)
 
     const defaultHeroImage = "https://res.cloudinary.com/ddsy9p8fg/image/upload/v1776657676/defaultheroImage_ewfnj4.jpg"
-
-    useEffect(() => {
-        const getDashboardData = async () => {
-            try {
-                const response = await fetch(`${BACKEND_URL_2_0}/dashboard`, { cache: "no-store" })
-                const result = await response.json()
-                if (!response.ok) throw new Error(result?.message || "Failed to fetch dashboard")
-                setDashboardSummary(result?.data?.summary ?? null)
-            } catch (err) {
-                console.error("Error fetching dashboard data:", err)
-            }
-        }
-
-        getDashboardData()
-    }, [])
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -278,9 +267,9 @@ const CityFranchise = ({ data }) => {
         "Campus-to-corporate transition support",
     ]
 
-    const placementsCount = dashboardSummary?.placedCount ?? "-"
-    const partnerCompaniesCount = dashboardSummary?.companiesCount ?? "-"
-    const localCollegesCount = dashboardSummary?.collegesCount ?? "-"
+    const placementsCount = stats?.joinings ?? "-"
+    const partnerCompaniesCount = stats?.companies ?? "-"
+    const localCollegesCount = stats?.collegePartners ?? "-"
 
     const companyBenefits = data.companyBenefits || [
         `Access to pre-vetted local talent pool in ${data.name}`,
@@ -372,6 +361,9 @@ const CityFranchise = ({ data }) => {
                                     </>
                                 )}
                             </p>
+                            <Link href="/franchise/locations" className="font-semibold text-orange-700 underline">
+                                All franchise locations
+                            </Link>
                         </motion.div>
                         <motion.div
                             initial={{ opacity: 0, x: 50 }}

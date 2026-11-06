@@ -152,39 +152,39 @@
           "name": "Is EarlyJobs a recruitment agency?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "EarlyJobs is a recruiter-first hiring network that connects employers with independent recruiters, supported by AI-assisted hiring infrastructure."
+            "text": "No. EarlyJobs is The Recruiter-First Hiring Network, connecting employers with independent recruiters supported by AI-powered hiring infrastructure."
           }
         },
         {
           "@type": "Question",
-          "name": "Can employers hire for multiple roles through EarlyJobs?",
+          "name": "Can we hire for multiple roles?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes. EarlyJobs supports hiring across multiple functions, industries and hiring requirements."
+            "text": "Yes. The network supports hiring across functions, industries, and geographies."
           }
         },
         {
           "@type": "Question",
-          "name": "How quickly can employers receive candidates?",
+          "name": "How quickly can we receive candidates?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Recruiters can begin working on a requirement once the hiring details are shared. Shortlist timelines depend on the role and its complexity."
+            "text": "Recruiters begin working once hiring requirements are shared, with qualified shortlists delivered based on role complexity."
           }
         },
         {
           "@type": "Question",
-          "name": "Do EarlyJobs recruiters specialize in specific industries?",
+          "name": "Do recruiters specialize in industries?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes. Recruiters support different domains, including technology, BFSI, healthcare, manufacturing, retail and executive hiring."
+            "text": "Yes. Recruiters participate across domains such as technology, BFSI, healthcare, manufacturing, retail, executive search, and more."
           }
         },
         {
           "@type": "Question",
-          "name": "Can startups use EarlyJobs for hiring?",
+          "name": "Can startups use EarlyJobs?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes. EarlyJobs supports hiring requirements for startups, growing businesses and enterprise organizations."
+            "text": "Absolutely. From early-stage startups to global enterprises, the network is designed to support different hiring needs."
           }
         }
       ]
