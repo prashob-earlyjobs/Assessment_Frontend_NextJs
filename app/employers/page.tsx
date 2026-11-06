@@ -72,7 +72,7 @@ export default async function EmployersPage() {
           titleMuted: "Hire Through Recruiters.",
           intro:
             "EarlyJobs connects employers with experienced recruiters and AI-assisted recruitment workflows to support role-based hiring across India. Hiring should begin with the right recruiters, whether you need one role or an entire team.",
-          primaryHref: "/sign-in",
+          primaryHref: "/contact-us",
           primaryLabel: "Start Hiring",
           secondaryHref: "#solutions",
           secondaryLabel: "Explore Our Hiring Solutions",

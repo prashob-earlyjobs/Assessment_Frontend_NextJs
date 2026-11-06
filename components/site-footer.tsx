@@ -341,6 +341,12 @@ export function SiteFooter() {
               Franchise With Us
             </Link>
             <Link
+              href="/franchise/locations"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
+              Franchise Locations
+            </Link>
+            <Link
               href="/become-a-recruiter"
               className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
             >

@@ -10,18 +10,30 @@ type BlogRouteProps = { params: Promise<{ slug: string }> };
 function blogPosting(blog: PublicBlog) {
   const published = blog.publishedAt || blog.createdAt;
   if (!blog.title || !blog.content || !published) return null;
-  const authorName = typeof blog.author === "string" ? blog.author : blog.author?.username;
+  const authorName = typeof blog.author === "string" ? blog.author : blog.author?.username || blog.author?.email;
+  const image = blog.featuredImage?.startsWith("http") ? blog.featuredImage : "";
+  const description = blog.excerpt?.trim();
   return {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: blog.title,
-    description: blog.seoDescription || blog.excerpt || blog.title,
+    ...(description ? { description } : {}),
     datePublished: published,
     ...(blog.updatedAt ? { dateModified: blog.updatedAt } : {}),
-    mainEntityOfPage: `${SITE_URL}/blogs/${blog.slug}`,
-    ...(blog.featuredImage ? { image: blog.featuredImage } : {}),
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${SITE_URL}/blogs/${blog.slug}`,
+    },
+    ...(image ? { image } : {}),
     ...(authorName ? { author: { "@type": "Person", name: authorName } } : {}),
-    publisher: { "@id": `${SITE_URL}/#organization` },
+    publisher: {
+      "@type": "Organization",
+      name: "EarlyJobs",
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}/images/logo.png`,
+      },
+    },
   };
 }
 

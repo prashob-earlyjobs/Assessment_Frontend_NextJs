@@ -850,9 +850,9 @@ export function CompanyTieUpsPage({
                       <p className="text-[1.05rem] font-medium tracking-[-0.02em] text-neutral-950">
                         {faq.q}
                       </p>
-                      {open ? (
-                        <p className="mt-3 text-[15px] leading-7 text-neutral-600">{faq.a}</p>
-                      ) : null}
+                      <p className={open ? "mt-3 text-[15px] leading-7 text-neutral-600" : "hidden"}>
+                        {faq.a}
+                      </p>
                     </div>
                     <span aria-hidden className="mt-1 text-xl leading-none text-neutral-400">
                       {open ? "–" : "+"}
