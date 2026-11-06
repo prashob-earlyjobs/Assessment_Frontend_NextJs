@@ -101,6 +101,12 @@ const Popup = ({ message, type, onClose }) => {
     )
 }
 
+/**
+ * @param {{
+ *   data: { name: string, heroTitle?: string, heroSubtitle?: string, heroDescription?: string, heroImage?: string, state?: string, hub?: string, aboutText?: string, theme?: { primary?: string, gradient?: string }, contactInfo?: { phone?: string, email?: string, address?: string }, companyBenefits?: string[] },
+ *   stats?: { joinings?: string, companies?: string, collegePartners?: string } | null,
+ * }} props
+ */
 const CityFranchise = ({ data, stats = null }) => {
     const [formData, setFormData] = useState({
         name: "",
