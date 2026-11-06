@@ -135,42 +135,42 @@
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "How does EarlyJobs match candidates with IT job opportunities?",
+          "name": "How does EarlyJobs match candidates with job opportunities?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "EarlyJobs uses recruiter-led candidate sourcing, role requirements and screening processes to identify IT professionals whose skills and experience align with an employer's hiring needs."
+            "text": "Candidate review focuses on the technology requirements you share. Specific checks are used only when they are part of the agreed process."
           }
         },
         {
           "@type": "Question",
-          "name": "What types of IT professionals can EarlyJobs help businesses hire?",
+          "name": "What industries does EarlyJobs specialize in?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "EarlyJobs supports recruitment for technology roles such as developers, engineers, project managers and IT support professionals, depending on the hiring requirements."
+            "text": "EarlyJobs specializes in a wide range of industries including technology, BPO, finance, marketing, engineering, and more. Our diverse network allows us to cater to various sectors and provide specialized recruitment services."
           }
         },
         {
           "@type": "Question",
-          "name": "How can an employer get started with EarlyJobs IT recruitment services?",
+          "name": "What is the process for employers to start working with EarlyJobs?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Employers can contact EarlyJobs to discuss their open positions, required skills, hiring priorities and recruitment needs so that the team can determine an appropriate hiring approach."
+            "text": "Employers can start working with EarlyJobs by contacting our team through our website or directly reaching out to our sales department. We will discuss your hiring needs, provide a customized recruitment plan, and begin sourcing and screening candidates."
           }
         },
         {
           "@type": "Question",
-          "name": "How does EarlyJobs assess IT candidates?",
+          "name": "How does EarlyJobs ensure the quality of candidates?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Candidate assessment can include reviewing relevant experience, qualifications and technical skills, along with screening and interviews appropriate to the role and the agreed recruitment process."
+            "text": "Candidate review focuses on the role requirements shared by the employer. Background checks are used only when they are part of the agreed process."
           }
         },
         {
           "@type": "Question",
-          "name": "Do candidates pay to use EarlyJobs recruitment services?",
+          "name": "Is there a fee for candidates to use EarlyJobs services?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "EarlyJobs states that candidates do not pay to use its recruitment services. Recruitment fees are covered by employers seeking to hire through its services."
+            "text": "Recruitment fees are agreed with the employer under the applicable commercial terms."
           }
         }
       ]

@@ -1,15 +1,16 @@
 import type { MetadataRoute } from "next";
 import { headers } from "next/headers";
 
-export default async function robots(): Promise<MetadataRoute.Robots> {
-  const headerList = await headers();
-  const host = (headerList.get("x-forwarded-host") ?? headerList.get("host") ?? "").split(",")[0].trim();
-  const isDevHost =
-    host === "dev.earlyjobs.ai" ||
-    host.startsWith("localhost") ||
-    host.startsWith("127.0.0.1");
+function hostname(headerList: Headers) {
+  const raw = (headerList.get("x-forwarded-host") ?? headerList.get("host") ?? "").split(",")[0].trim();
+  return raw.replace(/:\d+$/, "").toLowerCase();
+}
 
-  if (isDevHost) {
+export default async function robots(): Promise<MetadataRoute.Robots> {
+  const host = hostname(await headers());
+  const production = host === "www.earlyjobs.ai" || host === "earlyjobs.ai";
+
+  if (!production) {
     return {
       rules: {
         userAgent: "*",
@@ -22,6 +23,7 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
     rules: {
       userAgent: "*",
       allow: "/",
+      disallow: ["/api/"],
     },
     sitemap: "https://www.earlyjobs.ai/sitemap.xml",
   };

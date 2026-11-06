@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/json-ld";
 import { FreelanceRecruitersPage } from "@/components/freelance-recruiters/page";
 import { getNetworkMetrics } from "@/lib/dashboard";
 import { pageMetadata } from "@/lib/page-metadata";
+import recruiterJsonLd from "@/schema/become-a-recruiter.jsonld.json";
 
 export const metadata: Metadata = pageMetadata({
   path: "/become-a-recruiter",

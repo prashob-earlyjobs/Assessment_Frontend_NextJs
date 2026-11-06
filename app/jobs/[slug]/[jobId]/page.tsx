@@ -4,7 +4,7 @@ import { notFound, redirect } from "next/navigation";
 import { ApplyJob } from "@/components/jobs/apply-job";
 import { JsonLd } from "@/components/json-ld";
 import { CompanyLogo } from "@/components/jobs/company-logo";
-import { jobPostingSchema } from "@/lib/job-posting";
+import { jobDescriptionHtml, jobPostingSchema } from "@/lib/job-posting";
 import { jobHref, jobSlug } from "@/lib/job-path";
 import { pageMetadata } from "@/lib/page-metadata";
 import { getPublicJob, jobsPageHref } from "@/lib/public-jobs";
@@ -109,7 +109,7 @@ export default async function JobPage({ params }: { params: Promise<{ slug: stri
   const canonical = jobSlug(job);
   if (slug !== canonical) redirect(`/jobs/${canonical}/${job.jobId}`);
 
-  const descriptionHtml = job.description ? sanitizeHtml(job.description) : "";
+  const descriptionHtml = jobDescriptionHtml(job.description ? sanitizeHtml(job.description) : "");
   const posting = jobPostingSchema(job, descriptionHtml);
   const chips = [job.location, job.type, job.mode, job.experience, job.openings, job.category, job.hiringNeed, job.shift].filter(
     Boolean,

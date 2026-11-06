@@ -207,34 +207,42 @@
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "Do I need HR experience to start an EarlyJobs franchise?",
+          "name": "Do I need HR experience?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Prior HR experience is not required according to the EarlyJobs franchise page. The programme provides training covering recruitment, operations and sales processes."
+            "text": "No, prior HR experience is not required. We provide comprehensive training on recruitment, operations, and sales processes. Our step-by-step training program covers everything you need to know to run a successful EarlyJobs franchise."
           }
         },
         {
           "@type": "Question",
-          "name": "What is the investment required to start an EarlyJobs franchise?",
+          "name": "How much can I earn?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The investment depends on the applicable franchise fee, office or home-office setup, equipment and working capital. Prospective partners should confirm the current fee and total investment directly with EarlyJobs before making a decision."
+            "text": "Earnings are not guaranteed. Results depend on the business, location, effort, and market conditions. EarlyJobs does not promise a specific income."
           }
         },
         {
           "@type": "Question",
-          "name": "How do I apply for an EarlyJobs recruitment franchise?",
+          "name": "What is the franchise fee?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Submit the franchise interest form on the EarlyJobs website. The application is reviewed, followed by a discussion, documentation, onboarding and training for approved partners."
+            "text": "Investment and commercial terms are set out in the applicable franchise agreement. Contact the EarlyJobs team for the current terms."
           }
         },
         {
           "@type": "Question",
-          "name": "What support does EarlyJobs provide to franchise partners?",
+          "name": "Do I need an office?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The franchise programme describes support for recruitment training, operations, launch and business development. The specific scope of support is subject to the applicable franchise agreement."
+            "text": "A physical office space of 200-400 sq ft is preferred for Tier 1 cities to establish a professional brand presence. In Tier 2/3 cities, you can start with a home office setup and scale as your business grows."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What support is provided?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We provide comprehensive support including technology platform access, job leads, training modules, marketing materials, and more."
           }
         }
       ],

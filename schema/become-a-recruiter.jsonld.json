@@ -137,10 +137,10 @@
         },
         {
           "@type": "Question",
-          "name": "Can I work from home as an EarlyJobs recruiter?",
+          "name": "Can I work from home?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The recruiter programme is designed to offer flexibility in where you work. Specific requirements, communication expectations and deadlines depend on the mandate and programme terms."
+            "text": "The model is designed to offer flexibility in where you work. Specific requirements, communication expectations and deadlines depend on the mandate and programme terms."
           }
         },
         {
@@ -148,7 +148,7 @@
           "name": "Can women returning after a career break apply?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes. Women looking to return to recruitment or explore flexible professional opportunities can apply, subject to the programme's onboarding and role requirements."
+            "text": "Yes. Women looking to return to recruitment or explore flexible professional opportunities are welcome to apply, subject to the programme's onboarding and role requirements."
           }
         },
         {
@@ -156,15 +156,15 @@
           "name": "Do I need previous recruitment experience?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Relevant recruitment or HR experience can help establish suitability for particular hiring requirements. Applicants without prior experience should check the current eligibility criteria and whether a suitable entry-level pathway is available."
+            "text": "Relevant recruitment or HR experience can be helpful. Applicants without prior experience should confirm the current eligibility criteria and whether an appropriate training or entry-level pathway is available."
           }
         },
         {
           "@type": "Question",
-          "name": "How do freelance recruiters earn with EarlyJobs?",
+          "name": "How do freelance recruiters earn?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Commercial terms and payment arrangements are governed by the applicable recruiter programme or mandate agreement. Placements and earnings are not guaranteed."
+            "text": "Commercial terms are governed by the applicable recruiter programme or mandate agreement. Payment arrangements are subject to the applicable commercial terms."
           }
         },
         {
@@ -180,15 +180,15 @@
           "name": "Can I choose my working hours?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Freelance recruitment offers flexibility, but recruiters are expected to meet agreed deadlines, candidate communication expectations and hiring timelines."
+            "text": "Freelance recruitment offers greater flexibility than many traditional office roles, but recruiters must still meet agreed deadlines, candidate communication expectations and hiring timelines."
           }
         },
         {
           "@type": "Question",
-          "name": "How do I get started as an EarlyJobs recruiter?",
+          "name": "How do I get started?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Complete the recruiter application form. The EarlyJobs team can review your details and share the relevant onboarding process and next steps."
+            "text": "Complete the application form. The team can review your details and share the relevant onboarding process and next steps."
           }
         }
       ]

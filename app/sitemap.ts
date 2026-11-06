@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { listFranchiseCities } from "@/lib/franchise-cities";
 import { listPublishedBlogPaths } from "@/lib/public-blogs";
 import { listPublishedJobPaths } from "@/lib/public-jobs";
 
@@ -19,13 +20,14 @@ const routes = [
   "/become-a-recruiter",
   "/agency-partnerships",
   "/franchise",
+  "/franchise/locations",
   "/internship",
   "/jobs",
   "/blogs",
   "/contact-us",
   "/it-recruitment",
   "/finance-and-accounting-recruitment",
-  "/sales-marketing-services",
+  "/sales-marketing-recruitment",
   "/hr-executive-recruitment-services",
   "/top-executive-recruitment-firm",
   "/global-recruitment",
@@ -40,6 +42,8 @@ const routes = [
   "/terms-and-conditions",
 ] as const;
 
+const franchiseUpdated = new Date("2026-11-06");
+
 function entry(path: string, lastModified?: Date): MetadataRoute.Sitemap[number] {
   return {
     url: `${baseUrl}${path === "/" ? "" : path}`,
@@ -50,7 +54,8 @@ function entry(path: string, lastModified?: Date): MetadataRoute.Sitemap[number]
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [jobs, blogs] = await Promise.all([listPublishedJobPaths(), listPublishedBlogPaths()]);
   return [
-    ...routes.map((path) => entry(path)),
+    ...routes.map((path) => entry(path, path.startsWith("/franchise") ? franchiseUpdated : undefined)),
+    ...listFranchiseCities().map((city) => entry(city.path, franchiseUpdated)),
     ...blogs.map((blog) => entry(blog.path, blog.lastModified)),
     ...jobs.map((job) => entry(job.path, job.lastModified)),
   ];

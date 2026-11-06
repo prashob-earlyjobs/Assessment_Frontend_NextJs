@@ -5,7 +5,7 @@ import { pageMetadata } from "@/lib/page-metadata";
 import schema from "@/schema/sales-marketing-services.jsonld.json";
 
 export const metadata: Metadata = pageMetadata({
-  path: "/sales-marketing-services",
+  path: "/sales-marketing-recruitment",
   title: "Sales & Marketing Recruitment Services in India | EarlyJobs",
   description: "Hire sales and marketing professionals with EarlyJobs. Access recruiter-led sourcing and candidate screening for sales executives, business development, digital marketing and leadership roles across India.",
   ogTitle: "Sales & Marketing Recruitment Services | EarlyJobs",

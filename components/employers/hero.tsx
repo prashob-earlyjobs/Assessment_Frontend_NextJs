@@ -43,8 +43,8 @@ export function EmployerHero({
             </p>
           </div>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-            <SolidLink href="/sign-in">Start Hiring</SolidLink>
-            <GhostLink href="/sign-in">Talk to Hiring Expert</GhostLink>
+            <SolidLink href="/contact-us">Start Hiring</SolidLink>
+            <GhostLink href="/contact-us">Talk to Hiring Expert</GhostLink>
           </div>
           <ul className="mt-10 grid grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-4">
             {metrics.map((metric) => (
