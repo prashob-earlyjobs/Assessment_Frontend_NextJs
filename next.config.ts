@@ -3,6 +3,19 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   async redirects() {
     return [
+      {
+        source: "/",
+        has: [{ type: "host", value: "earlyjobs.ai" }],
+        destination: "https://www.earlyjobs.ai",
+        statusCode: 301,
+      },
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "earlyjobs.ai" }],
+        destination: "https://www.earlyjobs.ai/:path*",
+        statusCode: 301,
+      },
+      { source: "/recruiter", destination: "/recruiters", statusCode: 301 },
       { source: "/about-us", destination: "/about", statusCode: 301 },
       { source: "/about-us/our-story", destination: "/story", statusCode: 301 },
       { source: "/our-story", destination: "/story", statusCode: 301 },
