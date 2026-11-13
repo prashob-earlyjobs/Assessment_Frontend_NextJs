@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { portalApiUrl } from "@/lib/portal-api";
 
 interface Company {
   id: string;
@@ -22,7 +23,7 @@ const Clientele: React.FC = () => {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL_2_0 || "https://portal-bd-prod.earlyjobs.ai/api"}/public/companies`;
+  const apiUrl = portalApiUrl("/public/companies");
   console.log("API URL:", apiUrl);
   useEffect(() => {
     setLoading(true);

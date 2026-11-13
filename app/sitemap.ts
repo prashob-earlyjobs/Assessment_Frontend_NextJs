@@ -22,6 +22,7 @@ const routes = [
   "/franchise",
   "/franchise/locations",
   "/internship",
+  "/join-creator-programme",
   "/jobs",
   "/blogs",
   "/contact-us",

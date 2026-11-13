@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { portalApiBase } from "@/lib/portal-api";
 import Cookies from "js-cookie";
 import { toast } from "sonner";
 import { City, State } from "country-state-city";
@@ -266,8 +267,7 @@ function PhoneInput(props: {
 export default function AgencyOnboardingClient() {
   const router = useRouter();
 
-  const backendUrl =
-    process.env.NEXT_PUBLIC_BACKEND_URL_2_0;
+  const backendUrl = portalApiBase();
 
   const stateList = useMemo(() => State.getStatesOfCountry("IN"), []);
 

@@ -1,7 +1,7 @@
+import { portalApiUrl } from "@/lib/portal-api";
+
 function teamsEndpoint() {
-  const configured = process.env.NEXT_PUBLIC_BACKEND_URL_2_0?.replace(/\/$/, "");
-  if (configured) return `${configured}/teams`;
-  return "https://portal-bd-prod.earlyjobs.ai/api/teams";
+  return portalApiUrl("/teams");
 }
 
 export type TeamMember = {

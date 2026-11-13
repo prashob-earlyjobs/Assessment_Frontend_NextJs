@@ -1,6 +1,7 @@
 import type { JobListing } from "@/components/jobs/listing";
+import { portalApiUrl } from "@/lib/portal-api";
 
-const DASHBOARD_ENDPOINT = "https://portal-bd-prod.earlyjobs.ai/api/dashboard";
+const DASHBOARD_ENDPOINT = portalApiUrl("/dashboard");
 
 const dashboardHeaders = {
   Accept: "*/*",

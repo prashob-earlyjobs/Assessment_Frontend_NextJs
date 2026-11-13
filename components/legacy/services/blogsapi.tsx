@@ -1,6 +1,7 @@
 import { toast } from "sonner";
+import { portalApiBase } from "@/lib/portal-api";
 
-const BACKEND_URL_2_0 = process.env.NEXT_PUBLIC_BACKEND_URL_2_0 || 'https://portal-bd-prod.earlyjobs.ai/api';
+const BACKEND_URL_2_0 = portalApiBase();
 
 // Types
 export type BlogStatus = 'draft' | 'published' | 'archived';

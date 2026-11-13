@@ -1,7 +1,8 @@
 import type { JobListing } from "@/components/jobs/listing";
 import { jobHref } from "@/lib/job-path";
+import { portalApiUrl } from "@/lib/portal-api";
 
-const JOBS_ENDPOINT = "https://portal-bd-prod.earlyjobs.ai/api/public/jobs";
+const JOBS_ENDPOINT = portalApiUrl("/public/jobs");
 const PAGE_SIZE = 20;
 
 const employmentTypeByLabel: Record<string, string> = {
