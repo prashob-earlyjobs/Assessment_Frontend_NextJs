@@ -1,4 +1,6 @@
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL_2_0 || "https://portal-bd-prod.earlyjobs.ai/api";
+import { portalApiBase } from "@/lib/portal-api";
+
+const BACKEND_URL = portalApiBase();
 
 export type PublicBlog = {
   _id: string;

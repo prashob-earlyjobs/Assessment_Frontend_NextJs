@@ -1,4 +1,6 @@
-const UPLOAD_ENDPOINT = "https://portal-bd-prod.earlyjobs.ai/api/publicCom/file";
+import { portalApiUrl } from "@/lib/portal-api";
+
+const UPLOAD_ENDPOINT = portalApiUrl("/publicCom/file");
 
 const uploadHeaders = {
   Referer: "https://www.earlyjobs.ai/",

@@ -6,8 +6,9 @@ import type {
   ReferencePerson,
 } from "@/components/become-a-recruiter/form-shared";
 
-const ONBOARDING_ENDPOINT =
-  "https://portal-bd-prod.earlyjobs.ai/api/recruiter/create-onboarding";
+import { portalApiUrl } from "@/lib/portal-api";
+
+const ONBOARDING_ENDPOINT = portalApiUrl("/recruiter/create-onboarding");
 
 const onboardingHeaders = {
   Referer: "https://www.earlyjobs.ai/",

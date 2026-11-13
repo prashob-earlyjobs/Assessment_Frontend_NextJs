@@ -1,4 +1,6 @@
-const COMPANIES_ENDPOINT = "https://portal-bd-prod.earlyjobs.ai/api/public/companies";
+import { portalApiUrl } from "@/lib/portal-api";
+
+const COMPANIES_ENDPOINT = portalApiUrl("/public/companies");
 
 const companiesHeaders = {
   Accept: "*/*",

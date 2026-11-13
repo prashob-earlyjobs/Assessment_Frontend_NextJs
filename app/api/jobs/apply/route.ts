@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
+import { portalApiUrl } from "@/lib/portal-api";
 
-const APPLY_ENDPOINT = "https://portal-bd-prod.earlyjobs.ai/api/public/jobs/apply";
+const APPLY_ENDPOINT = portalApiUrl("/public/jobs/apply");
 
 const applyHeaders = {
   Referer: "https://www.earlyjobs.ai/",
