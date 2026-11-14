@@ -30,7 +30,6 @@ const nextConfig: NextConfig = {
       { source: "/dashboard", destination: "/contact-us", statusCode: 301 },
       { source: "/profile", destination: "/contact-us", statusCode: 301 },
       { source: "/airesumebuilder", destination: "/jobs", statusCode: 301 },
-      { source: "/jobs/:title", destination: "/jobs", statusCode: 301 },
       { source: "/assessments/:path*", destination: "/jobs", statusCode: 301 },
       { source: "/franchise/allahabad", destination: "/franchise/prayagraj", statusCode: 301 },
       { source: "/franchise/gulbarga", destination: "/franchise/kalaburagi", statusCode: 301 },

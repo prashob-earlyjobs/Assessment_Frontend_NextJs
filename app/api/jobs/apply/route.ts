@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { isPublicJobId } from "@/lib/job-path";
 import { portalApiUrl } from "@/lib/portal-api";
 
 const APPLY_ENDPOINT = portalApiUrl("/public/jobs/apply");
@@ -37,7 +38,7 @@ function asStringList(value: unknown) {
 
 function application(body: ApplyBody): ApplyBody | null {
   if (!body || typeof body !== "object") return null;
-  if (!/^ej[A-Za-z0-9]+$/.test(body.jobId ?? "")) return null;
+  if (!isPublicJobId(body.jobId ?? "")) return null;
   const spokenLanguages = asStringList(body.spokenLanguages);
   const skills = asStringList(body.skills);
   const workMode = asStringList(body.workMode);

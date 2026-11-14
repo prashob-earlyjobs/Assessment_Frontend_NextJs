@@ -1,5 +1,5 @@
 import type { JobListing } from "@/components/jobs/listing";
-import { jobHref } from "@/lib/job-path";
+import { expandJobShortId, isPublicJobId, jobHref, jobShortId, parseJobShortId } from "@/lib/job-path";
 import { portalApiUrl } from "@/lib/portal-api";
 
 const JOBS_ENDPOINT = portalApiUrl("/public/jobs");
@@ -70,12 +70,17 @@ function money(amount: number) {
   return `₹${amount.toLocaleString("en-IN")}`;
 }
 
+function normalizeSalaryMode(frequency: string) {
+  return frequency.toLowerCase().replace(/\s+/g, " ").trim();
+}
+
 function formatSalary(min: number, max: number, frequency: string) {
-  if (frequency === "yearly" && min >= 100_000 && max >= 100_000 && max < 10_000_000) {
+  const mode = normalizeSalaryMode(frequency);
+  if ((mode === "yearly" || mode === "annual" || mode === "per annum") && min >= 100_000 && max >= 100_000 && max < 10_000_000) {
     return `₹${trimNumber(min / 100_000)}–${trimNumber(max / 100_000)} LPA`;
   }
 
-  const suffix = frequency === "monthly" ? " /mo" : frequency === "yearly" ? " /yr" : "";
+  const suffix = mode === "monthly" ? " /mo" : mode === "yearly" || mode === "annual" || mode === "per annum" ? " /yr" : "";
   return `${money(min)}–${money(max)}${suffix}`;
 }
 
@@ -89,22 +94,9 @@ function formatOpenings(count: number) {
   return count === 1 ? "1 opening" : `${count} openings`;
 }
 
-function lpaAmount(amount: number, mode: string) {
-  const yearly = mode.toLowerCase() === "monthly" ? amount * 12 : amount;
-  return yearly / 100_000;
-}
-
-function lpaLabel(amount: number) {
-  return amount >= 10 ? amount.toFixed(0) : amount.toFixed(1);
-}
-
 function summarySalary(min: number | null, max: number | null, mode: string) {
-  const left = min == null ? null : lpaAmount(min, mode);
-  const right = max == null ? null : lpaAmount(max, mode);
-  if (left != null && right != null) return `${lpaLabel(left)} - ${lpaLabel(right)} LPA`;
-  if (left != null) return `${lpaLabel(left)} LPA`;
-  if (right != null) return `${lpaLabel(right)} LPA`;
-  return "Not Disclosed";
+  if (min == null || max == null || min <= 0 || max <= 0) return "Not Disclosed";
+  return formatSalary(min, max, mode);
 }
 
 function summaryExperience(min: number, max: number) {
@@ -136,7 +128,7 @@ function postedLabel(createdAt: string) {
 
 function toListing(job: PublicJob): JobListing {
   return {
-    id: job._id,
+    id: job._id || job.jobId,
     jobId: job.jobId,
     title: job.title,
     company: job.brandName || job.companyName,
@@ -240,6 +232,7 @@ export type PublicJobDetail = {
   title: string;
   description: string;
   company: string;
+  companyWebsite: string;
   logoUrl?: string;
   location: string;
   category: string;
@@ -257,6 +250,9 @@ export type PublicJobDetail = {
   shift: string;
   companyName: string;
   city: string;
+  street: string;
+  area: string;
+  pincode: string;
   summaryExperience: string;
   summarySalary: string;
   updates: "linkedin" | "instagram";
@@ -291,6 +287,11 @@ type PublicJobRecord = {
   city?: string;
   commission_type?: string;
   company_logo_url?: string;
+  company_website?: string;
+  companyWebsite?: string;
+  street?: string;
+  area?: string;
+  pincode?: string;
   employment_type?: string;
   work_type?: string;
   min_salary?: number;
@@ -299,8 +300,8 @@ type PublicJobRecord = {
   min_experience?: number;
   max_experience?: number;
   no_of_openings?: number;
-  skills?: string[];
-  qualification?: string[];
+  skills?: string[] | string;
+  qualification?: string[] | string;
   keywords?: { keyword?: string; isShared?: boolean }[] | string[];
   hiring_need?: string;
   shift_timings?: string;
@@ -345,6 +346,12 @@ export type JobKeyword = {
   shared: boolean;
 };
 
+function asStringList(value: string[] | string | undefined | null) {
+  if (Array.isArray(value)) return value.map((item) => String(item).trim()).filter(Boolean);
+  if (typeof value === "string" && value.trim()) return [value.trim()];
+  return [];
+}
+
 function keywordLabels(keywords: PublicJobRecord["keywords"]): JobKeyword[] {
   if (!keywords?.length) return [];
   const labels: JobKeyword[] = [];
@@ -365,7 +372,7 @@ function keywordLabels(keywords: PublicJobRecord["keywords"]): JobKeyword[] {
 }
 
 export async function getPublicJob(jobId: string): Promise<PublicJobDetail | null> {
-  if (!/^ej[A-Za-z0-9]+$/.test(jobId)) return null;
+  if (!isPublicJobId(jobId)) return null;
 
   const response = await fetch(`${JOBS_ENDPOINT}/${jobId}`, {
     headers: { Accept: "*/*" },
@@ -380,11 +387,14 @@ export async function getPublicJob(jobId: string): Promise<PublicJobDetail | nul
   const minExperience = job.min_experience ?? 0;
   const maxExperience = job.max_experience ?? minExperience;
 
+  const companyWebsite = (job.company_website || job.companyWebsite || "").trim();
+
   return {
     jobId: job.job_id,
     title: job.title,
     description: job.description ?? "",
     company: job.brand_name || job.company_name || "",
+    companyWebsite,
     logoUrl: job.company_logo_url,
     location: job.location || "",
     category: job.category || "",
@@ -395,13 +405,16 @@ export async function getPublicJob(jobId: string): Promise<PublicJobDetail | nul
     maxExperience,
     openings: formatOpenings(job.no_of_openings ?? 0),
     salary: formatSalary(job.min_salary ?? 0, job.max_salary ?? 0, job.salary_mode || ""),
-    skills: job.skills ?? [],
-    qualification: job.qualification ?? [],
+    skills: asStringList(job.skills),
+    qualification: asStringList(job.qualification),
     keywords: keywordLabels(job.keywords),
     hiringNeed: job.hiring_need || "",
     shift: job.shift_timings || "",
     companyName: job.company_name || job.brand_name || "",
     city: job.city || "Remote",
+    street: (job.street || "").trim(),
+    area: (job.area || "").trim(),
+    pincode: (job.pincode || "").trim(),
     summaryExperience: summaryExperience(minExperience, maxExperience),
     summarySalary: summarySalary(
       typeof job.min_salary === "number" ? job.min_salary : null,
@@ -472,42 +485,78 @@ async function mapPool<T, R>(items: T[], limit: number, worker: (item: T) => Pro
   return results;
 }
 
+async function listPublishedJobRefs() {
+  const refs: { jobId: string; title: string; createdAt?: string }[] = [];
+  let page = 1;
+  let totalPages = 1;
+  while (page <= totalPages && page <= 20) {
+    const url = new URL(JOBS_ENDPOINT);
+    url.searchParams.set("status", "published");
+    url.searchParams.set("page", String(page));
+    url.searchParams.set("pageSize", "100");
+    url.searchParams.set("limit", "100");
+    const response = await fetch(url, {
+      headers: { Accept: "*/*" },
+      // Keep reverse-lookup fresh so soft nav / bookmarks don't miss newly published jobs.
+      cache: "no-store",
+    });
+    if (!response.ok) break;
+    const body = (await response.json()) as JobsResponse & {
+      data?: { jobs?: PublicJob[] };
+    };
+    totalPages = body.totalPages || 1;
+    for (const job of body.data?.jobs ?? []) {
+      const jobId = job.jobId || job._id;
+      if (!jobId || !job.title) continue;
+      refs.push({ jobId, title: job.title, createdAt: job.createdAt });
+    }
+    page += 1;
+  }
+  return refs;
+}
+
+/** Resolve /jobs/{title}-{shortId} back to the API job id. */
+export async function resolveJobIdFromSlug(slug: string, jid?: string | null): Promise<string | null> {
+  const directJid = jid?.trim() ?? "";
+  if (directJid && isPublicJobId(directJid)) return directJid;
+
+  const shortId = parseJobShortId(slug);
+  if (!shortId) return null;
+
+  // Older bookmarks that embedded a reversible id in the path.
+  const expanded = expandJobShortId(shortId);
+  if (expanded && isPublicJobId(expanded)) return expanded;
+
+  // Opaque 8-char short ids — always try the trailing 8 chars as well, in case a
+  // title segment (e.g. "manager-xxxxxxxx") was mistaken for a 16-char token.
+  const candidates = new Set<string>();
+  if (/^[a-z0-9]{8}$/i.test(shortId)) candidates.add(shortId.toLowerCase());
+  const trailing8 = slug.toLowerCase().match(/-([a-z0-9]{8})$/)?.[1];
+  if (trailing8) candidates.add(trailing8);
+
+  try {
+    const refs = await listPublishedJobRefs();
+    for (const candidate of candidates) {
+      const match = refs.find((job) => jobShortId(job.jobId) === candidate);
+      if (match?.jobId) return match.jobId;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 export async function listPublishedJobPaths(): Promise<{ path: string; lastModified?: Date }[]> {
   const paths: { path: string; lastModified?: Date; jobId: string }[] = [];
   try {
-    let page = 1;
-    let totalPages = 1;
-    while (page <= totalPages && page <= 20) {
-      const url = new URL(JOBS_ENDPOINT);
-      url.searchParams.set("status", "published");
-      url.searchParams.set("page", String(page));
-      url.searchParams.set("pageSize", "100");
-      url.searchParams.set("limit", "100");
-      const response = await fetch(url, {
-        headers: { Accept: "*/*" },
-        next: { revalidate: 3600 },
+    const refs = await listPublishedJobRefs();
+    for (const job of refs) {
+      const lastModified = job.createdAt ? new Date(job.createdAt) : undefined;
+      paths.push({
+        jobId: job.jobId,
+        path: jobHref({ title: job.title, jobId: job.jobId }),
+        lastModified: lastModified && !Number.isNaN(lastModified.getTime()) ? lastModified : undefined,
       });
-      if (!response.ok) break;
-      const body = (await response.json()) as JobsResponse & {
-        data?: { jobs?: PublicJob[] };
-      };
-      totalPages = body.totalPages || 1;
-      for (const job of body.data?.jobs ?? []) {
-        if (!job.jobId || !job.title) continue;
-        const lastModified = job.createdAt ? new Date(job.createdAt) : undefined;
-        paths.push({
-          jobId: job.jobId,
-          path: jobHref({
-            title: job.title,
-            location: job.location || "",
-            minExperience: job.minExperience ?? 0,
-            maxExperience: job.maxExperience ?? job.minExperience ?? 0,
-            jobId: job.jobId,
-          }),
-          lastModified: lastModified && !Number.isNaN(lastModified.getTime()) ? lastModified : undefined,
-        });
-      }
-      page += 1;
     }
     const closed = await mapPool(paths, 24, (job) => publishedJobIsClosed(job.jobId));
     return paths.filter((_, index) => !closed[index]).map(({ path, lastModified }) => ({ path, lastModified }));

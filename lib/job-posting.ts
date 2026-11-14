@@ -93,13 +93,23 @@ function resolvePlace(city: string, location: string) {
   return { locality: fallback, region: regionFromText };
 }
 
-function jobLocation(locality: string, region: string) {
+function jobLocation(
+  locality: string,
+  region: string,
+  extras?: { street?: string; area?: string; pincode?: string },
+) {
+  const streetParts = [extras?.street?.trim(), extras?.area?.trim()].filter(Boolean);
+  const streetAddress = streetParts.join(", ");
+  const postalCode = extras?.pincode?.trim() || "";
+
   return {
     "@type": "Place",
     address: {
       "@type": "PostalAddress",
+      ...(streetAddress ? { streetAddress } : {}),
       addressLocality: locality,
       ...(region ? { addressRegion: region } : {}),
+      ...(postalCode ? { postalCode } : {}),
       addressCountry: "IN",
     },
   };
@@ -113,6 +123,15 @@ export function jobDescriptionHtml(html: string) {
   return `<p>${trimmed}</p>`;
 }
 
+/** Expiry is always 1 month after the original post date. */
+export function jobValidThrough(datePosted: string) {
+  const posted = new Date(datePosted);
+  if (Number.isNaN(posted.getTime())) return null;
+  const expires = new Date(posted);
+  expires.setUTCMonth(expires.getUTCMonth() + 1);
+  return expires;
+}
+
 /** JobPosting only when the vacancy is active and the required visible fields exist. */
 export function jobPostingSchema(job: PublicJobDetail, descriptionHtml: string) {
   const description = jobDescriptionHtml(descriptionHtml);
@@ -120,11 +139,20 @@ export function jobPostingSchema(job: PublicJobDetail, descriptionHtml: string) 
   const posted = new Date(job.datePosted);
   if (Number.isNaN(posted.getTime())) return null;
 
+  const expires = jobValidThrough(job.datePosted);
+  if (!expires) return null;
+
   const unit = salaryUnit(job.salaryMode);
   const place = resolvePlace(job.city, job.location);
   const remote = /remote/i.test(job.mode);
   const type = employmentType(job.type);
   const logo = job.logoUrl && /^https?:\/\//i.test(job.logoUrl) ? job.logoUrl : "";
+  const website = (() => {
+    const raw = (job.companyWebsite || "").trim();
+    if (!raw) return "https://www.earlyjobs.ai";
+    if (/^https?:\/\//i.test(raw)) return raw;
+    return `https://${raw}`;
+  })();
 
   const data: Record<string, unknown> = {
     "@context": "https://schema.org",
@@ -132,9 +160,11 @@ export function jobPostingSchema(job: PublicJobDetail, descriptionHtml: string) 
     title: job.title,
     description,
     datePosted: posted.toISOString(),
+    validThrough: expires.toISOString(),
     hiringOrganization: {
       "@type": "Organization",
       name: job.company,
+      sameAs: website,
       ...(logo ? { logo } : {}),
     },
     identifier: {
@@ -146,7 +176,13 @@ export function jobPostingSchema(job: PublicJobDetail, descriptionHtml: string) 
   };
 
   if (type) data.employmentType = type;
-  if (place.locality) data.jobLocation = jobLocation(place.locality, place.region);
+  if (place.locality) {
+    data.jobLocation = jobLocation(place.locality, place.region, {
+      street: job.street,
+      area: job.area,
+      pincode: job.pincode,
+    });
+  }
   if (remote) {
     data.jobLocationType = "TELECOMMUTE";
     data.applicantLocationRequirements = { "@type": "Country", name: "India" };

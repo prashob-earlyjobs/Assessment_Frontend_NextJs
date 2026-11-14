@@ -26,7 +26,7 @@ export function JobListingCard({ job }: { job: JobListing }) {
 
   return (
     <article className="flex flex-col gap-3 overflow-hidden rounded-2xl bg-neutral-50 p-4 ring-1 ring-black/[0.04] transition-colors hover:bg-white sm:p-5 lg:h-[100px] lg:flex-row lg:items-center lg:gap-4">
-      <Link href={href} className="flex min-w-0 cursor-pointer items-start gap-3 lg:contents">
+      <Link href={href} prefetch={false} className="flex min-w-0 cursor-pointer items-start gap-3 lg:contents">
         {job.logoUrl ? (
           <img src={job.logoUrl} alt="" className="size-11 shrink-0 rounded-xl object-cover ring-1 ring-black/[0.06]" />
         ) : null}
@@ -50,6 +50,7 @@ export function JobListingCard({ job }: { job: JobListing }) {
           <p className="text-[11px] text-neutral-400 lg:mt-1">{job.posted}</p>
           <Link
             href={href}
+            prefetch={false}
             className="mt-1 inline-block text-[12px] font-medium text-brand transition-colors hover:text-[#d85c42]"
           >
             Apply
