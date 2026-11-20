@@ -1,0 +1,93 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.earlyjobs.ai/compare/recruitment-agency-vs-in-house-hiring#webpage",
+      "url": "https://www.earlyjobs.ai/compare/recruitment-agency-vs-in-house-hiring",
+      "name": "Recruitment Agency vs In-House Hiring | EarlyJobs",
+      "description": "Compare recruitment agencies and in-house hiring across cost, control, sourcing and scalability for Indian employers. A balanced EarlyJobs guide—no fake benchmarks.",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/compare/recruitment-agency-vs-in-house-hiring#breadcrumb"
+      },
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": [
+          "h1",
+          "h2"
+        ]
+      },
+      "inLanguage": "en-IN",
+      "dateModified": "2026-11-20"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/compare/recruitment-agency-vs-in-house-hiring#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Compare",
+          "item": "https://www.earlyjobs.ai/compare/recruitment-agency-vs-in-house-hiring"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Recruitment Agency vs In-House Hiring",
+          "item": "https://www.earlyjobs.ai/compare/recruitment-agency-vs-in-house-hiring"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.earlyjobs.ai/compare/recruitment-agency-vs-in-house-hiring#faq",
+      "url": "https://www.earlyjobs.ai/compare/recruitment-agency-vs-in-house-hiring",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is an agency cheaper than in-house recruitment?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Neither model is cheaper by default. In-house teams carry payroll, tools and management overhead; agencies often charge placement fees or project fees tied to scope. Compare your hiring mix, volume and internal capacity—not headline rates alone."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can companies use both recruitment models?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Many Indian employers keep core roles in-house and use agencies for spikes, niche skills or new locations. A hybrid model works when responsibilities, SLAs and commercial terms are documented before sourcing begins."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Who makes the final hiring decision?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The employer ordinarily retains final selection authority unless a different lawful arrangement is explicitly agreed. Agencies may shortlist and coordinate, but culture fit, compensation approval and offer release typically stay internal."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "When should a company consider an agency?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Consider an agency when internal TA lacks bandwidth, specialist networks or geographic reach for a hiring burst. Agencies add sourcing capacity and flexibility, scoped by agreed services and fees—not guaranteed headcount outcomes."
+          }
+        }
+      ]
+    }
+  ]
+}

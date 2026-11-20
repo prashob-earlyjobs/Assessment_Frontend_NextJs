@@ -1,0 +1,87 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.earlyjobs.ai/electronics-manufacturing-recruitment#webpage",
+      "url": "https://www.earlyjobs.ai/electronics-manufacturing-recruitment",
+      "name": "Electronics & EMS Manufacturing Recruitment | EarlyJobs",
+      "description": "Hire assembly operators, inspection trainees and ESD-aware line staff for electronics and EMS plants in India. EarlyJobs supports high-volume ramp hiring.",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/electronics-manufacturing-recruitment#breadcrumb"
+      },
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": [
+          "h1",
+          "h2"
+        ]
+      },
+      "inLanguage": "en-IN",
+      "dateModified": "2026-11-20"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/electronics-manufacturing-recruitment#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Electronics Manufacturing Recruitment",
+          "item": "https://www.earlyjobs.ai/electronics-manufacturing-recruitment"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.earlyjobs.ai/electronics-manufacturing-recruitment#faq",
+      "url": "https://www.earlyjobs.ai/electronics-manufacturing-recruitment",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What roles can electronics manufacturers recruit for?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Common entry-level roles include SMT and final-assembly operators, inspection trainees, production assistants and warehouse associates. EarlyJobs can discuss volumes, shift patterns and qualification expectations for each station before sourcing begins."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can EMS companies discuss bulk recruitment?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. EMS companies can share ramp timelines, line counts, plant locations and joining targets for assessment. Clear headcount by shift helps plan high-volume hiring without disrupting customer program go-live dates."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can fresh diploma holders apply for electronics manufacturing roles?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Many diploma and ITI graduates are considered for assembly and inspection roles, depending on employer requirements, ESD training readiness and commuting distance to the facility."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does EarlyJobs provide technical certification?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Technical training or ESD certification should not be assumed as part of recruitment. Employers remain responsible for station-specific training, assessments and workplace safety authorization before operators start production."
+          }
+        }
+      ]
+    }
+  ]
+}

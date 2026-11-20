@@ -1,0 +1,87 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.earlyjobs.ai/pharmaceutical-manufacturing-recruitment#webpage",
+      "url": "https://www.earlyjobs.ai/pharmaceutical-manufacturing-recruitment",
+      "name": "Pharma Plant Recruitment & GMP Hiring India | EarlyJobs",
+      "description": "Hire GMP-aware production operators, packaging staff and junior QC support for pharmaceutical plants across India. EarlyJobs helps plant HR build regulated hiring pipelines.",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/pharmaceutical-manufacturing-recruitment#breadcrumb"
+      },
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": [
+          "h1",
+          "h2"
+        ]
+      },
+      "inLanguage": "en-IN",
+      "dateModified": "2026-11-20"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/pharmaceutical-manufacturing-recruitment#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Pharmaceutical Manufacturing Recruitment",
+          "item": "https://www.earlyjobs.ai/pharmaceutical-manufacturing-recruitment"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.earlyjobs.ai/pharmaceutical-manufacturing-recruitment#faq",
+      "url": "https://www.earlyjobs.ai/pharmaceutical-manufacturing-recruitment",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Can EarlyJobs help with entry-level pharmaceutical manufacturing recruitment?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EarlyJobs helps pharmaceutical manufacturers assess entry-level recruitment for production trainees, packaging associates, junior QC support and warehouse staff. Share plant locations, GMP-related role expectations and joining timelines so sourcing can align with regulated shop-floor needs."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can pharmaceutical companies hire diploma and science graduates?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Diploma and science graduates are often considered for entry-level pharma plant roles, provided they meet the employer's qualification criteria, shift availability and training requirements for the specific production or packaging department."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does EarlyJobs verify pharmaceutical compliance certifications?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EarlyJobs does not replace employer-led compliance. Pharmaceutical companies remain responsible for GMP training, credential verification, regulatory documentation and final hiring decisions unless a separate verification service is separately agreed."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can manufacturers discuss bulk hiring requirements?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Manufacturers can discuss bulk hiring across production, packaging and support functions. Sharing vacancy counts, shift patterns, plant locations and target joining dates helps plan a structured recruitment drive."
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,156 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.earlyjobs.ai/resources/manpower-requisition-template#webpage",
+      "url": "https://www.earlyjobs.ai/resources/manpower-requisition-template",
+      "name": "Free Manpower Requisition Form & Hiring Template | EarlyJobs",
+      "description": "Download the free EarlyJobs manpower requisition template for Indian HR teams. Document vacancies, shifts, budgets, locations and approvals before recruitment starts.",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/resources/manpower-requisition-template#breadcrumb"
+      },
+      "mainEntity": {
+        "@id": "https://www.earlyjobs.ai/resources/manpower-requisition-template#resource"
+      },
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": [
+          "h1",
+          "h2"
+        ]
+      },
+      "inLanguage": "en-IN",
+      "dateModified": "2026-11-20"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/resources/manpower-requisition-template#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Resources",
+          "item": "https://www.earlyjobs.ai/resources"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Manpower Requisition Template",
+          "item": "https://www.earlyjobs.ai/resources/manpower-requisition-template"
+        }
+      ]
+    },
+    {
+      "@type": "CreativeWork",
+      "@id": "https://www.earlyjobs.ai/resources/manpower-requisition-template#resource",
+      "name": "EarlyJobs Manpower Requisition Template",
+      "description": "Structured manpower requisition form for documenting vacancies, eligibility, compensation, justification and approvals before recruitment begins.",
+      "provider": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "url": "https://www.earlyjobs.ai/resources/manpower-requisition-template",
+      "encodingFormat": [
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.earlyjobs.ai/resources/manpower-requisition-template#faq",
+      "url": "https://www.earlyjobs.ai/resources/manpower-requisition-template",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the purpose of a manpower requisition form?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It documents an approved hiring need—headcount, budget and justification—before recruiters source candidates. The EarlyJobs template keeps department, HR and finance aligned on one record for India-based plant and corporate hiring."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Who prepares a manpower requisition?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Typically the hiring manager or department head drafts the request, while HR standardises fields and finance confirms budget. Approvers sign off before the requisition reaches talent acquisition or an external partner."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can this template be used for factory hiring?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Add shift patterns, plant location and safety notes for production, warehouse or maintenance roles. The same structure works across Indian manufacturing clusters when internal policy fields are appended."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is a manpower requisition the same as a job description?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. A requisition requests approval to hire and records budget; a job description explains duties and qualifications for applicants. Keep both documents linked but distinct in your workflow."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can it be used for multiple vacancies?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Record total headcount and shared eligibility when openings share one approval. Split requisitions when locations, grades or budgets differ materially."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "HowTo",
+      "@id": "https://www.earlyjobs.ai/resources/manpower-requisition-template#howto",
+      "name": "How to use a manpower requisition template",
+      "description": "Structured workflow for documenting workforce requirements and obtaining approval before recruitment begins.",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "name": "Identify the workforce gap",
+          "text": "Determine which roles are needed and why. Distinguish between additional headcount and replacement vacancies."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "name": "Define the position",
+          "text": "Document responsibilities, qualifications, working conditions and location."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "name": "Confirm the budget",
+          "text": "Ensure the proposed compensation and recruitment expenses align with approved plans."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 4,
+          "name": "Obtain internal approval",
+          "text": "Route the request through the organization's required approval process."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 5,
+          "name": "Share the approved requirement",
+          "text": "Provide the completed document to the recruitment team or external hiring partner."
+        }
+      ]
+    }
+  ]
+}

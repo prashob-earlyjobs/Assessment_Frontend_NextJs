@@ -1,0 +1,121 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.earlyjobs.ai/tools/recruitment-funnel-calculator#webpage",
+      "url": "https://www.earlyjobs.ai/tools/recruitment-funnel-calculator",
+      "name": "Free Recruitment Funnel Conversion Calculator | EarlyJobs",
+      "description": "Calculate recruitment funnel conversion rates from applications to interviews, offers and joinings. Identify hiring-stage drop-offs with a free employer tool.",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/tools/recruitment-funnel-calculator#breadcrumb"
+      },
+      "mainEntity": {
+        "@id": "https://www.earlyjobs.ai/tools/recruitment-funnel-calculator#tool"
+      },
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": [
+          "h1",
+          "h2"
+        ]
+      },
+      "inLanguage": "en-IN",
+      "dateModified": "2026-11-20"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/tools/recruitment-funnel-calculator#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Tools",
+          "item": "https://www.earlyjobs.ai/tools/recruitment-funnel-calculator"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Recruitment Funnel Calculator",
+          "item": "https://www.earlyjobs.ai/tools/recruitment-funnel-calculator"
+        }
+      ]
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://www.earlyjobs.ai/tools/recruitment-funnel-calculator#tool",
+      "name": "EarlyJobs Recruitment Funnel Calculator",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "description": "Interactive calculator that measures recruitment funnel conversion rates and drop-offs from applications through shortlist, interview, offer and joining.",
+      "provider": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "url": "https://www.earlyjobs.ai/tools/recruitment-funnel-calculator",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "INR"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.earlyjobs.ai/tools/recruitment-funnel-calculator#faq",
+      "url": "https://www.earlyjobs.ai/tools/recruitment-funnel-calculator",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is a recruitment funnel conversion rate?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A recruitment funnel conversion rate is the percentage of candidates who move from one stage to the next — applications to screens, screens to interviews, interviews to offers, and offers to joinings. Tracking these rates helps Indian employers see where candidates drop off in high-volume hiring."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do you calculate offer-to-joining conversion?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Divide joinings by offers extended in the same period, then multiply by 100. For example, 40 joinings from 50 offers is 80% offer-to-joining conversion. The calculator applies this logic across each funnel stage you enter."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is a good recruitment conversion rate?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "There is no single benchmark that fits every role. Plant hiring, nursing staffing, and tech roles differ widely by channel, salary, and location. Use your own historical funnel data as the baseline, then measure whether process changes improve the weakest stage."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can employers use the calculator for bulk hiring?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Enter volume at each stage for campus drives, seasonal manufacturing hiring, or multi-city campaigns. The output highlights bottlenecks so coordinators can fix scheduling, offers, or documentation before the next wave."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is the Recruitment Funnel Calculator free?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. EarlyJobs provides this recruitment funnel calculator free in your browser. Use it with vacancy cost and cost-per-hire tools when reporting hiring efficiency to operations and finance leaders."
+          }
+        }
+      ]
+    }
+  ]
+}

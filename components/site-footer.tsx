@@ -239,12 +239,162 @@ export function SiteFooter() {
             >
               Recruitment Process Outsourcing
             </Link>
+            <Link
+              href="/ai-recruiting-automation-healthcare-staffing"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
+              Healthcare Staffing Automation
+            </Link>
+            <Link
+              href="/ai-recruiting-automation-manufacturing"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
+              Manufacturing Recruiting Automation
+            </Link>
+            <Link
+              href="/ai-recruiting-automation-ev-manufacturing"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
+              EV Manufacturing Automation
+            </Link>
+            <Link
+              href="/pharmaceutical-manufacturing-recruitment"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
+              Pharmaceutical Manufacturing Recruitment
+            </Link>
+            <Link
+              href="/electronics-manufacturing-recruitment"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
+              Electronics Manufacturing Recruitment
+            </Link>
+            <Link
+              href="/solar-renewable-energy-recruitment"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
+              Solar & Renewable Energy Recruitment
+            </Link>
+            <Link
+              href="/ev-automotive-manufacturing-recruitment"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
+              EV & Automotive Manufacturing Recruitment
+            </Link>
+            <Link
+              href="/diagnostic-centre-lab-recruitment"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
+              Diagnostic Centre & Lab Recruitment
+            </Link>
+            <Link
+              href="/warehouse-distribution-centre-recruitment"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
+              Warehouse & Distribution Centre Recruitment
+            </Link>
+            <Link
+              href="/battery-manufacturing-recruitment"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
+              Battery Manufacturing Recruitment
+            </Link>
+            <Link
+              href="/food-processing-fmcg-manufacturing-recruitment"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
+              Food Processing & FMCG Recruitment
+            </Link>
+            <Link
+              href="/construction-infrastructure-recruitment"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
+              Construction & Infrastructure Recruitment
+            </Link>
+            <Link
+              href="/medical-device-manufacturing-recruitment"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
+              Medical Device Manufacturing Recruitment
+            </Link>
+            <Link
+              href="/semiconductor-electronics-component-recruitment"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
+              Semiconductor & Electronics Component Recruitment
+            </Link>
           </div>
 
           <div className="flex flex-col">
             <h3 className="pt-8 text-base font-semibold leading-5 text-white uppercase lg:pt-12">
               Tools & Tie-Ups
             </h3>
+            <Link
+              href="/recruiting-roi-calculator"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
+              Recruiting ROI Calculator
+            </Link>
+            <Link
+              href="/salary-benchmark-tool"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
+              Salary Benchmarking Tool
+            </Link>
+            <Link
+              href="/tools/cost-per-hire-calculator"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
+              Cost Per Hire Calculator
+            </Link>
+            <Link
+              href="/tools/employee-attrition-cost-calculator"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
+              Employee Attrition Cost Calculator
+            </Link>
+            <Link
+              href="/tools/recruitment-funnel-calculator"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
+              Recruitment Funnel Calculator
+            </Link>
+            <Link
+              href="/tools/vacancy-cost-calculator"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
+              Vacancy Cost Calculator
+            </Link>
+            <Link
+              href="/tools/job-description-generator"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
+              Job Description Generator
+            </Link>
+            <Link
+              href="/tools/salary-benchmarking-planner"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
+              Salary Benchmarking Planner
+            </Link>
+            <Link
+              href="/compare/recruitment-agency-vs-in-house-hiring"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
+              Agency vs In-House Hiring
+            </Link>
+            <Link
+              href="/resources/bulk-hiring-checklist"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
+              Bulk Hiring Checklist
+            </Link>
+            <Link
+              href="/resources/90-day-workforce-hiring-plan"
+              className="mt-4 text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"
+            >
+              90-Day Hiring Plan Template
+            </Link>
             <Link
               href="/agency-partnerships"
               className="mt-4 bg-transparent p-0 text-left text-base font-normal leading-5 text-gray-400 no-underline hover:text-gray-200 lg:mt-6"

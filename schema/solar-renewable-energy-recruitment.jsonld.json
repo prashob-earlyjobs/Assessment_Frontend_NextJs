@@ -1,0 +1,87 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.earlyjobs.ai/solar-renewable-energy-recruitment#webpage",
+      "url": "https://www.earlyjobs.ai/solar-renewable-energy-recruitment",
+      "name": "Solar & Renewable Energy Recruitment India | EarlyJobs",
+      "description": "Hire solar technicians, installation helpers and multi-site project staff across India. EarlyJobs supports workforce planning for renewable energy employers.",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/solar-renewable-energy-recruitment#breadcrumb"
+      },
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": [
+          "h1",
+          "h2"
+        ]
+      },
+      "inLanguage": "en-IN",
+      "dateModified": "2026-11-20"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/solar-renewable-energy-recruitment#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Solar & Renewable Energy Recruitment",
+          "item": "https://www.earlyjobs.ai/solar-renewable-energy-recruitment"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.earlyjobs.ai/solar-renewable-energy-recruitment#faq",
+      "url": "https://www.earlyjobs.ai/solar-renewable-energy-recruitment",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Can EarlyJobs support solar project recruitment?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EarlyJobs helps solar and renewable employers assess hiring for installation helpers, junior technicians and site support across project locations in India. Share MW timelines, site clusters and joining windows so sourcing matches field execution."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which qualifications are relevant for solar technician roles?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Requirements vary by employer and may include ITI electrical trades, diplomas in mechanical or electrical engineering, or employer-led apprenticeship paths. Site safety induction remains the employer's responsibility before technicians work at height or on energised equipment."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can solar employers recruit candidates for different project sites?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Multi-location EPC and O&M teams can share branch-wise headcount, mobility expectations and accommodation context. EarlyJobs assesses coverage based on role type and candidate availability near each project belt."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Who is responsible for electrical and site safety certification?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Employers must ensure workers meet applicable electrical safety, height work and site-access requirements. EarlyJobs does not replace statutory training, PPE authorisation or legal compliance on live project sites."
+          }
+        }
+      ]
+    }
+  ]
+}

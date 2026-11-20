@@ -1,0 +1,87 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.earlyjobs.ai/construction-infrastructure-recruitment#webpage",
+      "url": "https://www.earlyjobs.ai/construction-infrastructure-recruitment",
+      "name": "Construction Workforce Recruitment India | EarlyJobs",
+      "description": "Hire site support, trades and project administration staff for construction and infrastructure projects across India with EarlyJobs.",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/construction-infrastructure-recruitment#breadcrumb"
+      },
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": [
+          "h1",
+          "h2"
+        ]
+      },
+      "inLanguage": "en-IN",
+      "dateModified": "2026-11-20"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/construction-infrastructure-recruitment#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Construction & Infrastructure Recruitment",
+          "item": "https://www.earlyjobs.ai/construction-infrastructure-recruitment"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.earlyjobs.ai/construction-infrastructure-recruitment#faq",
+      "url": "https://www.earlyjobs.ai/construction-infrastructure-recruitment",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Can EarlyJobs support construction workforce recruitment?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EarlyJobs helps EPC and infrastructure employers assess site assistants, trades, equipment support and project admin hiring. Share project belts, mobilisation dates and accommodation context so candidates understand on-site conditions."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can companies request hiring across project sites?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Multi-site employers can provide location-wise vacancies, trade mixes and peak manpower windows. Separating civil, MEP and finishing trades avoids mismatched applicant pools."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What information is needed for project hiring?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Vacancy numbers, site GPS or district, trade certifications required, compensation, work rotation and reporting dates help scope recruitment. Employers remain accountable for site safety briefing and statutory compliance."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Who handles construction safety compliance?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Employers must deliver site induction, PPE allocation and trade-specific safety authorization. EarlyJobs does not replace contractor obligations under applicable construction safety regulations."
+          }
+        }
+      ]
+    }
+  ]
+}

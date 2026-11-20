@@ -1,0 +1,87 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.earlyjobs.ai/medical-device-manufacturing-recruitment#webpage",
+      "url": "https://www.earlyjobs.ai/medical-device-manufacturing-recruitment",
+      "name": "Medical Device Plant Recruitment India | EarlyJobs",
+      "description": "Hire precision assembly, packaging and quality-documentation staff for medical device manufacturing plants in India through EarlyJobs.",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/medical-device-manufacturing-recruitment#breadcrumb"
+      },
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": [
+          "h1",
+          "h2"
+        ]
+      },
+      "inLanguage": "en-IN",
+      "dateModified": "2026-11-20"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/medical-device-manufacturing-recruitment#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Medical Device Manufacturing Recruitment",
+          "item": "https://www.earlyjobs.ai/medical-device-manufacturing-recruitment"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.earlyjobs.ai/medical-device-manufacturing-recruitment#faq",
+      "url": "https://www.earlyjobs.ai/medical-device-manufacturing-recruitment",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Can EarlyJobs help recruit medical device production workers?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EarlyJobs helps device manufacturers assess precision assembly, packaging, labelling and quality-documentation hiring. Share clean-area requirements, batch traceability expectations and shift plans before sourcing begins."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can freshers apply for medical device manufacturing roles?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Some assembly and packaging trainee roles may consider freshers when employers provide documented work instructions and in-process checks. Roles touching sterilization or validated equipment need employer-defined technical gates."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can manufacturers discuss bulk hiring?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Manufacturers can share SKU ramp schedules, UDI labelling needs and joining targets across consumables or equipment lines. Clear station mapping separates high-volume packaging from specialized assembly."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Who verifies regulated manufacturing qualifications?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Employers remain responsible for technical assessments, quality record training and regulatory documentation discipline. EarlyJobs coordinates hiring discussions—not final compliance verification for regulated device roles."
+          }
+        }
+      ]
+    }
+  ]
+}

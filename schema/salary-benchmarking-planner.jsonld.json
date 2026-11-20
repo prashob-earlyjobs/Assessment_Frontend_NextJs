@@ -1,0 +1,113 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.earlyjobs.ai/tools/salary-benchmarking-planner#webpage",
+      "url": "https://www.earlyjobs.ai/tools/salary-benchmarking-planner",
+      "name": "Salary Benchmarking & Compensation Planning Tool | EarlyJobs",
+      "description": "Compare employer-provided salary ranges and plan compensation budgets across roles, locations and hiring volumes with a free salary planning tool.",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/tools/salary-benchmarking-planner#breadcrumb"
+      },
+      "mainEntity": {
+        "@id": "https://www.earlyjobs.ai/tools/salary-benchmarking-planner#tool"
+      },
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": [
+          "h1",
+          "h2"
+        ]
+      },
+      "inLanguage": "en-IN",
+      "dateModified": "2026-11-20"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/tools/salary-benchmarking-planner#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Tools",
+          "item": "https://www.earlyjobs.ai/tools/salary-benchmarking-planner"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Salary Benchmarking Planner",
+          "item": "https://www.earlyjobs.ai/tools/salary-benchmarking-planner"
+        }
+      ]
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://www.earlyjobs.ai/tools/salary-benchmarking-planner#tool",
+      "name": "EarlyJobs Salary Benchmarking & Compensation Planning Tool",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "description": "Interactive planner that calculates monthly and annual compensation budgets from employer-provided salary, headcount and optional comparison inputs.",
+      "provider": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "url": "https://www.earlyjobs.ai/tools/salary-benchmarking-planner",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "INR"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.earlyjobs.ai/tools/salary-benchmarking-planner#faq",
+      "url": "https://www.earlyjobs.ai/tools/salary-benchmarking-planner",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is salary benchmarking?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Salary benchmarking compares compensation for similar roles using consistent assumptions — base pay, location, level, and headcount. The EarlyJobs Salary Benchmarking Planner helps Indian employers model hiring budgets across teams before approvals, without relying on unverified market claims."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does the tool provide live market salary data?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "This planner uses salary scenarios and figures you enter, not a live national wage database. Pair it with the Salary Benchmarking Tool for reference ranges, then plug verified numbers from your own surveys or finance here for budget planning."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can employers compare salary budgets across locations?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Enter separate pay assumptions for metros, tier-2 cities, or multiple plants. The planner rolls up totals so workforce planning and TA leaders see how location mix affects annual hiring spend."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is the Salary Benchmarking Planner free?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. EarlyJobs offers the Salary Benchmarking Planner free online. Use it with the free Salary Benchmarking Tool when preparing compensation bands for manufacturing, healthcare, or high-volume hiring programs."
+          }
+        }
+      ]
+    }
+  ]
+}

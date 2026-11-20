@@ -1,0 +1,121 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.earlyjobs.ai/tools/vacancy-cost-calculator#webpage",
+      "url": "https://www.earlyjobs.ai/tools/vacancy-cost-calculator",
+      "name": "Free Vacancy Cost Calculator for Employers | EarlyJobs",
+      "description": "Estimate the cost of unfilled positions using vacancy days, daily operational impact and temporary coverage expenses. Free hiring calculator.",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/tools/vacancy-cost-calculator#breadcrumb"
+      },
+      "mainEntity": {
+        "@id": "https://www.earlyjobs.ai/tools/vacancy-cost-calculator#tool"
+      },
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": [
+          "h1",
+          "h2"
+        ]
+      },
+      "inLanguage": "en-IN",
+      "dateModified": "2026-11-20"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/tools/vacancy-cost-calculator#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Tools",
+          "item": "https://www.earlyjobs.ai/tools/vacancy-cost-calculator"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Vacancy Cost Calculator",
+          "item": "https://www.earlyjobs.ai/tools/vacancy-cost-calculator"
+        }
+      ]
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://www.earlyjobs.ai/tools/vacancy-cost-calculator#tool",
+      "name": "EarlyJobs Vacancy Cost Calculator",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "description": "Interactive calculator that estimates vacancy cost from vacant positions, vacancy days, daily operational impact and temporary coverage expenses in Indian rupees.",
+      "provider": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "url": "https://www.earlyjobs.ai/tools/vacancy-cost-calculator",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "INR"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.earlyjobs.ai/tools/vacancy-cost-calculator#faq",
+      "url": "https://www.earlyjobs.ai/tools/vacancy-cost-calculator",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the cost of an unfilled position?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Cost of vacancy estimates the financial impact of leaving a role open — daily lost output or service capacity, overtime, temporary staff, and delayed projects. The EarlyJobs calculator multiplies vacancy days by your daily impact estimate and adds coverage costs you enter."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is vacancy cost the same as cost per hire?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Vacancy cost is about money lost while the seat is empty; cost per hire measures recruitment spending to fill it. Leaders need both: high vacancy cost justifies faster hiring spend, while cost per hire shows whether sourcing is efficient."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can the calculator be used for manufacturing?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Plant and operations teams can model unfilled operator, maintenance, or QC roles using line-specific daily impact and shift overtime. Use conservative assumptions you can explain to plant heads rather than industry averages you cannot verify."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does the calculator predict exact losses?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. It produces estimates from your inputs for planning and prioritisation, not statutory reporting. Revisit assumptions when production targets, customer SLAs, or staffing models change."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is the Vacancy Cost Calculator free?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. This vacancy cost tool is free on EarlyJobs. Pair it with the Recruiting ROI or recruitment funnel calculators when building a case to shorten time-to-fill for critical roles."
+          }
+        }
+      ]
+    }
+  ]
+}

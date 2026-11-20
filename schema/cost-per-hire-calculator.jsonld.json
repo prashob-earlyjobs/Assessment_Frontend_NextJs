@@ -1,0 +1,121 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.earlyjobs.ai/tools/cost-per-hire-calculator#webpage",
+      "url": "https://www.earlyjobs.ai/tools/cost-per-hire-calculator",
+      "name": "Free Cost Per Hire Calculator for Employers | EarlyJobs",
+      "description": "Free Cost Per Hire Calculator — add internal & external recruiting costs, divide by hires. See average cost per hire in INR. Try it now.",
+      "isPartOf": {
+        "@id": "https://www.earlyjobs.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.earlyjobs.ai/tools/cost-per-hire-calculator#breadcrumb"
+      },
+      "mainEntity": {
+        "@id": "https://www.earlyjobs.ai/tools/cost-per-hire-calculator#tool"
+      },
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": [
+          "h1",
+          "h2"
+        ]
+      },
+      "inLanguage": "en-IN",
+      "dateModified": "2026-11-20"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.earlyjobs.ai/tools/cost-per-hire-calculator#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.earlyjobs.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Tools",
+          "item": "https://www.earlyjobs.ai/tools/cost-per-hire-calculator"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Cost Per Hire Calculator",
+          "item": "https://www.earlyjobs.ai/tools/cost-per-hire-calculator"
+        }
+      ]
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://www.earlyjobs.ai/tools/cost-per-hire-calculator#tool",
+      "name": "EarlyJobs Cost-per-Hire Calculator",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "description": "Interactive calculator that divides internal and external recruitment costs by completed hires to show average cost per hire in Indian rupees.",
+      "provider": {
+        "@id": "https://www.earlyjobs.ai/#organization"
+      },
+      "url": "https://www.earlyjobs.ai/tools/cost-per-hire-calculator",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "INR"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.earlyjobs.ai/tools/cost-per-hire-calculator#faq",
+      "url": "https://www.earlyjobs.ai/tools/cost-per-hire-calculator",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do you calculate cost per hire?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Add internal recruitment costs (recruiter time, tools, interview hours) and external costs (ads, agencies, assessments) for a defined period, then divide by the number of hires completed in that same period. The EarlyJobs calculator applies this standard formula using amounts you enter in INR."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Should recruiter salaries be included?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Include the portion of recruiter or HR compensation attributable to hiring activity if your finance team tracks it that way. Some organisations allocate by headcount or percentage of role — pick one method and use it consistently when comparing quarters or plants."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does cost per hire include employee salaries?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Cost per hire covers spending to fill a role, not the employee's post-joining wages, statutory contributions, or bonuses. Keep recruitment spend separate so you can compare channels and agencies without mixing payroll."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What if there are zero hires?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "You cannot calculate a meaningful average cost per hire when no one joined in the period — the tool avoids dividing by zero and prompts you to adjust dates or hire counts. Recruitment spend still matters for reporting; pair it with funnel metrics instead."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is the Cost Per Hire Calculator free?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. This EarlyJobs calculator is free to use online. Enter your recruitment expenses and hire count to see average cost per hire instantly — helpful for budget reviews with finance and leadership."
+          }
+        }
+      ]
+    }
+  ]
+}
